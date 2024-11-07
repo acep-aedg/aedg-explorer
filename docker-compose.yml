@@ -1,0 +1,14 @@
+version: '2'
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    ports:
+      - "127.0.0.1:5433:5432" # Maps host port 5433 to container port 5432
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+volumes:
+  pgdata:
