@@ -1,0 +1,18 @@
+%nav.navbar.navbar-expand-lg.navbar-light.bg-light
+  .container
+    = link_to 'AEDG Explorer', root_path, class: 'navbar-brand'
+    %button.navbar-toggler{ type: 'button', data: { bs_toggle: 'collapse', bs_target: '#navbarNav' }, aria: { controls: 'navbarNav', expanded: 'false', label: 'Toggle navigation' } }
+      %span.navbar-toggler-icon
+
+    #navbarNav.collapse.navbar-collapse
+      %ul.navbar-nav.me-auto.mb-2.mb-lg-0
+        %li.nav-item
+          = link_to 'Home', root_path, class: 'nav-link'
+        %li.nav-item
+          = link_to 'Community Summaries', '#', class: 'nav-link'
+        %li.nav-item
+          = link_to 'Data Views', '#', class: 'nav-link'
+        %li.nav-item
+          = link_to 'System Monitoring', '#', class: 'nav-link'
+        %li.nav-item
+          = link_to 'Logs', '#', class: 'nav-link'

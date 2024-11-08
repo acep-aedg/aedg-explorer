@@ -1,0 +1,16 @@
+// Theme for all Rails and Hugo Apps with AEDG 
+// This will be moved to a location for all apps to access
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$font-family: 'Arial, sans-serif';
+
+body {
+  font-family: $font-family;
+  color: $primary-color;
+}
+
+.header, .footer {
+  background-color: $secondary-color;
+  color: white;
+  padding: 1rem;
+}
