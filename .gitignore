@@ -45,5 +45,10 @@
 # Ignore data
 *.zip
 *.gdb
+*.db
+*.ddb
 *.geojson
 *.csv
+
+# Ignore zip extraction directories
+extract

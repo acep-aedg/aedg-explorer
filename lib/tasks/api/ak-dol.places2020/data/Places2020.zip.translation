@@ -1,0 +1,6 @@
+# ogr2ogr -f "SQLite" -t_srs EPSG:3338 -nln your_table_name your_database.db your_shapefile.shp \
+# -sql "SELECT old_name1 AS new_name1, old_name2 AS new_name2, other_field FROM mylayer"
+oldname1 as newname1,
+other_field,
+thing as thong,
+another_field

@@ -1,0 +1,10 @@
+source:
+  name: Alaska Dept of Labor and Workforce Development
+  url: https://live.laborstats.alaska.gov/article/maps-gis-data
+files:
+  - Places2020
+    type: shapefile
+    epsg: 3338
+    file: Places2020/Places2020.zip
+    url: https://live.laborstats.alaska.gov/cen/maps/gis/Places2020.zip
+    sha256: d6700eb6caa01e5f4f6ff881e5a0d83a805dac30ac64bce65606bed42c2ca36f
