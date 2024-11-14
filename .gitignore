@@ -38,3 +38,12 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Ignore python environment
+.venv
+
+# Ignore data
+*.zip
+*.gdb
+*.geojson
+*.csv
