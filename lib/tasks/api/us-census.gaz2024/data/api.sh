@@ -5,7 +5,7 @@ SCRIPT_DIR=$(cd $(dirname $BASH_SOURCE[0]) > /dev/null; pwd)
 cd $SCRIPT_DIR
 
 # Define the base name for the file
-BASE_NAME="2024_gaz_place_02"
+BASE_NAME="us-census.gaz2024"
 
 # Check if the file already exists, delete if it does
 if [ -f "$BASE_NAME.csv" ]; then
