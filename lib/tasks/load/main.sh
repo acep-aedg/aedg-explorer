@@ -5,7 +5,7 @@ SCRIPT_DIR=$(cd $(dirname $BASH_SOURCE[0]) > /dev/null; pwd)
 cd $SCRIPT_DIR
 
 # set name of database
-DB_FILE="source.ddb"
+DB_FILE="source.db"
 
 # check if the database exists, delete if does
 if [ -f $DB_FILE ]; then
@@ -19,6 +19,8 @@ fi
 # create empty database, install spatial plugin
 duckdb "$DB_FILE" < setup.sql
 echo "Empty database created"
+
+echo "Importing tables..."
 
 duckdb "$DB_FILE" < load.sql
 echo "Data loaded into database"

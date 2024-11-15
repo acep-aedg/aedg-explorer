@@ -30,8 +30,6 @@ else
   echo "File exists, check purge"
 fi
 
-
-
 # verify the checksum
 if [ ! -f "$BASE_NAME.sha256" ]; then
   echo "No checksum found, assuming this download is valid and assigning checksum to disk"
