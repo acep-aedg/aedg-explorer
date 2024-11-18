@@ -1,3 +1,0 @@
-INSTALL spatial;
-
-SELECT 1;
