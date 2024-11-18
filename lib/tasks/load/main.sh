@@ -1,28 +1,39 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# Set the working directory to the location of this script
-SCRIPT_DIR=$(cd $(dirname $BASH_SOURCE[0]) > /dev/null; pwd) 
-cd $SCRIPT_DIR
+# First:
+# Create the postgres database
+# Configure ~/.pgpass file for credentials
+# Install spatial plugin
 
-# set name of database
-DB_FILE="source.db"
 
-# check if the database exists, delete if does
-if [ -f $DB_FILE ]; then
-  echo "Database exists, deleting"
-  rm $DB_FILE
-else
-  echo "Database not found, skipping purge"
+
+# Set PostgreSQL credentials and target database name (password stored in .pgpass)
+PG_HOST="localhost"      
+PG_PORT="5432"           
+PG_USER="dev"     
+PG_DB="aedg"    # Database name to delete tables from
+
+# Ensure the .pgpass file exists and has correct permissions
+if [ ! -f "$HOME/.pgpass" ]; then
+  echo "Error: .pgpass file not found in your home directory."
+  exit 1
 fi
 
+# Connect to the database and drop all tables
+echo "Dropping all tables from $PG_DB..."
 
-# create empty database, install spatial plugin
-duckdb "$DB_FILE" < setup.sql
-echo "Empty database created"
+psql -h $PG_HOST -U $PG_USER -d $PG_DB <<EOF
+-- Drop all tables in the public schema (with CASCADE to handle foreign keys)
+DO \$\$ 
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+        EXECUTE 'DROP TABLE IF EXISTS public.' || r.tablename || ' CASCADE';
+    END LOOP;
+END;
+\$\$;
+EOF
 
-echo "Importing tables..."
-
-duckdb "$DB_FILE" < load.sql
-echo "Data loaded into database"
-exit 0
+echo "All tables have been dropped from database $PG_DB."
 
