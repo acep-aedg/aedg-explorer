@@ -1,0 +1,1 @@
+ \COPY gaz2024 FROM '../api/us-census.gaz2024/data/us-census.gaz2024.csv' WITH DELIMITER E'\t' CSV HEADER;
