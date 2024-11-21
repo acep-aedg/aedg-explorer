@@ -1,4 +1,43 @@
-# This script should be able to handle CSV, GeoJSON, Zip, and (other?) filetypes.
-# Might get a little long, but at least things will be centralized. 
+# This script should be able to handle CSV, GeoJSON, Zip, XLSX, and (other?) filetypes.
+# We want it to read a url from file (ex ak-dol.places2020.url) and download that endpoint.
+# We want error handling and verbosity
 
-# We want it to read a url from file (ex ak-dol.places2020.url) and download that endpoint
+import os
+import requests
+
+def download_file(base_name: str, file_type: str):
+    """Download a file from the given URL to the specified path.
+    :param base_name: Name of file without extension. This name is chosen by you and not dependent on the data itself. Must correspond to directory name and URL file name. 
+    :param file_type: Extension type of raw data (geojson, csv, xlsx, zip).
+    """
+
+    filename = f"{base_name}.{file_type}"
+    url_file = f"{base_name}.url"
+
+    # Download the file if it doesn't exist (shouldn't exist, purged in the step before)
+    if not os.path.isfile(filename):
+        # Read the URL from the base_name.url file
+        try:
+            with open(url_file, "r") as f:
+                url = f.read().strip()
+            print(f"URL file found")
+        except FileNotFoundError:
+            print(f"Error: URL file {url_file} not found. Hint: This file is manually created and populated with the endpoint URL string.")
+            exit(1)
+
+        print(f"Downloading {base_name}")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()  # will raise an exception for 4xx/5xx responses
+            with open(filename, "wb") as f:
+                f.write(response.content)
+            print("Download successful!")
+        except requests.RequestException as e:
+            print(f"Error: unable to download {base_name}.{file_type} - {e}")
+            exit(1)
+
+
+if __name__ == "__main__":
+    base_name = "us-census.gaz2024"  # Example base name
+    file_type = "csv"  # Example file type
+    download_file(base_name, file_type)
