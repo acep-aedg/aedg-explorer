@@ -1,11 +1,14 @@
 #!/bin/bash
 
 # Set the working directory to the location of this script
-SCRIPT_DIR=$(cd $(dirname $BASH_SOURCE[0]) > /dev/null; pwd) 
-cd $SCRIPT_DIR
+# SCRIPT_DIR=$(cd $(dirname $BASH_SOURCE[0]) > /dev/null; pwd) 
+# cd $SCRIPT_DIR
+
+# export PYTHONPATH=$(pwd)/scripts:$PYTHONPATH
 
 # api (purge, api, checksum)
-# source ./api/main.sh
+python run_api.py 
+
 
 # preprocess
 # source ./preprocess/main.sh
@@ -15,9 +18,9 @@ cd $SCRIPT_DIR
 
 # transform
 # Set the working directory to the location of this script
-cd transform
-dbt seed
-dbt run
+# cd transform
+# dbt seed
+# dbt run
 # dbt docs generate
 # dbt docs serve
 

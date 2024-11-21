@@ -39,8 +39,11 @@
 
 /node_modules
 
-# Ignore python environment
+# Ignore python components
 .venv
+__pycache__/
+*.pyc
+*.pyo
 
 # Ignore data
 *.zip
