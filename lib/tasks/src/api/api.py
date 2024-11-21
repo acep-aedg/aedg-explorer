@@ -5,7 +5,7 @@
 import os
 import requests
 
-def download(base_name: str, file_type: str, dir="api/"):
+def download(base_name: str, file_type: str, url: str, dir="api"):
     """Download a file from the given URL to the specified path.
     :param base_name: Name of file without extension. This name is chosen by you and not dependent on the data itself. Must correspond to directory name and URL file name. 
     :param file_type: Extension type of raw data (geojson, csv, xlsx, zip).
@@ -14,20 +14,9 @@ def download(base_name: str, file_type: str, dir="api/"):
     filename = f"{base_name}.{file_type}"
     partial_path = f"{dir}/{base_name}/data/"
     filepath = f"{partial_path}{filename}"
-    url_file = f"{base_name}.url"
-    url_filepath = f"{partial_path}{base_name}.url"
 
     # Download the file if it doesn't exist (shouldn't exist, purged in the step before)
     if not os.path.isfile(filepath):
-        # Read the URL from the base_name.url file
-        try:
-            with open(url_filepath, "r") as f:
-                url = f.read().strip()
-            print(f"{base_name} URL file found")
-        except FileNotFoundError:
-            print(f"Error: URL file {url_file} not found. Hint: This file is manually created and populated with the endpoint URL string.")
-            print(f"Also, check execution paths. The script is searching for {url_filepath}") 
-            exit(1)
 
         print(f"Downloading {base_name}")
         try:
@@ -46,4 +35,5 @@ def download(base_name: str, file_type: str, dir="api/"):
 if __name__ == "__main__":
     base_name = "us-census.gaz2024"  # Example base name
     file_type = "csv"  # Example file type
+    url = "https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2024_Gazetteer/2024_gaz_place_02.txt"
     download(base_name, file_type)

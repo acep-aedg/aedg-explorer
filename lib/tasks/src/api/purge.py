@@ -17,8 +17,3 @@ def delete(base_name: str, file_type: str, dir="api/"):
         os.remove(filepath)
     else:
         print("File not found, skipping purge")
-
-    if os.path.isfile(filepath):
-        print("File still exits, check purge script")
-    else:
-        print("File deleted")

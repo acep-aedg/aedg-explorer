@@ -1,0 +1,8 @@
+source:
+  name: United States Census Bureau
+  url: https://www.census.gov/geographies/reference-files/2024/geo/gazetter-file.html
+files:
+  - us-census.2024_gaz_place_02:
+      file_type: csv
+      url: https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2024_Gazetteer/2024_gaz_place_02.txt
+      sha256: 29de08af78f918d08cf679db96cb8a92ef2168460d9c0e5e805b7e95e43c2572
