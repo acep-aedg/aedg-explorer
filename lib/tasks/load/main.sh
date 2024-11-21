@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Set the working directory to the location of this script
-SCRIPT_DIR=$(cd $(dirname $BASH_SOURCE[0]) > /dev/null; pwd) 
-cd $SCRIPT_DIR
-
 # Set PostgreSQL credentials and target database name (password stored in .pgpass)
 export PG_HOST="localhost"      
 export PG_PORT="5432"           
@@ -16,13 +12,12 @@ if [ ! -f "$HOME/.pgpass" ]; then
   exit 1
 fi
 
-
 # Set up postgres database and create user `dev`
 # Note: nothing here yet
-./setup_postgres.sh
+source ./load/setup_postgres.sh
 
 # Drop all tables, then create from inddividual DDL scripts
-source ./create_tables.sh
+source ./load/create_tables.sh
 
 # Copy data into empty tables
-source ./load_data.sh
+source ./load/load_data.sh

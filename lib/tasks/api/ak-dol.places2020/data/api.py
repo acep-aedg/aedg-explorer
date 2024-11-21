@@ -3,6 +3,7 @@ import hashlib
 import requests
 import subprocess
 import zipfile
+import shutil
 
 # Set the working directory to the location of this script
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -12,21 +13,35 @@ os.chdir(SCRIPT_DIR)
 BASE_NAME = "ak-dol.places2020"
 EXTRACTED_NAME = "Places2020"
 
+print(f"Beginning {BASE_NAME} API housekeeping.")
+
 # Check if the zip file exists, delete if it does
 zip_file = f"{BASE_NAME}.zip"
+print(f"Checking if {zip_file} exists.")
 if os.path.isfile(zip_file):
-    print("File exists, deleting")
+    print(f"{BASE_NAME} exists, deleting.")
     os.remove(zip_file)
 else:
-    print("File not found, skipping purge")
+    print("File not found, skipping purge.")
 
 # Check if the extract directory exists, delete if it does
 extract_dir = "extract"
+print(f"Checking if extract directory exists.")
 if os.path.isdir(extract_dir):
-    print("Extract directory exists, deleting")
-    os.rmdir(extract_dir)  # Use os.rmdir or shutil.rmtree for directories with files
+    print("Extract directory exists, deleting.")
+    shutil.rmtree(extract_dir)  # Use os.rmdir or shutil.rmtree for directories with files
 else:
-    print("Extract directory not found, skipping purge")
+    print("Extract directory not found, skipping purge.")
+
+# Check if the geojson file exists, delete if it does
+geojson_file = f"{BASE_NAME}.geojson"
+print(f"Checking if {geojson_file} exists.")
+if os.path.isfile(geojson_file):
+    print(f"{geojson_file} exists, deleting.")
+    os.remove(geojson_file)
+else:
+    print("File not found, skipping purge.")
+
 
 # Download the zip file if it doesn't exist
 if not os.path.isfile(zip_file):
@@ -87,7 +102,7 @@ else:
     if expected_checksum == download_checksum:
         print("Checksum matches! File is valid.")
     else:
-        print("Checksum does not match! There may have been an error with the download.")
+        print("Checksum does not match! There may have been an error with the download or the data has changed.")
         exit(1)
 
 # Extract the zip file if the directory doesn't exist

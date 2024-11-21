@@ -1,0 +1,8 @@
+version: 2
+
+seeds:
+  - name: lookup_fips_interties
+    config:
+      column_types:
+        fips: varchar
+        aea_plant_id: text

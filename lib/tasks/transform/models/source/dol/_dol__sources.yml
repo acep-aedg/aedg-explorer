@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+    - name: dol
+      database: aedg
+      schema: public
+      tables:
+        - name: places2020
