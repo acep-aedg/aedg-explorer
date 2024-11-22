@@ -1,0 +1,8 @@
+source:
+  name: Alaska Dept of Labor and Workforce Development
+  url: https://maps.commerce.alaska.gov/server/rest/services/Economics_Related/Economics_Employment_Wages/MapServer/0
+files:
+  - ak-dol.employment:
+      file_type: geojson
+      url: https://maps.commerce.alaska.gov/server/rest/services/Economics_Related/Economics_Employment_Wages/MapServer/0/query?outFields=*&where=1%3D1&f=geojson
+      sha256: c98a398dc179f427d2323f82ffc0959fa098213f9655bcc3f4af3b6ea03de754

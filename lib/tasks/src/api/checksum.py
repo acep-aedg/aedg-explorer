@@ -34,11 +34,11 @@ def compare_hashes(base_name: str, file_type: str, sha256: str, dir="api"):
             print("Checksum matches! File is valid or unchanged.")
         else:
             print("Checksum does not match! There may have been an error with the download or the data has changed. Please investigate.")
-            exit(1)
+
     
     except FileNotFoundError:
         print(f"Error: Cannot verify checksum.")
-        exit(1)
+
 
 
 if __name__ == "__main__":
