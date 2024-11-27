@@ -7,11 +7,13 @@
 # export PYTHONPATH=$(pwd)/scripts:$PYTHONPATH
 
 # api (purge, api, checksum)
-python run_api.py 
+# python run_api.py 
 
 
-# preprocess
-# source ./preprocess/main.sh
+# # preprocess
+# python preprocess/transmission-lines-202200706/transmission-lines-202200706.py
+python preprocess/places2020/places2020.py
+
 
 # load
 # source ./main.sh

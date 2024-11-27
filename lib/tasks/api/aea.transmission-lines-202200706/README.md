@@ -1,0 +1,1 @@
+This data is source from Alaska Energy Authority via the CASES project and the AK Division of Community and Regional Affairs (DCRA) . At the moment, we do not have a public-facing API to access this data. Instead it is sourced from a stashed copy on the CASES Google Drive. 

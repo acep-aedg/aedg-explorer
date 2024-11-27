@@ -1,0 +1,8 @@
+source:
+  name: Alaska Energy Authority
+  url: Google Drive
+files:
+  - aea.transmission-lines-202200706:
+      file_type: shp
+      url: https://drive.google.com/drive/folders/1927uOlwsAw5zF6XPu3o2sBsqDJXvsewt?usp=share_link
+      sha256: dcc12a2f91e398af375c2971a2f2addb10aaa522656fef013e4803659e72b121

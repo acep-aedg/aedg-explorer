@@ -1,9 +1,9 @@
 import os
 import yaml
 
-from src.api.api import download
-from src.api.checksum import compare_hashes
-from src.api.purge import delete
+from api.functions.api import download
+from api.functions.checksum import compare_hashes
+from api.functions.purge import delete
 
 # List of directories containing the 'source.yml' file
 directories = [

@@ -53,6 +53,17 @@ __pycache__/
 *.geojson
 *.csv
 
+# Ignore shapefiles and accessories
+
+*.sbn
+*.sbx
+*.cpg
+*.dbf
+*.prj
+*.shp
+*.shx
+*.xml
+
 # Ignore zip extraction directories
 extract
 
