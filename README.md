@@ -45,7 +45,9 @@ Ensure you have the following dependencies installed:
     To start the PostgreSQL database, use Docker Compose:
 
     ```bash
-    docker compose up
+    docker compose up -d
+    # Create .env with the database credentials
+    echo "DATABASE_URL=postgres://postgres@localhost:5433" > .env
     rails db:setup
     ```
 
