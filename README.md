@@ -6,6 +6,8 @@ Welcome to the AEDG Explorer! This project is designed to... (TBD)
 
 To start, we recommend reading through the [ACEP DevOps Rails Applications Guide](https://wiki.acep.uaf.edu/en/devops/rails-applications-from-scratch) for a comprehensive understanding of the setup and best practices.
 
+TODO: Add ruby install instructions
+
 ### Dependencies
 
 Ensure you have the following dependencies installed:
