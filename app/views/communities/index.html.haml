@@ -1,0 +1,33 @@
+%h1 Listing communities
+
+%table
+  %thead
+    %tr
+      %th Id
+      %th Name
+      %th Incorporation
+      %th Incorporation
+      %th Latitude
+      %th Longitude
+      %th Global uuid
+      %th
+      %th
+      %th
+
+  %tbody
+    - @communities.each do |community|
+      %tr
+        %td= community.id
+        %td= community.name
+        %td= community.incorporation_id
+        %td= community.incorporation
+        %td= community.latitude
+        %td= community.longitude
+        %td= community.global_uuid
+        %td= link_to 'Show', community
+        %td= link_to 'Edit', edit_community_path(community)
+        %td= link_to 'Destroy', community, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Community', new_community_path

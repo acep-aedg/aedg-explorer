@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Id:
+  = @community.id
+%p
+  %b Name:
+  = @community.name
+%p
+  %b Incorporation:
+  = @community.incorporation_id
+%p
+  %b Incorporation:
+  = @community.incorporation
+%p
+  %b Latitude:
+  = @community.latitude
+%p
+  %b Longitude:
+  = @community.longitude
+%p
+  %b Global uuid:
+  = @community.global_uuid
+
+= link_to 'Edit', edit_community_path(@community)
+\|
+= link_to 'Back', communities_path
