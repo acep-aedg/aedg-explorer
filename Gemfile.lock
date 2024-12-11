@@ -115,6 +115,8 @@ GEM
     drb (2.2.1)
     erubi (1.13.0)
     erubis (2.7.0)
+    friendly_id (5.5.1)
+      activerecord (>= 4.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     haml (6.3.0)
@@ -291,6 +293,7 @@ DEPENDENCIES
   cssbundling-rails
   debug
   dotenv-rails (~> 3.1)
+  friendly_id (~> 5.5.0)
   haml-rails (~> 2.1)
   html2haml (~> 2.3)
   importmap-rails
