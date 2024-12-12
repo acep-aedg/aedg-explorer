@@ -1,0 +1,33 @@
+%h1 Listing communities
+
+%table
+  %thead
+    %tr
+      %th Fips code
+      %th Name
+      %th Latitude
+      %th Longitude
+      %th Ansi code
+      %th Community
+      %th Global
+      %th
+      %th
+      %th
+
+  %tbody
+    - @communities.each do |community|
+      %tr
+        %td= community.fips_code
+        %td= community.name
+        %td= community.latitude
+        %td= community.longitude
+        %td= community.ansi_code
+        %td= community.community_id
+        %td= community.global_id
+        %td= link_to 'Show', community
+        %td= link_to 'Edit', edit_community_path(community)
+        %td= link_to 'Destroy', community, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Community', new_community_path

@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Fips code:
+  = @community.fips_code
+%p
+  %b Name:
+  = @community.name
+%p
+  %b Latitude:
+  = @community.latitude
+%p
+  %b Longitude:
+  = @community.longitude
+%p
+  %b Ansi code:
+  = @community.ansi_code
+%p
+  %b Community:
+  = @community.community_id
+%p
+  %b Global:
+  = @community.global_id
+
+= link_to 'Edit', edit_community_path(@community)
+\|
+= link_to 'Back', communities_path

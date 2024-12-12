@@ -1,0 +1,31 @@
+= form_for @community do |f|
+  - if @community.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@community.errors.count, "error")} prohibited this community from being saved:"
+      %ul
+        - @community.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :fips_code
+    = f.number_field :fips_code
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :latitude
+    = f.text_field :latitude
+  .field
+    = f.label :longitude
+    = f.text_field :longitude
+  .field
+    = f.label :ansi_code
+    = f.number_field :ansi_code
+  .field
+    = f.label :community_id
+    = f.text_field :community_id
+  .field
+    = f.label :global_id
+    = f.text_field :global_id
+  .actions
+    = f.submit 'Save'
