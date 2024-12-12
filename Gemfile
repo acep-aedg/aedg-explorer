@@ -76,3 +76,5 @@ gem "bootstrap_form", "~> 5.4"
 gem "haml-rails", "~> 2.1"
 
 gem "html2haml", "~> 2.3", :group => :dev
+
+gem 'friendly_id', '~> 5.5.0'
