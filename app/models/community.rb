@@ -1,6 +1,14 @@
 class Community < ApplicationRecord
   extend FriendlyId
-  friendly_id :name, use: :slugged
+  friendly_id :slug_candidates, use: :slugged
+
+  # Handle the case where the name is not unique
+  def slug_candidates
+    [
+      :name,
+      [:name, :fips_code]
+    ]
+  end
 
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
