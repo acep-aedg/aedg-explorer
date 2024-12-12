@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_12_215118) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_12_232634) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_12_215118) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+    t.index ["ansi_code"], name: "index_communities_on_ansi_code", unique: true
+    t.index ["community_id"], name: "index_communities_on_community_id", unique: true
+    t.index ["fips_code"], name: "index_communities_on_fips_code", unique: true
+    t.index ["global_id"], name: "index_communities_on_global_id", unique: true
     t.index ["slug"], name: "index_communities_on_slug", unique: true
   end
 
