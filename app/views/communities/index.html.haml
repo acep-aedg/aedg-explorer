@@ -25,9 +25,5 @@
         %td= community.community_id
         %td= community.global_id
         %td= link_to 'Show', community
-        %td= link_to 'Edit', edit_community_path(community)
-        %td= link_to 'Destroy', community, method: :delete, data: { confirm: 'Are you sure?' }
 
 %br
-
-= link_to 'New Community', new_community_path
