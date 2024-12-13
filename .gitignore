@@ -39,5 +39,5 @@
 
 /node_modules
 
-/db/seeds/*
-!/db/seeds/.keep
+/db/imports/*
+!/db/imports/.keep
