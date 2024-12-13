@@ -3,7 +3,7 @@ namespace :import do
   task communities: :environment do
     require 'json'
 
-    filepath = Rails.root.join('db', 'seeds', 'communities.geojson')
+    filepath = Rails.root.join('db', 'imports', 'communities.geojson')
     file = File.read(filepath)
     communities_data = JSON.parse(file)
 

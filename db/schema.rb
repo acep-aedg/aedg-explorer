@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_12_232634) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_13_183907) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "communities", force: :cascade do |t|
-    t.integer "fips_code"
+    t.string "fips_code"
     t.string "name"
     t.decimal "latitude"
     t.decimal "longitude"
