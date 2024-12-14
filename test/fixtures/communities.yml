@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  fips_code: 1
+  name: MyString
+  latitude: 9.99
+  longitude: 9.99
+  ansi_code: 1
+  community_id: 
+  global_id: 
+
+two:
+  fips_code: 1
+  name: MyString
+  latitude: 9.99
+  longitude: 9.99
+  ansi_code: 1
+  community_id: 
+  global_id: 
