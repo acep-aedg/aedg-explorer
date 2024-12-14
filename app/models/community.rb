@@ -1,4 +1,5 @@
 class Community < ApplicationRecord
+  include CommunityAttributes
   extend FriendlyId
   friendly_id :slug_candidates, use: :slugged
 
