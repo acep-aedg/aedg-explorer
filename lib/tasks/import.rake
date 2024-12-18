@@ -11,23 +11,15 @@ namespace :import do
       properties = feature['properties']
 
       begin
+
         # Validate presence of fips_code
         if properties['fips_code'].blank?
           raise "Missing fips_code for record at index #{index}. Properties: #{properties.inspect}"
         end
-
+        
         # Find or initialize the community based on fips_code
         community = Community.find_or_initialize_by(fips_code: properties['fips_code'])
-
-        # Assign attributes from the JSON properties
-        community.assign_attributes(
-          name: properties['name'],
-          latitude: properties['latitude'],
-          longitude: properties['longitude'],
-          ansi_code: properties['ansi_code'],
-          community_id: properties['community_id'],
-          global_id: properties['global_id']
-        )
+        community.assign_aedg_attributes(properties)
 
         if community.save
           puts "Saved Community: #{community.name}"
@@ -35,12 +27,11 @@ namespace :import do
           puts "Failed to save Community: #{properties['name']}"
           puts "Errors: #{community.errors.full_messages.join(', ')}"
         end
+
       rescue StandardError => e
         puts "Error processing Community: #{properties['name'] || 'Unknown'} at index #{index}, Error: #{e.message}"
       end
     end
-
     puts "Communities imported successfully!"
   end
-  
 end
