@@ -11,6 +11,12 @@ namespace :import do
       properties = feature['properties']
 
       begin
+
+        # Validate presence of fips_code
+        if properties['fips_code'].blank?
+          raise "Missing fips_code for record at index #{index}. Properties: #{properties.inspect}"
+        end
+        
         # Find or initialize the community based on fips_code
         community = Community.find_or_initialize_by(fips_code: properties['fips_code'])
         community.assign_aedg_attributes(properties)
