@@ -1,0 +1,368 @@
+.home {
+  --bd-purple: #4c0bce;
+  --bd-violet: #712cf9;
+  --bd-accent: #ffe484;
+  --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+  --bd-accent-rgb: 255, 228, 132;
+  --bd-pink-rgb: 214, 51, 132;
+
+  .bd-masthead {
+    padding: 3rem 0;
+    background-image: linear-gradient(
+        180deg,
+        rgba(var(--bs-body-bg-rgb), 0.01),
+        rgba(var(--bs-body-bg-rgb), 1) 85%
+      ),
+      radial-gradient(
+        ellipse at top left,
+        rgba(var(--bs-primary-rgb), 0.5),
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at top right,
+        rgba(var(--bd-accent-rgb), 0.5),
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at center right,
+        rgba(var(--bd-violet-rgb), 0.5),
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at center left,
+        rgba(var(--bd-pink-rgb), 0.5),
+        transparent 50%
+      );
+  }
+
+  .btn-bd-primary {
+    --bs-btn-font-weight: 600;
+    --bs-btn-color: var(--bs-white);
+    --bs-btn-bg: var(--bd-violet);
+    --bs-btn-border-color: var(--bd-violet);
+    --bs-btn-border-radius: 0.5rem;
+    --bs-btn-hover-color: var(--bs-white);
+    --bs-btn-hover-bg: #6528e0;
+    --bs-btn-hover-border-color: #6528e0;
+    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+    --bs-btn-active-color: var(--bs-btn-hover-color);
+    --bs-btn-active-bg: #5a23c8;
+    --bs-btn-active-border-color: #5a23c8;
+  }
+}
+
+.navbar {
+  padding: 1rem 0;
+  background-color: $aedg-navy;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+
+  .nav-link {
+    color: $white;
+    font-weight: 500;
+    size: 1.25rem;
+
+    &:hover {
+      color: $aedg-yellow;
+    }
+
+    &.active {
+      color: $aedg-yellow;
+    }
+  }
+
+  .dropdown {
+    &:hover .dropdown-menu {
+      display: block;
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dropdown-menu {
+      display: none;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease-in-out;
+      background-color: lighten($aedg-navy, 75%);
+      border-radius: 0.5rem;
+      padding: 0;
+      border: none;
+
+      li:first-child a {
+        border-radius: 0.5rem 0.5rem 0 0;
+      }
+
+      li:last-child a {
+        border-radius: 0 0 0.5rem 0.5rem;
+      }
+
+      .dropdown-item {
+        color: $aedg-navy;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: background-color 0.3s ease, color 0.3s ease;
+
+        &:hover {
+          background-color: lighten($aedg-yellow, 15%);
+          color: $aedg-navy;
+        }
+
+        &.active {
+          background-color: $aedg-yellow;
+          color: $aedg-navy;
+        }
+      }
+    }
+  }
+}
+
+.list {
+  .card {
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.01);
+    }
+  }
+}
+
+// Reusable button styles
+.btn-secondary {
+  background-color: $aedg-yellow;
+  color: $aedg-navy;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: darken($aedg-yellow, 10%);
+  }
+}
+
+.btn-primary {
+  background-color: $aedg-navy;
+  color: $white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: darken($aedg-navy, 10%);
+  }
+}
+
+// Custom styles for the partner cards
+
+.button-container {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.card-body {
+  display: flex;
+  flex-direction: column; /* Arrange children in a vertical column */
+  justify-content: space-between; /* Push the button container to the bottom */
+  height: 100%; /* Ensure the card body fills the available space */
+}
+
+.button-container {
+  margin-top: auto; /* Push the button container to the bottom of the card body */
+}
+
+.content-flexbox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.content-text {
+  flex: 1; /* Allow text to take up remaining space */
+  min-width: 50%;
+}
+
+.content-image {
+  flex: 0 1 auto; /* Prevent the image from shrinking excessively */
+  max-width: 400px;
+}
+
+.content-image img {
+  width: 100%; /* Ensure image scales within its container */
+  height: auto;
+}
+
+.card {
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  background-color: $partner-card-bg;
+}
+
+// FAQ Page Styles
+.faq-wrapper {
+  display: flex; /* Align tabs and content side-by-side */
+  gap: 2rem; /* Add spacing between the tabs and content */
+  align-items: flex-start; /* Align tabs and content at the top */
+
+  @media (max-width: 768px) {
+    flex-direction: column; /* Stack tabs above content on smaller screens */
+  }
+}
+
+.tab-content {
+  flex-grow: 1;
+}
+
+.faq-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: $aedg-navy;
+}
+
+.faq-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Add spacing between tabs */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  .nav-link {
+    width: 100%; /* Tabs take up full width in the column layout */
+    font-size: 1rem;
+    font-weight: 600;
+    color: $aedg-navy;
+    background: $faq-category-inactive-bg;
+    border-radius: 20px;
+    padding: 10px 20px;
+    text-align: left;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+
+    &.active {
+      background: $faq-category-active-bg;
+      color: $white;
+    }
+
+    &:hover {
+      background: $aedg-yellow;
+      color: $white;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: row; /* Change tabs to row layout on smaller screens */
+    flex-wrap: wrap; /* Allow wrapping if needed */
+    justify-content: center; /* Center align tabs in row layout */
+    gap: 1rem; /* Maintain consistent spacing */
+
+    .nav-link {
+      flex: 1 1 calc(50% - 1rem); /* Make tabs divide evenly into rows */
+      text-align: center; /* Center align text in row layout */
+    }
+  }
+}
+
+.accordion-button {
+  background-color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  color: $aedg-navy;
+  border: none;
+  padding: 1rem;
+  position: relative; /* Enables positioning for the vertical bar */
+  transition: all 0.3s ease-in-out;
+
+  &:before {
+    content: ''; /* Create the small vertical bar */
+    position: absolute;
+    top: 10%; /* Adjust position vertically */
+    left: 0; /* Align the bar to the left edge */
+    width: 5px;
+    height: 80%; /* Height of the bar relative to the button */
+    background-color: transparent; /* Default state: no bar visible */
+    transition: background-color 0.3s ease-in-out;
+    border-radius: 4px;
+  }
+
+  &:not(.collapsed) {
+    background-color: transparent; /* Change background color when the question is opened */
+  }
+
+  &:not(.collapsed):before {
+    background-color: $aedg-yellow; /* Bar becomes visible when the question is opened */
+  }
+
+  &:focus {
+    box-shadow: none; /* Remove the default focus outline */
+  }
+}
+
+.accordion-body {
+  font-size: 0.95rem;
+  color: $faq-accordion-text;
+  background-color: $faq-accordion-bg;
+  padding: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 0.375rem 0.375rem;
+}
+
+.cta-section {
+  background-color: $aedg-navy;
+  padding: 2rem 1rem;
+  border-radius: 1rem;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .cta-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    color: $white;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  .cta-text {
+    flex: 1;
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+  }
+}
+
+.footer-about {
+  max-width: 400px;
+  min-width: 100px;
+}
+
+/* Uniform image size for the About section */
+.uniform-size {
+  width: 100%; /* Ensures the image scales to fit its container */
+  max-width: 400px; /* Adjust to set a maximum size */
+  height: 300px; /* Fixed height for uniformity */
+  object-fit: cover; /* Ensures the image fills the container, cropping if necessary */
+  display: block;
+  margin: 0 auto; /* Center images in their containers */
+}
