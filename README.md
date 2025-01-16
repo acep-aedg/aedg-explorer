@@ -68,7 +68,7 @@ Ensure you have the following dependencies installed:
 **Communities**
 
 1. Download the `communities.geojson` file from the AEDG Google Drive and place it in `db/imports/`
-2. Run the rake task to import communities into the db: `rails import:communities`
+2. Run the rake task to import data files from into the db: `rails import:communities`
 
 ---
 
