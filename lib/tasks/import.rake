@@ -34,4 +34,17 @@ namespace :import do
     end
     puts "Communities imported successfully!"
   end
+
+  desc "Import Data Files from Google Drive via rclone"
+  task pull_google_drive: :environment do
+    puts "Updating import files from Google Drive..."
+    success = system("rclone copy -v aedg-db-imports:/ db/imports")
+
+    if success
+      puts "Import files updated successfully!"
+    else
+      puts "Failed to update import files from Google Drive."
+      exit 1
+    end
+  end
 end
