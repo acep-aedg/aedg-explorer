@@ -1,5 +1,9 @@
 %p#notice= notice
+%h1 Show Community
 
+= render partial: "dropdown", locals: { communities: @communities, current_community: @community }
+
+%h2= @community.name
 %p
   %b Fips code:
   = @community.fips_code
@@ -21,4 +25,5 @@
 %p
   %b Global:
   = @community.global_id
+
 = link_to 'Back', communities_path

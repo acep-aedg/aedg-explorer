@@ -8,6 +8,8 @@ class CommunitiesController < ApplicationController
 
   # GET /communities/1 or /communities/1.json
   def show
+    @community = Community.find(params[:id])
+    @communities = Community.all
   end
 
   private

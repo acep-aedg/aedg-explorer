@@ -1,0 +1,8 @@
+%form{ data: { controller: "community-dropdown" } }
+  %label{ for: "community-dropdown" } Select a community:
+  %select#community-dropdown{ 
+    data: { action: "change->community-dropdown#update", community_dropdown_target: "select" } 
+  }
+    %option{ value: "", selected: current_community.nil?, disabled: true } -- Select a Community --
+    - communities.each do |community|
+      %option{ value: community.friendly_id, selected: community == current_community }= community.name
