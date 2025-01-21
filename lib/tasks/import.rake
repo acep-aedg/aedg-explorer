@@ -1,7 +1,27 @@
+require 'json'
+
 namespace :import do
+  desc "Import Data Files into the Database"
+  task all: :environment do
+    Rake::Task['import:pull_google_drive'].invoke
+    Rake::Task['import:communities'].invoke
+  end
+
+  desc "Import Data Files from Google Drive via rclone"
+  task pull_google_drive: :environment do
+    puts "Updating import files from Google Drive..."
+    success = system("rclone copy -v aedg-db-imports:/ db/imports")
+
+    if success
+      puts "Import files updated successfully!"
+    else
+      puts "Failed to update import files from Google Drive."
+      exit 1
+    end
+  end
+
   desc "Import Community Data from .geojson file"
   task communities: :environment do
-    require 'json'
 
     filepath = Rails.root.join('db', 'imports', 'communities.geojson')
     file = File.read(filepath)
