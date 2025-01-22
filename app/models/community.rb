@@ -2,6 +2,7 @@ class Community < ApplicationRecord
   include CommunityAttributes
   extend FriendlyId
   friendly_id :slug_candidates, use: :slugged
+  has_one :population, foreign_key: :fips_code, primary_key: :fips_code
 
   # Handle the case where the name is not unique
   def slug_candidates
@@ -13,8 +14,9 @@ class Community < ApplicationRecord
 
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
-  validates :latitude, presence: true
-  validates :longitude, presence: true
+  #TODO: Uncomment this line after the lat,long is added to the communities dataset
+  #validates :latitude, presence: true
+  #validates :longitude, presence: true
   validates :ansi_code, presence: true, uniqueness: true
   validates :community_id, presence: true, uniqueness: true
   validates :global_id, presence: true, uniqueness: true
