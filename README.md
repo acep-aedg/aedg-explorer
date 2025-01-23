@@ -65,10 +65,52 @@ Ensure you have the following dependencies installed:
 
 ### Importing Data
 
-**Communities**
+#### Setting up Rclone
+To import data, you must have access to the **AEDG Database Imports** shared google drive and the **AEDG Keeper Vault**.
 
-1. Download the `communities.geojson` file from the AEDG Google Drive and place it in `db/imports/`
-2. Run the rake task to import data files from into the db: `rails import:communities`
+1. **Install Rclone**
+    - Follow the [Rclone installation guide](https://rclone.org/install/) to install `rclone` on your system.
+
+1. **Locate Your Rclone Configuration File**
+    - Run the following command to find the lcoation of your `rclone.conf` file 
+    ```sh
+    rclone config file
+    ```
+1. **Update Rclone Configuration** 
+    - In **Keeper**, locate the **aedg-explorer rclone config** vault item.
+    - Copy the contents of the vault item and paste them into your local `rclone.conf` file.
+1. **Authenticate Rclone**
+    - Authenticate your Rclone setup via your web browser with:
+    ```sh
+    rclone config reconnect aedg-db-imports:
+
+    ### Rclone prompted Questions
+    Use web browser to automatically authenticate rclone with remote?
+    Y
+
+    Change current Shared Drive (Team Drive) ID "############"?
+    N
+    ```
+    Enter **Y** when prompted 
+1. **Verify Connection**
+    - Confirm that the Rclone connection is working by listing files in the shared Google Drive:
+    ```sh
+    rclone ls aedg-db-imports: 
+    ```
+
+#### Pulling Google Drive Files
+Once Rclone is set up, you can use the Rails task to pull the necessary Google Drive files into the project.
+1. **Run the Rake Task**
+    - Use the following command to pull files from Google Drive into the `db/imports/` directory:
+    ```sh
+    rails import:pull_google_drive
+    ```
+1. **Verify Files**
+    - After running the task, check the `db/imports/` directory to endure the files have successfully downloaded
+
+#### TODO: Importing Data into Models/Database
+
+Documentation for importing the specific data into the models/database is pending. 
 
 ---
 
