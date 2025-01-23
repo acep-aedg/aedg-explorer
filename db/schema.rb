@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_24_004341) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_23_003718) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "aedg_imports", force: :cascade do |t|
+    t.integer "aedg_id"
+    t.string "importable_type", null: false
+    t.bigint "importable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["importable_type", "importable_id"], name: "index_aedg_imports_on_importable"
+  end
 
   create_table "communities", force: :cascade do |t|
     t.string "fips_code"
