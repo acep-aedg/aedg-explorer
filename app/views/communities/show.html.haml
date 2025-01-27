@@ -1,29 +1,127 @@
-%p#notice= notice
-%h1 Show Community
+.container.py-4
+  .row
+    %p#notice= notice
+  .row
+    .col
+      = link_to 'Back', communities_path, class: 'btn btn-primary'
 
-= render partial: "dropdown", locals: { communities: @communities, current_community: @community }
+  .row.align-items-center
+    .col.text-center
+      %h1.my-3 Community Summary
+      = render partial: "dropdown", locals: { communities: @communities, current_community: @community }
+  
 
-%h2= @community.name
-%p
-  %b Fips code:
-  = @community.fips_code
-%p
-  %b Name:
-  = @community.name
-%p
-  %b Latitude:
-  = @community.latitude
-%p
-  %b Longitude:
-  = @community.longitude
-%p
-  %b Ansi code:
-  = @community.ansi_code
-%p
-  %b Community:
-  = @community.community_id
-%p
-  %b Global:
-  = @community.global_id
+.container
+  .row
+    .col
+      %h2=@community.name
+      %hr
+  .row.g-4
+    %h3 Overview
+    .col
+      .card
+        .card-header
+          .card-title
+            Identifiers 
+        .card-body
+          %p
+            %b FIPS code: 
+            = @community.fips_code
+          %p
+            %b ANSI code:
+            = @community.ansi_code
+    .col
+      .card
+        .card-header
+          .card-title
+            Geography
+        .card-body
+          %p
+            %b Latitude:
+            = @community.latitude
+          %p
+            %b Longitude:
+            = @community.longitude
 
-= link_to 'Back', communities_path
+    .col
+      .card
+        .card-header
+          .card-title
+            Population
+        .card-body
+          %p
+            %b Total Population:
+            = @community.population.population
+    .col
+      .card
+        .card-header
+          .card-title
+            Education
+        .card-body
+    .col
+      .card
+        .card-header
+          .card-title
+            Election Districts
+        .card-body
+
+    .row.g-4
+      %h3 Fuel Prices
+      .col 
+        .card 
+          .card-header 
+            .card-title
+              Diesel
+          .card-body
+
+      .col 
+        .card 
+          .card-header 
+            .card-title
+              Gasoline
+          .card-body
+
+      .col 
+        .card
+          .card-header 
+            .card-title
+              Propane
+          .card-body
+
+    .row.g-4
+      %h3 Electricity
+      .col 
+        .card
+          .card-header 
+            .card-title
+              Utility
+          .card-body
+
+      .col 
+        .card 
+          .card-header 
+            .card-title
+              Fuel
+          .card-body
+
+      .col 
+        .card 
+          .card-header 
+            .card-title
+              Rates
+          .card-body
+
+      .col 
+        .card 
+          .card-header 
+            .card-title
+              Production
+          .card-body
+
+      .col 
+        .card 
+          .card-header 
+            .card-title
+              Sales, Revenue and Customers
+          .card-body   
+
