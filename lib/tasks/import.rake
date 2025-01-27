@@ -6,7 +6,6 @@ namespace :import do
   task all: :environment do
     Rake::Task['import:pull_google_drive'].invoke
     Rake::Task['import:communities'].invoke
-    Rake::Task['import:populations'].invoke
   end
 
   desc "Import Data Files from Google Drive via rclone"
@@ -55,35 +54,5 @@ namespace :import do
       end
     end
     puts "Communities imported successfully!"
-  end
-
-  desc "Import Population Data from .csv file"
-  task populations: :environment do
-    filepath = Rails.root.join('db', 'imports', 'populations.csv')
-    populations_data = CSV.read(filepath, headers: true)
-
-    populations_data.each_with_index do |row, index|
-      begin
-        # Validate presence of fips_code
-        if row['fips_code'].blank?
-          raise "Missing fips_code for record at index #{index}. Row: #{row.inspect}"
-        end
-
-        # Find or initialize the population based on fips_code
-        population = Population.find_or_initialize_by(fips_code: row['fips_code'])
-        population.assign_attributes(row.to_h)
-
-        if population.save
-          puts "Saved Population for: #{population.fips_code}"
-          
-        else
-          puts "Failed to save Population for: #{population.fips_code}"
-          puts "Errors: #{population.errors.full_messages.join(', ')}"
-        end
-
-      rescue StandardError => e
-        puts "Error processing Population for: #{row['fips_code'] || 'Unknown'} at index #{index}, Error: #{e.message}"
-      end
-    end
   end
 end
