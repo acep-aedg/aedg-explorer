@@ -1,5 +1,6 @@
-%h1 Listing communities
-
-= render partial: "dropdown", locals: { communities: @communities, current_community: nil }
-
-%br
+.container.py-4
+  .row.align-items-center
+    .col.text-center
+      %h1.my-3 Community Summary
+      = render partial: "dropdown", locals: { communities: @communities, current_community: nil }
+  
