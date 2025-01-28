@@ -20,4 +20,7 @@ class Community < ApplicationRecord
   validates :ansi_code, presence: true, uniqueness: true
   validates :community_id, presence: true, uniqueness: true
   validates :global_id, presence: true, uniqueness: true
+
+  default_scope { order(name: :asc )}
+
 end
