@@ -1,8 +1,3 @@
-%form{ data: { controller: "community-dropdown" } }
-  %label{ for: "community-dropdown" } Select a community:
-  %select#community-dropdown{ 
-    data: { action: "change->community-dropdown#update", community_dropdown_target: "select" } 
-  }
-    %option{ value: "", selected: current_community.nil?, disabled: true } -- Select a Community --
-    - communities.each do |community|
-      %option{ value: community_path(community), selected: community == current_community }= community.name
+%div{ data: { controller: "community-dropdown", action: "change->community-dropdown#update" } }
+  - community_array = @communities.map { |community| [community.name, url_for(community)] }
+  = select_tag(:community, options_for_select(community_array, url_for(current_community) || ""), { prompt: '-- Select a Community --',  data: { community_dropdown_target: "select" } })
