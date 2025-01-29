@@ -10,33 +10,22 @@ export default class extends Controller {
   }
 
   update(event) {
-    const friendlyId = event.target.value;
-    console.log(friendlyId);
-
-    if (friendlyId) {
-      const url = `/communities/${friendlyId}`;
-      console.log(`Navigating to: ${url}`);
-      Turbo.visit(url); // Navigate to the selected community
-    }
+    const url = event.target.value;
+    Turbo.visit(url);
   }
 
   syncDropdownWithUrl() {
-    // Extract the friendly ID from the current URL path
-    const pathParts = window.location.pathname.split('/');
-    const selectedCommunity = pathParts[pathParts.length - 1];
+    const currentPath = window.location.pathname;
 
-    if (selectedCommunity) {
-      // Find the matching option in the dropdown
-      const matchingOption = Array.from(this.selectTarget.options).find(
-        (option) => option.value === selectedCommunity
-      );
-      if (matchingOption) {
-        this.selectTarget.value = selectedCommunity;
-      } else {
-        this.selectTarget.value = ''; // Reset to default if no match is found
-      }
+    // Find the matching option with a value equal to the current path
+    const matchingOption = Array.from(this.selectTarget.options).find(
+      (option) => option.value === currentPath
+    );
+
+    if (matchingOption) {
+      this.selectTarget.value = currentPath;
     } else {
-      this.selectTarget.value = ''; // Reset to default if no friendly ID is in the URL
+      this.selectTarget.value = '';
     }
   }
 }

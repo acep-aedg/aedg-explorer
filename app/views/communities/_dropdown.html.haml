@@ -5,4 +5,4 @@
   }
     %option{ value: "", selected: current_community.nil?, disabled: true } -- Select a Community --
     - communities.each do |community|
-      %option{ value: community.friendly_id, selected: community == current_community }= community.name
+      %option{ value: community_path(community), selected: community == current_community }= community.name
