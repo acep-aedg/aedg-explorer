@@ -1,4 +1,5 @@
 require 'json'
+require 'csv'
 
 namespace :import do
   desc "Import Data Files into the Database"

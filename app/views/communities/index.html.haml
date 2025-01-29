@@ -1,29 +1,6 @@
-%h1 Listing communities
-
-%table
-  %thead
-    %tr
-      %th Fips code
-      %th Name
-      %th Latitude
-      %th Longitude
-      %th Ansi code
-      %th Community
-      %th Global
-      %th
-      %th
-      %th
-
-  %tbody
-    - @communities.each do |community|
-      %tr
-        %td= community.fips_code
-        %td= community.name
-        %td= community.latitude
-        %td= community.longitude
-        %td= community.ansi_code
-        %td= community.community_id
-        %td= community.global_id
-        %td= link_to 'Show', community
-
-%br
+.container.py-4
+  .row.align-items-center
+    .col.text-center
+      %h1.my-3 Community Summary
+      = render partial: "dropdown", locals: { communities: @communities, current_community: nil }
+  
