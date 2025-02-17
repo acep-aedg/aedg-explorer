@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_24_004341) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_17_225415) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -20,16 +20,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_24_004341) do
     t.string "name"
     t.decimal "latitude"
     t.decimal "longitude"
-    t.integer "ansi_code"
-    t.uuid "community_id"
-    t.uuid "global_id"
+    t.string "ansi_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+    t.string "regional_corporation_fips_code"
+    t.string "borough_fips_code"
+    t.integer "grid_id"
+    t.uuid "dcra_code"
+    t.boolean "pce_eligible"
+    t.boolean "pce_active"
     t.index ["ansi_code"], name: "index_communities_on_ansi_code", unique: true
-    t.index ["community_id"], name: "index_communities_on_community_id", unique: true
     t.index ["fips_code"], name: "index_communities_on_fips_code", unique: true
-    t.index ["global_id"], name: "index_communities_on_global_id", unique: true
     t.index ["slug"], name: "index_communities_on_slug", unique: true
   end
 
