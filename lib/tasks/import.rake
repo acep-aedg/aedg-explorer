@@ -12,30 +12,31 @@ namespace :import do
   task pull_github_files: :environment do
     repo_url = ENV['GH_DATA_REPO_URL']
     folder_path = "data/final"
-    local_dir = "db/imports"
+    local_dir = Rails.root.join("db", "imports").to_s 
 
     puts "Fetching files from GitHub repo: #{repo_url}, folder: #{folder_path}"
 
-    # Create a temporary directory to clone the repo
-    temp_dir = "tmp_repo"
+    # Ensure the local directory & keep file exists
+    FileUtils.mkdir_p(local_dir)
+    keep_file = File.join(local_dir, ".keep")
+    FileUtils.touch(keep_file) unless File.exist?(keep_file)
 
-    puts "Cloning repository..."
-    system("git clone --no-checkout #{repo_url} #{temp_dir}")
-    
-    Dir.chdir(temp_dir) do
-      # Enable sparse-checkout
-      unless File.exist?(".git/info/sparse-checkout")
-        system("git sparse-checkout init --cone")
-        system("git sparse-checkout set #{folder_path}")
-        system("git checkout")
+    # Create a temporary directory
+    Dir.mktmpdir do |temp_dir|
+      system("git clone --no-checkout #{repo_url} #{temp_dir}")
+
+      Dir.chdir(temp_dir) do
+        # Enable sparse-checkout
+        unless File.exist?(".git/info/sparse-checkout")
+          system("git sparse-checkout init --cone")
+          system("git sparse-checkout set #{folder_path}")
+          system("git checkout")
+        end
+
+        # Sync only new/updated files from `data/final/` to `db/imports/`
+        system("rsync -av --update --exclude='*.md' #{folder_path}/ #{local_dir}/")
       end
-
-      # Sync only new/updated files from `data/final/` to `db/imports/`
-      system("rsync -av --update --exclude='*.md' #{folder_path}/ ../#{local_dir}/")
     end
-
-    # Remove temporary repo
-    FileUtils.rm_rf(temp_dir)
 
     puts "Import complete! Only new/updated files copied to #{local_dir}."
   end
