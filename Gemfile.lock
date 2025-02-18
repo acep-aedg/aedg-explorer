@@ -163,6 +163,7 @@ GEM
     mini_mime (1.1.5)
     minitest (5.25.4)
     msgpack (1.7.5)
+    multi_json (1.15.0)
     mutex_m (0.3.0)
     net-imap (0.5.1)
       date
@@ -237,9 +238,12 @@ GEM
     reline (0.5.12)
       io-console (~> 0.5)
     rexml (3.3.9)
-    rgeo (3.0.1)
+    rgeo (1.1.2)
     rgeo-activerecord (7.0.1)
       activerecord (>= 5.0)
+      rgeo (>= 1.0.0)
+    rgeo-geojson (2.2.0)
+      multi_json (~> 1.15)
       rgeo (>= 1.0.0)
     ruby_parser (3.21.1)
       racc (~> 1.5)
@@ -309,6 +313,8 @@ DEPENDENCIES
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.1.5)
+  rgeo
+  rgeo-geojson
   selenium-webdriver
   sprockets-rails
   stimulus-rails

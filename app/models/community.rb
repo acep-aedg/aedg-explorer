@@ -14,12 +14,11 @@ class Community < ApplicationRecord
 
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
-  #TODO: Uncomment this line after the lat,long is added to the communities dataset
-  #validates :latitude, presence: true
-  #validates :longitude, presence: true
+  validates :latitude, presence: true
+  validates :longitude, presence: true
   validates :ansi_code, presence: true, uniqueness: true
-  validates :community_id, presence: true, uniqueness: true
-  validates :global_id, presence: true, uniqueness: true
+  validates :borough_fips_code, presence: true
+  validates :dcra_code, presence: true, uniqueness: true
 
   default_scope { order(name: :asc )}
 
