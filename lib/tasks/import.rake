@@ -1,5 +1,5 @@
-require 'json'
 require 'csv'
+require 'rgeo/geo_json'
 
 namespace :import do
   desc "Import Data Files into the Database"
@@ -25,22 +25,28 @@ namespace :import do
   task communities: :environment do
 
     filepath = Rails.root.join('db', 'imports', 'communities.geojson')
-    file = File.read(filepath)
-    communities_data = JSON.parse(file)
+    community_data = File.read(filepath)
+    feature_collection = RGeo::GeoJSON.decode(community_data, json_parser: :json)
 
-    communities_data['features'].each_with_index do |feature, index|
-      properties = feature['properties']
-
+    feature_collection.each_with_index do |feature, index|
       begin
+        properties = feature.properties
+        geo_object = feature.geometry
+        puts geo_object.as_text
 
         # Validate presence of fips_code
         if properties['fips_code'].blank?
           raise "Missing fips_code for record at index #{index}. Properties: #{properties.inspect}"
         end
+
+        # Ensure it's a valid Point
+        if geo_object.nil? || geo_object.geometry_type.type_name != "Point"
+          raise "Invalid geometry type at index #{index}: #{geometry.inspect}"
+        end
         
         # Find or initialize the community based on fips_code
         community = Community.find_or_initialize_by(fips_code: properties['fips_code'])
-        community.assign_aedg_attributes(properties)
+        community.assign_aedg_attributes(properties, geo_object)
 
         if community.save
           puts "Saved Community: #{community.name}"

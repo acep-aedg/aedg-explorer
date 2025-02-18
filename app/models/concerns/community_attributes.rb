@@ -3,7 +3,7 @@ module CommunityAttributes
   extend ActiveSupport::Concern
 
   included do
-    def assign_aedg_attributes(properties)
+    def assign_aedg_attributes(properties, geo_object)
       assign_attributes(
         name: properties['name'],
         regional_corporation_fips_code: properties['regional_corporation_fips_code'],
@@ -15,7 +15,7 @@ module CommunityAttributes
         pce_active: properties['pce_active'],
         latitude: properties['latitude'],
         longitude: properties['longitude'],
-        
+        location: geo_object
       )
     end
   end
