@@ -4,21 +4,41 @@ require 'rgeo/geo_json'
 namespace :import do
   desc "Import Data Files into the Database"
   task all: :environment do
-    Rake::Task['import:pull_google_drive'].invoke
+    Rake::Task['import:pull_github_files'].invoke
     Rake::Task['import:communities'].invoke
   end
 
-  desc "Import Data Files from Google Drive via rclone"
-  task pull_google_drive: :environment do
-    puts "Updating import files from Google Drive..."
-    success = system("rclone copy -v aedg-db-imports:/ db/imports")
+  desc "Import only the data files from a specific GitHub folder"
+  task pull_github_files: :environment do
+    repo_url = ENV['GH_DATA_REPO_URL']
+    folder_path = "data/final"
+    local_dir = Rails.root.join("db", "imports").to_s 
 
-    if success
-      puts "Import files updated successfully!"
-    else
-      puts "Failed to update import files from Google Drive."
-      exit 1
+    puts "Fetching files from GitHub repo: #{repo_url}, folder: #{folder_path}"
+
+    # Ensure the local directory & keep file exists
+    FileUtils.mkdir_p(local_dir)
+    keep_file = File.join(local_dir, ".keep")
+    FileUtils.touch(keep_file) unless File.exist?(keep_file)
+
+    # Create a temporary directory
+    Dir.mktmpdir do |temp_dir|
+      system("git clone --no-checkout #{repo_url} #{temp_dir}")
+
+      Dir.chdir(temp_dir) do
+        # Enable sparse-checkout
+        unless File.exist?(".git/info/sparse-checkout")
+          system("git sparse-checkout init --cone")
+          system("git sparse-checkout set #{folder_path}")
+          system("git checkout")
+        end
+
+        # Sync only new/updated files from `data/final/` to `db/imports/`
+        system("rsync -av --update --exclude='*.md' #{folder_path}/ #{local_dir}/")
+      end
     end
+
+    puts "Import complete! Only new/updated files copied to #{local_dir}."
   end
 
   desc "Import Community Data from .geojson file"
