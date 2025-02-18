@@ -23,7 +23,6 @@ namespace :import do
 
   desc "Import Community Data from .geojson file"
   task communities: :environment do
-
     filepath = Rails.root.join('db', 'imports', 'communities.geojson')
     community_data = File.read(filepath)
     feature_collection = RGeo::GeoJSON.decode(community_data, json_parser: :json)
@@ -32,18 +31,18 @@ namespace :import do
       begin
         properties = feature.properties
         geo_object = feature.geometry
-        puts geo_object.as_text
 
         # Validate presence of fips_code
         if properties['fips_code'].blank?
           raise "Missing fips_code for record at index #{index}. Properties: #{properties.inspect}"
         end
 
-        # Ensure it's a valid Point
+        # Ensure it's a valid Point and not nil
         if geo_object.nil? || geo_object.geometry_type.type_name != "Point"
-          raise "Invalid geometry type at index #{index}: #{geometry.inspect}"
+          geo_type = geo_object.nil? ? "nil" : geo_object.geometry_type.type_name
+          raise "Invalid geometry type '#{geo_type}' at index #{index}. Only 'Point' geometry is allowed."
         end
-        
+
         # Find or initialize the community based on fips_code
         community = Community.find_or_initialize_by(fips_code: properties['fips_code'])
         community.assign_aedg_attributes(properties, geo_object)
