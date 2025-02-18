@@ -45,12 +45,12 @@ Ensure you have the following dependencies installed:
 
 1. Setup the Database
 
-    To start the PostgreSQL database, use Docker Compose:
+    To start the PostgreSQL/PostGIS database, use Docker Compose:
 
     ```bash
     docker compose up -d
     # Create .env with the database credentials
-    echo "DATABASE_URL=postgres://postgres@localhost:5433" > .env
+    echo "DATABASE_URL=postgis://postgres@localhost:5433" > .env
     rails db:setup
     ```
 
