@@ -5,6 +5,7 @@ namespace :import do
   desc "Import Data Files into the Database"
   task all: :environment do
     Rake::Task['import:pull_github_files'].invoke
+    Rake::Task['import:boroughs'].invoke
     Rake::Task['import:communities'].invoke
   end
 
@@ -39,6 +40,49 @@ namespace :import do
     end
 
     puts "Import complete! Only new/updated files copied to #{local_dir}."
+  end
+
+  desc "Import Borough Data from .geojson file"
+  task boroughs: :environment do
+    filepath = Rails.root.join('db', 'imports', 'boroughs.geojson')
+    borough_data = File.read(filepath)
+    feature_collection = RGeo::GeoJSON.decode(borough_data, json_parser: :json)
+
+    feature_collection.each_with_index do |feature, index|
+      begin
+        properties = feature.properties
+        geo_object = feature.geometry
+        
+
+        # Validate presence of fips_code
+        if properties['fips_code'].blank?
+          raise "Missing fips_code for record at index #{index}. Properties: #{properties.inspect}"
+        end
+
+        # Ensure it's a valid geometry and not nil
+        valid_types = [ "Polygon", "MultiPolygon" ]
+
+        if geo_object.nil? || !valid_types.include?(geo_object.geometry_type.type_name)
+          geo_type = geo_object.nil? ? "nil" : geo_object.geometry_type.type_name
+          raise "Invalid geometry type '#{geo_type}' at index #{index}. Only #{valid_types.join(', ')} geometries are allowed."
+        end
+
+        # Find or initialize the borough based on fips_code
+        borough = Borough.find_or_initialize_by(fips_code: properties['fips_code'])
+        borough.assign_aedg_attributes(properties, geo_object)
+
+        if borough.save
+          puts "Saved Borough: #{borough.name}"
+        else
+          puts "Failed to save Borough: #{properties['name']}"
+          puts "Errors: #{borough.errors.full_messages.join(', ')}"
+        end
+
+      rescue StandardError => e
+        puts "Error processing Borough: #{properties['name'] || 'Unknown'} at index #{index}, Error: #{e.message}"
+      end
+    end
+    puts "Boroughs imported successfully!"
   end
 
   desc "Import Community Data from .geojson file"
