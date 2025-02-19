@@ -2,7 +2,7 @@ class Community < ApplicationRecord
   include CommunityAttributes
   extend FriendlyId
   friendly_id :slug_candidates, use: :slugged
-  has_one :population, foreign_key: :fips_code, primary_key: :fips_code
+  belongs_to :borough, foreign_key: "borough_fips_code", primary_key: "fips_code"
 
   # Handle the case where the name is not unique
   def slug_candidates
