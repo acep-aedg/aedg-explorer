@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'data-explorer', to: 'data_explorer#index'
 
   resources :communities, only: [:index, :show]
   get 'welcome/index'
