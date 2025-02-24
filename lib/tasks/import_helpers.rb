@@ -1,5 +1,5 @@
 module ImportHelpers
-  def self.import_geojson(filepath, model, valid_geometry_types)
+  def self.import_geojson_with_fips(filepath, model, valid_geometry_types)
     data = File.read(filepath)
     feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
 
