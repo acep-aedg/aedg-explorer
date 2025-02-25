@@ -10,6 +10,7 @@ namespace :import do
     Rake::Task['import:regional_corporations'].invoke
     Rake::Task['import:communities'].invoke
     Rake::Task['import:populations'].invoke
+    Rake::Task['import:transportation'].invoke
   end
 
   desc "Import only the data files from a specific GitHub folder"
