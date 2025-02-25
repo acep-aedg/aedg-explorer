@@ -1,10 +1,12 @@
 require 'csv'
 require 'rgeo/geo_json'
+require_relative 'import_helpers'
 
 namespace :import do
   desc "Import Data Files into the Database"
   task all: :environment do
     Rake::Task['import:pull_github_files'].invoke
+    Rake::Task['import:boroughs'].invoke
     Rake::Task['import:communities'].invoke
   end
 
@@ -41,43 +43,15 @@ namespace :import do
     puts "Import complete! Only new/updated files copied to #{local_dir}."
   end
 
+  desc "Import Borough Data from .geojson file"
+  task boroughs: :environment do
+    filepath = Rails.root.join('db', 'imports', 'boroughs.geojson')
+    ImportHelpers.import_geojson_with_fips(filepath, Borough, ["Polygon", "MultiPolygon"])
+  end
+
   desc "Import Community Data from .geojson file"
   task communities: :environment do
     filepath = Rails.root.join('db', 'imports', 'communities.geojson')
-    community_data = File.read(filepath)
-    feature_collection = RGeo::GeoJSON.decode(community_data, json_parser: :json)
-
-    feature_collection.each_with_index do |feature, index|
-      begin
-        properties = feature.properties
-        geo_object = feature.geometry
-
-        # Validate presence of fips_code
-        if properties['fips_code'].blank?
-          raise "Missing fips_code for record at index #{index}. Properties: #{properties.inspect}"
-        end
-
-        # Ensure it's a valid Point and not nil
-        if geo_object.nil? || geo_object.geometry_type.type_name != "Point"
-          geo_type = geo_object.nil? ? "nil" : geo_object.geometry_type.type_name
-          raise "Invalid geometry type '#{geo_type}' at index #{index}. Only 'Point' geometry is allowed."
-        end
-
-        # Find or initialize the community based on fips_code
-        community = Community.find_or_initialize_by(fips_code: properties['fips_code'])
-        community.assign_aedg_attributes(properties, geo_object)
-
-        if community.save
-          puts "Saved Community: #{community.name}"
-        else
-          puts "Failed to save Community: #{properties['name']}"
-          puts "Errors: #{community.errors.full_messages.join(', ')}"
-        end
-
-      rescue StandardError => e
-        puts "Error processing Community: #{properties['name'] || 'Unknown'} at index #{index}, Error: #{e.message}"
-      end
-    end
-    puts "Communities imported successfully!"
+    ImportHelpers.import_geojson_with_fips(filepath, Community, ["Point"])
   end
 end
