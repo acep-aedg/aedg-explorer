@@ -9,6 +9,7 @@ namespace :import do
     Rake::Task['import:boroughs'].invoke
     Rake::Task['import:regional_corporations'].invoke
     Rake::Task['import:communities'].invoke
+    Rake::Task['import:populations'].invoke
   end
 
   desc "Import only the data files from a specific GitHub folder"
@@ -60,5 +61,11 @@ namespace :import do
   task communities: :environment do
     filepath = Rails.root.join('db', 'imports', 'communities.geojson')
     ImportHelpers.import_geojson_with_fips(filepath, Community, ["Point"])
+  end
+
+  desc "Import Population Data from .csv file"
+  task populations: :environment do
+    filepath = Rails.root.join('db', 'imports', 'populations.csv')
+    ImportHelpers.import_csv_with_fips(filepath, Population)
   end
 end

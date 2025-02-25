@@ -37,4 +37,28 @@ module ImportHelpers
 
     puts "#{model.name.pluralize} imported successfully!"
   end
+
+  def self.import_csv_with_fips(filepath, model)
+    csv = CSV.read(filepath, headers: true)
+
+    csv.each_with_index do |row, index|
+      begin
+        fips_code = row["fips_code"]
+        next if fips_code.blank?
+
+        record = model.find_or_initialize_by(fips_code: fips_code)
+        record.assign_aedg_attributes(row.to_hash)
+
+        if record.save
+          puts "Saved #{model.name}: #{record.fips_code}"
+        else
+          puts "Failed to save #{model.name}: #{row['fips_code']}"
+          puts "Errors: #{record.errors.full_messages.join(', ')}"
+        end
+
+      rescue StandardError => e
+        puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
+      end
+    end
+  end
 end
