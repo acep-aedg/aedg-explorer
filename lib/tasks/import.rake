@@ -7,6 +7,7 @@ namespace :import do
   task all: :environment do
     Rake::Task['import:pull_github_files'].invoke
     Rake::Task['import:boroughs'].invoke
+    Rake::Task['import:regional_corporations'].invoke
     Rake::Task['import:communities'].invoke
   end
 
@@ -47,6 +48,12 @@ namespace :import do
   task boroughs: :environment do
     filepath = Rails.root.join('db', 'imports', 'boroughs.geojson')
     ImportHelpers.import_geojson_with_fips(filepath, Borough, ["Polygon", "MultiPolygon"])
+  end
+
+  desc "Import Regional Corporation Data from .geojson file"
+  task regional_corporations: :environment do
+    filepath = Rails.root.join('db', 'imports', 'regional_corporations.geojson')
+    ImportHelpers.import_geojson_with_fips(filepath, RegionalCorporation, ["Polygon", "MultiPolygon"])
   end
 
   desc "Import Community Data from .geojson file"
