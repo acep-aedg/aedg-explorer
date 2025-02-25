@@ -68,4 +68,10 @@ namespace :import do
     filepath = Rails.root.join('db', 'imports', 'populations.csv')
     ImportHelpers.import_csv_with_fips(filepath, Population)
   end
+
+  desc "Import Transportation Data from .csv file"
+  task transportation: :environment do
+    filepath = Rails.root.join('db', 'imports', 'transportation.csv')
+    ImportHelpers.import_csv_with_fips(filepath, Transportation)
+  end
 end
