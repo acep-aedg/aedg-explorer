@@ -43,16 +43,16 @@ module ImportHelpers
 
     csv.each_with_index do |row, index|
       begin
-        fips_code = row["fips_code"]
-        next if fips_code.blank?
+        community_fips_code = row["community_fips_code"]
+        next if community_fips_code.blank?
 
-        record = model.find_or_initialize_by(fips_code: fips_code)
+        record = model.find_or_initialize_by(community_fips_code: community_fips_code)
         record.assign_aedg_attributes(row.to_hash)
 
         if record.save
-          puts "Saved #{model.name}: #{record.fips_code}"
+          puts "Saved #{model.name}: #{record.community_fips_code}"
         else
-          puts "Failed to save #{model.name}: #{row['fips_code']}"
+          puts "Failed to save #{model.name}: #{row['community_fips_code']}"
           puts "Errors: #{record.errors.full_messages.join(', ')}"
         end
 

@@ -60,11 +60,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_25_210351) do
   end
 
   create_table "populations", force: :cascade do |t|
-    t.string "fips_code", null: false
+    t.string "community_fips_code", null: false
     t.integer "total_population", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["fips_code"], name: "index_populations_on_fips_code", unique: true
+    t.index ["community_fips_code"], name: "index_populations_on_community_fips_code", unique: true
   end
 
   create_table "regional_corporations", force: :cascade do |t|
@@ -79,5 +79,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_25_210351) do
 
   add_foreign_key "communities", "boroughs", column: "borough_fips_code", primary_key: "fips_code"
   add_foreign_key "communities", "regional_corporations", column: "regional_corporation_fips_code", primary_key: "fips_code"
-  add_foreign_key "populations", "communities", column: "fips_code", primary_key: "fips_code"
+  add_foreign_key "populations", "communities", column: "community_fips_code", primary_key: "fips_code"
 end
