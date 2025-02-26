@@ -1,0 +1,44 @@
+// This file contains styles for community pages
+
+.community-dropdown-card {
+  background-color: #cecece;
+  border: none;
+  border-radius: 20px;
+  box-shadow: none;
+}
+
+.dropdown-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+}
+
+.community-dropdown {
+  width: 100%;
+  background: white;
+  border: 2px solid #ccc;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 20px; 
+  transition: all 0.3s ease-in-out;
+  text-align: center;
+
+  &:hover {
+    border-color: #007bff;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #555;
+  font-size: 18px;
+}
