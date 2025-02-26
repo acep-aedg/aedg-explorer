@@ -2,22 +2,24 @@
   .row
     %p#notice= notice
   .row
+    .col.text-center
+      %h1 Community Summary
+  .row.d-flex.justify-content-between
     .col
       = link_to 'Back', communities_path, class: 'btn btn-primary'
+    .col.text-end
+      = link_to 'Download/Print', '#', class: 'btn btn-primary'
 
   .row.align-items-center
-    .col.text-center
-      %h1.my-3 Community Summary
+    .col.text-center.py-5.my-4.community-dropdown-card
+      %h2=@community.name
+      %p.lead=@borough.name
       = render partial: "dropdown", locals: { communities: @communities, current_community: @community }
-  
-
-.container.py-4
   .row
     .col
-      %h2=@community.name
-      %hr
-  - cards = ["overview_card", "fuel_prices_card", "electricity_card"]
-  - cards.each do |card|
+      
+.container
+  - sections = ["quick_nav", "electricity", "fuel_prices", "overview", "related_datasets"]
+  - sections.each do |section|
     .row.my-4.g-4
-      = render partial: card
-
+      = render partial: section

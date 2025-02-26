@@ -9,6 +9,7 @@ class CommunitiesController < ApplicationController
   # GET /communities/1 or /communities/1.json
   def show
     @community = Community.find(params[:id])
+    @borough = @community.borough
     @communities = Community.all
   end
 
