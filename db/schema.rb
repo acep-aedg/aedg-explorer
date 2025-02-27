@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_25_231138) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_27_180706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "aedg_imports", force: :cascade do |t|
+    t.integer "aedg_id"
+    t.string "importable_type", null: false
+    t.bigint "importable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["importable_type", "importable_id"], name: "index_aedg_imports_on_importable"
+  end
 
   create_table "boroughs", force: :cascade do |t|
     t.string "fips_code", null: false
@@ -57,6 +66,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_25_231138) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "grids", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "populations", force: :cascade do |t|
