@@ -17,9 +17,22 @@
       = render partial: "dropdown", locals: { communities: @communities, current_community: @community }
   .row
     .col
-      
+
+- section_order = ["quick_nav", "electricity", "fuel_prices", "background", "related_datasets"]
+
 .container
-  - sections = ["quick_nav", "electricity", "fuel_prices", "overview", "related_datasets"]
-  - sections.each do |section|
-    .row.my-4.g-4
-      = render partial: section
+  - section_order.each do |section|
+    - section_id = section.parameterize
+
+    .d-flex.align-items-center.w-100
+      %button.collapse-btn.border-0.text-start.me-3{ 
+        type: "button", 
+        data: { bs_toggle: "collapse", bs_target: "##{section_id}" }, 
+        aria: { expanded: "true", controls: section_id }
+      }
+        %i.bi.bi-chevron-down.ms-2.arrow-icon
+        %h3.m-0= section.titleize
+ 
+    %div.collapse.show{ id: section_id }
+      .row.my-4.g-4
+        = render "communities/sections/#{section}"

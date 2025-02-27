@@ -42,3 +42,23 @@
   color: #555;
   font-size: 18px;
 }
+
+.collapse-btn {
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: none;
+  border: none;
+  padding: 10px;
+}
+
+.arrow-icon {
+  margin-right: 1rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.collapse-btn[aria-expanded="true"] .arrow-icon {
+  transform: rotate(180deg);
+}
