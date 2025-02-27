@@ -3,5 +3,5 @@ class Grid < ApplicationRecord
   include ImportFinders
   has_one :aedg_import, as: :importable
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
 end
