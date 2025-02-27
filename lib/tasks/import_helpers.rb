@@ -8,6 +8,7 @@ module ImportHelpers
   #     - `properties` include a `fips_code`.
   #     - `geometry` must be a valid type from `valid_geometry_types`.
   def self.import_geojson_with_fips(filepath, model, valid_geometry_types)
+    puts "Importing #{model.name.pluralize} from #{filepath}..."
     data = File.read(filepath)
     feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
 
@@ -53,6 +54,7 @@ module ImportHelpers
   #   - The model has a `community_fips_code` attribute for uniquely identifying records.
   #   - The CSV contains a `community_fips_code` column.
   def self.import_csv_with_fips(filepath, model)
+    puts "Importing #{model.name.pluralize} from #{filepath}..."
     csv = CSV.read(filepath, headers: true)
 
     csv.each_with_index do |row, index|
@@ -81,6 +83,7 @@ module ImportHelpers
   #   - The CSV contains an "id" column, which represents an external identifier (`aedg_id`).
   #   - The `id` from the CSV is stored in `aedg_imports.aedg_id` to maintain external ID references.
   def self.import_csv_with_id(filepath, model)
+    puts "Importing #{model.name.pluralize} from #{filepath}..."
     csv = CSV.read(filepath, headers: true)
 
     csv.each_with_index do |row, index|
@@ -90,12 +93,10 @@ module ImportHelpers
 
         record = model.import_aedg_attributes(row.to_hash)
 
-        if record&.persisted?
-          puts "Skipped (Already Exists): #{model.name}: #{record.name}"
-        elsif record && record.save
-          puts "Saved #{model.name}: #{record.name}"
+        if record.save
+          puts "Saved #{model.name}: #{record.aedg_id}"
         else
-          puts "Failed to save #{model.name}: #{row['name']}"
+          puts "Failed to save #{model.name}: #{row['id']}"
           puts "Errors: #{record.errors.full_messages.join(', ')}"
         end
       rescue StandardError => e

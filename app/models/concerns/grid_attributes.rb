@@ -6,16 +6,9 @@ module GridAttributes
     def self.import_aedg_attributes(properties)
       properties.symbolize_keys!
 
-      existing_grid = Grid.find_by(name: properties[:name])
-      existing_import = AedgImport.find_by(aedg_id: properties[:id], importable_type: "Grid")
-
-      # Skip if either a grid with this name exists
-      if existing_grid
-        return existing_grid
-      end
-
       g = Grid.build(
-        name: properties[:name]
+        name: properties[:name],
+        aedg_id: properties[:id]
       )
       g
     end
