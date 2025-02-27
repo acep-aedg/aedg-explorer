@@ -8,6 +8,7 @@ namespace :import do
     Rake::Task['import:pull_github_files'].invoke
     Rake::Task['import:boroughs'].invoke
     Rake::Task['import:regional_corporations'].invoke
+    Rake::Task['import:grids'].invoke
     Rake::Task['import:communities'].invoke
     Rake::Task['import:populations'].invoke
     Rake::Task['import:transportation'].invoke
@@ -74,5 +75,11 @@ namespace :import do
   task transportation: :environment do
     filepath = Rails.root.join('db', 'imports', 'transportation.csv')
     ImportHelpers.import_csv_with_fips(filepath, Transportation)
+  end
+
+  desc "Import Grid Data from .csv file"
+  task grids: :environment do
+    filepath = Rails.root.join('db', 'imports', 'grids.csv')
+    ImportHelpers.import_csv_with_id(filepath, Grid)
   end
 end
