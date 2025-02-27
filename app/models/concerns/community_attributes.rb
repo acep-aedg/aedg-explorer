@@ -8,7 +8,7 @@ module CommunityAttributes
         name: properties['name'],
         regional_corporation_fips_code: properties['regional_corporation_fips_code'],
         borough_fips_code: properties['borough_fips_code'],
-        grid_id: properties['grid_id'],
+        grid: Grid.from_aedg_id(properties['grid_id']).first,
         ansi_code: properties['ansi_code'],
         dcra_code: properties['dcra_code'],
         pce_eligible: properties['pce_eligible'],
