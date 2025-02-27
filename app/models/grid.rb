@@ -1,0 +1,8 @@
+class Grid < ApplicationRecord
+  include GridAttributes
+  include ImportFinders
+  has_one :aedg_import, as: :importable
+  has_many :communities
+
+  validates :name, presence: true, uniqueness: true
+end

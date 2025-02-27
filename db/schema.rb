@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_25_231138) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_27_222522) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "aedg_imports", force: :cascade do |t|
+    t.integer "aedg_id"
+    t.string "importable_type", null: false
+    t.bigint "importable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["importable_type", "importable_id"], name: "index_aedg_imports_on_importable"
+  end
 
   create_table "boroughs", force: :cascade do |t|
     t.string "fips_code", null: false
@@ -59,6 +68,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_25_231138) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
+  create_table "grids", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_grids_on_name"
+  end
+
   create_table "populations", force: :cascade do |t|
     t.string "community_fips_code", null: false
     t.integer "total_population", null: false
@@ -95,6 +111,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_25_231138) do
   end
 
   add_foreign_key "communities", "boroughs", column: "borough_fips_code", primary_key: "fips_code"
+  add_foreign_key "communities", "grids"
   add_foreign_key "communities", "regional_corporations", column: "regional_corporation_fips_code", primary_key: "fips_code"
   add_foreign_key "populations", "communities", column: "community_fips_code", primary_key: "fips_code"
   add_foreign_key "transportations", "communities", column: "community_fips_code", primary_key: "fips_code"

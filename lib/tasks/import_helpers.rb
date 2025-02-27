@@ -1,5 +1,14 @@
 module ImportHelpers
+  # Imports geographic data from a GeoJSON file into a specified model.
+  # 
+  # Assumptions:
+  #   - The model has a method `assign_aedg_attributes(properties, geo_object)`.
+  #   - The model has a `fips_code` attribute that uniquely identifies records.
+  #   - The GeoJSON contains a `FeatureCollection` where:
+  #     - `properties` include a `fips_code`.
+  #     - `geometry` must be a valid type from `valid_geometry_types`.
   def self.import_geojson_with_fips(filepath, model, valid_geometry_types)
+    puts "Importing #{model.name.pluralize} from #{filepath}..."
     data = File.read(filepath)
     feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
 
@@ -38,7 +47,14 @@ module ImportHelpers
     puts "#{model.name.pluralize} imported successfully!"
   end
 
+  # Imports data from a CSV file into a specified model using `community_fips_code` as the unique identifier.
+  #
+  # Assumptions:
+  #   - The model has a method `assign_aedg_attributes(properties)`.
+  #   - The model has a `community_fips_code` attribute for uniquely identifying records.
+  #   - The CSV contains a `community_fips_code` column.
   def self.import_csv_with_fips(filepath, model)
+    puts "Importing #{model.name.pluralize} from #{filepath}..."
     csv = CSV.read(filepath, headers: true)
 
     csv.each_with_index do |row, index|
@@ -56,6 +72,33 @@ module ImportHelpers
           puts "Errors: #{record.errors.full_messages.join(', ')}"
         end
 
+      rescue StandardError => e
+        puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
+      end
+    end
+  end
+  # This function imports data from a CSV file into a specified model and associates/maps it with an `AedgImport` record.
+  # Assumptions:
+  #   - The model has a method `import_aedg_attributes(properties)` that initializes a new record.
+  #   - The CSV contains an "id" column, which represents an external identifier (`aedg_id`).
+  #   - The `id` from the CSV is stored in `aedg_imports.aedg_id` to maintain external ID references.
+  def self.import_csv_with_id(filepath, model)
+    puts "Importing #{model.name.pluralize} from #{filepath}..."
+    csv = CSV.read(filepath, headers: true)
+
+    csv.each_with_index do |row, index|
+      begin
+        aedg_id = row["id"]
+        next if aedg_id.blank?
+
+        record = model.import_aedg_attributes(row.to_hash)
+
+        if record.save
+          puts "Saved #{model.name}: #{record.aedg_id}"
+        else
+          puts "Failed to save #{model.name}: #{row['id']}"
+          puts "Errors: #{record.errors.full_messages.join(', ')}"
+        end
       rescue StandardError => e
         puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
       end
