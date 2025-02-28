@@ -77,6 +77,7 @@ module ImportHelpers
       end
     end
   end
+
   # This function imports data from a CSV file into a specified model and associates/maps it with an `AedgImport` record.
   # Assumptions:
   #   - The model has a method `import_aedg_attributes(properties)` that initializes a new record.
@@ -97,6 +98,30 @@ module ImportHelpers
           puts "Saved #{model.name}: #{record.aedg_id}"
         else
           puts "Failed to save #{model.name}: #{row['id']}"
+          puts "Errors: #{record.errors.full_messages.join(', ')}"
+        end
+      rescue StandardError => e
+        puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
+      end
+    end
+  end
+
+  # This function imports data from a CSV file into a specified model.
+  # Assumptions:
+  #   - The model has a method `import_aedg_attributes(properties)` that assigns attributes to a new record.
+  def self.import_csv(filepath, model)
+    puts "Importing #{model.name.pluralize} from #{filepath}..."
+    csv = CSV.read(filepath, headers: true)
+
+    csv.each_with_index do |row, index|
+      begin
+        record = model.new
+        record.assign_aedg_attributes(row.to_hash)
+
+        if record.save
+          puts "Saved #{model.name}: #{record.id}"
+        else
+          puts "Failed to save #{model.name}: #{row.to_hash}"
           puts "Errors: #{record.errors.full_messages.join(', ')}"
         end
       rescue StandardError => e
