@@ -1,34 +1,12 @@
-.col 
-  .card
-    .card-header 
-      .card-title
-        Utility
-    .card-body
-
-.col 
-  .card 
-    .card-header 
-      .card-title
-        Fuel
-    .card-body
-
-.col 
-  .card 
-    .card-header 
-      .card-title
-        Rates
-    .card-body
-
-.col 
-  .card 
-    .card-header 
-      .card-title
-        Production
-    .card-body
-
-.col 
-  .card 
-    .card-header 
-      .card-title
-        Sales, Revenue and Customers
-    .card-body
+.container.mx-4
+  .row.g-5.align-items-start
+    - if @community.name
+      .col-md-6.col-12= render 'communities/sections/electricity/utility', community: @community
+    - if @community.name
+      .col-md-6.col-12= render 'communities/sections/electricity/production', community: @community
+    - if @community.name
+      .col-md-6.col-12= render 'communities/sections/electricity/rates', community: @community
+    - if @community.name
+      .col-md-6.col-12= render 'communities/sections/electricity/fuel', community: @community
+    - if @community.name
+      .col-md-6.col-12= render 'communities/sections/electricity/sales_revenue_customers', community: @community

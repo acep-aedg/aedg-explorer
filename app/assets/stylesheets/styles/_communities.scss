@@ -62,3 +62,17 @@
 .collapse-btn[aria-expanded="true"] .arrow-icon {
   transform: rotate(180deg);
 }
+
+.placeholder-card {
+  min-height: 150px;
+  background-color: #c9c9c9;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.placeholder-map{
+  background-image: url('https://placehold.co/600x400');
+  min-height: 300px;
+  border-radius: 20px;
+  margin: 20px;
+}

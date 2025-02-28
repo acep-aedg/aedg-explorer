@@ -1,43 +1,10 @@
-.col
-  .card
-    .card-header
-      .card-title
-        %h5 Identifiers 
-    .card-body
-      %p
-        %b FIPS code: 
-        = @community.fips_code
-      %p
-        %b ANSI code:
-        = @community.ansi_code
-.col
-  .card
-    .card-header
-      .card-title
-        %h5 Geography
-    .card-body
-      %p
-        %b Latitude:
-        = @community.latitude
-      %p
-        %b Longitude:
-        = @community.longitude
-.col
-  .card
-    .card-header
-      .card-title
-        %h5 Population
-    .card-body
-
-.col
-  .card
-    .card-header
-      .card-title
-        %h5 Education
-    .card-body
-.col
-  .card
-    .card-header
-      .card-title
-        %h5 Election Districts
-    .card-body
+.container.mx-4
+  .row.g-5.align-items-start
+    - if @community.name
+      .col-md-6.col-12= render 'communities/sections/background/geography', community: @community
+    - if @community.transportation
+      .col-md-6.col-12= render 'communities/sections/background/transportation', transportation: @community.transportation
+    - if @community.population
+      .col-md-6.col-12= render 'communities/sections/background/population_employment', community: @community.population
+    - if @community.name
+      .col-md-6.col-12= render 'communities/sections/background/election_districts', community: @community
