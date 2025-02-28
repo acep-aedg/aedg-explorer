@@ -5,7 +5,6 @@ export default class extends Controller {
   static targets = ['select'];
 
   connect() {
-    console.log('community_dropdown_controller connected to', this.element);
     this.syncDropdownWithUrl();
   }
 

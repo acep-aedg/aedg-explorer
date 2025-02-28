@@ -5,3 +5,6 @@ eagerLoadControllersFrom("controllers", application)
 
 import CommunityDropdownController from "controllers/community_dropdown_controller"
 application.register('community-dropdown', CommunityDropdownController);
+
+import TocController from "controllers/toc_controller"
+application.register('toc', TocController);

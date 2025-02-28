@@ -1,5 +1,4 @@
-.container.m-4
-  .quick-nav.mb-4{ data: { controller: "quick-navigation" } }
-    %ul.nav.nav-pills.flex-column.justify-content-center.gap-3{ data_quick_navigation_target: "toc" }
-  #toc
-    
+.container.mx-4
+  .quick-nav{ data: { controller: "toc" } }
+    .container-fluid
+      .row{ data: { toc_target: "toc" } }
