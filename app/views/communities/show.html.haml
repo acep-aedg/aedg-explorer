@@ -22,9 +22,9 @@
 
 .container
   - section_order.each do |section|
-    - section_id = section.parameterize
+    - section_id = "#{section.parameterize}-section"
 
-    .d-flex.align-items-center.w-100
+    .d-flex.align-items-center 
       %button.collapse-btn.border-0.text-start.me-3{ 
         type: "button", 
         data: { bs_toggle: "collapse", bs_target: "##{section_id}" }, 
@@ -35,4 +35,5 @@
  
     %div.collapse.show{ id: section_id }
       .row.my-4.g-4
-        = render "communities/sections/#{section}", community: @community
+        = render "communities/sections/#{section}", community: @community 
+    %hr/

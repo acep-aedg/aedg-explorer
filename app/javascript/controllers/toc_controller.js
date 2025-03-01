@@ -54,7 +54,7 @@ export default class extends Controller {
   renderTOCItem = (item) => {
     return `
       <div class="col-auto my-2">
-        <a href="#${item.id}" class="nav-link fw-bold" data-action="click->quick-navigation#scrollTo">
+        <a href="#${item.id}" class="nav-link fw-bold" data-action="click->toc#scrollTo">
           ${item.label}
         </a>
         ${
@@ -69,7 +69,7 @@ export default class extends Controller {
   renderTOCSubItem = (item) => {
     return `
       <li class="nav-item">
-        <a href="#${item.id}" class="nav-link" data-action="click->quick-navigation#scrollTo">${item.label}</a>
+        <a href="#${item.id}" class="nav-link" data-action="click->toc#scrollTo">${item.label}</a>
       </li>
     `;
   };
