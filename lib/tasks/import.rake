@@ -12,6 +12,7 @@ namespace :import do
     Rake::Task['import:communities'].invoke
     Rake::Task['import:populations'].invoke
     Rake::Task['import:transportation'].invoke
+    Rake::Task['import:yearly_generations'].invoke
   end
 
   desc "Import only the data files from a specific GitHub folder"
@@ -81,5 +82,11 @@ namespace :import do
   task grids: :environment do
     filepath = Rails.root.join('db', 'imports', 'grids.csv')
     ImportHelpers.import_csv_with_id(filepath, Grid)
+  end
+
+  desc "Import Grid Data from .csv file"
+  task yearly_generations: :environment do
+    filepath = Rails.root.join('db', 'imports', 'yearly_generation.csv')
+    ImportHelpers.import_csv(filepath, YearlyGeneration)
   end
 end
