@@ -34,13 +34,22 @@ export default class extends Controller {
   }
 
   generateId(text, index) {
-    return (
-      text
-        .toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^\w-]/g, '')
-        .substring(0, 30) || `heading-${index}`
-    );
+    const baseId = text
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]/g, '')
+      .substring(0, 30);
+
+    // Ensure IDs are unique
+    let uniqueId = baseId;
+    let count = 1;
+
+    while (document.getElementById(uniqueId)) {
+      uniqueId = `${baseId}-${count}`;
+      count++;
+    }
+
+    return uniqueId || `heading-${index}`;
   }
 
   renderTOC(toc) {
@@ -77,6 +86,27 @@ export default class extends Controller {
   scrollTo(event) {
     event.preventDefault();
     const target = document.querySelector(event.target.getAttribute('href'));
-    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    if (!target) return;
+
+    // Check if the target is inside a collapsed section
+    const collapsedSection = target.closest('.collapse:not(.show)');
+
+    if (collapsedSection) {
+      // Listen for the Bootstrap collapse event to scroll AFTER it's fully expanded
+      collapsedSection.addEventListener(
+        'shown.bs.collapse',
+        () => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        },
+        { once: true } // Ensures the event only fires once
+      );
+
+      // Manually trigger the collapse to open the section
+      new bootstrap.Collapse(collapsedSection, { toggle: true });
+    } else {
+      // If already visible, scroll immediately
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }
