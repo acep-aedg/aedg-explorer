@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_28_030224) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_01_004910) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -75,6 +75,64 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_28_030224) do
     t.index ["name"], name: "index_grids_on_name"
   end
 
+  create_table "population_age_sexes", force: :cascade do |t|
+    t.string "community_fips_code", null: false
+    t.integer "start_year"
+    t.integer "end_year"
+    t.boolean "is_most_recent"
+    t.string "geo_src"
+    t.integer "e_pop_age_total"
+    t.integer "m_pop_age_total"
+    t.integer "e_pop_age_under_5"
+    t.integer "m_pop_age_under_5"
+    t.integer "e_pop_age_5_9"
+    t.integer "m_pop_age_5_9"
+    t.integer "e_pop_age_10_14"
+    t.integer "m_pop_age_10_14"
+    t.integer "e_pop_age_15_19"
+    t.integer "m_pop_age_15_19"
+    t.integer "e_pop_age_20_24"
+    t.integer "m_pop_age_20_24"
+    t.integer "e_pop_age_25_34"
+    t.integer "m_pop_age_25_34"
+    t.integer "e_pop_age_35_44"
+    t.integer "m_pop_age_35_44"
+    t.integer "e_pop_age_45_54"
+    t.integer "m_pop_age_45_54"
+    t.integer "e_pop_age_55_59"
+    t.integer "m_pop_age_55_59"
+    t.integer "e_pop_age_60_64"
+    t.integer "m_pop_age_60_64"
+    t.integer "e_pop_age_65_74"
+    t.integer "m_pop_age_65_74"
+    t.integer "e_pop_age_75_84"
+    t.integer "m_pop_age_75_84"
+    t.integer "e_pop_age_85_plus"
+    t.integer "m_pop_age_85_plus"
+    t.integer "e_pop_age_median_age"
+    t.integer "m_pop_age_median_age"
+    t.integer "e_pop_age_under_18"
+    t.integer "m_pop_age_under_18"
+    t.integer "e_pop_age_18_plus"
+    t.integer "m_pop_age_18_plus"
+    t.integer "e_pop_age_21_plus"
+    t.integer "m_pop_age_21_plus"
+    t.integer "e_pop_age_62_plus"
+    t.integer "m_pop_age_62_plus"
+    t.integer "e_pop_age_65_plus"
+    t.integer "m_pop_age_65_plus"
+    t.integer "e_pop_total"
+    t.integer "m_pop_total"
+    t.integer "e_pop_male"
+    t.integer "m_pop_male"
+    t.integer "e_pop_female"
+    t.integer "m_pop_female"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_fips_code"], name: "index_population_age_sexes_on_community_fips_code"
+    t.index ["is_most_recent"], name: "index_population_age_sexes_on_is_most_recent"
+  end
+
   create_table "populations", force: :cascade do |t|
     t.string "community_fips_code", null: false
     t.integer "total_population", null: false
@@ -123,6 +181,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_28_030224) do
   add_foreign_key "communities", "boroughs", column: "borough_fips_code", primary_key: "fips_code"
   add_foreign_key "communities", "grids"
   add_foreign_key "communities", "regional_corporations", column: "regional_corporation_fips_code", primary_key: "fips_code"
+  add_foreign_key "population_age_sexes", "communities", column: "community_fips_code", primary_key: "fips_code"
   add_foreign_key "populations", "communities", column: "community_fips_code", primary_key: "fips_code"
   add_foreign_key "transportations", "communities", column: "community_fips_code", primary_key: "fips_code"
   add_foreign_key "yearly_generations", "grids"
