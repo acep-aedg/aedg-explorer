@@ -18,9 +18,4 @@ class CommunitiesController < ApplicationController
     def set_community
       @community = Community.find(params[:id])
     end
-
-    # Only allow a list of trusted parameters through.
-    def community_params
-      params.require(:community).permit(:fips_code, :name, :latitude, :longitude, :ansi_code, :community_id, :global_id)
-    end
 end

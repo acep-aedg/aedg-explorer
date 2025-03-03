@@ -2,7 +2,7 @@
   .row.g-5.align-items-start
     - if @community.name
       .col-md-6.col-12= render 'communities/sections/electricity/utility', community: @community
-    - if @community.name
+    - if @community.grid
       .col-md-6.col-12= render 'communities/sections/electricity/production', community: @community
     - if @community.name
       .col-md-6.col-12= render 'communities/sections/electricity/rates', community: @community
