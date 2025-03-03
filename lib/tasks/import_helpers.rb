@@ -16,9 +16,10 @@ module ImportHelpers
       begin
         properties = feature.properties
         geo_object = feature.geometry
+        fips_code = properties['fips_code']
 
         # Validate presence of fips_code
-        if properties['fips_code'].blank?
+        if fips_code.blank?
           raise "Missing fips_code for record at index #{index}. Properties: #{properties.inspect}"
         end
 
@@ -29,48 +30,86 @@ module ImportHelpers
         end
 
         # Find or initialize the record based on fips_code
-        record = model.find_or_initialize_by(fips_code: properties['fips_code'])
+        record = model.find_or_initialize_by(fips_code: fips_code)
         record.assign_aedg_attributes(properties, geo_object)
 
         if record.save
-          puts "Saved #{model.name}: #{record.name}"
+          puts "Saved #{model.name}: #{record.fips_code}"
         else
-          puts "Failed to save #{model.name}: #{properties['name']}"
+          puts "Failed to save #{model.name}: #{fips_code}"
           puts "Errors: #{record.errors.full_messages.join(', ')}"
         end
 
       rescue StandardError => e
-        puts "Error processing #{model.name}: #{properties['name'] || 'Unknown'} at index #{index}, Error: #{e.message}"
+        puts "Error processing #{model.name}: #{fips_code || 'Unknown'} at index #{index}, Error: #{e.message}"
       end
     end
 
-    puts "#{model.name.pluralize} imported successfully!"
+    puts "#{model.name.pluralize} import complete"
   end
 
-  # Imports data from a CSV file into a specified model using `community_fips_code` as the unique identifier.
+  # Imports data from a CSV file into a specified model, allowing for both unique record identification
+  # and unconditional record creation.
+  #
+  # Functionality:
+  #   - If `unique_fields` are provided, it finds or initializes records based on those fields.
+  #   - If `unique_fields` is empty, it creates a new record for each row.
+  #   - If any unique field is blank in a row, that row is skipped with a warning.
+  #   - Assigns attributes using `assign_aedg_attributes(properties)`, which must be implemented in the model.
   #
   # Assumptions:
-  #   - The model has a method `assign_aedg_attributes(properties)`.
-  #   - The model has a `community_fips_code` attribute for uniquely identifying records.
-  #   - The CSV contains a `community_fips_code` column.
-  def self.import_csv_with_fips(filepath, model)
+  #   - The model responds to `assign_aedg_attributes(properties)`, which assigns CSV data to attributes.
+  #   - If `unique_fields` are provided, they must match CSV column headers.
+  #   - The CSV file must have a header row.
+  #
+  # Parameters:
+  #   - filepath (String): The path to the CSV file to be imported.
+  #   - model (ActiveRecord::Base): The ActiveRecord model into which data will be imported.
+  #   - unique_fields (Array, optional): An array of column names to determine record uniqueness.
+  #     - If empty, each row creates a new record.
+  #     - If provided, records are found or initialized based on these fields.
+  #
+  # Example Usage:
+  #   - import_csv("data.csv", YourModel, [:name, :year])`
+  #     - Finds or initializes records using `name` and `year` as unique identifiers.
+  #   - import_csv("data.csv", YourModel)`
+  #     - Creates a new record for each row without enforcing uniqueness.
+  #     - Relies on the model's validations to prevent duplicate records. 
+  
+  def self.import_csv(filepath, model, unique_fields = [])
     puts "Importing #{model.name.pluralize} from #{filepath}..."
     csv = CSV.read(filepath, headers: true)
 
     csv.each_with_index do |row, index|
       begin
-        community_fips_code = row["community_fips_code"]
-        next if community_fips_code.blank?
+        conditions = {}
 
-        record = model.find_or_initialize_by(community_fips_code: community_fips_code)
+        # Only enforce uniqueness if `unique_fields` is provided
+        if unique_fields.present?
+          unique_fields.each do |field|
+            field_value = row[field.to_s].presence
+            if field_value.blank?
+              warn "Warning: Skipping row #{index} due to missing value for unique field '#{field}'. Row: #{row.to_hash.inspect}"
+              next
+            end
+            conditions[field] = field_value
+          end
+
+          # Skip rows where all unique fields are missing
+          if conditions.empty?
+            warn "Warning: Skipping row #{index} because no unique fields were valid."
+            next
+          end
+        end
+
+        record = unique_fields.present? ? model.find_or_initialize_by(conditions) : model.new
         record.assign_aedg_attributes(row.to_hash)
 
-        if record.save
-          puts "Saved #{model.name}: #{record.community_fips_code}"
-        else
-          puts "Failed to save #{model.name}: #{row['community_fips_code']}"
-          puts "Errors: #{record.errors.full_messages.join(', ')}"
-        end
+        message_details = conditions.empty? ? row.to_hash : conditions.inspect
+        status = record.save ? "Saved" : "Failed to save"
+
+        puts "#{status} #{model.name}: #{message_details}"
+        puts "Errors: #{record.errors.full_messages.join(', ')}" unless record.save     
 
       rescue StandardError => e
         puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
@@ -90,7 +129,11 @@ module ImportHelpers
     csv.each_with_index do |row, index|
       begin
         aedg_id = row["id"]
-        next if aedg_id.blank?
+
+        # Validate presence of id field
+        if aedg_id.blank?
+          raise "Missing id for record at index #{index}: #{row.to_hash}"
+        end
 
         record = model.import_aedg_attributes(row.to_hash)
 
@@ -98,30 +141,6 @@ module ImportHelpers
           puts "Saved #{model.name}: #{record.aedg_id}"
         else
           puts "Failed to save #{model.name}: #{row['id']}"
-          puts "Errors: #{record.errors.full_messages.join(', ')}"
-        end
-      rescue StandardError => e
-        puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
-      end
-    end
-  end
-
-  # This function imports data from a CSV file into a specified model.
-  # Assumptions:
-  #   - The model has a method `import_aedg_attributes(properties)` that assigns attributes to a new record.
-  def self.import_csv(filepath, model)
-    puts "Importing #{model.name.pluralize} from #{filepath}..."
-    csv = CSV.read(filepath, headers: true)
-
-    csv.each_with_index do |row, index|
-      begin
-        record = model.new
-        record.assign_aedg_attributes(row.to_hash)
-
-        if record.save
-          puts "Saved #{model.name}: #{record.id}"
-        else
-          puts "Failed to save #{model.name}: #{row.to_hash}"
           puts "Errors: #{record.errors.full_messages.join(', ')}"
         end
       rescue StandardError => e

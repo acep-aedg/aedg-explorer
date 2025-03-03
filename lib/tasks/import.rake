@@ -4,8 +4,10 @@ require_relative 'import_helpers'
 
 namespace :import do
   desc "Import Data Files into the Database"
-  task all: :environment do
+  task all: [:environment, "db:reset"] do
     Rake::Task['import:pull_github_files'].invoke
+
+    puts "Importing data files..."
     Rake::Task['import:boroughs'].invoke
     Rake::Task['import:regional_corporations'].invoke
     Rake::Task['import:grids'].invoke
@@ -13,6 +15,7 @@ namespace :import do
     Rake::Task['import:populations'].invoke
     Rake::Task['import:transportation'].invoke
     Rake::Task['import:yearly_generations'].invoke
+    Rake::Task['import:populations_ages_sexes'].invoke
   end
 
   desc "Import only the data files from a specific GitHub folder"
@@ -21,7 +24,7 @@ namespace :import do
     folder_path = "data/final"
     local_dir = Rails.root.join("db", "imports").to_s 
 
-    puts "Fetching files from GitHub repo: #{repo_url}, folder: #{folder_path}"
+    puts "Pulling latest files from GitHub: #{repo_url}, folder: #{folder_path}"
 
     # Ensure the local directory & keep file exists
     FileUtils.mkdir_p(local_dir)
@@ -60,6 +63,12 @@ namespace :import do
     ImportHelpers.import_geojson_with_fips(filepath, RegionalCorporation, ["Polygon", "MultiPolygon"])
   end
 
+  desc "Import Grid Data from .csv file"
+  task grids: :environment do
+    filepath = Rails.root.join('db', 'imports', 'grids.csv')
+    ImportHelpers.import_csv_with_id(filepath, Grid)
+  end
+
   desc "Import Community Data from .geojson file"
   task communities: :environment do
     filepath = Rails.root.join('db', 'imports', 'communities.geojson')
@@ -69,24 +78,24 @@ namespace :import do
   desc "Import Population Data from .csv file"
   task populations: :environment do
     filepath = Rails.root.join('db', 'imports', 'populations.csv')
-    ImportHelpers.import_csv_with_fips(filepath, Population)
+    ImportHelpers.import_csv(filepath, Population, [:community_fips_code])
   end
 
   desc "Import Transportation Data from .csv file"
   task transportation: :environment do
     filepath = Rails.root.join('db', 'imports', 'transportation.csv')
-    ImportHelpers.import_csv_with_fips(filepath, Transportation)
-  end
-
-  desc "Import Grid Data from .csv file"
-  task grids: :environment do
-    filepath = Rails.root.join('db', 'imports', 'grids.csv')
-    ImportHelpers.import_csv_with_id(filepath, Grid)
+    ImportHelpers.import_csv(filepath, Transportation, [:community_fips_code])
   end
 
   desc "Import Grid Data from .csv file"
   task yearly_generations: :environment do
     filepath = Rails.root.join('db', 'imports', 'yearly_generation.csv')
     ImportHelpers.import_csv(filepath, YearlyGeneration)
+  end
+
+  desc "Import Population, Ages, Sexes Data from .csv file"
+  task populations_ages_sexes: :environment do
+    filepath = Rails.root.join('db', 'imports', 'populations_ages_sexes.csv')
+    ImportHelpers.import_csv(filepath, PopulationAgeSex, [:community_fips_code, :start_year, :end_year, :geo_src])
   end
 end
