@@ -54,7 +54,7 @@ namespace :import do
   desc "Import Borough Data from .geojson file"
   task boroughs: :environment do
     filepath = Rails.root.join('db', 'imports', 'boroughs.geojson')
-    ImportHelpers.import_geojson_with_fips(filepath, Borough, ["Polygon", "MultiPolygon"])
+    ImportHelpers.import_geojson(filepath, Borough)
   end
 
   desc "Import Regional Corporation Data from .geojson file"
