@@ -41,3 +41,5 @@
 
 /db/imports/*
 !/db/imports/.keep
+
+/vendor/*
