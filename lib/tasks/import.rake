@@ -78,24 +78,24 @@ namespace :import do
   desc "Import Population Data from .csv file"
   task populations: :environment do
     filepath = Rails.root.join('db', 'imports', 'populations.csv')
-    ImportHelpers.import_csv(filepath, Population, [:community_fips_code])
+    ImportHelpers.import_csv(filepath, Population)
   end
 
   desc "Import Transportation Data from .csv file"
   task transportation: :environment do
     filepath = Rails.root.join('db', 'imports', 'transportation.csv')
-    ImportHelpers.import_csv(filepath, Transportation, [:community_fips_code])
+    ImportHelpers.import_csv_old(filepath, Transportation, [:community_fips_code])
   end
 
   desc "Import Grid Data from .csv file"
   task yearly_generations: :environment do
     filepath = Rails.root.join('db', 'imports', 'yearly_generation.csv')
-    ImportHelpers.import_csv(filepath, YearlyGeneration)
+    ImportHelpers.import_csv_old(filepath, YearlyGeneration)
   end
 
   desc "Import Population, Ages, Sexes Data from .csv file"
   task populations_ages_sexes: :environment do
     filepath = Rails.root.join('db', 'imports', 'populations_ages_sexes.csv')
-    ImportHelpers.import_csv(filepath, PopulationAgeSex, [:community_fips_code, :start_year, :end_year, :geo_src])
+    ImportHelpers.import_csv_old(filepath, PopulationAgeSex, [:community_fips_code, :start_year, :end_year, :geo_src])
   end
 end

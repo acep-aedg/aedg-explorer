@@ -17,52 +17,17 @@ module ImportHelpers
     puts "#{model.name.pluralize} import complete"
   end
 
-  # Imports geographic data from a GeoJSON file into a specified model.
-  # 
-  # Assumptions:
-  #   - The model has a method `assign_aedg_attributes(properties, geo_object)`.
-  #   - The model has a `fips_code` attribute that uniquely identifies records.
-  #   - The GeoJSON contains a `FeatureCollection` where:
-  #     - `properties` include a `fips_code`.
-  #     - `geometry` must be a valid type from `valid_geometry_types`.
-  def self.import_geojson_with_fips(filepath, model, valid_geometry_types)
-    puts "Importing #{model.name.pluralize} from #{filepath}..."
-    data = File.read(filepath)
-    feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
+  def self.import_csv(filepath, model)
+    puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
+    csv = CSV.read(filepath, headers: true)
 
-    feature_collection.each_with_index do |feature, index|
+    csv.each_with_index do |row, index|
       begin
-        properties = feature.properties
-        geo_object = feature.geometry
-        fips_code = properties['fips_code']
-
-        # Validate presence of fips_code
-        if fips_code.blank?
-          raise "Missing fips_code for record at index #{index}. Properties: #{properties.inspect}"
-        end
-
-        # Ensure geometry is valid and not nil
-        if geo_object.nil? || !valid_geometry_types.include?(geo_object.geometry_type.type_name)
-          geo_type = geo_object.nil? ? "nil" : geo_object.geometry_type.type_name
-          raise "Invalid geometry type '#{geo_type}' at index #{index}. Only #{valid_geometry_types.join(', ')} geometries are allowed."
-        end
-
-        # Find or initialize the record based on fips_code
-        record = model.find_or_initialize_by(fips_code: fips_code)
-        record.assign_aedg_attributes(properties, geo_object)
-
-        if record.save
-          puts "Saved #{model.name}: #{record.fips_code}"
-        else
-          puts "Failed to save #{model.name}: #{fips_code}"
-          puts "Errors: #{record.errors.full_messages.join(', ')}"
-        end
-
+        model.import_aedg!(row.to_hash)   
       rescue StandardError => e
-        puts "Error processing #{model.name}: #{fips_code || 'Unknown'} at index #{index}, Error: #{e.message}"
+        puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
       end
     end
-
     puts "#{model.name.pluralize} import complete"
   end
 
@@ -94,7 +59,7 @@ module ImportHelpers
   #     - Creates a new record for each row without enforcing uniqueness.
   #     - Relies on the model's validations to prevent duplicate records. 
   
-  def self.import_csv(filepath, model, unique_fields = [])
+  def self.import_csv_old(filepath, model, unique_fields = [])
     puts "Importing #{model.name.pluralize} from #{filepath}..."
     csv = CSV.read(filepath, headers: true)
 
