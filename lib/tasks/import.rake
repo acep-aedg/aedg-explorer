@@ -72,7 +72,7 @@ namespace :import do
   desc "Import Community Data from .geojson file"
   task communities: :environment do
     filepath = Rails.root.join('db', 'imports', 'communities.geojson')
-    ImportHelpers.import_geojson_with_fips(filepath, Community, ["Point"])
+    ImportHelpers.import_geojson(filepath, Community)
   end
 
   desc "Import Population Data from .csv file"
