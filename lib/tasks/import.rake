@@ -84,7 +84,7 @@ namespace :import do
   desc "Import Transportation Data from .csv file"
   task transportation: :environment do
     filepath = Rails.root.join('db', 'imports', 'transportation.csv')
-    ImportHelpers.import_csv_old(filepath, Transportation, [:community_fips_code])
+    ImportHelpers.import_csv(filepath, Transportation)
   end
 
   desc "Import Grid Data from .csv file"
