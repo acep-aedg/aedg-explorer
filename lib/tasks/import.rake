@@ -96,6 +96,6 @@ namespace :import do
   desc "Import Population, Ages, Sexes Data from .csv file"
   task populations_ages_sexes: :environment do
     filepath = Rails.root.join('db', 'imports', 'populations_ages_sexes.csv')
-    ImportHelpers.import_csv_old(filepath, PopulationAgeSex, [:community_fips_code, :start_year, :end_year, :geo_src])
+    ImportHelpers.import_csv(filepath, PopulationAgeSex)
   end
 end
