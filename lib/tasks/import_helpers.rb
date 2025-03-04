@@ -1,6 +1,6 @@
 module ImportHelpers
   def self.import_geojson(filepath, model)
-    puts "Importing #{model.name.pluralize} from #{filepath}..."
+    puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
     data = File.read(filepath)
     feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
     
@@ -14,6 +14,7 @@ module ImportHelpers
         puts "Error processing #{model.name} at index #{index}, Error: #{e.message}"
       end
     end
+    puts "#{model.name.pluralize} import complete"
   end
 
   # Imports geographic data from a GeoJSON file into a specified model.
