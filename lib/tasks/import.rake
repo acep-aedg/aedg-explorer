@@ -87,10 +87,10 @@ namespace :import do
     ImportHelpers.import_csv(filepath, Transportation)
   end
 
-  desc "Import Grid Data from .csv file"
+  desc "Import Yearly Generation Data from .csv file"
   task yearly_generations: :environment do
     filepath = Rails.root.join('db', 'imports', 'yearly_generation.csv')
-    ImportHelpers.import_csv_old(filepath, YearlyGeneration)
+    ImportHelpers.import_csv(filepath, YearlyGeneration)
   end
 
   desc "Import Population, Ages, Sexes Data from .csv file"
