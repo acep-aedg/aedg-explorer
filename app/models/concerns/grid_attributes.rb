@@ -10,11 +10,10 @@ module GridAttributes
         raise "id is required"
       end
 
-      g = Grid.build(
-        name: properties[:name],
+      Grid.create!(
+        name: properties[:name], 
         aedg_id: properties[:id]
       )
-      g.save!
     end
   end
 end
