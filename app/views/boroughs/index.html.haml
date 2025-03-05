@@ -1,0 +1,20 @@
+%h1 Boroughs
+
+%div{ data: { controller: 'datatables', datatables: { order_value: [0, 'asc'], pagesize_value: 50 } } }
+  %table.table.table-stripped.border{ data: { datatables_target: 'table'} }
+    %thead
+      %tr
+        %th Name
+        %th Fips Code
+        %th Census Area?
+    %tbody
+      - @boroughs.each do |borough|
+        %tr
+          %td= borough.name
+          %td= borough.fips_code
+          %td= borough.is_census_area? ? 'Yes' : 'No'
+          -# = link_to 'Show', borough, class: 'btn btn-primary'
+          -# = link_to 'Edit', edit_borough_path(borough), class: 'btn btn-warning'
+          -# = link_to 'Destroy', borough, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger'
+    %br
+    -# = link_to 'New Borough', new_borough_path    
