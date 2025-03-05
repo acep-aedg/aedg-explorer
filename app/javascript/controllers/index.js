@@ -5,3 +5,6 @@ eagerLoadControllersFrom("controllers", application)
 
 import CommunityDropdownController from "controllers/community_dropdown_controller"
 application.register('community-dropdown', CommunityDropdownController);
+
+import ChartController from "controllers/chart_controller"
+application.register('chart', ChartController);
