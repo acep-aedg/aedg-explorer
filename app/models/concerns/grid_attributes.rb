@@ -2,15 +2,18 @@
 module GridAttributes
   extend ActiveSupport::Concern
 
-  included do
-    def self.import_aedg_attributes(properties)
+  class_methods do
+    def import_aedg!(properties)
       properties.symbolize_keys!
 
-      g = Grid.build(
-        name: properties[:name],
+      if properties[:id].nil?
+        raise "id is required"
+      end
+
+      Grid.create!(
+        name: properties[:name], 
         aedg_id: properties[:id]
       )
-      g
     end
   end
 end

@@ -23,6 +23,7 @@ class Community < ApplicationRecord
   validates :ansi_code, presence: true, uniqueness: true
   validates :borough_fips_code, presence: true
   validates :dcra_code, presence: true, uniqueness: true
+  validates :location, presence: true, allowed_geometry_types: ["Point"]
 
   default_scope { order(name: :asc )}
 
