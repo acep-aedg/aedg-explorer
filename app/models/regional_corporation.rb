@@ -4,6 +4,7 @@ class RegionalCorporation < ApplicationRecord
 
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
+  validates :boundary, presence: true, allowed_geometry_types: ["Polygon", "MultiPolygon"]
 
   default_scope { order(name: :asc )}
 end
