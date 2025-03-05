@@ -11,12 +11,9 @@ This directory organizes the views for rendering community-related data. The `se
 **Example Structure**
 ```sh
 views/communities/
-├── _community.json.jbuilder       # JSON representation of community data
 ├── _dropdown.html.haml            # Dropdown partial
 ├── index.html.haml                # Index view
-├── index.json.jbuilder            
-├── show.html.haml                 # Show view (defines order and renders section)
-├── show.json.jbuilder             
+├── show.html.haml                 # Show view (defines order and renders section)        
 └── sections/                      # Contains collapsible sections & related partials
     ├── _background.html.haml       # Background section
     ├── _electricity.html.haml      # Electricity section
