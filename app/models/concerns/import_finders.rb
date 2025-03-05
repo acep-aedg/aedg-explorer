@@ -11,7 +11,10 @@ module ImportFinders
     }
 
     def create_importable 
-      AedgImport.create(aedg_id: self.aedg_id, importable: self) unless self.aedg_id.nil?
+      if self.aedg_id.nil?
+        raise "aedg_id is required"
+      end
+      AedgImport.create!(aedg_id: self.aedg_id, importable: self)
     end
 
     def aedg_id=(id)
