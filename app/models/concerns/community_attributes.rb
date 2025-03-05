@@ -2,20 +2,33 @@
 module CommunityAttributes
   extend ActiveSupport::Concern
 
+  class_methods do 
+    def import_aedg_with_geom!(properties, geom)
+      properties["location"] = geom
+      properties.symbolize_keys!
+
+      Community.find_or_initialize_by(fips_code: properties[:fips_code]).tap do |community|
+        community.assign_aedg_attributes(properties)
+        community.save!
+      end
+    end
+  end
+
   included do
-    def assign_aedg_attributes(properties, geo_object)
+    def assign_aedg_attributes(params)
       assign_attributes(
-        name: properties['name'],
-        regional_corporation_fips_code: properties['regional_corporation_fips_code'],
-        borough_fips_code: properties['borough_fips_code'],
-        grid_id: properties['grid_id'],
-        ansi_code: properties['ansi_code'],
-        dcra_code: properties['dcra_code'],
-        pce_eligible: properties['pce_eligible'],
-        pce_active: properties['pce_active'],
-        latitude: properties['latitude'],
-        longitude: properties['longitude'],
-        location: geo_object
+        fips_code: params[:fips_code],
+        name: params[:name],
+        regional_corporation_fips_code: params[:regional_corporation_fips_code],
+        borough_fips_code: params[:borough_fips_code],
+        ansi_code: params[:ansi_code],
+        dcra_code: params[:dcra_code],
+        pce_eligible: params[:pce_eligible],
+        pce_active: params[:pce_active],
+        latitude: params[:latitude],
+        longitude: params[:longitude],
+        location: params[:location],
+        grid: Grid.from_aedg_id(params[:grid_id]).first
       )
     end
   end

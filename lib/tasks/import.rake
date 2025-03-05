@@ -1,11 +1,21 @@
 require 'csv'
 require 'rgeo/geo_json'
+require_relative 'import_helpers'
 
 namespace :import do
   desc "Import Data Files into the Database"
-  task all: :environment do
+  task all: [:environment, "db:reset"] do
     Rake::Task['import:pull_github_files'].invoke
+
+    puts "Importing data files..."
+    Rake::Task['import:boroughs'].invoke
+    Rake::Task['import:regional_corporations'].invoke
+    Rake::Task['import:grids'].invoke
     Rake::Task['import:communities'].invoke
+    Rake::Task['import:populations'].invoke
+    Rake::Task['import:transportation'].invoke
+    Rake::Task['import:yearly_generations'].invoke
+    Rake::Task['import:populations_ages_sexes'].invoke
   end
 
   desc "Import only the data files from a specific GitHub folder"
@@ -14,7 +24,7 @@ namespace :import do
     folder_path = "data/final"
     local_dir = Rails.root.join("db", "imports").to_s 
 
-    puts "Fetching files from GitHub repo: #{repo_url}, folder: #{folder_path}"
+    puts "Pulling latest files from GitHub: #{repo_url}, folder: #{folder_path}"
 
     # Ensure the local directory & keep file exists
     FileUtils.mkdir_p(local_dir)
@@ -41,43 +51,51 @@ namespace :import do
     puts "Import complete! Only new/updated files copied to #{local_dir}."
   end
 
+  desc "Import Borough Data from .geojson file"
+  task boroughs: :environment do
+    filepath = Rails.root.join('db', 'imports', 'boroughs.geojson')
+    ImportHelpers.import_geojson(filepath, Borough)
+  end
+
+  desc "Import Regional Corporation Data from .geojson file"
+  task regional_corporations: :environment do
+    filepath = Rails.root.join('db', 'imports', 'regional_corporations.geojson')
+    ImportHelpers.import_geojson(filepath, RegionalCorporation)
+  end
+
+  desc "Import Grid Data from .csv file"
+  task grids: :environment do
+    filepath = Rails.root.join('db', 'imports', 'grids.csv')
+    ImportHelpers.import_csv(filepath, Grid)
+  end
+
   desc "Import Community Data from .geojson file"
   task communities: :environment do
     filepath = Rails.root.join('db', 'imports', 'communities.geojson')
-    community_data = File.read(filepath)
-    feature_collection = RGeo::GeoJSON.decode(community_data, json_parser: :json)
+    ImportHelpers.import_geojson(filepath, Community)
+  end
 
-    feature_collection.each_with_index do |feature, index|
-      begin
-        properties = feature.properties
-        geo_object = feature.geometry
+  desc "Import Population Data from .csv file"
+  task populations: :environment do
+    filepath = Rails.root.join('db', 'imports', 'populations.csv')
+    ImportHelpers.import_csv(filepath, Population)
+  end
 
-        # Validate presence of fips_code
-        if properties['fips_code'].blank?
-          raise "Missing fips_code for record at index #{index}. Properties: #{properties.inspect}"
-        end
+  desc "Import Transportation Data from .csv file"
+  task transportation: :environment do
+    filepath = Rails.root.join('db', 'imports', 'transportation.csv')
+    ImportHelpers.import_csv(filepath, Transportation)
+  end
 
-        # Ensure it's a valid Point and not nil
-        if geo_object.nil? || geo_object.geometry_type.type_name != "Point"
-          geo_type = geo_object.nil? ? "nil" : geo_object.geometry_type.type_name
-          raise "Invalid geometry type '#{geo_type}' at index #{index}. Only 'Point' geometry is allowed."
-        end
+  desc "Import Yearly Generation Data from .csv file"
+  task yearly_generations: :environment do
+    filepath = Rails.root.join('db', 'imports', 'yearly_generation.csv')
+    ImportHelpers.import_csv(filepath, YearlyGeneration)
+  end
 
-        # Find or initialize the community based on fips_code
-        community = Community.find_or_initialize_by(fips_code: properties['fips_code'])
-        community.assign_aedg_attributes(properties, geo_object)
-
-        if community.save
-          puts "Saved Community: #{community.name}"
-        else
-          puts "Failed to save Community: #{properties['name']}"
-          puts "Errors: #{community.errors.full_messages.join(', ')}"
-        end
-
-      rescue StandardError => e
-        puts "Error processing Community: #{properties['name'] || 'Unknown'} at index #{index}, Error: #{e.message}"
-      end
-    end
-    puts "Communities imported successfully!"
+  desc "Import Population, Ages, Sexes Data from .csv file"
+  task populations_ages_sexes: :environment do
+    filepath = Rails.root.join('db', 'imports', 'populations_ages_sexes.csv')
+    ImportHelpers.import_csv(filepath, PopulationAgeSex)
   end
 end

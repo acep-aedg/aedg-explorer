@@ -2,10 +2,10 @@
   "name": "app",
   "private": "true",
   "dependencies": {
-    "@popperjs/core": "^2.11.8",
     "autoprefixer": "^10.4.20",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "datatables.net-bs5": "^2.2.2",
     "nodemon": "^3.1.7",
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
