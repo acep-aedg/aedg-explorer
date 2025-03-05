@@ -66,7 +66,7 @@ namespace :import do
   desc "Import Grid Data from .csv file"
   task grids: :environment do
     filepath = Rails.root.join('db', 'imports', 'grids.csv')
-    ImportHelpers.import_csv_with_id(filepath, Grid)
+    ImportHelpers.import_csv(filepath, Grid)
   end
 
   desc "Import Community Data from .geojson file"

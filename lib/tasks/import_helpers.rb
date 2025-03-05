@@ -1,4 +1,7 @@
 module ImportHelpers
+
+# Imports geographic data from a GeoJSON file and processes it into the given model.
+# It assumes there is an `import_aedg_with_geom!` method for the given model to store the data.
   def self.import_geojson(filepath, model)
     puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
     data = File.read(filepath)
@@ -17,6 +20,8 @@ module ImportHelpers
     puts "#{model.name.pluralize} import complete"
   end
 
+# Imports tabular data from a CSV file and processes it into the given model.
+# It assumes there is an `import_aedg!` method for the given model to store the data.
   def self.import_csv(filepath, model)
     puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
     csv = CSV.read(filepath, headers: true)
@@ -29,37 +34,5 @@ module ImportHelpers
       end
     end
     puts "#{model.name.pluralize} import complete"
-  end
-
-  # This function imports data from a CSV file into a specified model and associates/maps it with an `AedgImport` record.
-  # Assumptions:
-  #   - The model has a method `import_aedg_attributes(properties)` that initializes a new record.
-  #   - The CSV contains an "id" column, which represents an external identifier (`aedg_id`).
-  #   - The `id` from the CSV is stored in `aedg_imports.aedg_id` to maintain external ID references.
-  def self.import_csv_with_id(filepath, model)
-    puts "Importing #{model.name.pluralize} from #{filepath}..."
-    csv = CSV.read(filepath, headers: true)
-
-    csv.each_with_index do |row, index|
-      begin
-        aedg_id = row["id"]
-
-        # Validate presence of id field
-        if aedg_id.blank?
-          raise "Missing id for record at index #{index}: #{row.to_hash}"
-        end
-
-        record = model.import_aedg_attributes(row.to_hash)
-
-        if record.save
-          puts "Saved #{model.name}: #{record.aedg_id}"
-        else
-          puts "Failed to save #{model.name}: #{row['id']}"
-          puts "Errors: #{record.errors.full_messages.join(', ')}"
-        end
-      rescue StandardError => e
-        puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
-      end
-    end
   end
 end
