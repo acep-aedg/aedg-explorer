@@ -1,11 +1,8 @@
-.container.py-4
-  .row.align-items-center
-    .col.text-center
-      .card.p-5.community-dropdown-card
-        .card-body
-          %h1.fw-bold Community Summaries
-          %p.lead.w-75.mx-auto
-            The Community Summary feature provides key insights into communities, covering geography, population and employment, fuel prices, electric rates, and more.
-          %br
-          = render partial: "dropdown", locals: { communities: @communities, current_community: nil }
-  
+.text-center
+  .card
+    .card-body.p-5
+      %h1.fw-bold Community Summaries
+      %p.lead.w-75.mx-auto
+        The Community Summary feature provides key insights into communities, covering geography, population and employment, fuel prices, electric rates, and more.
+      %br
+      = render partial: "dropdown", locals: { communities: @communities, current_community: nil }

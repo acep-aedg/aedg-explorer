@@ -1,13 +1,14 @@
-.placeholder-card
-  %h4 Utility
-  %table.table.table-striped.table-bordered
-    %thead
-      %tr
-        %th PCE Status
-        %th Utilities
-        %th Service Area
-    %tbody
-      %tr
-        %td= @community.pce_eligible ? "Eligible" : "Ineligible"
-        %td
-        %td
+.card
+  %h4.card-header Utility
+  .card-body
+    %table.table.table-striped
+      %thead
+        %tr
+          %th PCE Status
+          %th Utilities
+          %th Service Area
+      %tbody
+        %tr
+          %td= @community.pce_eligible ? "Eligible" : "Ineligible"
+          %td
+          %td
