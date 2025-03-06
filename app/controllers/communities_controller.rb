@@ -9,6 +9,7 @@ class CommunitiesController < ApplicationController
   # GET /communities/1 or /communities/1.json
   def show
     @community = Community.find(params[:id])
+    @borough = @community.borough
     @communities = Community.all
   end
 
@@ -16,10 +17,5 @@ class CommunitiesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_community
       @community = Community.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
-    def community_params
-      params.require(:community).permit(:fips_code, :name, :latitude, :longitude, :ansi_code, :community_id, :global_id)
     end
 end

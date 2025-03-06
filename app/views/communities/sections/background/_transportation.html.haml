@@ -1,0 +1,23 @@
+.placeholder-card
+  %h4 Transportation
+  %p= transportation.description
+
+  %small
+    %strong As of:
+    = transportation.as_of_date
+
+  - transport_fields = transportation.attributes.slice("airport", "harbor_dock", "state_ferry", "cargo_barge", "road_connection", "coastal", "road_or_ferry")
+
+  %table.table.table-bordered.table-striped
+    %thead
+      %tr
+        - transport_fields.keys.each do |field_name|
+          %th= field_name.humanize.titleize
+    %tbody
+      %tr
+        - transport_fields.values.each do |value|
+          %td
+            - if value
+              %i.bi.bi-check-lg.text-success
+            - else
+              %i.bi.bi-x-lg.text-danger
