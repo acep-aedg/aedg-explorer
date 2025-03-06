@@ -12,3 +12,7 @@ application.register("datatables", DatatablesController)
 
 import TocController from "controllers/toc_controller"
 application.register('toc', TocController);
+
+import ChartController from "./chart_controller"
+application.register("chart", ChartController)
+
