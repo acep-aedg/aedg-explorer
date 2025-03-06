@@ -1,0 +1,9 @@
+.card
+  .card-body
+    %h3 By Category
+    .row.row-cols-2.g-2
+      - category_links.each do |category|
+        .col
+          = link_to category[:path], class: "btn btn-light d-flex flex-column align-items-center justify-content-center gap-2 w-100 py-3" do
+            %i{ class: "bi #{category[:icon]} fs-1" }
+            %span= category[:name]
