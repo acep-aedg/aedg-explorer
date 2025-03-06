@@ -2,8 +2,12 @@ module NavigationHelper
   def main_menu
     [
       { name: "About", path: "#" },
-      { name: "Data Explorer", path: data_explorer_path },
-      { name: "Community Data Summaries", path: communities_path },
+      { name: "Explore Data", 
+        children: [
+          { name: "Datasets", path: explore_datasets_path },
+          { name: "Community Summaries", path: communities_path }
+        ]
+      },
       { name: "User Guide", path: "#" }
     ]
   end

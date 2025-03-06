@@ -1,4 +1,4 @@
-module DatasetHelper
+module DatasetsHelper
   def placeholder_datasets
     [
       { name: "Power Cost Equalization", description: "Description/Meta Data" },
