@@ -10,3 +10,5 @@ pin "datatables.net" # @2.2.2
 pin "jquery" # @3.7.1
 pin "datatables.net-bs5" # @2.2.2
 pin "@popperjs/core", to: "popper-lib.js" # @2.11.8
+pin "chart.js", to: "https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.js"
+pin "@kurkle/color", to: "https://cdn.jsdelivr.net/npm/@kurkle/color@0.3.4/dist/color.esm.js"

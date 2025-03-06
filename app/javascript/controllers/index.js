@@ -10,3 +10,5 @@ application.register("community-dropdown", CommunityDropdownController)
 import DatatablesController from "./datatables_controller"
 application.register("datatables", DatatablesController)
 
+import ChartController from "./chart_controller"
+application.register("chart", ChartController)
