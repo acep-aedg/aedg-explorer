@@ -15,6 +15,7 @@ namespace :import do
     Rake::Task['import:populations'].invoke
     Rake::Task['import:transportation'].invoke
     Rake::Task['import:yearly_generations'].invoke
+    Rake::Task['import:monthly_generations'].invoke
     Rake::Task['import:populations_ages_sexes'].invoke
   end
 
@@ -91,6 +92,12 @@ namespace :import do
   task yearly_generations: :environment do
     filepath = Rails.root.join('db', 'imports', 'yearly_generation.csv')
     ImportHelpers.import_csv(filepath, YearlyGeneration)
+  end
+
+  desc "Import Monthly Generation Data from .csv file"
+  task monthly_generations: :environment do
+    filepath = Rails.root.join('db', 'imports', 'monthly_generation.csv')
+    ImportHelpers.import_csv(filepath, MonthlyGeneration)
   end
 
   desc "Import Population, Ages, Sexes Data from .csv file"
