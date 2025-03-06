@@ -1,17 +1,13 @@
 .card
   .card-body
     %h3 Featured Datasets
+
     %ul.list-group
-      %li.list-group-item
-        %strong Power Cost Equalization
-        %br
-        Description/Meta Data
-      %li.list-group-item
-        %strong Fuel Prices
-        %br
-        Description/Meta Data
-      %li.list-group-item
-        %strong Another Dataset
-        %br
-        Description/Meta Data
+      -# TODO: Replace with actual datasets & remove placeholder_datasets from dataset_helper.rb
+      - placeholder_datasets.each do |dataset|
+        %li.list-group-item
+          %strong= dataset[:name]
+          %br
+          = dataset[:description]
+
     = link_to "View All Datasets", "#", class: "btn btn-primary mt-3"
