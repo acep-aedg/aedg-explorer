@@ -1,0 +1,15 @@
+.card.p-4
+  %h3 Keywords
+
+  %h3.mt-3 Geographic
+  %img{ src: "https://placehold.co/600x400", alt: "Map", class: "img-fluid" }
+
+  %h3.mt-3 Year
+  %input{ type: "range", min: "2000", max: "2025" }
+
+  %h3.mt-3 Theme/Category
+  %ul.list-unstyled
+    - category_links.each do |category|
+      %li
+        %input{ type: "checkbox" }
+        = category[:name]

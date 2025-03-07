@@ -3,11 +3,17 @@
     %h3 Featured Datasets
 
     %ul.list-group
-      -# TODO: Replace with actual datasets & remove placeholder_datasets from dataset_helper.rb
-      - placeholder_datasets.each do |dataset|
-        %li.list-group-item
-          %strong= dataset[:name]
-          %br
-          = dataset[:description]
+      -# Show only datasets where `featured: true`
+      - placeholder_datasets.select { |dataset| dataset[:featured] }.each do |dataset|
+        %li.list-group-item.p-3.mb-3
+          .d-flex.align-items-center
+            %strong= dataset[:name]
+            %span.text-muted.small.ms-2= dataset[:category]
+          
+          %p.mt-2= dataset[:description]
+          
+          .mt-2
+            - dataset[:tags].each do |tag|
+              %span.badge.bg-secondary.me-1= tag
 
     = link_to "View All Datasets", "#", class: "btn btn-primary mt-3"
