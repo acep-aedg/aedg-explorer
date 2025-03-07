@@ -22,7 +22,7 @@ namespace :import do
   task pull_github_files: :environment do
     repo_url = ENV['GH_DATA_REPO_URL']
     folder_path = "data/final"
-    local_dir = Rails.root.join("db", "imports").to_s 
+    local_dir = Rails.root.join("db", "imports").to_s
 
     puts "Pulling latest files from GitHub: #{repo_url}, folder: #{folder_path}"
 
@@ -97,5 +97,11 @@ namespace :import do
   task populations_ages_sexes: :environment do
     filepath = Rails.root.join('db', 'imports', 'populations_ages_sexes.csv')
     ImportHelpers.import_csv(filepath, PopulationAgeSex)
+  end
+
+  desc "Import Empolyment Data from .csv file"
+  task employment: :environment do
+    filepath = Rails.root.join('db', 'imports', 'employment.csv')
+    ImportHelpers.import_csv(filepath, Employment)
   end
 end
