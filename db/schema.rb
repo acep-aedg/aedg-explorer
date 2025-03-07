@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_07_180251) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_07_204744) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -138,6 +138,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_07_180251) do
     t.integer "total_population", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "year"
     t.index ["community_fips_code"], name: "index_populations_on_community_fips_code", unique: true
   end
 

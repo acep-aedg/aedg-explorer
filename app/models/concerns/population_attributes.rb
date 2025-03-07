@@ -6,7 +6,7 @@ module PopulationAttributes
     def import_aedg!(properties)
       properties.symbolize_keys!
 
-      Population.find_or_initialize_by(community_fips_code: properties[:community_fips_code]).tap do |population|
+      Population.build.tap do |population|
         population.assign_aedg_attributes(properties)
         population.save!
       end
@@ -18,6 +18,7 @@ module PopulationAttributes
       assign_attributes(
         community_fips_code: params[:community_fips_code],
         total_population: params[:total_population],
+        year: params[:year]
       )
     end
   end
