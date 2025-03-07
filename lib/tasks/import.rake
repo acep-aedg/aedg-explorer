@@ -99,7 +99,7 @@ namespace :import do
     ImportHelpers.import_csv(filepath, PopulationAgeSex)
   end
 
-  desc "Import Empolyment Data from .csv file"
+  desc "Import Employment Data from .csv file"
   task employment: :environment do
     filepath = Rails.root.join('db', 'imports', 'employment.csv')
     ImportHelpers.import_csv(filepath, Employment)

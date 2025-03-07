@@ -1,4 +1,4 @@
-class Empolyment < ApplicationRecord
+class Employment < ApplicationRecord
   include EmploymentAttributes
   extend FriendlyId
   friendly_id :slug_candidates, use: :slugged

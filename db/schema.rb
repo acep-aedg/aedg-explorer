@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_01_004910) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_07_004610) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -55,6 +55,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_01_004910) do
     t.index ["fips_code"], name: "index_communities_on_fips_code", unique: true
     t.index ["location"], name: "index_communities_on_location", using: :gist
     t.index ["slug"], name: "index_communities_on_slug", unique: true
+  end
+
+  create_table "employments", force: :cascade do |t|
+    t.string "community_fips_code"
+    t.integer "residents_employed"
+    t.integer "unemployment_insurance_claimants"
+    t.integer "measurement_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
