@@ -13,6 +13,16 @@ class CommunitiesController < ApplicationController
     @communities = Community.all
   end
 
+  def chart_data
+    render json: {
+      total_communities: Community.total_count,
+      pce_labels: ["PCE Eligible", "Not Eligible"],
+      pce_data: Community.pce_eligibility_count.values,
+      bubble_data: Community.bubble_chart_data
+    }, status: :ok
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_community

@@ -1,3 +1,13 @@
+%div{ data: { controller: "chart" } }
+  %div.charts-row
+    %div.chart-container
+      %canvas{ data: { chart_target: "barChart" }, id: "barChart" }
+    %div.chart-container
+      %canvas{ data: { chart_target: "pieChart" }, id: "pieChart" }
+
+  %div.chart-container
+    %canvas{ data: { chart_target: "bubbleChart" }, id: "bubbleChart" }
+
 .text-center
   .card
     .card-body.p-5

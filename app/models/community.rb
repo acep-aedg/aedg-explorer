@@ -27,4 +27,28 @@ class Community < ApplicationRecord
 
   default_scope { order(name: :asc )}
 
+    # Fetch total community count
+    def self.total_count
+      count
+    end
+
+    # Fetch communities grouped by PCE eligibility
+    def self.pce_eligibility_count
+      {
+        pce_eligible: where(pce_eligible: true).count,
+        not_eligible: where(pce_eligible: false).count
+      }
+    end
+
+    # Get data for Bubble Chart (longitude, latitude, name, size)
+    def self.bubble_chart_data
+      where.not(latitude: nil, longitude: nil).map do |community|
+        {
+          name: community.name,
+          x: community.longitude.to_f,
+          y: community.latitude.to_f,
+          pce_eligible: community.pce_eligible  # Send boolean to JS
+        }
+      end
+    end
 end

@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   resources :boroughs, only: [:index]
-  resources :communities, only: [:index, :show]
+  resources :communities, only: [:index, :show] do
+    collection do
+      get :chart_data
+    end
+  end
   get 'welcome/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -1,0 +1,19 @@
+.charts-row {
+    display: flex;  /* ✅ Enables side-by-side layout */
+    justify-content: center; /* ✅ Centers the charts */
+    gap: 20px; /* ✅ Adds spacing between charts */
+  }
+  
+  .charts-container {
+    display: flex;
+    justify-content: center; /* ✅ Centers the charts */
+    align-items: center; /* ✅ Ensures vertical alignment */
+    gap: 30px; /* ✅ Adds space between charts */
+    flex-wrap: wrap; /* ✅ Ensures charts stack on small screens */
+  }
+  
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
