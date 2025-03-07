@@ -16,6 +16,7 @@ namespace :import do
     Rake::Task['import:transportation'].invoke
     Rake::Task['import:yearly_generations'].invoke
     Rake::Task['import:populations_ages_sexes'].invoke
+    Rake::Task['import:employment'].invoke
   end
 
   desc "Import only the data files from a specific GitHub folder"

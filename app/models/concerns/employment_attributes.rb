@@ -5,7 +5,7 @@ module EmploymentAttributes
     def import_aedg!(properties)
       properties.symbolize_keys!
 
-      Employment.find_or_initialize_by(fips_code: properties[:fips_code]).tap do |employment|
+      Employment.find_or_initialize_by(community_fips_code: properties[:community_fips_code]).tap do |employment|
         employment.assign_aedg_attributes(properties)
         employment.save!
       end
@@ -17,7 +17,7 @@ module EmploymentAttributes
       assign_attributes(
         community_fips_code: params[:community_fips_code],
         residents_employed: params[:residentsemployed],
-        unemployed_insurance_claimants: params[:unemploymentinsuranceclaimants],
+        unemployment_insurance_claimants: params[:unemploymentinsuranceclaimants],
         measurement_year: params[:measurement_year]
       )
     end
