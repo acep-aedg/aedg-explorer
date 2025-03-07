@@ -19,6 +19,8 @@ module RegionalCorporationAttributes
       assign_attributes(
         fips_code: params[:fips_code],
         name: params[:name],
+        land_area: params[:land_area],
+        water_area: params[:water_area],
         boundary: params[:boundary],
       )
     end
