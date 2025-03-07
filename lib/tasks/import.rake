@@ -102,7 +102,23 @@ namespace :import do
 
   desc "Import Employment Data from .csv file"
   task employment: :environment do
+    raise "Employment table was not empty before starting import!" if Employment.count > 0
     filepath = Rails.root.join('db', 'imports', 'employment.csv')
     ImportHelpers.import_csv(filepath, Employment)
+  end
+end
+
+namespace :delete do
+  desc "Clear employment data"
+  task employment: :environment do
+    puts "Are you sure you want to delete all employment records? (yes/no)"
+    input = STDIN.gets.chomp.downcase
+
+    if input == "yes"
+      Employment.destroy_all
+      puts "Employment table cleared."
+    else
+      puts "Aborted. No records were deleted."
+    end
   end
 end

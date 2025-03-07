@@ -5,7 +5,7 @@ module EmploymentAttributes
     def import_aedg!(properties)
       properties.symbolize_keys!
 
-      Employment.find_or_initialize_by(community_fips_code: properties[:community_fips_code]).tap do |employment|
+      Employment.build.tap do |employment|
         employment.assign_aedg_attributes(properties)
         employment.save!
       end
