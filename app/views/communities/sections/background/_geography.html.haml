@@ -1,0 +1,27 @@
+.placeholder-card
+  %h4 Geography
+  .placeholder-map
+  %p
+    This section provides an overview of the geographical aspects of the community.
+    Please replace this placeholder text with actual content.
+
+  %table.table.table-bordered.table-striped
+    %tbody
+      %tr
+        %th Borough
+        %td= @community.borough.name
+      %tr
+        %th Regional Corporation
+        %td= @community.regional_corporation.name
+      %tr
+        %th Grid
+        %td= @community.grid.name.titleize
+      %tr
+        %th Location
+        %td= @community.location
+      %tr
+        %th Latitude
+        %td= @community.latitude
+      %tr
+        %th Longitude
+        %td= @community.longitude

@@ -1,0 +1,21 @@
+.card
+  %h4.card-header Production
+  .card-body
+    %p= @community.grid.name.titleize
+    %p.text-muted.small This data is generated at the grid level, not community-specific.
+    - if @community.grid.yearly_generations.present?
+      %h6 By Year
+      %table.table.table-striped.table-bordered
+        %thead
+          %tr
+            %th Net Generation (MWh)
+            %th Fuel Type
+            %th Year
+        %tbody
+          - @community.grid.yearly_generations.each do |generation|
+            %tr
+              %td= generation.net_generation_mwh
+              %td= generation.fuel_type
+              %td= generation.year
+    - else
+      %p No production data available.
