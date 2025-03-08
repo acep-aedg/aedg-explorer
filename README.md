@@ -23,6 +23,7 @@ Ensure you have the following dependencies installed:
 
 1. Install asdf nodejs/yarn dependencies - https://asdf-vm.com/
     ```bash
+    asdf plugin add yarn
     asdf install
     # verify tool versions
     asdf current
