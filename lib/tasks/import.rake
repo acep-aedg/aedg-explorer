@@ -102,7 +102,18 @@ namespace :import do
 
   desc "Import Employment Data from .csv file"
   task employment: :environment do
-    raise "Employment table was not empty before starting import!" if Employment.count > 0
+    if Employment.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Employment table was not empty before starting import!
+
+        To clear it, run:
+
+            rails delete:employment
+
+        Then, try running this import task again.
+      ERROR
+    end
+
     filepath = Rails.root.join('db', 'imports', 'employment.csv')
     ImportHelpers.import_csv(filepath, Employment)
   end
