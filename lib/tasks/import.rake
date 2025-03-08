@@ -5,7 +5,7 @@ require_relative 'import_helpers'
 namespace :import do
   desc "Import Data Files into the Database"
   task all: [:environment, "db:reset"] do
-    Rake::Task['import:pull_github_files'].invoke
+    Rake::Task['import:pull_gh_data'].invoke
 
     puts "Importing data files..."
     Rake::Task['import:boroughs'].invoke
@@ -19,7 +19,7 @@ namespace :import do
   end
 
   desc "Import only the data files from a specific GitHub folder"
-  task pull_github_files: :environment do
+  task pull_gh_data: :environment do
     repo_url = ENV['GH_DATA_REPO_URL']
     folder_path = "data/final"
     local_dir = Rails.root.join("db", "imports").to_s 
