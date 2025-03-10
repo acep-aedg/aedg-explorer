@@ -1,3 +1,9 @@
+# This is not a join table.
+# CommunitiesLegislativeDistrict is a reference model that maps a community to its
+# legislative districts (house, senate, election region).
+# It references shared district data but stores its own mapping context.
+# Associations to house_district and senate_district are optional and should not be deleted with this model.
+
 class CommunitiesLegislativeDistrict < ApplicationRecord
   include CommunitiesLegislativeDistrictAttributes
 
