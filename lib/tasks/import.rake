@@ -96,6 +96,16 @@ namespace :import do
 
   desc "Import Monthly Generation Data from .csv file"
   task monthly_generations: :environment do
+
+    if MonthlyGeneration.count > 0
+      raise <<~ERROR
+        ❌ ERROR: MonthlyGeneration table was not empty before starting import!
+        To clear it, run:
+            rails delete:monthly_generations
+        Then, try running this import task again.
+      ERROR
+    end
+    
     filepath = Rails.root.join('db', 'imports', 'monthly_generation.csv')
     ImportHelpers.import_csv(filepath, MonthlyGeneration)
   end
