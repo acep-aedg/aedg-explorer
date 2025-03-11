@@ -8,6 +8,18 @@ class Community < ApplicationRecord
   has_one :transportation, foreign_key: "community_fips_code", primary_key: "fips_code"
   belongs_to :grid, optional: true
 
+  has_many :communities_legislative_districts,
+         foreign_key: :community_fips_code,
+         primary_key: :fips_code
+
+  has_many :house_districts,
+          through: :communities_legislative_districts,
+          source: :house_district
+
+  has_many :senate_districts,
+          through: :communities_legislative_districts,
+          source: :senate_district
+
   # Handle the case where the name is not unique
   def slug_candidates
     [
