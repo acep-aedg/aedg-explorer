@@ -1,4 +1,4 @@
-module HouseAttributes
+module HouseDistrictAttributes
   extend ActiveSupport::Concern
 
   class_methods do
