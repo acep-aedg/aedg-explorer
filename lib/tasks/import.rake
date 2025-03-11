@@ -23,7 +23,7 @@ namespace :import do
   task pull_gh_data: :environment do
     repo_url = ENV['GH_DATA_REPO_URL']
     folder_path = "data/final"
-    local_dir = Rails.root.join("db", "imports").to_s 
+    local_dir = Rails.root.join("db", "imports").to_s
 
     puts "Pulling latest files from GitHub: #{repo_url}, folder: #{folder_path}"
 
@@ -105,7 +105,7 @@ namespace :import do
         Then, try running this import task again.
       ERROR
     end
-    
+
     filepath = Rails.root.join('db', 'imports', 'monthly_generation.csv')
     ImportHelpers.import_csv(filepath, MonthlyGeneration)
   end
@@ -115,4 +115,12 @@ namespace :import do
     filepath = Rails.root.join('db', 'imports', 'populations_ages_sexes.csv')
     ImportHelpers.import_csv(filepath, PopulationAgeSex)
   end
+
+  desc "Import House Districts Data from .geojson file"
+  task house_districts: :environment do
+    filepath = Rails.root.join('db', 'imports', 'house_districts.geojson')
+    ImportHelpers.import_geojson(filepath, HouseDistrict)
+  end
+
+
 end
