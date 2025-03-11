@@ -1,7 +1,7 @@
 import "chart.js";
 import { Controller } from "@hotwired/stimulus"
 
-// Basic chart example to get started with Chart.js
+// THIS IS A GUIDE: Basic chart example to get started with Chart.js
 // to add in html.haml add this to test 
 // %canvas{ data: { controller: "chart" } }
 
