@@ -4,7 +4,7 @@ module NavigationHelper
       { name: "About", path: "#" },
       { name: "Explore Data", 
         children: [
-          { name: "Datasets", path: explore_datasets_path },
+          { name: "Datasets", path: datasets_path },
           { name: "Community Summaries", path: communities_path }
         ]
       },

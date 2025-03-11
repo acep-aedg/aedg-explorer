@@ -1,22 +1,27 @@
 .container.my-5
-  .card.p-4
-    %h1 Data Explorer
-    %p Subtitle
+  .row
+    .col
+      .card.p-4.text-center
+        %h1 Explore Data
 
-  .container.mt-5
-    .row.g-5
-      .col-lg-3
-        = render 'filters'
+        .d-flex.justify-content-center.mt-3
+          = link_to "#{@communities_count} Communities", communities_path, class: "btn btn-secondary mx-2"
+          = link_to "Partners", "#", class: "btn btn-secondary mx-2"
+          = link_to "View All Datasets", search_datasets_path, class: "btn btn-primary mx-2"
 
-      .col-lg-9
-        .row.justify-content-between.align-items-end.mb-4
-          .col-lg-3
-            = render 'sort_dropdown'
+        %p.mt-3 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum.
 
+        .row.mt-3.justify-content-center
           .col-lg-6
             -# TODO: Replace with bootstrap_form_for and implement search functionality
-            .input-group  
-              %input.form-control{ type: "text", placeholder: "Search Keywords, Datasets..." }
+            .input-group
+              %input.form-control{ type: "text", placeholder: "Search by...Try Education, Community, or Electricity" }
               %button.btn.btn-secondary Search
 
-        = render 'datasets_list'
+  .row.mt-5.g-4
+    .col-lg-4
+      = render 'by_location'
+    .col-lg-4
+      = render 'by_category'
+    .col-lg-4
+      = render 'featured_datasets'

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :datasets, only: [:index, :show] do
     collection do
-      get 'explore' # Creates datasets_explore_path
+      get 'search' # Creates search_datasets_path
     end
   end
   resources :boroughs, only: [:index]

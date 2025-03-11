@@ -3,14 +3,14 @@ class DatasetsController < ApplicationController
 
   # GET /datasets or /datasets.json
   def index
+    @communities_count = Community.count
   end
 
   # GET /datasets/1 or /datasets/1.json
   def show
   end
   
-  def explore
-    @communities_count = Community.count
+  def search
   end
 
   private
