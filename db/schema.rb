@@ -66,14 +66,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_10_213253) do
     t.index ["slug"], name: "index_communities_on_slug", unique: true
   end
 
-  create_table "employments", force: :cascade do |t|
-    t.string "community_fips_code"
-    t.integer "residents_employed"
-    t.integer "unemployment_insurance_claimants"
-    t.integer "measurement_year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
   create_table "communities_legislative_districts", force: :cascade do |t|
     t.string "community_fips_code"
     t.integer "house_district"
