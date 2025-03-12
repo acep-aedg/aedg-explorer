@@ -105,7 +105,9 @@ namespace :import do
       raise <<~ERROR
         ❌ ERROR: MonthlyGeneration table was not empty before starting import!
         To clear it, run:
+
             rails delete:monthly_generations
+
         Then, try running this import task again.
       ERROR
     end
@@ -126,16 +128,14 @@ namespace :import do
     ImportHelpers.import_csv(filepath, CommunitiesLegislativeDistrict)
   end
 
-
   desc "Import Employment Data from .csv file"
-  task employment: :environment do
+  task employments: :environment do
     if Employment.count > 0
       raise <<~ERROR
         ❌ ERROR: Employment table was not empty before starting import!
-
         To clear it, run:
 
-            rails delete:employment
+            rails delete:employments
 
         Then, try running this import task again.
       ERROR
@@ -144,48 +144,20 @@ namespace :import do
     filepath = Rails.root.join('db', 'imports', 'employment.csv')
     ImportHelpers.import_csv(filepath, Employment)
   end
-end
-
-namespace :delete do
-  desc "Clear employment data"
-  task employment: :environment do
-    puts "Are you sure you want to delete all employment records? (yes/no)"
-    input = STDIN.gets.chomp.downcase
-
-    if input == "yes"
-      Employment.destroy_all
-      puts "Employment table cleared."
-    else
-      puts "Aborted. No records were deleted."
-    end
-  end
 
   desc "Import Capacity Data from .csv file"
-  task capacity: :environment do
+  task capacitys: :environment do
     if Capacity.count > 0
       raise <<~ERROR
         ❌ ERROR: Capacity table was not empty before starting import!
         To clear it, run:
-            rails delete:capacity
+
+            rails delete:capacitys
+
         Then, try running this import task again.
       ERROR
     end
     filepath = Rails.root.join('db', 'imports', 'capacity.csv')
     ImportHelpers.import_csv(filepath, Capacity)
-  end
-end
-
-namespace :delete do
-  desc "Clear capacity data"
-  task capacity: :environment do
-    puts "Are you sure you want to delete all capacity records? (yes/no)"
-    input = STDIN.gets.chomp.downcase
-
-    if input == "yes"
-      Capacity.destroy_all.size
-      puts "Capacity table cleared."
-    else
-      puts "Aborted. No records were deleted."
-    end
   end
 end
