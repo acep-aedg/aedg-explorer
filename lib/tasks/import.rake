@@ -18,6 +18,8 @@ namespace :import do
     Rake::Task['import:monthly_generations'].invoke
     Rake::Task['import:populations_ages_sexes'].invoke
     Rake::Task['import:communities_legislative_districts'].invoke
+    Rake::Task['import:employment'].invoke
+    Rake::Task['import:capacity'].invoke
   end
 
   desc "Import only the data files from a specific GitHub folder"
@@ -103,7 +105,9 @@ namespace :import do
       raise <<~ERROR
         ❌ ERROR: MonthlyGeneration table was not empty before starting import!
         To clear it, run:
+
             rails delete:monthly_generations
+
         Then, try running this import task again.
       ERROR
     end
@@ -124,6 +128,38 @@ namespace :import do
     ImportHelpers.import_csv(filepath, CommunitiesLegislativeDistrict)
   end
 
+  desc "Import Employment Data from .csv file"
+  task employments: :environment do
+    if Employment.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Employment table was not empty before starting import!
+        To clear it, run:
+
+            rails delete:employments
+
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db', 'imports', 'employment.csv')
+    ImportHelpers.import_csv(filepath, Employment)
+  end
+
+  desc "Import Capacity Data from .csv file"
+  task capacitys: :environment do
+    if Capacity.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Capacity table was not empty before starting import!
+        To clear it, run:
+
+            rails delete:capacitys
+
+        Then, try running this import task again.
+      ERROR
+    end
+    filepath = Rails.root.join('db', 'imports', 'capacity.csv')
+    ImportHelpers.import_csv(filepath, Capacity)
+  end
 
   desc "Import House Districts Data from .geojson file"
   task house_districts: :environment do

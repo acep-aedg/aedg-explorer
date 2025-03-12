@@ -1,0 +1,30 @@
+.container.my-5
+  = link_to 'Back', datasets_path, class: "btn btn-primary my-4"
+  .card.p-4
+    %h1 Dataset Name
+    %p Category
+
+  / Navigation Tabs
+  .d-flex.justify-content-between.align-items-center.mt-4
+    .nav.nav-tabs
+      %li.nav-item
+        = link_to "About", "#about", class: "nav-link active", data: { bs_toggle: "tab" }
+      %li.nav-item
+        = link_to "Data", "#data", class: "nav-link", data: { bs_toggle: "tab" }
+      %li.nav-item
+        = link_to "Related", "#related", class: "nav-link", data: { bs_toggle: "tab" }
+
+    / Export Button aligned to the right
+    = link_to "Export", "#", class: "btn btn-primary"
+
+  / Tab Content
+  .tab-content.mt-3
+    #about.tab-pane.fade.show.active
+      = render "datasets/tabs/about"
+      
+    #data.tab-pane.fade
+      = render "datasets/tabs/data"
+
+    #related.tab-pane.fade
+      = render "datasets/tabs/related"
+

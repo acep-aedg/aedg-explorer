@@ -7,6 +7,8 @@ class Community < ApplicationRecord
   has_one :population, foreign_key: "community_fips_code", primary_key: "fips_code"
   has_one :transportation, foreign_key: "community_fips_code", primary_key: "fips_code"
   belongs_to :grid, optional: true
+  has_many :employments, foreign_key: "community_fips_code", primary_key: "fips_code"
+  has_many :capacities, through: :grid
 
   has_many :communities_legislative_districts,
          foreign_key: :community_fips_code,
