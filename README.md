@@ -23,6 +23,7 @@ Ensure you have the following dependencies installed:
 
 1. Install asdf nodejs/yarn dependencies - https://asdf-vm.com/
     ```bash
+    asdf plugin add yarn
     asdf install
     # verify tool versions
     asdf current
@@ -63,54 +64,37 @@ Ensure you have the following dependencies installed:
     ```
 ---
 
-### Importing Data
+### 📂 Importing Data
 
-#### Setting up Rclone
-To import data, you must have access to the **AEDG Database Imports** shared google drive and the **AEDG Keeper Vault**.
+#### Pull Data from Github
+1. **Set up Github Repository URL**
+    - Before pulling data files from GitHub, ensure you have the correct repository URL configured in your `.env` by adding:
 
-1. **Install Rclone**
-    - Follow the [Rclone installation guide](https://rclone.org/install/) to install `rclone` on your system.
+        ```sh
+        GH_DATA_REPO_URL=https://github.com/acep-aedg/aedg-data-pond
+        ```
 
-1. **Locate Your Rclone Configuration File**
-    - Run the following command to find the lcoation of your `rclone.conf` file 
-    ```sh
-    rclone config file
-    ```
-1. **Update Rclone Configuration** 
-    - In **Keeper**, locate the **aedg-explorer rclone config** vault item.
-    - Copy the contents of the vault item and paste them into your local `rclone.conf` file.
-1. **Authenticate Rclone**
-    - Authenticate your Rclone setup via your web browser with:
-    ```sh
-    rclone config reconnect aedg-db-imports:
-
-    ### Rclone prompted Questions
-    Use web browser to automatically authenticate rclone with remote?
-    Y
-
-    Change current Shared Drive (Team Drive) ID "############"?
-    N
-    ```
-    Enter **Y** when prompted 
-1. **Verify Connection**
-    - Confirm that the Rclone connection is working by listing files in the shared Google Drive:
-    ```sh
-    rclone ls aedg-db-imports: 
-    ```
-
-#### Pulling Google Drive Files
-Once Rclone is set up, you can use the Rails task to pull the necessary Google Drive files into the project.
 1. **Run the Rake Task**
-    - Use the following command to pull files from Google Drive into the `db/imports/` directory:
-    ```sh
-    rails import:pull_google_drive
-    ```
+    - Use the following command to pull files from Github Repository into the `db/imports/` directory:
+        ```sh
+        rails import:pull_gh_data
+        ```
 1. **Verify Files**
-    - After running the task, check the `db/imports/` directory to endure the files have successfully downloaded
+    - After running the task, check the `db/imports/` directory to ensure the files have successfully downloaded
 
-#### TODO: Importing Data into Models/Database
+#### Run a Full Database Import
+To **reset the database**, pull **latest** data files and import **all** data in the **correct** order, use:
 
-Documentation for importing the specific data into the models/database is pending. 
+```bash
+rails import:all
+```
+**Important**: The GitHub repository URL (`GH_DATA_REPO_URL`) must be set in `.env` before running the full import. Otherwise, the data pull will fail.
+
+ **Note**: Importing **GeoJSON** files with **Polygons/Multipolygons** (e.g., `Borough`, `RegionalCorporation`) can take longer due to the complexity of the spatial data.
+
+#### Importing Individual Models/Tables
+
+We haven’t yet implemented a reliable way to import specific models individually, due to **foreign key constraints and associations**. Some models depend on others, making it difficult to import them individually without breaking data integrity. If you need to import a specific model manually, you will need to clear the table first but be sure to always check model relationships before running individual imports as it may not be possible.
 
 ---
 

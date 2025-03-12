@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_07_021227) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_10_213253) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -65,6 +65,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_07_021227) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+  create_table "communities_legislative_districts", force: :cascade do |t|
+    t.string "community_fips_code"
+    t.integer "house_district"
+    t.string "senate_district"
+    t.integer "election_region"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -83,6 +90,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_07_021227) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_grids_on_name"
+  end
+
+  create_table "monthly_generations", force: :cascade do |t|
+    t.integer "grid_id"
+    t.decimal "net_generation_mwh"
+    t.string "fuel_type"
+    t.integer "year"
+    t.integer "month"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "population_age_sexes", force: :cascade do |t|
@@ -148,6 +165,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_07_021227) do
     t.integer "total_population", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "year"
     t.index ["community_fips_code"], name: "index_populations_on_community_fips_code", unique: true
   end
 
@@ -157,6 +175,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_07_021227) do
     t.geography "boundary", limit: {:srid=>4326, :type=>"geometry", :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "land_area"
+    t.bigint "water_area"
     t.index ["boundary"], name: "index_regional_corporations_on_boundary", using: :gist
     t.index ["fips_code"], name: "index_regional_corporations_on_fips_code", unique: true
   end
@@ -191,6 +211,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_07_021227) do
   add_foreign_key "communities", "boroughs", column: "borough_fips_code", primary_key: "fips_code"
   add_foreign_key "communities", "grids"
   add_foreign_key "communities", "regional_corporations", column: "regional_corporation_fips_code", primary_key: "fips_code"
+  add_foreign_key "monthly_generations", "grids"
   add_foreign_key "population_age_sexes", "communities", column: "community_fips_code", primary_key: "fips_code"
   add_foreign_key "populations", "communities", column: "community_fips_code", primary_key: "fips_code"
   add_foreign_key "transportations", "communities", column: "community_fips_code", primary_key: "fips_code"

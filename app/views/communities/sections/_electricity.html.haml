@@ -1,0 +1,20 @@
+- content_for :quicknav do
+  %ul.nav.flex-column
+    %li.nav-item
+      = link_to "Utility", "#utility", class: 'nav-link'
+    %li.nav-item
+      = link_to "Production", "#production", class: 'nav-link'
+    %li.nav-item
+      = link_to "Rates", "#rates", class: 'nav-link'
+
+.row.g-5.row-cols-2
+  - if @community.name
+    .col= render 'communities/sections/electricity/utility', community: @community
+  - if @community.grid
+    .col= render 'communities/sections/electricity/production', community: @community
+  - if @community.name
+    .col= render 'communities/sections/electricity/rates', community: @community
+  - if @community.name
+    .col= render 'communities/sections/electricity/fuel', community: @community
+  - if @community.name
+    .col= render 'communities/sections/electricity/sales_revenue_customers', community: @community
