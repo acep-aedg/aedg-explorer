@@ -35,15 +35,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_10_213253) do
     t.index ["fips_code"], name: "index_boroughs_on_fips_code", unique: true
   end
 
-  create_table "capacities", force: :cascade do |t|
-    t.integer "grid_id"
-    t.float "capacity_mw"
-    t.string "fuel_type"
-    t.integer "year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "communities", force: :cascade do |t|
     t.string "fips_code"
     t.string "name"
@@ -73,16 +64,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_10_213253) do
     t.integer "election_region"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "employments", force: :cascade do |t|
-    t.string "community_fips_code"
-    t.integer "residents_employed"
-    t.integer "unemployment_insurance_claimants"
-    t.integer "measurement_year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
