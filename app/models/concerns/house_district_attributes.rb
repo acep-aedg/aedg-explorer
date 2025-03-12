@@ -2,18 +2,24 @@ module HouseDistrictAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_geojson_feature!(properties, geometry)
+    def import_aedg_with_geom!(properties, geom)
+      properties["boundary"] = geom
       properties.symbolize_keys!
 
-      house = HouseDistrict.find_or_initialize_by(house_district: properties[:district])
+      HouseDistrict.build.tap do |house|
+        house.assign_aedg_attributes(properties)
+        house.save!
+      end
+    end
+  end
 
-      house.assign_attributes(
-        name: properties[:name],
-        as_of_date: properties[:as_of_date],
-        geometry: geometry
+  included do
+    def assign_aedg_attributes(params)
+      assign_attributes(
+        name: params[:name],
+        as_of_date: params[:as_of_date],
+        boundary: params[:boundary]
       )
-
-      house.save!
     end
   end
 end
