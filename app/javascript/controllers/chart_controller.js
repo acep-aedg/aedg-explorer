@@ -6,27 +6,43 @@ import { Controller } from "@hotwired/stimulus"
 // %canvas{ data: { controller: "chart" } }
 
 export default class extends Controller {
+  static values = { type: String, url: String };
+
   connect() {
-    console.log("Chart Controller Connected!");
+    console.log('Chart Controller Connected!');
+    this.fetchChartData();
+  }
 
-    const ctx = this.element.getContext("2d");
+  async fetchChartData() {
+    try {
+      const response = await fetch(this.urlValue);
+      const data = await response.json();
 
-    new Chart(ctx, {  // ✅ Correct usage
-      type: "bar",
+      this.generateChart(data.labels, data.datasets, data.options);
+    } catch (error) {
+      console.error("Error fetching chart data:", error);
+    }
+  }
+
+  generateChart(labels, datasets, options) {
+    const ctx = this.element.getContext('2d');
+
+    // Destroy any existing chart instance before creating a new one
+    if (this.chart) this.chart.destroy();
+    
+    this.chart = new Chart(ctx, {
+      type: this.typeValue,
       data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-          label: "Votes",
-          data: [12, 19, 3, 5, 2, 3],
-          borderWidth: 1,
-        }]
+        labels: labels,
+        datasets: datasets,
       },
-      options: {
-        responsive: true,
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
+      options: options,
     });
+  }
+  
+  disconnect() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
   }
 }

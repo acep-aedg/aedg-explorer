@@ -15,4 +15,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "welcome#index"
+
+  # API endpoints for chart data
+  get "communities/:id/production_monthly_data", to: "communities#production_monthly_data"
 end

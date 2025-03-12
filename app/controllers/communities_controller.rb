@@ -1,4 +1,5 @@
 class CommunitiesController < ApplicationController
+  include ChartHelpers
   before_action :set_community, only: %i[ show ]
 
   # GET /communities or /communities.json
@@ -11,6 +12,12 @@ class CommunitiesController < ApplicationController
     @community = Community.find(params[:id])
     @borough = @community.borough
     @communities = Community.all
+  end
+
+  def production_monthly_data
+    community = Community.find(params[:id])
+    chart_data = generate_monthly_chart_data(community)
+    render json: chart_data
   end
 
   private
