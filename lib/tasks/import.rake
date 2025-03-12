@@ -15,7 +15,9 @@ namespace :import do
     Rake::Task['import:populations'].invoke
     Rake::Task['import:transportation'].invoke
     Rake::Task['import:yearly_generations'].invoke
+    Rake::Task['import:monthly_generations'].invoke
     Rake::Task['import:populations_ages_sexes'].invoke
+    Rake::Task['import:communities_legislative_districts'].invoke
     Rake::Task['import:capacity'].invoke
   end
 
@@ -23,6 +25,7 @@ namespace :import do
   task pull_gh_data: :environment do
     repo_url = ENV['GH_DATA_REPO_URL']
     folder_path = "data/final"
+    local_dir = Rails.root.join("db", "imports").to_s
     local_dir = Rails.root.join("db", "imports").to_s
 
     puts "Pulling latest files from GitHub: #{repo_url}, folder: #{folder_path}"
@@ -94,11 +97,34 @@ namespace :import do
     ImportHelpers.import_csv(filepath, YearlyGeneration)
   end
 
+  desc "Import Monthly Generation Data from .csv file"
+  task monthly_generations: :environment do
+
+    if MonthlyGeneration.count > 0
+      raise <<~ERROR
+        ❌ ERROR: MonthlyGeneration table was not empty before starting import!
+        To clear it, run:
+            rails delete:monthly_generations
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db', 'imports', 'monthly_generation.csv')
+    ImportHelpers.import_csv(filepath, MonthlyGeneration)
+  end
+
   desc "Import Population, Ages, Sexes Data from .csv file"
   task populations_ages_sexes: :environment do
     filepath = Rails.root.join('db', 'imports', 'populations_ages_sexes.csv')
     ImportHelpers.import_csv(filepath, PopulationAgeSex)
   end
+
+  desc "Import Community Legislative Districts Data from .csv file"
+  task communities_legislative_districts: :environment do
+    filepath = Rails.root.join('db', 'imports', 'communities_legislative_districts.csv')
+    ImportHelpers.import_csv(filepath, CommunitiesLegislativeDistrict)
+  end
+
 
   desc "Import Capacity Data from .csv file"
   task capacity: :environment do
