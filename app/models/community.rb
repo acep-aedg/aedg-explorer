@@ -8,6 +8,7 @@ class Community < ApplicationRecord
   has_one :transportation, foreign_key: "community_fips_code", primary_key: "fips_code"
   belongs_to :grid, optional: true
   has_many :employments, foreign_key: "community_fips_code", primary_key: "fips_code"
+  has_many :capacities, through: :grid
 
   # Handle the case where the name is not unique
   def slug_candidates
