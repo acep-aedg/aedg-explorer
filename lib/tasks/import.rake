@@ -18,6 +18,7 @@ namespace :import do
     Rake::Task['import:monthly_generations'].invoke
     Rake::Task['import:populations_ages_sexes'].invoke
     Rake::Task['import:communities_legislative_districts'].invoke
+    Rake::Task['import:employment'].invoke
   end
 
   desc "Import only the data files from a specific GitHub folder"
@@ -106,7 +107,7 @@ namespace :import do
         Then, try running this import task again.
       ERROR
     end
-    
+
     filepath = Rails.root.join('db', 'imports', 'monthly_generation.csv')
     ImportHelpers.import_csv(filepath, MonthlyGeneration)
   end
@@ -123,4 +124,37 @@ namespace :import do
     ImportHelpers.import_csv(filepath, CommunitiesLegislativeDistrict)
   end
 
+
+  desc "Import Employment Data from .csv file"
+  task employment: :environment do
+    if Employment.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Employment table was not empty before starting import!
+
+        To clear it, run:
+
+            rails delete:employment
+
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db', 'imports', 'employment.csv')
+    ImportHelpers.import_csv(filepath, Employment)
+  end
+end
+
+namespace :delete do
+  desc "Clear employment data"
+  task employment: :environment do
+    puts "Are you sure you want to delete all employment records? (yes/no)"
+    input = STDIN.gets.chomp.downcase
+
+    if input == "yes"
+      Employment.destroy_all
+      puts "Employment table cleared."
+    else
+      puts "Aborted. No records were deleted."
+    end
+  end
 end
