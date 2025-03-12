@@ -2,6 +2,7 @@ module CapacityAttributes
   extend ActiveSupport::Concern
 
   class_methods do
+
     def import_aedg!(properties)
       properties.symbolize_keys!
 
@@ -15,7 +16,7 @@ module CapacityAttributes
   included do
     def assign_aedg_attributes(params)
       assign_attributes(
-        grid_id: params[:grid_id],
+        grid: Grid.from_aedg_id(params[:grid_id]).first,
         capacity_mw: params[:capacity_mw],
         fuel_type: params[:fuel_type],
         year: params[:year]
