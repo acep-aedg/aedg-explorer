@@ -1,21 +1,19 @@
 .card
   %h4.card-header Production
-  .card-body
+  .card-body.p-3
     %p= @community.grid.name.titleize
     %p.text-muted.small This data is generated at the grid level, not community-specific.
-    - if @community.grid.yearly_generations.present?
-      %h6 By Year
-      %table.table.table-striped.table-bordered
-        %thead
-          %tr
-            %th Net Generation (MWh)
-            %th Fuel Type
-            %th Year
-        %tbody
-          - @community.grid.yearly_generations.each do |generation|
-            %tr
-              %td= generation.net_generation_mwh
-              %td= generation.fuel_type
-              %td= generation.year
-    - else
-      %p No production data available.
+    
+    .d-flex.justify-content-between.align-items-center
+      .nav.nav-tabs
+        %li.nav-item
+          = link_to "Monthly", "#monthly", class: "nav-link active", data: { bs_toggle: "tab" }
+        %li.nav-item
+          = link_to "Yearly", "#yearly", class: "nav-link", data: { bs_toggle: "tab" }
+
+    .tab-content
+      #monthly.tab-pane.fade.show.active
+        = render "communities/sections/electricity/production/monthly", community: @community
+
+      #yearly.tab-pane.fade
+        
