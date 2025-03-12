@@ -57,6 +57,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_10_213253) do
     t.index ["slug"], name: "index_communities_on_slug", unique: true
   end
 
+  create_table "communities_legislative_districts", force: :cascade do |t|
+    t.string "community_fips_code"
+    t.integer "house_district"
+    t.string "senate_district"
+    t.integer "election_region"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "employments", force: :cascade do |t|
     t.string "community_fips_code"
     t.integer "residents_employed"
@@ -65,13 +74,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_10_213253) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
-  create_table "communities_legislative_districts", force: :cascade do |t|
-    t.string "community_fips_code"
-    t.integer "house_district"
-    t.string "senate_district"
-    t.integer "election_region"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
