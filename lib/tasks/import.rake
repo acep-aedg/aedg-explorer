@@ -27,7 +27,6 @@ namespace :import do
     repo_url = ENV['GH_DATA_REPO_URL']
     folder_path = "data/final"
     local_dir = Rails.root.join("db", "imports").to_s
-    local_dir = Rails.root.join("db", "imports").to_s
 
     puts "Pulling latest files from GitHub: #{repo_url}, folder: #{folder_path}"
 
