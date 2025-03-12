@@ -81,3 +81,4 @@ gem 'friendly_id', '~> 5.5.0'
 gem "activerecord-postgis-adapter", "~> 9.0"
 gem 'rgeo'
 gem 'rgeo-geojson'
+gem 'csv'
