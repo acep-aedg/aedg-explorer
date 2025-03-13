@@ -1,0 +1,19 @@
+// Chart view
+= line_chart production_monthly_data_community_charts_path(community_id: @community.id), id: "monthly-production-chart", xtitle: "Month", ytitle: "Net Generation (MWh)", download: {background: "#ffffff", filename: "#{@community.name}_monthly_production_chart", format: "png"}
+
+// Tabular view
+%div{ data: { controller: 'datatables', datatables: { order_value: [3, 'asc']} }}
+  %table.table.table-stripped.border{ data: { datatables_target: 'table'} }
+    %thead
+      %tr
+        %th Net Generation (MWh)
+        %th Fuel Type
+        %th Month
+        %th Year
+    %tbody
+      - @community.grid.monthly_generations.each do |generation|
+        %tr
+          %td= generation.net_generation_mwh
+          %td= generation.fuel_type
+          %td= generation.month
+          %td= generation.year
