@@ -1,0 +1,2 @@
+module Communities::ChartsHelper
+end
