@@ -35,6 +35,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_11_020617) do
     t.index ["fips_code"], name: "index_boroughs_on_fips_code", unique: true
   end
 
+  create_table "capacities", force: :cascade do |t|
+    t.integer "grid_id"
+    t.float "capacity_mw"
+    t.string "fuel_type"
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "communities", force: :cascade do |t|
     t.string "fips_code"
     t.string "name"
@@ -66,6 +75,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_11_020617) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "employments", force: :cascade do |t|
+    t.string "community_fips_code"
+    t.integer "residents_employed"
+    t.integer "unemployment_insurance_claimants"
+    t.integer "measurement_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug"
+  end
+
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
     t.integer "sluggable_id", null: false
@@ -85,13 +104,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_11_020617) do
   end
 
   create_table "house_districts", force: :cascade do |t|
-    t.integer "house_district"
+    t.integer "house_district", null: false
     t.string "name"
     t.date "as_of_date"
     t.geography "boundary", limit: {:srid=>4326, :type=>"geometry", :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["boundary"], name: "index_house_districts_on_boundary", using: :gist
+    t.index ["house_district"], name: "index_house_districts_on_house_district", unique: true
   end
 
   create_table "monthly_generations", force: :cascade do |t|

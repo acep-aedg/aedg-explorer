@@ -14,9 +14,12 @@ module CommunitiesLegislativeDistrictAttributes
 
   included do
     def assign_aedg_attributes(params)
+      district_number = params[:house_district].to_i
+      house_district = HouseDistrict.find_by!(house_district: district_number)
+
       assign_attributes(
         community_fips_code: params[:communities_fips_code],
-        house_district: params[:house_district],
+        house_district: house_district,
         senate_district: params[:senate_district],
         election_region: params[:election_region],
       )

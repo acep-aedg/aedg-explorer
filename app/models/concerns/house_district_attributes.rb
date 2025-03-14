@@ -3,11 +3,12 @@ module HouseDistrictAttributes
 
   class_methods do
     def import_aedg_with_geom!(properties, geom)
-      properties["boundary"] = geom
+      # pp properties
       properties.symbolize_keys!
 
-      HouseDistrict.build.tap do |house|
+      HouseDistrict.new.tap do |house|
         house.assign_aedg_attributes(properties)
+        house.boundary = geom
         house.save!
       end
     end
@@ -16,6 +17,7 @@ module HouseDistrictAttributes
   included do
     def assign_aedg_attributes(params)
       assign_attributes(
+        house_district: params[:district],
         name: params[:name],
         as_of_date: params[:as_of_date],
         boundary: params[:boundary]
