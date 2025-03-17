@@ -22,37 +22,41 @@ namespace :import do
     Rake::Task['import:capacity'].invoke
   end
 
-  desc "Import only the data files from a specific GitHub folder"
+  desc "Import data files from a specific GitHub tag"
   task pull_gh_data: :environment do
-    repo_url = ENV['GH_DATA_REPO_URL']
+    repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
+    tag = ENV.fetch('GH_DATA_REPO_TAG')
     folder_path = "data/final"
     local_dir = Rails.root.join("db", "imports").to_s
-
-    puts "Pulling latest files from GitHub: #{repo_url}, folder: #{folder_path}"
 
     # Ensure the local directory & keep file exists
     FileUtils.mkdir_p(local_dir)
     keep_file = File.join(local_dir, ".keep")
     FileUtils.touch(keep_file) unless File.exist?(keep_file)
 
-    # Create a temporary directory
+    # Check if the tag exists before cloning
+    tag_exists = system("git ls-remote --tags #{repo_url} refs/tags/#{tag} | grep #{tag}")
+    raise "Error: Tag '#{tag}' not found in repository #{repo_url}." unless tag_exists
+
     Dir.mktmpdir do |temp_dir|
       system("git clone --no-checkout #{repo_url} #{temp_dir}")
 
       Dir.chdir(temp_dir) do
-        # Enable sparse-checkout
-        unless File.exist?(".git/info/sparse-checkout")
-          system("git sparse-checkout init --cone")
-          system("git sparse-checkout set #{folder_path}")
-          system("git checkout")
-        end
+        system("git fetch --tags")
 
-        # Sync only new/updated files from `data/final/` to `db/imports/`
+        # Checkout the specific tag
+        system("git checkout tags/#{tag} -b temp-tag-branch")
+
+        # Enable sparse-checkout
+        system("git sparse-checkout init --cone")
+        system("git sparse-checkout set #{folder_path}")
+
+        # Sync only new/updated files
         system("rsync -av --update --exclude='*.md' #{folder_path}/ #{local_dir}/")
       end
     end
 
-    puts "Import complete! Only new/updated files copied to #{local_dir}."
+    puts "Import complete! #{tag} files copied to #{local_dir}."
   end
 
   desc "Import Borough Data from .geojson file"

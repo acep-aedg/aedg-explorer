@@ -68,11 +68,13 @@ Ensure you have the following dependencies installed:
 
 #### Pull Data from Github
 1. **Set up Github Repository URL**
-    - Before pulling data files from GitHub, ensure you have the correct repository URL configured in your `.env` by adding:
+    - Before pulling data files from GitHub, ensure you have the correct repository URL and tag configured in your `.env` by adding:
 
         ```sh
         GH_DATA_REPO_URL=https://github.com/acep-aedg/aedg-data-pond
+        GH_DATA_REPO_TAG=v0.1
         ```
+        **Note**: See [data-pond releases](https://github.com/acep-aedg/aedg-data-pond/releases) for latest versions.
 
 1. **Run the Rake Task**
     - Use the following command to pull files from Github Repository into the `db/imports/` directory:
