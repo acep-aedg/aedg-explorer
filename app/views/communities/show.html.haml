@@ -1,7 +1,13 @@
-%h1.mb-4.text-center Community Summary
 
 .row 
   .col-md-3
+    .card.mb-4
+      .card-body.text-center
+        .mb-3
+          = render "dropdown", communities: @communities, current_community: @community 
+        %h4.fw-4=@borough.name
+
+
     .d-grid.gap-2
       = link_to 'Back', communities_path, class: 'btn btn-primary'
       %button.btn.btn-primary
@@ -12,19 +18,13 @@
     = render "communities/sections/quick_nav", community: @community
 
   .col-md-9
-    .card.mb-4
-      .card-body.text-center.p-5
-        %h2=@community.name
-        %p.lead=@borough.name
-        = render "dropdown", communities: @communities, current_community: @community 
-
-
+    %h1.mb-4 Community Summary
     - section_order = ["electricity", "fuel_prices", "background", "related_datasets"]
 
     - section_order.each do |section|
       - section_id = "#{section.parameterize}-section"
 
-      %button.collapse-btn.border-0.mb-3{ 
+      %button.collapse-btn.border-0.mb-1{ 
         type: "button", 
         data: { bs_toggle: "collapse", bs_target: "##{section_id}" }, 
         aria: { expanded: "true", controls: section_id }
@@ -32,7 +32,7 @@
         %i.bi.bi-chevron-down.ms-2.arrow-icon
         %h3.m-0= section.titleize
 
-      .collapse.show.p-4{ id: section_id }
+      .collapse.show.p-1{ id: section_id }
         = render "communities/sections/#{section}", community: @community 
       
       %hr/

@@ -7,11 +7,13 @@
     %li.nav-item
       = link_to "Rates", "#rates", class: 'nav-link'
 
-.row.g-5.row-cols-2
+- if @community.grid
+  .mb-3
+    = render 'communities/sections/electricity/production', community: @community
+  
+.row.g-3.row-cols-2
   - if @community.name
     .col= render 'communities/sections/electricity/utility', community: @community
-  - if @community.grid
-    .col= render 'communities/sections/electricity/production', community: @community
   - if @community.name
     .col= render 'communities/sections/electricity/rates', community: @community
   - if @community.name
