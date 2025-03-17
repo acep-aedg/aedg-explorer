@@ -1,7 +1,7 @@
 class Communities::ChartsController < ApplicationController
   before_action :set_community
 
-  def production_monthly_data
+  def production_monthly
     grouped_data = @community.grid.monthly_generations.group(:year, :month).sum(:net_generation_mwh)
     numeric_months = @community.grid.monthly_generations.pluck(:month).uniq.sort
     labels = numeric_months.map { |month| Date::ABBR_MONTHNAMES[month] }
