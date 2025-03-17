@@ -5,7 +5,16 @@ Rails.application.routes.draw do
     end
   end
   resources :boroughs, only: [:index]
-  resources :communities, only: [:index, :show]
+
+  resources :communities, only: [:index, :show] do
+    resources :charts, only: [] , controller: "communities/charts" do
+      collection do
+        get :production_monthly # Creates production_monthly_community_charts_path
+      end
+    end
+  end
+
+
   get 'welcome/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

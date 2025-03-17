@@ -82,3 +82,4 @@ gem "activerecord-postgis-adapter", "~> 9.0"
 gem 'rgeo'
 gem 'rgeo-geojson'
 gem 'csv'
+gem "chartkick"
