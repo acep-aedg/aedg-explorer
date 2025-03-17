@@ -23,8 +23,8 @@ namespace :import do
 
   desc "Import data files from a specific GitHub tag"
   task pull_gh_data: :environment do
-    repo_url = ENV['GH_DATA_REPO_URL']
-    tag = ENV['GH_DATA_REPO_TAG']
+    repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
+    tag = ENV.fetch('GH_DATA_REPO_TAG')
     folder_path = "data/final"
     local_dir = Rails.root.join("db", "imports").to_s
 
@@ -32,9 +32,6 @@ namespace :import do
     FileUtils.mkdir_p(local_dir)
     keep_file = File.join(local_dir, ".keep")
     FileUtils.touch(keep_file) unless File.exist?(keep_file)
-
-    raise "Error: GH_DATA_REPO_URL must be specified." if repo_url.nil? || repo_url.empty?
-    raise "Error: GH_DATA_REPO_TAG must be specified." if tag.nil? || tag.empty?
 
     # Check if the tag exists before cloning
     tag_exists = system("git ls-remote --tags #{repo_url} refs/tags/#{tag} | grep #{tag}")
