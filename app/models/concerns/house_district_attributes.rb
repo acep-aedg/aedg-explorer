@@ -17,7 +17,7 @@ module HouseDistrictAttributes
   included do
     def assign_aedg_attributes(params)
       assign_attributes(
-        house_district: params[:district],
+        district: params[:district],
         name: params[:name],
         as_of_date: params[:as_of_date],
         boundary: params[:boundary]

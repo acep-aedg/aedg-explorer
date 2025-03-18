@@ -12,13 +12,8 @@ class Community < ApplicationRecord
 
   has_many :employments, foreign_key: "community_fips_code", primary_key: "fips_code"
   has_many :capacities, through: :grid
-  has_many :communities_legislative_districts,
-           foreign_key: :community_fips_code,
-           primary_key: :fips_code,
-           dependent: :destroy
-  has_many :house_districts,
-           through: :communities_legislative_districts,
-            source: :house_district
+  has_many :communities_legislative_districts, dependent: :destroy
+  has_many :house_districts, through: :communities_legislative_districts
 
   # Handle the case where the name is not unique
   def slug_candidates
