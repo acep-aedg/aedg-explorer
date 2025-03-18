@@ -1,0 +1,35 @@
+.mb-3
+  %h3 What's in this Dataset?
+
+  %p= metadatum.description
+  %p
+    %strong Published:
+    = metadatum.publicationDate
+
+  %p 
+    %strong Keywords:
+    - metadatum.keywords.each do |tag|
+      %span.badge.bg-secondary= tag
+
+.mb-3
+  %h3 Resources 
+  %ul.list-group
+    - metadatum.datasets.each do |dataset|
+      %li.list-group-item
+        .mb-1
+          = link_to dataset.title.titleize, [metadatum, dataset], target: '_blank', class: 'fs-4'
+
+        %div
+          %strong Topics:
+          = dataset.topics.join(', ')
+        
+        %div
+          %strong Published:
+          = dataset.publicationDate
+
+        %span.badge.bg-primary= dataset.format
+
+        - dataset.keywords.each do |tag|
+          %span.badge.bg-secondary= tag
+
+       

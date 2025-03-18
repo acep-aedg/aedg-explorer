@@ -22,14 +22,14 @@
     / Tab Content
     .tab-content.mb-3
       #about.tab-pane.fade.show.active.border-start.border-end.border-bottom.p-3
-        = render "datasets/tabs/about", metadatum: @metadatum 
+        = render "metadata/tabs/about", metadatum: @metadatum 
         
       #data.tab-pane.fade.border-start.border-end.border-bottom.p-3
-        = render "datasets/tabs/data", metadatum: @metadatum
+        = render "metadata/tabs/data", metadatum: @metadatum
 
       #metadata.tab-pane.fade.border-start.border-end.border-bottom.p-3
-        = render "datasets/tabs/metadata", metadatum: @metadatum
+        = render "metadata/tabs/metadata", metadatum: @metadatum
 
       #related.tab-pane.fade.border-start.border-end.border-bottom.p-3
-        = render "datasets/tabs/related", metadatum: @metadatum
+        = render "metadata/tabs/related", metadatum: @metadatum
 

@@ -1,5 +1,5 @@
 class DatasetsController < ApplicationController
-  #before_action :set_dataset, only: %i[ show ]
+  before_action :set_metadatum, only: %i( show )
 
   # GET /datasets or /datasets.json
   def index
@@ -11,16 +11,19 @@ class DatasetsController < ApplicationController
   end
   
   def search
+    @search = params.permit(:search, :order, :page)
+    @metadata = Metadatum.all
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_dataset
-      @dataset = Dataset.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def dataset_params
-      params.fetch(:dataset, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_metadatum
+    @metadatum = Metadatum.friendly.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def dataset_params
+    params.fetch(:dataset, {})
+  end
 end
