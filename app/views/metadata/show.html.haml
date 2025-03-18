@@ -10,7 +10,7 @@
       %li.nav-item
         = link_to "About", "#about", class: "nav-link active", data: { bs_toggle: "tab" }
       %li.nav-item
-        = link_to "Data", "#data", class: "nav-link", data: { bs_toggle: "tab" }
+        = link_to "Datasets", "#datasets", class: "nav-link", data: { bs_toggle: "tab" }
       %li.nav-item
         = link_to "Metadata", "#metadata", class: "nav-link", data: { bs_toggle: "tab" }
       %li.nav-item
@@ -24,8 +24,8 @@
       #about.tab-pane.fade.show.active.border-start.border-end.border-bottom.p-3
         = render "metadata/tabs/about", metadatum: @metadatum 
         
-      #data.tab-pane.fade.border-start.border-end.border-bottom.p-3
-        = render "metadata/tabs/data", metadatum: @metadatum
+      #datasets.tab-pane.fade.border-start.border-end.border-bottom.p-3
+        = render "metadata/tabs/datasets", metadatum: @metadatum
 
       #metadata.tab-pane.fade.border-start.border-end.border-bottom.p-3
         = render "metadata/tabs/metadata", metadatum: @metadatum

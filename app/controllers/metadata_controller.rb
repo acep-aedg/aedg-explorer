@@ -1,5 +1,5 @@
 class MetadataController < ApplicationController
-  before_action :set_metadatum, only: %i( show )
+  before_action :set_metadatum, only: %i( download show )
 
   def index
     @search = search_params
@@ -12,6 +12,11 @@ class MetadataController < ApplicationController
     @search = search_params
     @metadata = Metadatum.all
   end
+
+  def download
+    send_data @metadatum.data.to_json, filename: @metadatum.filename, type: 'application/json', disposition: 'attachment'
+  end
+
 
   private 
 

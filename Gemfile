@@ -83,3 +83,5 @@ gem 'rgeo'
 gem 'rgeo-geojson'
 gem 'csv'
 gem "chartkick"
+
+gem "acts-as-taggable-on", "~> 12.0"

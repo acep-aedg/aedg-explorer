@@ -1,6 +1,10 @@
 class Metadatum < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
+
+  acts_as_taggable_on :keywords
+  acts_as_taggable_on :topics
+  acts_as_taggable_on :formats
  
   validates :name, presence: true, uniqueness: true
   validates :filename, presence: true
@@ -9,23 +13,17 @@ class Metadatum < ApplicationRecord
   store_accessor :data, :title, :description, :resources
 
   has_many :datasets, dependent: :destroy
-  
-  default_scope { where(published: true) }
 
-  def keywords
-    datasets.map(&:keywords).flatten.uniq
-  end
+  default_scope { where(published: true) }
 
   def topics
     datasets.map(&:topics).flatten.uniq
   end
 
-  def publicationDate 
-    
+  def publicationDate
   end
 
   def related
-
   end
 
   def self.import_metadata(path)
@@ -33,17 +31,18 @@ class Metadatum < ApplicationRecord
     Dir.glob("#{path}/*.json").each do |file|
       begin
         data = JSON.parse(File.read(file))
-        Metadatum.find_or_create_by(name: data['name']) do |metadata|
+        find_or_initialize_by(name: data['name']).tap do |metadata|
           metadata.filename = File.basename(file)
           metadata.data = data
-          metadata.published = true 
+          metadata.published = true
 
           puts "Imported metadata for #{metadata.name}"
           metadata.data['resources'].each do |resource|
-            puts "Resource: #{resource['name']}"
-            metadata.datasets.find_or_initialize_by(name: resource['name']) do |dataset|
-              dataset.data = resource
-            end
+            dataset = Dataset.import_resource(resource)
+            metadata.keyword_list.add(dataset.keyword_list)
+            metadata.topic_list.add(dataset.topic_list)
+            metadata.format_list.add(dataset.format)
+            metadata.datasets << dataset
           end
 
           metadata.save!

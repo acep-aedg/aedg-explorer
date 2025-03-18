@@ -1,9 +1,24 @@
 .row
   .col-md-3
     .d-grid.gap-3
-      = link_to 'Back', :back, class: "btn btn-primary"
+      = link_to download_metadatum_path(@metadatum), target: '_blank', class: 'btn btn-secondary' do 
+        %i.bi.bi-save
+        Download 
+        Metadata
+
+      = link_to download_metadatum_dataset_path(@metadatum, @dataset, format: @dataset.format.downcase), target: '_blank', class: 'btn btn-secondary' do 
+        %i.bi.bi-save
+        Download 
+        = @dataset.format
+
+      = link_to :back, class: "btn btn-primary" do 
+        %i.bi.bi-arrow-left
+        Back
+
   .col-md-9
-    %h3= @metadatum.title
+    %h3= @dataset.title
+    .mb-3
+      %p= @dataset.description
 
     / Navigation Tabs
     .nav.nav-tabs
@@ -13,23 +28,16 @@
         = link_to "Data", "#data", class: "nav-link", data: { bs_toggle: "tab" }
       %li.nav-item
         = link_to "Metadata", "#metadata", class: "nav-link", data: { bs_toggle: "tab" }
-      %li.nav-item
-        = link_to "Related", "#related", class: "nav-link", data: { bs_toggle: "tab" }
-
-      / Export Button aligned to the right
-      -# = link_to "Export", "#", class: "btn btn-primary"
 
     / Tab Content
     .tab-content.mb-3
       #about.tab-pane.fade.show.active.border-start.border-end.border-bottom.p-3
-        = render "datasets/tabs/about", metadatum: @metadatum 
-        
+        = render "datasets/tabs/about", dataset: @dataset
       #data.tab-pane.fade.border-start.border-end.border-bottom.p-3
-        = render "datasets/tabs/data", metadatum: @metadatum
+        - if @dataset.format.downcase == 'csv'
+          = render 'datasets/tabs/data_csv', dataset: @dataset
+        - if @dataset.format.downcase == 'geojson'
+          = render 'datasets/tabs/data_map', dataset: @dataset
 
       #metadata.tab-pane.fade.border-start.border-end.border-bottom.p-3
-        = render "datasets/tabs/metadata", metadatum: @metadatum
-
-      #related.tab-pane.fade.border-start.border-end.border-bottom.p-3
-        = render "datasets/tabs/related", metadatum: @metadatum
-
+        %pre= JSON.pretty_generate @dataset.data
