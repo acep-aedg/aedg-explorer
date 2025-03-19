@@ -14,6 +14,7 @@ class Community < ApplicationRecord
   has_many :capacities, through: :grid
   has_many :communities_legislative_districts, dependent: :destroy
   has_many :house_districts, through: :communities_legislative_districts
+  has_many :senate_districts, through: :communities_legislative_districts
 
   # Handle the case where the name is not unique
   def slug_candidates
