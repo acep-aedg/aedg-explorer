@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_18_191803) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_18_233551) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -67,14 +67,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_18_191803) do
   end
 
   create_table "communities_legislative_districts", force: :cascade do |t|
-    t.string "senate_district"
     t.integer "election_region"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "community_id", null: false
     t.bigint "house_district_id", null: false
+    t.bigint "senate_district_id", null: false
     t.index ["community_id"], name: "index_communities_legislative_districts_on_community_id"
     t.index ["house_district_id"], name: "index_communities_legislative_districts_on_house_district_id"
+    t.index ["senate_district_id"], name: "index_communities_legislative_districts_on_senate_district_id"
   end
 
   create_table "employments", force: :cascade do |t|
@@ -205,6 +206,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_18_191803) do
     t.index ["fips_code"], name: "index_regional_corporations_on_fips_code", unique: true
   end
 
+  create_table "senate_districts", force: :cascade do |t|
+    t.string "district", null: false
+    t.date "as_of_date"
+    t.geography "boundary", limit: {:srid=>4326, :type=>"geometry", :geographic=>true}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["boundary"], name: "index_senate_districts_on_boundary", using: :gist
+    t.index ["district"], name: "index_senate_districts_on_district", unique: true
+  end
+
   create_table "transportations", force: :cascade do |t|
     t.string "community_fips_code", null: false
     t.boolean "airport"
@@ -237,6 +248,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_18_191803) do
   add_foreign_key "communities", "regional_corporations", column: "regional_corporation_fips_code", primary_key: "fips_code"
   add_foreign_key "communities_legislative_districts", "communities"
   add_foreign_key "communities_legislative_districts", "house_districts"
+  add_foreign_key "communities_legislative_districts", "senate_districts"
   add_foreign_key "monthly_generations", "grids"
   add_foreign_key "population_age_sexes", "communities", column: "community_fips_code", primary_key: "fips_code"
   add_foreign_key "populations", "communities", column: "community_fips_code", primary_key: "fips_code"

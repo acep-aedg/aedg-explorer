@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  district: MyString
+  as_of_date: 2025-03-18
+  boundary: 
+
+two:
+  district: MyString
+  as_of_date: 2025-03-18
+  boundary: 

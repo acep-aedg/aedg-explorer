@@ -20,6 +20,7 @@ namespace :import do
     Rake::Task['import:employments'].invoke
     Rake::Task['import:capacities'].invoke
     Rake::Task['import:house_districts'].invoke
+    Rake::Task['import:senate_districts'].invoke
     Rake::Task['import:communities_legislative_districts'].invoke
   end
 
@@ -174,6 +175,22 @@ namespace :import do
     end
     filepath = Rails.root.join('db', 'imports', 'house_districts.geojson')
     ImportHelpers.import_geojson(filepath, HouseDistrict)
+  end
+
+  desc "Import Senate Districts Data from .geojson file"
+  task senate_districts: :environment do
+    if SenateDistrict.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Senate District table was not empty before starting import!
+        To clear it and all realted tables, run:
+
+            rails delete:districts
+
+        Then, try running this import task again.
+      ERROR
+    end
+    filepath = Rails.root.join('db', 'imports', 'senate_districts.geojson')
+    ImportHelpers.import_geojson(filepath, SenateDistrict)
   end
 
   desc "Import Community Legislative Districts Data from .csv file"
