@@ -14,6 +14,13 @@ class Communities::ChartsController < ApplicationController
     render json: dataset
   end
 
+  def capacity_yearly
+    latest_year = @community.grid.capacities.maximum(:year)
+    dataset = @community.grid.capacities.where(year: latest_year).group(:fuel_type).sum(:capacity_mw)
+    
+    render json: dataset
+  end
+
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
     def set_community

@@ -1,0 +1,35 @@
+- grid_name = @community.grid.name.titleize
+- latest_year = @community.grid.capacities.maximum(:year)
+.card
+  %h4.card-header Grid Capacity
+  .card-body.p-3
+    %h4= grid_name
+    %p.text-muted.small This data is generated at the grid level, not community-specific.
+
+    %div.mt-3
+      %h5.mb-1 Total Capacity
+      %p.font-weight-bold= "#{@community.grid.capacities.sum(:capacity_mw)} MW"
+
+    // Chart view
+    .row 
+      .col-md-6
+        - chart_title = "#{latest_year} #{grid_name} Capacity by Fuel Type"
+        = column_chart capacity_yearly_community_charts_path(community_id: @community.id),title: "#{chart_title}", xtitle: "Fuel Type", ytitle: "Capacity",suffix: "MW", download: {background: "#ffffff", filename: "#{chart_title}", format: "png"}
+      .col-md-6
+        = pie_chart capacity_yearly_community_charts_path(community_id: @community.id), download: {background: "#ffffff", filename: "#{chart_title}", format: "png"}, suffix: "MW", donut: true, title: "#{chart_title}", library: { plugins: { legend: { display: true, position: 'right' } } };
+
+    // Tabular view
+    %div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} }}
+      %table.table.table-stripped.border{ data: { datatables_target: 'table'} }
+        %thead
+          %tr
+            %th Fuel Type
+            %th Capacity (MW)
+            %th Year
+        %tbody
+          - latest_year = @community.grid.capacities.maximum(:year)
+          - @community.grid.capacities.where(year: latest_year).each do |capacity|
+            %tr
+              %td= capacity.fuel_type
+              %td= capacity.capacity_mw
+              %td= capacity.year
