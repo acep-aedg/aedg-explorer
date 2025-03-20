@@ -1,9 +1,9 @@
 - stats = @community.grid.capacities.capacity_stats
-- chart_title = "#{grid_name} Capacity by Fuel Type (#{stats[:year]})"
+- chart_title = "#{@community.grid.name.titleize} Capacity by Fuel Type (#{stats[:year]})"
 
 %h4.mb-3 Grid Capacity
 .mb-3
-  = render 'communities/shared/grid_info', community_name: @community.name, grid_name: grid_name
+  = render 'communities/shared/grid_info'
 
   .bg-body-secondary.p-3.rounded.mb-3.d-flex.flex-wrap.justify-content-center.gap-4
     .d-flex.align-items-center
@@ -44,12 +44,7 @@
   / Tab Content
   .tab-content.mt-3
     #chart.tab-pane.fade.show.active
-      = pie_chart capacity_yearly_community_charts_path(community_id: @community.id), 
-        title: chart_title, 
-        suffix: "MW", 
-        donut: true, 
-        download: { background: "#ffffff", filename: chart_title.parameterize, format: "png" }, 
-        library: { plugins: { legend: { title: { display: true, text: "Fuel Type"}, display: true, position: 'left' } } }
+      = pie_chart capacity_yearly_community_charts_path(@community), title: chart_title, suffix: "MW", donut: true, download: { background: "#ffffff", filename: chart_title.parameterize, format: "png" }, library: { plugins: { legend: { title: { display: true, text: "Fuel Type"}, display: true, position: 'left' } } }
 
     #data.tab-pane.fade
       %div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc'] } }}
