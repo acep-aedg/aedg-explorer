@@ -1,5 +1,38 @@
+- latest_year = @community.grid.monthly_generations.maximum(:year)
+- chart_title = "#{@community.grid.name.titleize} Net Generation by Month (#{latest_year})"
+- monthly_generations = @community.grid.monthly_generations.where(year: latest_year).group(:month).sum(:net_generation_mwh)
+
+- max_generation = monthly_generations.values.max || 0
+- min_generation = monthly_generations.values.min || 0
+- avg_generation = (monthly_generations.values.sum.to_f / monthly_generations.size).round(2)
+- max_month = monthly_generations.key(max_generation)
+- min_month = monthly_generations.key(min_generation)
+
+.row.justify-content-center.bg-light.p-3.rounded.shadow-sm.m-3
+  .col-auto
+    %i.bi-bar-chart-line-fill.mx-1
+    %strong.mx-1 Average:
+    %span.text-primary= "#{avg_generation} MWh"
+
+  .col-auto
+    %i.bi-arrow-up-right-circle.mx-1
+    %strong.mx-1 Max:
+    %span.text-success= "#{max_generation} MWh" 
+    %small.text-muted= "(#{Date::MONTHNAMES[max_month]})" 
+
+  .col-auto
+    %i.bi-arrow-down-right-circle.mx-1
+    %strong.mx-1 Min:
+    %span.text-danger= "#{min_generation} MWh" 
+    %small.text-muted= "(#{Date::MONTHNAMES[min_month]})" 
+
+  .col-auto
+    %i.bi-calendar.mx-1
+    %strong.mx-1 Year:
+    %span.text-muted= latest_year
+
 // Chart view
-= line_chart production_monthly_community_charts_path(community_id: @community.id), id: "monthly-production-chart", xtitle: "Month", ytitle: "Net Generation (MWh)", download: {background: "#ffffff", filename: "#{@community.name}_monthly_production_chart", format: "png"}
+= line_chart production_monthly_community_charts_path(community_id: @community.id), id: "monthly-production-chart", title: chart_title, xtitle: "Month", ytitle: "Net Generation (MWh)", suffix: "MWh", download: {background: "#ffffff", filename: chart_title, format: "png"}
 
 // Tabular view
 %div{ data: { controller: 'datatables', datatables: { order_value: [3, 'asc']} }}
