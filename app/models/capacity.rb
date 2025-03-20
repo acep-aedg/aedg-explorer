@@ -3,9 +3,7 @@ class Capacity < ApplicationRecord
   belongs_to :grid, optional: true
   validates :grid_id, presence: true
 
-  def self.latest_year
-    maximum(:year)
-  end
+  scope :latest_year, -> { where(year: maximum(:year)) }
 
   def self.capacity_stats
     min_record = order(:capacity_mw).first
@@ -18,7 +16,7 @@ class Capacity < ApplicationRecord
       min_fuel_type: min_record&.fuel_type,
       max_capacity: max_record&.capacity_mw&.round(2),
       max_fuel_type: max_record&.fuel_type,
-      year: latest_year
+      year: latest_year.pluck(:year).first
     }
   end
 end
