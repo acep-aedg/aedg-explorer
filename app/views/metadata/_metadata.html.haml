@@ -1,15 +1,15 @@
-.card.mb-3
-  %h4.card-header
+.mb-3.border-top.p-2
+  %h4
     %i.bi.bi-database-fill
     = metadatum.title
     %span.text-muted.small= "- #{metadatum.topics.join(',')}"
 
-  .card-body
+  .mb-3
     %p= metadatum.description
 
     - metadatum.keywords.each do |tag|
       %span.badge.bg-secondary= tag
 
-  .card-footer.d-flex.justify-content-between.align-items-center
+  .d-flex.justify-content-between.align-items-center
     = link_to "View", metadatum, class: "btn btn-primary" 
     .text-muted.small Last Updated: #{metadatum.updated_at}
