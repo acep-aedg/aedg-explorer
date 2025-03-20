@@ -24,7 +24,7 @@ class MonthlyGeneration < ApplicationRecord
       avg_generation: avg_generation,
       max_month: monthly_data.key(max_generation),
       min_month: monthly_data.key(min_generation),
-      latest_year: year
+      year: year
     }
   end
 end

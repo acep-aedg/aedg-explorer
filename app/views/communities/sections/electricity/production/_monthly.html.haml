@@ -1,5 +1,6 @@
 - stats = @community.grid.monthly_generations.generation_stats
-- chart_title = "#{grid_name} Net Generation by Month (#{stats[:latest_year]})"
+- chart_title = "#{grid_name} Net Generation by Month (#{stats[:year]})"
+
 .row.justify-content-center.bg-light.p-3.rounded.shadow-sm.m-3
   .col-auto
     %i.bi-bar-chart-line-fill.mx-1
@@ -21,7 +22,7 @@
   .col-auto
     %i.bi-calendar.mx-1
     %strong.mx-1 Year:
-    %span.text-muted= stats[:latest_year]
+    %span.text-muted= stats[:year]
 
 // Chart view
 = line_chart production_monthly_community_charts_path(@community), title: chart_title, xtitle: "Month", ytitle: "Net Generation", suffix: "MWh", download: {background: "#ffffff", filename: chart_title.parameterize, format: "png"}
