@@ -23,7 +23,7 @@ RUN apt-get update -qq && \
 
 # Install JavaScript dependencies
 ARG NODE_VERSION=21.6.1
-ARG YARN_VERSION=
+ARG YARN_VERSION=1.22.21
 ENV PATH=/usr/local/node/bin:$PATH
 RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
     /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
@@ -72,4 +72,4 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
