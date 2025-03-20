@@ -14,10 +14,13 @@ class Communities::ChartsController < ApplicationController
     render json: dataset
   end
 
+  def population_employment
+    @community = Community.includes(:population, :employments).find(@community.id)
+  end
+
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
     def set_community
         @community = Community.find(params[:community_id])
     end
 end
-

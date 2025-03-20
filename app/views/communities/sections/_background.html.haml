@@ -4,6 +4,6 @@
   - if @community.transportation
     .col= render 'communities/sections/background/transportation', transportation: @community.transportation
   - if @community.population
-    .col-md-6.col-12= render 'communities/sections/background/population_employment', community: @community.population
+    .col-md-6.col-12= render 'communities/sections/background/population_employment', community: @community
   - if @community.name
     .col-md-6.col-12= render 'communities/sections/background/election_districts', community: @community

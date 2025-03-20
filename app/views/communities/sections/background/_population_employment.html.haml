@@ -1,13 +1,32 @@
-.placeholder-card 
+.placeholder-card
   %h4 Population & Employment
-  %p 
-    This section provides an overview of the population aspects of the community. 
-    Please replace this placeholder text with actual content.
+  %p
+    This section provides an overview of the population and employment data for the selected community.
 
   %table.table.table-bordered.table-striped
     %tbody
-      %tr
-        %th Total Population:
-        %td= community.total_population
+      - if community.population
+        %tr
+          %th{ colspan: 2 }
+            %div.text-center
+              %mb-0.text-muted Total Population (#{community.population.year})
+              %mb-0.text-primary= number_with_delimiter(community.population.total_population)
 
-      
+      - else
+        %tr
+          %td{ colspan: 2 } No population data available.
+
+  - if community.employments.any?
+    - sorted_employments = community.employments.sort_by(&:measurement_year)
+    - employed_data = sorted_employments.map { |e| [e.measurement_year, e.residents_employed] }
+    - claimants_data = sorted_employments.map { |e| [e.measurement_year, e.unemployment_insurance_claimants] }
+    - employment_series = [{ name: "Residents Employed", data: employed_data },{ name: "Unemployment Insurance Claimants", data: claimants_data }]
+
+    = line_chart employment_series,
+        xtitle: "Year",
+        ytitle: "People",
+        thousands: ",",
+        colors: ["#1f77b4", "#ff7f0e"],
+        legend: true
+  - else
+    %p No employment data available.
