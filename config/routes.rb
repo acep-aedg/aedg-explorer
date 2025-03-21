@@ -7,17 +7,16 @@ Rails.application.routes.draw do
   resources :boroughs, only: [:index]
 
   resources :communities, only: [:index, :show] do
-    
     resources :charts, only: [] , controller: "communities/charts" do
       collection do
         get :production_monthly
         get :capacity_yearly 
       end
     end
-
     resources :maps, only: [] , controller: "communities/maps" do
       collection do
         get :house_districts
+        get :senate_districts
       end
     end
   end
