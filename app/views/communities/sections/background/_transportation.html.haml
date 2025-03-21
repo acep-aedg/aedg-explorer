@@ -1,23 +1,40 @@
-.placeholder-card
-  %h4 Transportation
-  %p= transportation.description
-
-  %small
-    %strong As of:
+%h4 Transportation
+.mb-3
+  %small.text-muted
+    %strong Last Updated:
     = transportation.as_of_date
+%p= transportation.description
 
-  - transport_fields = transportation.attributes.slice("airport", "harbor_dock", "state_ferry", "cargo_barge", "road_connection", "coastal", "road_or_ferry")
+// Option 1
+.d-flex.flex-wrap.bg-body-secondary.gap-3.justify-content-evenly.p-3.rounded.my-3
+  - Transportation::TRANSPORT_FIELDS.each do |field_name|
+    - value = transportation.send(field_name)
+    .text-center
+      %i{ class: "bi #{value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'}"}
+      %br
+      %small= field_name.titleize
 
-  %table.table.table-bordered.table-striped
-    %thead
+// Option 2
+%table.table.table-hover.align-middle.mt-2
+  %thead
+    %tr
+      %th Type
+      %th Status
+  %tbody
+    - Transportation::TRANSPORT_FIELDS.each do |field_name|
+      - value = transportation.send(field_name)
       %tr
-        - transport_fields.keys.each do |field_name|
-          %th= field_name.humanize.titleize
-    %tbody
-      %tr
-        - transport_fields.values.each do |value|
-          %td
-            - if value
-              %i.bi.bi-check-lg.text-success
-            - else
-              %i.bi.bi-x-lg.text-danger
+        %td= field_name.humanize.titleize
+        %td
+          %span.d-flex.align-items-center
+            %i{ class: "bi #{value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'} me-2" }
+            = value ? "Available" : "Unavailable"
+
+// Option 3
+.row.row-cols-2.row-cols-md-3.g-3.mt-2
+  - Transportation::TRANSPORT_FIELDS.each do |field_name|
+    - value = transportation.send(field_name)
+    .col
+      .d-flex.align-items-center.border.rounded.p-2.bg-light
+        %i{ class: "bi #{value ? 'bi-check-lg text-success' : 'bi-x-lg text-danger'} me-2" }
+        %span= field_name.humanize.titleize
