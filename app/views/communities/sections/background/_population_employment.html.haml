@@ -1,25 +1,15 @@
-.card
-  %h4.card-header Population & Employment
-  .card-body.p-3
-    - if community.population
-      .text-center.mb-4
-        %h5.text-muted.mb-1 Total #{@community.name} Population as of #{@community.population.year}:
-        %h2.text-primary= number_with_delimiter(community.population.total_population)
-    - else
-      %p.text-center.text-muted No population data available.
+.text-center.mb-4
+  %h5.text-muted.mb-1 Total #{@community.name} Population as of #{@community.population.year}:
+  %h2.text-primary= number_with_delimiter(@community.population.total_population)
 
-    - if community.employments.any?
-      - sorted_employments = community.employments.sort_by(&:measurement_year)
-      - employed_data = sorted_employments.map { |e| [e.measurement_year, e.residents_employed] }
-      - claimants_data = sorted_employments.map { |e| [e.measurement_year, e.unemployment_insurance_claimants] }
-      - employment_series = [{ name: "Residents Employed", data: employed_data },{ name: "Unemployment Insurance Claimants", data: claimants_data }]
+= line_chart population_employment_community_charts_path(@community),
+    title: "Employment and Unemployment Insurance Claimants Over Time",
+    xtitle: "Year",
+    ytitle: "Residents",
+    thousands: ",",
+    colors: ["#1f77b4", "#ff7f0e"],
+    legend: true,
+    empty: "No Employment Data Available",
+    loading: "Empolyment Data Loading...",
+    download: {background: "#ffffff", filename: "#{@community.name}_monthly_production_chart", format: "png"}
 
-      = line_chart employment_series,
-          title: "Employment and Unemployment Insurance Claimants Over Time",
-          xtitle: "Year",
-          ytitle: "Residents",
-          thousands: ",",
-          colors: ["#1f77b4", "#ff7f0e"],
-          legend: true
-    - else
-      %p.text-center.text-muted No employment data available.
