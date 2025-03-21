@@ -1,0 +1,24 @@
+- stats = @community.grid.monthly_generations.generation_stats
+
+.bg-body-secondary.p-3.rounded.my-3.d-flex.flex-wrap.justify-content-center.gap-4
+  .d-flex.align-items-center
+    %i.bi-bullseye.me-2
+    %strong.me-1 Average:
+    %span.text-primary= "#{stats[:avg_generation]} MWh"
+
+  .d-flex.align-items-center
+    %i.bi-arrow-up-right-circle.me-2
+    %strong.me-1 Max:
+    %span.text-success= "#{stats[:max_generation]} MWh" 
+    %small.text-muted= "(#{Date::MONTHNAMES[stats[:max_month]]})" 
+
+  .d-flex.align-items-center
+    %i.bi-arrow-down-right-circle.me-2
+    %strong.me-1 Min:
+    %span.text-danger= "#{stats[:min_generation]} MWh" 
+    %small.text-muted= "(#{Date::MONTHNAMES[stats[:min_month]]})" 
+
+  .d-flex.align-items-center
+    %i.bi-calendar.me-2
+    %strong.me-1 Year:
+    %span.text-muted= stats[:year]
