@@ -13,9 +13,10 @@
       %tr
         %th Regional Corporation
         %td= @community.regional_corporation.name
-      %tr
-        %th Grid
-        %td= @community.grid.name.titleize
+      - if @community.grid.present?
+        %tr
+          %th Grid
+          %td= @community.grid.name.titleize
       %tr
         %th Location
         %td= @community.location
