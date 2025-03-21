@@ -1,5 +1,5 @@
 - stats = @community.grid.monthly_generations.generation_stats
-- chart_title = "#{grid_name} Net Generation by Month (#{stats[:year]})"
+- chart_title = "#{@community.grid.name.titleize} Net Generation by Month (#{stats[:year]})"
 
 .row.justify-content-center.bg-light.p-3.rounded.shadow-sm.m-3
   .col-auto

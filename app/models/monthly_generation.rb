@@ -4,7 +4,7 @@ class MonthlyGeneration < ApplicationRecord
 
   validates :grid_id, uniqueness: { scope: [:year, :fuel_type, :month], message: "combination of grid_id, year, month, and fuel type must be unique" }
 
-  scope :yearly_stats, -> (year) {
+  scope :sum_net_generation_by_month, -> (year) {
     where(year: year).group(:month).sum(:net_generation_mwh)
   }
 
@@ -13,7 +13,7 @@ class MonthlyGeneration < ApplicationRecord
   end
 
   def self.generation_stats(year = latest_year)
-    monthly_data = yearly_stats(year)
+    monthly_data = sum_net_generation_by_month(year)
     max_generation = monthly_data.values.max || 0
     min_generation = monthly_data.values.min || 0
     avg_generation = (monthly_data.values.sum.to_f / monthly_data.size).round(2) if monthly_data.any?
