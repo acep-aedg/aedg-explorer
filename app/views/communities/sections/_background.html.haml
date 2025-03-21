@@ -1,3 +1,7 @@
+- if @community.name
+  .mb-3 
+    = render 'communities/sections/background/election_districts'
+
 .row.g-5.align-items-start
   - if @community.name
     .col= render 'communities/sections/background/geography', community: @community
@@ -5,5 +9,4 @@
     .col= render 'communities/sections/background/transportation', transportation: @community.transportation
   - if @community.population
     .col-md-6.col-12= render 'communities/sections/background/population_employment', community: @community.population
-  - if @community.name
-    .col-md-6.col-12= render 'communities/sections/background/election_districts', community: @community
+
