@@ -1,6 +1,3 @@
 - chart_title = "#{@community.grid.name.titleize} Net Generation by Month"
-
-= render 'communities/sections/electricity/production/monthly_stats'
-
 // Chart view
 = line_chart production_monthly_community_charts_path(@community), title: chart_title, xtitle: "Month", ytitle: "Net Generation", suffix: "MWh", download: {background: "#ffffff", filename: chart_title.parameterize, format: "png"}
