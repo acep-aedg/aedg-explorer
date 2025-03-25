@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :charts, only: [] , controller: "communities/charts" do
       collection do
         get :production_monthly # Creates production_monthly_community_charts_path
+        get :capacity_yearly 
         get :population_employment
       end
     end
