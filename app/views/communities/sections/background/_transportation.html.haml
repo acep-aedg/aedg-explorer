@@ -4,11 +4,12 @@
     %strong Last Updated:
     = transportation.as_of_date
 
-.row.bg-body-secondary.g-3.p-3.rounded.my-3
-  - Transportation::TRANSPORT_FIELDS.each do |field_name|
-    - value = transportation.send(field_name)
-    .col-4.col-md-2.d-flex.flex-column.text-center.mt-0
-      %i{ class: "bi #{value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'}" }
-      %small= field_name.titleize
+.container-fluid.bg-body-secondary.rounded.p-3.mb-3
+  .row.g-3
+    - Transportation::TRANSPORT_FIELDS.each do |field_name|
+      - value = transportation.send(field_name)
+      .col-4.col-md-2.d-flex.flex-column.text-center
+        %i{ class: "bi #{value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'}" }
+        %small= field_name.titleize
 
-%p= transportation.description  
+%p= transportation.description
