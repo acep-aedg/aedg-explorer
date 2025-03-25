@@ -10,7 +10,7 @@
         %li.nav-item
           = link_to "Monthly Data", "#monthly-data", class: "nav-link", data: { bs_toggle: "tab" }
       %li.nav-item
-        = link_to "Yearly", "#yearly", class: "nav-link", data: { bs_toggle: "tab" }
+        = link_to "Yearly Chart", "#yearly-chart", class: "nav-link", data: { bs_toggle: "tab" }
 
   .tab-content
     #monthly-chart.tab-pane.fade.show.active
@@ -20,4 +20,5 @@
     #monthly-data.tab-pane.fade
       = render "communities/sections/electricity/production/monthly_data"
 
-    #yearly.tab-pane.fade
+    #yearly-chart.tab-pane.fade
+      = render "communities/sections/electricity/production/yearly_chart"
