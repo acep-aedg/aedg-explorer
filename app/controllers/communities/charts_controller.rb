@@ -1,4 +1,5 @@
 class Communities::ChartsController < ApplicationController
+  include Communities::ChartsHelper
   before_action :set_community
 
   def production_monthly
@@ -19,10 +20,15 @@ class Communities::ChartsController < ApplicationController
     render json: dataset
   end
 
+  def population_employment
+    employment_chart_data = employment_chart_data(@community.employments.sort_by(&:measurement_year))
+    employments = @community.employments.sort_by(&:measurement_year)
+    render json: employment_chart_data(employments)
+  end
+
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
     def set_community
         @community = Community.find(params[:community_id])
     end
 end
-
