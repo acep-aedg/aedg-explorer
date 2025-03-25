@@ -3,38 +3,12 @@
   %small.text-muted
     %strong Last Updated:
     = transportation.as_of_date
-%p= transportation.description
 
-// Option 1
-.d-flex.flex-wrap.bg-body-secondary.gap-3.justify-content-evenly.p-3.rounded.my-3
+.row.bg-body-secondary.g-3.p-3.rounded.my-3
   - Transportation::TRANSPORT_FIELDS.each do |field_name|
     - value = transportation.send(field_name)
-    .text-center
-      %i{ class: "bi #{value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'}"}
-      %br
+    .col-4.col-md-2.d-flex.flex-column.align-items-center.text-center
+      %i{ class: "bi #{value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'}" }
       %small= field_name.titleize
 
-// Option 2
-%table.table.table-hover.align-middle.mt-2
-  %thead
-    %tr
-      %th Type
-      %th Status
-  %tbody
-    - Transportation::TRANSPORT_FIELDS.each do |field_name|
-      - value = transportation.send(field_name)
-      %tr
-        %td= field_name.humanize.titleize
-        %td
-          %span.d-flex.align-items-center
-            %i{ class: "bi #{value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'} me-2" }
-            = value ? "Available" : "Unavailable"
-
-// Option 3
-.row.row-cols-2.row-cols-md-3.g-3.mt-2
-  - Transportation::TRANSPORT_FIELDS.each do |field_name|
-    - value = transportation.send(field_name)
-    .col
-      .d-flex.align-items-center.border.rounded.p-2.bg-light
-        %i{ class: "bi #{value ? 'bi-check-lg text-success' : 'bi-x-lg text-danger'} me-2" }
-        %span= field_name.humanize.titleize
+%p= transportation.description
