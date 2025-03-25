@@ -1,8 +1,10 @@
+- if @community.transportation
+  .mb-3
+    = render 'communities/sections/background/transportation', transportation: @community.transportation
+
 .row.g-5.align-items-start
   - if @community.name
     .col= render 'communities/sections/background/geography', community: @community
-  - if @community.transportation
-    .col= render 'communities/sections/background/transportation', transportation: @community.transportation
   - if @community.population
     .col-md-6.col-12= render 'communities/sections/background/population_employment'
   - if @community.name
