@@ -55,6 +55,8 @@ Ensure you have the following dependencies installed:
     rails db:setup
     ```
 
+    If you get an error about `pg_dump` see the troubleshooting directions below
+
 1. Start the Web Server
 
     To start the web server on port 3001, run:
