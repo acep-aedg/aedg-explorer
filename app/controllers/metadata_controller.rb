@@ -10,7 +10,11 @@ class MetadataController < ApplicationController
 
   def search 
     @search = search_params
-    @metadata = Metadatum.all
+    @metadata = if @search[:search].present?
+      Metadatum.search_full_text(@search[:search])
+    else
+      Metadatum.all
+    end
   end
 
   def download
@@ -25,6 +29,6 @@ class MetadataController < ApplicationController
   end
 
   def search_params
-    params.permit(:search, :order, :page)
+    params.permit(:search, :order, :page, :commit)
   end
 end

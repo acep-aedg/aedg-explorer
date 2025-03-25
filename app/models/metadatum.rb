@@ -1,4 +1,25 @@
 class Metadatum < ApplicationRecord
+  include PgSearch::Model
+  pg_search_scope :search_full_text, 
+                  against: [:name], 
+                  associated_against: {
+                    keywords: [:name],
+                    topics: [:name],
+                    formats: [:name]
+                  },
+                  using: {
+                    dmetaphone: {
+                      tsvector_column: "tsvector_data"
+                    },
+                    tsearch: {
+                      dictionary: "english",
+                      tsvector_column: "tsvector_data"
+                    },
+                    trigram: {
+
+                    }
+                  }
+
   extend FriendlyId
   friendly_id :name, use: :slugged
 
