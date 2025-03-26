@@ -1,13 +1,12 @@
 - simple ||= false
 = form_with url: search_metadata_path, method: :get do |f|
-  .row.justify-content-center.align-items-end.mb-3
+  .row.justify-content-center
     - unless simple
       .col-md-4
-        .input-group.input-group-lg 
+        .input-group
           %span.input-group-text Order By
           = f.select :order, options_for_select([['Most Relevant', 'relevance'], ['Newest', 'newest'], ['Oldest', 'oldest']], @search[:order]), {}, class: 'form-control', id: 'order'
-    .col-md-8
-      .input-group.input-group-lg  
-        %span.input-group-text Search
+    .col
+      .input-group
         = f.text_field :search, value: @search[:search], class: 'form-control', placeholder: 'Search Keywords, Datasets...'
         = f.submit 'Search', class: 'btn btn-secondary'

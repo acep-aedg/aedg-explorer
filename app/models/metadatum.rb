@@ -37,9 +37,7 @@ class Metadatum < ApplicationRecord
 
   default_scope { where(published: true) }
 
-  def topics
-    datasets.map(&:topics).flatten.uniq
-  end
+  scope :highlighted, -> { where(highlighted: true) }
 
   def publicationDate
   end

@@ -3,6 +3,8 @@ class MetadataController < ApplicationController
 
   def index
     @search = search_params
+    @highlighted = Metadatum.highlighted.all
+    @topics = ActsAsTaggableOn::Tag.for_context(:topics)
   end
 
   def show
@@ -10,10 +12,14 @@ class MetadataController < ApplicationController
 
   def search 
     @search = search_params
-    @metadata = if @search[:search].present?
-      Metadatum.search_full_text(@search[:search])
-    else
-      Metadatum.all
+    @metadata = Metadatum
+
+    if @search[:search].present?
+      @metadata = @metadata.search_full_text(@search[:search])
+    end
+
+    if @search[:topic].present?
+      @metadata = @metadata.tagged_with(@search[:topic], on: :topics)
     end
   end
 
@@ -29,6 +35,6 @@ class MetadataController < ApplicationController
   end
 
   def search_params
-    params.permit(:search, :order, :page, :commit)
+    params.permit(:search, :order, :page, :topic, :commit)
   end
 end

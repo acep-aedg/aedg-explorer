@@ -1,0 +1,6 @@
+.row.justify-content-center.g-4
+  - @topics.each do |topic|
+    .col.d-grid
+      = link_to search_metadata_path(topic: topic.name.downcase), class: "btn btn-secondary" do
+        %i.bi.fs-1{ class: topic_icon(topic.name) }
+        %div= topic
