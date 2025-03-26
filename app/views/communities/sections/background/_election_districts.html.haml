@@ -6,9 +6,9 @@
 .d-flex.justify-content-between.align-items-center.mt-4
   .nav.nav-tabs{ data: { controller: 'maps' } }
     %li.nav-item
-      = link_to "House Districts Map", "#house", class: "nav-link active", data: { bs_toggle: "tab"}
+      = link_to "House Districts Map", "#house", class: "nav-link active", data: { bs_toggle: "tab", map_tab: true}
     %li.nav-item
-      = link_to "Senate Districts Map", "#senate", class: "nav-link", data: { bs_toggle: "tab" }
+      = link_to "Senate Districts Map", "#senate", class: "nav-link", data: { bs_toggle: "tab", map_tab: true}
     %li.nav-item 
       = link_to "District Data", "#districtData", class: "nav-link", data: { bs_toggle: "tab" }
 

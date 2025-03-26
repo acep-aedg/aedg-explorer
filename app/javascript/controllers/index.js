@@ -16,3 +16,6 @@ application.register('toc', TocController);
 import ChartController from "./chart_controller"
 application.register("chart", ChartController)
 
+import MapsController from "./maps_controller"
+application.register("maps", MapsController)
+
