@@ -19,7 +19,8 @@ module BoroughAttributes
       assign_attributes({
         fips_code: params[:fips_code],
         name: params[:name],
-        boundary: params[:boundary]
+        boundary: params[:boundary],
+        is_census_area: params[:is_census_area],
       })
     end
   end
