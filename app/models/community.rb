@@ -35,4 +35,8 @@ class Community < ApplicationRecord
 
   default_scope { order(name: :asc )}
 
+  def election_regions
+    communities_legislative_districts.pluck(:election_region).uniq
+  end
+
 end
