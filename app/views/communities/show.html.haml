@@ -9,10 +9,13 @@
 
 
     .d-grid.gap-2
-      = link_to 'Back', communities_path, class: 'btn btn-primary'
       %button.btn.btn-primary
+        %i.bi.bi-download
         Download/Print
 
+      = link_to communities_path, class: 'btn btn-secondary' do 
+        %i.bi.bi-arrow-left
+        Back
 
     %h4.mt-3 Quick Nav
     = render "communities/sections/quick_nav", community: @community

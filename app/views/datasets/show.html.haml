@@ -1,17 +1,16 @@
 .row
   .col-md-3
     .d-grid.gap-3
-      = link_to download_metadatum_path(@metadatum), target: '_blank', class: 'btn btn-secondary' do 
+      = link_to download_metadatum_path(@metadatum), target: '_blank', class: 'btn btn-primary' do 
         %i.bi.bi-save
-        Download 
-        Metadata
+        Download Metadata
 
-      = link_to download_metadatum_dataset_path(@metadatum, @dataset, format: @dataset.format.downcase), target: '_blank', class: 'btn btn-secondary' do 
+      = link_to download_metadatum_dataset_path(@metadatum, @dataset, format: @dataset.format.downcase), target: '_blank', class: 'btn btn-primary' do 
         %i.bi.bi-save
         Download 
         = @dataset.format
 
-      = link_to metadatum_path(@metadata), class: "btn btn-primary" do 
+      = link_to metadatum_path(@metadatum), class: "btn btn-secondary" do 
         %i.bi.bi-arrow-left
         Back
 

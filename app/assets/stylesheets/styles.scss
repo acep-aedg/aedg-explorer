@@ -77,7 +77,8 @@
 }
 
 // Reusable button styles
-.btn-secondary {
+.btn-aedg-primary,
+.btn-primary {
   background-color: $aedg-yellow;
   color: $aedg-navy;
   border-color: darken($aedg-yellow, 10%);
@@ -87,7 +88,7 @@
   }
 }
 
-.btn-primary {
+.btn-aedg-secondary {
   background-color: $aedg-navy;
   color: $white;
   border-color: darken($aedg-navy, 10%);
