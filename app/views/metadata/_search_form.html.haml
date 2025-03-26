@@ -15,5 +15,11 @@
       = f.label :order, 'Order By', class: 'col-form-label col-sm-3'
       = f.select :order, options_for_select([['Most Relevant', 'relevance'], ['Newest', 'newest'], ['Oldest', 'oldest']], @search[:order]), {}, class: 'form-select col', id: 'order'
 
+    .mb-3.row
+      .col-sm-3
+      .col
+        = f.check_box :featured, checked: @search[:featured].to_i == 1, class: 'form-check-input col-sm-3', id: 'featured'
+        = f.label :featured, 'Featured', class: 'form-check-label'
+
     .text-end
       = f.submit 'Search', class: 'btn btn-aedg-primary btn-lg'

@@ -23,6 +23,10 @@ class MetadataController < ApplicationController
       @metadata = @metadata.tagged_with(@search[:topic], on: :topics)
     end
 
+    if @search[:featured].to_i == 1
+      @metadata = @metadata.highlighted
+    end
+
     @metadata = @metadata.all
   end
 
@@ -38,6 +42,6 @@ class MetadataController < ApplicationController
   end
 
   def search_params
-    params.permit(:search, :order, :page, :topic, :commit)
+    params.permit(:search, :order, :page, :topic, :featured, :commit)
   end
 end
