@@ -12,6 +12,7 @@ class MetadataController < ApplicationController
 
   def search 
     @search = search_params
+    @topics = ActsAsTaggableOn::Tag.for_context(:topics)
     @metadata = Metadatum
 
     if @search[:search].present?
@@ -21,6 +22,8 @@ class MetadataController < ApplicationController
     if @search[:topic].present?
       @metadata = @metadata.tagged_with(@search[:topic], on: :topics)
     end
+
+    @metadata = @metadata.all
   end
 
   def download

@@ -1,10 +1,13 @@
-.row 
+.row.mb-3
   .col-md-4
-    PLACEHOLDER
-  .col-md-8
-    .mb-3
+    .m-2
       = render 'search_form'
-    - if @metadata.any?
-      = render partial: 'metadata', collection: @metadata, as: :metadatum
-    - else 
-      %p No results found. Try adjusting your search or using different keywords
+  .col-md-8.border-start
+    .mb-3
+      - if @metadata.any?
+        = render partial: 'metadata', collection: @metadata, as: :metadatum
+      - else 
+        %p.fs-2 
+          No results found. 
+          %br/
+          Try adjusting your search or using different keywords

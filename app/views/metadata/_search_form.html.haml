@@ -1,12 +1,19 @@
 - simple ||= false
 = form_with url: search_metadata_path, method: :get do |f|
-  .row.justify-content-center
-    - unless simple
-      .col-md-4
-        .input-group
-          %span.input-group-text Order By
-          = f.select :order, options_for_select([['Most Relevant', 'relevance'], ['Newest', 'newest'], ['Oldest', 'oldest']], @search[:order]), {}, class: 'form-control', id: 'order'
-    .col
-      .input-group
-        = f.text_field :search, value: @search[:search], class: 'form-control', placeholder: 'Search Keywords, Datasets...'
-        = f.submit 'Search', class: 'btn btn-secondary'
+  - if simple
+    .input-group.input-group-lg
+      = f.text_field :search, value: @search[:search], class: 'form-control col', placeholder: 'Search Keywords, Datasets...'
+      = f.submit 'Search', class: 'btn btn-secondary'
+  - unless simple
+    .mb-3.row
+      = f.text_field :search, value: @search[:search], class: 'form-control col', placeholder: 'Search Keywords, Datasets...'
+    .mb-3.row
+      = f.label :topic, 'Topic', class: 'col-form-label col-sm-3'
+      = f.select :topic, options_for_select(@topics.map { |t| [t.name, t.name.downcase] }, @search[:topic]), { include_blank: 'All Topics' }, class: 'form-select col', id: 'topic'
+
+    .mb-3.row
+      = f.label :order, 'Order By', class: 'col-form-label col-sm-3'
+      = f.select :order, options_for_select([['Most Relevant', 'relevance'], ['Newest', 'newest'], ['Oldest', 'oldest']], @search[:order]), {}, class: 'form-select col', id: 'order'
+
+    .text-end
+      = f.submit 'Search', class: 'btn btn-secondary btn-lg'
