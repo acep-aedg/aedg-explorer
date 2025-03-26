@@ -1,0 +1,26 @@
+.d-flex.bg-body-secondary.rounded.p-3.mb-3
+  .d-flex.align-items-center.me-2
+    %strong.mb-0 Election Region
+
+  .d-flex.flex-wrap.gap-3
+    - @community.communities_legislative_districts.map(&:election_region).uniq.each do |region|
+      .badge.px-3.py-2.text-bg-secondary.rounded-pill.fs-6
+        = region
+        
+.d-flex.bg-body-secondary.rounded.p-3.mb-3
+  .d-flex.align-items-center.me-2
+    %strong.mb-0 House Districts
+
+  .d-flex.flex-wrap.gap-3
+    - @community.house_districts.distinct.each do |district|
+      .badge.px-3.py-2.text-bg-success.rounded-pill.fs-6
+        = district.district
+
+.d-flex.bg-body-secondary.rounded.p-3.mb-3
+  .d-flex.align-items-center.me-2
+    %strong.mb-0 Senate Districts
+
+  .d-flex.flex-wrap.gap-3
+    - @community.senate_districts.distinct.each do |district|
+      .badge.px-3.py-2.text-bg-primary.rounded-pill.fs-6
+        = district.district

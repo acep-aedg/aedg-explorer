@@ -1,18 +1,23 @@
 %h4 Election Districts
-%p This section provides an overview of the election districts within the community.
+
+= render "communities/sections/background/election_districts/district_overview"
 
 / Navigation Tabs
 .d-flex.justify-content-between.align-items-center.mt-4
-  .nav.nav-tabs
+  .nav.nav-tabs{ data: { controller: 'maps' } }
     %li.nav-item
-      = link_to "House Districts", "#house", class: "nav-link active", data: { bs_toggle: "tab" }
+      = link_to "House Districts Map", "#house", class: "nav-link active", data: { bs_toggle: "tab"}
     %li.nav-item
-      = link_to "Senate Districts", "#senate", class: "nav-link", data: { bs_toggle: "tab" }
+      = link_to "Senate Districts Map", "#senate", class: "nav-link", data: { bs_toggle: "tab" }
+    %li.nav-item 
+      = link_to "District Data", "#districtData", class: "nav-link", data: { bs_toggle: "tab" }
 
 / Tab Content
 .tab-content.mt-3
   #house.tab-pane.fade.show.active
-    = area_map house_districts_community_maps_path(@community), tooltips: {hover: true}, controls: true
+    = area_map house_districts_community_maps_path(@community), tooltips: {hover: false}, controls: true
   #senate.tab-pane.fade
     = area_map senate_districts_community_maps_path(@community), tooltips: {hover: false}, controls: true
-    
+
+  #districtData.tab-pane.fade
+    = render "communities/sections/background/election_districts/district_data"
