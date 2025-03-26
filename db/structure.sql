@@ -226,12 +226,12 @@ ALTER SEQUENCE public.communities_id_seq OWNED BY public.communities.id;
 
 CREATE TABLE public.communities_legislative_districts (
     id bigint NOT NULL,
-    community_fips_code character varying,
-    house_district integer,
-    senate_district character varying,
     election_region integer,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    community_id bigint NOT NULL,
+    house_district_id bigint NOT NULL,
+    senate_district_id bigint NOT NULL
 );
 
 
@@ -385,6 +385,40 @@ CREATE SEQUENCE public.grids_id_seq
 --
 
 ALTER SEQUENCE public.grids_id_seq OWNED BY public.grids.id;
+
+
+--
+-- Name: house_districts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.house_districts (
+    id bigint NOT NULL,
+    district integer NOT NULL,
+    name character varying,
+    as_of_date date,
+    boundary public.geography(Geometry,4326),
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: house_districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.house_districts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: house_districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.house_districts_id_seq OWNED BY public.house_districts.id;
 
 
 --
@@ -618,6 +652,39 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: senate_districts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.senate_districts (
+    id bigint NOT NULL,
+    district character varying NOT NULL,
+    as_of_date date,
+    boundary public.geography(Geometry,4326),
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: senate_districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.senate_districts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: senate_districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.senate_districts_id_seq OWNED BY public.senate_districts.id;
+
+
+--
 -- Name: taggings; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -823,6 +890,13 @@ ALTER TABLE ONLY public.grids ALTER COLUMN id SET DEFAULT nextval('public.grids_
 
 
 --
+-- Name: house_districts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.house_districts ALTER COLUMN id SET DEFAULT nextval('public.house_districts_id_seq'::regclass);
+
+
+--
 -- Name: metadata id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -855,6 +929,13 @@ ALTER TABLE ONLY public.populations ALTER COLUMN id SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.regional_corporations ALTER COLUMN id SET DEFAULT nextval('public.regional_corporations_id_seq'::regclass);
+
+
+--
+-- Name: senate_districts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.senate_districts ALTER COLUMN id SET DEFAULT nextval('public.senate_districts_id_seq'::regclass);
 
 
 --
@@ -966,6 +1047,14 @@ ALTER TABLE ONLY public.grids
 
 
 --
+-- Name: house_districts house_districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.house_districts
+    ADD CONSTRAINT house_districts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: metadata metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1011,6 +1100,14 @@ ALTER TABLE ONLY public.regional_corporations
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: senate_districts senate_districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.senate_districts
+    ADD CONSTRAINT senate_districts_pkey PRIMARY KEY (id);
 
 
 --
@@ -1064,6 +1161,27 @@ CREATE INDEX index_boroughs_on_boundary ON public.boroughs USING gist (boundary)
 --
 
 CREATE UNIQUE INDEX index_boroughs_on_fips_code ON public.boroughs USING btree (fips_code);
+
+
+--
+-- Name: index_communities_legislative_districts_on_community_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_communities_legislative_districts_on_community_id ON public.communities_legislative_districts USING btree (community_id);
+
+
+--
+-- Name: index_communities_legislative_districts_on_house_district_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_communities_legislative_districts_on_house_district_id ON public.communities_legislative_districts USING btree (house_district_id);
+
+
+--
+-- Name: index_communities_legislative_districts_on_senate_district_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_communities_legislative_districts_on_senate_district_id ON public.communities_legislative_districts USING btree (senate_district_id);
 
 
 --
@@ -1130,6 +1248,20 @@ CREATE INDEX index_grids_on_name ON public.grids USING btree (name);
 
 
 --
+-- Name: index_house_districts_on_boundary; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_house_districts_on_boundary ON public.house_districts USING gist (boundary);
+
+
+--
+-- Name: index_house_districts_on_district; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_house_districts_on_district ON public.house_districts USING btree (district);
+
+
+--
 -- Name: index_population_age_sexes_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1162,6 +1294,20 @@ CREATE INDEX index_regional_corporations_on_boundary ON public.regional_corporat
 --
 
 CREATE UNIQUE INDEX index_regional_corporations_on_fips_code ON public.regional_corporations USING btree (fips_code);
+
+
+--
+-- Name: index_senate_districts_on_boundary; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_senate_districts_on_boundary ON public.senate_districts USING gist (boundary);
+
+
+--
+-- Name: index_senate_districts_on_district; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_senate_districts_on_district ON public.senate_districts USING btree (district);
 
 
 --
@@ -1325,6 +1471,14 @@ ALTER TABLE ONLY public.monthly_generations
 
 
 --
+-- Name: communities_legislative_districts fk_rails_757f7615db; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_legislative_districts
+    ADD CONSTRAINT fk_rails_757f7615db FOREIGN KEY (community_id) REFERENCES public.communities(id);
+
+
+--
 -- Name: taggings fk_rails_9fcd2e236b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1338,6 +1492,22 @@ ALTER TABLE ONLY public.taggings
 
 ALTER TABLE ONLY public.transportations
     ADD CONSTRAINT fk_rails_af73741a29 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
+
+
+--
+-- Name: communities_legislative_districts fk_rails_b3e1d61bb2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_legislative_districts
+    ADD CONSTRAINT fk_rails_b3e1d61bb2 FOREIGN KEY (house_district_id) REFERENCES public.house_districts(id);
+
+
+--
+-- Name: communities_legislative_districts fk_rails_b629a56790; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_legislative_districts
+    ADD CONSTRAINT fk_rails_b629a56790 FOREIGN KEY (senate_district_id) REFERENCES public.senate_districts(id);
 
 
 --
@@ -1366,6 +1536,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250325164313'),
 ('20250324164648'),
 ('20250324164610'),
+('20250318233551'),
+('20250318230000'),
+('20250318191803'),
+('20250318190213'),
 ('20250318164646'),
 ('20250318164645'),
 ('20250318164644'),
@@ -1375,6 +1549,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250318164640'),
 ('20250317212047'),
 ('20250317205224'),
+('20250311020617'),
 ('20250310213253'),
 ('20250310184056'),
 ('20250307204744'),
