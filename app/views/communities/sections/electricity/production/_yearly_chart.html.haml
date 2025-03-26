@@ -1,0 +1,11 @@
+- chart_title = "#{@community.grid.name.titleize} Net Generation by Year"
+= column_chart production_yearly_community_charts_path(@community), 
+  title: chart_title, 
+  xtitle: "Year", 
+  ytitle: "Net Generation", 
+  suffix: "MWh",
+  thousands: ",",
+  empty: "No Employment Data Available",
+  loading: "Empolyment Data Loading...",
+  library: { animation: { duration: 500 } },
+  download: {background: "#ffffff", filename: chart_title.parameterize, format: "png"}
