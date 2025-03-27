@@ -23,5 +23,9 @@ module AedgExplorer
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    #
+    # Switch to sql format for the schema file, this is required for supporting 
+    # tsvector fields used by full text search on the jsonb data
+    config.active_record.schema_format = :sql
   end
 end

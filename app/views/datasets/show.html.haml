@@ -1,30 +1,42 @@
-.container.my-5
-  = link_to 'Back', datasets_path, class: "btn btn-primary my-4"
-  .card.p-4
-    %h1 Dataset Name
-    %p Category
+.row
+  .col-md-3
+    .d-grid.gap-3
+      = link_to download_metadatum_path(@metadatum), target: '_blank', class: 'btn btn-primary' do 
+        %i.bi.bi-save
+        Download Metadata
 
-  / Navigation Tabs
-  .d-flex.justify-content-between.align-items-center.mt-4
+      = link_to download_metadatum_dataset_path(@metadatum, @dataset, format: @dataset.format.downcase), target: '_blank', class: 'btn btn-primary' do 
+        %i.bi.bi-save
+        Download 
+        = @dataset.format
+
+      = link_to metadatum_path(@metadatum), class: "btn btn-secondary" do 
+        %i.bi.bi-arrow-left
+        Back
+
+  .col-md-9
+    %h3= @dataset.title
+    .mb-3
+      %p= @dataset.description
+
+    / Navigation Tabs
     .nav.nav-tabs
       %li.nav-item
         = link_to "About", "#about", class: "nav-link active", data: { bs_toggle: "tab" }
       %li.nav-item
         = link_to "Data", "#data", class: "nav-link", data: { bs_toggle: "tab" }
       %li.nav-item
-        = link_to "Related", "#related", class: "nav-link", data: { bs_toggle: "tab" }
+        = link_to "Metadata", "#metadata", class: "nav-link", data: { bs_toggle: "tab" }
 
-    / Export Button aligned to the right
-    = link_to "Export", "#", class: "btn btn-primary"
+    / Tab Content
+    .tab-content.mb-3
+      #about.tab-pane.fade.show.active.border-start.border-end.border-bottom.p-3
+        = render "datasets/tabs/about", dataset: @dataset
+      #data.tab-pane.fade.border-start.border-end.border-bottom.p-3
+        - if @dataset.format.downcase == 'csv'
+          = render 'datasets/tabs/data_csv', dataset: @dataset
+        - if @dataset.format.downcase == 'geojson'
+          = render 'datasets/tabs/data_map', dataset: @dataset
 
-  / Tab Content
-  .tab-content.mt-3
-    #about.tab-pane.fade.show.active
-      = render "datasets/tabs/about"
-      
-    #data.tab-pane.fade
-      = render "datasets/tabs/data"
-
-    #related.tab-pane.fade
-      = render "datasets/tabs/related"
-
+      #metadata.tab-pane.fade.border-start.border-end.border-bottom.p-3
+        %pre= JSON.pretty_generate @dataset.data

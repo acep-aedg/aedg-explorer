@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
-  resources :datasets, only: [:index, :show] do
-    collection do
-      get 'search' # Creates search_datasets_path
+  resources :metadata, only: [:index, :show], path: 'data' do
+    resources :datasets, only: [:show] do 
+      get :download, on: :member
     end
+    get :search, on: :collection
+    get :download, on: :member
   end
+
   resources :boroughs, only: [:index]
 
   resources :communities, only: [:index, :show] do
@@ -16,7 +19,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
 
   get 'welcome/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
