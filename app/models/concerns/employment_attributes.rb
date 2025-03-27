@@ -5,7 +5,7 @@ module EmploymentAttributes
     def import_aedg!(properties)
       properties.symbolize_keys!
 
-      Employment.build.tap do |employment|
+      Employment.new.tap do |employment|
         employment.assign_aedg_attributes(properties)
         employment.save!
       end

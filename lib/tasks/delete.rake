@@ -12,7 +12,7 @@ namespace :delete do
   end
 
   desc "Clear capacities data"
-  task capacitys: :environment do
+  task capacities: :environment do
     DeleteHelpers.delete_records(Capacity)
   end
 
