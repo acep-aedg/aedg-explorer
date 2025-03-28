@@ -4,9 +4,9 @@
 ARG RUBY_VERSION=3.3.4
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
 
-# Install dependencies, including git and rsync
+# Install git and rsync for runtime usage
 RUN apt-get update -qq && \
-    apt-get install -y build-essential libpq-dev nodejs git rsync && \
+    apt-get install --no-install-recommends -y git rsync && \
     rm -rf /var/lib/apt/lists/*
 
 # Rails app lives here
