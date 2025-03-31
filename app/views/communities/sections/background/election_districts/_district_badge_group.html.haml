@@ -5,9 +5,11 @@
 
 .d-flex.bg-body-secondary.rounded.p-3.mb-3
   .d-flex.align-items-center.me-2
-    %strong.mb-0= label
+    %strong.mb-0
+      = label
+      = " (#{items.count})"
 
   .d-flex.flex-wrap.gap-3
     - items.each do |item|
-      .badge.px-3.py-2.rounded-pill.fs-6{ class: "text-bg-#{color}" }
+      .badge.px-3.py-2.rounded-pill{ class: "text-bg-#{color}" }
         = yield item

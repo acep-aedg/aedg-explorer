@@ -6,14 +6,22 @@
 .d-flex.justify-content-between.align-items-center.mt-4
   .nav.nav-tabs
     %li.nav-item
-      = link_to "Districts Map", "#districtsMap", class: "nav-link active", data: { bs_toggle: "tab"}
+      = link_to "District Map", "#districtsMap", class: "nav-link active", data: { bs_toggle: "tab"}
     %li.nav-item 
       = link_to "District Data", "#districtData", class: "nav-link", data: { bs_toggle: "tab" }
 
 / Tab Content
 .tab-content.mt-3
-  #districtsMap.tab-pane.fade.show.active
-    #map{ data: { controller: "mapbox", mapbox_data_url_value: house_districts_community_maps_path(@community), mapbox_token_value: ENV['MAPBOX_API_TOKEN'] }, style: "width: 100%; height: 500px;"}
+  #districtsMap.tab-pane.fade.show.active.position-relative
+    #map.rounded{
+      data: {
+        controller: "mapbox",
+        mapbox_data_url_value:         legislative_districts_community_maps_path(@community),
+        mapbox_map_center_value: [@community.longitude, @community.latitude],
+        mapbox_token_value: ENV['MAPBOX_API_TOKEN']
+      },
+      style: "width: 100%; height: 500px;"
+    }
 
   #districtData.tab-pane.fade
     = render "communities/sections/background/election_districts/district_data"

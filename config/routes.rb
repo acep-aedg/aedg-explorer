@@ -15,8 +15,7 @@ Rails.application.routes.draw do
     end
     resources :maps, only: [] , controller: "communities/maps" do
       collection do
-        get :house_districts
-        get :senate_districts
+        get :legislative_districts
       end
     end
   end
