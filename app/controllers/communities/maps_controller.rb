@@ -2,15 +2,25 @@ class Communities::MapsController < ApplicationController
   before_action :set_community
 
   def house_districts
-    districts = @community.house_districts.map do |district|
+    features = @community.house_districts.map do |district|
       {
+        type: "Feature",
         geometry: RGeo::GeoJSON.encode(district.boundary),
-        label: "District #{district.district}",
-        tooltip: "Disctrict #{district.district} - #{district.name}"
+        properties: {
+          id: district.district,
+          name: district.name,
+          tooltip: "District #{district.district}: #{district.name}"
+        }
       }
     end
 
-    render json: districts
+    geojson = {
+      type: "FeatureCollection",
+      features: features
+    }
+    pp geojson
+
+    render json: geojson
   end
 
   def senate_districts
