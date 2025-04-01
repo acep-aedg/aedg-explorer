@@ -51,4 +51,19 @@ module Communities::ChartsHelper
       { name: "Margin of Error", data: moe_data }
     ]
   end
+
+  def gender_distribution_chart_data(community)
+    population = community.population_age_sexes.most_recent_for(community.fips_code)
+
+    male_estimate = population.sum(:e_pop_male)
+    female_estimate = population.sum(:e_pop_female)
+
+    male_moe = population.sum(:m_pop_male)
+    female_moe = population.sum(:m_pop_female)
+
+    {
+      "Male (±#{male_moe})" => male_estimate,
+      "Female (±#{female_moe})" => female_estimate
+    }
+  end
 end
