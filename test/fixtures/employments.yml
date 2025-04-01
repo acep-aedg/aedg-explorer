@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  community_fips_code: MyString
+  community_fips_code: '0000001'
   residents_employed: 1
   unemployment_insurance_claimants: 1
   measurement_year: 1
 
 two:
-  community_fips_code: MyString
+  community_fips_code: '0000002'
   residents_employed: 1
   unemployment_insurance_claimants: 1
   measurement_year: 1

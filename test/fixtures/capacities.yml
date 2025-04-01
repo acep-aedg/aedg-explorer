@@ -3,11 +3,11 @@
 one:
   grid_id: 1
   capacity_mw: 1.5
-  fuel_type: MyString
-  year: 1
+  fuel_type: 'DFO'
+  year: 2020
 
 two:
-  grid_id: 1
+  grid_id: 2
   capacity_mw: 1.5
-  fuel_type: MyString
-  year: 1
+  fuel_type: 'NG'
+  year: 2021

@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  community_fips_code: MyString
-  house_district: 1
-  senate_district: MyString
+  community_fips_code: '0000001'
+  house_district: one
+  senate_district: one
   election_region: 1
 
 two:
-  community_fips_code: MyString
-  house_district: 1
-  senate_district: MyString
-  election_region: 1
+  community_fips_code: '0000002'
+  house_district: two
+  senate_district: two
+  election_region: 2

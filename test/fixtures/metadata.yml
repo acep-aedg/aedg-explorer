@@ -1,11 +1,16 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  name: MyString
-  filename: MyString
-  data: 
+  name: "Example Metadata 1"
+  slug: "metadata-1"
+  filename: "data1.csv"
+  highlighted: true
+  published: true
+  data: {}
 
 two:
-  name: MyString
-  filename: MyString
-  data: 
+  name: "Example Metadata 2"
+  slug: "metadata-2"
+  filename: "data2.csv"
+  highlighted: false
+  published: false
+  data: {}

@@ -2,12 +2,12 @@
 
 one:
   grid_id: 1
-  net_generation_mwh: 1
-  fuel_type: MyString
-  year: 1
+  net_generation_mwh: 5000
+  fuel_type: "NG"
+  year: 2020
 
 two:
-  grid_id: 1
-  net_generation_mwh: 1
-  fuel_type: MyString
-  year: 1
+  grid_id: 2
+  net_generation_mwh: 1500
+  fuel_type: "DFO"
+  year: 2021
