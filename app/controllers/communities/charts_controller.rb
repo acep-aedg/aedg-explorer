@@ -26,6 +26,11 @@ class Communities::ChartsController < ApplicationController
     render json: employment_chart_data(employments)
   end
 
+  def population_detail
+    population_age_sexes = PopulationAgeSex.most_recent_for(@community.fips_code).ordered
+    render json: population_detail_chart_data(population_age_sexes)
+  end
+
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
     def set_community

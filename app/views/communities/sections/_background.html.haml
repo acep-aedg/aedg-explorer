@@ -7,5 +7,7 @@
     .col= render 'communities/sections/background/geography', community: @community
   - if @community.population
     .col-md-6.col-12= render 'communities/sections/background/population_employment'
+  - if @community.population
+    .col-md-6.col-12= render 'communities/sections/background/population_age_sex'
   - if @community.name
     .col-md-6.col-12= render 'communities/sections/background/election_districts', community: @community
