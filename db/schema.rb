@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_25_164313) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_01_174706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -72,10 +72,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_25_164313) do
     t.integer "election_region"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "community_id", null: false
+    t.string "community_fips_code", null: false
     t.bigint "house_district_id", null: false
     t.bigint "senate_district_id", null: false
-    t.index ["community_id"], name: "index_communities_legislative_districts_on_community_id"
+    t.index ["community_fips_code"], name: "index_communities_legislative_districts_on_community_fips_code"
     t.index ["house_district_id"], name: "index_communities_legislative_districts_on_house_district_id"
     t.index ["senate_district_id"], name: "index_communities_legislative_districts_on_senate_district_id"
   end
@@ -301,7 +301,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_25_164313) do
   add_foreign_key "communities", "boroughs", column: "borough_fips_code", primary_key: "fips_code"
   add_foreign_key "communities", "grids"
   add_foreign_key "communities", "regional_corporations", column: "regional_corporation_fips_code", primary_key: "fips_code"
-  add_foreign_key "communities_legislative_districts", "communities"
+  add_foreign_key "communities_legislative_districts", "communities", column: "community_fips_code", primary_key: "fips_code"
   add_foreign_key "communities_legislative_districts", "house_districts"
   add_foreign_key "communities_legislative_districts", "senate_districts"
   add_foreign_key "datasets", "metadata"
