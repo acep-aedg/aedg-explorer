@@ -16,7 +16,8 @@ export default class extends Controller {
     let table = new DataTable(element, {
       retrieve: true,
       order: [this.orderValue],
-      pageLength: this.pagesizeValue
+      pageLength: this.pagesizeValue,
+      scrollX: true
     });
   }
 
