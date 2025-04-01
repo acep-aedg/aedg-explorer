@@ -1,0 +1,40 @@
+.row
+  .col-md-3
+    .d-grid.gap-3
+      = link_to '#', class: 'btn btn-primary' do
+        %i.bi.bi-save
+        Download
+      = link_to search_metadata_path, class: "btn btn-secondary" do 
+        %i.bi.bi-arrow-left
+        Back
+  .col-md-9
+    %h3= @metadatum.title
+
+    / Navigation Tabs
+    .nav.nav-tabs
+      %li.nav-item
+        = link_to "About", "#about", class: "nav-link active", data: { bs_toggle: "tab" }
+      %li.nav-item
+        = link_to "Datasets", "#datasets", class: "nav-link", data: { bs_toggle: "tab" }
+      %li.nav-item
+        = link_to "Metadata", "#metadata", class: "nav-link", data: { bs_toggle: "tab" }
+      %li.nav-item
+        = link_to "Related", "#related", class: "nav-link", data: { bs_toggle: "tab" }
+
+      / Export Button aligned to the right
+      -# = link_to "Export", "#", class: "btn btn-primary"
+
+    / Tab Content
+    .tab-content.mb-3
+      #about.tab-pane.fade.show.active.border-start.border-end.border-bottom.p-3
+        = render "metadata/tabs/about", metadatum: @metadatum 
+        
+      #datasets.tab-pane.fade.border-start.border-end.border-bottom.p-3
+        = render "metadata/tabs/datasets", metadatum: @metadatum
+
+      #metadata.tab-pane.fade.border-start.border-end.border-bottom.p-3
+        = render "metadata/tabs/metadata", metadatum: @metadatum
+
+      #related.tab-pane.fade.border-start.border-end.border-bottom.p-3
+        = render "metadata/tabs/related", metadatum: @metadatum
+

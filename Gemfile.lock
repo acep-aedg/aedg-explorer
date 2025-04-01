@@ -81,6 +81,9 @@ GEM
       mutex_m
       securerandom (>= 0.3)
       tzinfo (~> 2.0)
+    acts-as-taggable-on (12.0.0)
+      activerecord (>= 7.1, < 8.1)
+      zeitwerk (>= 2.4, < 3.0)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     base64 (0.2.0)
@@ -193,6 +196,9 @@ GEM
     nokogiri (1.18.3-x86_64-linux-gnu)
       racc (~> 1.4)
     pg (1.5.9)
+    pg_search (2.3.7)
+      activerecord (>= 6.1)
+      activesupport (>= 6.1)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -308,6 +314,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-postgis-adapter (~> 9.0)
+  acts-as-taggable-on (~> 12.0)
   bootsnap
   bootstrap_form (~> 5.4)
   capybara
@@ -322,6 +329,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   pg (~> 1.1)
+  pg_search (~> 2.3)
   puma (>= 5.0)
   rails (~> 7.1.5)
   rgeo

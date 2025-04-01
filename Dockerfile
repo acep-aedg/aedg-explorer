@@ -2,7 +2,12 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=3.3.4
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
+
+# Install git and rsync for runtime usage
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y git rsync && \
+    rm -rf /var/lib/apt/lists/*
 
 # Rails app lives here
 WORKDIR /rails
@@ -15,7 +20,7 @@ ENV RAILS_ENV="production" \
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install packages needed to build gems and node modules
 RUN apt-get update -qq && \

@@ -1,0 +1,21 @@
+.row.mb-3.justify-content-center
+  .col-lg-8
+    .card
+      %h1.text-center Explore Data
+
+      .card-body
+        .d-flex.justify-content-center.gap-4.mb-3
+          = link_to "#{Community.count} Communities", communities_path, class: "btn btn-lg btn-aedg-primary"
+          = link_to "View All Datasets", search_metadata_path, class: "btn btn-lg btn-aedg-secondary"
+
+        .row.justify-content-center
+          .col
+            = render 'search_form', simple: true
+.d-grid.g-2.mb-3
+  = render 'by_topic'
+.row
+  .col-lg-6.text-center
+    %p.hero PLACEHOLDER FOR MAP
+  .col-lg-6
+    %h2 Featured Datasets
+    = render partial: 'metadata', collection: @highlighted, as: :metadatum

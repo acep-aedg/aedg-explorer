@@ -4,7 +4,7 @@ require_relative 'import_helpers'
 
 namespace :import do
   desc "Import Data Files into the Database"
-  task all: [:environment, "db:reset"] do
+  task all: [:environment] do
     Rake::Task['import:pull_gh_data'].invoke
 
     puts "Importing data files..."

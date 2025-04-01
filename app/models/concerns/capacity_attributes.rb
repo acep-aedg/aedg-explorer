@@ -6,7 +6,7 @@ module CapacityAttributes
     def import_aedg!(properties)
       properties.symbolize_keys!
 
-      Capacity.build.tap do |capacity|
+      Capacity.new.tap do |capacity|
         capacity.assign_aedg_attributes(properties)
         capacity.save!
       end

@@ -1,0 +1,6 @@
+%table.table.table-striped.border{ data: { controller: 'datatables', datatables: { pagesize_value: 25, load_value: metadatum_dataset_path(@metadatum, dataset, format: 'json') } } }
+  %thead
+    %tr
+      - @dataset.data['schema']['fields'].each do |field|
+        %th= field['name']
+  %tbody

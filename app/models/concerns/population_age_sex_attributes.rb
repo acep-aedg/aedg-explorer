@@ -6,7 +6,7 @@ module PopulationAgeSexAttributes
     def import_aedg!(properties)
       properties.symbolize_keys!
 
-      PopulationAgeSex.find_or_initialize_by(community_fips_code: properties[:community_fips_code],start_year: properties[:start_year], end_year: properties[:end_year], geo_src: properties[:geo_src]).tap do |pop_age_sex|
+      PopulationAgeSex.new.tap do |pop_age_sex|
         pop_age_sex.assign_aedg_attributes(properties)
         pop_age_sex.save!
       end

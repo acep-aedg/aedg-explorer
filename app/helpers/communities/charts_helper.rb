@@ -66,4 +66,13 @@ module Communities::ChartsHelper
       "Female (±#{female_moe})" => female_estimate
     }
   end
+
+  def yearly_generation_chart_data(generations)
+    [
+      {
+        name: "Net Generation (MWh)",
+        data: generations.transform_keys(&:to_s)
+      }
+    ]
+  end
 end

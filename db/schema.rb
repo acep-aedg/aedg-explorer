@@ -10,8 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_18_233551) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_25_164313) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "fuzzystrmatch"
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
   enable_extension "postgis"
 
@@ -78,6 +80,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_18_233551) do
     t.index ["senate_district_id"], name: "index_communities_legislative_districts_on_senate_district_id"
   end
 
+  create_table "datasets", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.jsonb "data"
+    t.bigint "metadatum_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["metadatum_id"], name: "index_datasets_on_metadatum_id"
+  end
+
   create_table "employments", force: :cascade do |t|
     t.string "community_fips_code"
     t.integer "residents_employed"
@@ -115,6 +127,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_18_233551) do
     t.datetime "updated_at", null: false
     t.index ["boundary"], name: "index_house_districts_on_boundary", using: :gist
     t.index ["district"], name: "index_house_districts_on_district", unique: true
+  end
+
+  create_table "metadata", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.string "filename"
+    t.boolean "highlighted", default: false
+    t.boolean "published", default: false
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.virtual "tsvector_data", type: :tsvector, as: "jsonb_to_tsvector('english'::regconfig, data, '[\"string\", \"numeric\"]'::jsonb)", stored: true
   end
 
   create_table "monthly_generations", force: :cascade do |t|
@@ -216,6 +240,37 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_18_233551) do
     t.index ["district"], name: "index_senate_districts_on_district", unique: true
   end
 
+  create_table "taggings", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.string "taggable_type"
+    t.bigint "taggable_id"
+    t.string "tagger_type"
+    t.bigint "tagger_id"
+    t.string "context", limit: 128
+    t.datetime "created_at", precision: nil
+    t.string "tenant", limit: 128
+    t.index ["context"], name: "index_taggings_on_context"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_id", "taggable_type", "context"], name: "taggings_taggable_context_idx"
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+    t.index ["tagger_type", "tagger_id"], name: "index_taggings_on_tagger_type_and_tagger_id"
+    t.index ["tenant"], name: "index_taggings_on_tenant"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
   create_table "transportations", force: :cascade do |t|
     t.string "community_fips_code", null: false
     t.boolean "airport"
@@ -249,9 +304,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_18_233551) do
   add_foreign_key "communities_legislative_districts", "communities"
   add_foreign_key "communities_legislative_districts", "house_districts"
   add_foreign_key "communities_legislative_districts", "senate_districts"
+  add_foreign_key "datasets", "metadata"
   add_foreign_key "monthly_generations", "grids"
   add_foreign_key "population_age_sexes", "communities", column: "community_fips_code", primary_key: "fips_code"
   add_foreign_key "populations", "communities", column: "community_fips_code", primary_key: "fips_code"
+  add_foreign_key "taggings", "tags"
   add_foreign_key "transportations", "communities", column: "community_fips_code", primary_key: "fips_code"
   add_foreign_key "yearly_generations", "grids"
 end

@@ -1,0 +1,13 @@
+%div{ data: { controller: 'datatables', datatables: { order_value: [3, 'asc']} }}
+  %table.table.table-stripped.border{ data: { datatables_target: 'table'} }
+    %thead
+      %tr
+        %th Net Generation (MWh)
+        %th Fuel Type
+        %th Year
+    %tbody
+      - @community.grid.yearly_generations.each do |generation|
+        %tr
+          %td= generation.net_generation_mwh
+          %td= generation.fuel_type
+          %td= generation.year

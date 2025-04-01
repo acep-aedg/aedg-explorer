@@ -1,13 +1,39 @@
-.container
-  .row
-    .col
-      %h3 Metadata
-      %hr
-      .placeholder-card
-      %br
-  .row
-    .col
-      %h3 What's in this Dataset?
-      %hr
-      .placeholder-card
+.row 
+  .col 
+    %p 
+      %strong Published:
+      = @dataset.publicationDate
 
+    %p
+      %strong Topics 
+      = @dataset.topic_list.join(', ')
+
+    %p 
+      %strong Keywords: 
+      - @dataset.keywords.each do |tag|
+        %span.badge.bg-secondary= tag
+
+    %p 
+      %strong Format: 
+      %span.badge.bg-primary= @dataset.format
+
+  .col
+    %h3 Fields
+    %ul.list-group
+      - @dataset.schema['fields'].each do |field|
+        %li.list-group-item
+          %h4= field['long_name']
+          .mb-3= field['description']
+          .row.d-flex.gap-2
+            .col
+              %strong.text-nowrap Field Name
+              = field['name']
+            .col
+              %strong Type
+              %div= field['type']
+            .col
+              %strong Unit 
+              %div= field['unit']
+            .col
+              %strong Nullable
+              %div= field['nullable'] ? 'true' : 'false'
