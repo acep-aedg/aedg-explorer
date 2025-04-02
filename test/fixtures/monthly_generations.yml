@@ -1,18 +1,14 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
 one:
-  grid_id: 1
+  grid: one
   net_generation_mwh: 111.1
   fuel_type: 'NG'
   year: 2021
   month: 11
 
 two: 
-  grid_id: 2
+  grid: two
   net_generation_mwh: 222.2
   fuel_type: 'NG'
   year: 2022

@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  grid_id: 1
+  grid: one
   capacity_mw: 1.5
   fuel_type: 'DFO'
   year: 2020
 
 two:
-  grid_id: 2
+  grid: two
   capacity_mw: 1.5
   fuel_type: 'NG'
   year: 2021

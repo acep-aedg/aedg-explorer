@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: "Dataset One"
-  slug: "dataset-one"
+  name: 'Dataset One'
+  slug: 'dataset-one'
   data: {}
   metadatum: one
 
 two:
-  name: "Dataset Two"
-  slug: "dataset-two"
+  name: 'Dataset Two'
+  slug: 'dataset-two'
   data: {}
   metadatum: two

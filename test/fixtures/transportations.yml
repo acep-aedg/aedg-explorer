@@ -1,9 +1,5 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
 one:
   community_fips_code: '0000001'
   airport: true
@@ -13,9 +9,9 @@ one:
   road_connection: true
   coastal: true
   road_or_ferry: false
-  description: 'This is a description for transportation for community 1234'
+  description: 'This is a description for transportation for community 0000001'
   as_of_date: 2025-03-10
-#
+
 two:
   community_fips_code: '0000002'
   airport: true
@@ -25,5 +21,5 @@ two:
   road_connection: true
   coastal: true
   road_or_ferry: false
-  description: 'This is a description for transportation for community 5678'
+  description: 'This is a description for transportation for community 0000002'
   as_of_date: 2025-03-18

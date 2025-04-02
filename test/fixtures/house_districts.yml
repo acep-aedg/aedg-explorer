@@ -2,10 +2,10 @@
 
 one:
   district: 1
-  name: "House District 1"
+  name: 'House District 1'
   as_of_date: 2025-03-10
 
 two:
   district: 2
-  name: "House District 2"
+  name: 'House District 2'
   as_of_date: 2025-03-10
