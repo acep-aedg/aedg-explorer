@@ -83,4 +83,3 @@ gem 'rgeo'
 gem 'rgeo-geojson'
 gem 'csv'
 gem "chartkick"
-gem "mapkick-rb"
