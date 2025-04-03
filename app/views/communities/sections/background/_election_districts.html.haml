@@ -15,13 +15,14 @@
   #districtsMap.tab-pane.fade.show.active.position-relative
     #map.rounded{
       data: {
-        controller: "mapbox",
-        mapbox_data_url_value:         legislative_districts_community_maps_path(@community),
-        mapbox_map_center_value: [@community.longitude, @community.latitude],
-        mapbox_token_value: ENV['MAPBOX_API_TOKEN']
+        controller: "legislative-districts-map",
+        legislative_districts_map_house_url_value: house_districts_community_maps_path(@community),
+        legislative_districts_map_senate_url_value: senate_districts_community_maps_path(@community),
+        legislative_districts_map_map_center_value: [@community.longitude, @community.latitude],
+        legislative_districts_map_token_value: ENV['MAPBOX_API_TOKEN']
       },
       style: "width: 100%; height: 500px;"
     }
-
+    
   #districtData.tab-pane.fade
     = render "communities/sections/background/election_districts/district_data"

@@ -1,11 +1,10 @@
 class Communities::MapsController < ApplicationController
   before_action :set_community
 
-  def legislative_districts
-    house_districts = @community.house_districts.uniq
-    senate_districts = @community.senate_districts.uniq
+  def house_districts
+    districts = @community.house_districts.distinct
 
-    house_features = house_districts.map do |district|
+    features = districts.map do |district|
       {
         type: "Feature",
         geometry: RGeo::GeoJSON.encode(district.boundary),
@@ -18,7 +17,16 @@ class Communities::MapsController < ApplicationController
       }
     end
 
-    senate_features = senate_districts.map do |district|
+    render json: {
+      type: "FeatureCollection",
+      features: features
+    }
+  end
+
+  def senate_districts
+    districts = @community.senate_districts.distinct
+
+    features = districts.map do |district|
       {
         type: "Feature",
         geometry: RGeo::GeoJSON.encode(district.boundary),
@@ -31,21 +39,14 @@ class Communities::MapsController < ApplicationController
     end
 
     render json: {
-      house: {
-        type: "FeatureCollection",
-        features: house_features
-      },
-      senate: {
-        type: "FeatureCollection",
-        features: senate_features
-      }
+      type: "FeatureCollection",
+      features: features
     }
   end
-  
-  # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
-  private
-    def set_community
-        @community = Community.find(params[:community_id])
-    end
-end
 
+  private
+
+  def set_community
+    @community = Community.find(params[:community_id])
+  end
+end

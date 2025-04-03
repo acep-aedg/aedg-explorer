@@ -13,8 +13,8 @@ application.register("community-dropdown", CommunityDropdownController)
 import DatatablesController from "./datatables_controller"
 application.register("datatables", DatatablesController)
 
-import MapboxController from "./mapbox_controller"
-application.register("mapbox", MapboxController)
+import LegislativeDistrictsMapController from "./legislative_districts_map_controller"
+application.register("legislative-districts-map", LegislativeDistrictsMapController)
 
 import TocController from "./toc_controller"
 application.register("toc", TocController)
