@@ -1,11 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
+one:
+  fips_code: '0000001'
+  name: 'Regional Corporation One'
+  land_area: 1234
+  water_area: 5678
 #
-one: {}
-# column: value
-#
-two: {}
-# column: value
+two:
+  fips_code: '0000002'
+  name: 'Regional Corporation Two'
+  land_area: 1234
+  water_area: 5678

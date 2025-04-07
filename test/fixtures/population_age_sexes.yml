@@ -1,11 +1,151 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-# column: value
+one:
+  community_fips_code: '0000001'
+  start_year: 2020
+  end_year: 2021
+  is_most_recent: true
+  geo_src: 'P'
+  e_pop_age_total: 1000
+  m_pop_age_total: 10
+
+  e_pop_age_under_5: 50
+  m_pop_age_under_5: 2
+
+  e_pop_age_5_9: 55
+  m_pop_age_5_9: 2
+
+  e_pop_age_10_14: 60
+  m_pop_age_10_14: 3
+
+  e_pop_age_15_19: 65
+  m_pop_age_15_19: 3
+
+  e_pop_age_20_24: 70
+  m_pop_age_20_24: 4
+
+  e_pop_age_25_34: 80
+  m_pop_age_25_34: 4
+
+  e_pop_age_35_44: 85
+  m_pop_age_35_44: 4
+
+  e_pop_age_45_54: 90
+  m_pop_age_45_54: 5
+
+  e_pop_age_55_59: 60
+  m_pop_age_55_59: 3
+
+  e_pop_age_60_64: 50
+  m_pop_age_60_64: 2
+
+  e_pop_age_65_74: 40
+  m_pop_age_65_74: 2
+
+  e_pop_age_75_84: 30
+  m_pop_age_75_84: 2
+
+  e_pop_age_85_plus: 20
+  m_pop_age_85_plus: 1
+
+  e_pop_age_median_age: 38.5
+  m_pop_age_median_age: 0.5
+
+  e_pop_age_under_18: 200
+  m_pop_age_under_18: 5
+
+  e_pop_age_18_plus: 800
+  m_pop_age_18_plus: 7
+
+  e_pop_age_21_plus: 750
+  m_pop_age_21_plus: 7
+
+  e_pop_age_62_plus: 200
+  m_pop_age_62_plus: 2
+
+  e_pop_age_65_plus: 150
+  m_pop_age_65_plus: 2
+
+  e_pop_total: 1000
+  m_pop_total: 10
+
+  e_pop_male: 490
+  m_pop_male: 5
+
+  e_pop_female: 510
+  m_pop_female: 5
+
+two:
+  community_fips_code: '0000002'
+  start_year: 2022
+  end_year: 2023
+  is_most_recent: false
+  geo_src: 'E'
+  e_pop_age_total: 2000
+  m_pop_age_total: 15
+
+  e_pop_age_under_5: 100
+  m_pop_age_under_5: 3
+
+  e_pop_age_5_9: 110
+  m_pop_age_5_9: 3
+
+  e_pop_age_10_14: 120
+  m_pop_age_10_14: 4
+
+  e_pop_age_15_19: 130
+  m_pop_age_15_19: 4
+
+  e_pop_age_20_24: 140
+  m_pop_age_20_24: 5
+
+  e_pop_age_25_34: 160
+  m_pop_age_25_34: 5
+
+  e_pop_age_35_44: 170
+  m_pop_age_35_44: 5
+
+  e_pop_age_45_54: 180
+  m_pop_age_45_54: 6
+
+  e_pop_age_55_59: 120
+  m_pop_age_55_59: 4
+
+  e_pop_age_60_64: 100
+  m_pop_age_60_64: 3
+
+  e_pop_age_65_74: 90
+  m_pop_age_65_74: 3
+
+  e_pop_age_75_84: 80
+  m_pop_age_75_84: 3
+
+  e_pop_age_85_plus: 70
+  m_pop_age_85_plus: 2
+
+  e_pop_age_median_age: 41.2
+  m_pop_age_median_age: 0.6
+
+  e_pop_age_under_18: 400
+  m_pop_age_under_18: 6
+
+  e_pop_age_18_plus: 1600
+  m_pop_age_18_plus: 9
+
+  e_pop_age_21_plus: 1550
+  m_pop_age_21_plus: 9
+
+  e_pop_age_62_plus: 500
+  m_pop_age_62_plus: 3
+
+  e_pop_age_65_plus: 350
+  m_pop_age_65_plus: 3
+
+  e_pop_total: 2000
+  m_pop_total: 15
+
+  e_pop_male: 980
+  m_pop_male: 7
+
+  e_pop_female: 1020
+  m_pop_female: 8
