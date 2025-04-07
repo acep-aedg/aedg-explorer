@@ -39,7 +39,8 @@ export default class extends Controller {
       data: data,
       columns: columns,
       order: [this.orderValue],
-      pageLength: this.pagesizeValue
+      pageLength: this.pagesizeValue,
+      scrollX: true
     });
   }
 }

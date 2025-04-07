@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         get :production_monthly # Creates production_monthly_community_charts_path
         get :capacity_yearly
         get :population_employment
+        get :population_detail
         get :production_yearly
       end
     end
