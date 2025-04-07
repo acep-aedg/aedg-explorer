@@ -56,7 +56,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres
+        image: postgis
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
