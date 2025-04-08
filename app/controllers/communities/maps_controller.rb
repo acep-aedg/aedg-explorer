@@ -3,7 +3,6 @@ class Communities::MapsController < ApplicationController
 
   def house_districts
     geojson = Rails.cache.fetch(["community", @community.id, "house_districts"], expires_in: 12.hours) do
-      Rails.logger.info "[CACHE MISS] House districts for community #{@community.id}"
 
       districts = @community.house_districts.distinct
 
@@ -15,7 +14,6 @@ class Communities::MapsController < ApplicationController
             id: district.district,
             name: district.name,
             tooltip: "House: #{district.district} - #{district.name}",
-            layer: "house"
           }
         }
       end
@@ -26,14 +24,11 @@ class Communities::MapsController < ApplicationController
       }
     end
 
-    Rails.logger.info "[CACHE HIT] House districts for community #{@community.id}"
-
     render json: geojson
   end
 
   def senate_districts
     geojson = Rails.cache.fetch(["community", @community.id, "senate_districts"], expires_in: 12.hours) do
-      Rails.logger.info "[CACHE MISS] Senate districts for community #{@community.id}"
 
       districts = @community.senate_districts.distinct
 
@@ -44,7 +39,6 @@ class Communities::MapsController < ApplicationController
           properties: {
             id: district.district,
             tooltip: "Senate: #{district.district}",
-            layer: "senate"
           }
         }
       end
@@ -54,8 +48,6 @@ class Communities::MapsController < ApplicationController
         features: features
       }
     end
-
-    Rails.logger.info "[CACHE HIT] Senate districts for community #{@community.id}"
 
     render json: geojson
   end

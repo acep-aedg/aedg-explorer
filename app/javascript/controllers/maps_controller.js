@@ -5,9 +5,10 @@ export default class extends Controller {
   static targets = ['map', 'loading'];
   static values = {
     token: String,
-    mapCenter: Array,
+    mapCenter: { type: Array, default: [-154.49, 63.58] },
     defaultLayerUrl: String,
     markers: Array,
+    communityName: { type: String, default: 'Community' },
   };
 
   connect() {
@@ -19,7 +20,7 @@ export default class extends Controller {
     this.map = new mapboxgl.Map({
       container: this.mapTarget,
       style: 'mapbox://styles/mapbox/streets-v11?optimize=true',
-      center: this.mapCenterValue || [-149.9, 61.2],
+      center: this.mapCenterValue,
       zoom: 4,
     });
 
@@ -35,7 +36,78 @@ export default class extends Controller {
   }
 
   addMarker([lng, lat]) {
-    new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
+    const marker = new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
+    this.setupMarkerTooltip(marker, [lng, lat], this.communityNameValue);
+  }
+
+  setupMarkerTooltip(marker, [lng, lat], title) {
+    const popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 10,
+    }).setHTML(`
+    <div>
+      <strong>${title}</strong><br/>
+      Lat: ${lat.toFixed(4)}<br/>
+      Lng: ${lng.toFixed(4)}
+    </div>
+  `);
+
+    const el = marker.getElement();
+
+    el.addEventListener('mouseenter', () => {
+      popup.setLngLat([lng, lat]).addTo(this.map);
+    });
+
+    el.addEventListener('mouseleave', () => {
+      popup.remove();
+    });
+  }
+
+  setupFillLayerTooltip(fillLayerId) {
+    this._popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 10,
+    });
+
+    this._tooltipMouseMove = (e) => {
+      this.map.getCanvas().style.cursor = 'pointer';
+
+      const feature = e.features[0];
+      const tooltip = feature.properties.tooltip;
+
+      if (tooltip) {
+        this._popup
+          .setLngLat(e.lngLat)
+          .setHTML(`<div>${tooltip}</div>`)
+          .addTo(this.map);
+      }
+    };
+
+    this._tooltipMouseLeave = () => {
+      this.map.getCanvas().style.cursor = '';
+      this._popup.remove();
+    };
+
+    this.map.on('mousemove', fillLayerId, this._tooltipMouseMove);
+    this.map.on('mouseleave', fillLayerId, this._tooltipMouseLeave);
+  }
+
+  clearFillLayerTooltip() {
+    if (!this._tooltipMouseMove || !this._tooltipMouseLeave) return;
+
+    this.activeLayers.forEach((layerId) => {
+      if (this.map.getLayer(layerId)) {
+        this.map.off('mousemove', layerId, this._tooltipMouseMove);
+        this.map.off('mouseleave', layerId, this._tooltipMouseLeave);
+      }
+    });
+
+    this._popup?.remove();
+    this._popup = null;
+    this._tooltipMouseMove = null;
+    this._tooltipMouseLeave = null;
   }
 
   showLoading() {
@@ -50,34 +122,31 @@ export default class extends Controller {
     this.loadingTarget.classList.add('d-none');
   }
 
+  // This currently only works for Polygon and MultiPolygon geometries
   getBounds(geojson) {
     const bounds = new mapboxgl.LngLatBounds();
 
     for (const feature of geojson.features) {
       const coords = feature.geometry.coordinates;
       const type = feature.geometry.type;
-
-      if (type === 'Point') {
-        bounds.extend(coords);
-      } else {
-        // For Polygon and MultiPolygon, drill into the first level of nested coords
-        const recurse = (c) => {
-          if (typeof c[0] === 'number') {
-            bounds.extend(c);
-          } else {
-            c.forEach(recurse);
-          }
-        };
-        recurse(coords);
-      }
+      const recurse = (c) => {
+        if (typeof c[0] === 'number') {
+          bounds.extend(c);
+        } else {
+          c.forEach(recurse);
+        }
+      };
+      recurse(coords);
     }
 
     return bounds;
   }
+
   async loadLayer(url, options = {}) {
     this.showLoading();
     try {
       this.clearAllLayers();
+      this.clearFillLayerTooltip();
 
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
@@ -107,6 +176,8 @@ export default class extends Controller {
         },
       });
 
+      this.setupFillLayerTooltip(fillId);
+
       this.map.addLayer({
         id: outlineId,
         type: 'line',
@@ -119,6 +190,7 @@ export default class extends Controller {
       });
 
       this.activeLayers.push(fillId, outlineId);
+
       const bounds = this.getBounds(geojson);
       if (!bounds.isEmpty()) {
         this.map.fitBounds(bounds, {
