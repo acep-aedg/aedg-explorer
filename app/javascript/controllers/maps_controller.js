@@ -8,7 +8,7 @@ export default class extends Controller {
     mapCenter: { type: Array, default: [-154.49, 63.58] },
     defaultLayerUrl: String,
     markers: Array,
-    communityName: { type: String, default: 'Community' },
+    markerTooltipName: { type: String, default: 'Location' },
   };
 
   connect() {
@@ -37,7 +37,7 @@ export default class extends Controller {
 
   addMarker([lng, lat]) {
     const marker = new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
-    this.setupMarkerTooltip(marker, [lng, lat], this.communityNameValue);
+    this.setupMarkerTooltip(marker, [lng, lat], this.markerTooltipNameValue);
   }
 
   setupMarkerTooltip(marker, [lng, lat], title) {
