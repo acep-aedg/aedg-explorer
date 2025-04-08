@@ -12,7 +12,7 @@
 
 / Tab Content
 .tab-content.mt-3
-  #districtsMapWrapper.tab-pane.fade.show.active.position-relative{
+  #districtsMapWrapper.tab-pane.fade.show.active{
     data: {
       controller: "maps",
       maps_token_value: ENV['MAPBOX_API_TOKEN'],
@@ -20,36 +20,29 @@
       maps_default_layer_url_value: house_districts_community_maps_path(@community, format: :json)
     }
   }
-    .map-controls
-      %button.btn.btn-sm{
+    .d-flex.gap-2.mb-2.align-items-center
+      %button.btn.btn-outline-primary.active{
         data: {
           action: "click->maps#selectLayer",
           url: house_districts_community_maps_path(@community, format: :json),
           color: "#088",
           outline_color: "#05505e"
         }
-      } Show House Districts
+      } House Districts
 
-      %button.btn.btn-sm{
+      %button.btn.btn-outline-primary{
         data: {
           action: "click->maps#selectLayer",
           url: senate_districts_community_maps_path(@community, format: :json),
           color: "#e67e22",
           outline_color: "#a84300"
         }
-      } Show Senate Districts
+      } Senate Districts
+      %span{ data: { maps_target: "loading" }}
 
     #districtsMap.rounded{ data: { maps_target: "map" }, style: "width: 100%; height: 500px;" }
 
-    #communityLocationMapWrapper{
-      data: {
-        controller: "maps",
-        maps_token_value: ENV['MAPBOX_API_TOKEN'],
-        maps_map_center_value: [@community.longitude, @community.latitude],
-        maps_markers_value: [[@community.longitude, @community.latitude]]
-      }
-    }
-      #communityLocationMap{ data: { maps_target: "map" }, style: "width: 100%; height: 400px;" }
+
 
   #districtData.tab-pane.fade
     = render "communities/sections/background/election_districts/district_data"

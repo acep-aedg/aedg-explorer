@@ -2,7 +2,7 @@ import { Controller } from '@hotwired/stimulus';
 import mapboxgl from 'mapbox-gl';
 
 export default class extends Controller {
-  static targets = ['map'];
+  static targets = ['map', 'loading'];
   static values = {
     token: String,
     mapCenter: Array,
@@ -12,6 +12,9 @@ export default class extends Controller {
 
   connect() {
     mapboxgl.accessToken = this.tokenValue;
+
+    this.activeLayers = [];
+    this.activeSources = [];
 
     this.map = new mapboxgl.Map({
       container: this.mapTarget,
@@ -35,9 +38,22 @@ export default class extends Controller {
     new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
   }
 
+  showLoading() {
+    if (!this.hasLoadingTarget) return;
+    this.loadingTarget.classList.remove('d-none');
+    this.loadingTarget.innerHTML =
+      '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Loading...';
+  }
+
+  hideLoading() {
+    if (!this.hasLoadingTarget) return;
+    this.loadingTarget.classList.add('d-none');
+  }
+
   async loadLayer(url, options = {}) {
+    this.showLoading();
     try {
-      console.log('Loading layer from:', url);
+      this.clearAllLayers();
 
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
@@ -52,8 +68,13 @@ export default class extends Controller {
         data: geojson,
       });
 
+      this.activeSources.push(layerName);
+
+      const fillId = `${layerName}-fill`;
+      const outlineId = `${layerName}-outline`;
+
       this.map.addLayer({
-        id: `${layerName}-fill`,
+        id: fillId,
         type: 'fill',
         source: layerName,
         paint: {
@@ -63,7 +84,7 @@ export default class extends Controller {
       });
 
       this.map.addLayer({
-        id: `${layerName}-outline`,
+        id: outlineId,
         type: 'line',
         source: layerName,
         paint: {
@@ -73,16 +94,41 @@ export default class extends Controller {
         },
       });
 
+      this.activeLayers.push(fillId, outlineId);
     } catch (err) {
       console.error('Error loading layer:', err);
+    } finally {
+      this.hideLoading();
     }
   }
 
+  clearAllLayers() {
+    this.activeLayers.forEach((layerId) => {
+      if (this.map.getLayer(layerId)) {
+        this.map.removeLayer(layerId);
+      }
+    });
+    this.activeLayers = [];
 
-  selectLayer(event) {
-    const url = event.currentTarget.dataset.url;
-    const color = event.currentTarget.dataset.color;
-    const outlineColor = event.currentTarget.dataset.outlineColor;
+    this.activeSources.forEach((sourceId) => {
+      if (this.map.getSource(sourceId)) {
+        this.map.removeSource(sourceId);
+      }
+    });
+    this.activeSources = [];
+  }
+
+  async selectLayer(event) {
+    const button = event.currentTarget;
+    const url = button.dataset.url;
+    const color = button.dataset.color;
+    const outlineColor = button.dataset.outlineColor;
+
+    button.parentElement
+      .querySelectorAll('.btn')
+      .forEach((btn) => btn.classList.remove('active'));
+
+    button.classList.add('active');
 
     this.loadLayer(url, { color, outlineColor });
   }
