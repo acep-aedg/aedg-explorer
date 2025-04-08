@@ -8,7 +8,7 @@
         maps_token_value: ENV['MAPBOX_API_TOKEN'],
         maps_map_center_value: [@community.longitude, @community.latitude],
         maps_markers_value: [[@community.longitude, @community.latitude]],
-        maps_marker_tooltip_name_value: @community.name
+        maps_marker_tooltip_title_value: @community.name
       }
     }
       .map-sm.rounded{ data: { maps_target: "map" } }
