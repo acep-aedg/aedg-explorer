@@ -50,6 +50,30 @@ export default class extends Controller {
     this.loadingTarget.classList.add('d-none');
   }
 
+  getBounds(geojson) {
+    const bounds = new mapboxgl.LngLatBounds();
+
+    for (const feature of geojson.features) {
+      const coords = feature.geometry.coordinates;
+      const type = feature.geometry.type;
+
+      if (type === 'Point') {
+        bounds.extend(coords);
+      } else {
+        // For Polygon and MultiPolygon, drill into the first level of nested coords
+        const recurse = (c) => {
+          if (typeof c[0] === 'number') {
+            bounds.extend(c);
+          } else {
+            c.forEach(recurse);
+          }
+        };
+        recurse(coords);
+      }
+    }
+
+    return bounds;
+  }
   async loadLayer(url, options = {}) {
     this.showLoading();
     try {
@@ -95,6 +119,14 @@ export default class extends Controller {
       });
 
       this.activeLayers.push(fillId, outlineId);
+      const bounds = this.getBounds(geojson);
+      if (!bounds.isEmpty()) {
+        this.map.fitBounds(bounds, {
+          padding: 40,
+          maxZoom: 10,
+          duration: 1000,
+        });
+      }
     } catch (err) {
       console.error('Error loading layer:', err);
     } finally {
