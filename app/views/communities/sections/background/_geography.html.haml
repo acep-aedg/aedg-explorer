@@ -1,32 +1,42 @@
 %h4 Geography
-#communityLocationMapWrapper.tab-pane.fade.show.active{
-  data: {
-    controller: "maps",
-    maps_token_value: ENV['MAPBOX_API_TOKEN'],
-    maps_map_center_value: [@community.longitude, @community.latitude],
-    maps_markers_value: [[@community.longitude, @community.latitude]]
-  }
-}
-  #communityLocationMap.rounded{ data: { maps_target: "map" }, style: "width: 100%; height: 500px;" }
 
-%table.table.table-bordered.table-striped
-  %tbody
-    %tr
-      %th Borough
-      %td= @community.borough.name
-    %tr
-      %th Regional Corporation
-      %td= @community.regional_corporation.name
-    - if @community.grid.present?
-      %tr
-        %th Grid
-        %td= @community.grid.name.titleize
-    %tr
-      %th Location
-      %td= @community.location
-    %tr
-      %th Latitude
-      %td= @community.latitude
-    %tr
-      %th Longitude
-      %td= @community.longitude
+.row
+  .col-md-4
+    #communityLocationMapWrapper.tab-pane.fade.show.active{
+      data: {
+        controller: "maps",
+        maps_token_value: ENV['MAPBOX_API_TOKEN'],
+        maps_map_center_value: [@community.longitude, @community.latitude],
+        maps_markers_value: [[@community.longitude, @community.latitude]],
+        maps_community_name_value: @community.name
+      }
+    }
+      .map-sm.rounded{ data: { maps_target: "map" } }
+
+  .col-md-8
+    %table.table.table-hover
+      %tbody
+        - if @community.name.present?
+          %tr
+            %th.pe-3 Community
+            %td= @community.name
+        - if @community.borough.present?
+          %tr
+            %th.pe-3 Borough
+            %td= @community.borough.name
+
+        - if @community.regional_corporation.present?
+          %tr
+            %th.pe-3 Regional Corporation
+            %td= @community.regional_corporation.name
+
+        - if @community.grid.present?
+          %tr
+            %th.pe-3 Grid
+            %td= @community.grid.name.titleize
+        %tr
+          %th.pe-3 Latitude, Longitude
+          %td
+            = @community.latitude
+            ,
+            = @community.longitude

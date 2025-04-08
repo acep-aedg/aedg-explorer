@@ -1,0 +1,13 @@
+$map-sizes: (
+  sm: 200px,
+  md: 300px,
+  lg: 400px,
+  xl: 500px,
+);
+
+@each $size, $height in $map-sizes {
+  .map-#{$size} {
+    width: 100%;
+    height: $height;
+  }
+}
