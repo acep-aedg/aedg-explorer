@@ -3,11 +3,25 @@
 one:
   name: 'Dataset One'
   slug: 'dataset-one'
-  data: {}
   metadatum: one
-
-two:
-  name: 'Dataset Two'
-  slug: 'dataset-two'
-  data: {}
-  metadatum: two
+  data:
+    path: "dataset-one.csv"
+    type: "table"
+    title: "Test Dataset"
+    format: "CSV"
+    topics:
+      - "Test Topic"
+    schema:
+      fields:
+        - name: "name"
+          type: "string"
+          unit: null
+          nullable: false
+          description: "Test name"
+        - name: "number"
+          type: "number"
+          unit: "#"
+          nullable: true
+          description: "Test number"
+    publicationDate: "2025-03-07"
+  

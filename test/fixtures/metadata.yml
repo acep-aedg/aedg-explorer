@@ -1,17 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: "Example Metadata 1"
-  slug: "metadata-1"
-  filename: "data1.csv"
+  name: 'Test Metadata'
+  slug: 'test-metadata'
+  filename: 'test_metadata_1.csv'
   highlighted: true
   published: true
-  data: {}
-
-two:
-  name: "Example Metadata 2"
-  slug: "metadata-2"
-  filename: "data2.csv"
-  highlighted: false
-  published: false
-  data: {}
+  data:
+    name: "test_dataset"
+    title: "Test Monthly Generation Dataset"
+    description: "Test Monthly Generation Dataset"
+    topics:
+      - "Test Topic"
+    format: "CSV"
