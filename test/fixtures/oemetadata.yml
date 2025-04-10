@@ -1,5 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+_fixture:
+  model_class: Metadatum
 one:
   name: 'Test Metadata'
   slug: 'test-metadata'
@@ -7,9 +9,9 @@ one:
   highlighted: true
   published: true
   data:
-    name: "test_dataset"
-    title: "Test Monthly Generation Dataset"
-    description: "Test Monthly Generation Dataset"
+    name: 'test_dataset'
+    title: 'Test Monthly Generation Dataset'
+    description: 'Test Monthly Generation Dataset'
     topics:
-      - "Test Topic"
-    format: "CSV"
+      - 'Test Topic'
+    format: 'CSV'
