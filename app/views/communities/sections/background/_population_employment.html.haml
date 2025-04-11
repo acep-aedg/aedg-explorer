@@ -1,13 +1,15 @@
-.placeholder-card 
-  %h4 Population & Employment
-  %p 
-    This section provides an overview of the population aspects of the community. 
-    Please replace this placeholder text with actual content.
+.text-center.mb-4
+  %h5.text-muted.mb-1 Total #{@community.name} Population as of #{@community.population.year}:
+  %h2.text-primary= number_with_delimiter(@community.population.total_population)
 
-  %table.table.table-bordered.table-striped
-    %tbody
-      %tr
-        %th Total Population:
-        %td= community.total_population
+= line_chart population_employment_community_charts_path(@community),
+    title: "Employment and Unemployment Insurance Claimants Over Time",
+    xtitle: "Year",
+    ytitle: "Residents",
+    thousands: ",",
+    colors: ["#1f77b4", "#ff7f0e"],
+    legend: true,
+    empty: "No Employment Data Available",
+    loading: "Empolyment Data Loading...",
+    download: {background: "#ffffff", filename: "#{@community.name}_monthly_production_chart", format: "png"}
 
-      

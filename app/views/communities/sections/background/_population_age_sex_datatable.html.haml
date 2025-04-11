@@ -1,0 +1,110 @@
+%div{ data: { controller: 'datatables', datatables: { order_value: [3, 'asc'], scroll_x: true } } }
+  %h5.text-center.mt-2 Populations Ages and Sexes Table
+  %table.table.table-stripped.border{ data: { datatables_target: 'table' } }
+    %thead
+      %tr
+        %th Community FIPS Code
+        %th Start Year
+        %th End Year
+        %th Is Most Recent
+        %th Geo Source
+        %th Estimated Total Population
+        %th Margin of Error Total Population
+        %th Estimated Age Under 5
+        %th Margin of Error Age Under 5
+        %th Estimated Age 5-9
+        %th Margin of Error Age 5-9
+        %th Estimated Age 10-14
+        %th Margin of Error Age 10-14
+        %th Estimated Age 15-19
+        %th Margin of Error Age 15-19
+        %th Estimated Age 20-24
+        %th Margin of Error Age 20-24
+        %th Estimated Age 25-34
+        %th Margin of Error Age 25-34
+        %th Estimated Age 35-44
+        %th Margin of Error Age 35-44
+        %th Estimated Age 45-54
+        %th Margin of Error Age 45-54
+        %th Estimated Age 55-59
+        %th Margin of Error Age 55-59
+        %th Estimated Age 60-64
+        %th Margin of Error Age 60-64
+        %th Estimated Age 65-74
+        %th Margin of Error Age 65-74
+        %th Estimated Age 75-84
+        %th Margin of Error Age 75-84
+        %th Estimated Age 85+
+        %th Margin of Error Age 85+
+        %th Estimated Median Age
+        %th Margin of Error Median Age
+        %th Estimated Under 18
+        %th Margin of Error Under 18
+        %th Estimated 18 Plus
+        %th Margin of Error 18 Plus
+        %th Estimated 21 Plus
+        %th Margin of Error 21 Plus
+        %th Estimated 62 Plus
+        %th Margin of Error 62 Plus
+        %th Estimated 65 Plus
+        %th Margin of Error 65 Plus
+        %th Estimated Total
+        %th Margin of Error Total
+        %th Estimated Male
+        %th Margin of Error Male
+        %th Estimated Female
+        %th Margin of Error Female
+    %tbody
+      - @community.population_age_sexes.each do |row|
+        %tr
+          %td= row.community_fips_code
+          %td= row.start_year
+          %td= row.end_year
+          %td= row.is_most_recent
+          %td= row.geo_src
+          %td= row.e_pop_age_total
+          %td= row.m_pop_age_total
+          %td= row.e_pop_age_under_5
+          %td= row.m_pop_age_under_5
+          %td= row.e_pop_age_5_9
+          %td= row.m_pop_age_5_9
+          %td= row.e_pop_age_10_14
+          %td= row.m_pop_age_10_14
+          %td= row.e_pop_age_15_19
+          %td= row.m_pop_age_15_19
+          %td= row.e_pop_age_20_24
+          %td= row.m_pop_age_20_24
+          %td= row.e_pop_age_25_34
+          %td= row.m_pop_age_25_34
+          %td= row.e_pop_age_35_44
+          %td= row.m_pop_age_35_44
+          %td= row.e_pop_age_45_54
+          %td= row.m_pop_age_45_54
+          %td= row.e_pop_age_55_59
+          %td= row.m_pop_age_55_59
+          %td= row.e_pop_age_60_64
+          %td= row.m_pop_age_60_64
+          %td= row.e_pop_age_65_74
+          %td= row.m_pop_age_65_74
+          %td= row.e_pop_age_75_84
+          %td= row.m_pop_age_75_84
+          %td= row.e_pop_age_85_plus
+          %td= row.m_pop_age_85_plus
+          %td= row.e_pop_age_median_age
+          %td= row.m_pop_age_median_age
+          %td= row.e_pop_age_under_18
+          %td= row.m_pop_age_under_18
+          %td= row.e_pop_age_18_plus
+          %td= row.m_pop_age_18_plus
+          %td= row.e_pop_age_21_plus
+          %td= row.m_pop_age_21_plus
+          %td= row.e_pop_age_62_plus
+          %td= row.m_pop_age_62_plus
+          %td= row.e_pop_age_65_plus
+          %td= row.m_pop_age_65_plus
+          %td= row.e_pop_total
+          %td= row.m_pop_total
+          %td= row.e_pop_male
+          %td= row.m_pop_male
+          %td= row.e_pop_female
+          %td= row.m_pop_female

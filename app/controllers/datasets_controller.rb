@@ -1,26 +1,56 @@
+require 'open-uri'
 class DatasetsController < ApplicationController
-  #before_action :set_dataset, only: %i[ show ]
-
-  # GET /datasets or /datasets.json
-  def index
-    @communities_count = Community.count
-  end
+  before_action :set_metadatum
+  before_action :set_dataset, only: %i( download show )
 
   # GET /datasets/1 or /datasets/1.json
   def show
+    respond_to do |format|
+      format.html 
+      format.json {
+        # This is a workaround for rendering the data out to the datatables
+        render json: data_as_json
+      }
+    end
+  end
+
+  # This is just a workaround to be able to fetch the data from another site and return it 
+  # for the datatables to load
+  # This isn't great because it loads all of the data in memory for rails, instead we should
+  # have some ingest process that can precreate these files and serve them up to the user
+  def download 
+    respond_to do |format|
+      format.geojson { 
+        send_data URI.open(@dataset.path).read, filename: @dataset.filename, type: 'application/geo+json' , disposition: 'attachment'
+      }
+      format.csv { 
+        send_data URI.open(@dataset.path).read, filename: @dataset.filename, type: 'text/csv' , disposition: 'attachment'
+      }
+    end 
   end
   
-  def search
+  private
+
+  def data_as_json
+    case @dataset.format.downcase
+    when 'csv'
+      data = CSV.parse(URI.open(@dataset.path).read, headers: true).map(&:to_h)
+      {
+        recordsTotal: data.size,
+        data: data,
+        columns: @dataset.schema['fields'].map { |f| { data: f['name'], title: f['name'] } }
+      }.to_json
+    when 'geojson'
+      JSON.parse(URI.open(@dataset.path).read)
+    end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_dataset
-      @dataset = Dataset.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_metadatum
+    @metadatum = Metadatum.friendly.find(params[:metadatum_id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def dataset_params
-      params.fetch(:dataset, {})
-    end
+  def set_dataset 
+    @dataset = @metadatum.datasets.friendly.find(params[:id])
+  end
 end

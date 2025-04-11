@@ -1,16 +1,22 @@
 Rails.application.routes.draw do
-  resources :datasets, only: [:index, :show] do
-    collection do
-      get 'search' # Creates search_datasets_path
+  resources :metadata, only: [:index, :show], path: 'data' do
+    resources :datasets, only: [:show] do 
+      get :download, on: :member
     end
+    get :search, on: :collection
+    get :download, on: :member
   end
+
   resources :boroughs, only: [:index]
 
   resources :communities, only: [:index, :show] do
     resources :charts, only: [] , controller: "communities/charts", defaults: { format: :json } do
       collection do
-        get :production_monthly
-        get :capacity_yearly 
+        get :production_monthly # Creates production_monthly_community_charts_path
+        get :capacity_yearly
+        get :population_employment
+        get :population_detail
+        get :production_yearly
       end
     end
 
@@ -21,7 +27,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
 
   get 'welcome/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

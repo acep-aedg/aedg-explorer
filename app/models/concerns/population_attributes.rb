@@ -6,7 +6,7 @@ module PopulationAttributes
     def import_aedg!(properties)
       properties.symbolize_keys!
 
-      Population.build.tap do |population|
+      Population.new.tap do |population|
         population.assign_aedg_attributes(properties)
         population.save!
       end

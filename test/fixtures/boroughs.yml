@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  fips_code: MyString
-  name: MyString
-  is_census_area: false
+  fips_code: '00001'
+  name: 'Test Borough One'
+  is_census_area: true
 
 two:
-  fips_code: MyString
-  name: MyString
+  fips_code: '00002'
+  name: 'Test Borough Two'
   is_census_area: false

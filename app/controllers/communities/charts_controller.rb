@@ -1,4 +1,5 @@
 class Communities::ChartsController < ApplicationController
+  include Communities::ChartsHelper
   before_action :set_community
 
   def production_monthly
@@ -14,9 +15,26 @@ class Communities::ChartsController < ApplicationController
     render json: dataset
   end
 
+  def production_yearly
+    grouped_data = @community.grid.yearly_generations.grouped_net_generation_by_year
+    dataset = grouped_data.map { |year, value| [year.to_s, value] }
+    render json: dataset
+  end
+
   def capacity_yearly
     dataset = @community.grid.capacities.latest_year.group(:fuel_type).sum(:capacity_mw)
     render json: dataset
+  end
+
+  def population_employment
+    employment_chart_data = employment_chart_data(@community.employments.sort_by(&:measurement_year))
+    employments = @community.employments.sort_by(&:measurement_year)
+    render json: employment_chart_data(employments)
+  end
+
+  def population_detail
+    population_age_sexes = PopulationAgeSex.most_recent_for(@community.fips_code).ordered
+    render json: population_detail_chart_data(population_age_sexes)
   end
 
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
@@ -25,4 +43,3 @@ class Communities::ChartsController < ApplicationController
         @community = Community.find(params[:community_id])
     end
 end
-

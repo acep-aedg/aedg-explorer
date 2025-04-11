@@ -83,3 +83,9 @@ gem 'rgeo'
 gem 'rgeo-geojson'
 gem 'csv'
 gem "chartkick"
+
+gem "acts-as-taggable-on", "~> 12.0"
+gem "pg_search", "~> 2.3"
+gem 'rubocop', require: false
+
+gem "brakeman", "~> 7.0"

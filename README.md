@@ -55,6 +55,8 @@ Ensure you have the following dependencies installed:
     rails db:setup
     ```
 
+    If you get an error about `pg_dump` see the troubleshooting directions below
+
 1. Start the Web Server
 
     To start the web server on port 3001, run:
@@ -114,6 +116,24 @@ If you get this error you may need to pull the image manually.
 
 ```bash
 docker pull postgis/postgis:16-3.5
+```
+
+### `rails db:migrate` fails because of missing pg_dump or wrong version of `pg_dump`
+
+Metadata searching uses a `tsvector` field which is not fully supported by the default schema dumper for rails. To work around this the schema is dumped using the `:sql` format instead of the deafult.
+
+This approach requires the correct version of `pg_dump` that matches the PostgreSQL database (Currently v16)
+
+#### To resolve:
+
+Install the correct pg_dump version for the postgresql database. Instructions https://www.postgresql.org/download/linux/
+
+For example on Ubuntu:
+
+```bash
+sudo apt install -y postgresql-common
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+sudo apt install postgresql-client-16
 ```
 
 ### **Collation Version Mismatch**

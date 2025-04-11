@@ -9,4 +9,21 @@ module CategoriesHelper
       { name: "Population", icon: "bi-people-fill", path: "#" }
     ]
   end
+
+  def topic_icon(topic)
+    case topic.downcase
+    when "renewables"
+      "bi-sun-fill"
+    when "energy"
+      "bi-lightning-fill"
+    when "electricity"
+      "bi-ev-front"
+    when "transportation"
+      "bi-truck"
+    when "fuel"
+      "bi-fuel-pump"
+    when "population"
+      "bi-people-fill"
+    end
+  end
 end
