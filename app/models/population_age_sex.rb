@@ -2,16 +2,12 @@ class PopulationAgeSex < ApplicationRecord
   include PopulationAgeSexAttributes
   belongs_to :community, foreign_key: "community_fips_code", primary_key: "fips_code"
 
-  # scope to get most recent population detail data for a community
-  scope :most_recent_for, ->(community_id) {
-    where(community_fips_code: community_id).where(is_most_recent: true)
-  }
+  # Scope to get most recent population detail data for a community
+  scope :most_recent_for, ->(community_id) { where(community_fips_code: community_id).where(is_most_recent: true) }
 
   # Scope to filter by gender
-  scope :by_gender, ->(gender) {
-    where(gender: gender)
-  }
+  scope :by_gender, ->(gender) { where(gender: gender) }
 
-  # scope to order by start year if needed
-  scope :ordered, -> { order(start_year: :desc)}
+  # Scope to order by start year if needed
+  scope :ordered, -> { order(start_year: :desc) }
 end
