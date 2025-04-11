@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :maps, only: [] , controller: "communities/maps", defaults: { format: :json }do
+    resources :maps, only: [] , controller: "communities/maps", defaults: { format: :json } do
       collection do
         get :house_districts
         get :senate_districts
