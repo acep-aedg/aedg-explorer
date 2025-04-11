@@ -1,13 +1,43 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: 'Dataset One'
-  slug: 'dataset-one'
-  data: {}
+csv_dataset:
+  name: 'CSV Dataset'
   metadatum: one
+  data:
+    path: 'test/fixtures/files/test.csv'
+    type: 'table'
+    title: 'CSV Dataset'
+    format: 'CSV'
+    topics:
+      - 'Test Topic'
+    schema:
+      fields:
+        - name: 'name'
+          type: 'string'
+          unit: null
+          nullable: false
+          description: 'Test name'
+        - name: 'number'
+          type: 'number'
+          unit: '#'
+          nullable: true
+          description: 'Test number'
 
-two:
-  name: 'Dataset Two'
-  slug: 'dataset-two'
-  data: {}
-  metadatum: two
+geojson_dataset:
+  name: 'GeoJSON Dataset'
+  metadatum: one
+  data:
+    path: 'test/fixtures/files/test.geojson'
+    format: 'GeoJSON'
+    title: 'Geo Test'
+    schema:
+      fields:
+        - name: 'id'
+          type: 'integer'
+          description: 'Unique ID'
+        - name: 'name'
+          type: 'string'
+          description: 'Location name'
+        - name: 'location'
+          type: 'geojson'
+          description: 'Location coordinates'

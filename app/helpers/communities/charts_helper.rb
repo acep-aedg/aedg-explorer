@@ -39,7 +39,7 @@ module Communities::ChartsHelper
       estimate = population_age_sexes.sum("e_pop_age_#{group[:key]}").to_i
       moe = population_age_sexes.sum("m_pop_age_#{group[:key]}").to_i
 
-      if estimate > 0
+      if estimate.positive?
         estimate_data[group[:label]] = estimate
         moe_data[group[:label]] = moe
       end
