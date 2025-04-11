@@ -1,22 +1,15 @@
-- if @community.name
-  .mb-3
-    = render 'communities/sections/background/geography'
+.mb-5
+  = render 'communities/sections/background/geography'
 
 - if @community.transportation
-  .mb-3
+  .mb-5
     = render 'communities/sections/background/transportation', transportation: @community.transportation
     
-- if @community.name
-  .mb-3 
+- if @community.communities_legislative_districts.any?
+  .mb-5
     = render 'communities/sections/background/election_districts'
 
-- if @community.population
-  .mb-3
-    = render 'communities/sections/background/population_employment'
+.mb-5
+  = render 'communities/sections/background/population'
 
-- if @community.population_age_sexes
-  .mb-3
-    = render 'communities/sections/background/population_age_chart'
-    = render 'communities/sections/background/population_age_sex_datatable'
-    = render 'communities/sections/background/population_gender_pie'
 

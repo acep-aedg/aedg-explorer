@@ -1,0 +1,45 @@
+- employment_present = @community.population.present?
+- age_data_present = @community.population_age_sexes.present?
+
+%h4.mb-3 Population
+%ul.nav.nav-tabs
+  - if employment_present
+    %li.nav-item
+      = link_to "By Employment Status", "#employment-chart",
+        class: "nav-link#{' active' if employment_present}",
+        data: { bs_toggle: "tab" },
+        role: "tab"
+
+  - if age_data_present
+    %li.nav-item
+      = link_to "By Age", "#age-chart",
+        class: "nav-link#{' active' if !employment_present && age_data_present}",
+        data: { bs_toggle: "tab" },
+        role: "tab"
+
+    %li.nav-item
+      = link_to "By Sex", "#gender-pie",
+        class: "nav-link",
+        data: { bs_toggle: "tab" },
+        role: "tab"
+
+    %li.nav-item
+      = link_to "Age & Sex Table", "#age-sex-table",
+        class: "nav-link",
+        data: { bs_toggle: "tab" },
+        role: "tab"
+
+.tab-content.mt-3
+  - if employment_present
+    .tab-pane.fade#employment-chart{ class: "tab-pane fade#{' show active' if employment_present}", role: "tabpanel" }
+      = render 'communities/sections/background/population/population_employment'
+
+  - if age_data_present
+    .tab-pane.fade#age-chart{ class: "tab-pane fade#{' show active' if !employment_present && age_data_present}", role: "tabpanel" }
+      = render 'communities/sections/background/population/population_age_chart'
+
+    .tab-pane.fade#age-sex-table{ role: "tabpanel" }
+      = render 'communities/sections/background/population/population_age_sex_datatable'
+
+    .tab-pane.fade#gender-pie{ role: "tabpanel" }
+      = render 'communities/sections/background/population/population_gender_pie'
