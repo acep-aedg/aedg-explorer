@@ -1,15 +1,15 @@
-- if @community.transportation
-  .mb-3
-    = render 'communities/sections/background/transportation', transportation: @community.transportation
+.mb-5
+  = render 'communities/sections/background/geography'
 
-.row.g-5.align-items-start
-  - if @community.name
-    .col= render 'communities/sections/background/geography', community: @community
-  - if @community.population
-    .col-md-6.col-12= render 'communities/sections/background/population_employment'
-  - if @community.population_age_sexes
-    .col-md-6.col-12= render 'communities/sections/background/population_age_chart'
-    .col-md-6.col-12= render 'communities/sections/background/population_age_sex_datatable'
-    .col-md-6.col-12= render 'communities/sections/background/population_gender_pie'
-  - if @community.name
-    .col-md-6.col-12= render 'communities/sections/background/election_districts', community: @community
+- if @community.transportation
+  .mb-5
+    = render 'communities/sections/background/transportation', transportation: @community.transportation
+    
+- if @community.communities_legislative_districts.any?
+  .mb-5
+    = render 'communities/sections/background/election_districts'
+
+.mb-5
+  = render 'communities/sections/background/population'
+
+

@@ -1,0 +1,15 @@
+%div{ data: { controller: 'datatables' }}
+  %table.table.table-striped.border{ data: { datatables_target: 'table' } }
+    %thead
+      %tr
+        %th House District
+        %th House District Name
+        %th Senate District
+        %th Election Region
+    %tbody
+      - @community.communities_legislative_districts.each do |districts|
+        %tr
+          %td= districts.house_district&.district
+          %td= districts.house_district&.name
+          %td= districts.senate_district&.district
+          %td= districts.election_region

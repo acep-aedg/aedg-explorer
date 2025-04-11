@@ -13,7 +13,7 @@ class Community < ApplicationRecord
   has_many :population_age_sexes, foreign_key: "community_fips_code", primary_key: "fips_code"
   has_many :employments, foreign_key: "community_fips_code", primary_key: "fips_code"
   has_many :capacities, through: :grid
-  has_many :communities_legislative_districts, dependent: :destroy
+  has_many :communities_legislative_districts, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :house_districts, through: :communities_legislative_districts
   has_many :senate_districts, through: :communities_legislative_districts
 
@@ -35,5 +35,9 @@ class Community < ApplicationRecord
   validates :location, presence: true, allowed_geometry_types: ["Point"]
 
   default_scope { order(name: :asc )}
+
+  def election_regions
+    communities_legislative_districts.pluck(:election_region).uniq
+  end
 
 end

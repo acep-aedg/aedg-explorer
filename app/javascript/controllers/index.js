@@ -4,15 +4,17 @@
 
 import { application } from "./application"
 
+import ChartController from "./chart_controller"
+application.register("chart", ChartController)
+
 import CommunityDropdownController from "./community_dropdown_controller"
 application.register("community-dropdown", CommunityDropdownController)
 
 import DatatablesController from "./datatables_controller"
 application.register("datatables", DatatablesController)
 
-import TocController from "controllers/toc_controller"
-application.register('toc', TocController);
+import MapsController from "./maps_controller"
+application.register("maps", MapsController)
 
-import ChartController from "./chart_controller"
-application.register("chart", ChartController)
-
+import TocController from "./toc_controller"
+application.register("toc", TocController)

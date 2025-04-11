@@ -10,13 +10,20 @@ Rails.application.routes.draw do
   resources :boroughs, only: [:index]
 
   resources :communities, only: [:index, :show] do
-    resources :charts, only: [] , controller: "communities/charts" do
+    resources :charts, only: [] , controller: "communities/charts", defaults: { format: :json } do
       collection do
         get :production_monthly # Creates production_monthly_community_charts_path
         get :capacity_yearly
         get :population_employment
         get :population_detail
         get :production_yearly
+      end
+    end
+
+    resources :maps, only: [] , controller: "communities/maps", defaults: { format: :json } do
+      collection do
+        get :house_districts
+        get :senate_districts
       end
     end
   end
