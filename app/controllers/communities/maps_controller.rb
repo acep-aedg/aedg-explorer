@@ -3,49 +3,16 @@ module Communities
     before_action :set_community
 
     def house_districts
-      geojson = Rails.cache.fetch(["community", @community.id, "house_districts"], expires_in: 12.hours) do
-        districts = @community.house_districts.distinct
-
-        features = districts.map do |district|
-          {
-            type: "Feature",
-            geometry: RGeo::GeoJSON.encode(district.boundary),
-            properties: {
-              id: district.district,
-              name: district.name,
-              tooltip: "House: #{district.district} - #{district.name}"
-            }
-          }
-        end
-
-        {
-          type: "FeatureCollection",
-          features: features
-        }
+      geojson = Rails.cache.fetch(["community", @community.fips_code, "house_districts"], expires_in: 12.hours) do
+        HouseDistrict.as_geojson(@community.house_districts.distinct)
       end
 
       render json: geojson
     end
 
     def senate_districts
-      geojson = Rails.cache.fetch(["community", @community.id, "senate_districts"], expires_in: 12.hours) do
-        districts = @community.senate_districts.distinct
-
-        features = districts.map do |district|
-          {
-            type: "Feature",
-            geometry: RGeo::GeoJSON.encode(district.boundary),
-            properties: {
-              id: district.district,
-              tooltip: "Senate: #{district.district}"
-            }
-          }
-        end
-
-        {
-          type: "FeatureCollection",
-          features: features
-        }
+      geojson = Rails.cache.fetch(["community", @community.fips_code, "senate_districts"], expires_in: 12.hours) do
+        SenateDistrict.as_geojson(@community.senate_districts.distinct)
       end
 
       render json: geojson
@@ -54,7 +21,7 @@ module Communities
     private
 
     def set_community
-      @community = Community.find(params[:community_id])
+      @community = Community.friendly.find(params[:community_id])
     end
   end
 end
