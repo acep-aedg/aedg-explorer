@@ -2,6 +2,8 @@ class HouseDistrict < ApplicationRecord
   include HouseDistrictAttributes
   has_many :communities_legislative_districts, dependent: :destroy
   has_many :communities, through: :communities_legislative_districts
+
+  validates :boundary, presence: true, allowed_geometry_types: ["Polygon", "MultiPolygon"]
   
   def self.as_geojson(districts)
     {
