@@ -4,21 +4,15 @@ class HouseDistrict < ApplicationRecord
   has_many :communities, through: :communities_legislative_districts
 
   validates :boundary, presence: true, allowed_geometry_types: ["Polygon", "MultiPolygon"]
-  
-  def self.as_geojson(districts)
+
+  def as_geojson
     {
-      type: "FeatureCollection",
-      features: districts.map do |district|
-        {
-          type: "Feature",
-          geometry: RGeo::GeoJSON.encode(district.boundary),
-          properties: {
-            id: district.district,
-            name: district.name,
-            tooltip: "House: #{district.district} - #{district.name}"
-          }
-        }
-      end
+      type: "Feature",
+      geometry: RGeo::GeoJSON.encode(boundary),
+      properties: {
+        id: district,
+        tooltip: "House District: #{district} - #{name}"
+      }
     }
   end
 end

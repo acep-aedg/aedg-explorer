@@ -5,19 +5,14 @@ class SenateDistrict < ApplicationRecord
 
   validates :boundary, presence: true, allowed_geometry_types: ["Polygon", "MultiPolygon"]
 
-  def self.as_geojson(districts)
+  def as_geojson
     {
-      type: "FeatureCollection",
-      features: districts.map do |district|
-        {
-          type: "Feature",
-          geometry: RGeo::GeoJSON.encode(district.boundary),
-          properties: {
-            id: district.district,
-            tooltip: "Senate: #{district.district}"
-          }
-        }
-      end
+      type: "Feature",
+      geometry: RGeo::GeoJSON.encode(boundary),
+      properties: {
+        id: district,
+        tooltip: "Senate District: #{district}"
+      }
     }
   end
 end
