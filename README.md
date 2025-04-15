@@ -102,6 +102,17 @@ We haven’t yet implemented a reliable way to import specific models individual
 
 ---
 
+### Testing
+1. Run the test suite:
+    ```
+    rails test
+    ```
+
+Code coverage is tracked using [simplecov](https://github.com/simplecov-ruby/simplecov). After running the tests, a `coverage/` directory will be generated. To view the coverage report, open it in your browser:
+```
+open coverage/index.html
+```
+
 # Toubleshooting
 
 ## Local Dev Docker Database Setup Issues
