@@ -89,3 +89,4 @@ gem "pg_search", "~> 2.3"
 gem 'rubocop', require: false
 
 gem "brakeman", "~> 7.0"
+gem 'simplecov', require: false, group: :test

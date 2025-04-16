@@ -7,8 +7,6 @@ Rails.application.routes.draw do
     get :download, on: :member
   end
 
-  resources :boroughs, only: [:index]
-
   resources :communities, only: [:index, :show] do
     resources :charts, only: [] , controller: "communities/charts", defaults: { format: :json } do
       collection do

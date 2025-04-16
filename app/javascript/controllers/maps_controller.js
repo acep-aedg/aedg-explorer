@@ -236,4 +236,10 @@ export default class extends Controller {
 
     this.loadLayer(url, { color, outlineColor });
   }
+
+  disconnect() {
+    if (this.map) {
+      this.map.remove();
+    }
+  }
 }
