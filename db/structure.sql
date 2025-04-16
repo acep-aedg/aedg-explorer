@@ -396,9 +396,9 @@ CREATE TABLE public.house_districts (
     district integer NOT NULL,
     name character varying,
     as_of_date date,
-    boundary public.geography(Geometry,4326),
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    boundary public.geometry(Geometry,4326)
 );
 
 
@@ -659,9 +659,9 @@ CREATE TABLE public.senate_districts (
     id bigint NOT NULL,
     district character varying NOT NULL,
     as_of_date date,
-    boundary public.geography(Geometry,4326),
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    boundary public.geometry(Geometry,4326)
 );
 
 
@@ -1533,6 +1533,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250416200301'),
 ('20250401174706'),
 ('20250325164313'),
 ('20250324164648'),
