@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_01_174706) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_16_200301) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -122,9 +122,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_01_174706) do
     t.integer "district", null: false
     t.string "name"
     t.date "as_of_date"
-    t.geography "boundary", limit: {:srid=>4326, :type=>"geometry", :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.geometry "boundary", limit: {:srid=>4326, :type=>"geometry"}
     t.index ["boundary"], name: "index_house_districts_on_boundary", using: :gist
     t.index ["district"], name: "index_house_districts_on_district", unique: true
   end
@@ -233,9 +233,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_01_174706) do
   create_table "senate_districts", force: :cascade do |t|
     t.string "district", null: false
     t.date "as_of_date"
-    t.geography "boundary", limit: {:srid=>4326, :type=>"geometry", :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.geometry "boundary", limit: {:srid=>4326, :type=>"geometry"}
     t.index ["boundary"], name: "index_senate_districts_on_boundary", using: :gist
     t.index ["district"], name: "index_senate_districts_on_district", unique: true
   end
