@@ -7,7 +7,7 @@ export default class extends Controller {
   static values = {
     order: { type: Array, default: [0, 'asc'] },
     pagesize: { type: Number, default: 10 },
-    load: { type: String }
+    load: String
   }
 
   connect() {
