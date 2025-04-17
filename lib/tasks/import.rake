@@ -29,8 +29,8 @@ namespace :import do
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
     tag = ENV.fetch('GH_DATA_REPO_TAG')
     folder_path = "data/final"
-    local_dir = Rails.root.join("db", "imports").to_s
-    local_dir = Rails.root.join("db", "imports").to_s
+    local_dir = Rails.root.join("db/imports").to_s
+    local_dir = Rails.root.join("db/imports").to_s
 
     # Ensure the local directory & keep file exists
     FileUtils.mkdir_p(local_dir)
@@ -64,43 +64,43 @@ namespace :import do
 
   desc "Import Borough Data from .geojson file"
   task boroughs: :environment do
-    filepath = Rails.root.join('db', 'imports', 'boroughs.geojson')
+    filepath = Rails.root.join("db/imports/boroughs.geojson")
     ImportHelpers.import_geojson(filepath, Borough)
   end
 
   desc "Import Regional Corporation Data from .geojson file"
   task regional_corporations: :environment do
-    filepath = Rails.root.join('db', 'imports', 'regional_corporations.geojson')
+    filepath = Rails.root.join("db/imports/regional_corporations.geojson")
     ImportHelpers.import_geojson(filepath, RegionalCorporation)
   end
 
   desc "Import Grid Data from .csv file"
   task grids: :environment do
-    filepath = Rails.root.join('db', 'imports', 'grids.csv')
+    filepath = Rails.root.join("db/imports/grids.csv")
     ImportHelpers.import_csv(filepath, Grid)
   end
 
   desc "Import Community Data from .geojson file"
   task communities: :environment do
-    filepath = Rails.root.join('db', 'imports', 'communities.geojson')
+    filepath = Rails.root.join("db/imports/communities.geojson")
     ImportHelpers.import_geojson(filepath, Community)
   end
 
   desc "Import Population Data from .csv file"
   task populations: :environment do
-    filepath = Rails.root.join('db', 'imports', 'populations.csv')
+    filepath = Rails.root.join("db/imports/populations.csv")
     ImportHelpers.import_csv(filepath, Population)
   end
 
   desc "Import Transportation Data from .csv file"
   task transportation: :environment do
-    filepath = Rails.root.join('db', 'imports', 'transportation.csv')
+    filepath = Rails.root.join("db/imports/transportation.csv")
     ImportHelpers.import_csv(filepath, Transportation)
   end
 
   desc "Import Yearly Generation Data from .csv file"
   task yearly_generations: :environment do
-    filepath = Rails.root.join('db', 'imports', 'yearly_generation.csv')
+    filepath = Rails.root.join("db/imports/yearly_generation.csv")
     ImportHelpers.import_csv(filepath, YearlyGeneration)
   end
 
@@ -118,13 +118,13 @@ namespace :import do
       ERROR
     end
 
-    filepath = Rails.root.join('db', 'imports', 'monthly_generation.csv')
+    filepath = Rails.root.join("db/imports/monthly_generation.csv")
     ImportHelpers.import_csv(filepath, MonthlyGeneration)
   end
 
   desc "Import Population, Ages, Sexes Data from .csv file"
   task populations_ages_sexes: :environment do
-    filepath = Rails.root.join('db', 'imports', 'populations_ages_sexes.csv')
+    filepath = Rails.root.join("db/imports/populations_ages_sexes.csv")
     ImportHelpers.import_csv(filepath, PopulationAgeSex)
   end
 
@@ -141,7 +141,7 @@ namespace :import do
       ERROR
     end
 
-    filepath = Rails.root.join('db', 'imports', 'employment.csv')
+    filepath = Rails.root.join("db/imports/employment.csv")
     ImportHelpers.import_csv(filepath, Employment)
   end
 
@@ -157,7 +157,7 @@ namespace :import do
         Then, try running this import task again.
       ERROR
     end
-    filepath = Rails.root.join('db', 'imports', 'capacity.csv')
+    filepath = Rails.root.join("db/imports/capacity.csv")
     ImportHelpers.import_csv(filepath, Capacity)
   end
 
@@ -173,7 +173,7 @@ namespace :import do
         Then, try running this import task again.
       ERROR
     end
-    filepath = Rails.root.join('db', 'imports', 'house_districts.geojson')
+    filepath = Rails.root.join("db/imports/house_districts.geojson")
     ImportHelpers.import_geojson(filepath, HouseDistrict)
   end
 
@@ -189,13 +189,13 @@ namespace :import do
         Then, try running this import task again.
       ERROR
     end
-    filepath = Rails.root.join('db', 'imports', 'senate_districts.geojson')
+    filepath = Rails.root.join("db/imports/senate_districts.geojson")
     ImportHelpers.import_geojson(filepath, SenateDistrict)
   end
 
   desc "Import Community Legislative Districts Data from .csv file"
   task communities_legislative_districts: :environment do
-    filepath = Rails.root.join('db', 'imports', 'communities_legislative_districts.csv')
+    filepath = Rails.root.join("db/imports/communities_legislative_districts.csv")
     ImportHelpers.import_csv(filepath, CommunitiesLegislativeDistrict)
   end
 end

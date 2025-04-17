@@ -4,7 +4,7 @@ namespace :metadata do
     repo_url = ENV.fetch('GH_METADATA_REPO_URL', 'https://github.com/acep-aedg/aedg-metadata')
 
     folder_path = "metadata/public"
-    local_dir = Rails.root.join("db", "imports", "metadata").to_s
+    local_dir = Rails.root.join("db/imports/metadata").to_s
 
     # Ensure the local directory & keep file exists
     FileUtils.mkdir_p(local_dir)
@@ -25,7 +25,7 @@ namespace :metadata do
 
   desc "Import metadata files"
   task import: [:environment, :download] do
-    filepath = Rails.root.join('db', 'imports', 'metadata')
+    filepath = Rails.root.join("db/imports/metadata")
     Metadatum.import_metadata(filepath)
   end
 

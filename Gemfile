@@ -87,6 +87,7 @@ gem "chartkick"
 gem "acts-as-taggable-on", "~> 12.0"
 gem "pg_search", "~> 2.3"
 gem 'rubocop', require: false
+gem 'rubocop-rails', require: false
 
 gem "brakeman", "~> 7.0"
 gem 'simplecov', require: false, group: :test
