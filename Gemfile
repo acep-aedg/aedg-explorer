@@ -3,7 +3,7 @@ source "https://rubygems.org"
 ruby "3.3.4"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.1.5"
+gem "rails", "~> 8.0.0"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
@@ -78,7 +78,7 @@ gem "haml-rails", "~> 2.1"
 gem "html2haml", "~> 2.3", :group => :dev
 
 gem 'friendly_id', '~> 5.5.0'
-gem "activerecord-postgis-adapter", "~> 9.0"
+gem "activerecord-postgis-adapter", "~> 11.0.0"
 gem 'rgeo'
 gem 'rgeo-geojson'
 gem 'csv'
