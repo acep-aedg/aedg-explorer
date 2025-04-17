@@ -16,7 +16,7 @@ class Capacity < ApplicationRecord
       min_fuel_type: min_record&.fuel_type,
       max_capacity: max_record&.capacity_mw&.round(2),
       max_fuel_type: max_record&.fuel_type,
-      year: latest_year.pluck(:year).first
+      year: latest_year.pick(:year)
     }
   end
 end

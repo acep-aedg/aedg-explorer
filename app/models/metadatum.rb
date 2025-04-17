@@ -46,7 +46,7 @@ class Metadatum < ApplicationRecord
   end
 
   def self.import_metadata(path)
-    puts "Importing metadata from #{path}..."
+    Rails.logger.debug "Importing metadata from #{path}..."
     Dir.glob("#{path}/*.json").each do |file|
       begin
         data = JSON.parse(File.read(file))
@@ -55,7 +55,7 @@ class Metadatum < ApplicationRecord
           metadata.data = data
           metadata.published = true
 
-          puts "Imported metadata for #{metadata.name}"
+          Rails.logger.debug "Imported metadata for #{metadata.name}"
           metadata.data['resources'].each do |resource|
             dataset = Dataset.import_resource(resource)
             metadata.keyword_list.add(dataset.keyword_list)
@@ -67,7 +67,7 @@ class Metadatum < ApplicationRecord
           metadata.save!
         end
       rescue StandardError => e
-        puts "Error processing metadata file #{file}: #{e.message}"
+        Rails.logger.debug "Error processing metadata file #{file}: #{e.message}"
       end
     end
   end

@@ -15,7 +15,7 @@ class Dataset < ApplicationRecord
                         :format, :schema
 
   def self.import_resource(json)
-    puts "Resource: #{json['name']}"
+    Rails.logger.debug "Resource: #{json['name']}"
     find_or_initialize_by(name: json['name']).tap do |dataset|
       dataset.data = json
       dataset.keyword_list.add(json['keywords'])

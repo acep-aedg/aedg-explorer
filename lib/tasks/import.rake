@@ -22,6 +22,7 @@ namespace :import do
     Rake::Task['import:house_districts'].invoke
     Rake::Task['import:senate_districts'].invoke
     Rake::Task['import:communities_legislative_districts'].invoke
+    puts "Import complete"
   end
 
   desc "Import data files from a specific GitHub tag"
