@@ -1,0 +1,1 @@
+web: env RAILS_ENV=production PORT=4000 bin/rails server
