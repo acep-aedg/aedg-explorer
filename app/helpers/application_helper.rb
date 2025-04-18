@@ -11,4 +11,11 @@ module ApplicationHelper
       { name: "User Guide", path: "#" }
     ]
   end
+
+  def mapbox_api_data(data)
+    data['controller'] ||= 'maps'
+    data['maps_token_value'] ||= Rails.application.credentials.mapbox_api_token
+
+    data
+  end
 end
