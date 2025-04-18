@@ -1,7 +1,7 @@
 // @popperjs/core/+esm@2.11.8 downloaded from https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/+esm
 
 /**
- * Bundled by jsDelivr using Rollup v2.79.2 and Terser v5.37.0.
+ * Bundled by jsDelivr using Rollup v2.79.2 and Terser v5.39.0.
  * Original file: /npm/@popperjs/core@2.11.8/lib/index.js
  *
  * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
