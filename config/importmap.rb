@@ -14,5 +14,10 @@ pin "@kurkle/color", to: "https://cdn.jsdelivr.net/npm/@kurkle/color@0.3.4/dist/
 pin "chartkick", to: "chartkick.js"
 pin "Chart.bundle", to: "Chart.bundle.js"
 pin "mapbox-gl" # @3.11.0
+
+# Running `bin/importmap update` will not work for popper,
+# To pin the popper package manually and rename it, you can use the following commands:
+#   `bin/importmap pin @popperjs/core@2.11.8/+esm --from jsdelivr`
+#   `mv vendor/javascript/@popperjs--core--+esm.js vendor/javascript/@popperjs--core.js`
 pin "@popperjs/core", to: "@popperjs--core.js" # @2.11.8
 pin "@popperjs/core/+esm", to: "@popperjs--core--+esm.js" # @2.11.8
