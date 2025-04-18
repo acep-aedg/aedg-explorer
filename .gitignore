@@ -43,3 +43,5 @@
 !/db/imports/.keep
 !/db/imports/metadata/.keep
 coverage
+
+/vendor/cache
