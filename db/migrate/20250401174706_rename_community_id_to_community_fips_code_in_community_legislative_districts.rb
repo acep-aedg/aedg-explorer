@@ -17,6 +17,10 @@ class RenameCommunityIdToCommunityFipsCodeInCommunityLegislativeDistricts < Acti
     add_foreign_key :communities_legislative_districts, :communities,
                     column: :community_fips_code,
                     primary_key: :fips_code
+
+    remove_foreign_key :communities_legislative_districts, :community if foreign_key_exists?(:communities_legislative_districts, :community)
+    remove_index :communities_legislative_districts, :community_id if index_exists?(:communities_legislative_districts, :community_id)
+    remove_column :communities_legislative_districts, :community_id if column_exists?(:communities_legislative_districts, :community_id)
   end
 
   def down
