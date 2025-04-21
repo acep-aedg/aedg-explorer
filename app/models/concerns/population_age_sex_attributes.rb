@@ -2,7 +2,7 @@
 module PopulationAgeSexAttributes
   extend ActiveSupport::Concern
 
-  class_methods do 
+  class_methods do
     def import_aedg!(properties)
       properties.symbolize_keys!
 

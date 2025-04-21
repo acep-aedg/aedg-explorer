@@ -9,7 +9,7 @@ class CreateRegionalCorporations < ActiveRecord::Migration[7.1]
     end
     add_index :regional_corporations, :fips_code, unique: true
     add_index :regional_corporations, :boundary, using: :gist
-    add_foreign_key :communities, :regional_corporations, column: :regional_corporation_fips_code, primary_key: :fips_code
-
+    add_foreign_key :communities, :regional_corporations, column: :regional_corporation_fips_code,
+                                                          primary_key: :fips_code
   end
 end

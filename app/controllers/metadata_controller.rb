@@ -1,5 +1,5 @@
 class MetadataController < ApplicationController
-  before_action :set_metadatum, only: %i( download show )
+  before_action :set_metadatum, only: %i[download show]
 
   def index
     @search = search_params
@@ -7,35 +7,28 @@ class MetadataController < ApplicationController
     @topics = ActsAsTaggableOn::Tag.for_context(:topics)
   end
 
-  def show
-  end
+  def show; end
 
-  def search 
+  def search
     @search = search_params
     @topics = ActsAsTaggableOn::Tag.for_context(:topics)
     @metadata = Metadatum
 
-    if @search[:search].present?
-      @metadata = @metadata.search_full_text(@search[:search])
-    end
+    @metadata = @metadata.search_full_text(@search[:search]) if @search[:search].present?
 
-    if @search[:topic].present?
-      @metadata = @metadata.tagged_with(@search[:topic], on: :topics)
-    end
+    @metadata = @metadata.tagged_with(@search[:topic], on: :topics) if @search[:topic].present?
 
-    if @search[:featured].to_i == 1
-      @metadata = @metadata.highlighted
-    end
+    @metadata = @metadata.highlighted if @search[:featured].to_i == 1
 
     @metadata = @metadata.all
   end
 
   def download
-    send_data @metadatum.data.to_json, filename: @metadatum.filename, type: 'application/json', disposition: 'attachment'
+    send_data @metadatum.data.to_json, filename: @metadatum.filename, type: 'application/json',
+                                       disposition: 'attachment'
   end
 
-
-  private 
+  private
 
   def set_metadatum
     @metadatum = Metadatum.friendly.find(params[:id])

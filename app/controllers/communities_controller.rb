@@ -1,5 +1,5 @@
 class CommunitiesController < ApplicationController
-  before_action :set_community, only: %i[ show ]
+  before_action :set_community, only: %i[show]
 
   # GET /communities or /communities.json
   def index
@@ -14,8 +14,9 @@ class CommunitiesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_community
-      @community = Community.find(params[:id])
-    end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_community
+    @community = Community.find(params[:id])
+  end
 end

@@ -2,7 +2,6 @@ module CapacityAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-
     def import_aedg!(properties)
       properties.symbolize_keys!
 

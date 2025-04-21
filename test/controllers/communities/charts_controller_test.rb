@@ -1,4 +1,4 @@
-require "test_helper"
+require 'test_helper'
 
 class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -6,18 +6,18 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     @grid = @community.grid
   end
 
-  test "should get production_monthly" do
+  test 'should get production_monthly' do
     get production_monthly_community_charts_url(@community)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
     generation = @grid.monthly_generations.first
     month_abbr = Date::ABBR_MONTHNAMES[generation.month]
-    assert_equal generation.year.to_s, body.first["name"]
-    assert_equal generation.net_generation_mwh.to_s, body.first["data"][month_abbr]
+    assert_equal generation.year.to_s, body.first['name']
+    assert_equal generation.net_generation_mwh.to_s, body.first['data'][month_abbr]
   end
 
-  test "should get production_yearly" do
+  test 'should get production_yearly' do
     get production_yearly_community_charts_url(@community)
     assert_response :success
     assert_equal 'application/json', @response.media_type
@@ -26,7 +26,7 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [[generation.year.to_s, generation.net_generation_mwh]], body
   end
 
-  test "should get capacity_yearly" do
+  test 'should get capacity_yearly' do
     get capacity_yearly_community_charts_url(@community)
     assert_response :success
     assert_equal 'application/json', @response.media_type
@@ -35,13 +35,13 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal capacity.capacity_mw, body[capacity.fuel_type]
   end
 
-  test "should get population_employment" do
+  test 'should get population_employment' do
     get population_employment_community_charts_url(@community)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
     pop_employment = @community.employments.first
-    assert_equal [[pop_employment.measurement_year, pop_employment.residents_employed]], body[0]["data"]
-    assert_equal [[pop_employment.measurement_year, pop_employment.unemployment_insurance_claimants]], body[1]["data"]
+    assert_equal [[pop_employment.measurement_year, pop_employment.residents_employed]], body[0]['data']
+    assert_equal [[pop_employment.measurement_year, pop_employment.unemployment_insurance_claimants]], body[1]['data']
   end
 end

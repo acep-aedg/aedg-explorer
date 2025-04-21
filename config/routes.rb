@@ -1,14 +1,14 @@
 Rails.application.routes.draw do
-  resources :metadata, only: [:index, :show], path: 'data' do
-    resources :datasets, only: [:show] do 
+  resources :metadata, only: %i[index show], path: 'data' do
+    resources :datasets, only: [:show] do
       get :download, on: :member
     end
     get :search, on: :collection
     get :download, on: :member
   end
 
-  resources :communities, only: [:index, :show] do
-    resources :charts, only: [] , controller: "communities/charts", defaults: { format: :json } do
+  resources :communities, only: %i[index show] do
+    resources :charts, only: [], controller: 'communities/charts', defaults: { format: :json } do
       collection do
         get :production_monthly # Creates production_monthly_community_charts_path
         get :capacity_yearly
@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :maps, only: [] , controller: "communities/maps", defaults: { format: :json } do
+    resources :maps, only: [], controller: 'communities/maps', defaults: { format: :json } do
       collection do
         get :house_districts
         get :senate_districts
@@ -31,8 +31,8 @@ Rails.application.routes.draw do
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  get 'up' => 'rails/health#show', as: :rails_health_check
 
   # Defines the root path route ("/")
-  root "welcome#index"
+  root 'welcome#index'
 end
