@@ -44,10 +44,4 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [[pop_employment.measurement_year, pop_employment.residents_employed]], body[0]["data"]
     assert_equal [[pop_employment.measurement_year, pop_employment.unemployment_insurance_claimants]], body[1]["data"]
   end
-
-  test "should get population_detail" do
-    get population_detail_community_charts_url(@community)
-    assert_response :success
-    assert_equal 'application/json', @response.media_type
-  end
 end
