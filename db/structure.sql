@@ -233,9 +233,10 @@ CREATE TABLE public.communities_legislative_districts (
     election_region integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    community_fips_code character varying NOT NULL,
+    community_id bigint NOT NULL,
     house_district_id bigint NOT NULL,
-    senate_district_id bigint NOT NULL
+    senate_district_id bigint NOT NULL,
+    community_fips_code character varying
 );
 
 
@@ -1168,10 +1169,10 @@ CREATE UNIQUE INDEX index_boroughs_on_fips_code ON public.boroughs USING btree (
 
 
 --
--- Name: index_communities_legislative_districts_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
+-- Name: index_communities_legislative_districts_on_community_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_communities_legislative_districts_on_community_fips_code ON public.communities_legislative_districts USING btree (community_fips_code);
+CREATE INDEX index_communities_legislative_districts_on_community_id ON public.communities_legislative_districts USING btree (community_id);
 
 
 --
@@ -1490,6 +1491,14 @@ ALTER TABLE ONLY public.communities_legislative_districts
 
 
 --
+-- Name: communities_legislative_districts fk_rails_757f7615db; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_legislative_districts
+    ADD CONSTRAINT fk_rails_757f7615db FOREIGN KEY (community_id) REFERENCES public.communities(id);
+
+
+--
 -- Name: taggings fk_rails_9fcd2e236b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1545,9 +1554,6 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20250421165405'),
-('20250417191731'),
-('20250417191730'),
-('20250417191729'),
 ('20250416200301'),
 ('20250401174706'),
 ('20250325164313'),
