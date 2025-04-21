@@ -2,7 +2,7 @@
 module CommunityAttributes
   extend ActiveSupport::Concern
 
-  class_methods do 
+  class_methods do
     def import_aedg_with_geom!(properties, geom)
       properties["location"] = geom
       properties.symbolize_keys!
@@ -28,6 +28,10 @@ module CommunityAttributes
         latitude: params[:latitude],
         longitude: params[:longitude],
         location: params[:location],
+        gnis_code: params[:gnis_code],
+        puma_code: params[:puma_code],
+        subsistence: params[:subsistence],
+        economic_region: params[:economic_region],
         grid: Grid.from_aedg_id(params[:grid_id]).first
       )
     end
