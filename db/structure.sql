@@ -197,7 +197,11 @@ CREATE TABLE public.communities (
     dcra_code uuid,
     pce_eligible boolean,
     pce_active boolean,
-    location public.geography(Point,4326)
+    location public.geography(Point,4326),
+    gnis_code character varying,
+    puma_code character varying,
+    subsistence boolean,
+    economic_region character varying
 );
 
 
@@ -1199,6 +1203,13 @@ CREATE UNIQUE INDEX index_communities_on_fips_code ON public.communities USING b
 
 
 --
+-- Name: index_communities_on_gnis_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_communities_on_gnis_code ON public.communities USING btree (gnis_code);
+
+
+--
 -- Name: index_communities_on_location; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1533,6 +1544,10 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250421165405'),
+('20250417191731'),
+('20250417191730'),
+('20250417191729'),
 ('20250416200301'),
 ('20250401174706'),
 ('20250325164313'),
