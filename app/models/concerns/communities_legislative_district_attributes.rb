@@ -17,7 +17,7 @@ module CommunitiesLegislativeDistrictAttributes
       house_district_number = params[:house_district].to_i
       house_district = HouseDistrict.find_by!(district: house_district_number)
       senate_district = SenateDistrict.find_by!(district: params[:senate_district])
-      community = Community.find_by!(fips_code: params[:communitiy_fips_code])
+      community = Community.find_by!(fips_code: params[:community_fips_code])
 
       assign_attributes(
         community: community,
