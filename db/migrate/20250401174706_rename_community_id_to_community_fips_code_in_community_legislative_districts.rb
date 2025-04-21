@@ -4,7 +4,7 @@ class RenameCommunityIdToCommunityFipsCodeInCommunityLegislativeDistricts < Acti
 
     # repopulate the community_fips_code column
     if CommunitiesLegislativeDistrict.exists?
-      say_with_time "Repopulating community_fips_code from community_id..." do
+      say_with_time 'Repopulating community_fips_code from community_id...' do
         CommunitiesLegislativeDistrict.reset_column_information
 
         CommunitiesLegislativeDistrict.find_each do |cld|

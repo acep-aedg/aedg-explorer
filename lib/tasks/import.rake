@@ -3,11 +3,11 @@ require 'rgeo/geo_json'
 require_relative 'import_helpers'
 
 namespace :import do
-  desc "Import Data Files into the Database"
+  desc 'Import Data Files into the Database'
   task all: [:environment] do
     Rake::Task['import:pull_gh_data'].invoke
 
-    puts "Importing data files..."
+    puts 'Importing data files...'
     Rake::Task['import:boroughs'].invoke
     Rake::Task['import:regional_corporations'].invoke
     Rake::Task['import:grids'].invoke
@@ -22,20 +22,20 @@ namespace :import do
     Rake::Task['import:house_districts'].invoke
     Rake::Task['import:senate_districts'].invoke
     Rake::Task['import:communities_legislative_districts'].invoke
-    puts "Import complete"
+    puts 'Import complete'
   end
 
-  desc "Import data files from a specific GitHub tag"
+  desc 'Import data files from a specific GitHub tag'
   task pull_gh_data: :environment do
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
     tag = ENV.fetch('GH_DATA_REPO_TAG')
-    folder_path = "data/final"
-    local_dir = Rails.root.join("db/imports").to_s
-    local_dir = Rails.root.join("db/imports").to_s
+    folder_path = 'data/final'
+    Rails.root.join('db/imports').to_s
+    local_dir = Rails.root.join('db/imports').to_s
 
     # Ensure the local directory & keep file exists
     FileUtils.mkdir_p(local_dir)
-    keep_file = File.join(local_dir, ".keep")
+    keep_file = File.join(local_dir, '.keep')
     FileUtils.touch(keep_file) unless File.exist?(keep_file)
 
     # Check if the tag exists before cloning
@@ -46,13 +46,13 @@ namespace :import do
       system("git clone --no-checkout #{repo_url} #{temp_dir}")
 
       Dir.chdir(temp_dir) do
-        system("git fetch --tags")
+        system('git fetch --tags')
 
         # Checkout the specific tag
         system("git checkout tags/#{tag} -b temp-tag-branch")
 
         # Enable sparse-checkout
-        system("git sparse-checkout init --cone")
+        system('git sparse-checkout init --cone')
         system("git sparse-checkout set #{folder_path}")
 
         # Sync only new/updated files
@@ -63,51 +63,50 @@ namespace :import do
     puts "Import complete! #{tag} files copied to #{local_dir}."
   end
 
-  desc "Import Borough Data from .geojson file"
+  desc 'Import Borough Data from .geojson file'
   task boroughs: :environment do
-    filepath = Rails.root.join("db/imports/boroughs.geojson")
+    filepath = Rails.root.join('db/imports/boroughs.geojson')
     ImportHelpers.import_geojson(filepath, Borough)
   end
 
-  desc "Import Regional Corporation Data from .geojson file"
+  desc 'Import Regional Corporation Data from .geojson file'
   task regional_corporations: :environment do
-    filepath = Rails.root.join("db/imports/regional_corporations.geojson")
+    filepath = Rails.root.join('db/imports/regional_corporations.geojson')
     ImportHelpers.import_geojson(filepath, RegionalCorporation)
   end
 
-  desc "Import Grid Data from .csv file"
+  desc 'Import Grid Data from .csv file'
   task grids: :environment do
-    filepath = Rails.root.join("db/imports/grids.csv")
+    filepath = Rails.root.join('db/imports/grids.csv')
     ImportHelpers.import_csv(filepath, Grid)
   end
 
-  desc "Import Community Data from .geojson file"
+  desc 'Import Community Data from .geojson file'
   task communities: :environment do
-    filepath = Rails.root.join("db/imports/communities.geojson")
+    filepath = Rails.root.join('db/imports/communities.geojson')
     ImportHelpers.import_geojson(filepath, Community)
   end
 
-  desc "Import Population Data from .csv file"
+  desc 'Import Population Data from .csv file'
   task populations: :environment do
-    filepath = Rails.root.join("db/imports/populations.csv")
+    filepath = Rails.root.join('db/imports/populations.csv')
     ImportHelpers.import_csv(filepath, Population)
   end
 
-  desc "Import Transportation Data from .csv file"
+  desc 'Import Transportation Data from .csv file'
   task transportation: :environment do
-    filepath = Rails.root.join("db/imports/transportation.csv")
+    filepath = Rails.root.join('db/imports/transportation.csv')
     ImportHelpers.import_csv(filepath, Transportation)
   end
 
-  desc "Import Yearly Generation Data from .csv file"
+  desc 'Import Yearly Generation Data from .csv file'
   task yearly_generations: :environment do
-    filepath = Rails.root.join("db/imports/yearly_generation.csv")
+    filepath = Rails.root.join('db/imports/yearly_generation.csv')
     ImportHelpers.import_csv(filepath, YearlyGeneration)
   end
 
-  desc "Import Monthly Generation Data from .csv file"
+  desc 'Import Monthly Generation Data from .csv file'
   task monthly_generations: :environment do
-
     if MonthlyGeneration.count > 0
       raise <<~ERROR
         ❌ ERROR: MonthlyGeneration table was not empty before starting import!
@@ -119,17 +118,17 @@ namespace :import do
       ERROR
     end
 
-    filepath = Rails.root.join("db/imports/monthly_generation.csv")
+    filepath = Rails.root.join('db/imports/monthly_generation.csv')
     ImportHelpers.import_csv(filepath, MonthlyGeneration)
   end
 
-  desc "Import Population, Ages, Sexes Data from .csv file"
+  desc 'Import Population, Ages, Sexes Data from .csv file'
   task populations_ages_sexes: :environment do
-    filepath = Rails.root.join("db/imports/populations_ages_sexes.csv")
+    filepath = Rails.root.join('db/imports/populations_ages_sexes.csv')
     ImportHelpers.import_csv(filepath, PopulationAgeSex)
   end
 
-  desc "Import Employment Data from .csv file"
+  desc 'Import Employment Data from .csv file'
   task employments: :environment do
     if Employment.count > 0
       raise <<~ERROR
@@ -142,11 +141,11 @@ namespace :import do
       ERROR
     end
 
-    filepath = Rails.root.join("db/imports/employment.csv")
+    filepath = Rails.root.join('db/imports/employment.csv')
     ImportHelpers.import_csv(filepath, Employment)
   end
 
-  desc "Import Capacity Data from .csv file"
+  desc 'Import Capacity Data from .csv file'
   task capacities: :environment do
     if Capacity.count > 0
       raise <<~ERROR
@@ -158,11 +157,12 @@ namespace :import do
         Then, try running this import task again.
       ERROR
     end
-    filepath = Rails.root.join("db/imports/capacity.csv")
+
+    filepath = Rails.root.join('db/imports/capacity.csv')
     ImportHelpers.import_csv(filepath, Capacity)
   end
 
-  desc "Import House Districts Data from .geojson file"
+  desc 'Import House Districts Data from .geojson file'
   task house_districts: :environment do
     if HouseDistrict.count > 0
       raise <<~ERROR
@@ -174,11 +174,12 @@ namespace :import do
         Then, try running this import task again.
       ERROR
     end
-    filepath = Rails.root.join("db/imports/house_districts.geojson")
+
+    filepath = Rails.root.join('db/imports/house_districts.geojson')
     ImportHelpers.import_geojson(filepath, HouseDistrict)
   end
 
-  desc "Import Senate Districts Data from .geojson file"
+  desc 'Import Senate Districts Data from .geojson file'
   task senate_districts: :environment do
     if SenateDistrict.count > 0
       raise <<~ERROR
@@ -190,13 +191,14 @@ namespace :import do
         Then, try running this import task again.
       ERROR
     end
-    filepath = Rails.root.join("db/imports/senate_districts.geojson")
+
+    filepath = Rails.root.join('db/imports/senate_districts.geojson')
     ImportHelpers.import_geojson(filepath, SenateDistrict)
   end
 
-  desc "Import Community Legislative Districts Data from .csv file"
+  desc 'Import Community Legislative Districts Data from .csv file'
   task communities_legislative_districts: :environment do
-    filepath = Rails.root.join("db/imports/communities_legislative_districts.csv")
+    filepath = Rails.root.join('db/imports/communities_legislative_districts.csv')
     ImportHelpers.import_csv(filepath, CommunitiesLegislativeDistrict)
   end
 end
