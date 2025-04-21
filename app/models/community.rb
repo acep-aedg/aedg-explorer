@@ -30,11 +30,12 @@ class Community < ApplicationRecord
   validates :latitude, presence: true
   validates :longitude, presence: true
   validates :ansi_code, presence: true, uniqueness: true
+  validates :gnis_code, presence: true, uniqueness: true
   validates :borough_fips_code, presence: true
   validates :dcra_code, presence: true, uniqueness: true
   validates :location, presence: true, allowed_geometry_types: ["Point"]
 
-  default_scope { order(name: :asc )}
+  default_scope { order(name: :asc ) }
 
   def election_regions
     communities_legislative_districts.pluck(:election_region).uniq
