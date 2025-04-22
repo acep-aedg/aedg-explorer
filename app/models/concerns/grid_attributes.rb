@@ -6,12 +6,10 @@ module GridAttributes
     def import_aedg!(properties)
       properties.symbolize_keys!
 
-      if properties[:id].nil?
-        raise "id is required"
-      end
+      raise 'id is required' if properties[:id].nil?
 
       Grid.create!(
-        name: properties[:name], 
+        name: properties[:name],
         aedg_id: properties[:id]
       )
     end

@@ -1,4 +1,4 @@
-class AllowedGeometryTypesValidator < ActiveModel::EachValidator 
+class AllowedGeometryTypesValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return if options[:in].include?(value.geometry_type.type_name)
 

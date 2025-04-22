@@ -3,7 +3,7 @@ module HouseDistrictAttributes
 
   class_methods do
     def import_aedg_with_geom!(properties, geom)
-      properties["boundary"] = geom
+      properties['boundary'] = geom
       properties.symbolize_keys!
 
       HouseDistrict.new.tap do |house|

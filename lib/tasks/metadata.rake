@@ -1,10 +1,10 @@
 namespace :metadata do
-  desc "Download metadata files"
+  desc 'Download metadata files'
   task download: :environment do
     repo_url = ENV.fetch('GH_METADATA_REPO_URL', 'https://github.com/acep-aedg/aedg-metadata')
 
-    folder_path = "metadata/public"
-    local_dir = Rails.root.join("db", "imports", "metadata").to_s
+    folder_path = 'metadata/public'
+    local_dir = Rails.root.join('db/imports/metadata').to_s
 
     # Ensure the local directory & keep file exists
     FileUtils.mkdir_p(local_dir)
@@ -14,22 +14,22 @@ namespace :metadata do
 
       Dir.chdir(temp_dir) do
         # Enable sparse-checkout
-        system("git sparse-checkout init --cone")
+        system('git sparse-checkout init --cone')
         system("git sparse-checkout set #{folder_path}")
-        system("git checkout main")
+        system('git checkout main')
         # Sync only new/updated files
         system("rsync -avh --delete #{folder_path}/ #{local_dir}/")
       end
     end
   end
 
-  desc "Import metadata files"
-  task import: [:environment, :download] do
-    filepath = Rails.root.join('db', 'imports', 'metadata')
+  desc 'Import metadata files'
+  task import: %i[environment download] do
+    filepath = Rails.root.join('db/imports/metadata')
     Metadatum.import_metadata(filepath)
   end
 
-  desc "Clear metadata records"
+  desc 'Clear metadata records'
   task clear: :environment do
     Metadatum.destroy_all
   end

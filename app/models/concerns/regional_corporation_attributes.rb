@@ -2,9 +2,9 @@
 module RegionalCorporationAttributes
   extend ActiveSupport::Concern
 
-   class_methods do 
+  class_methods do
     def import_aedg_with_geom!(properties, geom)
-      properties["boundary"] = geom
+      properties['boundary'] = geom
       properties.symbolize_keys!
 
       RegionalCorporation.find_or_initialize_by(fips_code: properties[:fips_code]).tap do |reg_corp|
@@ -21,7 +21,7 @@ module RegionalCorporationAttributes
         name: params[:name],
         land_area: params[:land_area],
         water_area: params[:water_area],
-        boundary: params[:boundary],
+        boundary: params[:boundary]
       )
     end
   end

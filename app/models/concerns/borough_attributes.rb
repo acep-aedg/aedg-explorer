@@ -2,9 +2,9 @@
 module BoroughAttributes
   extend ActiveSupport::Concern
 
-  class_methods do 
+  class_methods do
     def import_aedg_with_geom!(properties, geom)
-      properties["boundary"] = geom
+      properties['boundary'] = geom
       properties.symbolize_keys!
 
       Borough.find_or_initialize_by(fips_code: properties[:fips_code]).tap do |borough|
@@ -17,11 +17,11 @@ module BoroughAttributes
   included do
     def assign_aedg_attributes(params)
       assign_attributes({
-        fips_code: params[:fips_code],
-        name: params[:name],
-        boundary: params[:boundary],
-        is_census_area: params[:is_census_area],
-      })
+                          fips_code: params[:fips_code],
+                          name: params[:name],
+                          boundary: params[:boundary],
+                          is_census_area: params[:is_census_area]
+                        })
     end
   end
 end

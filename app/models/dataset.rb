@@ -10,12 +10,12 @@ class Dataset < ApplicationRecord
 
   belongs_to :metadatum
 
-  store_accessor :data, :title, :description, :resources,  
-                        :path, :publicationDate, :spatial, 
-                        :format, :schema
+  store_accessor :data, :title, :description, :resources,
+                 :path, :publicationDate, :spatial,
+                 :format, :schema
 
   def self.import_resource(json)
-    puts "Resource: #{json['name']}"
+    Rails.logger.debug "Resource: #{json['name']}"
     find_or_initialize_by(name: json['name']).tap do |dataset|
       dataset.data = json
       dataset.keyword_list.add(json['keywords'])
@@ -23,7 +23,7 @@ class Dataset < ApplicationRecord
     end
   end
 
-  def filename 
+  def filename
     [name, format.downcase].join('.')
   end
 end

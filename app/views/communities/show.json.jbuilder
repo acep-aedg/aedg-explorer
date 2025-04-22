@@ -1,1 +1,1 @@
-json.partial! "communities/community", community: @community
+json.partial! 'communities/community', community: @community

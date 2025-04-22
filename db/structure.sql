@@ -233,9 +233,9 @@ CREATE TABLE public.communities_legislative_districts (
     election_region integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
+    community_fips_code character varying NOT NULL,
     house_district_id bigint NOT NULL,
-    senate_district_id bigint NOT NULL,
-    community_fips_code character varying
+    senate_district_id bigint NOT NULL
 );
 
 
@@ -1168,6 +1168,13 @@ CREATE UNIQUE INDEX index_boroughs_on_fips_code ON public.boroughs USING btree (
 
 
 --
+-- Name: index_communities_legislative_districts_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_communities_legislative_districts_on_community_fips_code ON public.communities_legislative_districts USING btree (community_fips_code);
+
+
+--
 -- Name: index_communities_legislative_districts_on_house_district_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1538,6 +1545,9 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20250421165405'),
+('20250417191731'),
+('20250417191730'),
+('20250417191729'),
 ('20250416200301'),
 ('20250401174706'),
 ('20250325164313'),

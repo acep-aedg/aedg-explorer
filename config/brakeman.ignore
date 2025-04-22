@@ -1,0 +1,51 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "46dddae70004b49efba413a93ca91306071ff0d555793403eb47916977fbb1cf",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/helpers/communities/charts_helper.rb",
+      "line": 39,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "PopulationAgeSex.most_recent_for(community.fips_code).ordered.sum(\"e_pop_age_#{group[:key]}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Communities::ChartsHelper",
+        "method": "age_group_estimates_with_moe_data"
+      },
+      "user_input": "group[:key]",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "group comes from a prepopulated list and not user input"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "90842c8c15c53595e78cdcfd399de3d84d3995a0ed91a0cb79ad224bdd71e8bc",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/helpers/communities/charts_helper.rb",
+      "line": 40,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "PopulationAgeSex.most_recent_for(community.fips_code).ordered.sum(\"m_pop_age_#{group[:key]}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Communities::ChartsHelper",
+        "method": "age_group_estimates_with_moe_data"
+      },
+      "user_input": "group[:key]",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "group comes from a prepopulated list and not user input"
+    }
+  ],
+  "brakeman_version": "7.0.2"
+}

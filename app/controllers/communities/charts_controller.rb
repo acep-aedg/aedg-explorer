@@ -33,7 +33,8 @@ class Communities::ChartsController < ApplicationController
 
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
-    def set_community
-        @community = Community.find(params[:community_id])
-    end
+
+  def set_community
+    @community = Community.find(params[:community_id])
+  end
 end

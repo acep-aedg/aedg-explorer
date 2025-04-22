@@ -3,13 +3,11 @@
 .row
   .col-md-4
     #communityLocationMapWrapper.tab-pane.fade.show.active{
-      data: {
-        controller: "maps",
-        maps_token_value: ENV['MAPBOX_API_TOKEN'],
+      data: mapbox_api_data({
         maps_map_center_value: [@community.longitude, @community.latitude],
         maps_markers_value: [[@community.longitude, @community.latitude]],
         maps_marker_tooltip_title_value: @community.name
-      }
+      })
     }
       .map-sm.rounded{ data: { maps_target: "map" } }
 

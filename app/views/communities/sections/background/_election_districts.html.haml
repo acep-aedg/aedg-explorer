@@ -13,12 +13,10 @@
 / Tab Content
 .tab-content.mt-3
   #districtsMapWrapper.tab-pane.fade.show.active{
-    data: {
-      controller: "maps",
-      maps_token_value: ENV['MAPBOX_API_TOKEN'],
+    data: mapbox_api_data({
       maps_map_center_value: [@community.longitude, @community.latitude],
       maps_default_layer_url_value: house_districts_community_maps_path(@community, format: :json)
-    }
+    })
   }
     .d-flex.gap-2.mb-2.align-items-center
       %button.btn.btn-outline-primary.active{

@@ -2,7 +2,7 @@
 module MonthlyGenerationAttributes
   extend ActiveSupport::Concern
 
-  class_methods do 
+  class_methods do
     def import_aedg!(properties)
       properties.symbolize_keys!
 
@@ -10,7 +10,6 @@ module MonthlyGenerationAttributes
         monthly_generation.assign_aedg_attributes(properties)
         monthly_generation.save!
       end
-
     end
   end
 
