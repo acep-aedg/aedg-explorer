@@ -1,6 +1,6 @@
 class Capacity < ApplicationRecord
   include CapacityAttributes
-  belongs_to :grid, optional: true
+  belongs_to :grid
   validates :grid_id, presence: true
 
   scope :latest_year, -> { where(year: maximum(:year)) }
