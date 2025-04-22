@@ -37,9 +37,10 @@ class Metadatum < ApplicationRecord
 
   scope :highlighted, -> { where(highlighted: true) }
 
-  def publicationDate; end
-
-  def related; end
+  # Temp method until we implement finding related datasets
+  def related
+    []
+  end
 
   def self.import_metadata(path)
     Rails.logger.debug "Importing metadata from #{path}..."
