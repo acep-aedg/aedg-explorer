@@ -45,4 +45,9 @@ class Community < ApplicationRecord
   def election_regions
     communities_legislative_districts.pluck(:election_region).uniq
   end
+
+  def grid
+    community_grids.find_by(termination_year: 9999)&.grid
+  end
+
 end
