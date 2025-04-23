@@ -3,10 +3,8 @@ module FooterHelper
 
   def footer_links
     [
-      { name: 'About AEDG', path: welcome_index_path, title: 'About AEDG' },
-      { name: 'FAQ', path: welcome_index_path, title: 'FAQ' },
-      { name: 'Contact', path: welcome_index_path, title: 'Contact' },
-      { name: 'Privacy Policy', path: welcome_index_path, title: 'Privacy Policy' }
+      { name: 'About AEDG', path: about_path, title: 'About AEDG' },
+      { name: 'User Guide', path: user_guide_path, title: 'User Guide' }
     ]
   end
 
