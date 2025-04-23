@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get "/home", to: "static_pages#home", as: :home
+  get "/about", to: "static_pages#about", as: :about
+  get "/user_guide", to: "static_pages#user_guide", as: :user_guide
+  get "/data_explorer", to: "datasets#index", as: :data_explorer
+
   resources :metadata, only: %i[index show], path: 'data' do
     resources :datasets, only: [:show] do
       get :download, on: :member
