@@ -1,0 +1,33 @@
+.container.py-5
+  %h2.fw-bold.text-center.mb-5 Discover More About the Alaska Energy Data Gateway
+
+  .row.text-start.justify-content-center
+    .col-md-4.mb-4
+      .d-flex.flex-column.align-items-start
+        .mb-3
+          %i.bi.bi-graph-up-arrow.fs-2
+        %h5.fw-bold Get to know the Alaska Energy Data Gateway
+        %p.text-muted
+          Understand the methodologies behind our comprehensive data collection.
+        %p.mb-0
+          = link_to 'Learn →', user_guide_path(anchor:'data-creation-process'), class: 'text-decoration-none ms-1'
+
+    .col-md-4.mb-4
+      .d-flex.flex-column.align-items-start
+        .mb-3
+          %i.bi.bi-people-fill.fs-2
+        %h5.fw-bold Meet the Team Behind AEDG's Revitalization
+        %p.text-muted
+          Get to know the experts committed to improving energy data access.
+        %p.mb-0
+          = link_to 'Meet →', about_path(anchor:'partners'), class: 'text-decoration-none ms-1'
+
+    .col-md-4.mb-4
+      .d-flex.flex-column.align-items-start
+        .mb-3
+          %i.bi.bi-file-earmark-text.fs-2
+        %h5.fw-bold Citing AEDG Data: Guidelines and Best Practices
+        %p.text-muted
+          Learn how to properly reference AEDG data in your work.
+        %p.mb-0
+          = link_to 'View →', user_guide_path(anchor:'citing'), class: 'text-decoration-none ms-1'
