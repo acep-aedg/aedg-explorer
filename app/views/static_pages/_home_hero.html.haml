@@ -1,0 +1,28 @@
+= image_tag "aedg-logo.png", alt: "AEDG Logo", class: "img-fluid mb-4", style: "max-width: 300px;"
+
+%h2.mb-5.fw-bold Energy Data for Alaskan Communities
+
+.row.justify-content-center.mb-5
+  .col-md-4.d-flex.mb-4
+    = link_to user_guide_path, class: "p-4 bg-white shadow rounded h-100 w-100 text-decoration-none text-dark" do
+      .mb-2
+      %i.bi.bi-star-fill.fs-2
+      %h5.fw-semibold New to AEDG?
+      %hr
+      %p A guide to getting you started
+
+  .col-md-4.d-flex.mb-4
+    = link_to metadata_path, class: "p-4 bg-white shadow rounded h-100 w-100 text-decoration-none text-dark" do
+      .mb-2
+        %i.bi.bi-database-fill.fs-2
+      %h5.fw-semibold View & Download Datasets
+      %hr
+      %p Dive into Alaskan energy data to uncover trends, inform decisions, and power your insights
+
+  .col-md-4.d-flex.mb-4
+    = link_to communities_path, class: "p-4 bg-white shadow rounded h-100 w-100 text-decoration-none text-dark" do
+      .mb-2
+        %i.bi.bi-house-fill.fs-2
+      %h5.fw-semibold Explore Community Dashboards
+      %hr
+      %p Gain insights into the energy systems that shape Alaska’s communities

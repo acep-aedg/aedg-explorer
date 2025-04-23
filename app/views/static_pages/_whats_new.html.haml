@@ -1,0 +1,35 @@
+%h2.fw-bold.mb-4 What's new?
+
+.row.justify-content-center.mb-5
+  .col-lg-10
+    %p.lead.text-muted
+      The Alaska Energy Data Gateway (AEDG) provides essential energy and socioeconomic data tailored for Alaskan communities.
+      Our revitalized platform offers user-friendly access to updated datasets and community dashboards.
+      Explore how this data can empower your community today.
+.row.text-start.justify-content-center
+  .col-md-4.mb-4
+    .d-flex.flex-column.align-items-start
+      %h5.fw-bold.d-flex.align-items-center.gap-2
+        %i.bi.bi-rocket.fs-4
+        Explore the revitalized data gateway
+      %p Experience a fresh look and feel that makes navigation easier.
+      %p.mb-0
+        = link_to 'Tour →', user_guide_path, class: 'text-decoration-none ms-1'
+
+  .col-md-4.mb-4
+    .d-flex.flex-column.align-items-start
+      %h5.fw-bold.d-flex.align-items-center.gap-2
+        %i.bi.bi-bar-chart-line.fs-4
+        Find the latest available energy data
+      %p Access comprehensive energy statistics — updated through 2021 — to support informed decision-making.
+      %p.mb-0
+        = link_to 'View →', metadata_path, class: 'text-decoration-none ms-1'
+
+  .col-md-4.mb-4
+    .d-flex.flex-column.align-items-start
+      %h5.fw-bold.d-flex.align-items-center.gap-2
+        %i.bi.bi-lightbulb.fs-4
+        Gain energy insights
+      %p Discover user-friendly tools designed to enhance your data exploration experience.
+      %p.mb-0
+        = link_to 'Explore →', user_guide_path, class: 'text-decoration-none ms-1'

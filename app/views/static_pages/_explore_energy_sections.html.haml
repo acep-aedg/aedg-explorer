@@ -1,0 +1,24 @@
+.row.align-items-center.mb-5
+  .col-lg-6.mb-4.text-start
+    .mb-3
+      %i.bi.bi-house-fill.fs-2
+    %h3.fw-bold Find Community Energy Snapshots Effortlessly
+    %p.text-muted
+      Select your community from the dropdown to access tailored energy details.
+      Dive deep into the data that powers your local energy landscape.
+    = render partial: "communities/dropdown", locals: { communities: @communities, current_community: nil }
+
+  .col-lg-6
+    = image_tag "https://placehold.co/600x300", class: "img-fluid rounded"
+.row.align-items-center.mb-5
+  .col-lg-6.mb-4
+    = image_tag "https://placehold.co/600x300", class: "img-fluid rounded"
+
+  .col-lg-6.text-start
+    .mb-3
+      %i.bi.bi-database-fill.fs-2
+    %h3.fw-bold Download Energy Datasets
+    %p.text-muted
+      Explore and download datasets related to Alaska’s energy landscape.
+      Dive into the data to uncover trends, inform decisions, and power your insights.
+    = link_to "Explore Data", metadata_path, class: "btn btn-dark mt-2"
