@@ -12,7 +12,6 @@ one:
   pce_active: true
   slug: 'test-community-one'
   location: 'POINT(-149.1 64.1)'
-  grid: one
   regional_corporation_fips_code: '0000001'
 
 
@@ -28,5 +27,4 @@ two:
   pce_active: false
   slug: 'test-community-two'
   location: 'POINT(-149.1 64.1)'
-  grid: two
   regional_corporation_fips_code: '0000002'
