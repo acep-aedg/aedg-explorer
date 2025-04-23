@@ -16,7 +16,7 @@ class Community < ApplicationRecord
   has_many :house_districts, through: :communities_legislative_districts
   has_many :senate_districts, through: :communities_legislative_districts
 
-  has_many :community_grids, foreign_key: :community_fips_code, primary_key: :fips_code
+  has_many :community_grids, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :grids, through: :community_grids
   has_many :capacities, through: :grids
   has_many :monthly_generations, through: :grids
@@ -49,5 +49,4 @@ class Community < ApplicationRecord
   def grid
     community_grids.find_by(termination_year: 9999)&.grid
   end
-
 end
