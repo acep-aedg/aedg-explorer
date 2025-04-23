@@ -3,9 +3,7 @@ class StaticPagesController < ApplicationController
     @communities = Community.all
   end
 
-  def about
-  end
+  def about; end
 
-  def user_guide
-  end
+  def user_guide; end
 end
