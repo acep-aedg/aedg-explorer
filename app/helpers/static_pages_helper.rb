@@ -24,6 +24,27 @@ module StaticPagesHelper
     ]
   end
 
+  def data_creation_steps
+    [
+      {
+        title: "Collect Source Data",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat."
+      },
+      {
+        title: "Combine & Aggregate",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat."
+      },
+      {
+        title: "Clean & Validate",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat."
+      },
+      {
+        title: "Collaborate with Experts",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat."
+      }
+    ]
+  end
+
   def grouped_partners
     YAML.load_file(Rails.root.join("config", "data", "partners.yml"))
   end
