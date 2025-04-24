@@ -12,6 +12,7 @@ namespace :import do
     Rake::Task['import:regional_corporations'].invoke
     Rake::Task['import:grids'].invoke
     Rake::Task['import:communities'].invoke
+    Rake::Task['import:community_grids'].invoke
     Rake::Task['import:populations'].invoke
     Rake::Task['import:transportation'].invoke
     Rake::Task['import:yearly_generations'].invoke
@@ -85,6 +86,12 @@ namespace :import do
   task communities: :environment do
     filepath = Rails.root.join('db/imports/communities.geojson')
     ImportHelpers.import_geojson(filepath, Community)
+  end
+
+  desc 'Import Community Grid Data from .csv file'
+  task community_grids: :environment do
+    filepath = Rails.root.join('db/imports/communities_grids.csv')
+    ImportHelpers.import_csv(filepath, CommunityGrid)
   end
 
   desc 'Import Population Data from .csv file'

@@ -4,26 +4,28 @@
     
   .d-flex.justify-content-between.align-items-center
     .nav.nav-tabs
-      - if @community.grid.monthly_generations.any?
+      - if @community.grid&.monthly_generations&.exists?
         %li.nav-item
           = link_to "Monthly Chart", "#monthly-chart", class: "nav-link active", data: { bs_toggle: "tab" }
         %li.nav-item
           = link_to "Monthly Data", "#monthly-data", class: "nav-link", data: { bs_toggle: "tab" }
-      %li.nav-item
-        = link_to "Yearly Chart", "#yearly-chart", class: "nav-link", data: { bs_toggle: "tab" }
-      %li.nav-item
-        = link_to "Yearly Data", "#yearly-data", class: "nav-link", data: { bs_toggle: "tab" }
+      - if @community.grid&.yearly_generations&.exists?
+        %li.nav-item
+          = link_to "Yearly Chart", "#yearly-chart", class: "nav-link", data: { bs_toggle: "tab" }
+        %li.nav-item
+          = link_to "Yearly Data", "#yearly-data", class: "nav-link", data: { bs_toggle: "tab" }
 
   .tab-content
-    #monthly-chart.tab-pane.fade.show.active
-      = render 'communities/sections/electricity/production/monthly_stats'
-      = render "communities/sections/electricity/production/monthly_chart"
+    - if @community.grid&.monthly_generations&.exists?
+      #monthly-chart.tab-pane.fade.show.active
+        = render 'communities/sections/electricity/production/monthly_stats'
+        = render "communities/sections/electricity/production/monthly_chart"
 
-    #monthly-data.tab-pane.fade
-      = render "communities/sections/electricity/production/monthly_data"
+      #monthly-data.tab-pane.fade
+        = render "communities/sections/electricity/production/monthly_data"
+    - if @community.grid&.monthly_generations&.exists?
+      #yearly-chart.tab-pane.fade
+        = render "communities/sections/electricity/production/yearly_chart"
 
-    #yearly-chart.tab-pane.fade
-      = render "communities/sections/electricity/production/yearly_chart"
-
-    #yearly-data.tab-pane.fade
-      = render "communities/sections/electricity/production/yearly_data"
+      #yearly-data.tab-pane.fade
+        = render "communities/sections/electricity/production/yearly_data"

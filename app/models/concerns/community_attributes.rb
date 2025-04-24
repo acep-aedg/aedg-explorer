@@ -31,8 +31,7 @@ module CommunityAttributes
         gnis_code: params[:gnis_code],
         puma_code: params[:puma_code],
         subsistence: params[:subsistence],
-        economic_region: params[:economic_region],
-        grid: Grid.from_aedg_id(params[:grid_id]).first
+        economic_region: params[:economic_region]
       )
     end
   end
