@@ -151,176 +151,6 @@
   background-color: $partner-card-bg;
 }
 
-// FAQ Page Styles
-.faq-wrapper {
-  display: flex;
-  /* Align tabs and content side-by-side */
-  gap: 2rem;
-  /* Add spacing between the tabs and content */
-  align-items: flex-start;
-  /* Align tabs and content at the top */
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    /* Stack tabs above content on smaller screens */
-  }
-}
-
-// .tab-content {
-//   flex-grow: 1;
-// }
-
-.faq-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: $aedg-navy;
-}
-
-.faq-tabs {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  /* Add spacing between tabs */
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-  .nav-link {
-    width: 100%;
-    /* Tabs take up full width in the column layout */
-    font-size: 1rem;
-    font-weight: 600;
-    color: $aedg-navy;
-    background: $faq-category-inactive-bg;
-    border-radius: 20px;
-    padding: 10px 20px;
-    text-align: left;
-    transition: all 0.3s ease-in-out;
-    text-align: center;
-
-    &.active {
-      background: $faq-category-active-bg;
-      color: $white;
-    }
-
-    &:hover {
-      background: $aedg-yellow;
-      color: $white;
-    }
-  }
-
-  @media (max-width: 768px) {
-    flex-direction: row;
-    /* Change tabs to row layout on smaller screens */
-    flex-wrap: wrap;
-    /* Allow wrapping if needed */
-    justify-content: center;
-    /* Center align tabs in row layout */
-    gap: 1rem;
-    /* Maintain consistent spacing */
-
-    .nav-link {
-      flex: 1 1 calc(50% - 1rem);
-      /* Make tabs divide evenly into rows */
-      text-align: center;
-      /* Center align text in row layout */
-    }
-  }
-}
-
-.accordion-button {
-  background-color: white;
-  font-size: 1rem;
-  font-weight: bold;
-  color: $aedg-navy;
-  border: none;
-  padding: 1rem;
-  position: relative;
-  /* Enables positioning for the vertical bar */
-  transition: all 0.3s ease-in-out;
-
-  &:before {
-    content: '';
-    /* Create the small vertical bar */
-    position: absolute;
-    top: 10%;
-    /* Adjust position vertically */
-    left: 0;
-    /* Align the bar to the left edge */
-    width: 5px;
-    height: 80%;
-    /* Height of the bar relative to the button */
-    background-color: transparent;
-    /* Default state: no bar visible */
-    transition: background-color 0.3s ease-in-out;
-    border-radius: 4px;
-  }
-
-  &:not(.collapsed) {
-    background-color: transparent;
-    /* Change background color when the question is opened */
-  }
-
-  &:not(.collapsed):before {
-    background-color: $aedg-yellow;
-    /* Bar becomes visible when the question is opened */
-  }
-
-  &:focus {
-    box-shadow: none;
-    /* Remove the default focus outline */
-  }
-}
-
-.accordion-body {
-  font-size: 0.95rem;
-  color: $faq-accordion-text;
-  background-color: $faq-accordion-bg;
-  padding: 1rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 0.375rem 0.375rem;
-}
-
-.cta-section {
-  background-color: $aedg-navy;
-  padding: 2rem 1rem;
-  border-radius: 1rem;
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .cta-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 2rem;
-    color: $white;
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-      text-align: center;
-    }
-  }
-
-  .cta-text {
-    flex: 1;
-
-    h3 {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
-
-    p {
-      margin-bottom: 1.5rem;
-      font-size: 1rem;
-    }
-  }
-}
-
 .footer-about {
   max-width: 400px;
   min-width: 100px;
@@ -340,7 +170,6 @@
   margin: 0 auto;
   /* Center images in their containers */
 }
-
 
 .timeline {
   border-left: 1px solid hsl(0, 0%, 90%);
@@ -364,5 +193,56 @@
   border-radius: 50%;
   height: 14px;
   width: 14px;
-  content: "";
+  content: '';
+}
+
+.bg-aedg-navy {
+  background-color: $aedg-navy;
+}
+.bg-aedg-yellow {
+  background-color: $aedg-yellow;
+}
+
+.text-aedg-navy {
+  color: $aedg-navy;
+}
+.text-aedg-yellow {
+  color: $aedg-yellow;
+}
+
+#faq {
+  .nav-pills .nav-link {
+    background-color: $faq-category-inactive-bg; // light bg
+    color: $aedg-navy;
+    transition: all 0.3s ease;
+    border-radius: 50rem;
+
+    &:hover {
+      background-color: #fcb900; // AEDG yellow
+      color: $white;
+    }
+
+    &.active {
+      background-color: $aedg-navy;
+      color: $white;
+    }
+  }
+
+  .accordion-button {
+    background-color: $white;
+    color: $aedg-navy;
+    transition: all 0.3s ease;
+    border-left: 5px solid transparent;
+
+    &:not(.collapsed) {
+      border-left: 5px solid $aedg-yellow;
+      background-color: $white;
+      color: $aedg-navy;
+      box-shadow: none;
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
 }

@@ -25,6 +25,10 @@ module StaticPagesHelper
   end
 
   def grouped_partners
-    YAML.load_file(Rails.root.join("config", "partners.yml"))
+    YAML.load_file(Rails.root.join("config", "data", "partners.yml"))
+  end
+
+  def faq_categories
+    YAML.load_file(Rails.root.join('config/data/faq.yml'))['categories']
   end
 end
