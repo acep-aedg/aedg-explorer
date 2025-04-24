@@ -1,8 +1,13 @@
-%h1 StaticPages#user_guide
-%p Find me in app/views/static_pages/user_guide.html.haml
-%section#data-creation-process
+.container.py-5
+  %h2.fw-bold User Guide
+  %p.lead.text-muted
+    Find energy and socioeconomic data for communities across the state of Alaska in the revitalized Alaska Energy Data Gateway
+  %hr.mb-5
+  = render 'faq'
+  %hr.mb-5
+  = render 'navigating_aedg'
+
+  %section#data-creation-process
   %h1 Data Creation Process
 %section#citing
   %h1 Citing AEDG
-
-= render 'faq'

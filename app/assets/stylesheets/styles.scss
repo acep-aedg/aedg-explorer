@@ -246,3 +246,15 @@
     }
   }
 }
+
+.circle-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: $aedg-navy;
+  color: $aedg-yellow;
+  font-size: 1.25rem;
+}
