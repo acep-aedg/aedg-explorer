@@ -232,9 +232,9 @@ CREATE TABLE public.communities_legislative_districts (
     election_region integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
+    community_fips_code character varying NOT NULL,
     house_district_id bigint NOT NULL,
-    senate_district_id bigint NOT NULL,
-    community_fips_code character varying
+    senate_district_id bigint NOT NULL
 );
 
 
@@ -391,6 +391,43 @@ CREATE SEQUENCE public.friendly_id_slugs_id_seq
 --
 
 ALTER SEQUENCE public.friendly_id_slugs_id_seq OWNED BY public.friendly_id_slugs.id;
+
+
+--
+-- Name: fuel_prices; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.fuel_prices (
+    id bigint NOT NULL,
+    community_fips_code character varying,
+    price numeric,
+    fuel_type character varying,
+    price_type character varying,
+    source character varying,
+    reporting_season character varying,
+    reporting_year integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: fuel_prices_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.fuel_prices_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: fuel_prices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.fuel_prices_id_seq OWNED BY public.fuel_prices.id;
 
 
 --
@@ -927,6 +964,13 @@ ALTER TABLE ONLY public.friendly_id_slugs ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: fuel_prices id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.fuel_prices ALTER COLUMN id SET DEFAULT nextval('public.fuel_prices_id_seq'::regclass);
+
+
+--
 -- Name: grids id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1091,6 +1135,14 @@ ALTER TABLE ONLY public.friendly_id_slugs
 
 
 --
+-- Name: fuel_prices fuel_prices_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.fuel_prices
+    ADD CONSTRAINT fuel_prices_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: grids grids_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1223,6 +1275,13 @@ CREATE UNIQUE INDEX index_boroughs_on_fips_code ON public.boroughs USING btree (
 
 
 --
+-- Name: index_communities_legislative_districts_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_communities_legislative_districts_on_community_fips_code ON public.communities_legislative_districts USING btree (community_fips_code);
+
+
+--
 -- Name: index_communities_legislative_districts_on_house_district_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1304,6 +1363,13 @@ CREATE UNIQUE INDEX index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope
 --
 
 CREATE INDEX index_friendly_id_slugs_on_sluggable_type_and_sluggable_id ON public.friendly_id_slugs USING btree (sluggable_type, sluggable_id);
+
+
+--
+-- Name: index_fuel_prices_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_fuel_prices_on_community_fips_code ON public.fuel_prices USING btree (community_fips_code);
 
 
 --
@@ -1545,6 +1611,14 @@ ALTER TABLE ONLY public.community_grids
 
 
 --
+-- Name: fuel_prices fk_rails_5a86c9fa5a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.fuel_prices
+    ADD CONSTRAINT fk_rails_5a86c9fa5a FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
+
+
+--
 -- Name: communities_legislative_districts fk_rails_62b26fb9e7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1607,6 +1681,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250424230514'),
 ('20250422213740'),
 ('20250422211727'),
 ('20250421165405'),

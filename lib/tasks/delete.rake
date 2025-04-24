@@ -27,4 +27,9 @@ namespace :delete do
     DeleteHelpers.delete_records(HouseDistrict)
     DeleteHelpers.delete_records(SenateDistrict)
   end
+
+  desc 'Clear all fuel prices data'
+  task fuel_prices: :environment do
+    DeleteHelpers.delete_records(FuelPrice)
+  end
 end
