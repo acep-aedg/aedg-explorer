@@ -6,4 +6,40 @@
   %hr.my-5
 
   = render 'history_timeline'
-%section#partners
+
+  %hr.my-5
+  %section#partners.pt-5
+    %h5.text-muted.mb-3.mt-5.text-center Our Partners
+    %h3.fw-bold.text-center.mb-5 Working Together to Power Alaska
+
+    - grouped_partners.each do |category, partners|
+      %h4.mt-5.mb-4.text-muted= category.titleize
+      .list-group
+        - partners.each do |partner|
+          = link_to partner['url'], target: "_blank", class: "list-group-item list-group-item-action d-flex align-items-center py-3 px-4 gap-3 text-dark text-decoration-none" do
+            - if partner['logo']
+              = image_tag "partners/#{partner['logo']}", class: "rounded", alt: partner['name'], style: "width: 10rem; height: auto;"
+            - else
+              = image_tag "https://placehold.co/40", class: "rounded", alt: "Placeholder for #{partner['name']}", style: "width: 40px; height: auto;"
+
+            .flex-grow-1
+              %h6.mb-1.fw-semibold= partner['name']
+              - if partner['acronym']
+                %p.text-muted.small.mb-1= partner['acronym']
+
+    - grouped_partners.each do |category, partners|
+      %h4.mt-5.mb-4.text-muted= category.titleize
+      .row
+        - partners.each do |partner|
+          .col-md-6.col-lg-4.mb-4
+            = link_to partner['url'], target: "_blank", class: "d-block p-4 bg-white border rounded shadow-sm text-decoration-none text-dark h-100" do
+              .d-flex.align-items-start.gap-3
+                - if partner['logo']
+                  = image_tag "partners/#{partner['logo']}", class: "rounded", alt: partner['name'], style: "width: 60px; height: auto;"
+                - else
+                  = image_tag "https://placehold.co/60", class: "rounded", alt: "Placeholder for #{partner['name']}", style: "width: 60px; height: auto;"
+
+                .flex-grow-1
+                  %h6.fw-semibold.mb-1= partner['name']
+                  - if partner['acronym']
+                    %p.text-muted.small.mb-1= partner['acronym']

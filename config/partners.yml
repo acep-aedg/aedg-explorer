@@ -1,0 +1,61 @@
+funders:
+  - name: State of Alaska
+    
+developers:
+  - name: Alaska Center for Energy and Power
+    acronym: ACEP
+    url: https://acep.uaf.edu/
+
+  - name: Institute of Social and Economic Research
+    acronym: ISER
+    url: https://iser.uaa.alaska.edu/
+
+dataProviders:
+  - name: Lawrence Berkeley National Lab
+    url: https://www.lbl.gov/
+
+  - name: Alaska Energy Authority
+    acronym: AEA
+    url: https://www.akenergyauthority.org/
+    
+  - name: Alaska Center for Energy and Power
+    acronym: ACEP
+    url: https://acep.uaf.edu/
+
+  - name: American Community Survey
+    acronym: ACS
+  
+  - name: U.S. Bureau of Labor Statistics
+    acronym: BLS
+    url: https://www.bls.gov/
+
+  - name: Catalyst Cooperative
+    
+  - name: United States Census Bureau
+    acronym: CENSUS
+    url: https://www.census.gov/
+
+  - name: Alaska Department of Education & Early Development
+    acronym: DEED
+
+  - name: Alaska Division of Community and Regional Affairs
+    acronym: DCRA
+
+  - name: Alaska Department of Labor and Workforce Development
+    acronym: DOLWD
+
+  - name: DOWL Engineering
+    acronym: DOWL
+
+  - name: U.S. Energy Information Administration
+    acronym: EIA
+
+  - name: Federal Energy Regulatory Commission
+    acronym: FERC
+
+  - name: Regulatory Commission of Alaska
+    acronym: RCA
+
+  - name: U.S. Geological Survey
+    acronym: USGS
+  
