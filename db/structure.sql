@@ -232,9 +232,9 @@ CREATE TABLE public.communities_legislative_districts (
     election_region integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    community_fips_code character varying NOT NULL,
     house_district_id bigint NOT NULL,
-    senate_district_id bigint NOT NULL
+    senate_district_id bigint NOT NULL,
+    community_fips_code character varying
 );
 
 
@@ -264,7 +264,7 @@ ALTER SEQUENCE public.communities_legislative_districts_id_seq OWNED BY public.c
 CREATE TABLE public.community_grids (
     id bigint NOT NULL,
     community_fips_code character varying NOT NULL,
-    grid_id bigint NOT NULL,
+    grid_id bigint,
     connection_year integer,
     termination_year integer,
     created_at timestamp(6) without time zone NOT NULL,
@@ -1195,6 +1195,13 @@ ALTER TABLE ONLY public.yearly_generations
 
 
 --
+-- Name: idx_on_community_fips_code_grid_id_connection_year_dab7f92833; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_on_community_fips_code_grid_id_connection_year_dab7f92833 ON public.community_grids USING btree (community_fips_code, grid_id, connection_year);
+
+
+--
 -- Name: index_aedg_imports_on_importable; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1213,13 +1220,6 @@ CREATE INDEX index_boroughs_on_boundary ON public.boroughs USING gist (boundary)
 --
 
 CREATE UNIQUE INDEX index_boroughs_on_fips_code ON public.boroughs USING btree (fips_code);
-
-
---
--- Name: index_communities_legislative_districts_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_communities_legislative_districts_on_community_fips_code ON public.communities_legislative_districts USING btree (community_fips_code);
 
 
 --
@@ -1269,13 +1269,6 @@ CREATE INDEX index_communities_on_location ON public.communities USING gist (loc
 --
 
 CREATE UNIQUE INDEX index_communities_on_slug ON public.communities USING btree (slug);
-
-
---
--- Name: index_community_grids_on_community_fips_code_and_grid_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_community_grids_on_community_fips_code_and_grid_id ON public.community_grids USING btree (community_fips_code, grid_id);
 
 
 --
