@@ -1,19 +1,19 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  community_fips_code: MyString
-  price: 9.99
-  fuel_type: MyString
-  price_type: MyString
-  source: MyString
-  reporting_season: MyString
-  reporting_year: 1
+  community_fips_code: '0000001'
+  price: 3.58
+  fuel_type: heating_fuel
+  price_type: regional
+  source: DCRA
+  reporting_season: Winter
+  reporting_year: 2005
 
 two:
-  community_fips_code: MyString
-  price: 9.99
-  fuel_type: MyString
-  price_type: MyString
-  source: MyString
-  reporting_season: MyString
-  reporting_year: 1
+  community_fips_code: '0000002'
+  price: 4.10
+  fuel_type: gasoline
+  price_type: regional
+  source: DCRA
+  reporting_season: Winter
+  reporting_year: 2005
