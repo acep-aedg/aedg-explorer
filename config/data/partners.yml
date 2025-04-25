@@ -1,40 +1,4 @@
-funders:
-  - name: State of Alaska
-    
-developers:
-  - name: Alaska Center for Energy and Power
-    acronym: ACEP
-    url: https://acep.uaf.edu/
-
-  - name: Institute of Social and Economic Research
-    acronym: ISER
-    url: https://iser.uaa.alaska.edu/
-
-dataProviders:
-  - name: Lawrence Berkeley National Lab
-    url: https://www.lbl.gov/
-
-  - name: Alaska Energy Authority
-    acronym: AEA
-    url: https://www.akenergyauthority.org/
-    
-  - name: Alaska Center for Energy and Power
-    acronym: ACEP
-    url: https://acep.uaf.edu/
-
-  - name: American Community Survey
-    acronym: ACS
-  
-  - name: U.S. Bureau of Labor Statistics
-    acronym: BLS
-    url: https://www.bls.gov/
-
-  - name: Catalyst Cooperative
-    
-  - name: United States Census Bureau
-    acronym: CENSUS
-    url: https://www.census.gov/
-
+state_partners:
   - name: Alaska Department of Education & Early Development
     acronym: DEED
 
@@ -44,18 +8,63 @@ dataProviders:
   - name: Alaska Department of Labor and Workforce Development
     acronym: DOLWD
 
-  - name: DOWL Engineering
-    acronym: DOWL
+  - name: Alaska Energy Authority
+    acronym: AEA
+    url: https://www.akenergyauthority.org/
+    logo: 'AEA-logo.png'
 
-  - name: U.S. Energy Information Administration
-    acronym: EIA
-
-  - name: Federal Energy Regulatory Commission
-    acronym: FERC
+  - name: Alaska Housing Finance Corporation
+    acronym: AHFC
 
   - name: Regulatory Commission of Alaska
     acronym: RCA
+  
+  - name: State of Alaska
+    
+federal_partners:
+  - name: American Community Survey
+    acronym: ACS
+
+  - name: Federal Energy Regulatory Commission
+    acronym: FERC
+    logo: 'FERC-logo.png'
+
+  - name: United States Census Bureau
+    acronym: CENSUS
+    url: https://www.census.gov/
+    logo: 'census-logo.png'
+
+  - name: U.S. Bureau of Labor Statistics
+    acronym: BLS
+    url: https://www.bls.gov/
+    logo: 'BLS-logo.png'
+
+  - name: U.S. Energy Information Administration
+    acronym: EIA
+    logo: 'eia-logo.jpg'
 
   - name: U.S. Geological Survey
     acronym: USGS
+    logo: 'usgs_logo.gif'
+
+industry_partners:
+  - name: Alaska Center for Energy and Power
+    acronym: ACEP
+    url: https://acep.uaf.edu/ 
+    logo: 'ACEP-Logo.jpg'
+  - name: Berkeley National Lab
+    url: https://www.lbl.gov/
+  
+  - name: Catalyst Cooperative
+
+  - name: Institute of Social and Economic Research
+    acronym: ISER
+    url: https://iser.uaa.alaska.edu/
+    logo: 'ISER-logo.png'
+  
+  - name: DOWL Engineering
+    acronym: DOWL
+    logo: 'DOWL-logo.jpg'
+
+  
   
