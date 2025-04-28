@@ -1,0 +1,19 @@
+%section#history.py-5
+  .row
+    .col-lg-6
+      %h5.text-muted.mb-3 History
+      %h3.fw-bold.mb-4 AEDG Throughout the Years
+      %p.text-muted.mb-3
+        A highly sought-after tool for energy and socioeconomic data about Alaska, the AEDG continues to evolve. Funding for version 3.0 of the AEDG comes from the State of Alaska.
+        Previous development of the AEDG was funded by Alaska Energy Authority, the U.S. Department of Energy’s EPSCoR program and Grid Modernization Initiative from 2013–2024.
+
+      %p.text-muted
+        Developers of the AEDG system over time include Alaska Energy Authority, UAA Institute for Social and Economic Research (ISER), and UAF’s Alaska Center for Energy and Power (ACEP).
+
+    .col-lg-6.pt-5
+      %ul.timeline
+        - aedg_timeline.each do |item|
+          %li.timeline-item.mb-5
+            %h5.mb-2.fw-bold= item[:date]
+            %p.text-muted.fw-bold= item[:title]
+            %p.text-muted= item[:desc]

@@ -1,0 +1,22 @@
+%section#partners.py-5
+  %h5.text-muted.mb-3.text-center Partners & Contributors
+  %h2.fw-bold.text-center Working Together to Power Alaska
+  %p.lead.text-muted.text-center.mb-5
+    Many organizations have shaped the development and the data presented in the AEDG. Learn more about them here.
+
+  - grouped_partners.each do |category, partners|
+    %h4.mt-5.mb-4.text-muted= category.titleize
+    .row
+      - partners.each do |partner|
+        .col-md-6.col-lg-4.mb-4
+          = link_to partner['url'], target: "_blank", class: "d-block p-4 bg-white border rounded shadow-sm text-decoration-none text-dark h-100" do
+            .d-flex.align-items-start.gap-3
+              - if partner['logo']
+                = image_tag "partners/#{partner['logo']}", class: "rounded object-fit-contain img-fluid", alt: partner['name'], style: "height: 60px; width: auto;"
+              - else
+                = image_tag "https://placehold.co/75", class: "rounded", alt: "Placeholder for #{partner['name']}", style: "width: 60px; height: auto;"
+
+              .flex-grow-1
+                %h6.fw-semibold.mb-1= partner['name']
+                - if partner['acronym']
+                  %p.text-muted.small.mb-1= partner['acronym']

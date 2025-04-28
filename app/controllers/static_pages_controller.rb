@@ -5,5 +5,7 @@ class StaticPagesController < ApplicationController
 
   def about; end
 
-  def user_guide; end
+  def user_guide
+    @communities = Community.all
+  end
 end

@@ -1,5 +1,5 @@
 module StaticPagesHelper
-  def aedg_history_timeline
+  def aedg_timeline
     [
       {
         title: 'AEDG Version 3.0',
