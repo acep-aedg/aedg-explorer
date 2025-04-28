@@ -1,31 +1,36 @@
-%footer.py-5.mt-auto.bg-light
+%footer.p-5.mt-auto.bg-light
   .container
-    / Flex container with responsive behavior
-    .d-flex.flex-wrap.justify-content-around.align-items-start
-
-      / Logo and About AEDG
-      .d-flex.flex-wrap.align-items-start
-        / Logo
-        - footer_logo = asset_path('footer_logo.png') # Adjust as needed
+    .row.gy-5
+      / Logo and About AEDG combined horizontally
+      .col-lg-5.d-flex.flex-column.flex-lg-row.align-items-start
+        - footer_logo = asset_path('footer_logo.png')
         - if footer_logo.present?
-          %img{ src: footer_logo, alt: "AEDG Logo", width: "200", class: "me-4 mb-5" }
-
-        / About AEDG
-        .footer-about
-          %strong.mb-5= footer_about_title
-          %p.my-2= footer_about_text
+          %img{ src: footer_logo, alt: "AEDG Logo", width: "150", class: "me-3 mb-3" }
+        
+        .mt-3.mt-lg-0
+          %strong.mb-2.d-block= about_title
+          %p.text-muted.mb-0= about_text
 
       / Quick Links
-      .mb-3
-        %strong Quick Links
+      .col-6.col-md-3.offset-lg-1
+        %strong.mb-2.d-block Quick Links
         %ul.nav.flex-column
           - footer_links.each do |link|
             %li.nav-item
               %a.nav-link.text-muted.px-0{ href: link[:path], title: link[:title], aria: { label: link[:title] } }
                 = link[:name]
 
-    / Footer bottom section
+      / Contact
+      .col-6.col-md-3
+        %strong.mb-2.d-block Contact
+        %p.text-muted.mb-0
+          Please contact 
+          %a.text-decoration-none{ href: "mailto:#{contact_email}" }
+            = contact_email
+          with any questions or comments.
+
+    / Footer bottom
     .mt-4
       %hr.my-4
       %p.text-center.text-muted.small
-        &copy; #{Time.current.year} Alaska Energy Data Gateway. All rights reserved.
+        = copyright_text

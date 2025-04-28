@@ -8,12 +8,19 @@ module FooterHelper
     ]
   end
 
-  def footer_about_title
-    'About AEDG'
+  def about_title
+    'Alaska Energy Data Gateway'
   end
 
-  def footer_about_text
-    "The Alaska Energy Data Gateway is a public resource funded by grants from the Alaska Energy Authority as well as the U.S. Department of Energy’s EPSCoR program and #{link_to 'Grid Modernization Initiative',
-                                                                                                                                                                                   'https://www.energy.gov/gmi/grid-modernization-initiative', target: '_blank', rel: 'noopener noreferrer'}.".html_safe
+  def about_text
+    'The Alaska Energy Data Gateway is a public resource funded by the State of Alaska to ensure energy and socioeconomic data is easily accessible.'
+  end
+
+  def contact_email
+    '[AEDG_EMAIL]@alaska.edu'
+  end
+
+  def copyright_text
+    "© #{Time.current.year} Alaska Center for Energy and Power. All rights reserved."
   end
 end
