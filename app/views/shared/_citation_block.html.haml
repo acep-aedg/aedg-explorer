@@ -1,0 +1,7 @@
+.border.rounded.bg-light-subtle.p-3.d-flex.flex-column.flex-md-row.flex-wrap.gap-2.align-items-start{ data: { controller: "citation" } }
+  %code.mb-0.d-block.flex-grow-1.text-break.align-self-center{ data: { citation_target: "output" } }
+    = citation
+
+  %button.btn.btn-outline-secondary.btn-sm.d-inline-flex.ms-md-auto.align-self-start{ type: "button", data: { action: "citation#copy" } }
+    %i.bi.bi-clipboard.me-1
+    Copy

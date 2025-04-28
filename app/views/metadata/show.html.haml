@@ -19,6 +19,8 @@
       %li.nav-item
         = link_to "Metadata", "#metadata", class: "nav-link", data: { bs_toggle: "tab" }
       %li.nav-item
+        = link_to "Citation", "#citation", class: "nav-link", data: { bs_toggle: "tab" }
+      %li.nav-item
         = link_to "Related", "#related", class: "nav-link", data: { bs_toggle: "tab" }
 
       / Export Button aligned to the right
@@ -34,6 +36,9 @@
 
       #metadata.tab-pane.fade.border-start.border-end.border-bottom.p-3
         = render "metadata/tabs/metadata", metadatum: @metadatum
+
+      #citation.tab-pane.fade.border-start.border-end.border-bottom.p-3
+        = render "metadata/tabs/cite_dataset", metadatum: @metadatum
 
       #related.tab-pane.fade.border-start.border-end.border-bottom.p-3
         = render "metadata/tabs/related", metadatum: @metadatum

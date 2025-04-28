@@ -7,6 +7,9 @@ import { application } from "./application"
 import ChartController from "./chart_controller"
 application.register("chart", ChartController)
 
+import CitationController from "./citation_controller"
+application.register("citation", CitationController)
+
 import CommunityDropdownController from "./community_dropdown_controller"
 application.register("community-dropdown", CommunityDropdownController)
 

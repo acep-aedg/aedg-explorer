@@ -66,4 +66,20 @@ class Metadatum < ApplicationRecord
       Rails.logger.debug "Error processing metadata file #{file}: #{e.message}"
     end
   end
+
+  def citation
+    author = data.dig('resources', 0, 'context', 'publisher').presence || 'Unknown Author'
+    publication_date = data.dig('resources', 0, 'publicationDate').presence
+    title = data['title'].presence&.titleize || 'Untitled Dataset'
+    publication_year = Date.parse(publication_date).year if publication_date.present?
+    version = 'v3.0'
+    access_date = Time.zone.today.strftime('%B %-d, %Y')
+    base_url = 'https://akenergygateway.alaska.edu'
+    path = Rails.application.routes.url_helpers.metadatum_path(self)
+
+    dataset_url = "#{base_url}#{path}"
+
+    # Build final citation string
+    "#{author} (#{publication_year}). \"#{title}\" Accessed on the Alaska Energy Data Gateway #{version}. #{access_date}. #{dataset_url}"
+  end
 end
