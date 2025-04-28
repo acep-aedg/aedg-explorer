@@ -1,5 +1,5 @@
 class Metadatum < ApplicationRecord
-  include MetadatumAttributes
+  include MetadatumImport
   include PgSearch::Model
 
   pg_search_scope :search_full_text,
@@ -42,22 +42,5 @@ class Metadatum < ApplicationRecord
   # Temp method until we implement finding related datasets
   def related
     []
-  end
-
-  def self.import_metadata(path)
-    errors = []
-
-    Rails.logger.info "Importing metadata from #{path}..."
-    Dir.glob("#{path}/*.json").each do |file|
-      data = JSON.parse(File.read(file))
-      find_or_initialize_by(name: data['name']).tap do |metadata|
-        metadata.import_attributes!(file, data)
-        Rails.logger.info "Imported metadata for #{metadata.name}"
-      end
-    rescue StandardError => e
-      errors << "Error processing metadata file #{file}: #{e.message}"
-    end
-
-    errors
   end
 end
