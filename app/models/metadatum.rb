@@ -43,27 +43,37 @@ class Metadatum < ApplicationRecord
   end
 
   def self.import_metadata(path)
-    Rails.logger.debug "Importing metadata from #{path}..."
+    errors = []
+
+    Rails.logger.info "Importing metadata from #{path}..."
     Dir.glob("#{path}/*.json").each do |file|
       data = JSON.parse(File.read(file))
       find_or_initialize_by(name: data['name']).tap do |metadata|
-        metadata.filename = File.basename(file)
-        metadata.data = data
-        metadata.published = true
-
-        Rails.logger.debug "Imported metadata for #{metadata.name}"
-        metadata.data['resources'].each do |resource|
-          dataset = Dataset.import_resource(resource)
-          metadata.keyword_list.add(dataset.keyword_list)
-          metadata.topic_list.add(dataset.topic_list)
-          metadata.format_list.add(dataset.format)
-          metadata.datasets << dataset
-        end
-
-        metadata.save!
+        metadata.import_attributes!(file, data)
+        Rails.logger.info "Imported metadata for #{metadata.name}"
       end
     rescue StandardError => e
-      Rails.logger.debug "Error processing metadata file #{file}: #{e.message}"
+      errors << "Error processing metadata file #{file}: #{e.message}"
     end
+
+    errors
+  end
+
+  def import_attributes!(file, data)
+    raise "Duplicate metadata name found for different import files, #{filename} != #{File.basename(file)}" if filename.present? && filename != File.basename(file)
+
+    self.filename = File.basename(file)
+    self.data = data
+    self.published = true
+
+    self.data['resources'].each do |resource|
+      dataset = Dataset.import_resource(resource)
+      keyword_list.add(dataset.keyword_list)
+      topic_list.add(dataset.topic_list)
+      format_list.add(dataset.format)
+      datasets << dataset
+    end
+
+    save!
   end
 end
