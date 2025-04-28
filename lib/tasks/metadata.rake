@@ -25,8 +25,11 @@ namespace :metadata do
 
   desc 'Import metadata files'
   task import: %i[environment download] do
+    puts 'Starting metadata import'
     filepath = Rails.root.join('db/imports/metadata')
-    Metadatum.import_metadata(filepath)
+    errors = Metadatum.import_metadata(filepath)
+    puts errors.join("\n")
+    puts 'Metadata import completed'
   end
 
   desc 'Clear metadata records'

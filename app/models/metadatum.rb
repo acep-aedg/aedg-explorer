@@ -1,5 +1,7 @@
 class Metadatum < ApplicationRecord
+  include MetadatumImport
   include PgSearch::Model
+
   pg_search_scope :search_full_text,
                   against: [:name],
                   associated_against: {
@@ -40,30 +42,5 @@ class Metadatum < ApplicationRecord
   # Temp method until we implement finding related datasets
   def related
     []
-  end
-
-  def self.import_metadata(path)
-    Rails.logger.debug "Importing metadata from #{path}..."
-    Dir.glob("#{path}/*.json").each do |file|
-      data = JSON.parse(File.read(file))
-      find_or_initialize_by(name: data['name']).tap do |metadata|
-        metadata.filename = File.basename(file)
-        metadata.data = data
-        metadata.published = true
-
-        Rails.logger.debug "Imported metadata for #{metadata.name}"
-        metadata.data['resources'].each do |resource|
-          dataset = Dataset.import_resource(resource)
-          metadata.keyword_list.add(dataset.keyword_list)
-          metadata.topic_list.add(dataset.topic_list)
-          metadata.format_list.add(dataset.format)
-          metadata.datasets << dataset
-        end
-
-        metadata.save!
-      end
-    rescue StandardError => e
-      Rails.logger.debug "Error processing metadata file #{file}: #{e.message}"
-    end
   end
 end
