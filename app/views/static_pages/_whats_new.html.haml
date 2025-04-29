@@ -3,7 +3,7 @@
 
   .row.justify-content-center
     .col-lg-10.mb-5
-      %p.lead.text-muted
+      %p.lead.text-muted.text-start.text-md-center
         The Alaska Energy Data Gateway (AEDG) provides essential energy and socioeconomic data tailored for Alaskan communities.
         Our revitalized platform offers user-friendly access to updated datasets and community dashboards.
         Explore how this data can empower your community today.
@@ -11,10 +11,10 @@
     .col-md-4
       .d-flex.flex-column.align-items-start
         %h5.fw-bold.d-flex.align-items-center.gap-2
-          %i.bi.bi-rocket.fs-4
+          %i.bi.bi-rocket
           Explore the revitalized data gateway
-        %p Experience a fresh look and feel that makes navigation easier.
-        %p.mb-0
+        %p.text-muted Experience a fresh look and feel that makes navigation easier.
+        %p.mb-5
           = link_to user_guide_path, class: 'text-decoration-none fs-5 ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
             %span Tour
             %i.bi.bi-arrow-right
@@ -22,20 +22,20 @@
     .col-md-4
       .d-flex.flex-column.align-items-start
         %h5.fw-bold.d-flex.align-items-center.gap-2
-          %i.bi.bi-bar-chart-line.fs-4
+          %i.bi.bi-bar-chart-line
           Find the latest available energy data
-        %p Access comprehensive energy statistics — updated through 2021 — to support informed decision-making.
-        %p.mb-0
+        %p.text-muted Access comprehensive energy statistics — updated through 2021 — to support informed decision-making.
+        %p.mb-5
           = link_to metadata_path, class: 'text-decoration-none fs-5 ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
             %span View
             %i.bi.bi-arrow-right
     .col-md-4
       .d-flex.flex-column.align-items-start
         %h5.fw-bold.d-flex.align-items-center.gap-2
-          %i.bi.bi-lightbulb.fs-4
+          %i.bi.bi-lightbulb
           Gain energy insights
-        %p Discover user-friendly tools designed to enhance your data exploration experience.
-        %p.mb-0
+        %p.text-muted Discover user-friendly tools designed to enhance your data exploration experience.
+        %p.mb-5
           = link_to user_guide_path, class: 'text-decoration-none fs-5 ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
             %span Explore
             %i.bi.bi-arrow-right

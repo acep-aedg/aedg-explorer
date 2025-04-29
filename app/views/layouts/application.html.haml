@@ -10,7 +10,7 @@
     = javascript_importmap_tags
     %link{rel: 'stylesheet', href: 'https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css' }
   %body.d-flex.flex-column.min-vh-100
-    = render 'header'
+    = render 'shared/header'
     .flex-grow-1
       = yield
-    = render 'footer'
+    = render 'shared/footer'

@@ -6,13 +6,13 @@
         - footer_logo = asset_path('footer_logo.png')
         - if footer_logo.present?
           %img{ src: footer_logo, alt: "AEDG Logo", width: "150", class: "me-3 mb-3" }
-        
+
         .mt-3.mt-lg-0
           %strong.mb-2.d-block= about_title
           %p.text-muted.mb-0= about_text
 
       / Quick Links
-      .col-6.col-md-3.offset-lg-1
+      .col-12.col-md-3.offset-lg-1
         %strong.mb-2.d-block Quick Links
         %ul.nav.flex-column
           - footer_links.each do |link|
@@ -21,7 +21,7 @@
                 = link[:name]
 
       / Contact
-      .col-6.col-md-3
+      .col-12.col-md-3
         %strong.mb-2.d-block Contact
         %p.text-muted.mb-0
           Please contact 

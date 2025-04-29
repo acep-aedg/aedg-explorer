@@ -1,6 +1,7 @@
 %section#explore-tools.py-5
   .row.align-items-center.mb-5
-    .col-lg-6.mb-4.text-start
+    / Text column: Order second on small, first on large
+    .col-12.col-md-6.order-2.order-md-1.text-start
       .mb-3
         %i.bi.bi-house-fill.fs-2
       %h3.fw-bold Find Community Energy Snapshots Effortlessly
@@ -9,13 +10,15 @@
         Dive deep into the data that powers your local energy landscape.
       = render partial: "communities/dropdown", locals: { communities: @communities, current_community: nil }
 
-    .col-lg-6
-      = image_tag "https://placehold.co/600x300", class: "img-fluid rounded"
-  .row.align-items-center
-    .col-lg-6
-      = image_tag "https://placehold.co/600x300", class: "img-fluid rounded"
+    / Image column: Order first on small, second on medium/large
+    .col-12.col-md-6.order-1.order-md-2.text-center.mb-3
+      = image_tag "https://placehold.co/400x200", class: "img-fluid rounded w-100"
 
-    .col-lg-6.text-start
+  .row.align-items-center
+    .col-12.col-md-6.text-center.mb-3
+      = image_tag "https://placehold.co/400x200", class: "img-fluid rounded w-100"
+
+    .col-12.col-md-6.text-start
       .mb-3
         %i.bi.bi-database-fill.fs-2
       %h3.fw-bold Download Energy Datasets
