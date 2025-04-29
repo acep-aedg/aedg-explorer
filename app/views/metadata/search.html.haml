@@ -1,13 +1,14 @@
-.row.mb-3
-  .col-md-4
-    .m-2
-      = render 'search_form'
-  .col-md-8.border-start
-    .mb-3
-      - if @metadata.any?
-        = render partial: 'metadata', collection: @metadata, as: :metadatum
-      - else 
-        %p.fs-2 
-          No results found. 
-          %br/
-          Try adjusting your search or using different keywords
+.container.py-3.py-sm-5
+  .row.g-4.mb-3
+    .col-md-4
+      .m-2
+        = render 'search_form'
+    .col-md-8.border-start
+      .mb-3
+        - if @metadata.any?
+          = render partial: 'metadata', collection: @metadata, as: :metadatum
+        - else 
+          %p.fs-2 
+            No results found. 
+            %br/
+            Try adjusting your search or using different keywords
