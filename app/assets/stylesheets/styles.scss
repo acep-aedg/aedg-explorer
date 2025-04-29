@@ -65,16 +65,6 @@
   }
 }
 
-.list {
-  .card {
-    transition: transform 0.2s ease-in-out;
-
-    &:hover {
-      transform: scale(1.01);
-    }
-  }
-}
-
 .hero-gradient {
   background: linear-gradient(to bottom, #e0f0ff 0%, #fff7e6 50%, #ffffff 100%);
 }
@@ -255,4 +245,11 @@
   background-color: $aedg-navy;
   color: $aedg-yellow;
   font-size: 1.25rem;
+}
+
+
+.hover-shadow:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-3px);
+  transition: all 0.3s ease;
 }
