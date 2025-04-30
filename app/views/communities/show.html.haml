@@ -1,41 +1,55 @@
+.container-fluid.p-3
+  .row
+    .col-md-3
+      .position-sticky.top-0.py-3
+        .card.mb-4
+          .card-body.text-center
+            .mb-3
+              = render "dropdown", communities: @communities, current_community: @community 
+            %h4.fw-4= @borough.name
 
-.row 
-  .col-md-3
-    .card.mb-4
-      .card-body.text-center
-        .mb-3
-          = render "dropdown", communities: @communities, current_community: @community 
-        %h4.fw-4=@borough.name
+        .d-grid.gap-2
+          %button.btn.btn-primary
+            %i.bi.bi-download
+            Download/Print
 
+          = link_to communities_path, class: 'btn btn-secondary' do 
+            %i.bi.bi-arrow-left
+            Back
 
-    .d-grid.gap-2
-      %button.btn.btn-primary
-        %i.bi.bi-download
-        Download/Print
+        %h4.mt-3 Quick Nav
+        = render "communities/sections/quick_nav", community: @community
 
-      = link_to communities_path, class: 'btn btn-secondary' do 
-        %i.bi.bi-arrow-left
-        Back
+    .col-md-9
+      .text-center.my-3
+        %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Community Summary
 
-    %h4.mt-3 Quick Nav
-    = render "communities/sections/quick_nav", community: @community
+        %h1.fw-bold.d-flex.justify-content-center.align-items-center.flex-wrap.gap-2
+          %i.bi.bi-geo-alt-fill.text-primary
+          = @community.name
 
-  .col-md-9
-    %h1.mb-4 Community Summary
-    - section_order = ["electricity", "fuel_prices", "background", "related_datasets"]
+        %h3.fw-semibold.text-secondary.mt-2
+          = @borough.name
+          - if @community.grid.present?
+            %span.text-muted.fs-4.mx-2 &bull;
+            %span.text-info= @community.grid.name
 
-    - section_order.each do |section|
-      - section_id = "#{section.parameterize}-section"
+        %hr
 
-      %button.collapse-btn.border-0.mb-1{ 
-        type: "button", 
-        data: { bs_toggle: "collapse", bs_target: "##{section_id}" }, 
-        aria: { expanded: "true", controls: section_id }
-      }
-        %i.bi.bi-chevron-down.ms-2.arrow-icon
-        %h3.m-0= section.titleize
+      - section_order = ["electricity", "fuel_prices", "background", "related_datasets"]
 
-      .collapse.show.p-1{ id: section_id }
-        = render "communities/sections/#{section}", community: @community 
-      
-      %hr/
+      - section_order.each do |section|
+        - section_id = "#{section.parameterize}-section"
+
+        %button.collapse-btn.border-0.mb-1{ 
+          type: "button", 
+          data: { bs_toggle: "collapse", bs_target: "##{section_id}" }, 
+          aria: { expanded: "true", controls: section_id }
+        }
+          %i.bi.bi-chevron-down.ms-2.arrow-icon
+          %h3.m-0= section.titleize
+
+        .collapse.show.p-1{ id: section_id }
+          = render "communities/sections/#{section}", community: @community 
+        
+        %hr/
