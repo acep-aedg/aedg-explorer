@@ -193,7 +193,6 @@ CREATE TABLE public.communities (
     slug character varying,
     regional_corporation_fips_code character varying,
     borough_fips_code character varying,
-    grid_id integer,
     dcra_code uuid,
     pce_eligible boolean,
     pce_active boolean,
@@ -256,6 +255,40 @@ CREATE SEQUENCE public.communities_legislative_districts_id_seq
 --
 
 ALTER SEQUENCE public.communities_legislative_districts_id_seq OWNED BY public.communities_legislative_districts.id;
+
+
+--
+-- Name: community_grids; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.community_grids (
+    id bigint NOT NULL,
+    community_fips_code character varying NOT NULL,
+    grid_id bigint,
+    connection_year integer,
+    termination_year integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: community_grids_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.community_grids_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: community_grids_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.community_grids_id_seq OWNED BY public.community_grids.id;
 
 
 --
@@ -866,6 +899,13 @@ ALTER TABLE ONLY public.communities_legislative_districts ALTER COLUMN id SET DE
 
 
 --
+-- Name: community_grids id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.community_grids ALTER COLUMN id SET DEFAULT nextval('public.community_grids_id_seq'::regclass);
+
+
+--
 -- Name: datasets id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1019,6 +1059,14 @@ ALTER TABLE ONLY public.communities
 
 
 --
+-- Name: community_grids community_grids_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.community_grids
+    ADD CONSTRAINT community_grids_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: datasets datasets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1147,6 +1195,13 @@ ALTER TABLE ONLY public.yearly_generations
 
 
 --
+-- Name: idx_on_community_fips_code_grid_id_connection_year_dab7f92833; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_on_community_fips_code_grid_id_connection_year_dab7f92833 ON public.community_grids USING btree (community_fips_code, grid_id, connection_year);
+
+
+--
 -- Name: index_aedg_imports_on_importable; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1214,6 +1269,13 @@ CREATE INDEX index_communities_on_location ON public.communities USING gist (loc
 --
 
 CREATE UNIQUE INDEX index_communities_on_slug ON public.communities USING btree (slug);
+
+
+--
+-- Name: index_community_grids_on_grid_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_community_grids_on_grid_id ON public.community_grids USING btree (grid_id);
 
 
 --
@@ -1475,11 +1537,27 @@ ALTER TABLE ONLY public.monthly_generations
 
 
 --
+-- Name: community_grids fk_rails_51105f953f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.community_grids
+    ADD CONSTRAINT fk_rails_51105f953f FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
+
+
+--
 -- Name: communities_legislative_districts fk_rails_62b26fb9e7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.communities_legislative_districts
     ADD CONSTRAINT fk_rails_62b26fb9e7 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
+
+
+--
+-- Name: community_grids fk_rails_7d3a74461c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.community_grids
+    ADD CONSTRAINT fk_rails_7d3a74461c FOREIGN KEY (grid_id) REFERENCES public.grids(id);
 
 
 --
@@ -1515,14 +1593,6 @@ ALTER TABLE ONLY public.communities_legislative_districts
 
 
 --
--- Name: communities fk_rails_bfab6d8f8f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.communities
-    ADD CONSTRAINT fk_rails_bfab6d8f8f FOREIGN KEY (grid_id) REFERENCES public.grids(id);
-
-
---
 -- Name: communities fk_rails_d9078d9620; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1537,6 +1607,8 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250422213740'),
+('20250422211727'),
 ('20250421165405'),
 ('20250417191731'),
 ('20250417191730'),
