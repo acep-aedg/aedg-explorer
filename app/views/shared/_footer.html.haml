@@ -8,8 +8,10 @@
           %img{ src: footer_logo, alt: "AEDG Logo", width: "150", class: "me-3 mb-3" }
 
         .mt-3.mt-lg-0
-          %strong.mb-2.d-block= about_title
-          %p.text-muted.mb-0= about_text
+          %strong.mb-2.d-block
+            Alaska Energy Data Gateway
+          %p.text-muted.mb-0 
+            The Alaska Energy Data Gateway is a public resource funded by the State of Alaska to ensure energy and socioeconomic data is easily accessible.
 
       / Quick Links
       .col-12.col-md-3.offset-lg-1
@@ -25,12 +27,12 @@
         %strong.mb-2.d-block Contact
         %p.text-muted.mb-0
           Please contact 
-          %a.text-decoration-none{ href: "mailto:#{contact_email}" }
-            = contact_email
+          %a.text-decoration-none{ href: "mailto:[AEDG_EMAIL]@alaska.edu" }
+            [AEDG_EMAIL]@alaska.edu
           with any questions or comments.
 
     / Footer bottom
     .mt-4
       %hr.my-4
       %p.text-center.text-muted.small
-        = copyright_text
+        &copy; #{Time.current.year} Alaska Energy Data Gateway. All rights reserved.
