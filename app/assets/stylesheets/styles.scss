@@ -1,18 +1,15 @@
+
 .navbar {
-  padding: 1rem 0;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15),
     inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 
   .nav-link {
     color: $white;
-    font-weight: 500;
-    size: 1.25rem;
 
-    &:hover {
-      color: $aedg-yellow;
-    }
-
-    &.active {
+    &:hover,
+    &.active,
+    &.show,
+    .dropdown.show & {
       color: $aedg-yellow;
     }
   }
@@ -45,7 +42,6 @@
       }
 
       .dropdown-item {
-        color: $aedg-navy;
         padding: 1rem 2rem;
         font-size: 1rem;
         font-weight: 500;
@@ -62,6 +58,17 @@
         }
       }
     }
+  }
+}
+
+// Hover action only large screens
+@media (min-width: 992px) {
+  .navbar .dropdown-toggle::after {
+    display: none;
+  }
+
+  .navbar .dropdown-toggle {
+    pointer-events: none;
   }
 }
 
@@ -246,7 +253,6 @@
   color: $aedg-yellow;
   font-size: 1.25rem;
 }
-
 
 .hover-shadow:hover {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
