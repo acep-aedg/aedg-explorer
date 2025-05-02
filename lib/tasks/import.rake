@@ -23,6 +23,7 @@ namespace :import do
     Rake::Task['import:house_districts'].invoke
     Rake::Task['import:senate_districts'].invoke
     Rake::Task['import:communities_legislative_districts'].invoke
+    Rake::Task['import:fuel_prices'].invoke
     puts 'Import complete'
   end
 
@@ -207,5 +208,22 @@ namespace :import do
   task communities_legislative_districts: :environment do
     filepath = Rails.root.join('db/imports/communities_legislative_districts.csv')
     ImportHelpers.import_csv(filepath, CommunitiesLegislativeDistrict)
+  end
+
+  desc 'Import Fuel Prices Data from .csv file'
+  task fuel_prices: :environment do
+    if FuelPrice.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Fuel Price table was not empty before starting import!
+        To clear it and all realted tables, run:
+
+            rails delete:fuel_prices
+
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/fuel_prices.csv')
+    ImportHelpers.import_csv(filepath, FuelPrice)
   end
 end

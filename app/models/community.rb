@@ -21,6 +21,7 @@ class Community < ApplicationRecord
   has_many :capacities, through: :grids
   has_many :monthly_generations, through: :grids
   has_many :yearly_generations, through: :grids
+  has_many :fuel_prices, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
 
   # Handle the case where the name is not unique
   def slug_candidates
