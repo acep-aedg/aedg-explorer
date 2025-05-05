@@ -13,7 +13,8 @@ class GeometryTypeValidatorTest < ActiveSupport::TestCase
     geometry.stubs(:geometry_type).returns(stub(type_name: 'Polygon'))
 
     model = MockModel.new(geometry: geometry)
-    assert model.valid?
+    model.valid?
+    assert model.errors[:geometry].empty?
   end
 
   test 'is invalid when geometry type is not allowed' do
