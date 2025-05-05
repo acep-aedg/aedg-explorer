@@ -1,0 +1,53 @@
+%section#faq.py-5
+  %h5.text-muted.mb-3 FAQ
+  %h2.fw-bold.mb-4 Frequently Asked Questions
+
+  .d-flex.flex-column.flex-sm-row.flex-nowrap.gap-5.align-items-start
+    %ul.nav.flex-row.flex-sm-column.nav-pills.gap-3{ id: "faq-tab", role: "tablist", 'aria-orientation': "vertical" }
+      - faq_categories.each_with_index do |category, i|
+        %li.nav-item
+          %button.nav-link.fw-semibold.text-nowrap.text-start.text-md-center.rounded-pill.me-2{
+            id: "#{category['name'].parameterize}-tab",
+            class: ("active" if i == 0),
+            data: { bs_toggle: "pill", bs_target: "##{category['name'].parameterize}" },
+            type: "button",
+            role: "tab",
+            aria: {
+              controls: "#{category['name'].parameterize}",
+              selected: (i == 0).to_s
+            }
+          }
+            = category['name'].titleize
+
+    .tab-content.flex-grow-1{ id: "faq-tabContent" }
+      - faq_categories.each_with_index do |category, i|
+        .tab-pane.fade{ 
+          class: ("show active" if i == 0),
+          id: category['name'].parameterize,
+          role: "tabpanel",
+          aria: { labelledby: "#{category['name'].parameterize}-tab" }
+        }
+          .accordion{ id: "#{category['name'].parameterize}-accordion" }
+            - category['questions'].each_with_index do |item, index|
+              .accordion-item
+                %h2.accordion-header{ id: "heading-#{category['name'].parameterize}-#{index}" }
+                  %button.accordion-button.fw-bold{ 
+                    class: ("collapsed" unless index == 0),
+                    type: "button",
+                    data: {
+                      bs_toggle: "collapse",
+                      bs_target: "#collapse-#{category['name'].parameterize}-#{index}"
+                    },
+                    aria: {
+                      expanded: (index == 0).to_s,
+                      controls: "collapse-#{category['name'].parameterize}-#{index}"
+                    }
+                  }
+                    = item['question']
+                .accordion-collapse.collapse{ 
+                  class: ("show" if index == 0),
+                  id: "collapse-#{category['name'].parameterize}-#{index}",
+                  aria: { labelledby: "heading-#{category['name'].parameterize}-#{index}" }
+                }
+                  .accordion-body.bg-light.text-muted
+                    = simple_format(item['answer'])

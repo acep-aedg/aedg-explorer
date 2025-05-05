@@ -1,0 +1,26 @@
+categories:
+  - name: "general"
+    questions:
+      - question: "What is the Alaska Energy Data Gateway?"
+        answer: "The Alaska Energy Data Gateway is a centralized platform providing access to energy data across Alaska."
+      - question: "Who can use the data portal?"
+        answer: "The data portal is available to anyone interested in Alaska's energy data, including researchers, policymakers, industry professionals, and the general public."
+
+  - name: "data access"
+    questions:
+      - question: "How do I access the data on the portal?"
+        answer: "You can access the data by browsing datasets on the portal or using the search function to find specific datasets."
+      - question: "Do I need an account to download data?"
+        answer: "No, all datasets are publicly available and can be downloaded without an account."
+
+  - name: "technical"
+    questions:
+      - question: "What file formats are the datasets available in?"
+        answer: "Datasets are typically available in CSV, JSON, or GeoJSON formats for easy use in analysis tools."
+      - question: "How often is the data updated?"
+        answer: "The update frequency varies by dataset. Check the dataset metadata for details."
+
+  - name: "support"
+    questions:
+      - question: "How can I contact support if I encounter issues?"
+        answer: "You can contact support by emailing [akenergygateway@alaska.edu](mailto:akenergygateway@alaska.edu)"

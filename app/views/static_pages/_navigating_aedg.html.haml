@@ -1,0 +1,29 @@
+%section#navigate.py-5
+  %h5.text-muted.mb-3 Explore
+  %h2.fw-bold.mb-4 How to Navigate the AEDG
+
+  .row.text-start
+    .col-md-4.mb-4
+      .circle-icon.mb-4
+        %i.bi.bi-grid-3x3-gap.fs-4
+      %h5.fw-bold Step 1: Access the Data Apps
+      %p.text-muted.mb-2
+        Visit the Data Explorer or Community Dashboards to get started.
+
+      .d-flex.flex-column.gap-2.mt-3
+        = link_to 'Data Explorer →', metadata_path, class: 'btn btn-primary btn-sm'
+        = link_to 'Community Summaries →', communities_path, class: 'btn btn-primary btn-sm'
+
+    .col-md-4.mb-4        
+      .circle-icon.mb-4
+        %i.bi.bi-search.fs-4
+      %h5.fw-bold Step 2: Search for Relevant Data
+      %p.text-muted
+        Once inside, use search tools and filters to find datasets of interest or explore community-specific insights by using the "Quick Links" feature.
+
+    .col-md-4.mb-4
+      .circle-icon.mb-4
+        %i.bi.bi-download.fs-4
+      %h5.fw-bold Step 3: Download and Analyze Data
+      %p.text-muted
+        Download datasets or summaries directly to your device for further analysis and research.
