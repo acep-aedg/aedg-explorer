@@ -4,6 +4,7 @@ SimpleCov.start 'rails'
 
 require_relative '../config/environment'
 require 'rails/test_help'
+require 'mocha/minitest'
 
 module ActiveSupport
   class TestCase
