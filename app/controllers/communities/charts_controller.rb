@@ -16,8 +16,7 @@ class Communities::ChartsController < ApplicationController
   end
 
   def production_yearly
-    grouped_data = @community.grid.yearly_generations.grouped_net_generation_by_year
-    dataset = grouped_data.map { |year, value| [year.to_s, value] }
+    dataset = @community.grid.yearly_generations.latest_year.grouped_net_generation_by_fuel_type
     render json: dataset
   end
 
