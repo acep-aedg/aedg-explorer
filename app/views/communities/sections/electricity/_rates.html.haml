@@ -1,2 +1,26 @@
-.placeholder-card
-  %h4 Rates
+- if (latest_rate = @community.electric_rates.most_recent.first)
+  %h4.mb-3 Rates
+  .row.g-3
+    - if latest_rate.residential_rate
+      .col-12.col-md-4
+        .d-flex.align-items-center.bg-body-secondary.rounded.p-3
+          %i.bi.bi-house-door-fill.text-primary.fs-3.me-3
+          .flex-grow-1
+            .text-muted Residential Rate (#{latest_rate.year})
+            .fw-semibold= number_to_currency(latest_rate.residential_rate, unit: "$") + "/kWh"
+
+    - if latest_rate.commercial_rate
+      .col-12.col-md-4
+        .d-flex.align-items-center.bg-body-secondary.rounded.p-3
+          %i.bi.bi-buildings-fill.text-success.fs-3.me-3
+          .flex-grow-1
+            .text-muted Commercial Rate (#{latest_rate.year})
+            .fw-semibold= number_to_currency(latest_rate.commercial_rate, unit: "$") + "/kWh"
+
+    - if latest_rate.industrial_rate
+      .col-12.col-md-4
+        .d-flex.align-items-center.bg-body-secondary.rounded.p-3
+          %i.bi.bi-building-fill-gear.text-primary-emphasis.fs-3.me-3
+          .flex-grow-1
+            .text-muted Industrial Rate (#{latest_rate.year})
+            .fw-semibold= number_to_currency(latest_rate.industrial_rate, unit: "$") + "/kWh"

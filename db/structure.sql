@@ -327,6 +327,41 @@ ALTER SEQUENCE public.datasets_id_seq OWNED BY public.datasets.id;
 
 
 --
+-- Name: electric_rates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.electric_rates (
+    id bigint NOT NULL,
+    reporting_entity_id bigint NOT NULL,
+    year integer,
+    residential_rate numeric,
+    commercial_rate numeric,
+    industrial_rate numeric,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: electric_rates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.electric_rates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: electric_rates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.electric_rates_id_seq OWNED BY public.electric_rates.id;
+
+
+--
 -- Name: employments; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -984,6 +1019,13 @@ ALTER TABLE ONLY public.datasets ALTER COLUMN id SET DEFAULT nextval('public.dat
 
 
 --
+-- Name: electric_rates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.electric_rates ALTER COLUMN id SET DEFAULT nextval('public.electric_rates_id_seq'::regclass);
+
+
+--
 -- Name: employments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1157,6 +1199,14 @@ ALTER TABLE ONLY public.community_grids
 
 ALTER TABLE ONLY public.datasets
     ADD CONSTRAINT datasets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: electric_rates electric_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.electric_rates
+    ADD CONSTRAINT electric_rates_pkey PRIMARY KEY (id);
 
 
 --
@@ -1391,6 +1441,13 @@ CREATE INDEX index_community_grids_on_grid_id ON public.community_grids USING bt
 --
 
 CREATE INDEX index_datasets_on_metadatum_id ON public.datasets USING btree (metadatum_id);
+
+
+--
+-- Name: index_electric_rates_on_reporting_entity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_electric_rates_on_reporting_entity_id ON public.electric_rates USING btree (reporting_entity_id);
 
 
 --
@@ -1659,6 +1716,14 @@ ALTER TABLE ONLY public.monthly_generations
 
 
 --
+-- Name: electric_rates fk_rails_45b5e43dbc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.electric_rates
+    ADD CONSTRAINT fk_rails_45b5e43dbc FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
+
+
+--
 -- Name: community_grids fk_rails_51105f953f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1753,6 +1818,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250507214459'),
 ('20250507174304'),
 ('20250505231517'),
 ('20250424230514'),

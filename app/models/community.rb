@@ -23,6 +23,7 @@ class Community < ApplicationRecord
   has_many :yearly_generations, through: :grids
   has_many :fuel_prices, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   belongs_to :reporting_entity, optional: true
+  has_many :electric_rates, through: :reporting_entity
 
   # Handle the case where the name is not unique
   def slug_candidates

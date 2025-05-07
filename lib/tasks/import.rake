@@ -12,6 +12,7 @@ namespace :import do
     Rake::Task['import:regional_corporations'].invoke
     Rake::Task['import:grids'].invoke
     Rake::Task['import:reporting_entities'].invoke
+    Rake::Task['import:electric_rates'].invoke
     Rake::Task['import:communities'].invoke
     Rake::Task['import:community_grids'].invoke
     Rake::Task['import:populations'].invoke
@@ -82,6 +83,18 @@ namespace :import do
   task grids: :environment do
     filepath = Rails.root.join('db/imports/grids.csv')
     ImportHelpers.import_csv(filepath, Grid)
+  end
+
+  desc 'Import Reporting Entities Data from .csv file'
+  task reporting_entities: :environment do
+    filepath = Rails.root.join('db/imports/reporting_entities.csv')
+    ImportHelpers.import_csv(filepath, ReportingEntity)
+  end
+
+  desc 'Import Electric Rates Data from .csv file'
+  task electric_rates: :environment do
+    filepath = Rails.root.join('db/imports/electric_rates.csv')
+    ImportHelpers.import_csv(filepath, ElectricRate)
   end
 
   desc 'Import Community Data from .geojson file'
@@ -228,9 +241,5 @@ namespace :import do
     ImportHelpers.import_csv(filepath, FuelPrice)
   end
 
-  desc 'Import Reporting Entities Data from .csv file'
-  task reporting_entities: :environment do
-    filepath = Rails.root.join('db/imports/reporting_entities.csv')
-    ImportHelpers.import_csv(filepath, ReportingEntity)
-  end
+  
 end
