@@ -4,7 +4,7 @@
   .d-flex.justify-content-between.align-items-center
     .nav.nav-tabs
       %li.nav-item
-        = link_to "Seasonal Trends Chart", "#fuel-prices-chart",
+        = link_to "Charts", "#fuel-prices-chart",
           class: "nav-link active",
           data: { bs_toggle: "tab" }
       %li.nav-item
@@ -14,6 +14,6 @@
 
 .tab-content
   #fuel-prices-chart.tab-pane.fade.show.active
-    = render "communities/sections/fuel_prices/line_chart"
+    = render "communities/sections/fuel_prices/chart"
   #fuel-prices-data.tab-pane.fade
     = render "communities/sections/fuel_prices/datatable"

@@ -90,4 +90,17 @@ module Communities::ChartsHelper
         }
       end
   end
+
+  def fuel_prices_by_season_chart_data(fuel_prices)
+    fuel_prices
+      .group_by(&:reporting_season)
+      .map do |season, recs|
+        {
+          name: season,
+          data: recs
+            .group_by(&:reporting_year)
+            .transform_values { |a| a.sum(&:price).to_f }
+        }
+      end
+  end
 end
