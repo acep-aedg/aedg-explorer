@@ -1,0 +1,7 @@
+= line_chart fuel_prices_chart_data(@community.fuel_prices),
+  title:       "Seasonal Fuel Price Trends",
+  xtitle:      "Year & Season",
+  ytitle:      "Price (USD)",
+  prefix:      "$",
+  legend:      true,
+  library:     { plotOptions: { series: { marker: { enabled: true } } }}, download:    {filename: "#{@community.name.parameterize}_fuel_prices", format:   "png"}

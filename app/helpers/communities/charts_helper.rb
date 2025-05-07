@@ -75,4 +75,19 @@ module Communities::ChartsHelper
       }
     ]
   end
+
+  def fuel_prices_chart_data(fuel_prices)
+    fuel_prices
+      .group_by(&:fuel_type)
+      .map do |fuel_type, recs|
+        {
+          name: fuel_type.humanize,
+          data: recs
+            .sort_by { |r| [r.reporting_year, r.reporting_season] }
+            .each_with_object({}) do |r, h|
+              h["#{r.reporting_year} #{r.reporting_season}"] = r.price.to_f
+            end
+        }
+      end
+  end
 end

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         get :population_employment
         get :population_detail
         get :production_yearly
+        get :fuel_prices
       end
     end
 

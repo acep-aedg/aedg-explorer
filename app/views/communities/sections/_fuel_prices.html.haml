@@ -1,2 +1,19 @@
-.placeholder-card 
-  %h4 Fuel Prices
+%h4.mb-3 Fuel Prices
+
+.mb-3
+  .d-flex.justify-content-between.align-items-center
+    .nav.nav-tabs
+      %li.nav-item
+        = link_to "Chart", "#fuel-prices-chart",
+          class: "nav-link active",
+          data: { bs_toggle: "tab" }
+      %li.nav-item
+        = link_to "Data", "#fuel-prices-data",
+          class: "nav-link",
+          data: { bs_toggle: "tab" }
+
+.tab-content
+  #fuel-prices-chart.tab-pane.fade.show.active
+    = render "communities/sections/fuel_prices/line_chart"
+  #fuel-prices-data.tab-pane.fade
+    = render "communities/sections/fuel_prices/datatable"
