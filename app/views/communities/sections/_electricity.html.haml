@@ -13,10 +13,11 @@
 - if @community.grid&.capacities&.exists?
   .mb-3
     = render 'communities/sections/electricity/grid_capacity'
+- if @community.reporting_entity
+  .mb-3
+    = render 'communities/sections/electricity/utilities'
 
 .row.g-3.row-cols-2
-  - if @community.name
-    .col= render 'communities/sections/electricity/utility', community: @community
   - if @community.name
     .col= render 'communities/sections/electricity/rates', community: @community
   - if @community.name

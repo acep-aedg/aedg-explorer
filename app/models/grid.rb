@@ -7,5 +7,6 @@ class Grid < ApplicationRecord
   has_many :yearly_generations
   has_many :monthly_generations
   has_many :capacities
+  has_many :reporting_entities
   validates :name, presence: true, uniqueness: true
 end

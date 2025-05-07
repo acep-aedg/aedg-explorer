@@ -11,6 +11,7 @@ namespace :import do
     Rake::Task['import:boroughs'].invoke
     Rake::Task['import:regional_corporations'].invoke
     Rake::Task['import:grids'].invoke
+    Rake::Task['import:reporting_entities'].invoke
     Rake::Task['import:communities'].invoke
     Rake::Task['import:community_grids'].invoke
     Rake::Task['import:populations'].invoke
@@ -225,5 +226,11 @@ namespace :import do
 
     filepath = Rails.root.join('db/imports/fuel_prices.csv')
     ImportHelpers.import_csv(filepath, FuelPrice)
+  end
+
+  desc 'Import Reporting Entities Data from .csv file'
+  task reporting_entities: :environment do
+    filepath = Rails.root.join('db/imports/reporting_entities.csv')
+    ImportHelpers.import_csv(filepath, ReportingEntity)
   end
 end

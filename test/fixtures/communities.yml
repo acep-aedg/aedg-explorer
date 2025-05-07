@@ -13,6 +13,7 @@ one:
   slug: 'test-community-one'
   location: 'POINT(-149.1 64.1)'
   regional_corporation_fips_code: '0000001'
+  reporting_entity: one
 
 
 two:
@@ -28,3 +29,4 @@ two:
   slug: 'test-community-two'
   location: 'POINT(-149.1 64.1)'
   regional_corporation_fips_code: '0000002'
+  reporting_entity: two
