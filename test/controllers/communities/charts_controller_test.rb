@@ -23,7 +23,7 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
     generation = @grid.yearly_generations.first
-    assert_equal [[generation.year.to_s, generation.net_generation_mwh]], body
+    assert_equal [[generation.fuel_type.to_s, generation.net_generation_mwh]], body
   end
 
   test 'should get capacity_yearly' do
@@ -32,7 +32,7 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
     capacity = @grid.capacities.first
-    assert_equal capacity.capacity_mw, body[capacity.fuel_type]
+    assert_equal [[capacity.fuel_type.to_s, capacity.capacity_mw]], body
   end
 
   test 'should get population_employment' do
