@@ -9,8 +9,8 @@
         .text-muted PCE Status
         .fw-semibold= @community.pce_eligible ? "Eligible" : "Ineligible"
 
-  - main_utility = @community.reporting_entity&.utility_name
-  - other_utilities = @community.grid.reporting_entities.map(&:utility_name).uniq.reject { |name| name == main_utility }
+  - main_utility = @community.reporting_entity&.name
+  - other_utilities = @community.grid.reporting_entities.map(&:name).uniq.reject { |name| name == main_utility }
   
   .col-12.col-lg-6
     .d-flex.align-items-center.bg-body-secondary.rounded.p-3

@@ -723,7 +723,7 @@ ALTER SEQUENCE public.regional_corporations_id_seq OWNED BY public.regional_corp
 
 CREATE TABLE public.reporting_entities (
     id bigint NOT NULL,
-    utility_name character varying,
+    name character varying,
     year integer,
     grid_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,

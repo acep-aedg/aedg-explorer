@@ -11,7 +11,7 @@ module ReportingEntityAttributes
       ReportingEntity.create!(
         aedg_id: properties[:id],
         year: properties[:year],
-        utility_name: properties[:utility_name],
+        name: properties[:name],
         grid: Grid.from_aedg_id(properties[:grid_id]).first
       )
     end
