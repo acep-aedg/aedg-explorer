@@ -28,9 +28,7 @@ class MonthlyGeneration < ApplicationRecord
 
     max_generation = monthly_data.values.max || 0
     min_generation = monthly_data.values.min || 0
-    avg_generation = if monthly_data.any?
-      (monthly_data.values.sum.to_f / monthly_data.size).round(2)
-    end
+    avg_generation = ((monthly_data.values.sum.to_f / monthly_data.size).round(2) if monthly_data.any?)
 
     {
       max_generation: max_generation,
