@@ -169,6 +169,8 @@ GEM
     matrix (0.4.2)
     mini_mime (1.1.5)
     minitest (5.25.5)
+    mocha (2.7.1)
+      ruby2_keywords (>= 0.0.5)
     msgpack (1.8.0)
     multi_json (1.15.0)
     net-imap (0.5.6)
@@ -281,6 +283,7 @@ GEM
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.38.0, < 2.0)
     ruby-progressbar (1.13.0)
+    ruby2_keywords (0.0.5)
     ruby_parser (3.21.1)
       racc (~> 1.5)
       sexp_processor (~> 4.16)
@@ -360,6 +363,7 @@ DEPENDENCIES
   html2haml (~> 2.3)
   importmap-rails
   jbuilder
+  mocha
   pg (~> 1.1)
   pg_search (~> 2.3)
   puma (>= 5.0)
