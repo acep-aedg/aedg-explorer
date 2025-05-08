@@ -7,11 +7,11 @@ class ReportingEntityAttributesTest < ActiveSupport::TestCase
 
     assert_difference -> { ReportingEntity.count }, +1 do
       reporting_entity = ReportingEntity.import_aedg!({
-        'id' => 1,
-        'name' => 'Mocked Utility',
-        'year' => 2020,
-        'grid_id' => 1
-      })
+                                                        'id' => 1,
+                                                        'name' => 'Mocked Utility',
+                                                        'year' => 2020,
+                                                        'grid_id' => 1
+                                                      })
 
       assert_equal 'Mocked Utility', reporting_entity.name
       assert_equal 1, reporting_entity.aedg_id
@@ -23,10 +23,10 @@ class ReportingEntityAttributesTest < ActiveSupport::TestCase
   test 'import_aedg! raises error if id is missing' do
     assert_raises(RuntimeError, 'id is required') do
       ReportingEntity.import_aedg!({
-        'name' => 'Missing ID Utility',
-        'year' => 2021,
-        'grid_id' => 1
-      })
+                                     'name' => 'Missing ID Utility',
+                                     'year' => 2021,
+                                     'grid_id' => 1
+                                   })
     end
   end
 
@@ -34,11 +34,11 @@ class ReportingEntityAttributesTest < ActiveSupport::TestCase
     Grid.stubs(:from_aedg_id).with(999).returns([])
     assert_raises(ActiveRecord::RecordInvalid) do
       ReportingEntity.import_aedg!({
-        'id' => 2,
-        'name' => 'No Grid Utility',
-        'year' => 2022,
-        'grid_id' => 999
-      })
+                                     'id' => 2,
+                                     'name' => 'No Grid Utility',
+                                     'year' => 2022,
+                                     'grid_id' => 999
+                                   })
     end
   end
 end
