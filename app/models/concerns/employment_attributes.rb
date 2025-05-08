@@ -16,8 +16,8 @@ module EmploymentAttributes
     def assign_aedg_attributes(params)
       assign_attributes(
         community_fips_code: params[:community_fips_code],
-        residents_employed: params[:residentsemployed],
-        unemployment_insurance_claimants: params[:unemploymentinsuranceclaimants],
+        residents_employed: params[:residents_employed],
+        unemployment_insurance_claimants: params[:unemployment_insurance_claimants],
         measurement_year: params[:measurement_year]
       )
     end
