@@ -151,10 +151,11 @@ CREATE TABLE public.capacities (
     id bigint NOT NULL,
     grid_id integer,
     capacity_mw double precision,
-    fuel_type character varying,
     year integer,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    fuel_type_code character varying,
+    fuel_type_name character varying
 );
 
 
@@ -232,9 +233,9 @@ CREATE TABLE public.communities_legislative_districts (
     election_region integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    community_fips_code character varying NOT NULL,
     house_district_id bigint NOT NULL,
-    senate_district_id bigint NOT NULL
+    senate_district_id bigint NOT NULL,
+    community_fips_code character varying
 );
 
 
@@ -575,11 +576,12 @@ CREATE TABLE public.monthly_generations (
     id bigint NOT NULL,
     grid_id integer,
     net_generation_mwh numeric,
-    fuel_type character varying,
     year integer,
     month integer,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    fuel_type_code character varying,
+    fuel_type_name character varying
 );
 
 
@@ -942,10 +944,11 @@ CREATE TABLE public.yearly_generations (
     id bigint NOT NULL,
     grid_id integer,
     net_generation_mwh integer,
-    fuel_type character varying,
     year integer,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    fuel_type_code character varying,
+    fuel_type_name character varying
 );
 
 
@@ -1370,13 +1373,6 @@ CREATE INDEX index_boroughs_on_boundary ON public.boroughs USING gist (boundary)
 --
 
 CREATE UNIQUE INDEX index_boroughs_on_fips_code ON public.boroughs USING btree (fips_code);
-
-
---
--- Name: index_communities_legislative_districts_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_communities_legislative_districts_on_community_fips_code ON public.communities_legislative_districts USING btree (community_fips_code);
 
 
 --
@@ -1817,6 +1813,9 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250508195941'),
+('20250508194355'),
+('20250508193222'),
 ('20250507235806'),
 ('20250507214459'),
 ('20250507174304'),

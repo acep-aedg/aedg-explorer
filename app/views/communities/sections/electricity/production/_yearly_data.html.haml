@@ -2,11 +2,13 @@
   %thead
     %tr
       %th Net Generation (MWh)
-      %th Fuel Type
+      %th Fuel Type Code
+      %th Fuel Type Name
       %th Year
   %tbody
     - @community.grid.yearly_generations.each do |generation|
       %tr
         %td= generation.net_generation_mwh
-        %td= generation.fuel_type
+        %td= generation.fuel_type_code
+        %td= generation.fuel_type_name
         %td= generation.year

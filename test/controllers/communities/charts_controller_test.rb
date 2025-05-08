@@ -31,8 +31,11 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
+    label, value = body.first
     capacity = @grid.capacities.first
-    assert_equal capacity.capacity_mw, body[capacity.fuel_type]
+    assert_includes label, capacity.fuel_type_code
+    assert_includes label, capacity.fuel_type_name
+    assert_equal capacity.capacity_mw, value
   end
 
   test 'should get population_employment' do

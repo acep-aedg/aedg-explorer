@@ -3,11 +3,13 @@
 one:
   grid: one
   net_generation_mwh: 5000
-  fuel_type: 'NG'
+  fuel_type_code: 'NG'
+  fuel_type_name: 'Natural Gas'
   year: 2020
 
 two:
   grid: two
   net_generation_mwh: 1500
-  fuel_type: 'DFO'
+  fuel_type_code: 'DFO'
+  fuel_type_name: 'Distillate Fuel Oil'
   year: 2021

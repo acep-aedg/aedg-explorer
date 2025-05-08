@@ -22,7 +22,17 @@ class Communities::ChartsController < ApplicationController
   end
 
   def capacity_yearly
-    dataset = @community.grid.capacities.latest_year.group(:fuel_type).sum(:capacity_mw)
+    latest_year = @community.grid.capacities.maximum(:year)
+
+    # Get all matching records, not just the aggregate
+    records = @community.grid.capacities.where(year: latest_year).select(:fuel_type_code, :fuel_type_name, :capacity_mw)
+    grouped = records.group_by(&:fuel_type_code)
+
+    dataset = grouped.map do |code, rows|
+      name = rows.first.fuel_type_name
+      label = name.present? ? "#{name} (#{code})" : code
+      [label, rows.sum(&:capacity_mw)]
+    end
     render json: dataset
   end
 
