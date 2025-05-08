@@ -6,7 +6,7 @@
       - pce_icon = @community.pce_eligible ? "bi-patch-check-fill text-success" : "bi-x-circle-fill text-danger"
       %i{ class: "bi #{pce_icon} fs-4 me-3" }
       .flex-grow-1
-        .text-muted PCE Status
+        .text-muted Price Cost Equalization (PCE) Status
         .fw-semibold= @community.pce_eligible ? "Eligible" : "Ineligible"
 
   - main_utility = @community.reporting_entity&.name

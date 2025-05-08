@@ -1,4 +1,4 @@
-.container-fluid.p-3
+.container-fluid.p-3.mt-n3.mt-sm-n5
   .row
     .col-md-3
       .position-sticky.top-0.py-3
@@ -28,7 +28,7 @@
           %i.bi.bi-geo-alt-fill.text-primary
           = @community.name
 
-        %h3.fw-semibold.text-secondary.mt-2
+        %h4.fw-semibold.text-secondary.mt-2
           = @borough.name
           - if @community.grid.present?
             %span.text-muted.fs-4.mx-2 &bull;
