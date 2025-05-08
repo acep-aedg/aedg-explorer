@@ -187,7 +187,6 @@ CREATE TABLE public.communities (
     name character varying,
     latitude numeric,
     longitude numeric,
-    ansi_code character varying,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     slug character varying,
@@ -1388,13 +1387,6 @@ CREATE INDEX index_communities_legislative_districts_on_senate_district_id ON pu
 
 
 --
--- Name: index_communities_on_ansi_code; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_communities_on_ansi_code ON public.communities USING btree (ansi_code);
-
-
---
 -- Name: index_communities_on_fips_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1818,6 +1810,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250507235806'),
 ('20250507214459'),
 ('20250507174304'),
 ('20250505231517'),

@@ -21,7 +21,6 @@ module CommunityAttributes
         name: params[:name],
         regional_corporation_fips_code: params[:regional_corporation_fips_code],
         borough_fips_code: params[:borough_fips_code],
-        ansi_code: params[:ansi_code],
         dcra_code: params[:dcra_code],
         pce_eligible: params[:pce_eligible],
         pce_active: params[:pce_active],
