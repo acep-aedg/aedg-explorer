@@ -6,7 +6,9 @@ class YearlyGeneration < ApplicationRecord
             uniqueness: { scope: %i[year fuel_type],
                           message: 'combination of grid_id, year, and fuel type must be unique' }
 
-  scope :latest_year, -> { where(year: maximum(:year)) }
+  def self.latest_year_for(grid)
+    where(grid: grid).maximum(:year)
+  end
 
   scope :grouped_net_generation_by_fuel_type, lambda {
     group(:fuel_type).sum(:net_generation_mwh)

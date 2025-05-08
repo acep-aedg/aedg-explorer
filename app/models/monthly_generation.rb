@@ -14,15 +14,23 @@ class MonthlyGeneration < ApplicationRecord
     where(year: year).group(:month).sum(:net_generation_mwh)
   }
 
-  def self.latest_year
-    maximum(:year)
+  def self.latest_year_for(grid)
+    where(grid: grid).maximum(:year)
   end
 
-  def self.generation_stats(year = latest_year)
-    monthly_data = sum_net_generation_by_month(year)
+  def self.generation_stats_for(grid)
+    scoped = where(grid: grid)
+    year = scoped.maximum(:year)
+    return {} unless year
+
+    latest_year_records = scoped.where(year: year)
+    monthly_data = latest_year_records.group(:month).sum(:net_generation_mwh)
+
     max_generation = monthly_data.values.max || 0
     min_generation = monthly_data.values.min || 0
-    avg_generation = (monthly_data.values.sum.to_f / monthly_data.size).round(2) if monthly_data.any?
+    avg_generation = if monthly_data.any?
+      (monthly_data.values.sum.to_f / monthly_data.size).round(2)
+    end
 
     {
       max_generation: max_generation,

@@ -3,7 +3,8 @@ class Communities::ChartsController < ApplicationController
   before_action :set_community
 
   def production_monthly
-    grouped_data = @community.grid.monthly_generations.grouped_net_generation_by_year_month
+    latest_year = MonthlyGeneration.latest_year_for(@community.grid)
+    grouped_data = @community.grid.monthly_generations.where(year: latest_year).grouped_net_generation_by_year_month
 
     dataset = grouped_data.keys.map(&:first).uniq.sort.map do |year|
       monthly_data = (1..12).map do |month|
@@ -11,18 +12,19 @@ class Communities::ChartsController < ApplicationController
       end.to_h
       { name: year.to_s, data: monthly_data }
     end
-
     render json: dataset
   end
 
   def production_yearly
-    data = @community.grid.yearly_generations.latest_year.grouped_net_generation_by_fuel_type
+    latest_year = YearlyGeneration.latest_year_for(@community.grid)
+    data = @community.grid.yearly_generations.where(year: latest_year).grouped_net_generation_by_fuel_type
     dataset = data.map { |fuel_type, value| [fuel_type.to_s, value] }
     render json: dataset
   end
 
   def capacity_yearly
-    data = @community.grid.capacities.latest_year.group(:fuel_type).sum(:capacity_mw)
+    latest_year = Capacity.latest_year_for(@community.grid)
+    data = @community.grid.capacities.where(year: latest_year).grouped_capacity_by_fuel_type
     dataset = data.map { |fuel_type, value| [fuel_type.to_s, value] }
     render json: dataset
   end
