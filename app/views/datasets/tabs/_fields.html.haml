@@ -1,0 +1,18 @@
+%ul.list-group
+  - @dataset.schema['fields'].each do |field|
+    %li.list-group-item
+      %h4= field['long_name']
+      .mb-3= field['description']
+      .row.d-flex.gap-2
+        .col
+          %strong.text-nowrap Field Name
+          = field['name']
+        .col
+          %strong Type
+          %div= field['type']
+        .col
+          %strong Unit 
+          %div= field['unit']
+        .col
+          %strong Nullable
+          %div= field['nullable'] ? 'true' : 'false'

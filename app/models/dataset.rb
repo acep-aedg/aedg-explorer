@@ -12,7 +12,7 @@ class Dataset < ApplicationRecord
 
   store_accessor :data, :title, :description, :resources,
                  :path, :publicationDate, :spatial,
-                 :format, :schema
+                 :format, :schema, :sources, :licenses
 
   def self.import_resource(json)
     Rails.logger.debug "Resource: #{json['name']}"

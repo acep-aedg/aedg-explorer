@@ -28,6 +28,8 @@
         %li.nav-item
           = link_to "About", "#about", class: "nav-link active", data: { bs_toggle: "tab" }
         %li.nav-item
+          = link_to "Fields", "#fields", class: "nav-link", data: { bs_toggle: "tab" }
+        %li.nav-item
           = link_to "Data", "#data", class: "nav-link", data: { bs_toggle: "tab" }
         %li.nav-item
           = link_to "Metadata", "#metadata", class: "nav-link", data: { bs_toggle: "tab" }
@@ -36,6 +38,8 @@
       .tab-content.mb-3
         #about.tab-pane.fade.show.active.border-start.border-end.border-bottom.p-3
           = render "datasets/tabs/about", dataset: @dataset
+        #fields.tab-pane.fade.border-start.border-end.border-bottom.p-3
+          = render 'datasets/tabs/fields', dataset: @dataset
         #data.tab-pane.fade.border-start.border-end.border-bottom.p-3
           - if @dataset.format.downcase == 'csv'
             = render 'datasets/tabs/data_csv', dataset: @dataset
