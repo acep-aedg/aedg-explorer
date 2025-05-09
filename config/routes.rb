@@ -25,7 +25,7 @@ Rails.application.routes.draw do
           get :population_detail
           get :production_yearly
           get :fuel_prices
-      end
+        end
       end
 
       resources :maps, only: [], controller: 'communities/maps', defaults: { format: :json } do
