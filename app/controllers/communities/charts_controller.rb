@@ -41,6 +41,11 @@ class Communities::ChartsController < ApplicationController
     render json: employment_chart_data(employments)
   end
 
+  def fuel_prices
+    records = @community.fuel_prices.chronological
+    render json: fuel_prices_chart_data(records)
+  end
+
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
 
