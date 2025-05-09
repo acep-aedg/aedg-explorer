@@ -17,7 +17,7 @@
   %strong Format: 
   %span.badge.bg-primary= @dataset.format
 
-- if @dataset.sources.any?
+- if @dataset.sources.present?
   %p 
     %strong Sources:
     %ul.list-group.ms-3
@@ -30,7 +30,7 @@
               %strong URL: 
               = link_to source['path']
 
-- if @dataset.licenses.any?
+- if @dataset.licenses.present?
   %p 
     %strong Licenses:
     - @dataset.licenses.each do |license|
