@@ -2,6 +2,7 @@ module CategoriesHelper
   def category_links
     [
       { name: 'Renewables', icon: 'bi-sun-fill', path: '#' },
+      { name: 'Infrastructure', icon: 'bi-buildings', path: '#' },
       { name: 'Energy', icon: 'bi-lightning-fill', path: '#' },
       { name: 'Electricity', icon: 'bi-ev-front', path: '#' },
       { name: 'Transportation', icon: 'bi-truck', path: '#' },
@@ -11,19 +12,13 @@ module CategoriesHelper
   end
 
   def topic_icon(topic)
-    case topic.downcase
-    when 'renewables'
-      'bi-sun-fill'
-    when 'energy'
-      'bi-lightning-fill'
-    when 'electricity'
-      'bi-ev-front'
-    when 'transportation'
-      'bi-truck'
-    when 'fuel'
-      'bi-fuel-pump'
-    when 'population'
-      'bi-people-fill'
-    end
+    { 'infrastructure' => 'bi-buildings',
+      'social' => 'bi-people',
+      'renewables' => 'bi-sun-fill',
+      'energy' => 'bi-lightning-fill',
+      'electricity' => 'bi-ev-front',
+      'transportation' => 'bi-truck',
+      'fuel' => 'bi-fuel-pump',
+      'population' => 'bi-people-fill' }[topic.downcase]
   end
 end
