@@ -787,6 +787,47 @@ ALTER SEQUENCE public.reporting_entities_id_seq OWNED BY public.reporting_entiti
 
 
 --
+-- Name: sales; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sales (
+    id bigint NOT NULL,
+    reporting_entity_id bigint NOT NULL,
+    year integer,
+    residential_revenue integer,
+    residential_sales integer,
+    residential_customers integer,
+    commercial_revenue integer,
+    commercial_sales integer,
+    commercial_customers integer,
+    total_revenue integer,
+    total_sales integer,
+    total_customers integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: sales_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sales_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sales_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sales_id_seq OWNED BY public.sales.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1105,6 +1146,13 @@ ALTER TABLE ONLY public.reporting_entities ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
+-- Name: sales id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sales ALTER COLUMN id SET DEFAULT nextval('public.sales_id_seq'::regclass);
+
+
+--
 -- Name: senate_districts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1297,6 +1345,14 @@ ALTER TABLE ONLY public.regional_corporations
 
 ALTER TABLE ONLY public.reporting_entities
     ADD CONSTRAINT reporting_entities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sales sales_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sales
+    ADD CONSTRAINT sales_pkey PRIMARY KEY (id);
 
 
 --
@@ -1534,6 +1590,13 @@ CREATE UNIQUE INDEX index_regional_corporations_on_fips_code ON public.regional_
 --
 
 CREATE INDEX index_reporting_entities_on_grid_id ON public.reporting_entities USING btree (grid_id);
+
+
+--
+-- Name: index_sales_on_reporting_entity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sales_on_reporting_entity_id ON public.sales USING btree (reporting_entity_id);
 
 
 --
@@ -1775,6 +1838,14 @@ ALTER TABLE ONLY public.communities_legislative_districts
 
 
 --
+-- Name: sales fk_rails_b5eeb5e842; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sales
+    ADD CONSTRAINT fk_rails_b5eeb5e842 FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
+
+
+--
 -- Name: communities_legislative_districts fk_rails_b629a56790; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1813,6 +1884,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250509014050'),
 ('20250508195941'),
 ('20250508194355'),
 ('20250508193222'),

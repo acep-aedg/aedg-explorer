@@ -5,6 +5,7 @@ class ReportingEntity < ApplicationRecord
   belongs_to :grid
   has_many :communities, dependent: :nullify
   has_many :electric_rates, dependent: :nullify
+  has_many :sales, dependent: :nullify
 
   validates :name, presence: true
   validates :grid, presence: true
