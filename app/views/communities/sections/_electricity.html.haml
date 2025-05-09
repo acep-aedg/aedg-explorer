@@ -19,9 +19,6 @@
 - if @community.electric_rates&.exists?
   .mb-3
     = render 'communities/sections/electricity/rates'
-
-.row.g-3.row-cols-2
-  - if @community.name
-    .col= render 'communities/sections/electricity/fuel', community: @community
-  - if @community.name
-    .col= render 'communities/sections/electricity/sales_revenue_customers', community: @community
+- if @community.reporting_entity&.sales&.exists?
+  .mb-3 
+    = render 'communities/sections/electricity/sales_revenue_customers'

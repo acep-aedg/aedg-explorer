@@ -25,6 +25,10 @@ Rails.application.routes.draw do
           get :population_detail
           get :production_yearly
           get :fuel_prices
+          get :average_sales_rates
+          get :revenue_by_customer_type
+          get :customers_by_customer_type
+          get :sales_by_customer_type
         end
       end
 

@@ -1,0 +1,29 @@
+%table.table.table-striped.border{ data: { controller: 'datatables', datatables: { order_value: [4, 'asc'] } }}
+  %thead
+    %tr
+      %th Customer Type
+      %th Customers 
+      %th Sales (Mwh)
+      %th Revenue ($)
+      %th Year
+  %tbody
+    - @community.reporting_entity.sales.each do |sale|
+      %tr
+        %td Residential
+        %td= number_with_delimiter(sale.residential_customers)
+        %td= number_with_delimiter(sale.residential_sales)
+        %td= number_to_currency(sale.residential_revenue, precision: 0)
+        %td= sale.year
+
+      %tr
+        %td Commercial
+        %td= number_with_delimiter(sale.commercial_customers)
+        %td= number_with_delimiter(sale.commercial_sales)
+        %td= number_to_currency(sale.commercial_revenue, precision: 0)
+        %td= sale.year
+      %tr
+        %td Total
+        %td= number_with_delimiter(sale.total_customers)
+        %td= number_with_delimiter(sale.total_sales)
+        %td= number_to_currency(sale.total_revenue, precision: 0)
+        %td= sale.year
