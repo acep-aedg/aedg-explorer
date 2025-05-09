@@ -8,22 +8,24 @@
       %th Year
   %tbody
     - @community.reporting_entity.sales.each do |sale|
-      %tr
-        %td Residential
-        %td= number_with_delimiter(sale.residential_customers)
-        %td= number_with_delimiter(sale.residential_sales)
-        %td= number_to_currency(sale.residential_revenue, precision: 0)
-        %td= sale.year
-
-      %tr
-        %td Commercial
-        %td= number_with_delimiter(sale.commercial_customers)
-        %td= number_with_delimiter(sale.commercial_sales)
-        %td= number_to_currency(sale.commercial_revenue, precision: 0)
-        %td= sale.year
-      %tr
-        %td Total
-        %td= number_with_delimiter(sale.total_customers)
-        %td= number_with_delimiter(sale.total_sales)
-        %td= number_to_currency(sale.total_revenue, precision: 0)
-        %td= sale.year
+      - if sale.residential_customers || sale.residential_sales || sale.residential_revenue
+        %tr
+          %td Residential
+          %td= number_with_delimiter(sale.residential_customers)
+          %td= number_with_delimiter(sale.residential_sales)
+          %td= number_to_currency(sale.residential_revenue, precision: 0)
+          %td= sale.year
+      - if sale.commercial_customers || sale.commercial_sales || sale.commercial_revenue
+        %tr
+          %td Commercial
+          %td= number_with_delimiter(sale.commercial_customers)
+          %td= number_with_delimiter(sale.commercial_sales)
+          %td= number_to_currency(sale.commercial_revenue, precision: 0)
+          %td= sale.year
+      - if sale.total_customers || sale.total_sales || sale.total_revenue
+        %tr
+          %td Total
+          %td= number_with_delimiter(sale.total_customers)
+          %td= number_with_delimiter(sale.total_sales)
+          %td= number_to_currency(sale.total_revenue, precision: 0)
+          %td= sale.year

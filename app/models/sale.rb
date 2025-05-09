@@ -2,6 +2,8 @@ class Sale < ApplicationRecord
   include SaleAttributes
   belongs_to :reporting_entity
 
+  validates :year, presence: true
+
   def residential_rate
     return nil if residential_sales.to_f.zero?
 
@@ -18,5 +20,16 @@ class Sale < ApplicationRecord
     return nil if total_sales.to_f.zero?
 
     total_revenue / total_sales
+  end
+
+  def has_any_customer_type_data?
+    [
+      residential_customers,
+      commercial_customers,
+      residential_sales,
+      commercial_sales,
+      residential_revenue,
+      commercial_revenue
+    ].any?(&:present?)
   end
 end

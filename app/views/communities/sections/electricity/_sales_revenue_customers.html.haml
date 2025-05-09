@@ -13,10 +13,11 @@
         = link_to "Average Rates", "#average_rates",
           class: "nav-link active",
           data: { bs_toggle: "tab" }
-      %li.nav-item
-        = link_to "By Customer Type", "#by-customer-type",
-          class: "nav-link",
-          data: { bs_toggle: "tab" }
+      - if latest_sale&.has_any_customer_type_data?
+        %li.nav-item
+          = link_to "By Customer Type", "#by-customer-type",
+            class: "nav-link",
+            data: { bs_toggle: "tab" }
       %li.nav-item
         = link_to "Sales, Revenue & Customers Data", "#sales-data",
           class: "nav-link",
@@ -24,7 +25,7 @@
 
 .tab-content
   #average_rates.tab-pane.fade.show.active
-    = render "communities/sections/electricity/sales/average_rates", latest_sale: latest_sale, latest_year: latest_year
+    = render "communities/sections/electricity/sales/average_rates"
   #by-customer-type.tab-pane.fade
     = render "communities/sections/electricity/sales/by_customer_type", latest_sale: latest_sale, latest_year: latest_year
   #sales-data.tab-pane.fade

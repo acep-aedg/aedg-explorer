@@ -9,7 +9,7 @@
 - if @community.reporting_entity
   .m-5.mt-3
     = render 'communities/sections/electricity/utilities'
-- if @community.electric_rates&.exists?
+- if @community.electric_rates&.any? { |rate| rate.residential_rate || rate.commercial_rate || rate.industrial_rate }
   .m-5
     = render 'communities/sections/electricity/rates'
 - if @community.grid&.monthly_generations&.exists? || @community.grid&.yearly_generations&.exists?

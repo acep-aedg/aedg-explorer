@@ -1,4 +1,3 @@
-- if latest_sale
-  .row.g-3
-    .col
-      = column_chart average_sales_rates_community_charts_path(@community), suffix: "$/MWh", title: "Average Rates by Customer Type", download: { background: "#ffffff", filename: "Average Rates by Customer Type".parameterize, format: "png" }
+.row.g-3
+  .col
+    = column_chart average_sales_rates_community_charts_path(@community), suffix: "$/MWh", title: "Average Rates by Customer Type", download: { background: "#ffffff", filename: "Average Rates by Customer Type".parameterize, format: "png" }
