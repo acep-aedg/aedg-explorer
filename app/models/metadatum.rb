@@ -1,5 +1,7 @@
 class Metadatum < ApplicationRecord
+  include MetadatumImport
   include PgSearch::Model
+
   pg_search_scope :search_full_text,
                   against: [:name],
                   associated_against: {
@@ -42,28 +44,19 @@ class Metadatum < ApplicationRecord
     []
   end
 
-  def self.import_metadata(path)
-    Rails.logger.debug "Importing metadata from #{path}..."
-    Dir.glob("#{path}/*.json").each do |file|
-      data = JSON.parse(File.read(file))
-      find_or_initialize_by(name: data['name']).tap do |metadata|
-        metadata.filename = File.basename(file)
-        metadata.data = data
-        metadata.published = true
+  def citation
+    author = data.dig('resources', 0, 'context', 'publisher').presence || 'Unknown Author'
+    publication_date = data.dig('resources', 0, 'publicationDate').presence
+    title = data['title'].presence&.titleize || 'Untitled Dataset'
+    publication_year = Date.parse(publication_date).year if publication_date.present?
+    version = 'v3.0'
+    access_date = Time.zone.today.strftime('%B %-d, %Y')
+    base_url = 'https://akenergygateway.alaska.edu'
+    path = Rails.application.routes.url_helpers.metadatum_path(self)
 
-        Rails.logger.debug "Imported metadata for #{metadata.name}"
-        metadata.data['resources'].each do |resource|
-          dataset = Dataset.import_resource(resource)
-          metadata.keyword_list.add(dataset.keyword_list)
-          metadata.topic_list.add(dataset.topic_list)
-          metadata.format_list.add(dataset.format)
-          metadata.datasets << dataset
-        end
+    dataset_url = "#{base_url}#{path}"
 
-        metadata.save!
-      end
-    rescue StandardError => e
-      Rails.logger.debug "Error processing metadata file #{file}: #{e.message}"
-    end
+    # Build final citation string
+    "#{author} (#{publication_year}). \"#{title}\" Accessed on the Alaska Energy Data Gateway #{version}. #{access_date}. #{dataset_url}"
   end
 end

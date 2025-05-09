@@ -1,0 +1,11 @@
+%h3.mb-3 How to Cite This Dataset
+%p.text-muted Copy the reference below
+
+= render "shared/citation_block", citation: @metadatum.citation
+
+%h6.fw-bold.mt-5 Need to cite the entire Alaska Energy Data Gateway?
+%p.text-muted
+  = link_to user_guide_path(anchor: 'cite-aedg'), class: 'text-decoration-none ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
+    %span See citation instructions
+    %i.bi.bi-arrow-right
+  

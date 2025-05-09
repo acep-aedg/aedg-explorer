@@ -1,13 +1,13 @@
 module ApplicationHelper
   def main_menu
     [
-      { name: 'About', path: '#' },
+      { name: 'About', path: about_path },
       { name: 'Explore Data',
         children: [
-          { name: 'Data Explorer', path: metadata_path },
-          { name: 'Community Summaries', path: communities_path }
+          { name: 'Community Summaries', path: communities_path },
+          { name: 'Data Explorer', path: metadata_path }
         ] },
-      { name: 'User Guide', path: '#' }
+      { name: 'User Guide', path: user_guide_path }
     ]
   end
 
