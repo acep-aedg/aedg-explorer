@@ -12,23 +12,13 @@ module CategoriesHelper
   end
 
   def topic_icon(topic)
-    case topic.downcase
-    when 'infrastructure'
-      'bi-buildings'
-    when 'social'
-      'bi-people'
-    when 'renewables'
-      'bi-sun-fill'
-    when 'energy'
-      'bi-lightning-fill'
-    when 'electricity'
-      'bi-ev-front'
-    when 'transportation'
-      'bi-truck'
-    when 'fuel'
-      'bi-fuel-pump'
-    when 'population'
-      'bi-people-fill'
-    end
+    { 'infrastructure' => 'bi-buildings',
+      'social' => 'bi-people',
+      'renewables' => 'bi-sun-fill',
+      'energy' => 'bi-lightning-fill',
+      'electricity' => 'bi-ev-front',
+      'transportation' => 'bi-truck',
+      'fuel' => 'bi-fuel-pump',
+      'population' => 'bi-people-fill' }[topic.downcase]
   end
 end
