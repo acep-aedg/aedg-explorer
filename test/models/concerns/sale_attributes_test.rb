@@ -20,11 +20,11 @@ class SaleAttributesTest < ActiveSupport::TestCase
       residential_revenue: 100_000,
       residential_sales: 5_000,
       residential_customers: 1000,
-      commercial_revenue: 200000,
+      commercial_revenue: 200_000,
       commercial_sales: 8000,
       commercial_customers: 1500,
-      total_revenue: 300000,
-      total_sales: 13000,
+      total_revenue: 300_000,
+      total_sales: 13_000,
       total_customers: 2500
     }
 
@@ -33,8 +33,8 @@ class SaleAttributesTest < ActiveSupport::TestCase
 
       assert_equal @reporting_entity, sale.reporting_entity
       assert_equal 2021, sale.year
-      assert_equal 100000, sale.residential_revenue
-      assert_equal 13000, sale.total_sales
+      assert_equal 100_000, sale.residential_revenue
+      assert_equal 13_000, sale.total_sales
       assert_equal 2500, sale.total_customers
     end
   end
@@ -44,18 +44,18 @@ class SaleAttributesTest < ActiveSupport::TestCase
 
     assert_raises ActiveRecord::RecordInvalid do
       Sale.import_aedg!({
-        reporting_entity_id: 999,
-        year: 2022,
-        residential_revenue: 100,
-        residential_sales: 100,
-        residential_customers: 10,
-        commercial_revenue: 100,
-        commercial_sales: 100,
-        commercial_customers: 10,
-        total_revenue: 200,
-        total_sales: 200,
-        total_customers: 20
-      })
+                          reporting_entity_id: 999,
+                          year: 2022,
+                          residential_revenue: 100,
+                          residential_sales: 100,
+                          residential_customers: 10,
+                          commercial_revenue: 100,
+                          commercial_sales: 100,
+                          commercial_customers: 10,
+                          total_revenue: 200,
+                          total_sales: 200,
+                          total_customers: 20
+                        })
     end
   end
 end

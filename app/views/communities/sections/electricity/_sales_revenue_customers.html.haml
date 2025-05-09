@@ -13,7 +13,7 @@
         = link_to "Average Rates", "#average_rates",
           class: "nav-link active",
           data: { bs_toggle: "tab" }
-      - if latest_sale&.has_any_customer_type_data?
+      - if latest_sale&.any_customer_type_data?
         %li.nav-item
           = link_to "By Customer Type", "#by-customer-type",
             class: "nav-link",

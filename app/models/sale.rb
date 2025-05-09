@@ -22,7 +22,7 @@ class Sale < ApplicationRecord
     total_revenue / total_sales
   end
 
-  def has_any_customer_type_data?
+  def any_customer_type_data?
     [
       residential_customers,
       commercial_customers,
