@@ -18,7 +18,8 @@ module YearlyGenerationAttributes
       assign_attributes(
         grid: Grid.from_aedg_id(params[:grid_id]).first,
         year: params[:year],
-        fuel_type: params[:fuel_type],
+        fuel_type_code: params[:fuel_type_code],
+        fuel_type_name: params[:fuel_type_name],
         net_generation_mwh: params[:net_generation_mwh]
       )
     end

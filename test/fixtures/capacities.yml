@@ -3,11 +3,13 @@
 one:
   grid: one
   capacity_mw: 1.5
-  fuel_type: 'DFO'
+  fuel_type_code: 'DFO'
+  fuel_type_name: 'Distillate Fuel Oil'
   year: 2020
 
 two:
   grid: two
   capacity_mw: 1.5
-  fuel_type: 'NG'
+  fuel_type_code: 'NG'
+  fuel_type_name: 'Natural Gas'
   year: 2021

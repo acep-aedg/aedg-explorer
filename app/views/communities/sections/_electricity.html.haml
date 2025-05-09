@@ -1,7 +1,7 @@
 - content_for :quicknav do
   %ul.nav.flex-column
     %li.nav-item
-      = link_to "Utility", "#utility", class: 'nav-link'
+      = link_to "Utilities", "#utilities", class: 'nav-link'
     %li.nav-item
       = link_to "Production", "#production", class: 'nav-link'
     %li.nav-item
@@ -13,12 +13,14 @@
 - if @community.grid&.capacities&.exists?
   .mb-3
     = render 'communities/sections/electricity/grid_capacity'
+- if @community.reporting_entity
+  .mb-3
+    = render 'communities/sections/electricity/utilities'
+- if @community.electric_rates&.exists?
+  .mb-3
+    = render 'communities/sections/electricity/rates'
 
 .row.g-3.row-cols-2
-  - if @community.name
-    .col= render 'communities/sections/electricity/utility', community: @community
-  - if @community.name
-    .col= render 'communities/sections/electricity/rates', community: @community
   - if @community.name
     .col= render 'communities/sections/electricity/fuel', community: @community
   - if @community.name

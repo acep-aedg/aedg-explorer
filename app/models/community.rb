@@ -22,6 +22,8 @@ class Community < ApplicationRecord
   has_many :monthly_generations, through: :grids
   has_many :yearly_generations, through: :grids
   has_many :fuel_prices, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
+  belongs_to :reporting_entity, optional: true
+  has_many :electric_rates, through: :reporting_entity
 
   # Handle the case where the name is not unique
   def slug_candidates
@@ -35,7 +37,6 @@ class Community < ApplicationRecord
   validates :name, presence: true
   validates :latitude, presence: true
   validates :longitude, presence: true
-  validates :ansi_code, presence: true, uniqueness: true
   validates :gnis_code, presence: true, uniqueness: true
   validates :borough_fips_code, presence: true
   validates :dcra_code, presence: true, uniqueness: true

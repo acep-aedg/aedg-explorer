@@ -50,12 +50,14 @@
       %table.table.table-striped.border{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }
         %thead
           %tr
-            %th Fuel Type
+            %th Fuel Type Code
+            %th Fuel Type Name
             %th Capacity (MW)
             %th Year
         %tbody
           - @community.grid.capacities.where(year: stats[:year]).each do |capacity|
             %tr
-              %td= capacity.fuel_type
+              %td= capacity.fuel_type_code
+              %td= capacity.fuel_type_name
               %td= capacity.capacity_mw
               %td= capacity.year

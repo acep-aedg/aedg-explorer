@@ -3,13 +3,15 @@
 one:
   grid: one
   net_generation_mwh: 111.1
-  fuel_type: 'NG'
+  fuel_type_code: 'NG'
+  fuel_type_name: 'Natural Gas'
   year: 2021
   month: 11
 
 two: 
   grid: two
   net_generation_mwh: 222.2
-  fuel_type: 'NG'
+  fuel_type_code: 'NG'
+  fuel_type_name: 'Natural Gas'
   year: 2022
   month: 2

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the "{}" from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: 
+  reporting_entity: one
+  year: 2020
+  residential_rate: 0.12
+  commercial_rate: 0.15
+  industrial_rate: 0.10
+
+two:
+  reporting_entity: two
+  year: 2021
+  residential_rate: 0.20
+  commercial_rate: 0.25
+  industrial_rate: 0.15

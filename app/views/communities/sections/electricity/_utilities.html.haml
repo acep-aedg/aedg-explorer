@@ -1,0 +1,28 @@
+%h4.mb-3 Utilities
+
+.row.g-3
+  .col-12.col-lg-6
+    .d-flex.align-items-center.bg-body-secondary.rounded.p-3
+      - pce_icon = @community.pce_eligible ? "bi-patch-check-fill text-success" : "bi-x-circle-fill text-danger"
+      %i{ class: "bi #{pce_icon} fs-4 me-3" }
+      .flex-grow-1
+        .text-muted Price Cost Equalization (PCE) Status
+        .fw-semibold= @community.pce_eligible ? "Eligible" : "Ineligible"
+
+  - main_utility = @community.reporting_entity&.name
+  - other_utilities = @community.grid.reporting_entities.map(&:name).uniq.reject { |name| name == main_utility }
+  
+  .col-12.col-lg-6
+    .d-flex.align-items-center.bg-body-secondary.rounded.p-3
+      %i.bi.bi-building.text-secondary.fs-4.me-3
+      .flex-grow-1
+        .text-muted= "Utility for #{@community.name}"
+        .fw-semibold= main_utility
+
+  - if other_utilities.any?
+    .col-12
+      .d-flex.align-items-center.bg-body-secondary.rounded.p-3
+        %i.bi.bi-diagram-3.text-info.fs-4.me-3
+        .flex-grow-1
+          .text-muted= "Other Utilities on the #{@community.grid.name}"
+          .fw-semibold= other_utilities.join(", ")

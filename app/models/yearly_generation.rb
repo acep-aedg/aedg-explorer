@@ -3,8 +3,8 @@ class YearlyGeneration < ApplicationRecord
   belongs_to :grid
 
   validates :grid_id,
-            uniqueness: { scope: %i[year fuel_type],
-                          message: 'combination of grid_id, year, and fuel type must be unique' }
+            uniqueness: { scope: %i[year fuel_type_code],
+                          message: 'combination of grid_id, year, and fuel type_code must be unique' }
 
   scope :grouped_net_generation_by_year, lambda {
     group(:year).sum(:net_generation_mwh)

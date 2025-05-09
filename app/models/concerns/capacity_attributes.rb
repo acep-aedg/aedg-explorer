@@ -17,7 +17,8 @@ module CapacityAttributes
       assign_attributes(
         grid: Grid.from_aedg_id(params[:grid_id]).first,
         capacity_mw: params[:capacity_mw],
-        fuel_type: params[:fuel_type],
+        fuel_type_code: params[:fuel_type_code],
+        fuel_type_name: params[:fuel_type_name],
         year: params[:year]
       )
     end

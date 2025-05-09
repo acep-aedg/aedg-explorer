@@ -14,10 +14,8 @@ class CommunitiesTest < ApplicationSystemTestCase
     visit communities_url
     click_on 'New community'
 
-    fill_in 'Ansi code', with: @community.ansi_code
     fill_in 'Community', with: @community.community_id
     fill_in 'Fips code', with: @community.fips_code
-    fill_in 'Global', with: @community.global_id
     fill_in 'Latitude', with: @community.latitude
     fill_in 'Longitude', with: @community.longitude
     fill_in 'Name', with: @community.name
@@ -31,10 +29,8 @@ class CommunitiesTest < ApplicationSystemTestCase
     visit community_url(@community)
     click_on 'Edit this community', match: :first
 
-    fill_in 'Ansi code', with: @community.ansi_code
     fill_in 'Community', with: @community.community_id
     fill_in 'Fips code', with: @community.fips_code
-    fill_in 'Global', with: @community.global_id
     fill_in 'Latitude', with: @community.latitude
     fill_in 'Longitude', with: @community.longitude
     fill_in 'Name', with: @community.name

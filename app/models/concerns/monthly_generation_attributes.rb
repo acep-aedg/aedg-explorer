@@ -16,7 +16,8 @@ module MonthlyGenerationAttributes
   included do
     def assign_aedg_attributes(params)
       assign_attributes(
-        fuel_type: params[:fuel_type],
+        fuel_type_code: params[:fuel_type_code],
+        fuel_type_name: params[:fuel_type_name],
         year: params[:year],
         month: params[:month],
         net_generation_mwh: params[:net_generation_mwh],
