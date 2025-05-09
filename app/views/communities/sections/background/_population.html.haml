@@ -1,7 +1,10 @@
 - employment_present = @community.population.present?
 - age_data_present = @community.population_age_sexes.present?
 
-%h4.mb-3 Population
+.d-flex.align-items-center.mb-3
+  %i.bi.bi-people-fill.me-2.fs-4
+  %h4.mb-0.me-3 Population
+  %hr.flex-grow-1.mt-1.mb-0
 %ul.nav.nav-tabs
   - if employment_present
     %li.nav-item
@@ -24,7 +27,7 @@
         role: "tab"
 
     %li.nav-item
-      = link_to "Age & Sex Table", "#age-sex-table",
+      = link_to "Population, Age & Sex Data", "#age-sex-table",
         class: "nav-link",
         data: { bs_toggle: "tab" },
         role: "tab"

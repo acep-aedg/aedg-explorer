@@ -5,23 +5,26 @@
 
 - if latest_sale
   .row.g-3.mb-3
-    .col-md-4
-      .d-flex.align-items-center.bg-body-secondary.rounded.p-3
-        %i.bi.bi-lightning-fill.text-warning.fs-3.me-3
-        .flex-grow-1
-          .text-muted Total Sales (#{latest_year})
-          %p.fw-semibold.mb-0= number_with_delimiter(latest_sale.total_sales) + " MWh"
+    .col-12.col-md-6.col-lg-4
+      .d-flex.h-100
+        .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
+          %i.bi.bi-lightning-fill.text-warning.fs-3.me-3
+          .flex-grow-1
+            .text-muted Total Sales (#{latest_year})
+            %p.fw-semibold.mb-0= number_with_delimiter(latest_sale.total_sales) + " MWh"
 
-    .col-md-4
-      .d-flex.align-items-center.bg-body-secondary.rounded.p-3
-        %i.bi.bi-people-fill.text-info.fs-3.me-3
-        .flex-grow-1
-          .text-muted Total Customers (#{latest_year})
-          %p.fw-semibold.mb-0= number_with_delimiter(latest_sale.total_customers)
+    .col-12.col-md-6.col-lg-4
+      .d-flex.h-100
+        .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
+          %i.bi.bi-people-fill.text-info.fs-3.me-3
+          .flex-grow-1
+            .text-muted Total Customers (#{latest_year})
+            %p.fw-semibold.mb-0= number_with_delimiter(latest_sale.total_customers)
 
-    .col-md-4
-      .d-flex.align-items-center.bg-body-secondary.rounded.p-3
-        %i.bi.bi-cash-coin.text-success.fs-3.me-3
-        .flex-grow-1
-          .text-muted Total Revenue (#{latest_year})
-          %p.fw-semibold.mb-0= number_to_currency(latest_sale.total_revenue, precision: 0)
+    .col-12.col-md-6.col-lg-4
+      .d-flex.h-100
+        .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
+          %i.bi.bi-cash-coin.text-success.fs-3.me-3
+          .flex-grow-1
+            .text-muted Total Revenue (#{latest_year})
+            %p.fw-semibold.mb-0= number_to_currency(latest_sale.total_revenue, precision: 0)

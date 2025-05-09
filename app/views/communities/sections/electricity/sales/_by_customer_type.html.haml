@@ -1,11 +1,11 @@
 - if latest_sale
   .row.g-3 
-    .col-md-4
+    .col-12.col-md-6.col-lg-4
       - revenue_chart_title = "Revenue by Customer Type (#{latest_year})"
       = pie_chart revenue_by_customer_type_community_charts_path(@community), prefix: "$", thousands: ",",title: revenue_chart_title, download: { background: "#ffffff", filename: revenue_chart_title.parameterize, format: "png" }, donut: true
-    .col-md-4
+    .col-12.col-md-6.col-lg-4
       - sales_chart_title = "Sales by Customer Type (#{latest_year})"
       = pie_chart sales_by_customer_type_community_charts_path(@community), suffix: " MWh", thousands: ",",title: sales_chart_title, download: { background: "#ffffff", filename: sales_chart_title.parameterize, format: "png" }, donut: true
-    .col-md-4
+    .col-12.col-md-6.col-lg-4
       - customers_chart_title = "Customers by Customer Type (#{latest_year})"
       = pie_chart customers_by_customer_type_community_charts_path(@community), thousands: ",", title: customers_chart_title, donut: true, download: { background: "#ffffff", filename: customers_chart_title.parameterize, format: "png" }

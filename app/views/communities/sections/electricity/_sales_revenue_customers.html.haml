@@ -1,4 +1,7 @@
-%h4.mb-3 Sales, Revenue & Customers
+.d-flex.align-items-center.mb-3
+  %i.bi.bi-cash-coin.me-2.fs-4
+  %h4.mb-0.me-3 Sales, Revenue & Customers
+  %hr.flex-grow-1.mt-1.mb-0
 
 - latest_sale = @community.reporting_entity.latest_sale
 - latest_year = latest_sale.year
