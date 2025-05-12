@@ -1,7 +1,10 @@
 - stats = @community.grid.capacities.capacity_stats
 - chart_title = "#{@community.grid.name.titleize} Capacity by Fuel Type (#{stats[:year]})"
 
-%h4.mb-3 Grid Capacity
+.d-flex.align-items-center.mb-3
+  %i.bi.bi-lightning-fill.me-2.fs-4
+  %h4.mb-0.me-3 Capacity
+  %hr.flex-grow-1.mt-1.mb-0
 .mb-3
   = render 'communities/shared/grid_info'
 

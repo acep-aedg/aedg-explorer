@@ -46,6 +46,52 @@ class Communities::ChartsController < ApplicationController
     render json: fuel_prices_chart_data(records)
   end
 
+  def average_sales_rates
+    sales = @community.reporting_entity.sales.order(year: :asc)
+    dataset = sales.map do |sale|
+      {
+        name: sale.year.to_s,
+        data: {
+          'Residential' => sale.residential_rate,
+          'Commercial' => sale.commercial_rate,
+          'Total' => sale.total_rate
+        }
+      }
+    end
+
+    render json: dataset
+  end
+
+  def revenue_by_customer_type
+    sale = @community.reporting_entity.latest_sale
+    return render json: {} unless sale
+
+    render json: {
+      'Residential' => sale.residential_revenue,
+      'Commercial' => sale.commercial_revenue
+    }
+  end
+
+  def customers_by_customer_type
+    sale = @community.reporting_entity.latest_sale
+    return render json: {} unless sale
+
+    render json: {
+      'Residential' => sale.residential_customers,
+      'Commercial' => sale.commercial_customers
+    }
+  end
+
+  def sales_by_customer_type
+    sale = @community.reporting_entity.latest_sale
+    return render json: {} unless sale
+
+    render json: {
+      'Residential' => sale.residential_sales,
+      'Commercial' => sale.commercial_sales
+    }
+  end
+
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
 

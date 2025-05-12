@@ -99,7 +99,7 @@ module Communities::ChartsHelper
           name: season,
           data: recs
             .group_by(&:reporting_year)
-            .transform_values { |a| a.sum(&:price).to_f }
+            .transform_values { |a| a.sum { |fp| fp.price.to_f } }
         }
       end
   end
