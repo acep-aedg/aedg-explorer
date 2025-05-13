@@ -1,59 +1,88 @@
+industry_partners:
+  - name: Catalyst Cooperative
+    url: https://catalyst.coop
+    logo: 'catalyst-logo.png'
+  
+  - name: DOWL
+    url: https://www.dowl.com
+    logo: 'dowl-logo.jpg'
+
+academic_partners:
+  - name: Alaska Center for Energy and Power
+    acronym: ACEP
+    url: https://acep.uaf.edu
+    logo: 'acep-logo.jpg'
+
+  - name: Institute of Social and Economic Research
+    acronym: ISER
+    url: https://iseralaska.org
+    logo: 'iser-logo.png'
+
+  - name: Lawrence Berkeley National Lab
+    acronym: LBNL
+    url: https://www.lbl.gov
+    logo: 'lbnl-logo.png'
+
 state_partners:
   - name: Alaska Department of Education & Early Development
     acronym: DEED
     url: https://education.alaska.gov
-
-  - name: Alaska Division of Community and Regional Affairs
-    acronym: DCRA
-    url: https://www.commerce.alaska.gov/web/dcra
+    logo: 'deed-logo.png'
 
   - name: Alaska Department of Labor and Workforce Development
     acronym: DOLWD
     url: https://labor.alaska.gov
+    logo: 'dowld-logo.png'
+
+  - name: Alaska Division of Community and Regional Affairs
+    acronym: DCRA
+    url: https://www.commerce.alaska.gov/web/dcra
+    logo: 'dcra-logo.png'
 
   - name: Alaska Energy Authority
     acronym: AEA
     url: https://www.akenergyauthority.org
-    logo: 'AEA-logo.png'
+    logo: 'aea-logo.png'
 
   - name: Alaska Housing Finance Corporation
     acronym: AHFC
     url: https://www.ahfc.us
-
-  - name: State of Alaska Department of Natural Resources
-    acronym: DNR
-    url: https://dnr.alaska.gov
+    logo: 'ahfc-logo.png'
 
   - name: Regulatory Commission of Alaska
     acronym: RCA
     url: https://rca.alaska.gov/RCAWeb/home.aspx
+    logo: 'rca-logo.png'
   
   - name: State of Alaska
     url: https://www.alaska.gov
+    logo: 'soa-logo.png'
+  
+  - name: State of Alaska Department of Natural Resources
+    acronym: DNR
+    url: https://dnr.alaska.gov
+    logo: 'dnr-logo.png'
     
 federal_partners:
   - name: American Community Survey
     acronym: ACS
     url: https://www.census.gov/programs-surveys/acs
+    logo: 'acs-logo.png'
 
   - name: Federal Energy Regulatory Commission
     acronym: FERC
     url: https://www.ferc.gov
-    logo: 'FERC-logo.png'
-
-  - name: United States Census Bureau
-    acronym: CENSUS
-    url: https://www.census.gov
-    logo: 'census-logo.png'
+    logo: 'ferc-logo.png'
 
   - name: U.S. Bureau of Labor Statistics
     acronym: BLS
     url: https://www.bls.gov
-    logo: 'BLS-logo.png'
+    logo: 'bls-logo.png'
 
   - name: U.S. Department of Commerce
     acronym: DOC
     url: https://www.commerce.gov
+    logo: 'doc-logo.jpeg'
 
   - name: U.S. Energy Information Administration
     acronym: EIA
@@ -65,27 +94,7 @@ federal_partners:
     url: https://www.usgs.gov
     logo: 'usgs_logo.gif'
 
-industry_partners:
-  - name: Alaska Center for Energy and Power
-    acronym: ACEP
-    url: https://acep.uaf.edu
-    logo: 'ACEP-Logo.jpg'
-
-  - name: Berkeley National Lab
-    acronym: LBL
-    url: https://www.lbl.gov
-  
-  - name: Catalyst Cooperative
-    url: https://catalyst.coop
-
-  - name: Institute of Social and Economic Research
-    acronym: ISER
-    url: https://iseralaska.org
-    logo: 'ISER-logo.png'
-  
-  - name: DOWL
-    url: https://www.dowl.com
-    logo: 'DOWL-logo.jpg'
-
-  
-  
+  - name: United States Census Bureau
+    acronym: CENSUS
+    url: https://www.census.gov
+    logo: 'census-logo.png'
