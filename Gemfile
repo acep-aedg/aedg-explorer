@@ -91,4 +91,6 @@ gem 'rubocop', require: false
 gem 'rubocop-rails', require: false
 
 gem 'brakeman', '~> 7.0'
+gem 'kramdown'
+gem 'kramdown-parser-gfm'
 gem 'simplecov', require: false, group: :test

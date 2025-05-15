@@ -11,4 +11,5 @@
         - data_creation_steps.each do |item|
           %li.timeline-item.mb-5
             %h5.mb-2.fw-bold= item[:title]
-            %p.text-muted= item[:desc]
+            .text-muted
+              = markdownify(item[:desc])

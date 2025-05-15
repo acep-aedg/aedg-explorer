@@ -259,3 +259,9 @@
   transform: translateY(-3px);
   transition: all 0.3s ease;
 }
+
+// Target links coming from yml static content (markdown)
+.text-muted a {
+  text-decoration: none;
+  font-weight: 500;
+}

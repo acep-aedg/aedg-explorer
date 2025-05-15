@@ -50,4 +50,4 @@
                   aria: { labelledby: "heading-#{category['name'].parameterize}-#{index}" }
                 }
                   .accordion-body.bg-light.text-muted
-                    = simple_format(item['answer'])
+                    = markdownify(item['answer'])

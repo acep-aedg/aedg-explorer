@@ -17,4 +17,14 @@ module ApplicationHelper
 
     data
   end
+
+  def markdownify(text)
+    html = Kramdown::Document.new(text, input: 'GFM').to_html
+
+    scrubber = Rails::Html::PermitScrubber.new
+    scrubber.tags = %w[a p br ul ol li strong em blockquote code pre h1 h2 h3 h4 h5 h6]
+    scrubber.attributes = %w[href target rel title]
+
+    sanitize(html, scrubber: scrubber)
+  end
 end
