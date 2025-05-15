@@ -1,6 +1,5 @@
 %section#explore-tools.py-5
   .row.align-items-center.mb-5
-    / Text column: Order second on small, first on large
     .col-12.col-md-6.order-2.order-md-1.text-start
       .mb-3
         %i.bi.bi-house-fill.fs-2
@@ -10,15 +9,28 @@
         Dive deep into the data that powers your local energy landscape.
       = render partial: "communities/dropdown", locals: { communities: @communities, current_community: nil }
 
-    / Image column: Order first on small, second on medium/large
-    .col-12.col-md-6.order-1.order-md-2.text-center.mb-3
-      = image_tag "https://placehold.co/400x200", class: "img-fluid rounded w-100"
+    
+    .col-12.col-md-5.offset-md-1.order-1.order-md-2.text-center.mb-3
+      .mb-3{ data: { controller: "lightbox" } }
+        - community_image = "solar-test-site_pc-jeff-fisher.JPG"
+        - community_image_credit = "Photo Credit: Jeff Fisher"
+        = link_to image_path(community_image), class: "glightbox", data: { glightbox: "description: #{community_image_credit}" } do
+          = image_tag community_image, class: "img-fluid rounded w-100 img-max-h-300"
+      .text-start.text-small.text-muted
+        = community_image_credit
 
   .row.align-items-center
-    .col-12.col-md-6.text-center.mb-3
-      = image_tag "https://placehold.co/400x200", class: "img-fluid rounded w-100"
+    .col-12.col-md-5.text-center.mb-3
+      .mb-3{ data: { controller: "lightbox" } }
+        - data_explorer_image = "eagle-turbine_pc-todd-paris.jpg"
+        - data_explorer_image_credit = "Photo Credit: Todd Paris"
+        = link_to image_path(data_explorer_image), class: "glightbox", data: { glightbox: "description: #{data_explorer_image_credit}" } do
+          = image_tag data_explorer_image, class: "img-fluid rounded w-100 img-max-h-300"
+      .text-start.text-small.text-muted
+        = data_explorer_image_credit
 
-    .col-12.col-md-6.text-start
+
+    .col-12.col-md-6.offset-md-1.text-start
       .mb-3
         %i.bi.bi-database-fill.fs-2
       %h3.fw-bold Download Energy Datasets
