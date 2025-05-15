@@ -16,8 +16,14 @@ class Communities::ChartsController < ApplicationController
   end
 
   def production_yearly
-    grouped_data = @community.grid.yearly_generations.grouped_net_generation_by_year
-    dataset = grouped_data.map { |year, value| [year.to_s, value] }
+    latest_year = YearlyGeneration.latest_year_for(@community.grid)
+    records = YearlyGeneration.for_grid_and_year(@community.grid, latest_year)
+    grouped = records.group_by(&:fuel_type_code)
+    dataset = grouped.map do |code, rows|
+      name = rows.first.fuel_type_name
+      label = name.present? ? "#{name} (#{code})" : code
+      [label, rows.sum(&:net_generation_mwh)]
+    end
     render json: dataset
   end
 
