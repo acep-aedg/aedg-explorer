@@ -1,3 +1,7 @@
+- chart_title = "Average Rates by Customer Type"
 .row.g-3
   .col
-    = column_chart average_sales_rates_community_charts_path(@community), suffix: "$/MWh", title: "Average Rates by Customer Type", download: { background: "#ffffff", filename: "Average Rates by Customer Type".parameterize, format: "png" }
+    = column_chart average_sales_rates_community_charts_path(@community),
+      suffix: ' $/MWh',
+      title: chart_title,
+      download: { background: '#ffffff', filename: chart_title.parameterize, format: 'png' }

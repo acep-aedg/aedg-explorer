@@ -1,11 +1,10 @@
 - chart_title = "#{@community.grid.name.titleize} Net Generation by Month (#{MonthlyGeneration.latest_year_for(@community.grid)})"
-// Chart view
 = line_chart production_monthly_community_charts_path(@community), 
   title: chart_title, 
-  xtitle: "Month", 
-  ytitle: "Net Generation (MWh)", 
-  suffix: " MWh",
-  thousands: ",",
-  empty: "No Monthly Generation Data Available",
-  loading: "Loading Monthly Generation Data...",
-  download: {background: "#ffffff", filename: chart_title.parameterize, format: "png"}
+  xtitle: 'Month', 
+  ytitle: 'Net Generation (MWh)', 
+  suffix: ' MWh',
+  thousands: ',',
+  empty: 'No Monthly Generation Data Available',
+  loading: 'Loading Monthly Generation Data...',
+  download: {background: '#ffffff', filename: chart_title.parameterize, format: 'png'}
