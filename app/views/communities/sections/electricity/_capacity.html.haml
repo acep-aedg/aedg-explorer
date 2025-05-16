@@ -1,4 +1,4 @@
-- stats = @community.grid.capacities.capacity_stats
+- stats = Capacity.capacity_stats_for(@community.grid)
 - chart_title = "#{@community.grid.name.titleize} Capacity by Fuel Type (#{stats[:year]})"
 
 .d-flex.align-items-center.mb-3
@@ -47,7 +47,14 @@
   / Tab Content
   .tab-content.mt-3
     #chart.tab-pane.fade.show.active
-      = pie_chart capacity_yearly_community_charts_path(@community), title: chart_title, suffix: "MW", donut: true, download: { background: "#ffffff", filename: chart_title.parameterize, format: "png" }, library: { plugins: { legend: { title: { display: true, text: "Fuel Type"}, display: true, position: 'left' } } }
+      = pie_chart capacity_yearly_community_charts_path(@community),
+        title: chart_title,
+        suffix: " MWh",
+        donut: true,
+        empty: "No Yearly Generation Data Available",
+        loading: "Loading Yearly Generation Data...",
+        library: { animation: { duration: 500 }, tooltip: { pointFormat: '{point.name}: <b>{point.y} MW</b>' }, plugins: { legend: { title: { display: true, text: "Fuel Type"}, display: true, position: 'left' } }   },
+        download: { background: "#ffffff", filename: chart_title.parameterize, format: "png" }
 
     #data.tab-pane.fade
       %table.table.table-striped.border{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }

@@ -28,10 +28,8 @@ class Communities::ChartsController < ApplicationController
   end
 
   def capacity_yearly
-    latest_year = @community.grid.capacities.maximum(:year)
-
-    # Get all matching records, not just the aggregate
-    records = @community.grid.capacities.where(year: latest_year).select(:fuel_type_code, :fuel_type_name, :capacity_mw)
+    latest_year = Capacity.latest_year_for(@community.grid)
+    records = Capacity.for_grid_and_year(@community.grid, latest_year)
     grouped = records.group_by(&:fuel_type_code)
 
     dataset = grouped.map do |code, rows|
