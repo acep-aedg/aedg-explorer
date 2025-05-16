@@ -1,7 +1,7 @@
 - chart_title = "#{@community.grid.name.titleize} Net Generation by Fuel Type (#{YearlyGeneration.latest_year_for(@community.grid)})"
 = pie_chart production_yearly_community_charts_path(@community),
   title: chart_title,
-  suffix: " MWh",
+  suffix: " MW",
   thousands: ",",
   donut: true,
   empty: "No Yearly Generation Data Available",
