@@ -18,8 +18,8 @@ class RegionalCorporationAttributesTest < ActiveSupport::TestCase
     @valid_props = {
       fips_code: '123456',
       name: 'Test Regional Corporation',
-      land_area: 100000000,
-      water_area: 100000000
+      land_area: 100_000_000,
+      water_area: 100_000_000
     }
   end
 
@@ -37,7 +37,7 @@ class RegionalCorporationAttributesTest < ActiveSupport::TestCase
 
   test 'fails to create due to missing fips_code' do
     invalid_props = @valid_props.merge(fips_code: nil)
-  
+
     assert_no_difference -> { RegionalCorporation.count } do
       assert_raises ActiveRecord::RecordInvalid do
         RegionalCorporation.import_aedg_with_geom!(invalid_props, @polygon_geom)
