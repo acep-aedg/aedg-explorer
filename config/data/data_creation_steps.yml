@@ -1,20 +1,31 @@
 data_creation_steps:
-  - title: 'Targeting Datasets'
+  - title: 'Choosing the Right Data'
     description: |
-      The [AESTF State Energy Data Subcommittee Report](https://www.akenergyauthority.org/LinkClick.aspx?fileticket=9yFSLzf61MA%3d&portalid=0){:target='_blank'} defines energy data as “*Information about how electricity, heat, and transportation fuels are sourced, generated, stored, distributed, used, and governed; and the impacts on the built, natural, and socioeconomic environments.*” Previous versions of the Alaska Energy Data Gateway were valuable to a wide audience because of the broad range of data it contained. Therefore, we needed to consider these contexts as we chose the data to include.
+      You need data that reflects the full picture of energy in Alaska—how it’s generated, stored, moved, used, and governed, as well as how it affects communities, boroughs, and the State as a whole. To get started, we looked at the kinds of data people found useful in earlier versions of AEDG. Then we added more.
 
-      We started with the datasets used by previous versions of AEDG. Then we held internal brainstorming meetings and consulted with subject matter experts via user interviews to determine which datasets were still available and to find newly published ones. With this list of possible datasets and using user stories, we established priorities for which datasets to incorporate in the first year of the project.
+      We talked with experts to decide what important data to  include first. The goal is to present data that is most useful for planning, reporting, or simply getting a better sense of what’s happening in Alaska’s communities.
 
-  - title: 'Data Sourcing'
+      [For a more indepth view of the data sources, view here.](https://acep-aedg.github.io/aedg-metadata/registries.html#sources){:target='_blank'}
+
+  - title: 'Finding and Downloading the Data'
     description: |
-      To enable quick development of dashboards with up-to-date, relevant data, our sources needed to be available online from government agencies or previously compiled by ACEP and ISER. We cataloged data server URLs for each dataset and established a data pipeline that downloads from all sources at the push of a button. These downloaded data sets are copied into a local archive and then loaded into a database for processing. The flexibility of our pipeline will allow us to incorporate data from other sources and research projects in future iterations of this work.
+      While much of the data is available online from public sources like federal or state  agencies, some of it is not. To keep the data readily accessible, an automated pipeline downloads the data regularly, stores it in a local archive, and loads it into a database. This gives you quicker access to updated dashboards and ensures the system can easily incorporate new data sources over time.
 
-  - title: 'Data Standardization'
+      [For a more indepth view of the data pipeline, request access to the ETL pipeline documentation here.](https://github.com/acep-aedg/aedg-etl-2024/blob/main/ADEG_ETL_readme.md){:target='_blank'}
+
+  - title: 'Making the Data Work Together'
     description: |
-      To allow the merging of disparate datasets that characterizes AEDG, data were standardized and normalized. Column names were standardized, values were calculated and converted to established units, and data tests were written in order to ensure we serve the best available data. Code also subsets, aggregates, and transforms the tables into the datasets loaded into the AEDG database. 
+      The AEDG brings together lots of different datasets, all of which need to be brought into harmony with each other. You’ll find that the data have consistent field names, standard units, and quality checks  to make sure the data you're seeing is the best available.
 
-  - title: 'Data Enrichment'
+      The data has also been combined and re-organized  so it could be displayed clearly by community, region, and other groups that matter to Alaskans.
+
+      [For a more indepth view of the data validation steps, view here.]()
+
+  - title: 'Adding Context You Can Use'
     description: |
-      This iteration of AEDG, like previous versions, displays data at the community level. However, some data are only available in aggregates of communities (electrical grids connecting communities, reporting by utilities that serve multiple communities). And other data apply to subsets of communities (some Alaska legislative districts, census tracts) Therefore the subtleties of this display needed to be identified and descriptionribed to make the dashboards understandable. Additionally the context of relationships between data sources and credit to the data originators needed to be established.
+      You’ll notice that AEDG shows most data by community. But not every dataset lines up neatly that way. Some information comes in grouped by utility service area, census tract, or legislative district. When that’s the case, the distinction is clearly marked – so you’re not left guessing.
 
-      Merging data tables within the processing database enriches the original sources. Additional context is provided by metadata displayed in the Data Explorer which includes descriptionriptions of the data and sources, units, publication year, authors, and licenses. Together, these operations provide a unique glimpse into energy data in Alaska.
+      You can also find extra context about who created the data, what year it was published, what units it’s in, and what kind of license it uses. You’ll see this in the Data Explorer section.
+
+      Together, all these steps help you explore Alaska’s energy with more confidence and clarity.
+
