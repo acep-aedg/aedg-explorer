@@ -32,10 +32,10 @@ class SaleAttributesTest < ActiveSupport::TestCase
       sale = Sale.import_aedg!(attributes)
 
       assert_equal @reporting_entity, sale.reporting_entity
-      assert_equal 2021, sale.year
-      assert_equal 100_000, sale.residential_revenue
-      assert_equal 13_000, sale.total_sales
-      assert_equal 2500, sale.total_customers
+      assert_equal attributes[:year], sale.year
+      assert_equal attributes[:residential_revenue], sale.residential_revenue
+      assert_equal attributes[:total_sales], sale.total_sales
+      assert_equal attributes[:total_customers], sale.total_customers
     end
   end
 
