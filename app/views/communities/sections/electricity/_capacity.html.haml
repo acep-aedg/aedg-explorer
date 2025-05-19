@@ -51,11 +51,8 @@
         title: chart_title,
         suffix: " MW",
         donut: true,
-        thousands: ",",
-        empty: "No Yearly Generation Data Available",
-        loading: "Loading Yearly Generation Data...",
-        library: { animation: { duration: 500 }, tooltip: { pointFormat: '{point.name}: <b>{point.y} MW</b>' }, plugins: { legend: { title: { display: true, text: "Fuel Type"}, display: true, position: 'left' } }   },
-        download: { background: "#ffffff", filename: chart_title.parameterize, format: "png" }
+        library: { plugins: { legend: { title: { display: true, text: "Fuel Type"}, display: true, position: 'left' } } },
+        download: { filename: chart_title.parameterize}
 
     #data.tab-pane.fade
       %table.table.table-striped.border{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }

@@ -5,9 +5,8 @@
       = pie_chart revenue_by_customer_type_community_charts_path(@community),
         prefix: '$ ',
         donut: true,
-        thousands: ',',
         title: revenue_chart_title,
-        download: { background: '#ffffff', filename: revenue_chart_title.parameterize, format: 'png' }
+        download: { filename: revenue_chart_title.parameterize }
 
   - if latest_sale&.residential_sales && latest_sale&.commercial_sales
     .col-12.col-md-6.col-lg-4
@@ -15,15 +14,13 @@
       = pie_chart sales_by_customer_type_community_charts_path(@community),
         suffix: ' MWh',
         donut: true,
-        thousands: ',',
         title: sales_chart_title,
-        download: { background: '#ffffff', filename: sales_chart_title.parameterize, format: 'png' }
+        download: { filename: sales_chart_title.parameterize }
 
   - if latest_sale&.residential_customers && latest_sale&.commercial_customers
     .col-12.col-md-6.col-lg-4
       - customers_chart_title = "Customers by Customer Type (#{latest_year})"
       = pie_chart customers_by_customer_type_community_charts_path(@community),
-        thousands: ',',
         title: customers_chart_title,
         donut: true,
-        download: { background: '#ffffff', filename: customers_chart_title.parameterize, format: 'png' }
+        download: {filename: customers_chart_title.parameterize }
