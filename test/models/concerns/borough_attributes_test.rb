@@ -27,8 +27,9 @@ class BoroughAttributesTest < ActiveSupport::TestCase
     assert_difference -> { Borough.count }, +1 do
       borough = Borough.import_aedg_with_geom!(@valid_props, @polygon_geom)
     end
-    assert_equal 'Test Borough', borough.name
-    assert_equal true, borough.is_census_area
+    assert_equal @valid_props[:name], borough.name
+    assert_equal @valid_props[:is_census_area], borough.is_census_area
+    assert_equal @valid_props[:fips_code], borough.fips_code
     assert_equal @polygon_geom.as_text, borough.boundary.as_text
   end
 
