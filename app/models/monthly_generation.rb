@@ -10,19 +10,22 @@ class MonthlyGeneration < ApplicationRecord
     group(:year, :month).sum(:net_generation_mwh)
   }
 
-  scope :sum_net_generation_by_month, lambda { |year|
-    where(year: year).group(:month).sum(:net_generation_mwh)
+  scope :for_grid_and_year, lambda { |grid, year|
+    where(grid: grid, year: year)
   }
 
-  def self.latest_year
-    maximum(:year)
+  def self.latest_year_for(grid)
+    where(grid: grid).maximum(:year)
   end
 
-  def self.generation_stats(year = latest_year)
-    monthly_data = sum_net_generation_by_month(year)
+  def self.generation_stats_for(grid, year = nil)
+    year ||= latest_year_for(grid)
+    records = for_grid_and_year(grid, year)
+    monthly_data = records.group(:month).sum(:net_generation_mwh)
+
     max_generation = monthly_data.values.max || 0
     min_generation = monthly_data.values.min || 0
-    avg_generation = (monthly_data.values.sum.to_f / monthly_data.size).round(2) if monthly_data.any?
+    avg_generation = ((monthly_data.values.sum.to_f / monthly_data.size).round(2) if monthly_data.any?)
 
     {
       max_generation: max_generation,

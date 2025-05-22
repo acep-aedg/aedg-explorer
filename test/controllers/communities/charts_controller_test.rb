@@ -22,8 +22,11 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
+    label, value = body.first
     generation = @grid.yearly_generations.first
-    assert_equal [[generation.year.to_s, generation.net_generation_mwh]], body
+    assert_includes label, generation.fuel_type_code
+    assert_includes label, generation.fuel_type_name
+    assert_equal generation.net_generation_mwh, value
   end
 
   test 'should get capacity_yearly' do
