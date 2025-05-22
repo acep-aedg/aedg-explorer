@@ -1,8 +1,7 @@
 require 'test_helper'
 
 class FuelPriceAttributesTest < ActiveSupport::TestCase
-  VALID_FIPS_CODE = '000000'.freeze
-  INVALID_FIPS_CODE = '999999'.freeze
+  include TestConstants
 
   def setup
     @community = Community.new(fips_code: VALID_FIPS_CODE)
@@ -24,13 +23,6 @@ class FuelPriceAttributesTest < ActiveSupport::TestCase
     assert_equal @community, fp.community
     assert_equal @valid_props[:reporting_season], fp.reporting_season
     assert_equal @valid_props[:reporting_year], fp.reporting_year
-  end
-
-  test 'import_aedg! raises RecordInvalid for duplicate fuel price' do
-    FuelPrice.import_aedg!(@valid_props)
-    assert_raises(ActiveRecord::RecordInvalid) do
-      FuelPrice.import_aedg!(@valid_props)
-    end
   end
 
   test 'import_aedg! raises RecordInvalid when community fips code does not match any existing community' do

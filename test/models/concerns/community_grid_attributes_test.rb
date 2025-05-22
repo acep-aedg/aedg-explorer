@@ -1,23 +1,20 @@
 require 'test_helper'
 
 class CommunityGridAttributesTest < ActiveSupport::TestCase
-  VALID_AEGD_ID = 1111
-  INVALID_AEGD_ID = 9999
-  INVALID_FIPS_CODE = '9999'.freeze
+  include TestConstants
 
   def setup
-    @grid = Grid.create!(aedg_id: VALID_AEGD_ID, name: 'Test Grid')
+    @grid = Grid.create!(aedg_id: VALID_AEDG_ID, name: 'Test Grid')
     @community = communities(:one)
     @valid_props = {
       community_fips_code: @community.fips_code,
-      grid_id: VALID_AEGD_ID,
+      grid_id: VALID_AEDG_ID,
       connection_year: 2010,
       termination_year: 9999
     }
   end
 
   test 'import_aedg! creates a community grid with valid props' do
-    Grid.stubs(:from_aedg_id).with(VALID_AEGD_ID).returns([@grid])
     cg = nil
     assert_difference -> { CommunityGrid.count }, 1 do
       cg = CommunityGrid.import_aedg!(@valid_props)

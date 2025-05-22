@@ -4,7 +4,6 @@ require 'rgeo'
 class SenateDistrictAttributesTest < ActiveSupport::TestCase
   def setup
     @geom_factory = RGeo::Geographic.simple_mercator_factory
-
     polygon = @geom_factory.polygon(
       @geom_factory.linear_ring([
                                   @geom_factory.point(0, 0),
@@ -16,10 +15,9 @@ class SenateDistrictAttributesTest < ActiveSupport::TestCase
     )
 
     @polygon_geom = @geom_factory.multi_polygon([polygon])
-
     @valid_props = {
-      'district' => 'ABC',
-      'as_of_date' => '2022-01-01'
+      district: 'ABC',
+      as_of_date: '2022-01-01'
     }
   end
 

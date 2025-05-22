@@ -1,7 +1,6 @@
 class PopulationAgeSex < ApplicationRecord
   include PopulationAgeSexAttributes
   belongs_to :community, foreign_key: 'community_fips_code', primary_key: 'fips_code'
-  validates :community_fips_code, presence: true, uniqueness: { scope: :is_most_recent }
 
   # Scope to get most recent population detail data for a community
   scope :most_recent_for, ->(community_id) { where(community_fips_code: community_id).where(is_most_recent: true) }

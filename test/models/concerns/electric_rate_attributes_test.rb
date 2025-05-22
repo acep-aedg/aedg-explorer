@@ -1,8 +1,7 @@
 require 'test_helper'
 
 class ElectricRateAttributesTest < ActiveSupport::TestCase
-  VALID_AEDG_ID = 1111
-  INVALID_AEDG_ID = 9999
+  include TestConstants
 
   def setup
     @grid = grids(:one)
@@ -14,7 +13,6 @@ class ElectricRateAttributesTest < ActiveSupport::TestCase
     }
   end
   test 'import_aedg! creates electric rate with valid props' do
-    ReportingEntity.stubs(:from_aedg_id).with(VALID_AEDG_ID).returns([@reporting_entity])
     electric_rate = nil
     assert_difference -> { ElectricRate.count }, +1 do
       electric_rate = ElectricRate.import_aedg!(@valid_props)
@@ -26,7 +24,6 @@ class ElectricRateAttributesTest < ActiveSupport::TestCase
   end
 
   test 'import_aedg! raises NotNullViolation when associated grid does not exist' do
-    ReportingEntity.stubs(:from_aedg_id).with(INVALID_AEDG_ID).returns([])
     invalid_props = @valid_props.merge(reporting_entity_id: INVALID_AEDG_ID)
     assert_raises(ActiveRecord::NotNullViolation) do
       ElectricRate.import_aedg!(invalid_props)

@@ -1,25 +1,27 @@
 require 'test_helper'
 
 class TransportationAttributesTest < ActiveSupport::TestCase
+  include TestConstants
+
   def setup
-    @community = Community.new(fips_code: '000000')
+    @community = Community.new(fips_code: VALID_FIPS_CODE)
     @community.save(validate: false)
 
     @valid_props = {
-      'community_fips_code' => @community.fips_code,
-      'airport' => true,
-      'harbor_dock' => true,
-      'state_ferry' => true,
-      'cargo_barge' => true,
-      'road_connection' => true,
-      'coastal' => true,
-      'road_or_ferry' => true,
-      'description' => 'Test description',
-      'as_of_date' => '2023-10-01'
+      community_fips_code: VALID_FIPS_CODE,
+      airport: true,
+      harbor_dock: true,
+      state_ferry: true,
+      cargo_barge: true,
+      road_connection: true,
+      coastal: true,
+      road_or_ferry: true,
+      description: 'Test description',
+      as_of_date: '2023-10-01'
     }
   end
 
-  test 'creates a new transportation with attributes' do
+  test 'import_aedg! creates a transportation record with valid props' do
     transportation = nil
     assert_difference -> { Transportation.count }, +1 do
       transportation = Transportation.import_aedg!(@valid_props)
@@ -38,7 +40,7 @@ class TransportationAttributesTest < ActiveSupport::TestCase
     assert_equal Date.parse(@valid_props[:as_of_date]), transportation.as_of_date
   end
 
-  test 'does not create a duplicate transportation for the same community' do
+  test 'import_aedg! does not create duplicate transportation for the same community' do
     Transportation.import_aedg!(@valid_props)
 
     assert_no_difference -> { Transportation.count } do
@@ -46,8 +48,8 @@ class TransportationAttributesTest < ActiveSupport::TestCase
     end
   end
 
-  test 'raises error if community fips code does not match any community' do
-    props_with_invalid_fips = @valid_props.merge('community_fips_code' => '999999')
+  test 'import_aedg! raises RecordInvalid when no matching community is found' do
+    props_with_invalid_fips = @valid_props.merge(community_fips_code: INVALID_FIPS_CODE)
     assert_raises(ActiveRecord::RecordInvalid) do
       Transportation.import_aedg!(props_with_invalid_fips)
     end

@@ -1,8 +1,7 @@
 require 'test_helper'
 
 class EmploymentAttributesTest < ActiveSupport::TestCase
-  VALID_FIPS_CODE = '000000'.freeze
-  INVALID_FIPS_CODE = '999999'.freeze
+  include TestConstants
 
   def setup
     @community = Community.new(fips_code: VALID_FIPS_CODE)

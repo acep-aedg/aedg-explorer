@@ -1,44 +1,40 @@
 require 'test_helper'
 
 class ReportingEntityAttributesTest < ActiveSupport::TestCase
-  test 'import_aedg! creates a reporting entity with correct attributes using stubbed grid' do
-    fake_grid = Grid.new(aedg_id: 1, name: 'Stub Grid')
-    Grid.stubs(:from_aedg_id).with(1).returns([fake_grid])
+  include TestConstants
 
+  def setup
+    @grid = Grid.create!(aedg_id: VALID_AEDG_ID, name: 'Test Grid')
+    @valid_props = {
+      id: VALID_AEDG_ID,
+      name: 'Test Utility',
+      year: 2021,
+      grid_id: VALID_AEDG_ID
+    }
+  end
+  test 'import_aedg! creates a reporting entity record with valid props' do
+    reporting_entity = nil
     assert_difference -> { ReportingEntity.count }, +1 do
-      reporting_entity = ReportingEntity.import_aedg!({
-                                                        'id' => 1,
-                                                        'name' => 'Mocked Utility',
-                                                        'year' => 2020,
-                                                        'grid_id' => 1
-                                                      })
-
-      assert_equal 'Mocked Utility', reporting_entity.name
-      assert_equal 1, reporting_entity.aedg_id
-      assert_equal 2020, reporting_entity.year
-      assert_equal fake_grid, reporting_entity.grid
+      reporting_entity = ReportingEntity.import_aedg!(@valid_props)
     end
+
+    assert_equal @valid_props[:name], reporting_entity.name
+    assert_equal @valid_props[:id], reporting_entity.aedg_id
+    assert_equal @valid_props[:year], reporting_entity.year
+    assert_equal @grid, reporting_entity.grid
   end
 
-  test 'import_aedg! raises error if id is missing' do
+  test 'import_aedg! raises RuntimeError when missing id' do
+    invalid_props = @valid_props.merge(id: nil)
     assert_raises(RuntimeError, 'id is required') do
-      ReportingEntity.import_aedg!({
-                                     'name' => 'Missing ID Utility',
-                                     'year' => 2021,
-                                     'grid_id' => 1
-                                   })
+      ReportingEntity.import_aedg!(invalid_props)
     end
   end
 
-  test 'import_aedg! raises validation error if grid is not found' do
-    Grid.stubs(:from_aedg_id).with(999).returns([])
+  test 'import_aedg! raises RecordInvalid when associated grid does not exist' do
+    invalid_props = @valid_props.merge(grid_id: INVALID_AEDG_ID)
     assert_raises(ActiveRecord::RecordInvalid) do
-      ReportingEntity.import_aedg!({
-                                     'id' => 2,
-                                     'name' => 'No Grid Utility',
-                                     'year' => 2022,
-                                     'grid_id' => 999
-                                   })
+      ReportingEntity.import_aedg!(invalid_props)
     end
   end
 end

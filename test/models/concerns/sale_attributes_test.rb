@@ -1,61 +1,38 @@
 require 'test_helper'
 
 class SaleAttributesTest < ActiveSupport::TestCase
-  setup do
+  include TestConstants
+
+  def setup
     @grid = grids(:one)
-    @reporting_entity = ReportingEntity.create!(
-      aedg_id: 101,
-      name: 'Test Utility',
-      year: 2021,
-      grid: @grid
-    )
-  end
-
-  test 'import_aedg! creates a sale with correct attributes using stubbed reporting_entity' do
-    ReportingEntity.stubs(:from_aedg_id).with(101).returns([@reporting_entity])
-
-    attributes = {
-      reporting_entity_id: 101,
+    @reporting_entity = ReportingEntity.create!(aedg_id: VALID_AEDG_ID, name: 'Test Utility', year: 2021, grid: @grid)
+    @valid_props = {
+      reporting_entity_id: VALID_AEDG_ID,
       year: 2021,
       residential_revenue: 100_000,
-      residential_sales: 5_000,
-      residential_customers: 1000,
-      commercial_revenue: 200_000,
       commercial_sales: 8000,
-      commercial_customers: 1500,
-      total_revenue: 300_000,
-      total_sales: 13_000,
       total_customers: 2500
     }
-
-    assert_difference -> { Sale.count }, 1 do
-      sale = Sale.import_aedg!(attributes)
-
-      assert_equal @reporting_entity, sale.reporting_entity
-      assert_equal attributes[:year], sale.year
-      assert_equal attributes[:residential_revenue], sale.residential_revenue
-      assert_equal attributes[:total_sales], sale.total_sales
-      assert_equal attributes[:total_customers], sale.total_customers
-    end
   end
 
-  test 'import_aedg! raises if reporting_entity is not found' do
-    ReportingEntity.stubs(:from_aedg_id).with(999).returns([])
+  test 'import_aedg! creates sale record with valid props' do
+    sale = nil
+    assert_difference -> { Sale.count }, 1 do
+      sale = Sale.import_aedg!(@valid_props)
+    end
+
+    assert_equal @reporting_entity, sale.reporting_entity
+    assert_equal @valid_props[:year], sale.year
+    assert_equal @valid_props[:residential_revenue], sale.residential_revenue
+    assert_equal @valid_props[:commercial_sales], sale.commercial_sales
+    assert_equal @valid_props[:total_customers], sale.total_customers
+  end
+
+  test 'import_aedg! raises RecordInvalid if reporting_entity is not found' do
+    invalid_props = @valid_props.merge(reporting_entity_id: INVALID_AEDG_ID)
 
     assert_raises ActiveRecord::RecordInvalid do
-      Sale.import_aedg!({
-                          reporting_entity_id: 999,
-                          year: 2022,
-                          residential_revenue: 100,
-                          residential_sales: 100,
-                          residential_customers: 10,
-                          commercial_revenue: 100,
-                          commercial_sales: 100,
-                          commercial_customers: 10,
-                          total_revenue: 200,
-                          total_sales: 200,
-                          total_customers: 20
-                        })
+      Sale.import_aedg!(invalid_props)
     end
   end
 end

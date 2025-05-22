@@ -1,15 +1,12 @@
 require 'test_helper'
 
 class PopulationAgeSexAttributesTest < ActiveSupport::TestCase
-  VALID_FIPS_CODE = '000000'.freeze
-  INVALID_FIPS_CODE = '999999'.freeze
+  include TestConstants
 
   def setup
-    @community = Community.new(fips_code: VALID_FIPS_CODE)
-    @community.save(validate: false)
-
+    @community = communities(:one)
     @valid_props = {
-      community_fips_code: VALID_FIPS_CODE,
+      community_fips_code: @community.fips_code,
       is_most_recent: true
     }
   end
@@ -23,13 +20,6 @@ class PopulationAgeSexAttributesTest < ActiveSupport::TestCase
     assert_equal @community, pas.community
     assert_equal @valid_props[:community_fips_code], pas.community_fips_code
     assert_equal @valid_props[:is_most_recent], pas.is_most_recent
-  end
-
-  test 'import_aedg! does not create duplicate population age sex for the same community and is most recent' do
-    PopulationAgeSex.import_aedg!(@valid_props)
-    assert_raises(ActiveRecord::RecordInvalid) do
-      PopulationAgeSex.import_aedg!(@valid_props)
-    end
   end
 
   test 'import_aedg! raises RecordInvalid when community fips code does not match an existing community' do

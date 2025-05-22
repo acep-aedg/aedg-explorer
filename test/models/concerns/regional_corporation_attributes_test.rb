@@ -2,6 +2,7 @@ require 'test_helper'
 require 'rgeo'
 
 class RegionalCorporationAttributesTest < ActiveSupport::TestCase
+  include TestConstants
   def setup
     @geom_factory = RGeo::Geographic.simple_mercator_factory
 
@@ -16,14 +17,14 @@ class RegionalCorporationAttributesTest < ActiveSupport::TestCase
     )
 
     @valid_props = {
-      fips_code: '123456',
+      fips_code: VALID_FIPS_CODE,
       name: 'Test Regional Corporation',
       land_area: 100_000_000,
       water_area: 100_000_000
     }
   end
 
-  test 'creates a new borough with geometry and attributes' do
+  test 'import_aedg_with_geom! creates a regional corporation record with vaild props and geom' do
     reg_corp = nil
     assert_difference -> { RegionalCorporation.count }, +1 do
       reg_corp = RegionalCorporation.import_aedg_with_geom!(@valid_props, @polygon_geom)
@@ -35,7 +36,7 @@ class RegionalCorporationAttributesTest < ActiveSupport::TestCase
     assert_equal @polygon_geom.as_text, reg_corp.boundary.as_text
   end
 
-  test 'fails to create due to missing fips_code' do
+  test 'import_aedg_with_geom! raises RecordInvalid when fips_code is missing' do
     invalid_props = @valid_props.merge(fips_code: nil)
 
     assert_no_difference -> { RegionalCorporation.count } do
@@ -45,7 +46,7 @@ class RegionalCorporationAttributesTest < ActiveSupport::TestCase
     end
   end
 
-  test 'fails to create due to no geometry' do
+  test 'import_aedg_with_geom! raises ArgumentError when geometry is not provided' do
     assert_no_difference -> { RegionalCorporation.count } do
       assert_raises ArgumentError do
         RegionalCorporation.import_aedg_with_geom!(@valid_props)

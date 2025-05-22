@@ -1,15 +1,12 @@
 require 'test_helper'
 
 class YearlyGenerationAttributesTest < ActiveSupport::TestCase
-  VALID_AEGD_ID = 1
-  INVALID_AEGD_ID = 9999
+  include TestConstants
 
   def setup
-    @grid = Grid.create!(aedg_id: VALID_AEGD_ID, name: 'Stub Grid')
-    Grid.stubs(:from_aedg_id).with(VALID_AEGD_ID).returns([@grid])
-
+    @grid = Grid.create!(aedg_id: VALID_AEDG_ID, name: 'Test Grid')
     @valid_props = {
-      grid_id: VALID_AEGD_ID,
+      grid_id: VALID_AEDG_ID,
       net_generation_mwh: 10,
       fuel_type_code: 'TEST',
       fuel_type_name: 'Test Fuel Type',
@@ -17,23 +14,24 @@ class YearlyGenerationAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test 'import_aedg! creates a Yearly Generation Record' do
+  test 'import_aedg! creates a yearly generation record with valid props' do
+    yg = nil
+
     assert_difference -> { YearlyGeneration.count }, +1 do
       yg = YearlyGeneration.import_aedg!(@valid_props)
-      assert_equal @grid, yg.grid
-      assert_equal @valid_props[:net_generation_mwh], yg.net_generation_mwh
-      assert_equal @valid_props[:fuel_type_code], yg.fuel_type_code
-      assert_equal @valid_props[:fuel_type_name], yg.fuel_type_name
-      assert_equal @valid_props[:year], yg.year
     end
+
+    assert_equal @grid, yg.grid
+    assert_equal @valid_props[:net_generation_mwh], yg.net_generation_mwh
+    assert_equal @valid_props[:fuel_type_code], yg.fuel_type_code
+    assert_equal @valid_props[:fuel_type_name], yg.fuel_type_name
+    assert_equal @valid_props[:year], yg.year
   end
 
-  test 'fails to create Yearly Generation when grid does not exist' do
-    Grid.stubs(:from_aedg_id).with(INVALID_AEGD_ID).returns([])
-    props = @valid_props.merge(grid_id: INVALID_AEGD_ID)
-
+  test 'import_aedg! raises RecordInvalid when associated grid cannot be found' do
+    invalid_props = @valid_props.merge(grid_id: INVALID_AEDG_ID)
     assert_raises(ActiveRecord::RecordInvalid) do
-      YearlyGeneration.import_aedg!(props)
+      YearlyGeneration.import_aedg!(invalid_props)
     end
   end
 end
