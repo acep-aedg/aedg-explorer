@@ -12,7 +12,7 @@
           = link_to partner['url'], target: "_blank", class: "d-block p-4 bg-white border rounded shadow-sm text-decoration-none text-dark h-100 hover-shadow text-center" do
             .d-flex.flex-column.align-items-center.justify-content-center.h-100
               / Logo container with fixed size
-              .logo-wrapper.mb-3{ style: "width: 120px; height: 90px;" }
+              .logo-wrapper.mb-3{ style: "width: auto; height: 90px;" }
                 - if partner['logo']
                   = image_tag "partners/#{partner['logo']}", class: "img-fluid object-fit-contain h-100", alt: partner['name']
                 - else

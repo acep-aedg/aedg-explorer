@@ -2,13 +2,17 @@
   .row
     .col-lg-6
       %h5.text-muted.mb-3 Data Process
-      %h2.fw-bold.mb-4 How Were the AEDG Datasets Created?
+      %h2.fw-bold.mb-4 How Your Data is Built
       %p.text-muted
-        To help you make confident, data-driven decisions, the AEDG datasets were built with care and precision. From sourcing high-quality public data to cleaning, verifying, and validating every entry, each step of the process was designed to ensure accuracy and usability. Here’s a behind-the-scenes look at how the datasets came together—so you can trust what you’re working with.
+        The Alaska Energy Data Gateway (AEDG) gives you access to carefully selected energy data, enriched with helpful context. Instead of pulling data from just anywhere, AEDG follows a several step process to ensure what you see is accurate, relevant, and easy to use.
+
+      %p.text-muted.mt-3
+        Here’s a look at how the datasets were built – so you can feel confident in the source and quality of the data you’re working with.
 
     .col-lg-6.pt-5
       %ul.timeline
         - data_creation_steps.each do |item|
           %li.timeline-item.mb-5
             %h5.mb-2.fw-bold= item[:title]
-            %p.text-muted= item[:desc]
+            .text-muted
+              = markdownify(item[:description])

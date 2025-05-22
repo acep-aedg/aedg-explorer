@@ -16,6 +16,9 @@ application.register("community-dropdown", CommunityDropdownController)
 import DatatablesController from "./datatables_controller"
 application.register("datatables", DatatablesController)
 
+import LightboxController from "./lightbox_controller"
+application.register("lightbox", LightboxController)
+
 import MapsController from "./maps_controller"
 application.register("maps", MapsController)
 

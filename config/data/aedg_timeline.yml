@@ -1,0 +1,16 @@
+aedg_timeline:
+  - title: 'AEDG Version 3.0'
+    date: '2024–2025'
+    description: "University partners ISER and ACEP launch a revitalized AEDG with updated datasets, enhanced tools, and a modernized interface."
+
+  - title: 'State Support'
+    date: '2024'
+    description: "The Alaska State Legislature allocates funding to support the revitalization of the AEDG."
+
+  - title: 'AEDG Version 2.0'
+    date: '2017'
+    description: "AEDG was redesigned & extended by ACEP and ISER in collaboration with Lawrence Berkeley National Laboratory (LBNL)."
+
+  - title: 'AEDG Version 1.0'
+    date: '2013'
+    description: "The Alaska Energy Data Gateway (AEDG) was created by UAA’s Institute of Social and Economic Research (ISER) and UAF’s Alaska Center for Energy and Power (ACEP) to showcase energy and socioeconomic data for Alaska."

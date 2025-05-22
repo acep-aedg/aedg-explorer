@@ -21,3 +21,4 @@ pin 'mapbox-gl' # @3.11.0
 #   `mv vendor/javascript/@popperjs--core--+esm.js vendor/javascript/@popperjs--core.js`
 pin '@popperjs/core', to: '@popperjs--core.js' # @2.11.8
 pin '@popperjs/core/+esm', to: '@popperjs--core--+esm.js' # @2.11.8
+pin 'glightbox' # @3.3.1

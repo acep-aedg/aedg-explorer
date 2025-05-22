@@ -15,5 +15,6 @@
         - aedg_timeline.each do |item|
           %li.timeline-item.mb-5
             %h5.mb-2.fw-bold= item[:date]
-            %p.text-muted.fw-bold= item[:title]
-            %p.text-muted= item[:desc]
+            %p.text-muted.fw-bold= (item[:title])
+            .text-muted
+              = markdownify(item[:description])
