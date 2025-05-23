@@ -1,42 +1,44 @@
-%p= @dataset.description
+.mb-3 
+  %h3 What's in this Dataset?
+  %p= @dataset.description
 
-%p 
-  %strong Published:
-  = @dataset.publicationDate
-
-%p
-  %strong Topics 
-  = @dataset.topic_list.join(', ')
-
-%p 
-  %strong Keywords: 
-  - @dataset.keywords.each do |tag|
-    %span.badge.bg-secondary= tag
-
-%p 
-  %strong Format: 
-  %span.badge.bg-primary= @dataset.format
-
-- if @dataset.sources.present?
   %p 
-    %strong Sources:
-    %ul.list-group.ms-3
-      - @dataset.sources.each do |source|
-        %li.list-group-item.overflow-hidden
-          .fw-bold= source['title']
-          .ms-2.me-auto
-            = source['description']
-            %div
-              %strong URL: 
-              = link_to source['path']
+    %strong Published:
+    = @dataset.publicationDate
 
-- if @dataset.licenses.present?
+  %p
+    %strong Topics 
+    = @dataset.topic_list.join(', ')
+
   %p 
-    %strong Licenses:
-    - @dataset.licenses.each do |license|
-      %div
-        %span This work is licensed under 
-        %span.fw-bold
-          = link_to license['path'], target: '_blank' do 
-            = license['name']
-            %i.bi.bi-link-45deg
+    %strong Keywords: 
+    - @dataset.keywords.each do |tag|
+      %span.badge.bg-secondary= tag
+
+  %p 
+    %strong Format: 
+    %span.badge.bg-primary= @dataset.format
+
+  - if @dataset.sources.present?
+    %p 
+      %strong Sources:
+      %ul.list-group.ms-3
+        - @dataset.sources.each do |source|
+          %li.list-group-item.overflow-hidden
+            .fw-bold= source['title']
+            .ms-2.me-auto
+              = source['description']
+              %div
+                %strong URL: 
+                = link_to source['path']
+
+  - if @dataset.licenses.present?
+    %p 
+      %strong Licenses:
+      - @dataset.licenses.each do |license|
+        %div
+          %span This work is licensed under 
+          %span.fw-bold
+            = link_to license['path'], target: '_blank' do 
+              = license['name']
+              %i.bi.bi-link-45deg

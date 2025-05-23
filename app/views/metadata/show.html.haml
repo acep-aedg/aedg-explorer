@@ -2,9 +2,14 @@
   .row.g-5
     .col-md-3
       .d-grid.gap-3
-        = link_to '#', class: 'btn btn-primary' do
+        = link_to download_metadatum_path(@metadatum), target: '_blank', class: 'btn btn-primary' do 
           %i.bi.bi-save
-          Download
+          Download Metadata
+
+        = link_to download_metadatum_dataset_path(@metadatum, @dataset, format: @dataset.format.downcase), target: '_blank', class: 'btn btn-primary' do 
+          %i.bi.bi-save
+          Download 
+          = @dataset.format
         = link_to search_metadata_path, class: "btn btn-secondary" do 
           %i.bi.bi-arrow-left
           Back
@@ -18,9 +23,11 @@
         %li.nav-item
           = link_to "About", "#about", class: "nav-link active", data: { bs_toggle: "tab" }
         %li.nav-item
-          = link_to "Datasets", "#datasets", class: "nav-link", data: { bs_toggle: "tab" }
-        %li.nav-item
           = link_to "Metadata", "#metadata", class: "nav-link", data: { bs_toggle: "tab" }
+        %li.nav-item
+          = link_to "Fields", "#fields", class: "nav-link", data: { bs_toggle: "tab" }
+        %li.nav-item
+          = link_to "Data", "#data", class: "nav-link", data: { bs_toggle: "tab" }
         %li.nav-item
           = link_to "Citation", "#citation", class: "nav-link", data: { bs_toggle: "tab" }
         %li.nav-item
@@ -32,14 +39,18 @@
       / Tab Content
       .tab-content.mb-3
         #about.tab-pane.fade.show.active.border-start.border-end.border-bottom.p-3
-          = render "metadata/tabs/about", metadatum: @metadatum 
-          
-        #datasets.tab-pane.fade.border-start.border-end.border-bottom.p-3
-          = render "metadata/tabs/datasets", metadatum: @metadatum
+          = render "datasets/tabs/about", dataset: @dataset
 
         #metadata.tab-pane.fade.border-start.border-end.border-bottom.p-3
           = render "metadata/tabs/metadata", metadatum: @metadatum
-
+        
+        #fields.tab-pane.fade.border-start.border-end.border-bottom.p-3
+          = render 'datasets/tabs/fields', dataset: @dataset
+        #data.tab-pane.fade.border-start.border-end.border-bottom.p-3
+          - if @dataset.format.downcase == 'csv'
+            = render 'datasets/tabs/data_csv', dataset: @dataset
+          - if @dataset.format.downcase == 'geojson'
+            = render 'datasets/tabs/data_map', dataset: @dataset
         #citation.tab-pane.fade.border-start.border-end.border-bottom.p-3
           = render "metadata/tabs/cite_dataset", metadatum: @metadatum
 

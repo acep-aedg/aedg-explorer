@@ -1,5 +1,6 @@
 class MetadataController < ApplicationController
   before_action :set_metadatum, only: %i[download show]
+  before_action :set_dataset, only: %i[show]
 
   def index
     @search = search_params
@@ -32,6 +33,10 @@ class MetadataController < ApplicationController
 
   def set_metadatum
     @metadatum = Metadatum.friendly.find(params[:id])
+  end
+
+  def set_dataset
+    @dataset = @metadatum.dataset
   end
 
   def search_params
