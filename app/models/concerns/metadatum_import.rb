@@ -9,13 +9,15 @@ module MetadatumImport
       self.data = data
       self.published = true
 
-      self.data['resources'].each do |resource|
-        dataset = Dataset.import_resource(resource)
-        keyword_list.add(dataset.keyword_list)
-        topic_list.add(dataset.topic_list)
-        format_list.add(dataset.format)
-        datasets << dataset
-      end
+      resource = self.data['resources'].first
+      raise 'Expected a single resource, but none found.' unless resource
+
+      dataset = Dataset.import_resource(resource)
+      keyword_list.add(dataset.keyword_list)
+      topic_list.add(dataset.topic_list)
+      format_list.add(dataset.format)
+
+      self.dataset = dataset
 
       save!
     end

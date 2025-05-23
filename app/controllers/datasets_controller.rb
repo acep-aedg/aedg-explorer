@@ -53,6 +53,6 @@ class DatasetsController < ApplicationController
   end
 
   def set_dataset
-    @dataset = @metadatum.datasets.friendly.find(params[:id])
+    @dataset = @metadatum.dataset
   end
 end

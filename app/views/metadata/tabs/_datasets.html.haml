@@ -1,21 +1,19 @@
-    
-%h3 Datasets
-%ul.list-group
-  - metadatum.datasets.each do |dataset|
+- if metadatum.dataset.present?
+  %h3 Dataset
+  %ul.list-group
     %li.list-group-item
       .mb-1
-        = link_to dataset.title.titleize, [metadatum, dataset], class: 'fs-4'
+        = link_to metadatum.dataset.title.titleize, [metadatum, metadatum.dataset], class: 'fs-4'
 
       %div
         %strong Topics:
-        = dataset.topics.join(', ')
-      
+        = metadatum.dataset.topics.join(', ')
+
       %div
         %strong Published:
-        = dataset.publicationDate
+        = metadatum.dataset.publicationDate
 
-      %span.badge.bg-primary= dataset.format
+      %span.badge.bg-primary= metadatum.dataset.format
 
-      - dataset.keywords.each do |tag|
+      - metadatum.dataset.keywords.each do |tag|
         %span.badge.bg-secondary= tag
-
