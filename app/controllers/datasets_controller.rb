@@ -6,11 +6,9 @@ class DatasetsController < ApplicationController
   # GET /datasets/1 or /datasets/1.json
   def show
     respond_to do |format|
-      format.html
-      format.json do
-        # This is a workaround for rendering the data out to the datatables
-        render json: data_as_json
-      end
+      # This is a workaround for rendering the data out to the datatables
+      format.json { render json: data_as_json }
+      format.any  { head :not_acceptable }
     end
   end
 
@@ -53,6 +51,6 @@ class DatasetsController < ApplicationController
   end
 
   def set_dataset
-    @dataset = @metadatum.datasets.friendly.find(params[:id])
+    @dataset = @metadatum.dataset
   end
 end

@@ -33,7 +33,7 @@ class Metadatum < ApplicationRecord
 
   store_accessor :data, :title, :description, :resources
 
-  has_many :datasets, dependent: :destroy
+  has_one :dataset, dependent: :destroy
 
   default_scope { where(published: true) }
 
