@@ -1,59 +1,66 @@
-.container-fluid
-  .row
-    .col-md-3
-      .d-grid.gap-3
-        = link_to download_metadatum_path(@metadatum), target: '_blank', class: 'btn btn-primary' do 
-          %i.bi.bi-save
+.container-xxl
+  / Back Button
+  .row.mb-3
+    .col-12
+      = link_to search_metadata_path, class: 'text-decoration-none ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
+        %i.bi.bi-arrow-left.me-1
+        Back to Browse
+
+  / Title + Download Buttons
+  .row.mb-3.align-items-center
+    .col-12.col-lg-8
+      .d-flex.align-items-baseline
+        %i.bi.bi-database-fill.me-2.fs-1
+        %h2.fw-bold= @metadatum.title.titleize
+
+    .col-12.col-lg-3.offset-lg-1.mt-3.mt-lg-0
+      .d-flex.flex-row.flex-lg-column.align-items-md-end.gap-2
+        = link_to download_metadatum_path(@metadatum), target: '_blank', class: 'btn btn-aedg-secondary px-4 py-2 w-100' do
+          %i.bi.bi-file-earmark-arrow-down.me-1
           Download Metadata
 
-        = link_to download_metadatum_dataset_path(@metadatum, @dataset, format: @dataset.format.downcase), target: '_blank', class: 'btn btn-primary' do 
-          %i.bi.bi-save
-          Download 
-          = @dataset.format
-        = link_to search_metadata_path, class: "btn btn-secondary" do 
-          %i.bi.bi-arrow-left
-          Back
-    .col-md-9
-      .d-flex.flex-row.align-items-center
-        %i.bi.bi-database-fill.me-2.fs-3
-        %h3.my-3= @metadatum.title.titleize
-
-      / Navigation Tabs
-      .nav.nav-tabs
-        %li.nav-item
-          = link_to "About", "#about", class: "nav-link active", data: { bs_toggle: "tab" }
-        %li.nav-item
-          = link_to "Metadata", "#metadata", class: "nav-link", data: { bs_toggle: "tab" }
-        %li.nav-item
-          = link_to "Fields", "#fields", class: "nav-link", data: { bs_toggle: "tab" }
-        %li.nav-item
-          = link_to "Data", "#data", class: "nav-link", data: { bs_toggle: "tab" }
-        %li.nav-item
-          = link_to "Citation", "#citation", class: "nav-link", data: { bs_toggle: "tab" }
-        %li.nav-item
-          = link_to "Related", "#related", class: "nav-link", data: { bs_toggle: "tab" }
-
-        / Export Button aligned to the right
-        -# = link_to "Export", "#", class: "btn btn-primary"
-
-      / Tab Content
-      .tab-content.mb-3
-        #about.tab-pane.fade.show.active.border-start.border-end.border-bottom.p-3
-          = render "datasets/tabs/about", dataset: @dataset
-
-        #metadata.tab-pane.fade.border-start.border-end.border-bottom.p-3
-          = render "metadata/tabs/metadata", metadatum: @metadatum
-        
-        #fields.tab-pane.fade.border-start.border-end.border-bottom.p-3
-          = render 'datasets/tabs/fields', dataset: @dataset
-        #data.tab-pane.fade.border-start.border-end.border-bottom.p-3
+        = link_to download_metadatum_dataset_path(@metadatum, @dataset, format: @dataset.format.downcase), target: '_blank', class: 'btn btn-aedg-primary px-4 py-2 w-100' do
           - if @dataset.format.downcase == 'csv'
-            = render 'datasets/tabs/data_csv', dataset: @dataset
-          - if @dataset.format.downcase == 'geojson'
-            = render 'datasets/tabs/data_map', dataset: @dataset
-        #citation.tab-pane.fade.border-start.border-end.border-bottom.p-3
-          = render "metadata/tabs/cite_dataset", metadatum: @metadatum
+            %i.bi.bi-filetype-csv.me-1
+          - elsif @dataset.format.downcase == 'geojson'
+            %i.bi.bi-filetype-geojson.me-1
+          - else
+            %i.bi.bi-filetype-text.me-1
+          Download Data
+  / Navigation Tabs
+  .nav.nav-tabs
+    %li.nav-item
+      = link_to 'About', '#about', class: 'nav-link active', data: { bs_toggle: 'tab' }
+    %li.nav-item
+      = link_to 'Metadata', '#metadata', class: 'nav-link', data: { bs_toggle: 'tab' }
+    %li.nav-item
+      = link_to 'Fields', '#fields', class: 'nav-link', data: { bs_toggle: 'tab' }
+    %li.nav-item
+      = link_to 'View Data', '#data', class: 'nav-link', data: { bs_toggle: 'tab' }
+    %li.nav-item
+      = link_to 'Citation', '#citation', class: 'nav-link', data: { bs_toggle: 'tab' }
+    / Not yet implemented
+    /%li.nav-item
+    /  = link_to 'Related', '#related', class: 'nav-link', data: { bs_toggle: 'tab' }
 
-        #related.tab-pane.fade.border-start.border-end.border-bottom.p-3
-          = render "metadata/tabs/related", metadatum: @metadatum
+  / Tab Content
+  .tab-content.my-3
+    #about.tab-pane.fade.show.active.p-3
+      = render 'datasets/tabs/about', dataset: @dataset
+
+    #metadata.tab-pane.fade.p-3
+      = render 'metadata/tabs/metadata', metadatum: @metadatum
+    
+    #fields.tab-pane.fade.p-3
+      = render 'datasets/tabs/fields', dataset: @dataset
+    #data.tab-pane.fade.p-3
+      - if @dataset.format.downcase == 'csv'
+        = render 'datasets/tabs/data_csv', dataset: @dataset
+      - if @dataset.format.downcase == 'geojson'
+        = render 'datasets/tabs/data_map', dataset: @dataset
+    #citation.tab-pane.fade.p-3
+      = render 'metadata/tabs/cite_dataset', metadatum: @metadatum
+    / Not yet implemented
+    /#related.tab-pane.fade.p-3
+    /  = render 'metadata/tabs/related', metadatum: @metadatum
 
