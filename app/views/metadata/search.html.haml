@@ -1,14 +1,29 @@
-.container
+.container-xxl
+  / Back Button
+  .row.mb-3
+    .col-12
+      = link_to metadata_path, class: 'text-decoration-none ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
+        %i.bi.bi-arrow-left.me-1
+        Back
+
   .row.g-4.mb-3
     .col-md-4
-      .m-2
+      .mb-4.position-sticky.top-0.py-3
+        %h2.fw-bold.mb-1 Data Explorer
+        %p.text-muted Explore datasets by filtering or browsing below.
         = render 'search_form'
-    .col-md-8.border-start
-      .mb-3
+
+    .col-md-8.border-md-start.ps-md-4
+      .mb-3.metadata-results.py-3
         - if @metadata.any?
+          - filters_applied = @search.values.any?(&:present?)
+          .d-flex.justify-content-between.align-items-center.mb-3
+            %span.text-muted.fs-5
+              = filters_applied ? 'Search Results' : 'All Datasets'
+              %small.ms-2.text-secondary= "#{pluralize(@metadata.size, 'dataset')} found"
           = render partial: 'metadata', collection: @metadata, as: :metadatum
         - else 
-          %p.fs-2 
-            No results found. 
+          %p.text-center.text-muted.fs-5.mt-5
+            No results found.
             %br/
             Try adjusting your search or using different keywords
