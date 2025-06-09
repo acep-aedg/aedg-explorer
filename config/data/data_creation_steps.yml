@@ -11,7 +11,7 @@ data_creation_steps:
     description: |
       While much of the data is available online from public sources like federal or state  agencies, some of it is not. To keep the data readily accessible, an automated pipeline downloads the data regularly, stores it in a local archive, and loads it into a database. This gives you quicker access to updated dashboards and ensures the system can easily incorporate new data sources over time.
 
-      [For a more indepth view of the data pipeline, request access to the ETL pipeline documentation here.](https://github.com/acep-aedg/aedg-etl-2024/blob/main/AEDG_ETL_readme.md){:target='_blank'}
+      [For a more indepth view of the data pipeline, request access to the ETL pipeline documentation here.](https://github.com/acep-aedg/aedg-etl-2024/blob/main/README.md){:target='_blank'}
 
   - title: 'Making the Data Work Together'
     description: |
@@ -19,7 +19,7 @@ data_creation_steps:
 
       The data has also been combined and re-organized  so it could be displayed clearly by community, region, and other groups that are important across Alaska.
 
-      [For a more indepth view of the data validation steps, view here.]()
+      [For a more indepth view of the data integration steps, view here.]()
 
   - title: 'Adding Context You Can Use'
     description: |
