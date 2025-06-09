@@ -98,40 +98,19 @@
   }
 }
 
-// Custom styles for the partner cards
-
-.button-container {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+// Utility classes for colors
+.bg-aedg-navy {
+  background-color: $aedg-navy;
+}
+.bg-aedg-yellow {
+  background-color: $aedg-yellow;
 }
 
-.button-container {
-  margin-top: auto;
+.text-aedg-navy {
+  color: $aedg-navy;
 }
-
-.content-flexbox {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 3rem;
-  flex-wrap: wrap;
-}
-
-.content-text {
-  flex: 1;
-  min-width: 50%;
-}
-
-.content-image {
-  flex: 0 1 auto;
-  max-width: 400px;
-}
-
-.content-image img {
-  width: 100%;
-  /* Ensure image scales within its container */
-  height: auto;
+.text-aedg-yellow {
+  color: $aedg-yellow;
 }
 
 .card {
@@ -140,15 +119,6 @@
   background-color: $partner-card-bg;
 }
 
-/* Uniform image size for the About section */
-.uniform-size {
-  width: 100%;
-  max-width: 400px;
-  height: 300px;
-  object-fit: cover;
-  display: block;
-  margin: 0 auto;
-}
 
 .timeline {
   border-left: 1px solid hsl(0, 0%, 90%);
@@ -175,19 +145,7 @@
   content: '';
 }
 
-.bg-aedg-navy {
-  background-color: $aedg-navy;
-}
-.bg-aedg-yellow {
-  background-color: $aedg-yellow;
-}
 
-.text-aedg-navy {
-  color: $aedg-navy;
-}
-.text-aedg-yellow {
-  color: $aedg-yellow;
-}
 
 #faq {
   .nav-pills .nav-link {
@@ -276,4 +234,44 @@
       font-weight: 600;
     }
   }
+}
+.topic-tile {
+  background-color: white;
+  border: 1px solid mix($aedg-yellow, #000, 25%);
+  color: $aedg-navy;
+  transition: all 0.2s ease;
+
+  i, .text-dark {
+    color: $aedg-navy !important;
+  }
+
+  &:hover {
+    background-color: mix(white, $aedg-yellow, 85%) !important;
+    transform: translateY(-2px);
+  }
+}
+
+.hero-section {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 0;
+    border-radius: inherit;
+  }
+
+  .container-fluid {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+#explore-data-hero {
+  @extend .hero-section;
+  background-image: linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)), url('landscape_pc-gwen-holdmann.jpg');
 }
