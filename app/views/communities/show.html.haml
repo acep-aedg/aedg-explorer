@@ -7,9 +7,10 @@
           = render "dropdown", communities: @communities, current_community: @community
 
         .d-grid.gap-2
-          %button.btn.btn-aedg-primary.px-4.py-2 
-            %i.bi.bi-file-earmark-arrow-down.me-1
-            Download Summary
+          -# TODO: Uncomment when the download/print functionality is implemented
+          -# %button.btn.btn-aedg-primary.px-4.py-2 
+          -#   %i.bi.bi-file-earmark-arrow-down.me-1
+          -#   Download Summary
 
           = link_to communities_path, class: 'btn btn-secondary' do 
             %i.bi.bi-arrow-left
