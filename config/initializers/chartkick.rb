@@ -11,5 +11,5 @@ Chartkick.options = {
         intersect: true
       }
     }
-  },
+  }
 }

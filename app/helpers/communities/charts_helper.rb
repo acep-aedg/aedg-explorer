@@ -76,7 +76,7 @@ module Communities::ChartsHelper
     years = filtered.map(&:reporting_year).uniq.sort
 
     # Fixed category order ensures consistent series across years
-    categories = ["Winter Gasoline", "Winter Heating Fuel", "Summer Gasoline", "Summer Heating Fuel"]
+    categories = ['Winter Gasoline', 'Winter Heating Fuel', 'Summer Gasoline', 'Summer Heating Fuel']
 
     # Lookup: [year, category] => price Ex: [2024, "Winter Gasoline"] => 6.94
     price_map = filtered.each_with_object({}) do |fp, hash|
