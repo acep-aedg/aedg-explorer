@@ -17,8 +17,8 @@
           = link_to communities_path, class: 'btn btn-secondary' do 
             %i.bi.bi-arrow-left
             Back
-
-        = render 'communities/sections/quick_nav', community: @community
+        .mt-5
+          = render 'communities/sections/quick_nav', community: @community
 
     .col-md-9
       .text-center.my-3

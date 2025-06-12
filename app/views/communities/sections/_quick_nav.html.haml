@@ -1,46 +1,48 @@
-%h4.mt-3.align-self-start On this page
-.row.row-cols-1.row-cols-sm-3.row-cols-md-1.g-2
-  .col
-    %ul.nav.flex-column
-      - if show_electricity_section?(@community)
+#quick-nav.m-3
+  .border-bottom.pb-1
+    %h6.text-muted.fw-semibold On This Page
+  .row.row-cols-1.row-cols-sm-3.row-cols-md-1.g-2
+    .col
+      %ul.nav.flex-column
+        - if show_electricity_section?(@community)
+          %li.nav-item.mt-3.text-uppercase.text-muted.small
+            = nav_link "Electricity", "#electricity", parent_section: true
+        - if show_utilities?(@community)  
+          %li.nav-item
+            = nav_link "Utilities", "#utilities"
+        - if show_rates?(@community)    
+          %li.nav-item
+            = nav_link "Rates", "#rates"
+        - if show_production?(@community)
+          %li.nav-item
+            = nav_link "Production", "#production"
+        - if show_capacity?(@community)
+          %li.nav-item
+            = nav_link "Capacity", "#capacity"
+        - if show_sales_revenue_customers?(@community)
+          %li.nav-item
+            = nav_link "Sales, Revenue & Customers", "#sales-revenue-customers"
+    .col
+      %ul.nav.flex-column
+        - if show_prices_section?(@community)
+          %li.nav-item.mt-3.text-uppercase.text-muted.small
+            = nav_link "Prices", "#prices", parent_section: true
+        - if show_fuel_prices?(@community)
+          %li.nav-item
+            = nav_link "Fuel Prices", "#fuel-prices"
+    .col
+      %ul.nav.flex-column{ data: { turbo: false } }
+        - if show_background_section?(@community)
+          %li.nav-item.mt-3.text-uppercase.text-muted.small
+            = nav_link "Background", "#background", parent_section: true
         %li.nav-item
-          = link_to "Electricity", "#electricity", class: 'nav-link fw-bold', data: { turbo: false }
-      - if show_utilities?(@community)  
-        %li.nav-item
-          = link_to "Utilities", "#utilities", class: 'nav-link ms-3', data: { turbo: false }
-      - if show_rates?(@community)    
-        %li.nav-item
-          = link_to "Rates", "#rates", class: 'nav-link ms-3', data: { turbo: false }
-      - if show_production?(@community)
-        %li.nav-item
-          = link_to "Production", "#production", class: 'nav-link ms-3', data: { turbo: false }
-      - if show_capacity?(@community)
-        %li.nav-item
-          = link_to "Capacity", "#capacity", class: 'nav-link ms-3', data: { turbo: false }
-      - if show_sales_revenue_customers?(@community)
-        %li.nav-item
-          = link_to "Sales, Revenue & Customers", "#sales-revenue-customers", class: 'nav-link ms-3', data: { turbo: false }
-  .col
-    %ul.nav.flex-column
-      - if show_prices_section?(@community)
-        %li.nav-item
-          = link_to "Prices", "#prices", class: 'nav-link fw-bold', data: { turbo: false }
-      - if show_fuel_prices?(@community)
-        %li.nav-item
-          = link_to "Fuel Prices", "#fuel-prices", class: 'nav-link ms-3', data: { turbo: false }
-  .col
-    %ul.nav.flex-column{ data: { turbo: false } }
-      - if show_background_section?(@community)
-        %li.nav-item
-          = link_to "Background", "#background", class: 'nav-link fw-bold', data: { turbo: false }
-      %li.nav-item
-        = link_to "Geography", "#geography", class: 'nav-link ms-3', data: { turbo: false }
-      - if show_transportation?(@community)
-        %li.nav-item
-          = link_to "Transportation", "#transportation", class: 'nav-link ms-3', data: { turbo: false }
-      - if show_election_districts?(@community)
-        %li.nav-item
-          = link_to "Election Districts", "#election-districts", class: 'nav-link ms-3', data: { turbo: false }
-      - if show_population?(@community) 
-        %li.nav-item
-          = link_to "Population", "#population", class: 'nav-link ms-3', data: { turbo: false }
+          = nav_link "Geography", "#geography"
+        - if show_transportation?(@community)
+          %li.nav-item
+            = nav_link "Transportation", "#transportation"
+        - if show_election_districts?(@community)
+          %li.nav-item
+            = nav_link "Election Districts", "#election-districts"
+        - if show_population?(@community) 
+          %li.nav-item
+            = nav_link "Population", "#population"

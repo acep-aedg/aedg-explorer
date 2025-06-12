@@ -270,3 +270,9 @@
   text-decoration: none;
   font-weight: 500;
 }
+
+#quick-nav .nav-link:hover {
+  background-color: $gray-200; 
+  color: darken($primary, 25%);
+  border-radius: 0.25rem;
+}
