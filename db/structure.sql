@@ -201,7 +201,8 @@ CREATE TABLE public.communities (
     puma_code character varying,
     subsistence boolean,
     economic_region character varying,
-    reporting_entity_id bigint
+    reporting_entity_id bigint,
+    village_corporation character varying
 );
 
 
@@ -1884,6 +1885,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250611215411'),
 ('20250509014050'),
 ('20250508195941'),
 ('20250508194355'),

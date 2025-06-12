@@ -31,6 +31,7 @@ module CommunityAttributes
         puma_code: params[:puma_code],
         subsistence: params[:subsistence],
         economic_region: params[:economic_region],
+        village_corporation: params[:village_corporation],
         reporting_entity: ReportingEntity.from_aedg_id(params[:reporting_entity_id]).first
       )
     end
