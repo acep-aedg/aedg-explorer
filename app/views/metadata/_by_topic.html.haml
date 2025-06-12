@@ -1,6 +1,7 @@
-.row.justify-content-center.g-4
+.row.row-cols-2.row-cols-sm-3.g-4
   - @topics.each do |topic|
-    .col-2.d-grid
-      = link_to search_metadata_path(topic: topic.name.downcase), class: "btn btn-outline-secondary" do
-        %i.bi.fs-1{ class: topic_icon(topic.name) }
-        %div= topic.name.titleize
+    .col
+      = link_to search_metadata_path(topic: topic.name.downcase), class: "text-decoration-none" do
+        .topic-tile.d-flex.flex-column.align-items-center.justify-content-center.p-4.border.rounded-4.bg-light.subtle
+          %i.fs-1.mb-2{ class: "#{topic_icon(topic.name)}" }
+          .fw-semibold.text-dark= topic.name.titleize

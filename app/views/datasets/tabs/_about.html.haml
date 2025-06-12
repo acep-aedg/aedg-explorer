@@ -1,44 +1,62 @@
-.mb-3 
-  %h3 What's in this Dataset?
-  %p= @dataset.description
+.mb-4
+  %h3.mb-4.fs-4 What's in this Dataset?
+  .p-4.bg-light-subtle.border.rounded
+    .row.row-cols-1.g-4
 
-  %p 
-    %strong Published:
-    = @dataset.publicationDate
+      / Description
+      .col
+        %h4.fs-6.mb-2 Description
+        %p.text-muted.mb-0= @dataset.description
 
-  %p
-    %strong Topics 
-    = @dataset.topic_list.join(', ')
+      / Published
+      .col
+        %h4.fs-6.mb-2 Published
+        %p.mb-0= @dataset.publicationDate
 
-  %p 
-    %strong Keywords: 
-    - @dataset.keywords.each do |tag|
-      %span.badge.bg-secondary= tag
+      / Topics
+      - if @dataset.topic_list.any?
+        .col
+          %h4.fs-6.mb-2 Topic(s)
+          - @dataset.topic_list.each do |topic|
+            %span.badge.bg-success.me-2.mb-1= topic
 
-  %p 
-    %strong Format: 
-    %span.badge.bg-primary= @dataset.format
+      / Keywords
+      - if @dataset.keywords.any?
+        .col
+          %h4.fs-6.mb-2 Keyword(s)
+          - @dataset.keywords.each do |tag|
+            %span.badge.bg-secondary.me-2.mb-1= tag
 
-  - if @dataset.sources.present?
-    %p 
-      %strong Sources:
-      %ul.list-group.ms-3
-        - @dataset.sources.each do |source|
-          %li.list-group-item.overflow-hidden
-            .fw-bold= source['title']
-            .ms-2.me-auto
-              = source['description']
-              %div
-                %strong URL: 
-                = link_to source['path']
+      / Format
+      .col
+        %h4.fs-6.mb-2 Format
+        %span.badge.bg-primary.me-2.mb-1= @dataset.format
 
-  - if @dataset.licenses.present?
-    %p 
-      %strong Licenses:
-      - @dataset.licenses.each do |license|
-        %div
-          %span This work is licensed under 
-          %span.fw-bold
-            = link_to license['path'], target: '_blank' do 
-              = license['name']
-              %i.bi.bi-link-45deg
+      / Licenses
+      - if @dataset.licenses.present?
+        .col
+          %h4.fs-6.mb-2.text-dark Licenses
+          - @dataset.licenses.each do |license|
+            %div
+              %span.text-muted This work is licensed under 
+              = link_to license['path'], class: 'fw-semibold ms-1 text-decoration-none', target: '_blank' do 
+                = license['name']
+                %i.bi.bi-link-45deg
+
+      / Sources
+      - if @dataset.sources.present?
+        .col
+          %h4.fs-6.mb-3.text-dark Sources
+          .row.row-cols-1.g-3
+            - @dataset.sources.each do |source|
+              .col
+                .p-3.bg-white.border.rounded.h-100
+                  .fs-6.fw-semibold.mb-1= source['title']
+                  .text-muted.mb-2= source['description']
+                  - if source['path'].present?
+                    .fs-6
+                    = link_to source['path'], class: 'text-decoration-none icon-link icon-link-hover align-items-baseline', target: '_blank' do
+                      %span
+                        Visit Source
+                        %i.bi.bi-link-45deg
+                      %i.bi.bi-arrow-right

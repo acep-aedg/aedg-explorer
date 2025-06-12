@@ -77,11 +77,10 @@
 }
 
 // Reusable button styles
-.btn-aedg-primary,
-.btn-primary {
+.btn-aedg-primary {
   background-color: $aedg-yellow;
   color: $aedg-navy;
-  border-color: darken($aedg-yellow, 10%);
+  border-width: 0px;
 
   &:hover {
     background-color: darken($aedg-yellow, 10%);
@@ -99,50 +98,19 @@
   }
 }
 
-// Custom styles for the partner cards
-
-.button-container {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+// Utility classes for colors
+.bg-aedg-navy {
+  background-color: $aedg-navy;
+}
+.bg-aedg-yellow {
+  background-color: $aedg-yellow;
 }
 
-// .card-body {
-//   display: flex;
-//   flex-direction: column; /* Arrange children in a vertical column */
-//   justify-content: space-between; /* Push the button container to the bottom */
-//   height: 100%; /* Ensure the card body fills the available space */
-// }
-
-.button-container {
-  margin-top: auto;
-  /* Push the button container to the bottom of the card body */
+.text-aedg-navy {
+  color: $aedg-navy;
 }
-
-.content-flexbox {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 3rem;
-  flex-wrap: wrap;
-}
-
-.content-text {
-  flex: 1;
-  /* Allow text to take up remaining space */
-  min-width: 50%;
-}
-
-.content-image {
-  flex: 0 1 auto;
-  /* Prevent the image from shrinking excessively */
-  max-width: 400px;
-}
-
-.content-image img {
-  width: 100%;
-  /* Ensure image scales within its container */
-  height: auto;
+.text-aedg-yellow {
+  color: $aedg-yellow;
 }
 
 .card {
@@ -151,20 +119,6 @@
   background-color: $partner-card-bg;
 }
 
-/* Uniform image size for the About section */
-.uniform-size {
-  width: 100%;
-  /* Ensures the image scales to fit its container */
-  max-width: 400px;
-  /* Adjust to set a maximum size */
-  height: 300px;
-  /* Fixed height for uniformity */
-  object-fit: cover;
-  /* Ensures the image fills the container, cropping if necessary */
-  display: block;
-  margin: 0 auto;
-  /* Center images in their containers */
-}
 
 .timeline {
   border-left: 1px solid hsl(0, 0%, 90%);
@@ -191,19 +145,7 @@
   content: '';
 }
 
-.bg-aedg-navy {
-  background-color: $aedg-navy;
-}
-.bg-aedg-yellow {
-  background-color: $aedg-yellow;
-}
 
-.text-aedg-navy {
-  color: $aedg-navy;
-}
-.text-aedg-yellow {
-  color: $aedg-yellow;
-}
 
 #faq {
   .nav-pills .nav-link {
@@ -213,7 +155,7 @@
     border-radius: 50rem;
 
     &:hover {
-      background-color: #fcb900; // AEDG yellow
+      background-color: $aedg-yellow;
       color: $white;
     }
 
@@ -270,6 +212,74 @@
   text-decoration: none;
   font-weight: 500;
 }
+
+.nav-tabs {
+  .nav-link {
+    border: none;
+    border-bottom: 4px solid transparent;
+    color: $tabs-text-default;
+    font-weight: 500;
+    font-size: 1.05rem;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      color: $tabs-text-hover;
+      border-bottom-color: $tabs-border-hover;
+    }
+
+    &.active {
+      color: $tabs-text-active;
+      border-bottom-color: $tabs-border-active;
+      font-weight: 600;
+    }
+  }
+}
+.topic-tile {
+  background-color: white;
+  border: 1px solid mix($aedg-yellow, #000, 25%);
+  color: $aedg-navy;
+  transition: all 0.2s ease;
+
+  i, .text-dark {
+    color: $aedg-navy !important;
+  }
+
+  &:hover {
+    background-color: mix(white, $aedg-yellow, 85%) !important;
+    transform: translateY(-2px);
+  }
+}
+
+.hero-section {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 0;
+    border-radius: inherit;
+  }
+
+  .container-fluid {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+#explore-data-hero {
+  @extend .hero-section;
+  background-image: linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)), url('landscape_pc-gwen-holdmann.jpg');
+}
+
+#community-data-hero {
+  @extend .hero-section;
+  background-image: linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6));
+  }
 
 #quick-nav .nav-link:hover {
   background-color: $gray-200; 

@@ -1,18 +1,16 @@
-.container-fluid.p-3.mt-n3.mt-sm-n5
+.container-fluid.p-3.mt-n3.mt-sm-n5     
   .row
     .col-md-3
       .position-sticky.top-0.py-3
-        .card.mb-4
-          .card-body.text-center
-            .mb-3
-              = render 'dropdown', communities: @communities, current_community: @community 
-            %h4.fw-4= @borough.name
+        .bg-body-secondary.rounded-4.p-4.mb-4.text-center
+          %h5.fw-semibold.mb-3 Select a Community
+          = render "dropdown", communities: @communities, current_community: @community
 
         .d-grid.gap-2
           -# TODO: Uncomment when the download/print functionality is implemented
-          -# %button.btn.btn-primary
-          -#   %i.bi.bi-download
-          -#   Download/Print
+          -# %button.btn.btn-aedg-primary.px-4.py-2 
+          -#   %i.bi.bi-file-earmark-arrow-down.me-1
+          -#   Download Summary
 
           = link_to communities_path, class: 'btn btn-secondary' do 
             %i.bi.bi-arrow-left

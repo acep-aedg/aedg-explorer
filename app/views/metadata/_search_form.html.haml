@@ -1,25 +1,37 @@
 - simple ||= false
-= form_with url: search_metadata_path, method: :get do |f|
+
+= form_with url: search_metadata_path, method: :get, local: true do |f|
   - if simple
     .input-group.input-group-lg
-      = f.text_field :search, value: @search[:search], class: 'form-control col', placeholder: 'Search Keywords, Datasets...'
+      = f.text_field :search, value: @search[:search], class: 'form-control', placeholder: 'Search Keywords, Datasets...'
       = f.submit 'Search', class: 'btn btn-aedg-primary'
   - unless simple
-    .mb-3.row
-      = f.text_field :search, value: @search[:search], class: 'form-control col', placeholder: 'Search Keywords, Datasets...'
-    .mb-3.row
-      = f.label :topic, 'Topic', class: 'col-form-label col-sm-3'
-      = f.select :topic, options_for_select(@topics.map { |t| [t.name.titleize, t.name.downcase] }, @search[:topic]), { include_blank: 'All Topics' }, class: 'form-select col', id: 'topic'
+    .mb-3
+      = f.label :search, 'Search', class: 'form-label visually-hidden'
+      = f.text_field :search, value: @search[:search], class: 'form-control', placeholder: 'Search Keywords, Datasets...'
 
-    .mb-3.row
-      = f.label :order, 'Order By', class: 'col-form-label col-sm-3'
-      = f.select :order, options_for_select([['Most Relevant', 'relevance'], ['Newest', 'newest'], ['Oldest', 'oldest']], @search[:order]), {}, class: 'form-select col', id: 'order'
-
-    .mb-3.row
+    .row.mb-3
       .col-sm-3
+        = f.label :topic, 'Topic', class: 'col-form-label fw-semibold'
       .col
-        = f.check_box :featured, checked: @search[:featured].to_i == 1, class: 'form-check-input col-sm-3', id: 'featured'
-        = f.label :featured, 'Featured', class: 'form-check-label'
+        = f.select :topic, options_for_select(@topics.map { |t| [t.name.titleize, t.name.downcase] }, @search[:topic]), { include_blank: 'All Topics' }, class: 'form-select', id: 'topic'
 
-    .text-end
-      = f.submit 'Search', class: 'btn btn-aedg-primary btn-lg'
+    .row.mb-3
+      .col-sm-3
+        = f.label :order, 'Order By', class: 'col-form-label fw-semibold'
+      .col
+        = f.select :order,
+            options_for_select([['Most Relevant', 'relevance'], ['Newest', 'newest'], ['Oldest', 'oldest']], @search[:order]),
+            {}, class: 'form-select', id: 'order'
+
+    .row.mb-3.align-items-center
+      .col-sm-3
+        = f.label :featured, 'Featured', class: 'form-label mb-0 fw-semibold'
+      .col
+        .form-check
+          = f.check_box :featured, checked: @search[:featured].to_i == 1, class: 'form-check-input', id: 'featured'
+          = f.label :featured, 'Only show featured datasets', class: 'form-check-label'
+
+      .d-flex.justify-content-end.gap-2.mt-4
+        = link_to 'Reset Filters', search_metadata_path, class: 'btn btn-outline-secondary'
+        = f.submit 'Search', class: 'btn btn-aedg-primary'

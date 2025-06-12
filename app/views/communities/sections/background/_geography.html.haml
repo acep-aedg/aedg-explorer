@@ -31,6 +31,11 @@
             %th.pe-3 Regional Corporation
             %td= @community.regional_corporation.name
 
+        - if @community.village_corporation.present?
+          %tr
+            %th.pe-3 Village Corporation
+            %td= @community.village_corporation
+
         - if @community.grid.present?
           %tr
             %th.pe-3 Grid
