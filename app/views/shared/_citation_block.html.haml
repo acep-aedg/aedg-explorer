@@ -1,7 +1,7 @@
-.border.rounded.bg-light-subtle.p-3.d-flex.flex-column.flex-md-row.flex-wrap.gap-2.align-items-start{ data: { controller: "citation" } }
-  %code.mb-0.d-block.flex-grow-1.text-break.align-self-center{ data: { citation_target: "output" } }
-    = citation
+.border.rounded.bg-light-subtle.p-4.d-flex.flex-column.flex-md-row.align-items-start.justify-content-between.gap-3{'data-controller' => 'copy'}
+  %code.text-break.mb-0.flex-grow-1.w-100.overflow-auto.order-1.order-md-0{ 'data-copy-target' => 'source' }
+    = markdownify(citation)
 
-  %button.btn.btn-outline-secondary.btn-sm.d-inline-flex.ms-md-auto.align-self-start{ type: "button", data: { action: "citation#copy" } }
-    %i.bi.bi-clipboard.me-1
-    Copy
+  %button.btn.btn-outline-secondary.btn-sm.d-inline-flex.align-self-end.ms-md-3.order-0.order-md-1{'data-action' => 'click->copy#copy', 'data-copy-target' => 'button'}
+    %i.bi.bi-clipboard.me-1{'data-copy-target' => 'icon'}
+    %span{'data-copy-target' => 'label'} Copy

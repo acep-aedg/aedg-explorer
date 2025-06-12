@@ -1,20 +1,23 @@
-.mb-3
-  %h3 Fields
-  %ul.list-group
-    - @dataset.schema['fields'].each do |field|
-      %li.list-group-item
-        %h4= field['long_name']
-        .mb-3= field['description']
-        .row.d-flex.gap-2
-          .col
-            %strong.text-nowrap Field Name
-            = field['name']
-          .col
-            %strong Type
-            %div= field['type']
-          .col
-            %strong Unit 
-            %div= field['unit']
-          .col
-            %strong Nullable
-            %div= field['nullable'] ? 'true' : 'false'
+- field_count = @dataset.schema['fields'].size
+
+.mb-4
+  %h3.mb-4.fs-4.text-dark
+    = "Fields (#{field_count})"
+  .p-4.bg-light-subtle.border.rounded
+    .table-responsive
+      %table.table.table-hover.align-middle.mb-0.bg-light-subtle
+        %thead.border-bottom
+          %tr.text-uppercase.small
+            %th.py-3.bg-light-subtle Long Name
+            %th.py-3.bg-light-subtle Description
+            %th.py-3.bg-light-subtle Field Name
+            %th.py-3.bg-light-subtle Type
+            %th.py-3.bg-light-subtle Unit
+        %tbody
+          - @dataset.schema['fields'].each do |field|
+            %tr.border-bottom
+              %td.py-3.bg-light-subtle.fw-semibold= field['long_name']
+              %td.py-3.bg-light-subtle.text-muted= field['description']
+              %td.py-3.bg-light-subtle.text-body= field['name']
+              %td.py-3.bg-light-subtle.text-body= field['type']
+              %td.py-3.bg-light-subtle.text-body= field['unit']

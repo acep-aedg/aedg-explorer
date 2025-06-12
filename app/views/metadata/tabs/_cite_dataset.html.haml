@@ -1,11 +1,12 @@
-%h3.mb-3 How to Cite This Dataset
-%p.text-muted Copy the reference below
+.mb-4
+  %h3.mb-4.fs-4 How to Cite This Dataset
+  %p.text-muted Copy the reference below.
 
-= render "shared/citation_block", citation: @metadatum.citation
+  = render "shared/citation_block", citation: @metadatum.citation
 
-%h6.fw-bold.mt-5 Need to cite the entire Alaska Energy Data Gateway?
-%p.text-muted
-  = link_to user_guide_path(anchor: 'cite-aedg'), class: 'text-decoration-none ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
-    %span See citation instructions
-    %i.bi.bi-arrow-right
-  
+  %h5.fs-5.mt-5 Need to cite the entire Alaska Energy Data Gateway?
+  %p
+    = link_to user_guide_path(anchor: 'cite-aedg'), class: 'text-decoration-none icon-link icon-link-hover align-items-baseline' do
+      %span See citation instructions
+      %i.bi.bi-arrow-right
+    
