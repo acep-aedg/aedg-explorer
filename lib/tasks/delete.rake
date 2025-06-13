@@ -24,6 +24,7 @@ namespace :delete do
   desc 'Clear all district-related tables'
   task districts: :environment do
     DeleteHelpers.delete_records(CommunitiesLegislativeDistrict)
+    DeleteHelpers.delete_records(CommunitiesSenateDistrict)
     DeleteHelpers.delete_records(HouseDistrict)
     DeleteHelpers.delete_records(SenateDistrict)
   end

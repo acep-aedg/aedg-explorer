@@ -260,6 +260,38 @@ ALTER SEQUENCE public.communities_legislative_districts_id_seq OWNED BY public.c
 
 
 --
+-- Name: communities_senate_districts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.communities_senate_districts (
+    id bigint NOT NULL,
+    community_fips_code character varying,
+    senate_district_district character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: communities_senate_districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.communities_senate_districts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: communities_senate_districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.communities_senate_districts_id_seq OWNED BY public.communities_senate_districts.id;
+
+
+--
 -- Name: community_grids; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1049,6 +1081,13 @@ ALTER TABLE ONLY public.communities_legislative_districts ALTER COLUMN id SET DE
 
 
 --
+-- Name: communities_senate_districts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_senate_districts ALTER COLUMN id SET DEFAULT nextval('public.communities_senate_districts_id_seq'::regclass);
+
+
+--
 -- Name: community_grids id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1234,6 +1273,14 @@ ALTER TABLE ONLY public.communities_legislative_districts
 
 ALTER TABLE ONLY public.communities
     ADD CONSTRAINT communities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: communities_senate_districts communities_senate_districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_senate_districts
+    ADD CONSTRAINT communities_senate_districts_pkey PRIMARY KEY (id);
 
 
 --
@@ -1885,6 +1932,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250613003333'),
 ('20250611215411'),
 ('20250509014050'),
 ('20250508195941'),

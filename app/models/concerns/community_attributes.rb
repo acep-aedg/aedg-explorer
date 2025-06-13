@@ -1,6 +1,7 @@
 # app/models/concerns/community_attributes.rb
 module CommunityAttributes
   extend ActiveSupport::Concern
+  include CommunitiesSenateDistrictAssignment
 
   class_methods do
     def import_aedg_with_geom!(properties, geom)
@@ -10,6 +11,8 @@ module CommunityAttributes
       Community.find_or_initialize_by(fips_code: properties[:fips_code]).tap do |community|
         community.assign_aedg_attributes(properties)
         community.save!
+
+        assign_senate_districts!(community, properties[:senate_district])
       end
     end
   end
