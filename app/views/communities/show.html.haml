@@ -15,9 +15,8 @@
           = link_to communities_path, class: 'btn btn-secondary' do 
             %i.bi.bi-arrow-left
             Back
-
-        %h4.mt-3 Quick Nav
-        = render "communities/sections/quick_nav", community: @community
+        .mt-5
+          = render 'communities/sections/quick_nav', community: @community
 
     .col-md-9
       .text-center.my-3
@@ -33,15 +32,19 @@
             %span.text-muted.fs-4.mx-2 &bull;
             %span.text-info= @community.grid.name
 
-      - section_order = ["electricity", "fuel_prices", "background"]
+      - section_order = []
+      - section_order << 'electricity' if show_electricity_section?(@community)
+      - section_order << 'prices' if show_prices_section?(@community)
+      - section_order << 'background' if show_background_section?(@community)
 
       - section_order.each do |section|
         - section_id = "#{section.parameterize}-section"
 
         %button.collapse-btn.border-0.mb-1{ 
-          type: "button", 
-          data: { bs_toggle: "collapse", bs_target: "##{section_id}" }, 
-          aria: { expanded: "true", controls: section_id }
+          id: section.parameterize,
+          type: 'button', 
+          data: { bs_toggle: 'collapse', bs_target: "##{section_id}" }, 
+          aria: { expanded: 'true', controls: section_id }
         }
           %i.bi.bi-chevron-down.ms-2.arrow-icon
           %h3.m-0= section.titleize

@@ -21,6 +21,3 @@ application.register("lightbox", LightboxController)
 
 import MapsController from "./maps_controller"
 application.register("maps", MapsController)
-
-import TocController from "./toc_controller"
-application.register("toc", TocController)

@@ -1,8 +1,8 @@
-- if @community.fuel_prices
+- if show_fuel_prices?(@community)
   .m-5.mt-3
     .d-flex.align-items-center.mb-3
       %i.bi.bi-fuel-pump-fill.me-2.fs-4
-      %h4.mb-0.me-3 Fuel Prices
+      %h4#fuel-prices.mb-0.me-3.py-3 Fuel Prices
       %hr.flex-grow-1.mt-1.mb-0
 
     .mb-3
@@ -19,6 +19,6 @@
 
     .tab-content
       #fuel-prices-chart.tab-pane.fade.show.active
-        = render "communities/sections/fuel_prices/chart"
+        = render "communities/sections/prices/fuel_prices/chart"
       #fuel-prices-data.tab-pane.fade
-        = render "communities/sections/fuel_prices/datatable"
+        = render "communities/sections/prices/fuel_prices/datatable"

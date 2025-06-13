@@ -1,15 +1,16 @@
 .m-5.mt-3
   = render 'communities/sections/background/geography'
 
-- if @community.transportation
+- if show_transportation?(@community)
   .m-5
     = render 'communities/sections/background/transportation', transportation: @community.transportation
     
-- if @community.communities_legislative_districts.any?
+- if show_election_districts?(@community)
   .m-5
     = render 'communities/sections/background/election_districts'
 
-.m-5
-  = render 'communities/sections/background/population'
+- if show_population?(@community)
+  .m-5
+    = render 'communities/sections/background/population'
 
 
