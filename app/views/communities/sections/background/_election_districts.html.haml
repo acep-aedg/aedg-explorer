@@ -9,7 +9,7 @@
 / Two-Column Layout: Map Left, Tabs Right
 .row.g-4.mt-4
   / Left Column: Map
-  .col-12.col-xl-6.mb-4
+  .col-12.col-xl-6
     - if show_election_districts?(@community)
       #districtsMapWrapper.tab-pane.fade.show.active{
         data: mapbox_api_data({

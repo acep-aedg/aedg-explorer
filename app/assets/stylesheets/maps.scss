@@ -1,13 +1,9 @@
-.map {
-  width: 100%;
-  height: 250px;
-}
-
+// Responsive max-heights per breakpoint
 $map-sizes: (
   sm: 250px,
   md: 300px,
-  lg: 400px,
-  xl: 500px,
+  lg: 350px,
+  xl: 350px
 );
 
 @each $size, $height in $map-sizes {
