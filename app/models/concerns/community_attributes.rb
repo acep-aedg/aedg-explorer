@@ -2,6 +2,7 @@
 module CommunityAttributes
   extend ActiveSupport::Concern
   include CommunitiesSenateDistrictAssignment
+  include CommunitiesHouseDistrictAssignment
 
   class_methods do
     def import_aedg_with_geom!(properties, geom)
@@ -13,6 +14,7 @@ module CommunityAttributes
         community.save!
 
         assign_senate_districts!(community, properties[:senate_district])
+        assign_house_districts!(community, properties[:house_district])
       end
     end
   end

@@ -15,6 +15,7 @@ namespace :import do
     Rake::Task['import:electric_rates'].invoke
     Rake::Task['import:sales'].invoke
     Rake::Task['import:senate_districts'].invoke
+    Rake::Task['import:house_districts'].invoke
     Rake::Task['import:communities'].invoke
     Rake::Task['import:community_grids'].invoke
     Rake::Task['import:populations'].invoke
@@ -24,7 +25,6 @@ namespace :import do
     Rake::Task['import:populations_ages_sexes'].invoke
     Rake::Task['import:employments'].invoke
     Rake::Task['import:capacities'].invoke
-    Rake::Task['import:house_districts'].invoke
     Rake::Task['import:fuel_prices'].invoke
     puts 'Import complete'
   end
