@@ -1,8 +1,7 @@
-= render "communities/sections/background/election_districts/district_badge_group", label: "Election Region", items: @community.election_regions, color: "secondary" do |region|
-  = region
+- if show_house_districts?(@community)
+  = render "communities/sections/background/election_districts/district_badge_group", label: "House Districts",  items: @community.house_districts,  color: "success" do |district|
+    = district.district
 
-= render "communities/sections/background/election_districts/district_badge_group", label: "House Districts",  items: @community.house_districts.distinct,  color: "success" do |district|
-  = district.district
-
-= render "communities/sections/background/election_districts/district_badge_group", label: "Senate Districts",  items: @community.senate_districts.distinct,  color: "primary" do |district|
-  = district.district
+- if show_senate_districts?(@community)
+  = render "communities/sections/background/election_districts/district_badge_group", label: "Senate Districts",  items: @community.senate_districts,  color: "primary" do |district|
+    = district.district

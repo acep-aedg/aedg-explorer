@@ -1,0 +1,10 @@
+%table.table.table-striped.border{ data: { controller: 'datatables' }}
+  %thead
+    %tr
+      %th Senate District
+      %th As of Date
+  %tbody
+    - @community.senate_districts.each do |district|
+      %tr
+        %td= district.district
+        %td= district.as_of_date

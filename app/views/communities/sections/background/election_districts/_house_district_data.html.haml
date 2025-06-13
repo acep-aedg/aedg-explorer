@@ -1,0 +1,12 @@
+%table.table.table-striped.border{ data: { controller: 'datatables' }}
+  %thead
+    %tr
+      %th District
+      %th Name
+      %th As of Date
+  %tbody
+    - @community.house_districts.each do |district|
+      %tr
+        %td= district.district
+        %td= district.name
+        %td= district.as_of_date
