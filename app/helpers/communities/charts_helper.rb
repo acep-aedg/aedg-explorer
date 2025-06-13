@@ -81,7 +81,15 @@ module Communities::ChartsHelper
     # Lookup: [year, category] => price Ex: [2024, "Winter Gasoline"] => 6.94
     price_map = filtered.each_with_object({}) do |fp, hash|
       label = "#{fp.reporting_season.to_s.capitalize} #{fp.fuel_type.to_s.titleize}"
-      hash[[fp.reporting_year, label]] = BigDecimal(fp.price.to_s)
+      price = fp.price.to_s
+      next if price.blank?
+
+      begin
+        hash[[fp.reporting_year, label]] = BigDecimal(price)
+      rescue ArgumentError
+        Rails.logger.warn "Invalid price '#{price}' for fuel_price ##{fp.id}"
+        next
+      end
     end
 
     categories.map do |label|
