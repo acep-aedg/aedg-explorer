@@ -2,7 +2,7 @@ class SenateDistrict < ApplicationRecord
   include SenateDistrictAttributes
   has_many :communities_legislative_districts, dependent: :destroy
   has_many :communities, through: :communities_legislative_districts
-  has_many :communities_senate_districts, foreign_key: :senate_district_district, primary_key: :district
+  has_many :communities_senate_districts, dependent: :destroy
   has_many :communities, through: :communities_senate_districts
 
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
