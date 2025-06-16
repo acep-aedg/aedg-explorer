@@ -9,4 +9,9 @@ class Grid < ApplicationRecord
   has_many :capacities
   has_many :reporting_entities
   validates :name, presence: true, uniqueness: true
+
+  def utility_names(exclude: nil)
+    names = reporting_entities.pluck(:name).uniq
+    exclude.present? ? names.reject { |name| name == exclude } : names
+  end
 end
