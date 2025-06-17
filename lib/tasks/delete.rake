@@ -37,4 +37,9 @@ namespace :delete do
   task electric_rates: :environment do
     DeleteHelpers.delete_records(ElectricRate)
   end
+
+  desc 'Clear all school districts data'
+  task school_districts: :environment do
+    DeleteHelpers.delete_records(SchoolDistrict)
+  end
 end

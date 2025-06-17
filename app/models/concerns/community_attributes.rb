@@ -32,7 +32,8 @@ module CommunityAttributes
         subsistence: params[:subsistence],
         economic_region: params[:economic_region],
         village_corporation: params[:village_corporation],
-        reporting_entity: ReportingEntity.from_aedg_id(params[:reporting_entity_id]).first
+        reporting_entity: ReportingEntity.from_aedg_id(params[:reporting_entity_id]).first,
+        school_districts: Array(params[:school_district]).map(&:to_i)
       )
     end
   end

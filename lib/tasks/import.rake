@@ -27,6 +27,7 @@ namespace :import do
     Rake::Task['import:senate_districts'].invoke
     Rake::Task['import:communities_legislative_districts'].invoke
     Rake::Task['import:fuel_prices'].invoke
+    Rake::Task['import:school_districts'].invoke
     puts 'Import complete'
   end
 
@@ -246,5 +247,22 @@ namespace :import do
 
     filepath = Rails.root.join('db/imports/fuel_prices.csv')
     ImportHelpers.import_csv(filepath, FuelPrice)
+  end
+
+  desc 'Import School Districts Data from .geojson file'
+  task school_districts: :environment do
+    if SchoolDistrict.count > 0
+      raise <<~ERROR
+        ❌ ERROR: School District table was not empty before starting import!
+        To clear it and all related tables, run:
+
+            rails delete:school_districts
+
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/school_districts.geojson')
+    ImportHelpers.import_geojson(filepath, SchoolDistrict)
   end
 end

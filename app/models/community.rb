@@ -25,6 +25,12 @@ class Community < ApplicationRecord
   belongs_to :reporting_entity, optional: true
   has_many :electric_rates, through: :reporting_entity
 
+  def school_district_objects
+    SchoolDistrict
+      .joins(:aedg_import)
+      .where(aedg_imports: { aedg_id: school_districts })
+  end
+
   # Handle the case where the name is not unique
   def slug_candidates
     [
