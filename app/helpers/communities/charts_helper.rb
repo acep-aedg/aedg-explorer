@@ -86,7 +86,6 @@ module Communities::ChartsHelper
       hash[[fp.reporting_year, label]] = BigDecimal(fp.price.to_s)
     end
 
-
     categories.map do |label|
       {
         name: label,
