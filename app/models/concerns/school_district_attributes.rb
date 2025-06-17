@@ -20,7 +20,8 @@ module SchoolDistrictAttributes
         name: params[:name],
         district_type: params[:type],
         is_active: params[:is_active],
-        boundary: params[:boundary]
+        boundary: params[:boundary],
+        notes: params[:notes]
       )
     end
   end
