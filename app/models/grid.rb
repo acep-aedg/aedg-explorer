@@ -11,7 +11,8 @@ class Grid < ApplicationRecord
   validates :name, presence: true, uniqueness: true
 
   def utility_names(exclude: nil)
-    names = reporting_entities.pluck(:name).uniq
-    exclude.present? ? names.reject { |name| name == exclude } : names
+    query = reporting_entities
+    query = query.where.not(name: exclude) if exclude.present?
+    query.distinct.pluck(:name)
   end
 end
