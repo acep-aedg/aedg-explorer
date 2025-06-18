@@ -51,7 +51,15 @@ module CommunitiesHelper
   end
 
   def show_election_districts?(community)
-    community.communities_legislative_districts.any?
+    show_senate_districts?(community) || show_house_districts?(community)
+  end
+
+  def show_senate_districts?(community)
+    community.senate_districts.any?
+  end
+
+  def show_house_districts?(community)
+    community.house_districts.any?
   end
 
   def show_population?(community)

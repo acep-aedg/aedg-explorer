@@ -207,6 +207,38 @@ CREATE TABLE public.communities (
 
 
 --
+-- Name: communities_house_districts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.communities_house_districts (
+    id bigint NOT NULL,
+    community_fips_code character varying,
+    house_district_district character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: communities_house_districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.communities_house_districts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: communities_house_districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.communities_house_districts_id_seq OWNED BY public.communities_house_districts.id;
+
+
+--
 -- Name: communities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -257,6 +289,38 @@ CREATE SEQUENCE public.communities_legislative_districts_id_seq
 --
 
 ALTER SEQUENCE public.communities_legislative_districts_id_seq OWNED BY public.communities_legislative_districts.id;
+
+
+--
+-- Name: communities_senate_districts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.communities_senate_districts (
+    id bigint NOT NULL,
+    community_fips_code character varying,
+    senate_district_district character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: communities_senate_districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.communities_senate_districts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: communities_senate_districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.communities_senate_districts_id_seq OWNED BY public.communities_senate_districts.id;
 
 
 --
@@ -504,7 +568,7 @@ ALTER SEQUENCE public.grids_id_seq OWNED BY public.grids.id;
 
 CREATE TABLE public.house_districts (
     id bigint NOT NULL,
-    district integer NOT NULL,
+    district character varying NOT NULL,
     name character varying,
     as_of_date date,
     created_at timestamp(6) without time zone NOT NULL,
@@ -1042,10 +1106,24 @@ ALTER TABLE ONLY public.communities ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: communities_house_districts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_house_districts ALTER COLUMN id SET DEFAULT nextval('public.communities_house_districts_id_seq'::regclass);
+
+
+--
 -- Name: communities_legislative_districts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.communities_legislative_districts ALTER COLUMN id SET DEFAULT nextval('public.communities_legislative_districts_id_seq'::regclass);
+
+
+--
+-- Name: communities_senate_districts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_senate_districts ALTER COLUMN id SET DEFAULT nextval('public.communities_senate_districts_id_seq'::regclass);
 
 
 --
@@ -1221,6 +1299,14 @@ ALTER TABLE ONLY public.capacities
 
 
 --
+-- Name: communities_house_districts communities_house_districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_house_districts
+    ADD CONSTRAINT communities_house_districts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: communities_legislative_districts communities_legislative_districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1234,6 +1320,14 @@ ALTER TABLE ONLY public.communities_legislative_districts
 
 ALTER TABLE ONLY public.communities
     ADD CONSTRAINT communities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: communities_senate_districts communities_senate_districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_senate_districts
+    ADD CONSTRAINT communities_senate_districts_pkey PRIMARY KEY (id);
 
 
 --
@@ -1885,6 +1979,9 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250613174051'),
+('20250613173935'),
+('20250613003333'),
 ('20250611215411'),
 ('20250509014050'),
 ('20250508195941'),

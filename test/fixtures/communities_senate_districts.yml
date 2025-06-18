@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  community_fips_code: '0000001'
+  senate_district_district: one
+
+two:
+  community_fips_code: '0000002'
+  senate_district_district: two

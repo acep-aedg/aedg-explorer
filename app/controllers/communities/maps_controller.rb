@@ -6,7 +6,7 @@ module Communities
       geojson = Rails.cache.fetch(['community', @community.fips_code, 'house_districts'], expires_in: 12.hours) do
         {
           type: 'FeatureCollection',
-          features: @community.house_districts.distinct.map(&:as_geojson)
+          features: @community.house_districts.map(&:as_geojson)
         }
       end
 
@@ -17,7 +17,7 @@ module Communities
       geojson = Rails.cache.fetch(['community', @community.fips_code, 'senate_districts'], expires_in: 12.hours) do
         {
           type: 'FeatureCollection',
-          features: @community.senate_districts.distinct.map(&:as_geojson)
+          features: @community.senate_districts.map(&:as_geojson)
         }
       end
 

@@ -1,7 +1,7 @@
 class HouseDistrict < ApplicationRecord
   include HouseDistrictAttributes
-  has_many :communities_legislative_districts, dependent: :destroy
-  has_many :communities, through: :communities_legislative_districts
+  has_many :communities_house_districts, dependent: :destroy
+  has_many :communities, through: :communities_house_districts
 
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
 

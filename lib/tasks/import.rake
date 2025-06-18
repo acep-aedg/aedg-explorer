@@ -14,6 +14,8 @@ namespace :import do
     Rake::Task['import:reporting_entities'].invoke
     Rake::Task['import:electric_rates'].invoke
     Rake::Task['import:sales'].invoke
+    Rake::Task['import:senate_districts'].invoke
+    Rake::Task['import:house_districts'].invoke
     Rake::Task['import:communities'].invoke
     Rake::Task['import:community_grids'].invoke
     Rake::Task['import:populations'].invoke
@@ -23,9 +25,6 @@ namespace :import do
     Rake::Task['import:populations_ages_sexes'].invoke
     Rake::Task['import:employments'].invoke
     Rake::Task['import:capacities'].invoke
-    Rake::Task['import:house_districts'].invoke
-    Rake::Task['import:senate_districts'].invoke
-    Rake::Task['import:communities_legislative_districts'].invoke
     Rake::Task['import:fuel_prices'].invoke
     puts 'Import complete'
   end
@@ -223,12 +222,6 @@ namespace :import do
 
     filepath = Rails.root.join('db/imports/senate_districts.geojson')
     ImportHelpers.import_geojson(filepath, SenateDistrict)
-  end
-
-  desc 'Import Community Legislative Districts Data from .csv file'
-  task communities_legislative_districts: :environment do
-    filepath = Rails.root.join('db/imports/communities_legislative_districts.csv')
-    ImportHelpers.import_csv(filepath, CommunitiesLegislativeDistrict)
   end
 
   desc 'Import Fuel Prices Data from .csv file'
