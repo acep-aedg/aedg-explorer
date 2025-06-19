@@ -9,26 +9,35 @@
     .nav.nav-tabs
       - if show_monthly_generation?(@community)
         %li.nav-item
-          = link_to "Monthly Chart", "#monthly-chart", class: "nav-link active", data: { bs_toggle: "tab" }
+          = link_to "#monthly-prod-chart-wrapper", class: "nav-link active", data: { bs_toggle: "tab" } do
+            %i.bi.bi-graph-up.me-1
+            Monthly Chart
         %li.nav-item
-          = link_to "Monthly Data", "#monthly-data", class: "nav-link", data: { bs_toggle: "tab" }
+          = link_to "#monthly-prod-data", class: "nav-link", data: { bs_toggle: "tab" } do
+            %i.bi.bi-table.me-1
+            Monthly Data
       - if show_yearly_generation?(@community)
         %li.nav-item
-          = link_to "Yearly Chart", "#yearly-chart", class: "nav-link", data: { bs_toggle: "tab" }
+          = link_to "#yearly-prod-chart-wrapper", class: "nav-link", data: { bs_toggle: "tab" } do
+            %i.bi.bi-pie-chart.me-1
+            Yearly Chart
         %li.nav-item
-          = link_to "Yearly Data", "#yearly-data", class: "nav-link", data: { bs_toggle: "tab" }
+          = link_to "#yearly-prod-data", class: "nav-link", data: { bs_toggle: "tab" } do
+            %i.bi.bi-table.me-1
+            Yearly Data
+
 
   .tab-content
     - if show_monthly_generation?(@community)
-      #monthly-chart.tab-pane.fade.show.active
+      #monthly-prod-chart-wrapper.tab-pane.fade.show.active
         = render 'communities/sections/electricity/production/monthly_stats'
         = render "communities/sections/electricity/production/monthly_chart"
 
-      #monthly-data.tab-pane.fade
+      #monthly-prod-data.tab-pane.fade
         = render "communities/sections/electricity/production/monthly_data"
     - if show_yearly_generation?(@community)
-      #yearly-chart.tab-pane.fade
+      #yearly-prod-chart-wrapper.tab-pane.fade
         = render "communities/sections/electricity/production/yearly_chart"
 
-      #yearly-data.tab-pane.fade
+      #yearly-prod-data.tab-pane.fade
         = render "communities/sections/electricity/production/yearly_data"

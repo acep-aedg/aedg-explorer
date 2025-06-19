@@ -4,7 +4,8 @@
 // - Fetches chart data from a provided URL.
 // - Uses Chartkick to render a pie chart.
 // - Assigns consistent colors based on fuel type codes.
-// - Merges options with Gloabl Chartkick Options located in (config/initializers/chartkick.rb)
+// - Merges options with Global Chartkick Options located in (config/initializers/chartkick.rb)
+// - Waits for chart container to be visible before rendering if it is initially hidden (e.g., in an inactive tab).
 //
 // Requirements:
 // - Chart type must be "pie" (only pie charts are currently supported).
@@ -28,6 +29,7 @@ const FUEL_COLORS = {
   WND: '#95A5A6',
   JF: '#D35400',
   WO: '#6E2C00',
+  CL: '#F1C40F',
 };
 
 export default class extends Controller {
@@ -38,19 +40,60 @@ export default class extends Controller {
   };
 
   connect() {
+    if (this.isHidden()) {
+      this.waitUntilVisible(() => this.renderChart());
+    } else {
+      this.renderChart();
+    }
+  }
+
+  isHidden() {
+    return this.element.offsetParent === null;
+  }
+
+  waitUntilVisible(callback) {
+    const observer = new MutationObserver(() => {
+      if (!this.isHidden()) {
+        observer.disconnect();
+        callback();
+      }
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['class'],
+    });
+  }
+
+  renderChart() {
     fetch(this.urlValue)
       .then((res) => res.json())
       .then((data) => {
         const labels = data.map((entry) => entry[0]);
         const colors = labels.map((label) => {
-          const abbrMatch = label.match(/\(([^)]+)\)$/); // extract abbreviation in parentheses
+          const abbrMatch = label.match(/\(([^)]+)\)$/);
           const abbr = abbrMatch ? abbrMatch[1] : null;
           return FUEL_COLORS[abbr] || '#ccc';
         });
 
+        const isXSmallScreen = window.innerWidth < 576;
+
         const chartOptions = {
           ...this.optionsValue,
           colors: colors,
+          library: {
+            ...(this.optionsValue?.library || {}),
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              ...(this.optionsValue?.library?.plugins || {}),
+              legend: {
+                position: isXSmallScreen ? 'bottom' : 'left',
+                align: isXSmallScreen ? 'start' : 'end',
+              },
+            },
+          },
         };
 
         if (this.chartTypeValue === 'pie') {

@@ -12,13 +12,17 @@
   .d-flex.align-items-center.mt-4
     .nav.nav-tabs
       %li.nav-item
-        = link_to "Chart", "#chart", class: "nav-link active", data: { bs_toggle: "tab" }
+        = link_to "#capacity-chart-wrapper", class: "nav-link active", data: { bs_toggle: "tab" } do
+          %i.bi.bi-pie-chart.me-1
+          Capacity Chart
       %li.nav-item
-        = link_to "Data", "#data", class: "nav-link", data: { bs_toggle: "tab" }
+        = link_to "#capacity-data-wrapper", class: "nav-link", data: { bs_toggle: "tab" } do
+          %i.bi.bi-table.me-1
+          Capacity Data
 
   / Tab Content
   .tab-content.mt-3
-    #chart.tab-pane.fade.show.active
+    #capacity-chart-wrapper.tab-pane.fade.show.active
       = render 'communities/sections/electricity/capacity/capacity_chart', year: stats[:year]
-    #capacity-data.tab-pane.fade
+    #capacity-data-wrapper.tab-pane.fade
       = render 'communities/sections/electricity/capacity/capacity_data', year: stats[:year]
