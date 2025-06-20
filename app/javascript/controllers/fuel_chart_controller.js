@@ -11,7 +11,7 @@
 //
 // Requirements:
 // - Chart type must be "pie".
-// - Chart labels must end with a fuel code in parentheses, e.g., "Hydro (WAT)".
+// - Chart labels must include a fuel code within the label. e.g., "Natural Gas (NG)", "NG - Natural Gas", "Diesel DFO", "DFO"
 //
 // Connects to: data-controller="fuel-chart"
 
@@ -141,8 +141,9 @@ export default class extends Controller {
 
   getFuelColors(labels) {
     return labels.map((label) => {
-      const abbrMatch = label.match(/\(([^)]+)\)$/);
-      const abbr = abbrMatch ? abbrMatch[1] : null;
+      const abbr = Object.keys(FUEL_COLORS).find(code =>
+        label.includes(code)
+      );
       return FUEL_COLORS[abbr] || '#ccc';
     });
   }
