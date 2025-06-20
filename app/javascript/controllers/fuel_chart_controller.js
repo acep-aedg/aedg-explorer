@@ -18,19 +18,19 @@
 import { Controller } from '@hotwired/stimulus';
 
 const FUEL_COLORS = {
-  SUN: '#FDB813',
-  LFG: '#8E44AD',
-  MWH: '#1ABC9C',
-  WC: '#7F8C8D',
-  SUB: '#34495E',
-  WAT: '#3498DB',
-  DFO: '#E67E22',
-  LIG: '#A0522D',
-  NG: '#2ECC71',
-  WND: '#95A5A6',
-  JF: '#D35400',
-  WO: '#6E2C00',
-  CL: '#F1C40F',
+  SUN: '#FDB813', // Solar
+  LFG: '#A1866F', // Landfill Gas
+  MWH: '#5D6D7E', // Energy Storage
+  WC: '#7F8C8D', // Waste Combustion
+  SUB: '#34495E', // Sub-bituminous coal
+  WAT: '#3498DB', // Hydro - water blue
+  DFO: '#E67E22', // Distillate Fuel Oil
+  LIG: '#A0522D', // Lignite
+  NG: '#8EBFA2', // Natural Gas
+  WND: '#2980B9', // Wind
+  JF: '#D35400', // Jet Fuel
+  WO: '#6E2C00', // Wood
+  CL: '#F1C40F', // Coal
 };
 
 export default class extends Controller {
