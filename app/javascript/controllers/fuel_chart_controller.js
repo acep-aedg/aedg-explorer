@@ -1,16 +1,17 @@
-// Stimulus controller for rendering fuel-type charts with consistent colors.
+// Stimulus controller for rendering fuel-type charts using Chartkick + Chart.js.
 //
 // Features:
-// - Fetches chart data from a provided URL.
-// - Uses Chartkick to render a pie chart.
-// - Assigns consistent colors based on fuel type codes.
-// - Merges options with Global Chartkick Options located in (config/initializers/chartkick.rb)
-// - Waits for chart container to be visible before rendering if it is initially hidden (e.g., in an inactive tab).
+// - Fetches and caches chart data from a provided URL.
+// - Renders responsive pie charts with consistent colors based on fuel type codes.
+// - Dynamically updates chart layout for small screens (legend position).
+// - Destroys any existing chart instance before re-rendering.
+// - Waits for chart container to become visible before rendering (for tabbed/hidden UIs).
+// - Redraws chart on window resize (debounced).
+// - Warns if chart type is unsupported or data is invalid.
 //
 // Requirements:
-// - Chart type must be "pie" (only pie charts are currently supported).
-// - Each data label must include a fuel code abbreviation in parentheses,
-//   e.g., "Natural Gas (NG)".
+// - Chart type must be "pie".
+// - Chart labels must end with a fuel code in parentheses, e.g., "Hydro (WAT)".
 //
 // Connects to: data-controller="fuel-chart"
 
@@ -40,11 +41,24 @@ export default class extends Controller {
   };
 
   connect() {
+    this.chart = null;
+    this.chartData = null;
+    this.handleResize = this.debounce(() => {
+      if (!this.isHidden()) this.renderChart();
+    }, 300);
+
+    window.addEventListener('resize', this.handleResize);
+
     if (this.isHidden()) {
       this.waitUntilVisible(() => this.renderChart());
     } else {
       this.renderChart();
     }
+  }
+
+  disconnect() {
+    window.removeEventListener('resize', this.handleResize);
+    this.destroyChart();
   }
 
   isHidden() {
@@ -66,39 +80,78 @@ export default class extends Controller {
     });
   }
 
+  destroyChart() {
+    if (this.chart && this.chart.destroy) {
+      this.chart.destroy();
+    }
+    this.chart = null;
+  }
+
   renderChart() {
-    fetch(this.urlValue)
-      .then((res) => res.json())
-      .then((data) => {
-        const labels = data.map((entry) => entry[0]);
-        const colors = labels.map((label) => {
-          const abbrMatch = label.match(/\(([^)]+)\)$/);
-          const abbr = abbrMatch ? abbrMatch[1] : null;
-          return FUEL_COLORS[abbr] || '#ccc';
+    if (!this.chartData) {
+      fetch(this.urlValue)
+        .then((res) => res.json())
+        .then((data) => {
+          this.chartData = data;
+          this.renderChartData();
+        })
+        .catch((error) => {
+          console.error('Failed to fetch chart data:', error);
         });
+    } else {
+      this.renderChartData();
+    }
+  }
 
-        const isXSmallScreen = window.innerWidth < 576;
+  renderChartData() {
+    if (this.chartTypeValue !== 'pie') {
+      console.warn(`Unsupported chart type: ${this.chartTypeValue}`);
+      return;
+    }
+    
+    this.destroyChart();
 
-        const chartOptions = {
-          ...this.optionsValue,
-          colors: colors,
-          library: {
-            ...(this.optionsValue?.library || {}),
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              ...(this.optionsValue?.library?.plugins || {}),
-              legend: {
-                position: isXSmallScreen ? 'bottom' : 'left',
-                align: isXSmallScreen ? 'start' : 'end',
-              },
-            },
+    const labels = this.chartData.map((entry) => entry[0]);
+    const colors = this.getFuelColors(labels);
+    const isXSmallScreen = window.innerWidth < 576;
+
+    const chartOptions = {
+      ...this.optionsValue,
+      colors: colors,
+      library: {
+        ...(this.optionsValue?.library || {}),
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          ...(this.optionsValue?.library?.plugins || {}),
+          legend: {
+            position: isXSmallScreen ? 'bottom' : 'left',
+            align: isXSmallScreen ? 'start' : 'end',
           },
-        };
+        },
+      },
+    };
 
-        if (this.chartTypeValue === 'pie') {
-          new Chartkick.PieChart(this.element, data, chartOptions);
-        }
-      });
+    this.chart = new Chartkick.PieChart(
+      this.element,
+      this.chartData,
+      chartOptions
+    );
+  }
+
+  getFuelColors(labels) {
+    return labels.map((label) => {
+      const abbrMatch = label.match(/\(([^)]+)\)$/);
+      const abbr = abbrMatch ? abbrMatch[1] : null;
+      return FUEL_COLORS[abbr] || '#ccc';
+    });
+  }
+
+  debounce(callback, delay) {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => callback.apply(this, args), delay);
+    };
   }
 }

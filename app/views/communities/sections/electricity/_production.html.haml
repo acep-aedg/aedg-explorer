@@ -27,7 +27,7 @@
             Yearly Data
 
 
-  .tab-content
+  .tab-content.mt-3
     - if show_monthly_generation?(@community)
       #monthly-prod-chart-wrapper.tab-pane.fade.show.active
         = render 'communities/sections/electricity/production/monthly_stats'

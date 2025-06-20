@@ -5,7 +5,7 @@
     library: { plugins: { legend: { title: { display: true, text: 'Fuel Type'} } } },
     download: { filename: chart_title.parameterize}})
 
-#capacity-chart{ data: { controller: 'fuel-chart', fuel_chart:{
+#capacity-chart.responsive-fuel-chart{ data: { controller: 'fuel-chart', fuel_chart:{
     url_value: capacity_yearly_community_charts_path(@community),
     chart_type_value: 'pie',
     options_value: chart_options.to_json
