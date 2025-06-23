@@ -26,6 +26,7 @@ namespace :delete do
     DeleteHelpers.delete_records(CommunitiesLegislativeDistrict)
     DeleteHelpers.delete_records(HouseDistrict)
     DeleteHelpers.delete_records(SenateDistrict)
+    DeleteHelpers.delete_records(SchoolDistrict)
   end
 
   desc 'Clear all fuel prices data'
@@ -36,10 +37,5 @@ namespace :delete do
   desc 'Clear all electric rate data'
   task electric_rates: :environment do
     DeleteHelpers.delete_records(ElectricRate)
-  end
-
-  desc 'Clear all school districts data'
-  task school_districts: :environment do
-    DeleteHelpers.delete_records(SchoolDistrict)
   end
 end

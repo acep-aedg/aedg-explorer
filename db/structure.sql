@@ -202,8 +202,7 @@ CREATE TABLE public.communities (
     subsistence boolean,
     economic_region character varying,
     reporting_entity_id bigint,
-    village_corporation character varying,
-    school_districts integer[] DEFAULT '{}'::integer[]
+    village_corporation character varying
 );
 
 
@@ -839,41 +838,6 @@ CREATE TABLE public.schema_migrations (
 
 
 --
--- Name: school_districts; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.school_districts (
-    id bigint NOT NULL,
-    name character varying,
-    district_type character varying,
-    is_active boolean,
-    notes character varying,
-    boundary public.geography(Geometry,4326),
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: school_districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.school_districts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: school_districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.school_districts_id_seq OWNED BY public.school_districts.id;
-
-
---
 -- Name: senate_districts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1190,13 +1154,6 @@ ALTER TABLE ONLY public.sales ALTER COLUMN id SET DEFAULT nextval('public.sales_
 
 
 --
--- Name: school_districts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.school_districts ALTER COLUMN id SET DEFAULT nextval('public.school_districts_id_seq'::regclass);
-
-
---
 -- Name: senate_districts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1405,14 +1362,6 @@ ALTER TABLE ONLY public.sales
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
-
-
---
--- Name: school_districts school_districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.school_districts
-    ADD CONSTRAINT school_districts_pkey PRIMARY KEY (id);
 
 
 --
@@ -1649,13 +1598,6 @@ CREATE INDEX index_reporting_entities_on_grid_id ON public.reporting_entities US
 --
 
 CREATE INDEX index_sales_on_reporting_entity_id ON public.sales USING btree (reporting_entity_id);
-
-
---
--- Name: index_school_districts_on_boundary; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_school_districts_on_boundary ON public.school_districts USING gist (boundary);
 
 
 --
@@ -1943,8 +1885,6 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20250616231822'),
-('20250616225142'),
 ('20250611215411'),
 ('20250509014050'),
 ('20250508195941'),
