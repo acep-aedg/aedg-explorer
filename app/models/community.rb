@@ -49,16 +49,16 @@ class Community < ApplicationRecord
 
   def available_price_types
     types = []
-    types << 'Survey' if survey_prices?
-    types << 'Regional' if regional_prices?
+    types << 'Survey' if any_survey_prices?
+    types << 'Regional' if any_regional_prices?
     types
   end
 
-  def survey_prices?
-    fuel_prices.any? { |fp| fp.price_type.to_s.downcase == 'survey' && fp.price.present? }
+  def any_survey_prices?
+    @any_survey_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == 'survey' && fp.price.present? }
   end
 
-  def regional_prices?
-    fuel_prices.any? { |fp| fp.price_type.to_s.downcase == 'regional' && fp.price.present? }
+  def any_regional_prices?
+    @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == 'regional' && fp.price.present? }
   end
 end
