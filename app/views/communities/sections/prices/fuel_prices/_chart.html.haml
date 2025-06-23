@@ -1,14 +1,15 @@
 = form_with url: request.path, method: :get, data: { turbo_frame: "fuel_prices_chart" } do
-  %label{ for: "price_type_select" } Select Price Type:
+  %label{ for: "price_type" } Select Price Type:
   = select_tag :price_type,
-    options_for_select(["Survey", "Regional"], params[:price_type] || "Survey"),
+    options_for_select(@available_price_types, @selected_price_type),
+    disabled: @available_price_types.size == 1,
     onchange: "this.form.requestSubmit();"
 
 %turbo-frame#fuel_prices_chart
-  = column_chart fuel_prices_by_season_chart_data(@community.fuel_prices, price_type: params[:price_type] || "Survey"),
+  = column_chart fuel_prices_by_season_chart_data(@community.fuel_prices, price_type: @selected_price_type),
     colors: ["#6BAED6", "#08519C", "#74C476", "#006D2C"],
-    title: "Fuel Types and Prices by Year and Season (#{params[:price_type] || 'Survey'})",
+    title: "Fuel Types and Prices by Year and Season (#{@selected_price_type})",
     xtitle: "Year",
     ytitle: "Price (USD)",
     prefix: "$",
-    download: {filename: "#{@community.name.parameterize}_fuel_prices", format:   "png"}
+    download: {filename: "#{@community.name.parameterize}_fuel_prices", format: "png"}

@@ -11,6 +11,8 @@ class CommunitiesController < ApplicationController
     @community = Community.find(params[:id])
     @borough = @community.borough
     @communities = Community.all
+    @available_price_types = @community.available_price_types
+    @selected_price_type = (params[:price_type] if @available_price_types.include?(params[:price_type])) || @available_price_types.first
   end
 
   private
