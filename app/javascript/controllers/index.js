@@ -16,6 +16,9 @@ application.register("copy", CopyController)
 import DatatablesController from "./datatables_controller"
 application.register("datatables", DatatablesController)
 
+import FuelChartController from "./fuel_chart_controller"
+application.register("fuel-chart", FuelChartController)
+
 import LightboxController from "./lightbox_controller"
 application.register("lightbox", LightboxController)
 

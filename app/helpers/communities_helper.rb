@@ -23,7 +23,15 @@ module CommunitiesHelper
   end
 
   def show_production?(community)
-    community.grid&.monthly_generations&.exists? || community.grid&.yearly_generations&.exists?
+    show_monthly_generation?(community) || show_yearly_generation?(community)
+  end
+
+  def show_yearly_generation?(community)
+    community.grid&.yearly_generations&.exists?
+  end
+
+  def show_monthly_generation?(community)
+    community.grid&.monthly_generations&.exists?
   end
 
   def show_capacity?(community)

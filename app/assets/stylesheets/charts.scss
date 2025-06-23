@@ -1,0 +1,14 @@
+.responsive-fuel-chart {
+  height: 300px !important;
+  width: 75% !important;
+  margin: 0 auto !important;
+  max-width: 800px !important;
+
+  @media (max-width: 1200px) {
+    width: 100% !important;
+  }
+
+  @media (max-width: 576px) {
+    height: 500px !important;
+  }
+}
