@@ -3,7 +3,7 @@ require 'net/http'
 require 'uri'
 namespace :communities do
   desc 'Check community show pages render without error'
-  task test_community_show_views: :environment do
+  task test_show_view: :environment do
     include Rails.application.routes.url_helpers
     Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
