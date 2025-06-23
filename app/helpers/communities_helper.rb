@@ -5,6 +5,14 @@ module CommunitiesHelper
 
   # Electricity section visibility methods
   def show_utilities?(community)
+    show_main_utility?(community) || show_grid_utilities?(community)
+  end
+
+  def show_grid_utilities?(community)
+    community.grid&.reporting_entities&.exists?
+  end
+
+  def show_main_utility?(community)
     community.reporting_entity.present?
   end
 
