@@ -1,5 +1,4 @@
 - stats = Capacity.capacity_stats_for(@community.grid)
-- chart_title = "#{@community.grid.name.titleize} Capacity by Fuel Type (#{stats[:year]})"
 
 .d-flex.align-items-center.mb-3
   %i.bi.bi-lightning-fill.me-2.fs-4
@@ -7,65 +6,23 @@
   %hr.flex-grow-1.mt-1.mb-0
 .mb-3
   = render 'communities/shared/grid_info'
-
-  .bg-body-secondary.p-3.rounded.mb-3.d-flex.flex-wrap.justify-content-center.gap-4
-    .d-flex.align-items-center
-      %i.bi-bar-chart-line-fill.me-2
-      %strong.me-1 Total:
-      %span.text-primary= "#{stats[:total_capacity]} MW"
-
-    .d-flex.align-items-center
-      %i.bi-bullseye.me-2
-      %strong.me-1 Average:
-      %span.text-secondary= "#{stats[:average_capacity]} MW" 
-
-    .d-flex.align-items-center
-      %i.bi-arrow-up-right-circle.me-2
-      %strong.me-1 Max:
-      %span.text-success= "#{stats[:max_capacity]} MW" 
-      %small.text-muted= "(#{stats[:max_fuel_type]})"
-
-    .d-flex.align-items-center
-      %i.bi-arrow-down-right-circle.me-2
-      %strong.me-1 Min:
-      %span.text-danger= "#{stats[:min_capacity]} MW" 
-      %small.text-muted= "(#{stats[:min_fuel_type]})"
-
-    .d-flex.align-items-center
-      %i.bi-calendar.me-2
-      %strong.me-1 Year:
-      %span.text-muted= stats[:year]
+  = render 'communities/sections/electricity/capacity/capacity_stats', stats: stats
 
   / Tabs
   .d-flex.align-items-center.mt-4
     .nav.nav-tabs
       %li.nav-item
-        = link_to "Chart", "#chart", class: "nav-link active", data: { bs_toggle: "tab" }
+        = link_to "#capacity-chart-wrapper", class: "nav-link active", data: { bs_toggle: "tab" } do
+          %i.bi.bi-pie-chart.me-1
+          Capacity Chart
       %li.nav-item
-        = link_to "Data", "#data", class: "nav-link", data: { bs_toggle: "tab" }
+        = link_to "#capacity-data-wrapper", class: "nav-link", data: { bs_toggle: "tab" } do
+          %i.bi.bi-table.me-1
+          Capacity Data
 
   / Tab Content
   .tab-content.mt-3
-    #chart.tab-pane.fade.show.active
-      = pie_chart capacity_yearly_community_charts_path(@community),
-        title: chart_title,
-        suffix: " MW",
-        donut: true,
-        library: { plugins: { legend: { title: { display: true, text: "Fuel Type"}, display: true, position: 'left' } } },
-        download: { filename: chart_title.parameterize}
-
-    #data.tab-pane.fade
-      %table.table.table-striped.border{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }
-        %thead
-          %tr
-            %th Fuel Type Code
-            %th Fuel Type Name
-            %th Capacity (MW)
-            %th Year
-        %tbody
-          - @community.grid.capacities.where(year: stats[:year]).each do |capacity|
-            %tr
-              %td= capacity.fuel_type_code
-              %td= capacity.fuel_type_name
-              %td= capacity.capacity_mw
-              %td= capacity.year
+    #capacity-chart-wrapper.tab-pane.fade.show.active
+      = render 'communities/sections/electricity/capacity/capacity_chart', year: stats[:year]
+    #capacity-data-wrapper.tab-pane.fade
+      = render 'communities/sections/electricity/capacity/capacity_data', year: stats[:year]

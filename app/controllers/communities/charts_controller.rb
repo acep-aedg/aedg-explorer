@@ -24,6 +24,8 @@ class Communities::ChartsController < ApplicationController
       label = name.present? ? "#{name} (#{code})" : code
       [label, rows.sum(&:net_generation_mwh)]
     end
+
+    dataset = dataset.sort_by { |label, _| label }
     render json: dataset
   end
 
@@ -37,6 +39,8 @@ class Communities::ChartsController < ApplicationController
       label = name.present? ? "#{name} (#{code})" : code
       [label, rows.sum(&:capacity_mw)]
     end
+
+    dataset = dataset.sort_by { |label, _| label }
     render json: dataset
   end
 

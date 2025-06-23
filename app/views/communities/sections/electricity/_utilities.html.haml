@@ -12,22 +12,26 @@
         .flex-grow-1
           .text-muted Power Cost Equalization (PCE) Status
           .fw-semibold= @community.pce_eligible ? "Eligible" : "Ineligible"
-  - main_utility = @community.reporting_entity&.name
-  - other_utilities = @community.grid.reporting_entities.map(&:name).uniq.reject { |name| name == main_utility }
+  
+  - if show_main_utility?(@community)
+    - main_utility = @community.reporting_entity&.name
 
-  .col-12.col-lg-6
-    .d-flex.h-100
-      .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
-        %i.bi.bi-building.text-secondary.fs-4.me-3
-        .flex-grow-1
-          .text-muted= "Utility for #{@community.name}"
-          .fw-semibold= main_utility
-
-  - if other_utilities.any?
-    .col-12
-      .d-flex
+    .col-12.col-lg-6
+      .d-flex.h-100
         .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
-          %i.bi.bi-diagram-3.text-info.fs-4.me-3
+          %i.bi.bi-building.text-secondary.fs-4.me-3
           .flex-grow-1
-            .text-muted= "Other Utilities on the #{@community.grid.name}"
-            .fw-semibold= other_utilities.join(", ")
+            .text-muted= "Utility for #{@community.name}"
+            .fw-semibold= main_utility
+
+  - if show_grid_utilities?(@community)
+    - other_utilities = @community.grid&.utility_names(exclude: main_utility)
+
+    - if other_utilities.any?
+      .col-12
+        .d-flex
+          .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
+            %i.bi.bi-diagram-3.text-info.fs-4.me-3
+            .flex-grow-1
+              .text-muted= "Other Utilities on the #{@community.grid.name}"
+              .fw-semibold= other_utilities.join(", ")

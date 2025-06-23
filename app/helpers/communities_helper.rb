@@ -5,6 +5,14 @@ module CommunitiesHelper
 
   # Electricity section visibility methods
   def show_utilities?(community)
+    show_main_utility?(community) || show_grid_utilities?(community)
+  end
+
+  def show_grid_utilities?(community)
+    community.grid&.reporting_entities&.exists?
+  end
+
+  def show_main_utility?(community)
     community.reporting_entity.present?
   end
 
@@ -15,7 +23,15 @@ module CommunitiesHelper
   end
 
   def show_production?(community)
-    community.grid&.monthly_generations&.exists? || community.grid&.yearly_generations&.exists?
+    show_monthly_generation?(community) || show_yearly_generation?(community)
+  end
+
+  def show_yearly_generation?(community)
+    community.grid&.yearly_generations&.exists?
+  end
+
+  def show_monthly_generation?(community)
+    community.grid&.monthly_generations&.exists?
   end
 
   def show_capacity?(community)
@@ -51,7 +67,15 @@ module CommunitiesHelper
   end
 
   def show_election_districts?(community)
-    community.communities_legislative_districts.any?
+    show_senate_districts?(community) || show_house_districts?(community)
+  end
+
+  def show_senate_districts?(community)
+    community.senate_districts.any?
+  end
+
+  def show_house_districts?(community)
+    community.house_districts.any?
   end
 
   def show_population?(community)
