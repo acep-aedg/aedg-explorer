@@ -46,4 +46,19 @@ class Community < ApplicationRecord
   def grid
     community_grids.find_by(termination_year: 9999)&.grid
   end
+
+  def available_price_types
+    types = []
+    types << 'Survey' if any_survey_prices?
+    types << 'Regional' if any_regional_prices?
+    types
+  end
+
+  def any_survey_prices?
+    @any_survey_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == 'survey' && fp.price.present? }
+  end
+
+  def any_regional_prices?
+    @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == 'regional' && fp.price.present? }
+  end
 end
