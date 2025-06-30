@@ -7,16 +7,16 @@ categories:
       - question: "How do I submit feedback or send suggestions?"
         answer: |
           If you have feedback, suggestions, or questions, please reach out to [akenergygateway@alaska.edu](mailto:akenergygateway@alaska.edu). Your input helps improve the AEDG to better support your needs. 
-      - question: "How do you define energy data?"
+      - question: "How is energy data defined?"
         answer: |
           AEDG adopts the definition of energy data developed for the 2023 Alaska Energy Security Task Force’s [*State Energy Data Subcommittee Report*](https://www.akenergyauthority.org/LinkClick.aspx?fileticket=9yFSLzf61MA%3d&portalid=0){:target='_blank'}:
             
            **“Information about how electricity, heat, and transportation fuels are sourced, generated, stored, distributed, used, and governed; and the impacts on the built, natural, and socioeconomic environments.”** 
            
            Many of the expert advisors to the AEDG 3.0 revitalization effort were members of this subcommittee.
-      - question: "How did you choose what Communities to include?"
+      - question: "How were communities selected?"
         answer: |
-          We took some time to define a community and how a community relates to other governmental organizations like Boroughs and Legislative Districts and energy-related entities like electrical grids and operators. Relational definitions like this are called an **ontology**. For AEDG summaries, communities are required to:
+          Time was taken to define what consititues a community and how a community relates to other governmental organizations like Boroughs and Legislative Districts and energy-related entities like electrical grids and operators. Relational definitions like this are called an **ontology**. For AEDG summaries, communities are required to:
             
           - Have a 5-digit Federal Information Processing Series (FIPS) code assigned by the U.S. Census Bureau
           - Have energy data available for it
@@ -28,6 +28,11 @@ categories:
           - Alaska Center for Energy and Power. "Alaska Energy Ontology." Accessed May 13, 2025. <https://acep-aedg.github.io/alaskan-community-ontology>{:target='_blank'}
 
           - Booshehri, Meisam, Lukas Emele, Simon Flügel, Hannah Förster, Johannes Frey, Ulrich Frey, Martin Glauer, et al. 2021. "Introducing the Open Energy Ontology: Enhancing Data Interpretation and Interfacing in Energy Systems Analysis." *Energy and AI* 5 (September): 100074. <https://doi.org/10.1016/j.egyai.2021.100074>{:target='_blank'}
+      - question: "How do I cite the AEDG?"
+        answer: |
+          To cite the **AEDG as a whole**, use the general citation available [here](https://aedg-dev.camio.acep.uaf.edu/user-guide#cite-aedg). This citation is formatted in Chicago style and is appropriate when citing the platform broadly.
+
+          To cite a **specific dataset**, navigate to its page in the **Data Explorer** and open the **Cite** tab. Each dataset includes a Chicago style citation that can be copied and included in references. 
       - question: "What is next for the AEDG? Do you have a product roadmap?"
         answer: |
           In 2024-2025 the AEDG 3.0 revitalization team set out to update the look and feel of the AEDG, the underlying software, and the datasets. After consulting the expert community for energy and economic data, the team identified **three key features** to deliver in the first year of the project: 
@@ -36,11 +41,6 @@ categories:
           - Ability to download data
 
           Looking forward the team hopes to establish a **Developers, Data Providers, and Users Group (DDPUG)** to guide development of the gateway over time and ensure it meets a broad base of needs for energy and economic data for the state of Alaska.
-      - question: "How do I cite the AEDG?"
-        answer: |
-          To cite the **AEDG as a whole**, use the general citation available [here](https://aedg-dev.camio.acep.uaf.edu/user-guide#cite-aedg). This citation is formatted in Chicago style and is appropriate when citing the platform broadly.
-
-          To cite a **specific dataset**, navigate to its page in the **Data Explorer** and open the **Cite** tab. Each dataset includes a Chicago style citation that can be copied and included in references. 
 
   - name: 'Data Access'
     questions:
