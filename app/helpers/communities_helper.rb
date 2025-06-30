@@ -16,6 +16,10 @@ module CommunitiesHelper
     community.reporting_entity.present?
   end
 
+  def show_operators?(community)
+    community.operators.present?
+  end
+
   def show_rates?(community)
     community.electric_rates&.any? do |rate|
       rate.residential_rate || rate.commercial_rate || rate.industrial_rate

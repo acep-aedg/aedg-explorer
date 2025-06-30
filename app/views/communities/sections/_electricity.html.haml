@@ -1,6 +1,9 @@
 - if show_utilities?(@community)
   .m-5.mt-3
     = render 'communities/sections/electricity/utilities'
+- if show_operators?(@community)
+  .m-5
+    = render 'communities/sections/electricity/operators'
 - if show_rates?(@community)
   .m-5
     = render 'communities/sections/electricity/rates'
