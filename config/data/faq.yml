@@ -1,26 +1,76 @@
 categories:
-  - name: "general"
+  - name: 'General'
     questions:
-      - question: "What is the Alaska Energy Data Gateway?"
-        answer: "The Alaska Energy Data Gateway is a centralized platform providing access to energy data across Alaska."
-      - question: "Who can use the data portal?"
-        answer: "The data portal is available to anyone interested in Alaska's energy data, including researchers, policymakers, industry professionals, and the general public."
+      - question: "What is the Alaska Energy Data Gateway (AEDG)?"
+        answer: |
+          The Alaska Energy Data Gateway is a centralized platform providing access to energy and socioeconomic data across Alaska.
+      - question: "How do I submit feedback or send suggestions?"
+        answer: |
+          If you have feedback, suggestions, or questions, please reach out to [akenergygateway@alaska.edu](mailto:akenergygateway@alaska.edu). Your input helps improve the AEDG to better support your needs. 
+      - question: "How do you define energy data?"
+        answer: |
+          AEDG adopts the definition of energy data developed for the 2023 Alaska Energy Security Task Force’s [*State Energy Data Subcommittee Report*](https://www.akenergyauthority.org/LinkClick.aspx?fileticket=9yFSLzf61MA%3d&portalid=0){:target='_blank'}:
+            
+           **“Information about how electricity, heat, and transportation fuels are sourced, generated, stored, distributed, used, and governed; and the impacts on the built, natural, and socioeconomic environments.”** 
+           
+           Many of the expert advisors to the AEDG 3.0 revitalization effort were members of this subcommittee.
+      - question: "How did you choose what Communities to include?"
+        answer: |
+          We took some time to define a community and how a community relates to other governmental organizations like Boroughs and Legislative Districts and energy-related entities like electrical grids and operators. Relational definitions like this are called an **ontology**. For AEDG summaries, communities are required to:
+            
+          - Have a 5-digit Federal Information Processing Series (FIPS) code assigned by the U.S. Census Bureau
+          - Have energy data available for it
+           
+          The list of communities will continue to be refined based on user feedback.
 
-  - name: "data access"
-    questions:
-      - question: "How do I access the data on the portal?"
-        answer: "You can access the data by browsing datasets on the portal or using the search function to find specific datasets."
-      - question: "Do I need an account to download data?"
-        answer: "No, all datasets are publicly available and can be downloaded without an account."
+          For more information on AEDG’s ontology and an example of a more general ontology for energy data, see:
 
-  - name: "technical"
-    questions:
-      - question: "What file formats are the datasets available in?"
-        answer: "Datasets are typically available in CSV, JSON, or GeoJSON formats for easy use in analysis tools."
-      - question: "How often is the data updated?"
-        answer: "The update frequency varies by dataset. Check the dataset metadata for details."
+          - Alaska Center for Energy and Power. "Alaska Energy Ontology." Accessed May 13, 2025. <https://acep-aedg.github.io/alaskan-community-ontology>{:target='_blank'}
 
-  - name: "support"
+          - Booshehri, Meisam, Lukas Emele, Simon Flügel, Hannah Förster, Johannes Frey, Ulrich Frey, Martin Glauer, et al. 2021. "Introducing the Open Energy Ontology: Enhancing Data Interpretation and Interfacing in Energy Systems Analysis." *Energy and AI* 5 (September): 100074. <https://doi.org/10.1016/j.egyai.2021.100074>{:target='_blank'}
+      - question: "What is next for the AEDG? Do you have a product roadmap?"
+        answer: |
+          In 2024-2025 the AEDG 3.0 revitalization team set out to update the look and feel of the AEDG, the underlying software, and the datasets. After consulting the expert community for energy and economic data, the team identified **three key features** to deliver in the first year of the project: 
+          - Community Summaries
+          - Data Explorer
+          - Ability to download data
+
+          Looking forward the team hopes to establish a **Developers, Data Providers, and Users Group (DDPUG)** to guide development of the gateway over time and ensure it meets a broad base of needs for energy and economic data for the state of Alaska.
+      - question: "How do I cite the AEDG?"
+        answer: |
+          To cite the **AEDG as a whole**, use the general citation available [here](https://aedg-dev.camio.acep.uaf.edu/user-guide#cite-aedg). This citation is formatted in Chicago style and is appropriate when citing the platform broadly.
+
+          To cite a **specific dataset**, navigate to its page in the **Data Explorer** and open the **Cite** tab. Each dataset includes a Chicago style citation that can be copied and included in references. 
+
+  - name: 'Data Access'
     questions:
-      - question: "How can I contact support if I encounter issues?"
-        answer: "You can contact support by emailing [akenergygateway@alaska.edu](mailto:akenergygateway@alaska.edu)"
+      - question: "How can I find data the AEDG?"
+        answer: |
+          The [Data Explorer](https://aedg-dev.camio.acep.uaf.edu/explore/data) provides access to all available datasets and their metadata. Each dataset has a dedicated page with data, metadata, and data dictionary, along with descriptions, context, and download options. 
+
+          The [Community Summaries](https://aedg-dev.camio.acep.uaf.edu/explore/communities) tool displays information for individual communities. While full datasets are not available in this section, the displayed data is derived from the same sources used in the Data Explorer and is tailored to highlight community-specific insights. 
+      - question: "Can I download Data?"
+        answer: |
+          **Yes, data from the AEDG is available for download.** Each dataset page in the Data Explorer includes buttons in the top right corner to download both the dataset and its metadata.
+  - name: 'Metadata'
+    questions: 
+      - question: 'How are variables defined in the AEDG?  Where is the data dictionary?'
+        answer: |
+          Every variable shown in the AEDG includes a recorded definition to help users understand the data they are viewing. 
+
+          You can view these definitions in **two places** within each dataset page: 
+              
+          - **Data Dictionary:** Each dataset page includes a **Fields** tab that serves as a data dictionary. It lists the variables relevant to that dataset along with their descriptions, types and units (where applicable).
+          - **Metadata:** Each dataset also includes a **Metadata** tab that displays the metadata in a structured `JSON` format. Within this, the `schema` section contains a list of `fields`. Each field includes the variable name, description, type and unit (where applicable).
+      - question: "What is the Metadata tab in the Data Explorer?" 
+        answer: |
+          Metadata is a method of describing data so that is useful beyond the context for which the dataset was originally created. To help others make use of the datasets published through AEDG, metadata is included to answer common questions. Metadata describes the what, where, when, how of data collection and other useful information like the units and contact information of the data collector.
+
+          While metadata can be a simple text file, AEDG also uses it to generate web pages. This means the metadata must be machine-readable and follow a consistent standard format to ensure data is read and displayed correctly. To support this, AEDG uses the [Open Energy Metadata](https://openenergyplatform.github.io/oemetadata/latest/){:target='_blank'} (OEMetadata), which is an offshoot of [Frictionless Data Packages](https://frictionlessdata.io/){:target='_blank'}. 
+
+          For more information on AEDG’s use of metadata, see:
+            - Hülk, Ludwig, Jonas Huber, Christian Hofmann, and Christoph Muschner. 2025. "Open Energy Metadata (OEMetadata)." Zenodo. <https://doi.org/10.5281/zenodo.15019562>{:target='_blank'}.
+        
+            - Alaska Center for Energy and Power. "Metadata Generator for the Alaska Energy Data Gateway (AEDG)." Accessed May 13, 2025. <https://acep-aedg.github.io/aedg-metadata/index.html>{:target='_blank'}
+
+
