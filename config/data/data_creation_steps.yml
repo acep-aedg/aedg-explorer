@@ -1,17 +1,15 @@
 data_creation_steps:
   - title: 'Choosing the Right Data'
     description: |
-      You need data that reflects the full picture of energy in Alaska—how it’s generated, stored, moved, used, and governed, as well as how it affects communities, boroughs, and the State as a whole. To get started, we looked at the kinds of data people found useful in earlier versions of AEDG. Then we added more.
+      You need data that reflects the full picture of energy in Alaska: how it’s generated, stored, moved, used, and governed, as well as how it affects communities, boroughs, and the State as a whole. To get started, we looked at the kinds of data people found useful in earlier versions of AEDG. Then we added more.
 
       We talked with experts to decide what important data to  include first. The goal is to present data that is most useful for planning, reporting, or simply getting a better sense of what’s happening in Alaska’s communities.
 
-      [For a more indepth view of the data sources, view here.](https://acep-aedg.github.io/aedg-metadata/registries.html#sources){:target='_blank'}
+      Read more about [the approach to data prioritization, cross-team collaboration, and phased development for the AEDG.](https://www.uaf.edu/acep/news/2024/acep-iser-project-is-underway-to-advance-energy-data-access-for-alaskans.php){:target='_blank'}
 
   - title: 'Finding and Downloading the Data'
     description: |
       While much of the data is available online from public sources like federal or state  agencies, some of it is not. To keep the data readily accessible, an automated pipeline downloads the data regularly, stores it in a local archive, and loads it into a database. This gives you quicker access to updated dashboards and ensures the system can easily incorporate new data sources over time.
-
-      [For a more indepth view of the data pipeline, request access to the ETL pipeline documentation here.](https://github.com/acep-aedg/aedg-etl-2024/blob/main/README.md){:target='_blank'}
 
   - title: 'Making the Data Work Together'
     description: |
@@ -19,13 +17,12 @@ data_creation_steps:
 
       The data has also been combined and re-organized  so it could be displayed clearly by community, region, and other groups that are important across Alaska.
 
-      [For a more indepth view of the data integration steps, view here.]()
-
   - title: 'Adding Context You Can Use'
     description: |
-      You’ll notice that AEDG shows most data by community. But not every dataset lines up neatly that way. Some information comes in grouped by utility service area, census tract, or legislative district. When that’s the case, the distinction is clearly marked – so you’re not left guessing.
+      You’ll notice that AEDG shows most data by community. But not every dataset lines up neatly that way. Some information comes in grouped by utility service area, census tract, or legislative district. When that’s the case, the distinction is clearly marked, so you’re not left guessing.
 
-      You can also find extra context about who created the data, what year it was published, what units it’s in, and what kind of license it uses. You’ll see this in the Data Explorer section.
+      You can also find helpful context about who created the data, when it was published, what units are used, and how it's licensed. This information is available in the dataset's About, Metadata, and Fields tabs.
 
       Together, all these steps help you explore Alaska’s energy with more confidence and clarity.
 
+      [Explore the Communities dataset page](https://aedg-dev.camio.acep.uaf.edu/explore/data/public_communities) to see how supporting context is presented alongside each dataset.
