@@ -1,16 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  district: Integer
-  district_type: MyString
-  is_active: false
-  notes: MyString
-  boundary: 
+  district: 1
+  name: "School District 1"
+  district_type: "Type A"
+  is_active: true
+  notes: "notes here"
 
 two:
-  district: Integer
-  district_name: MyString
-  district_type: MyString
+  district: 2
+  name: "School District 2"
+  district_type: "Type B"
   is_active: false
-  notes: MyString
-  boundary: 
+  notes: "notes here"
