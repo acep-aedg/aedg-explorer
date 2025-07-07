@@ -27,6 +27,8 @@ class Community < ApplicationRecord
   has_many :senate_districts, through: :communities_senate_districts
   has_many :communities_house_districts, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :house_districts, through: :communities_house_districts
+  has_many :communities_school_districts, foreign_key: :community_fips_code, primary_key: :fips_code
+  has_many :school_districts, through: :communities_school_districts
 
   # Handle the case where the name is not unique
   def slug_candidates

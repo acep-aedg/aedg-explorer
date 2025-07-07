@@ -78,6 +78,10 @@ module CommunitiesHelper
     community.house_districts.any?
   end
 
+  def show_school_districts?(community)
+    community.school_districts.any?
+  end
+
   def show_population?(community)
     community.population_age_sexes.exists?
   end

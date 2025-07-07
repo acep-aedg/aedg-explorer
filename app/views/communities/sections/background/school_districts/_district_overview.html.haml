@@ -3,23 +3,11 @@
   %h4#school-districts.mb-0.me-3.py-3 School Districts
   %hr.flex-grow-1.mt-1.mb-0
 
-- if @community.school_district_objects.any?
-  %ul.ms-3
-    - @community.school_district_objects.each do |district|
-      %li.mb-2
+%ul.ms-3
+  - @community.school_districts.each do |district|
+    %li.mb-3
+      %div
         %strong= district.name
-        - if district.district_type.present?
-          %span.text-muted.mx-2= "(#{district.district_type})"
-        - unless district.is_active
-          %span.badge.bg-warning.text-dark.ms-2 Inactive
-        - if district.notes.present?
-          %div.text-muted.small.fw-semibold.mt-1= district.notes
-
-- else
-  %p.text-muted.mt-2 No school districts found for this community.
-
-
-
-
-
-
+        %span.text-muted.mx-2= "(#{district.district_type})"
+        %span.badge.bg-warning.text-dark.ms-2= "Inactive" unless district.is_active
+    %div.text-muted.small.ms-2.mt-1= "Notes: #{district.notes}" if district.notes&.strip.present?

@@ -3,6 +3,7 @@ module CommunityAttributes
   extend ActiveSupport::Concern
   include CommunitiesSenateDistrictAssignment
   include CommunitiesHouseDistrictAssignment
+  include CommunitiesSchoolDistrictAssignment
 
   class_methods do
     def import_aedg_with_geom!(properties, geom)
@@ -15,6 +16,7 @@ module CommunityAttributes
 
         assign_senate_districts!(community, properties[:senate_district])
         assign_house_districts!(community, properties[:house_district])
+        assign_school_districts!(community, properties[:school_district])
       end
     end
   end
@@ -37,8 +39,7 @@ module CommunityAttributes
         subsistence: params[:subsistence],
         economic_region: params[:economic_region],
         village_corporation: params[:village_corporation],
-        reporting_entity: ReportingEntity.from_aedg_id(params[:reporting_entity_id]).first,
-        school_districts: Array(params[:school_district]).map(&:to_i)
+        reporting_entity: ReportingEntity.from_aedg_id(params[:reporting_entity_id]).first
       )
     end
   end

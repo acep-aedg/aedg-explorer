@@ -16,6 +16,7 @@ namespace :import do
     Rake::Task['import:sales'].invoke
     Rake::Task['import:senate_districts'].invoke
     Rake::Task['import:house_districts'].invoke
+    Rake::Task['import:school_districts'].invoke
     Rake::Task['import:communities'].invoke
     Rake::Task['import:community_grids'].invoke
     Rake::Task['import:populations'].invoke
@@ -26,7 +27,6 @@ namespace :import do
     Rake::Task['import:employments'].invoke
     Rake::Task['import:capacities'].invoke
     Rake::Task['import:fuel_prices'].invoke
-    Rake::Task['import:school_districts'].invoke
     puts 'Import complete'
   end
 
@@ -225,23 +225,6 @@ namespace :import do
     ImportHelpers.import_geojson(filepath, SenateDistrict)
   end
 
-  desc 'Import Fuel Prices Data from .csv file'
-  task fuel_prices: :environment do
-    if FuelPrice.count > 0
-      raise <<~ERROR
-        ❌ ERROR: Fuel Price table was not empty before starting import!
-        To clear it and all realted tables, run:
-
-            rails delete:fuel_prices
-
-        Then, try running this import task again.
-      ERROR
-    end
-
-    filepath = Rails.root.join('db/imports/fuel_prices.csv')
-    ImportHelpers.import_csv(filepath, FuelPrice)
-  end
-
   desc 'Import School Districts Data from .geojson file'
   task school_districts: :environment do
     if SchoolDistrict.count > 0
@@ -257,5 +240,22 @@ namespace :import do
 
     filepath = Rails.root.join('db/imports/school_districts.geojson')
     ImportHelpers.import_geojson(filepath, SchoolDistrict)
+  end
+
+  desc 'Import Fuel Prices Data from .csv file'
+  task fuel_prices: :environment do
+    if FuelPrice.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Fuel Price table was not empty before starting import!
+        To clear it and all realted tables, run:
+
+            rails delete:fuel_prices
+
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/fuel_prices.csv')
+    ImportHelpers.import_csv(filepath, FuelPrice)
   end
 end
