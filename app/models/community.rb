@@ -117,4 +117,32 @@ class Community < ApplicationRecord
   def show_prices_section?
     show_fuel_prices?
   end
+
+  # --- Background Section ---
+
+  def show_transportation?
+    @show_transportation ||= transportation.present?
+  end
+
+  def show_election_districts?
+    show_senate_districts? || show_house_districts?
+  end
+
+  def show_senate_districts?
+    @show_senate_districts ||= senate_districts.any?
+  end
+
+  def show_house_districts?
+    @show_house_districts ||= house_districts.any?
+  end
+
+  def show_population?
+    @show_population ||= population_age_sexes.exists?
+  end
+
+  def show_background_section?
+    show_transportation? ||
+      show_election_districts? ||
+      show_population?
+  end
 end

@@ -10,7 +10,7 @@
 .row.g-4.mt-4
   / Left Column: Map
   .col-12.col-xl-6
-    - if show_election_districts?(@community)
+    - if @community.show_election_districts?
       #districtsMapWrapper.tab-pane.fade.show.active{
         data: mapbox_api_data({
           maps_map_center_value: [@community.longitude, @community.latitude],
@@ -19,7 +19,7 @@
       }
         %h5.fw-semibold.text-muted.mb-3 Legislative Districts Map
         .d-flex.gap-2.mb-3.align-items-center
-          - if show_house_districts?(@community)
+          - if @community.show_house_districts?
             %button.btn.btn-outline-primary.active{
               data: {
                 action: "click->maps#selectLayer",
@@ -28,7 +28,7 @@
                 outline_color: "#05505e"
               }
             } House Districts
-          - if show_senate_districts?(@community)
+          - if @community.show_senate_districts?
             %button.btn.btn-outline-primary{
               data: {
                 action: "click->maps#selectLayer",
@@ -43,18 +43,18 @@
   / Right Column: Tabs + Data
   .col-12.col-xl-6
     .nav.nav-tabs.mb-2
-      - if show_house_districts?(@community)  
+      - if @community.show_house_districts?  
         %li.nav-item 
           = link_to "House District Data", "#HouseDistrictData", class: "nav-link active", data: { bs_toggle: "tab" }
-      - if show_senate_districts?(@community) 
+      - if @community.show_senate_districts? 
         %li.nav-item 
           = link_to "Senate District Data", "#SenateDistrictData", class: "nav-link", data: { bs_toggle: "tab" }
 
     .tab-content
-      - if show_house_districts?(@community) 
+      - if @community.show_house_districts? 
         #HouseDistrictData.tab-pane.fade.show.active
           = render "communities/sections/background/election_districts/house_district_data"
 
-      - if show_senate_districts?(@community) 
+      - if @community.show_senate_districts? 
         #SenateDistrictData.tab-pane.fade
           = render "communities/sections/background/election_districts/senate_district_data"

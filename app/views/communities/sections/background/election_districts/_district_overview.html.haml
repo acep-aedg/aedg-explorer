@@ -1,7 +1,7 @@
-- if show_house_districts?(@community)
+- if @community.show_house_districts?
   = render "communities/sections/background/election_districts/district_badge_group", label: "House Districts",  items: @community.house_districts,  color: "success" do |district|
     = district.district
 
-- if show_senate_districts?(@community)
+- if @community.show_senate_districts?
   = render "communities/sections/background/election_districts/district_badge_group", label: "Senate Districts",  items: @community.senate_districts,  color: "primary" do |district|
     = district.district

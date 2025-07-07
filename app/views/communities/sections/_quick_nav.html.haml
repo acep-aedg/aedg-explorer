@@ -32,17 +32,17 @@
             = nav_link "Fuel Prices", "#fuel-prices"
     .col
       %ul.nav.flex-column{ data: { turbo: false } }
-        - if show_background_section?(@community)
+        - if @community.show_background_section?
           %li.nav-item.mt-3.text-uppercase.text-muted.small
             = nav_link "Background", "#background", parent_section: true
         %li.nav-item
           = nav_link "Geography", "#geography"
-        - if show_transportation?(@community)
+        - if @community.show_transportation?
           %li.nav-item
             = nav_link "Transportation", "#transportation"
-        - if show_election_districts?(@community)
+        - if @community.show_election_districts?
           %li.nav-item
             = nav_link "Election Districts", "#election-districts"
-        - if show_population? (@community)
+        - if @community.show_population? 
           %li.nav-item
             = nav_link "Population", "#population"
