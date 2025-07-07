@@ -202,7 +202,8 @@ CREATE TABLE public.communities (
     subsistence boolean,
     economic_region character varying,
     reporting_entity_id bigint,
-    village_corporation character varying
+    village_corporation character varying,
+    heating_degree_days integer
 );
 
 
@@ -1979,6 +1980,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250707215602'),
 ('20250613174051'),
 ('20250613173935'),
 ('20250613003333'),

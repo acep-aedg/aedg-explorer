@@ -61,4 +61,12 @@ class Community < ApplicationRecord
   def any_regional_prices?
     @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == 'regional' && fp.price.present? }
   end
+
+  def show_climate?
+    @show_climate ||= show_heating_degree_days?
+  end
+
+  def show_heating_degree_days?
+    @show_heating_degree_days ||= heating_degree_days.present? && heating_degree_days.positive?
+  end
 end

@@ -12,5 +12,9 @@
 - if show_population?(@community)
   .my-5.mx-3.mx-md-5
     = render 'communities/sections/background/population'
+    
+- if @community.show_climate?
+  .my-5.mx-3.mx-md-5
+    = render 'communities/sections/background/climate'
 
 

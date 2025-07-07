@@ -37,6 +37,7 @@ module CommunityAttributes
         subsistence: params[:subsistence],
         economic_region: params[:economic_region],
         village_corporation: params[:village_corporation],
+        heating_degree_days: params[:heating_degree_days],
         reporting_entity: ReportingEntity.from_aedg_id(params[:reporting_entity_id]).first
       )
     end

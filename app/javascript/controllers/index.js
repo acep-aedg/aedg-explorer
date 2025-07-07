@@ -24,3 +24,6 @@ application.register("lightbox", LightboxController)
 
 import MapsController from "./maps_controller"
 application.register("maps", MapsController)
+
+import TooltipController from "./tooltip_controller"
+application.register("tooltip", TooltipController)
