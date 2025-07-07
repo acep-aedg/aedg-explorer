@@ -24,10 +24,10 @@
             = nav_link "Sales, Revenue & Customers", "#sales-revenue-customers"
     .col
       %ul.nav.flex-column
-        - if show_prices_section?(@community)
+        - if @community.show_prices_section?
           %li.nav-item.mt-3.text-uppercase.text-muted.small
             = nav_link "Prices", "#prices", parent_section: true
-        - if show_fuel_prices?(@community)
+        - if @community.show_fuel_prices?
           %li.nav-item
             = nav_link "Fuel Prices", "#fuel-prices"
     .col

@@ -63,7 +63,6 @@ class Community < ApplicationRecord
   end
 
   # --- Electricity Section ---
-
   def show_utilities?
     show_main_utility? || show_grid_utilities?
   end
@@ -108,5 +107,14 @@ class Community < ApplicationRecord
       show_production? ||
       show_capacity? ||
       show_sales_revenue_customers?
+  end
+
+  # --- Prices Section ---
+  def show_fuel_prices?
+    @show_fuel_prices ||= fuel_prices.exists?
+  end
+
+  def show_prices_section?
+    show_fuel_prices?
   end
 end

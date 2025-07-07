@@ -3,16 +3,6 @@ module CommunitiesHelper
     link_to text, anchor.to_s, class: "nav-link #{parent_section ? 'fw-semibold' : 'ps-4'} py-1", data: { turbo: false }
   end
 
-  # Prices section visibility methods
-  def show_fuel_prices?(community)
-    community.fuel_prices.exists?
-  end
-
-  # If any sub-sections are visible, show the parent section
-  def show_prices_section?(community)
-    show_fuel_prices?(community)
-  end
-
   # Background section visibility methods
   def show_transportation?(community)
     community.transportation.present?
