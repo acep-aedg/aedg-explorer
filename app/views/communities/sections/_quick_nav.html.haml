@@ -4,22 +4,22 @@
   .row.row-cols-1.row-cols-sm-3.row-cols-md-1.g-2
     .col
       %ul.nav.flex-column
-        - if show_electricity_section?(@community)
+        - if @community.show_electricity_section?
           %li.nav-item.mt-3.text-uppercase.text-muted.small
             = nav_link "Electricity", "#electricity", parent_section: true
-        - if show_utilities?(@community)  
+        - if @community.show_utilities? 
           %li.nav-item
             = nav_link "Utilities", "#utilities"
-        - if show_rates?(@community)    
+        - if @community.show_rates?    
           %li.nav-item
             = nav_link "Rates", "#rates"
-        - if show_production?(@community)
+        - if @community.show_production?
           %li.nav-item
             = nav_link "Production", "#production"
-        - if show_capacity?(@community)
+        - if @community.show_capacity?
           %li.nav-item
             = nav_link "Capacity", "#capacity"
-        - if show_sales_revenue_customers?(@community)
+        - if @community.show_sales_revenue_customers?
           %li.nav-item
             = nav_link "Sales, Revenue & Customers", "#sales-revenue-customers"
     .col
@@ -43,6 +43,6 @@
         - if show_election_districts?(@community)
           %li.nav-item
             = nav_link "Election Districts", "#election-districts"
-        - if show_population?(@community) 
+        - if show_population? (@community)
           %li.nav-item
             = nav_link "Population", "#population"

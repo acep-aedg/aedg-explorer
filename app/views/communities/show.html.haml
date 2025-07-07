@@ -33,7 +33,7 @@
             %span.text-info= @community.grid.name
 
       - section_order = []
-      - section_order << 'electricity' if show_electricity_section?(@community)
+      - section_order << 'electricity' if @community.show_electricity_section?
       - section_order << 'prices' if show_prices_section?(@community)
       - section_order << 'background' if show_background_section?(@community)
 

@@ -61,4 +61,52 @@ class Community < ApplicationRecord
   def any_regional_prices?
     @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == 'regional' && fp.price.present? }
   end
+
+  # --- Electricity Section ---
+
+  def show_utilities?
+    show_main_utility? || show_grid_utilities?
+  end
+
+  def show_grid_utilities?
+    @show_grid_utilities ||= grid&.reporting_entities&.exists?
+  end
+
+  def show_main_utility?
+    @show_main_utility ||= reporting_entity.present?
+  end
+
+  def show_rates?
+    @show_rates ||= electric_rates&.any? do |rate|
+      rate.residential_rate || rate.commercial_rate || rate.industrial_rate
+    end
+  end
+
+  def show_production?
+    show_monthly_generation? || show_yearly_generation?
+  end
+
+  def show_yearly_generation?
+    @show_yearly_generation ||= grid&.yearly_generations&.exists?
+  end
+
+  def show_monthly_generation?
+    @show_monthly_generation ||= grid&.monthly_generations&.exists?
+  end
+
+  def show_capacity?
+    @show_capacity ||= grid&.capacities&.exists?
+  end
+
+  def show_sales_revenue_customers?
+    @show_sales_revenue_customers ||= reporting_entity&.sales&.exists?
+  end
+
+  def show_electricity_section?
+    show_utilities? ||
+      show_rates? ||
+      show_production? ||
+      show_capacity? ||
+      show_sales_revenue_customers?
+  end
 end
