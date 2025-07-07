@@ -124,7 +124,7 @@ class Community < ApplicationRecord
     @show_transportation ||= transportation.present?
   end
 
-  def show_election_districts?
+  def show_legislative_districts?
     show_senate_districts? || show_house_districts?
   end
 
@@ -142,7 +142,7 @@ class Community < ApplicationRecord
 
   def show_background_section?
     show_transportation? ||
-      show_election_districts? ||
+      show_legislative_districts? ||
       show_population?
   end
 end

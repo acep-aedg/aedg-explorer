@@ -5,9 +5,9 @@
   .my-5.mx-3.mx-md-5
     = render 'communities/sections/background/transportation', transportation: @community.transportation
     
-- if @community.show_election_districts?
+- if @community.show_legislative_districts?
   .my-5.mx-3.mx-md-5
-    = render 'communities/sections/background/election_districts'
+    = render 'communities/sections/background/legislative_districts'
 
 - if @community.show_population?
   .my-5.mx-3.mx-md-5
