@@ -7,7 +7,7 @@
     
   .d-flex.justify-content-between.align-items-center
     .nav.nav-tabs
-      - if show_monthly_generation?(@community)
+      - if @community.show_monthly_generation?
         %li.nav-item
           = link_to "#monthly-prod-chart-wrapper", class: "nav-link active", data: { bs_toggle: "tab" } do
             %i.bi.bi-graph-up.me-1
@@ -16,7 +16,7 @@
           = link_to "#monthly-prod-data", class: "nav-link", data: { bs_toggle: "tab" } do
             %i.bi.bi-table.me-1
             Monthly Data
-      - if show_yearly_generation?(@community)
+      - if @community.show_yearly_generation?
         %li.nav-item
           = link_to "#yearly-prod-chart-wrapper", class: "nav-link", data: { bs_toggle: "tab" } do
             %i.bi.bi-pie-chart.me-1
@@ -28,14 +28,14 @@
 
 
   .tab-content.mt-3
-    - if show_monthly_generation?(@community)
+    - if @community.show_monthly_generation?
       #monthly-prod-chart-wrapper.tab-pane.fade.show.active
         = render 'communities/sections/electricity/production/monthly_stats'
         = render "communities/sections/electricity/production/monthly_chart"
 
       #monthly-prod-data.tab-pane.fade
         = render "communities/sections/electricity/production/monthly_data"
-    - if show_yearly_generation?(@community)
+    - if @community.show_yearly_generation?
       #yearly-prod-chart-wrapper.tab-pane.fade
         = render "communities/sections/electricity/production/yearly_chart"
 
