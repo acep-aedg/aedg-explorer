@@ -49,11 +49,6 @@ class Communities::ChartsController < ApplicationController
     render json: employment_chart_data(employments)
   end
 
-  def fuel_prices
-    records = @community.fuel_prices.chronological
-    render json: fuel_prices_chart_data(records)
-  end
-
   def average_sales_rates
     sales = @community.reporting_entity.sales.order(year: :asc)
     dataset = sales.map do |sale|
