@@ -292,6 +292,38 @@ ALTER SEQUENCE public.communities_legislative_districts_id_seq OWNED BY public.c
 
 
 --
+-- Name: communities_school_districts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.communities_school_districts (
+    id bigint NOT NULL,
+    community_fips_code character varying,
+    school_district_district integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: communities_school_districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.communities_school_districts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: communities_school_districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.communities_school_districts_id_seq OWNED BY public.communities_school_districts.id;
+
+
+--
 -- Name: communities_senate_districts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -902,6 +934,42 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: school_districts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.school_districts (
+    id bigint NOT NULL,
+    district integer NOT NULL,
+    name character varying,
+    district_type character varying,
+    is_active boolean,
+    notes character varying,
+    boundary public.geometry,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: school_districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.school_districts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: school_districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.school_districts_id_seq OWNED BY public.school_districts.id;
+
+
+--
 -- Name: senate_districts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1120,6 +1188,13 @@ ALTER TABLE ONLY public.communities_legislative_districts ALTER COLUMN id SET DE
 
 
 --
+-- Name: communities_school_districts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_school_districts ALTER COLUMN id SET DEFAULT nextval('public.communities_school_districts_id_seq'::regclass);
+
+
+--
 -- Name: communities_senate_districts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1232,6 +1307,13 @@ ALTER TABLE ONLY public.sales ALTER COLUMN id SET DEFAULT nextval('public.sales_
 
 
 --
+-- Name: school_districts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.school_districts ALTER COLUMN id SET DEFAULT nextval('public.school_districts_id_seq'::regclass);
+
+
+--
 -- Name: senate_districts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1320,6 +1402,14 @@ ALTER TABLE ONLY public.communities_legislative_districts
 
 ALTER TABLE ONLY public.communities
     ADD CONSTRAINT communities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: communities_school_districts communities_school_districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_school_districts
+    ADD CONSTRAINT communities_school_districts_pkey PRIMARY KEY (id);
 
 
 --
@@ -1456,6 +1546,14 @@ ALTER TABLE ONLY public.sales
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: school_districts school_districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.school_districts
+    ADD CONSTRAINT school_districts_pkey PRIMARY KEY (id);
 
 
 --
@@ -1692,6 +1790,27 @@ CREATE INDEX index_reporting_entities_on_grid_id ON public.reporting_entities US
 --
 
 CREATE INDEX index_sales_on_reporting_entity_id ON public.sales USING btree (reporting_entity_id);
+
+
+--
+-- Name: index_school_districts_on_boundary; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_school_districts_on_boundary ON public.school_districts USING gist (boundary);
+
+
+--
+-- Name: index_school_districts_on_district; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_school_districts_on_district ON public.school_districts USING btree (district);
+
+
+--
+-- Name: index_school_districts_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_school_districts_on_name ON public.school_districts USING btree (name);
 
 
 --
@@ -1979,6 +2098,8 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250623222721'),
+('20250623222653'),
 ('20250613174051'),
 ('20250613173935'),
 ('20250613003333'),

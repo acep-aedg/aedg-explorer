@@ -43,6 +43,9 @@
         - if @community.show_legislative_districts?
           %li.nav-item
             = nav_link "Legislative Districts", "#legislative-districts"
+        - if @community.show_school_districts?
+          %li.nav-item
+            = nav_link "School Districts", "#school-districts"
         - if @community.show_population? 
           %li.nav-item
             = nav_link "Population", "#population"

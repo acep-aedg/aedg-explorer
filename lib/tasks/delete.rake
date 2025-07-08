@@ -28,6 +28,7 @@ namespace :delete do
     DeleteHelpers.delete_records(CommunitiesHouseDistrict)
     DeleteHelpers.delete_records(HouseDistrict)
     DeleteHelpers.delete_records(SenateDistrict)
+    DeleteHelpers.delete_records(SchoolDistrict)
   end
 
   desc 'Clear all fuel prices data'
