@@ -12,13 +12,13 @@
   .d-flex.align-items-center
     %i.bi-arrow-up-right-circle.me-2
     %strong.me-1 Max:
-    %span.text-success= "#{stats[:max_capacity]} MW" 
+    %span.text-success.me-1= "#{stats[:max_capacity]} MW"
     %small.text-muted= "(#{stats[:max_fuel_type]})"
 
   .d-flex.align-items-center
     %i.bi-arrow-down-right-circle.me-2
     %strong.me-1 Min:
-    %span.text-danger= "#{stats[:min_capacity]} MW" 
+    %span.text-danger.me-1= "#{stats[:min_capacity]} MW"
     %small.text-muted= "(#{stats[:min_fuel_type]})"
 
   .d-flex.align-items-center
