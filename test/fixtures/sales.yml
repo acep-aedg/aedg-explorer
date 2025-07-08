@@ -2,16 +2,16 @@
 
 one:
   reporting_entity: one
-  year: 1
-  residential_revenue: 1
-  residential_sales: 1
-  residential_customers: 1
-  commercial_revenue: 1
-  commercial_sales: 1
-  commercial_customers: 1
-  total_revenue: 1
-  total_sales: 1
-  total_customers: 1
+  year: 2020
+  residential_revenue: 100
+  residential_sales: 500
+  residential_customers: 200
+  commercial_revenue: 800
+  commercial_sales: 300
+  commercial_customers: 1500
+  total_revenue: 1000
+  total_sales: 900
+  total_customers: 2200
 
 two:
   reporting_entity: two
