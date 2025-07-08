@@ -104,11 +104,7 @@ class Community < ApplicationRecord
   end
 
   def show_electricity_section?
-    show_utilities? ||
-      show_rates? ||
-      show_production? ||
-      show_capacity? ||
-      show_sales_revenue_customers?
+    show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers?
   end
 
   # --- Prices Section ---
@@ -147,8 +143,6 @@ class Community < ApplicationRecord
   end
 
   def show_background_section?
-    show_transportation? ||
-      show_legislative_districts? ||
-      show_population?
+    show_transportation? || show_legislative_districts? || show_population?
   end
 end
