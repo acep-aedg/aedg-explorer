@@ -1,7 +1,7 @@
 - if @community.show_utilities?
   .my-5.mx-3.mx-md-5.mt-3
     = render 'communities/sections/electricity/utilities'
-- if show_operators?(@community)
+- if @community.show_operators?
   .m-5
     = render 'communities/sections/electricity/operators'
 - if @community.show_rates?

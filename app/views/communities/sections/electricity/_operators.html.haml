@@ -4,7 +4,7 @@
   %hr.flex-grow-1.mt-1.mb-0
 
 .row
-  - if show_operators?(@community)
+  - if @community.show_operators?
     .col-12
       .d-flex
         .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
