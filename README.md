@@ -65,6 +65,19 @@ Ensure you have the following dependencies installed:
     bin/dev -p 3001
     ```
 ---
+### Static Content
+Most static content is located in their respective files in `config/data/`
+- [FAQ](https://aedg-dev.camio.acep.uaf.edu/user-guide#faq)
+  -  Answers Supports Markdown 
+- [AEDG Timeline](https://aedg-dev.camio.acep.uaf.edu/about#history)
+  -  Descriptions Supports Markdown 
+- [Data Creation Steps](https://aedg-dev.camio.acep.uaf.edu/user-guide#data-creation-process)
+  -  Descriptions Supports Markdown 
+- [Partners](https://aedg-dev.camio.acep.uaf.edu/about#partners)
+
+**Notes:**
+- **Markdown**: Descriptions & Answers in the YAML files for the [FAQ](https://aedg-dev.camio.acep.uaf.edu/user-guide#faq), [AEDG Timeline](https://aedg-dev.camio.acep.uaf.edu/about#history), [Data Creation Steps](https://aedg-dev.camio.acep.uaf.edu/user-guide#data-creation-process) can use Markdown for basic formatting (e.g., bold, italics, links, lists).
+- **Opening links in a new tab**: Add `{:target='_blank'}` after the link in Markdown to make it open in a new tab.
 
 ### 📂 Importing Data
 

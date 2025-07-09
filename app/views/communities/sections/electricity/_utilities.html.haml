@@ -13,7 +13,7 @@
           .text-muted Power Cost Equalization (PCE) Status
           .fw-semibold= @community.pce_eligible ? "Eligible" : "Ineligible"
   
-  - if show_main_utility?(@community)
+  - if @community.show_main_utility?
     - main_utility = @community.reporting_entity&.name
 
     .col-12.col-lg-6
@@ -24,7 +24,7 @@
             .text-muted= "Utility for #{@community.name}"
             .fw-semibold= main_utility
 
-  - if show_grid_utilities?(@community)
+  - if @community.show_grid_utilities?
     - other_utilities = @community.grid&.utility_names(exclude: main_utility)
 
     - if other_utilities.any?

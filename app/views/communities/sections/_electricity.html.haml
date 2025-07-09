@@ -1,18 +1,18 @@
-- if show_utilities?(@community)
-  .m-5.mt-3
+- if @community.show_utilities?
+  .my-5.mx-3.mx-md-5.mt-3
     = render 'communities/sections/electricity/utilities'
 - if show_operators?(@community)
   .m-5
     = render 'communities/sections/electricity/operators'
-- if show_rates?(@community)
-  .m-5
+- if @community.show_rates?
+  .my-5.mx-3.mx-md-5
     = render 'communities/sections/electricity/rates'
-- if show_production?(@community)
-  .m-5
+- if @community.show_production?
+  .my-5.mx-3.mx-md-5
     = render 'communities/sections/electricity/production'
-- if show_capacity?(@community)
-  .m-5
+- if @community.show_capacity?
+  .my-5.mx-3.mx-md-5
     = render 'communities/sections/electricity/capacity'
-- if show_sales_revenue_customers?(@community)
-  .m-5
+- if @community.show_sales_revenue_customers?
+  .my-5.mx-3.mx-md-5
     = render 'communities/sections/electricity/sales_revenue_customers'

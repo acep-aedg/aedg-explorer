@@ -4,12 +4,12 @@
 -#   color: Bootstrap contextual class (e.g., 'success', 'primary', etc.)
 
 .d-flex.bg-body-secondary.rounded.p-3.mb-3.align-items-start
-  .me-4
+  .me-2
     %strong.text-muted.text-nowrap
       = label
       = " (#{items.count})"
 
-  .d-flex.flex-wrap.gap-2.border-start.border-2.border-text-muted.ps-4
+  .d-flex.flex-wrap.gap-2.border-start.border-2.border-text-muted.ps-2
     - items.each do |item|
       .badge.px-3.py-2.rounded-pill{ class: "text-bg-#{color}" }
         = yield item

@@ -1,16 +1,16 @@
-.m-5.mt-3
+.my-5.mx-3.mx-md-5.mt-3
   = render 'communities/sections/background/geography'
 
-- if show_transportation?(@community)
-  .m-5
+- if @community.show_transportation?
+  .my-5.mx-3.mx-md-5
     = render 'communities/sections/background/transportation', transportation: @community.transportation
     
-- if show_election_districts?(@community)
+- if @community.show_legislative_districts?
+  .my-5.mx-3.mx-md-5
+    = render 'communities/sections/background/legislative_districts'
   .m-5
-    = render 'communities/sections/background/election_districts'
-
-- if show_population?(@community)
-  .m-5
+    = render 'communities/sections/background/school_districts'
+- if @community.show_population?
+  .my-5.mx-3.mx-md-5
     = render 'communities/sections/background/population'
-
 
