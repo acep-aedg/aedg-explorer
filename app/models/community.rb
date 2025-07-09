@@ -143,7 +143,7 @@ class Community < ApplicationRecord
   end
 
   def show_operators?
-    @show_operators ||= operators&.exists?
+    @show_operators ||= operators.present?
   end
 
   def show_background_section?
