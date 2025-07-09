@@ -45,10 +45,14 @@
     .nav.nav-tabs.mb-2
       - if @community.show_house_districts?  
         %li.nav-item 
-          = link_to "House District Data", "#HouseDistrictData", class: "nav-link active", data: { bs_toggle: "tab" }
+          = link_to "#HouseDistrictData", class: "nav-link active", data: { bs_toggle: "tab" } do
+            %i.bi.bi-table.me-1
+            House District Data
       - if @community.show_senate_districts? 
         %li.nav-item 
-          = link_to "Senate District Data", "#SenateDistrictData", class: "nav-link", data: { bs_toggle: "tab" }
+          = link_to "#SenateDistrictData", class: "nav-link", data: { bs_toggle: "tab" } do
+            %i.bi.bi-table.me-1
+            Senate District Data
 
     .tab-content
       - if @community.show_house_districts? 
