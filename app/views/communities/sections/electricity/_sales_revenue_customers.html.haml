@@ -10,18 +10,18 @@
   .d-flex.justify-content-between.align-items-center
     .nav.nav-tabs
       %li.nav-item
-        = link_to "Average Rates", "#average_rates",
-          class: "nav-link active",
-          data: { bs_toggle: "tab" }
+        = link_to "#average_rates", class: "nav-link active", data: { bs_toggle: "tab" } do
+          %i.bi.bi-bar-chart-fill.me-1
+          Average Rates Chart
       - if latest_sale&.any_customer_type_data?
         %li.nav-item
-          = link_to "By Customer Type", "#by-customer-type",
-            class: "nav-link",
-            data: { bs_toggle: "tab" }
+          = link_to "#by-customer-type", class: "nav-link", data: { bs_toggle: "tab" } do
+            %i.bi.bi-pie-chart.me-1
+            Customer Type Chart
       %li.nav-item
-        = link_to "Sales, Revenue & Customers Data", "#sales-data",
-          class: "nav-link",
-          data: { bs_toggle: "tab" }
+        = link_to "#sales-data", class: "nav-link", data: { bs_toggle: "tab" } do
+          %i.bi.bi-table.me-1
+          Sales, Revenue & Customer Data
 
 .tab-content
   #average_rates.tab-pane.fade.show.active
