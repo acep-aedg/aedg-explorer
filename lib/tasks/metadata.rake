@@ -1,9 +1,9 @@
 namespace :metadata do
   desc 'Download metadata files'
   task download: :environment do
-    repo_url = ENV.fetch('GH_METADATA_REPO_URL', 'https://github.com/acep-aedg/aedg-metadata')
+    repo_url = ENV.fetch('GH_METADATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
 
-    folder_path = 'metadata/public'
+    folder_path = 'data/public'
     local_dir = Rails.root.join('db/imports/metadata').to_s
 
     # Ensure the local directory & keep file exists
