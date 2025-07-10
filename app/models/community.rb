@@ -66,7 +66,7 @@ class Community < ApplicationRecord
 
   # --- Electricity Section ---
   def show_utilities?
-    show_main_utility? || show_grid_utilities?
+    @show_utilities ||= show_main_utility? || show_grid_utilities?
   end
 
   def show_grid_utilities?
@@ -84,7 +84,7 @@ class Community < ApplicationRecord
   end
 
   def show_production?
-    show_monthly_generation? || show_yearly_generation?
+    @show_production ||= show_monthly_generation? || show_yearly_generation?
   end
 
   def show_yearly_generation?
@@ -104,7 +104,7 @@ class Community < ApplicationRecord
   end
 
   def show_electricity_section?
-    show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers?
+    @show_electricity_section ||= show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers?
   end
 
   # --- Prices Section ---
@@ -113,7 +113,7 @@ class Community < ApplicationRecord
   end
 
   def show_prices_section?
-    show_fuel_prices?
+    @show_prices_section ||= show_fuel_prices?
   end
 
   # --- Background Section ---
@@ -123,7 +123,7 @@ class Community < ApplicationRecord
   end
 
   def show_legislative_districts?
-    show_senate_districts? || show_house_districts?
+    @show_legislative_districts ||= show_senate_districts? || show_house_districts?
   end
 
   def show_senate_districts?
@@ -142,8 +142,13 @@ class Community < ApplicationRecord
     @show_school_districts ||= school_districts.exists?
   end
 
+  def show_operators?
+    ## Check for the presence of grid as some communities spatially have operators but no a grid
+    @show_operators ||= operators.present? && grid.present?
+  end
+
   def show_background_section?
-    show_transportation? || show_legislative_districts? || show_population?
+    @show_background_section ||= show_transportation? || show_legislative_districts? || show_population?
   end
 
   def show_climate?
