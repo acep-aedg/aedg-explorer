@@ -27,6 +27,8 @@ class Community < ApplicationRecord
   has_many :senate_districts, through: :communities_senate_districts
   has_many :communities_house_districts, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :house_districts, through: :communities_house_districts
+  has_many :communities_school_districts, foreign_key: :community_fips_code, primary_key: :fips_code
+  has_many :school_districts, through: :communities_school_districts
 
   # Handle the case where the name is not unique
   def slug_candidates
@@ -102,11 +104,7 @@ class Community < ApplicationRecord
   end
 
   def show_electricity_section?
-    show_utilities? ||
-      show_rates? ||
-      show_production? ||
-      show_capacity? ||
-      show_sales_revenue_customers?
+    show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers?
   end
 
   # --- Prices Section ---
@@ -140,10 +138,12 @@ class Community < ApplicationRecord
     @show_population ||= population_age_sexes.exists?
   end
 
+  def show_school_districts?
+    @show_school_districts ||= school_districts.exists?
+  end
+
   def show_background_section?
-    show_transportation? ||
-      show_legislative_districts? ||
-      show_population?
+    show_transportation? || show_legislative_districts? || show_population?
   end
 
   def show_climate?

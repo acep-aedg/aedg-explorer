@@ -8,7 +8,8 @@
 - if @community.show_legislative_districts?
   .my-5.mx-3.mx-md-5
     = render 'communities/sections/background/legislative_districts'
-
+  .m-5
+    = render 'communities/sections/background/school_districts'
 - if @community.show_population?
   .my-5.mx-3.mx-md-5
     = render 'communities/sections/background/population'
@@ -16,5 +17,4 @@
 - if @community.show_climate?
   .my-5.mx-3.mx-md-5
     = render 'communities/sections/background/climate'
-
 
