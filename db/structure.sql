@@ -2100,8 +2100,8 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20250630224339'),
 ('20250707215602'),
+('20250630224339'),
 ('20250623222721'),
 ('20250623222653'),
 ('20250613174051'),
