@@ -10,5 +10,5 @@
         .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
           %i.bi.bi-house-gear-fill.text-warning.fs-4.me-3
           .flex-grow-1
-            .text-muted= "Operators for #{@community.name}"
+            .text-muted= "Operators for #{@community.grid&.name}"
             .fw-semibold= @community.operators.join(", ")
