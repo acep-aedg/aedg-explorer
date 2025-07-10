@@ -143,7 +143,8 @@ class Community < ApplicationRecord
   end
 
   def show_operators?
-    @show_operators ||= operators.present?
+    ## Check for the presence of grid as some communities spatially have operators but no a grid
+    @show_operators ||= operators.present? && grid.present?
   end
 
   def show_background_section?
