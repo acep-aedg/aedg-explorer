@@ -52,3 +52,6 @@
         - if @community.show_population? 
           %li.nav-item
             = nav_link "Population", "#population"
+        - if @community.show_climate? 
+          %li.nav-item
+            = nav_link "Climate", "#climate"

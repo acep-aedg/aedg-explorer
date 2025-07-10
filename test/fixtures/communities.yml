@@ -12,6 +12,7 @@ one:
   slug: 'test-community-one'
   location: 'POINT(-149.1 64.1)'
   regional_corporation_fips_code: '0000001'
+  heating_degree_days: 500
   reporting_entity: one
 
 
@@ -27,4 +28,5 @@ two:
   slug: 'test-community-two'
   location: 'POINT(-149.1 64.1)'
   regional_corporation_fips_code: '0000002'
+  heating_degree_days: 1000
   reporting_entity: two
