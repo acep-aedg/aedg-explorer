@@ -10,6 +10,9 @@
         - if @community.show_utilities? 
           %li.nav-item
             = nav_link "Utilities", "#utilities"
+        - if @community.show_operators?  
+          %li.nav-item
+            = nav_link "Operators", "#operators"
         - if @community.show_rates?    
           %li.nav-item
             = nav_link "Rates", "#rates"
