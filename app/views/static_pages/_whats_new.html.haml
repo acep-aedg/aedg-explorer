@@ -8,16 +8,17 @@
         Our revitalized platform offers user-friendly access to updated datasets and community summaries.
         Explore how this data can empower your community today.
   .row.text-start.justify-content-center
-    .col-md-4
-      .d-flex.flex-column.align-items-start
-        %h5.fw-bold.d-flex.align-items-center.gap-2
-          %i.bi.bi-rocket
-          Explore the revitalized data gateway
-        %p.text-muted Experience a fresh look and feel that makes navigation easier.
-        %p.mb-5
-          = link_to user_guide_path, class: 'text-decoration-none fs-5 ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
-            %span Tour
-            %i.bi.bi-arrow-right
+    - if FeatureFlag.enabled?(:show_tour)
+      .col-md-4
+        .d-flex.flex-column.align-items-start
+          %h5.fw-bold.d-flex.align-items-center.gap-2
+            %i.bi.bi-rocket
+            Explore the revitalized data gateway
+          %p.text-muted Experience a fresh look and feel that makes navigation easier.
+          %p.mb-5
+            = link_to user_guide_path, class: 'text-decoration-none fs-5 ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
+              %span Tour
+              %i.bi.bi-arrow-right
 
     .col-md-4
       .d-flex.flex-column.align-items-start
