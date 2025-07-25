@@ -22,12 +22,14 @@
       .text-end.text-small.text-muted.mt-2
         Photo Credit: Gwen Holdmann
 
-- if FeatureFlag.enabled?(:show_extra_datasets)
-  .row.g-5.mb-5.mx-0
+
+.row.g-5.mb-5.mx-0
+  - if FeatureFlag.enabled?(:show_datasets_by_theme)
     .col-lg-6
       %h3.fw-semibold.mb-4 Datasets by Theme
       = render 'by_topic'
 
+  - if FeatureFlag.enabled?(:show_featured_datasets)
     .col-lg-6
       %h3.fw-semibold.mb-4 Featured Datasets
       = render partial: 'metadata', collection: @highlighted, as: :metadatum
