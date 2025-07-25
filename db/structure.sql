@@ -501,8 +501,8 @@ ALTER SEQUENCE public.employments_id_seq OWNED BY public.employments.id;
 
 CREATE TABLE public.feature_flags (
     id bigint NOT NULL,
-    name character varying,
-    enabled boolean,
+    name character varying NOT NULL,
+    state character varying DEFAULT 'disabled'::character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -1741,6 +1741,13 @@ CREATE INDEX index_datasets_on_metadatum_id ON public.datasets USING btree (meta
 --
 
 CREATE INDEX index_electric_rates_on_reporting_entity_id ON public.electric_rates USING btree (reporting_entity_id);
+
+
+--
+-- Name: index_feature_flags_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_feature_flags_on_name ON public.feature_flags USING btree (name);
 
 
 --
