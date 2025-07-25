@@ -1,30 +1,31 @@
 %header.mb-3.mb-sm-5
   %nav.navbar.bg-aedg-navy.navbar-expand-lg.p-4
-    %a.navbar-brand{ href: root_path }
-      %img{ src: asset_path('main_menu_logo.png'), alt: "Main Menu Logo", width: "125", class: "d-inline-block align-text-top" }
+    .container
+      %a.navbar-brand{ href: root_path }
+        %img{ src: asset_path('main_menu_logo.png'), alt: "Main Menu Logo", width: "125", class: "d-inline-block align-text-top" }
 
-    / Menu Toggler
-    %button.navbar-dark.navbar-toggler{ type: "button", data: { bs_toggle: "collapse", bs_target: "#navbarContent" }, aria: { controls: "navbarContent", expanded: "false", label: "Toggle navigation" } }
-      %span.navbar-dark.navbar-toggler-icon
+      / Menu Toggler
+      %button.navbar-dark.navbar-toggler{ type: "button", data: { bs_toggle: "collapse", bs_target: "#navbarContent" }, aria: { controls: "navbarContent", expanded: "false", label: "Toggle navigation" } }
+        %span.navbar-dark.navbar-toggler-icon
 
-    / Main Menu
-    #navbarContent.navbar-collapse.collapse
-      %ul.navbar-nav.ms-auto.mb-2.mb-lg-0
-        - current_page = request.path
-        - main_menu.each do |menu_item|
-          - active = current_page?(menu_item[:path])
-          - if menu_item[:children].present?
-            %li.nav-item.dropdown.fw-medium{ class: "#{'active' if active}" }
-              %a.nav-link.dropdown-toggle{ id: "navbarDropdown", role: "button", data: { bs_toggle: "dropdown" }, aria: { expanded: "false" } }
-                = menu_item[:name]
-                %i.bi.bi-caret-down-fill.fs-6.d-none.d-lg-inline
-              %ul.dropdown-menu{ aria_labelledby: "navbarDropdown" }
-                - menu_item[:children].each do |child|
-                  - active = current_page == child[:path]
-                  %li
-                    %a.dropdown-item.text-aedg-navy{ href: child[:path], class: "#{'active' if active}", aria: { current: ("true" if active) } }
-                      = child[:name]
-          - else
-            %li.nav-item.me-2{ class: "#{'active' if active}" }
-              %a.nav-link.fw-medium{ href: menu_item[:path], class: "#{'active' if active}", aria: { current: "page" } }
-                = menu_item[:name]
+      / Main Menu
+      #navbarContent.navbar-collapse.collapse
+        %ul.navbar-nav.ms-auto.mb-2.mb-lg-0
+          - current_page = request.path
+          - main_menu.each do |menu_item|
+            - active = current_page?(menu_item[:path])
+            - if menu_item[:children].present?
+              %li.nav-item.dropdown.fw-medium{ class: "#{'active' if active}" }
+                %a.nav-link.dropdown-toggle{ id: "navbarDropdown", role: "button", data: { bs_toggle: "dropdown" }, aria: { expanded: "false" } }
+                  = menu_item[:name]
+                  %i.bi.bi-caret-down-fill.fs-6.d-none.d-lg-inline
+                %ul.dropdown-menu{ aria_labelledby: "navbarDropdown" }
+                  - menu_item[:children].each do |child|
+                    - active = current_page == child[:path]
+                    %li
+                      %a.dropdown-item.text-aedg-navy{ href: child[:path], class: "#{'active' if active}", aria: { current: ("true" if active) } }
+                        = child[:name]
+            - else
+              %li.nav-item.me-2{ class: "#{'active' if active}" }
+                %a.nav-link.fw-medium{ href: menu_item[:path], class: "#{'active' if active}", aria: { current: "page" } }
+                  = menu_item[:name]
