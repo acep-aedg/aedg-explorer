@@ -1,0 +1,7 @@
+---
+- name: show_tour
+  state: disabled
+- name: show_by_theme
+  state: disabled
+- name: show_featured
+  state: disabled
