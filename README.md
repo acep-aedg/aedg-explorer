@@ -116,15 +116,21 @@ We haven’t yet implemented a reliable way to import specific models individual
 ---
 
 ### Testing
-1. Run the test suite:
+1. **Prepare the Test Database**
+    ```
+    rails db:create RAILS_ENV=test
+    ```
+
+1. **Run the test suite**
     ```
     rails test
     ```
+1. **View Code Coverage**
 
-Code coverage is tracked using [simplecov](https://github.com/simplecov-ruby/simplecov). After running the tests, a `coverage/` directory will be generated. To view the coverage report, open it in your browser:
-```
-open coverage/index.html
-```
+    Code coverage is tracked using [simplecov](https://github.com/simplecov-ruby/simplecov). After running the tests, a `coverage/` directory will be generated. To view the coverage report, open it in your browser:
+    ```
+    open coverage/index.html
+    ```
 
 # Toubleshooting
 
