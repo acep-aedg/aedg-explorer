@@ -1,0 +1,12 @@
+.d-flex.align-items-center.mb-3
+  %i.bi.bi-thermometer-snow.me-2.fs-4
+  %h4#climate.mb-0.me-3.py-3 Climate
+  %hr.flex-grow-1.mt-1.mb-0
+
+.row
+  .col.mb-3
+    - if @community.show_heating_degree_days?
+      .d-flex.align-items-center.ms-3.mb-3
+        %i.bi.bi-info-circle-fill.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Heating degree days (HDD), defined in the U.S. as degrees F below 65 multiplied by duration in days, quantifies energy needed to heat a building over a year's time. HDD values are based on temperature data from 1980-2017." }
+        %strong.ms-2.mb-0 Heating Degree Days (HDD):
+        %span.text-muted.ms-2.mb-0= "#{@community.heating_degree_days}"

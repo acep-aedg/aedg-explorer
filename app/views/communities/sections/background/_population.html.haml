@@ -8,30 +8,24 @@
 %ul.nav.nav-tabs
   - if employment_present
     %li.nav-item
-      = link_to "By Employment Status", "#employment-chart",
-        class: "nav-link#{' active' if employment_present}",
-        data: { bs_toggle: "tab" },
-        role: "tab"
+      = link_to "#employment-chart", class: "nav-link#{' active' if employment_present}", data: { bs_toggle: "tab" }, role: "tab" do
+        %i.bi.bi-graph-up.me-1
+        Employment Status Chart
 
   - if age_data_present
     %li.nav-item
-      = link_to "By Age", "#age-chart",
-        class: "nav-link#{' active' if !employment_present && age_data_present}",
-        data: { bs_toggle: "tab" },
-        role: "tab"
+      = link_to "#age-chart", class: "nav-link#{' active' if !employment_present && age_data_present}", data: { bs_toggle: "tab" }, role: "tab" do
+        %i.bi.bi-bar-chart-steps.me-1
+        Age Distribution Chart
 
     %li.nav-item
-      = link_to "By Sex", "#gender-pie",
-        class: "nav-link",
-        data: { bs_toggle: "tab" },
-        role: "tab"
-
+      = link_to "#gender-pie", class: "nav-link", data: { bs_toggle: "tab" }, role: "tab" do
+        %i.bi.bi-pie-chart.me-1
+        Gender Distribution Chart
     %li.nav-item
-      = link_to "Population, Age & Sex Data", "#age-sex-table",
-        class: "nav-link",
-        data: { bs_toggle: "tab" },
-        role: "tab"
-
+      = link_to "#age-sex-table", class: "nav-link", data: { bs_toggle: "tab" }, role: "tab" do
+        %i.bi.bi-table.me-1
+        Population, Age & Sex Data
 .tab-content.mt-3
   - if employment_present
     .tab-pane.fade#employment-chart{ class: "tab-pane fade#{' show active' if employment_present}", role: "tabpanel" }

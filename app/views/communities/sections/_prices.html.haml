@@ -9,13 +9,13 @@
       .d-flex.justify-content-between.align-items-center
         .nav.nav-tabs
           %li.nav-item
-            = link_to "Chart", "#fuel-prices-chart",
-              class: "nav-link active",
-              data: { bs_toggle: "tab" }
+            = link_to "#fuel-prices-chart", class: "nav-link active", data: { bs_toggle: "tab" } do
+              %i.bi.bi-bar-chart-fill.me-1
+              Fuel Price Chart
           %li.nav-item
-            = link_to "Fuel Price Data", "#fuel-prices-data",
-              class: "nav-link",
-              data: { bs_toggle: "tab" }
+            = link_to "#fuel-prices-data", class: "nav-link", data: { bs_toggle: "tab" } do
+              %i.bi.bi-table.me-1
+              Fuel Price Data
 
     .tab-content
       #fuel-prices-chart.tab-pane.fade.show.active

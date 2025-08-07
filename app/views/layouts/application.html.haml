@@ -2,7 +2,9 @@
 %html
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %title AedgExplorer
+    %title= content_for?(:title) ? "AEDG - #{yield(:title)}" : "AEDG - Alaska Energy Data Gateway"
+    = favicon_link_tag 'favicon/favicon-light-mode.png', media: '(prefers-color-scheme: light)'
+    = favicon_link_tag 'favicon/favicon-dark-mode.png', media: '(prefers-color-scheme: dark)'   
     %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}/
     = csrf_meta_tags
     = csp_meta_tag

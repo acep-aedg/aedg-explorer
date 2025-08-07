@@ -33,7 +33,7 @@ namespace :import do
   desc 'Import data files from a specific GitHub tag'
   task pull_gh_data: :environment do
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    tag = 'v0.5'
+    tag = 'v0.6'
     folder_path = 'data/final'
     Rails.root.join('db/imports').to_s
     local_dir = Rails.root.join('db/imports').to_s
