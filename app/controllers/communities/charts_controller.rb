@@ -52,14 +52,13 @@ class Communities::ChartsController < ApplicationController
   def average_sales_rates
     sales = @community.reporting_entity.sales.order(year: :asc)
     dataset = sales.map do |sale|
-      {
-        name: sale.year.to_s,
-        data: {
-          'Residential' => sale.residential_rate,
-          'Commercial' => sale.commercial_rate,
-          'Total' => sale.total_rate
-        }
-      }
+      values = {
+        'Residential' => sale.residential_rate,
+        'Commercial' => sale.commercial_rate,
+        'Total' => sale.total_rate
+      }.transform_values { |v| v&.to_f&.round(2) }
+
+      { name: sale.year.to_s, data: values }
     end
 
     render json: dataset

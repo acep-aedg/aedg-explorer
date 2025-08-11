@@ -6,8 +6,7 @@ class SaleTest < ActiveSupport::TestCase
   end
 
   test 'residential_rate returns correct value' do
-    expected = @sale.residential_revenue / @sale.residential_sales
-    assert_equal expected, @sale.residential_rate
+    assert_equal 0.25, @sale.residential_rate
   end
 
   test 'residential_rate returns nil when residential_sales is zero' do
@@ -16,8 +15,7 @@ class SaleTest < ActiveSupport::TestCase
   end
 
   test 'commercial_rate returns correct value' do
-    expected = @sale.commercial_revenue / @sale.commercial_sales
-    assert_equal expected, @sale.commercial_rate
+    assert_equal 2.50, @sale.commercial_rate
   end
 
   test 'commercial_rate returns nil when commercial_sales is zero' do
@@ -26,8 +24,7 @@ class SaleTest < ActiveSupport::TestCase
   end
 
   test 'total_rate returns correct value' do
-    expected = @sale.total_revenue / @sale.total_sales
-    assert_equal expected, @sale.total_rate
+    assert_equal 2.50, @sale.total_rate
   end
 
   test 'total_rate returns nil when total_sales is zero' do
