@@ -64,9 +64,7 @@ namespace :feature_flag do
 
     # Use curl so it works for private repos too
     response = `curl -s -H "Authorization: token #{token}" "#{url}"`
-    if response.blank?
-      raise '❌ No response from GitHub. Check URL/token permissions.'
-    end
+    raise '❌ No response from GitHub. Check URL/token permissions.' if response.blank?
 
     flags = YAML.safe_load(response) || []
     if flags.empty?
