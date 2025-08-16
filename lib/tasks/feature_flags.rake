@@ -2,6 +2,7 @@ require 'fileutils'
 require 'tmpdir'
 require 'net/http'
 require 'uri'
+require 'yaml'
 # Manage feature flags: enable, disable, list, and delete.
 # Usage: bin/rake feature_flag:enable['flag_name']
 
@@ -51,25 +52,35 @@ namespace :feature_flag do
     end
   end
 
-  desc 'Download feature_flags_backup.yml from GitHub and restore feature flags into DB'
+  desc 'Download feature_flags_backup.yml from GitHub (supports private repos) and restore into DB'
   task pull_from_gh: :environment do
-    url = 'https://raw.githubusercontent.com/acep-aedg/aedg-explorer/main/config/feature_flags_backup.yml'
+    url = ENV['FEATURE_FLAG_FILE_URL']
+    token = ENV['GITHUB_TOKEN']
+
+    raise '❌ FEATURE_FLAG_FILE_URL not set!' if url.blank?
+    raise '❌ GITHUB_TOKEN not set!' if token.blank?
 
     puts "📥 Downloading feature flags from: #{url}"
 
-    uri = URI.parse(url)
-    response = Net::HTTP.get_response(uri)
-    raise "❌ Failed to fetch file: #{response.code} #{response.message}" unless response.is_a?(Net::HTTPSuccess)
-
-    flags = YAML.safe_load(response.body)
-
-    flags.each do |flag|
-      f = FeatureFlag.find_or_initialize_by(name: flag['name'])
-      f.state = flag['state']
-      f.save!
+    # Use curl so it works for private repos too
+    response = `curl -s -H "Authorization: token #{token}" "#{url}"`
+    if response.blank?
+      raise '❌ No response from GitHub. Check URL/token permissions.'
     end
 
-    puts "✅ Restored #{flags.size} feature flags from GitHub"
+    flags = YAML.safe_load(response) || []
+    if flags.empty?
+      puts '⚠️  No flags found in YAML.'
+      next
+    end
+
+    flags.each do |flag|
+      rec = FeatureFlag.find_or_initialize_by(name: flag['name'])
+      rec.state = flag['state']
+      rec.save!
+    end
+
+    puts "✅ Restored #{flags.size} feature flags."
   end
 
   desc 'Dump current feature flags to config/feature_flags_backup.yml'
