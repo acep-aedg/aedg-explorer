@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "grids/index"
+  get "grids/show"
   # Defines the root path route ("/")
   root 'static_pages#home'
 
@@ -35,6 +37,15 @@ Rails.application.routes.draw do
         collection do
           get :house_districts
           get :senate_districts
+        end
+      end
+    end
+    resources :grids, only: %i[index show] do
+      resources :charts, only: [], controller: 'grids/charts', defaults: { format: :json } do
+        collection do
+          get :production_monthly
+          get :capacity_yearly
+          get :production_yearly
         end
       end
     end

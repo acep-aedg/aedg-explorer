@@ -605,7 +605,8 @@ CREATE TABLE public.grids (
     id bigint NOT NULL,
     name character varying,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    slug character varying
 );
 
 
@@ -1786,6 +1787,13 @@ CREATE INDEX index_grids_on_name ON public.grids USING btree (name);
 
 
 --
+-- Name: index_grids_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_grids_on_slug ON public.grids USING btree (slug);
+
+
+--
 -- Name: index_house_districts_on_boundary; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2154,6 +2162,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250821174649'),
 ('20250725001258'),
 ('20250707215602'),
 ('20250630224339'),

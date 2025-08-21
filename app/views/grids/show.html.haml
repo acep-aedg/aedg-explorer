@@ -1,0 +1,46 @@
+- content_for :title, "Grid - #{@grid.name}"
+
+.container-fluid.p-3.mt-n3.mt-sm-n5     
+  .row
+    .col-md-3
+      .position-sticky.top-0.py-3
+        .bg-body-secondary.rounded-4.p-4.mb-4.text-center
+          %h5.fw-semibold.mb-3 Select a Grid
+          = render "dropdown", grids: @grids, current_grid: @grid
+
+        .d-grid.gap-2
+          = link_to grids_path, class: 'btn btn-secondary' do 
+            %i.bi.bi-arrow-left
+            Back
+
+        .mt-5
+          = render 'grids/sections/quick_nav', grid: @grid
+
+    .col-md-9
+      .text-center.my-3
+        %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Grid Summary
+
+        %h1.fw-bold.d-flex.justify-content-center.align-items-center.flex-wrap.gap-2
+          %i.bi.bi-geo-alt-fill.text-primary
+          = @grid.name
+
+      - section_order = []
+      - section_order << 'communities'
+      - section_order << 'electricity' if @grid.show_electricity_section?
+
+      - section_order.each do |section|
+        - section_id = "#{section.parameterize}-section"
+
+        %button.collapse-btn.border-0.mb-1{ 
+          id: section.parameterize,
+          type: 'button', 
+          data: { bs_toggle: 'collapse', bs_target: "##{section_id}" }, 
+          aria: { expanded: 'true', controls: section_id }
+        }
+          %i.bi.bi-chevron-down.ms-2.arrow-icon
+          %h3.m-0= section.titleize
+
+        .collapse.show.p-1{ id: section_id }
+          = render "grids/sections/#{section}", grid: @grid 
+        
+        %hr

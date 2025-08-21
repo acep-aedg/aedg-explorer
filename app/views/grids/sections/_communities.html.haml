@@ -1,0 +1,12 @@
+- communities = @grid.communities.order(:name)
+- return if communities.blank?
+- cols = communities.in_groups(4, false)
+
+.container.mb-3.my-5.mx-3.mx-md-5.mt-3
+  .row.g-3
+    - cols.each do |group|
+      .col-12.col-md-3
+        %ul.list-group.list-group-flush.small
+          - group.each do |c|
+            %li.list-group-item.py-2
+              = link_to c.name, community_path(c), class: "text-decoration-none stretched-link"
