@@ -14,7 +14,7 @@
               Explore grid-level insights, from communities served to energy metrics.
 
             / --- GRID LINKS IN 3 COLUMNS ---
-            - cols = @grids.in_groups(3)
+            - cols = @grids.in_groups(3, false)
             .row.g-3
               - cols.each do |group|
                 .col-12.col-md-4

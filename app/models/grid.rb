@@ -11,16 +11,16 @@ class Grid < ApplicationRecord
   has_many :capacities
   has_many :reporting_entities
   validates :name, presence: true, uniqueness: true
-  
+
   def slug_candidates
     [
       :name
     ]
   end
 
-    # --- Electricity Section ---
+  # --- Electricity Section ---
   def show_electricity_section?
-    @show_electricity_section ||= (show_production? || show_capacity?)
+    @show_electricity_section ||= show_production? || show_capacity?
   end
 
   def show_capacity?
