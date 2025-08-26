@@ -2,25 +2,31 @@
 
 .container-fluid.p-3.mt-n3.mt-sm-n5     
   .row
-    .col-md-3
-      .position-sticky.top-0.py-3
-        .bg-body-secondary.rounded-4.p-4.mb-4.text-center
-          %h5.fw-semibold.mb-3 Select a Community
+    .col-md-5
+      .position-sticky.top-0.py-3.d-flex.flex-column{ style: "height: 100vh;" }
+        .mb-3
           = render "dropdown", communities: @communities, current_community: @community
 
-        .d-grid.gap-2
           -# TODO: Uncomment when the download/print functionality is implemented
           -# %button.btn.btn-aedg-primary.px-4.py-2 
           -#   %i.bi.bi-file-earmark-arrow-down.me-1
           -#   Download Summary
 
-          = link_to communities_path, class: 'btn btn-secondary' do 
-            %i.bi.bi-arrow-left
-            Back
-        .mt-5
-          = render 'communities/sections/quick_nav', community: @community
+        .flex-grow-1.position-relative#mapbox-area{
+          data: mapbox_api_data({
+            maps_map_center_value: [@community.longitude, @community.latitude],
+            maps_markers_value: [[@community.longitude, @community.latitude]],
+            maps_marker_tooltip_title_value: @community.name
+          })
+        }
+          %div{ data: { maps_target: "map" },
+                style: "position:absolute; inset:0; width:100%; height:100%;" }
+        
+        -# TODO:: move quicklinks        
+        -# .mt-5
+        -#   = render 'communities/sections/quick_nav', community: @community
 
-    .col-md-9
+    .col-md-7
       .text-center.my-3
         %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Community Summary
 

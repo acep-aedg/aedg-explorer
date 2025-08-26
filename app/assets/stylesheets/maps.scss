@@ -1,15 +1,1 @@
-// Responsive max-heights per breakpoint
-$map-sizes: (
-  sm: 250px,
-  md: 300px,
-  lg: 350px,
-  xl: 350px
-);
-
-@each $size, $height in $map-sizes {
-  @include media-breakpoint-up($size) {
-    .map {
-      height: $height;
-    }
-  }
-}
+//TODO:  keeping this file incase we need styles for maps with new refactor 
