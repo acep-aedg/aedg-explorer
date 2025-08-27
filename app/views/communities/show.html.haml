@@ -1,12 +1,28 @@
 - content_for :title, "Community - #{@community.name}"
 
-.container-fluid.p-3.mt-n3.mt-sm-n5     
-  .row
-    .col-md-5
-      .position-sticky.top-0.py-3.d-flex.flex-column{ style: "height: 100vh;" }
-        .mb-3
+.container-fluid.p-1.mt-n1.mt-sm-n1
+  .sticky-top.py-1{ style: "z-index:1030; background: var(--bs-body-bg);" }
+    .row.align-items-center.gx-3
+
+      / LEFT: title/meta (shrinks; ellipsis)
+      .col.text-truncate
+        %i.bi.bi-geo-alt-fill.text-primary.fs-4.me-1
+        %span.fw-bold.fs-2.fs-md-4.text-truncate{ style: "max-width:100%;" }= @community.name
+        %span.text-muted.mx-2 •
+        %span.fw-semibold.text-secondary.text-truncate{ style: "max-width:30ch;" }= @borough.name
+        - if @community.grid.present?
+          %span.text-muted.mx-2 •
+          %span.text-info.text-truncate{ style: "max-width:24ch;" }= @community.grid.name
+
+      / RIGHT: two dropdowns, side-by-side, never wrap
+      .col-auto
+        .d-flex.align-items-center.gap-2.flex-nowrap.flex-shrink-0
           = render "dropdown", communities: @communities, current_community: @community
 
+
+  .row.g-3
+    .col-md-5
+      .py-1.d-flex.flex-column{ style: "position: sticky; top: 55px; height: calc(100vh - 55px);" }
         .flex-grow-1.d-flex.flex-column#mapbox-area{
           data: mapbox_api_data({
             maps_map_center_value: [@community.longitude, @community.latitude],
@@ -51,17 +67,17 @@
 
     .col-md-7
       .text-center.my-3
-        %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Community Summary
+        -# %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Community Summary
 
-        %h1.fw-bold.d-flex.justify-content-center.align-items-center.flex-wrap.gap-2
-          %i.bi.bi-geo-alt-fill.text-primary
-          = @community.name
+        -# %h1.fw-bold.d-flex.justify-content-center.align-items-center.flex-wrap.gap-2
+        -#   %i.bi.bi-geo-alt-fill.text-primary
+        -#   = @community.name
 
-        %h4.fw-semibold.text-secondary.mt-2
-          = @borough.name
-          - if @community.grid.present?
-            %span.text-muted.fs-4.mx-2 &bull;
-            %span.text-info= @community.grid.name
+        -# %h4.fw-semibold.text-secondary.mt-2
+        -#   = @borough.name
+        -#   - if @community.grid.present?
+        -#     %span.text-muted.fs-4.mx-2 &bull;
+        -#     %span.text-info= @community.grid.name
 
       - section_order = []
       - section_order << 'electricity' if @community.show_electricity_section?

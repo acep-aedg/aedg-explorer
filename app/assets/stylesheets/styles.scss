@@ -32,6 +32,7 @@
       border-radius: 0.5rem;
       padding: 0;
       border: none;
+      z-index: 2000 !important;
 
       li:first-child a {
         border-radius: 0.5rem 0.5rem 0 0;
