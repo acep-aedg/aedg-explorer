@@ -27,3 +27,6 @@ application.register("maps", MapsController)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
+
+import MapsBridgeController from "./maps_bridge_controller"
+application.register("maps-bridge", MapsBridgeController)

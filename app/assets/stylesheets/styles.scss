@@ -216,11 +216,11 @@
 .nav-tabs {
   .nav-link {
     border: none;
-    border-bottom: 4px solid transparent;
+    border-bottom: 3px solid transparent;
     color: $tabs-text-default;
     font-weight: 500;
-    font-size: 1.05rem;
-    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.75rem;
     transition: border-color 0.2s ease, color 0.2s ease;
 
     &:hover {

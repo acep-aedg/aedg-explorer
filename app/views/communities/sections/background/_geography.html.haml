@@ -4,45 +4,34 @@
   %hr.flex-grow-1.mt-1.mb-0
 
 .row
-  .col-md-4
-    #communityLocationMapWrapper.tab-pane.fade.show.active{
-      data: mapbox_api_data({
-        maps_map_center_value: [@community.longitude, @community.latitude],
-        maps_markers_value: [[@community.longitude, @community.latitude]],
-        maps_marker_tooltip_title_value: @community.name
-      })
-    }
-      .map.rounded{ data: { maps_target: "map" } }
-
-  .col-md-8
-    %table.table.table-hover
-      %tbody
-        - if @community.name.present?
-          %tr
-            %th.pe-3 Community
-            %td= @community.name
-        - if @community.borough.present?
-          %tr
-            %th.pe-3 Borough
-            %td= @community.borough.name
-
-        - if @community.regional_corporation.present?
-          %tr
-            %th.pe-3 Regional Corporation
-            %td= @community.regional_corporation.name
-
-        - if @community.village_corporation.present?
-          %tr
-            %th.pe-3 Village Corporation
-            %td= @community.village_corporation
-
-        - if @community.grid.present?
-          %tr
-            %th.pe-3 Grid
-            %td= @community.grid.name.titleize
+  %table.table.table-hover
+    %tbody
+      - if @community.name.present?
         %tr
-          %th.pe-3 Latitude, Longitude
-          %td
-            = @community.latitude
-            ,
-            = @community.longitude
+          %th.pe-3 Community
+          %td= @community.name
+      - if @community.borough.present?
+        %tr
+          %th.pe-3 Borough
+          %td= @community.borough.name
+
+      - if @community.regional_corporation.present?
+        %tr
+          %th.pe-3 Regional Corporation
+          %td= @community.regional_corporation.name
+
+      - if @community.village_corporation.present?
+        %tr
+          %th.pe-3 Village Corporation
+          %td= @community.village_corporation
+
+      - if @community.grid.present?
+        %tr
+          %th.pe-3 Grid
+          %td= @community.grid.name.titleize
+      %tr
+        %th.pe-3 Latitude, Longitude
+        %td
+          = @community.latitude
+          ,
+          = @community.longitude

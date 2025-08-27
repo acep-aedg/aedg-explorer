@@ -16,6 +16,7 @@ export default class extends Controller {
 
     this.activeLayers = [];
     this.activeSources = [];
+    this._marker = null; // single marker instance
 
     this.map = new mapboxgl.Map({
       container: this.mapTarget,
@@ -33,17 +34,28 @@ export default class extends Controller {
         this.markersValue.forEach((coord) => this.addMarker(coord));
       }
     });
+
+    this._onSelectLayer = (e) => {
+      const { url, color, outlineColor } = e.detail || {};
+      if (url) this.loadLayer(url, { color, outlineColor });
+    };
+    window.addEventListener("maps:select-layer", this._onSelectLayer);
   }
 
   addMarker([lng, lat]) {
+    this.clearMarker();
+
     const marker = new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
     this.setupMarkerTooltip(marker, [lng, lat], this.markerTooltipTitleValue);
+
+    this._marker = marker;
   }
 
   setupMarkerTooltip(marker, [lng, lat], title) {
     const popup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false,
+      closeOnMove: false, 
       offset: 10,
     }).setHTML(`
     <div>
@@ -53,15 +65,13 @@ export default class extends Controller {
     </div>
   `);
 
+    // attach popup to marker so togglePopup/getPopup work
+    marker.setPopup(popup);
+
+    // hover behavior (so user can re-open after auto-close)
     const el = marker.getElement();
-
-    el.addEventListener('mouseenter', () => {
-      popup.setLngLat([lng, lat]).addTo(this.map);
-    });
-
-    el.addEventListener('mouseleave', () => {
-      popup.remove();
-    });
+    el.addEventListener('mouseenter', () => marker.togglePopup());
+    el.addEventListener('mouseleave', () => marker.togglePopup());
   }
 
   setupFillLayerTooltip(fillLayerId) {
@@ -222,24 +232,57 @@ export default class extends Controller {
     this.activeSources = [];
   }
 
-  async selectLayer(event) {
+  selectLayer(event) {
+    this.clearAll();
     const button = event.currentTarget;
     const url = button.dataset.url;
     const color = button.dataset.color;
     const outlineColor = button.dataset.outlineColor;
-
-    button.parentElement
-      .querySelectorAll('.btn')
-      .forEach((btn) => btn.classList.remove('active'));
-
-    button.classList.add('active');
-
     this.loadLayer(url, { color, outlineColor });
+  }
+
+  clearMarker() {
+    if (this._marker) {
+      this._marker.remove();
+      this._marker = null;
+    }
+  }
+
+  clearAll() {
+    this.clearMarker();
+    this.clearAllLayers();
+  }
+
+  showMarker(event) {
+    const { lng, lat, title } = event.params;
+    this.clearAll(); // removes polygons + old marker
+
+    const L = parseFloat(lng), A = parseFloat(lat);
+
+    this._marker = new mapboxgl.Marker()
+      .setLngLat([L, A])
+      .addTo(this.map);
+
+    this.setupMarkerTooltip(this._marker, [L, A], title);
+
+    // open immediately
+    this._marker.togglePopup();
+
+    // auto-close after 7 seconds
+    setTimeout(() => {
+      if (this._marker?.getPopup()) {
+        this._marker.getPopup().remove();
+      }
+    }, 7000);
+
+    this.map.flyTo({ center: [L, A], essential: true });
   }
 
   disconnect() {
     if (this.map) {
       this.map.remove();
     }
+    window.removeEventListener("maps:select-layer", this._onSelectLayer);
+    this.map?.remove();
   }
 }
