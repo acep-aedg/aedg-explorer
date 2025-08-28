@@ -287,3 +287,7 @@
   color: darken($primary, 25%);
   border-radius: 0.25rem;
 }
+
+.anchor-offset {
+  scroll-margin-top: 8vh; /* position anchor below nav  */
+}

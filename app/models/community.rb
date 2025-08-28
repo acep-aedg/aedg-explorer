@@ -117,6 +117,9 @@ class Community < ApplicationRecord
   end
 
   # --- Background Section ---
+  def show_geography?
+    @show_geography ||= community_grids.any?
+  end
 
   def show_transportation?
     @show_transportation ||= transportation.present?
