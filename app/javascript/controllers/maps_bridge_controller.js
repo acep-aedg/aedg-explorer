@@ -18,6 +18,7 @@ export default class extends Controller {
         url: tab.dataset.layerUrl,
         color: tab.dataset.color,
         outlineColor: tab.dataset.outlineColor,
+        clear: true,
       };
       this._manualUntil = Date.now() + 2000; // ignore scroll for 2s after a click
       window.dispatchEvent(new CustomEvent("maps:select-layer", { detail }));
@@ -43,6 +44,7 @@ export default class extends Controller {
             url: this.defaultLayerUrlValue,
             color: this.defaultColorValue,
             outlineColor: this.defaultOutlineColorValue,
+            clear: true,
           };
           window.dispatchEvent(new CustomEvent("maps:select-layer", { detail }));
         },

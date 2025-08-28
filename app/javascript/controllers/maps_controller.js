@@ -36,8 +36,14 @@ export default class extends Controller {
     });
 
     this._onSelectLayer = (e) => {
-      const { url, color, outlineColor } = e.detail || {};
-      if (url) this.loadLayer(url, { color, outlineColor });
+      const { url, color, outlineColor, clear: shouldClear } = e.detail || {};
+        if (!url) return;
+
+        if (shouldClear !== false) {
+          this.clearAll();           
+        }
+
+        this.loadLayer(url, { color, outlineColor });
     };
     window.addEventListener("maps:select-layer", this._onSelectLayer);
   }
@@ -279,10 +285,36 @@ export default class extends Controller {
   }
 
   disconnect() {
-    if (this.map) {
-      this.map.remove();
-    }
+    // 1) detach external listeners/timers
     window.removeEventListener("maps:select-layer", this._onSelectLayer);
-    this.map?.remove();
+    clearTimeout(this._markerPopupTimer);
+
+    // 2) remove map-bound handlers (tooltips, etc.)
+    try {
+      // if you set these earlier, unbind them safely
+      if (this._tooltipMouseMove || this._tooltipMouseLeave) {
+        this.activeLayers.forEach((layerId) => {
+          if (this.map?.getLayer(layerId)) {
+            this.map.off('mousemove', layerId, this._tooltipMouseMove);
+            this.map.off('mouseleave', layerId, this._tooltipMouseLeave);
+          }
+        });
+      }
+      this._popup?.remove();
+    } catch (_) {}
+
+    // 3) clear overlays you created
+    this.clearAll?.(); // clears marker + layers (guards inside)
+
+    // 4) remove the map ONCE, with a guard
+    if (this.map) {
+      try {
+        this.map.remove();
+      } catch (e) {
+        console.warn('Mapbox remove() failed, ignoring:', e);
+      } finally {
+        this.map = null;
+      }
+    }
   }
 }
