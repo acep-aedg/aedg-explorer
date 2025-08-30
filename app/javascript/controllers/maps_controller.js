@@ -40,7 +40,7 @@ export default class extends Controller {
         if (!url) return;
 
         if (shouldClear !== false) {
-          this.clearAll();           
+          this.clearAllLayers();
         }
 
         this.loadLayer(url, { color, outlineColor });
@@ -60,7 +60,8 @@ export default class extends Controller {
   setupMarkerTooltip(marker, [lng, lat], title) {
     const popup = new mapboxgl.Popup({
       closeButton: false,
-      closeOnClick: false,
+      closeOnClick: true,
+      closeOffClick:true,
       closeOnMove: false, 
       offset: 10,
     }).setHTML(`
@@ -73,11 +74,6 @@ export default class extends Controller {
 
     // attach popup to marker so togglePopup/getPopup work
     marker.setPopup(popup);
-
-    // hover behavior (so user can re-open after auto-close)
-    const el = marker.getElement();
-    el.addEventListener('mouseenter', () => marker.togglePopup());
-    el.addEventListener('mouseleave', () => marker.togglePopup());
   }
 
   setupFillLayerTooltip(fillLayerId) {
@@ -138,21 +134,48 @@ export default class extends Controller {
     this.loadingTarget.classList.add('d-none');
   }
 
-  // This currently only works for Polygon and MultiPolygon geometries
-  getBounds(geojson) {
+    resetView() {
+    // clear layers but leave marker
+    this.clearAllLayers();
+
+    // reset map position to the original center/zoom
+    this.map.flyTo({
+      center: this.mapCenterValue,
+      zoom: 4,
+      essential: true
+    });
+
+    // if you had a marker set initially, make sure it’s still visible
+    if (this.hasMarkersValue && this.markersValue.length > 0) {
+      const [lng, lat] = this.markersValue[0];
+      if (!this._marker) {
+        this.addMarker([lng, lat]);
+      }
+    }
+  }
+
+  // Unwraps longitudes so features are contiguous around refLng.
+  getBoundsAround(refLng, geojson) {
     const bounds = new mapboxgl.LngLatBounds();
 
-    for (const feature of geojson.features) {
-      const coords = feature.geometry.coordinates;
-      const type = feature.geometry.type;
-      const recurse = (c) => {
-        if (typeof c[0] === 'number') {
-          bounds.extend(c);
-        } else {
-          c.forEach(recurse);
-        }
-      };
-      recurse(coords);
+    // Map a longitude `lng` to the equivalent value closest to `refLng`
+    const wrapLngNear = (lng) => {
+      const diff = lng - refLng;                                   // offset from refLng
+      const wrappedDiff = (((diff + 180) % 360) + 360) % 360 - 180; // [-180, 180)
+      return refLng + wrappedDiff;
+    };
+
+    const extendRecurse = (coords) => {
+      if (typeof coords[0] === 'number') {
+        const [lng, lat] = coords;
+        bounds.extend([wrapLngNear(lng), lat]);
+      } else {
+        coords.forEach(extendRecurse);
+      }
+    };
+
+    for (const f of geojson.features) {
+      extendRecurse(f.geometry.coordinates);
     }
 
     return bounds;
@@ -207,13 +230,14 @@ export default class extends Controller {
 
       this.activeLayers.push(fillId, outlineId);
 
-      const bounds = this.getBounds(geojson);
+      const refLng = this._marker?.getLngLat()?.lng ?? this.map.getCenter().lng;
+      const bounds = this.getBoundsAround(refLng, geojson);
+
       if (!bounds.isEmpty()) {
-        this.map.fitBounds(bounds, {
-          padding: 40,
-          maxZoom: 10,
-          duration: 1000,
-        });
+        this.map.fitBounds(bounds, { padding: 40, maxZoom: 10, duration: 1000 });
+        const c = bounds.getCenter();
+        const wrappedLng = ((c.lng + 180) % 360 + 360) % 360 - 180;
+        if (Math.abs(c.lng - wrappedLng) > 1e-6) this.map.setCenter([wrappedLng, c.lat]);
       }
     } catch (err) {
       console.error('Error loading layer:', err);
@@ -239,7 +263,7 @@ export default class extends Controller {
   }
 
   selectLayer(event) {
-    this.clearAll();
+    this.clearAllLayers();
     const button = event.currentTarget;
     const url = button.dataset.url;
     const color = button.dataset.color;
@@ -261,26 +285,15 @@ export default class extends Controller {
 
   showMarker(event) {
     const { lng, lat, title } = event.params;
-    this.clearAll(); // removes polygons + old marker
-
     const L = parseFloat(lng), A = parseFloat(lat);
 
-    this._marker = new mapboxgl.Marker()
-      .setLngLat([L, A])
-      .addTo(this.map);
-
+    this._marker = new mapboxgl.Marker().setLngLat([L, A]).addTo(this.map);
     this.setupMarkerTooltip(this._marker, [L, A], title);
-
     // open immediately
     this._marker.togglePopup();
-
-    // auto-close after 7 seconds
+    // auto-close after 2 seconds
     setTimeout(() => {
-      if (this._marker?.getPopup()) {
-        this._marker.getPopup().remove();
-      }
-    }, 7000);
-
+      if (this._marker?.getPopup()) { this._marker.getPopup().remove(); } }, 2000);
     this.map.flyTo({ center: [L, A], essential: true });
   }
 
