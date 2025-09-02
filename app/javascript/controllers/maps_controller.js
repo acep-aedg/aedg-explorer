@@ -154,30 +154,33 @@ export default class extends Controller {
     }
   }
 
-  // Unwraps longitudes so features are contiguous around refLng.
-  getBoundsAround(refLng, geojson) {
+  getBoundsAround(geojson) {
     const bounds = new mapboxgl.LngLatBounds();
-
-    // Map a longitude `lng` to the equivalent value closest to `refLng`
-    const wrapLngNear = (lng) => {
-      const diff = lng - refLng;                                   // offset from refLng
-      const wrappedDiff = (((diff + 180) % 360) + 360) % 360 - 180; // [-180, 180)
-      return refLng + wrappedDiff;
+    // Helper to normalize longitudes near the anti-meridian (±180°).
+    // Ensures features crossing the Date Line stay contiguous instead of appearing split across the entire globe.
+    // Example:
+    //   -179° (Alaska) and +179° (Russia) are only 2° apart geographically,but numerically they look 358° apart.
+    //  This function re-wraps them so they remain adjacent around 180°.
+    const wrapLngNear180 = (lng) => {
+      // Step 1: Shift so the anti-meridian (180°) is treated as zero.
+      // Subtracting 180 recenters the modulo around the Date Line instead of Greenwich (0°).
+      let offset = (lng - 180) % 360;
+      // Step 2: Normalize into the interval (-180, 180].
+      if (offset <= -180) offset += 360;
+      // Step 3: Shift back into world coordinates.
+      return 180 + offset;
     };
 
     const extendRecurse = (coords) => {
       if (typeof coords[0] === 'number') {
         const [lng, lat] = coords;
-        bounds.extend([wrapLngNear(lng), lat]);
+        bounds.extend([wrapLngNear180(lng), lat]);
       } else {
         coords.forEach(extendRecurse);
       }
     };
 
-    for (const f of geojson.features) {
-      extendRecurse(f.geometry.coordinates);
-    }
-
+    for (const f of geojson.features) extendRecurse(f.geometry.coordinates);
     return bounds;
   }
 
@@ -230,14 +233,10 @@ export default class extends Controller {
 
       this.activeLayers.push(fillId, outlineId);
 
-      const refLng = this._marker?.getLngLat()?.lng ?? this.map.getCenter().lng;
-      const bounds = this.getBoundsAround(refLng, geojson);
+      const bounds = this.getBoundsAround(geojson);
 
       if (!bounds.isEmpty()) {
         this.map.fitBounds(bounds, { padding: 40, maxZoom: 10, duration: 1000 });
-        const c = bounds.getCenter();
-        const wrappedLng = ((c.lng + 180) % 360 + 360) % 360 - 180;
-        if (Math.abs(c.lng - wrappedLng) > 1e-6) this.map.setCenter([wrappedLng, c.lat]);
       }
     } catch (err) {
       console.error('Error loading layer:', err);
