@@ -18,6 +18,14 @@ class Grid < ApplicationRecord
     ]
   end
 
+  def active?
+    community_grids.active.exists?
+  end
+
+  def inactive_year
+    community_grids.inactive.maximum(:termination_year)
+  end
+
   # --- Electricity Section ---
   def show_electricity_section?
     @show_electricity_section ||= show_production? || show_capacity?
