@@ -1,0 +1,41 @@
+.d-flex.align-items-center.mb-3
+  %i.bi.bi-building-gear.me-2.fs-4
+  %h4#production.mb-0.me-3.py-3 Production
+  %hr.flex-grow-1.mt-1.mb-0
+.mb-3
+  .d-flex.justify-content-between.align-items-center
+    .nav.nav-tabs
+      - if @grid.show_monthly_generation?
+        %li.nav-item
+          = link_to "#monthly-prod-chart-wrapper", class: "nav-link active", data: { bs_toggle: "tab" } do
+            %i.bi.bi-graph-up.me-1
+            Monthly Chart
+        %li.nav-item
+          = link_to "#monthly-prod-data", class: "nav-link", data: { bs_toggle: "tab" } do
+            %i.bi.bi-table.me-1
+            Monthly Data
+      - if @grid.show_yearly_generation?
+        %li.nav-item
+          = link_to "#yearly-prod-chart-wrapper", class: "nav-link", data: { bs_toggle: "tab" } do
+            %i.bi.bi-pie-chart.me-1
+            Yearly Chart
+        %li.nav-item
+          = link_to "#yearly-prod-data", class: "nav-link", data: { bs_toggle: "tab" } do
+            %i.bi.bi-table.me-1
+            Yearly Data
+
+
+  .tab-content.mt-3
+    - if @grid.show_monthly_generation?
+      #monthly-prod-chart-wrapper.tab-pane.fade.show.active
+        = render 'grids/sections/electricity/production/monthly_stats'
+        = render "grids/sections/electricity/production/monthly_chart"
+
+      #monthly-prod-data.tab-pane.fade
+        = render "grids/sections/electricity/production/monthly_data"
+    - if @grid.show_yearly_generation?
+      #yearly-prod-chart-wrapper.tab-pane.fade
+        = render "grids/sections/electricity/production/yearly_chart"
+
+      #yearly-prod-data.tab-pane.fade
+        = render "grids/sections/electricity/production/yearly_data"
