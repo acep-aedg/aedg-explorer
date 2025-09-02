@@ -12,18 +12,17 @@ class Grid < ApplicationRecord
   has_many :reporting_entities
   validates :name, presence: true, uniqueness: true
 
+  scope :active, -> { joins(:community_grids).merge(CommunityGrid.active).distinct }
+
   def slug_candidates
     [
       :name
     ]
   end
 
-  def active?
-    community_grids.active.exists?
-  end
-
-  def inactive_year
-    community_grids.inactive.maximum(:termination_year)
+  # --- Communities Section ---
+  def show_communities_section?
+    @show_communities_section ||= communities&.exists?
   end
 
   # --- Electricity Section ---

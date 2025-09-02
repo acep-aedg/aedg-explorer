@@ -24,14 +24,8 @@
           %i.bi.bi-geo-alt-fill.text-primary
           = @grid.name
 
-        - if @grid.active?
-          %span.badge.rounded-pill.bg-success Active
-        - else
-          %span.badge.rounded-pill.bg-secondary
-            = "Inactive (#{@grid.inactive_year})"
-
       - section_order = []
-      - section_order << 'communities'
+      - section_order << 'communities' if @grid.show_communities_section?
       - section_order << 'electricity' if @grid.show_electricity_section?
 
       - section_order.each do |section|

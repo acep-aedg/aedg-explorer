@@ -32,7 +32,7 @@
           = @borough.name
           - if @community.grid.present?
             %span.text-muted.fs-4.mx-2 &bull;
-            = link_to @community.grid.name, grid_path(@community.grid), class: "text-info text-decoration-none"
+            = link_to @community.grid.name, grid_path(@community.grid), class: "text-info"
 
       - section_order = []
       - section_order << 'electricity' if @community.show_electricity_section?

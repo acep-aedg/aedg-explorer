@@ -1,22 +1,11 @@
-- communities = @grid.communities.order(:name)
-- return if communities.blank?
-- cols = communities.in_groups(4, false)
-- count = communities.size
-- yr = @grid.inactive_year
+- cols = @grid.communities.in_groups(4, false)
+ 
 .container.mb-3.my-5.mx-3.mx-md-5.mt-3
   .row.g-3
     %p
-      - if @grid.active?
-        The
-        %strong= @grid.name
-        = " currently serves #{pluralize(count, 'community')}:"
-      - else
-        The
-        %strong= @grid.name
-        = " previously served #{pluralize(count, 'community')}#{yr ? " (inactive since #{yr})" : ''}."
-        %br
-        %br
-        = "Click a community to see the grid it’s currently connected to:"
+      The
+      %strong= @grid.name
+      = " serves #{pluralize(@grid.communities.size, 'community')}:"
   .row.g-3
     - cols.each do |group|
       .col-12.col-md-3

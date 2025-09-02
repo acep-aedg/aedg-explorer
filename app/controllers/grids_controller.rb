@@ -1,12 +1,12 @@
 class GridsController < ApplicationController
   before_action :set_grid, only: %i[show]
   def index
-    @grids = Grid.all.order(:name)
+    @grids = Grid.active.order(:name)
   end
 
   def show
     @grid = Grid.find(params[:id])
-    @grids = Grid.all.order(:name)
+    @grids = Grid.active.order(:name)
   end
 
   private
