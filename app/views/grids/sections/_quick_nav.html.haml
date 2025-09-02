@@ -4,6 +4,11 @@
   .row.row-cols-1.row-cols-sm-3.row-cols-md-1.g-2
     .col
       %ul.nav.flex-column
+        - if @grid.communities.exists?
+          %li.nav-item.mt-3.text-uppercase.text-muted.small
+            = nav_link "Communities", "#communities", parent_section: true
+    .col
+      %ul.nav.flex-column
         - if @grid.show_electricity_section?
           %li.nav-item.mt-3.text-uppercase.text-muted.small
             = nav_link "Electricity", "#electricity", parent_section: true
@@ -13,9 +18,3 @@
         - if @grid.show_capacity?
           %li.nav-item
             = nav_link "Capacity", "#capacity"
-
-    .col
-      %ul.nav.flex-column
-        - if @grid.communities.exists?
-          %li.nav-item.mt-3.text-uppercase.text-muted.small
-            = nav_link "Communities", "#communities", parent_section: true

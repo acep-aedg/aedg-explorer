@@ -1,3 +1,3 @@
-.m-auto{ data: { controller: "community-dropdown", action: "change->community-dropdown#update" } }
+.m-auto{ data: { controller: "dropdown", action: "change->dropdown#update" } }
   - grid_array = @grids.map { |grid| [grid.name, url_for(grid)] }
   = select_tag(:grid, options_for_select(grid_array, url_for(current_grid) || ""), { prompt: '-- Select a Grid --', class: "form-select rounded-5 fs-4 text-center", data: { community_dropdown_target: "select" } })

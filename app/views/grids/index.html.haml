@@ -5,7 +5,7 @@
     .col
       .container-fluid
         .row.justify-content-center
-          .col-12.col-md-11.col-lg-10.bg-white.bg-opacity-75.p-4.rounded-4.shadow
+          .col-12.col-md-11.col-lg-10.bg-opacity-75.p-4.rounded-4.bg-body-secondary
             %h1.fw-bold.m-3
               %i.bi.bi-grid-fill.me-2
               Grid Summaries
@@ -15,10 +15,12 @@
 
             / --- GRID LINKS IN 3 COLUMNS ---
             - cols = @grids.in_groups(3, false)
-            .row.g-3
-              - cols.each do |group|
-                .col-12.col-md-4
-                  %ul.list-group.list-group-flush.small
-                    - group.each do |grid|
-                      %li.list-group-item.py-2
-                        = link_to grid.name, grid_path(grid), class: "text-decoration-none stretched-link"
+            .bg-body-tertiary.rounded-4.p-4
+              .bg-white.rounded-3.p-4
+                .row.g-4
+                  - cols.each do |group|
+                    .col-12.col-md-4
+                      %ul.list-group.list-group-flush.small
+                        - group.each do |grid|
+                          %li.list-group-item
+                            = link_to grid.name, grid_path(grid), class: "text-decoration-none stretched-link"
