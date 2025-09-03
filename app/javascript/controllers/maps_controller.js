@@ -156,25 +156,15 @@ export default class extends Controller {
 
   getBoundsAround(geojson) {
     const bounds = new mapboxgl.LngLatBounds();
-    // Helper to normalize longitudes near the anti-meridian (±180°).
-    // Ensures features crossing the Date Line stay contiguous instead of appearing split across the entire globe.
-    // Example:
-    //   -179° (Alaska) and +179° (Russia) are only 2° apart geographically,but numerically they look 358° apart.
-    //  This function re-wraps them so they remain adjacent around 180°.
-    const wrapLngNear180 = (lng) => {
-      // Step 1: Shift so the anti-meridian (180°) is treated as zero.
-      // Subtracting 180 recenters the modulo around the Date Line instead of Greenwich (0°).
-      let offset = (lng - 180) % 360;
-      // Step 2: Normalize into the interval (-180, 180].
-      if (offset <= -180) offset += 360;
-      // Step 3: Shift back into world coordinates.
-      return 180 + offset;
-    };
-
     const extendRecurse = (coords) => {
       if (typeof coords[0] === 'number') {
-        const [lng, lat] = coords;
-        bounds.extend([wrapLngNear180(lng), lat]);
+        // we're only dealing with polygons/points that should be in the state of Alaska
+        // if any points are west of the anti-meridian, re-wrap them
+        // I'm choosing 170 here because the "eastern" most point of Alaska is 172E (Attu Island) 
+        if (coords[0] > 170) {
+          coords[0] = (coords[0] % 360) - 360;
+        }
+        bounds.extend(coords);
       } else {
         coords.forEach(extendRecurse);
       }
