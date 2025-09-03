@@ -1,0 +1,12 @@
+- chart_title = "#{@grid.name.titleize} Net Generation by Fuel Type (#{YearlyGeneration.latest_year_for(@grid)})"
+- chart_options = Chartkick.options.deep_merge({ title: chart_title,
+    suffix: " MWh",
+    donut: true,
+    library: { plugins: { legend: { title: { display: true, text: "Fuel Type"} } } },
+    download: { filename: chart_title.parameterize}})
+
+#yearly-prod-chart-2.responsive-fuel-chart{ data: { controller: "fuel-chart", fuel_chart:{
+    url_value: production_yearly_grid_charts_path(@grid),
+    chart_type_value: "pie",
+    options_value: chart_options.to_json
+}}}

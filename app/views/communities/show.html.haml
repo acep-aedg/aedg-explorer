@@ -9,9 +9,12 @@
         %span.fw-bold.fs-2.fs-md-4.text-truncate{ style: "max-width:100%;" }= @community.name
         %span.text-muted.mx-2 •
         %span.fw-semibold.text-secondary.text-truncate{ style: "max-width:30ch;" }= @borough.name
-        - if @community.grid.present?
-          %span.text-muted.mx-2 •
-          %span.text-info.text-truncate{ style: "max-width:24ch;" }= @community.grid.name
+        %span.fw-semibold.text-secondary.mt-2
+          = @borough.name
+          - if @community.grid.present?
+            %span.text-muted.fs-4.mx-2 &bull;
+            = link_to @community.grid.name, grid_path(@community.grid), class: "text-info"
+
       / RIGHT: two dropdowns, side-by-side, never wrap
       .col-auto
         .d-flex.align-items-center.gap-2.flex-nowrap.flex-shrink-0
