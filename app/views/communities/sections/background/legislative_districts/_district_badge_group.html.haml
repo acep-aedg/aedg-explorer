@@ -3,13 +3,15 @@
 -#   items: enumerable
 -#   color: Bootstrap contextual class (e.g., 'success', 'primary', etc.)
 
-.d-flex.bg-body-secondary.rounded.p-3.mb-3.align-items-start
-  .me-2
-    %strong.text-muted.text-nowrap
-      = label
-      = " (#{items.count})"
+-# NOTE: Removed since datatables show same information but before, the was changes to the UI look in the code below
 
-  .d-flex.flex-wrap.gap-2.border-start.border-2.border-text-muted.ps-2
-    - items.each do |item|
-      .badge.px-3.py-2.rounded-pill{ class: "text-bg-#{color}" }
-        = yield item
+-# .d-flex.rounded.p-1.mb-1.align-items-start
+-#   .me-2
+-#     %strong.text-muted.text-nowrap
+-#       = label
+-#       = " (#{items.count})"
+
+-#   .d-flex.flex-wrap.gap-2.border-start.border-2.border-text-muted.ps-2
+-#     - items.each do |item|
+-#       .badge.rounded-pill{ class: "text-bg-#{color}" }
+-#         = yield item

@@ -1,9 +1,14 @@
+- many = @available_price_types.size > 1
+
 = form_with url: request.path, method: :get, data: { turbo_frame: "fuel_prices_chart" } do
-  %label{ for: "price_type" } Select Price Type:
-  = select_tag :price_type,
-    options_for_select(@available_price_types, @selected_price_type),
-    disabled: @available_price_types.size == 1,
-    onchange: "this.form.requestSubmit();"
+  - if many
+    %label{ for: "price_type" } Select Price Type:
+    = select_tag :price_type,
+      options_for_select(@available_price_types, @selected_price_type),
+      id: "price_type",
+      class: "form-select form-select-sm",
+      onchange: "this.form.requestSubmit();"
+  - else
 
 %turbo-frame#fuel_prices_chart
   = column_chart fuel_prices_by_season_chart_data(@community.fuel_prices, price_type: @selected_price_type),

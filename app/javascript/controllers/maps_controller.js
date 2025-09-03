@@ -16,6 +16,7 @@ export default class extends Controller {
 
     this.activeLayers = [];
     this.activeSources = [];
+    this._marker = null; // single marker instance
 
     this.map = new mapboxgl.Map({
       container: this.mapTarget,
@@ -33,17 +34,35 @@ export default class extends Controller {
         this.markersValue.forEach((coord) => this.addMarker(coord));
       }
     });
+
+    this._onSelectLayer = (e) => {
+      const { url, color, outlineColor, clear: shouldClear } = e.detail || {};
+        if (!url) return;
+
+        if (shouldClear !== false) {
+          this.clearAllLayers();
+        }
+
+        this.loadLayer(url, { color, outlineColor });
+    };
+    window.addEventListener("maps:select-layer", this._onSelectLayer);
   }
 
   addMarker([lng, lat]) {
+    this.clearMarker();
+
     const marker = new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
     this.setupMarkerTooltip(marker, [lng, lat], this.markerTooltipTitleValue);
+
+    this._marker = marker;
   }
 
   setupMarkerTooltip(marker, [lng, lat], title) {
     const popup = new mapboxgl.Popup({
       closeButton: false,
-      closeOnClick: false,
+      closeOnClick: true,
+      closeOffClick:true,
+      closeOnMove: false, 
       offset: 10,
     }).setHTML(`
     <div>
@@ -53,15 +72,8 @@ export default class extends Controller {
     </div>
   `);
 
-    const el = marker.getElement();
-
-    el.addEventListener('mouseenter', () => {
-      popup.setLngLat([lng, lat]).addTo(this.map);
-    });
-
-    el.addEventListener('mouseleave', () => {
-      popup.remove();
-    });
+    // attach popup to marker so togglePopup/getPopup work
+    marker.setPopup(popup);
   }
 
   setupFillLayerTooltip(fillLayerId) {
@@ -122,23 +134,43 @@ export default class extends Controller {
     this.loadingTarget.classList.add('d-none');
   }
 
-  // This currently only works for Polygon and MultiPolygon geometries
-  getBounds(geojson) {
-    const bounds = new mapboxgl.LngLatBounds();
+    resetView() {
+    // clear layers but leave marker
+    this.clearAllLayers();
 
-    for (const feature of geojson.features) {
-      const coords = feature.geometry.coordinates;
-      const type = feature.geometry.type;
-      const recurse = (c) => {
-        if (typeof c[0] === 'number') {
-          bounds.extend(c);
-        } else {
-          c.forEach(recurse);
-        }
-      };
-      recurse(coords);
+    // reset map position to the original center/zoom
+    this.map.flyTo({
+      center: this.mapCenterValue,
+      zoom: 4,
+      essential: true
+    });
+
+    // if you had a marker set initially, make sure it’s still visible
+    if (this.hasMarkersValue && this.markersValue.length > 0) {
+      const [lng, lat] = this.markersValue[0];
+      if (!this._marker) {
+        this.addMarker([lng, lat]);
+      }
     }
+  }
 
+  getBoundsAround(geojson) {
+    const bounds = new mapboxgl.LngLatBounds();
+    const extendRecurse = (coords) => {
+      if (typeof coords[0] === 'number') {
+        // we're only dealing with polygons/points that should be in the state of Alaska
+        // if any points are west of the anti-meridian, re-wrap them
+        // I'm choosing 170 here because the "eastern" most point of Alaska is 172E (Attu Island) 
+        if (coords[0] > 170) {
+          coords[0] = (coords[0] % 360) - 360;
+        }
+        bounds.extend(coords);
+      } else {
+        coords.forEach(extendRecurse);
+      }
+    };
+
+    for (const f of geojson.features) extendRecurse(f.geometry.coordinates);
     return bounds;
   }
 
@@ -191,13 +223,10 @@ export default class extends Controller {
 
       this.activeLayers.push(fillId, outlineId);
 
-      const bounds = this.getBounds(geojson);
+      const bounds = this.getBoundsAround(geojson);
+
       if (!bounds.isEmpty()) {
-        this.map.fitBounds(bounds, {
-          padding: 40,
-          maxZoom: 10,
-          duration: 1000,
-        });
+        this.map.fitBounds(bounds, { padding: 40, maxZoom: 10, duration: 1000 });
       }
     } catch (err) {
       console.error('Error loading layer:', err);
@@ -222,24 +251,72 @@ export default class extends Controller {
     this.activeSources = [];
   }
 
-  async selectLayer(event) {
+  selectLayer(event) {
+    this.clearAllLayers();
     const button = event.currentTarget;
     const url = button.dataset.url;
     const color = button.dataset.color;
     const outlineColor = button.dataset.outlineColor;
-
-    button.parentElement
-      .querySelectorAll('.btn')
-      .forEach((btn) => btn.classList.remove('active'));
-
-    button.classList.add('active');
-
     this.loadLayer(url, { color, outlineColor });
   }
 
+  clearMarker() {
+    if (this._marker) {
+      this._marker.remove();
+      this._marker = null;
+    }
+  }
+
+  clearAll() {
+    this.clearMarker();
+    this.clearAllLayers();
+  }
+
+  showMarker(event) {
+    const { lng, lat, title } = event.params;
+    const L = parseFloat(lng), A = parseFloat(lat);
+
+    this._marker = new mapboxgl.Marker().setLngLat([L, A]).addTo(this.map);
+    this.setupMarkerTooltip(this._marker, [L, A], title);
+    // open immediately
+    this._marker.togglePopup();
+    // auto-close after 2 seconds
+    setTimeout(() => {
+      if (this._marker?.getPopup()) { this._marker.getPopup().remove(); } }, 2000);
+    this.map.flyTo({ center: [L, A], essential: true });
+  }
+
   disconnect() {
+    // 1) detach external listeners/timers
+    window.removeEventListener("maps:select-layer", this._onSelectLayer);
+    clearTimeout(this._markerPopupTimer);
+
+    // 2) remove map-bound handlers (tooltips, etc.)
+    try {
+      // if you set these earlier, unbind them safely
+      if (this._tooltipMouseMove || this._tooltipMouseLeave) {
+        this.activeLayers.forEach((layerId) => {
+          if (this.map?.getLayer(layerId)) {
+            this.map.off('mousemove', layerId, this._tooltipMouseMove);
+            this.map.off('mouseleave', layerId, this._tooltipMouseLeave);
+          }
+        });
+      }
+      this._popup?.remove();
+    } catch (_) {}
+
+    // 3) clear overlays you created
+    this.clearAll?.(); // clears marker + layers (guards inside)
+
+    // 4) remove the map ONCE, with a guard
     if (this.map) {
-      this.map.remove();
+      try {
+        this.map.remove();
+      } catch (e) {
+        console.warn('Mapbox remove() failed, ignoring:', e);
+      } finally {
+        this.map = null;
+      }
     }
   }
 }
