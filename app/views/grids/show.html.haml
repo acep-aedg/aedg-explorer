@@ -1,28 +1,46 @@
 - content_for :title, "Grid - #{@grid.name}"
 
-.container-fluid.p-3.mt-n3.mt-sm-n5     
-  .row
-    .col-md-3
-      .position-sticky.top-0.py-3
-        .bg-body-secondary.rounded-4.p-4.mb-4.text-center
-          %h5.fw-semibold.mb-3 Select a Grid
+.container-fluid.p-1.mt-n1.mt-sm-n1
+  .sticky-top.py-1{ style: "z-index:1030; background: var(--bs-body-bg);" }
+    .row.align-items-center.gx-3
+      / LEFT: title (shrinks; ellipsis)
+      .col.text-truncate
+        %i.bi.bi-geo-alt-fill.text-primary.fs-4.me-1
+        %span.fw-bold.fs-2.fs-md-4.text-truncate{ style: "max-width:100%;" }= @grid.name
+
+      / RIGHT: two dropdowns, side-by-side, never wrap
+      .col-auto
+        .d-flex.align-items-center.gap-2.flex-nowrap.flex-shrink-0
           = render "dropdown", grids: @grids, current_grid: @grid
-
-        .d-grid.gap-2
-          = link_to grids_path, class: 'btn btn-secondary' do 
-            %i.bi.bi-arrow-left
-            Back
-
-        .mt-5
+          -# %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Community Summary
           = render 'grids/sections/quick_nav', grid: @grid
 
-    .col-md-9
-      .text-center.my-3
-        %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Grid Summary
+  .row.g-3
+    / LEFT: map (sticky)
+    .col-md-5
+      .py-1.d-flex.flex-column{ style: "position: sticky; top: 55px; height: calc(100vh - 55px);" }
+        .flex-grow-1.d-flex.flex-column#mapbox-area{
+          data: mapbox_api_data({
+          })
+        }
+          / --- Map fills the column
+          .d-flex.gap-2.mb-2.align-items-center
+            / --- Floating map controls (top-right, inside map) ---
+            .position-absolute.top-0.end-0.p-4{ style: "z-index:5; pointer-events:none;" }
+              .btn-group.shadow-sm{ style: "pointer-events:auto;" }
+                %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                  title: "Reset view",
+                  data: { action: "click->maps#resetView" }
+                }
+                  %i.bi.bi-arrow-counterclockwise
 
-        %h1.fw-bold.d-flex.justify-content-center.align-items-center.flex-wrap.gap-2
-          %i.bi.bi-geo-alt-fill.text-primary
-          = @grid.name
+          / --- Map fills the remaining height below the toolbar
+          .flex-grow-1.position-relative
+            %div{ data: { maps_target: "map" }, style: "position:absolute; inset:0; width:100%; height:100%;" }
+
+    / RIGHT: main content 
+    .col-md-7
+      .text-center.my-3
 
       - section_order = []
       - section_order << 'communities' if @grid.show_communities_section?
@@ -30,6 +48,9 @@
 
       - section_order.each do |section|
         - section_id = "#{section.parameterize}-section"
+
+        / Anchor offset target
+        %div{ id: section.parameterize, class: "anchor-offset" }
 
         %button.collapse-btn.border-0.mb-1{ 
           id: section.parameterize,
@@ -43,4 +64,4 @@
         .collapse.show.p-1{ id: section_id }
           = render "grids/sections/#{section}", grid: @grid 
         
-        %hr
+        %hr/
