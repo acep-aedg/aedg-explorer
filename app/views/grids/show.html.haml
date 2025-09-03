@@ -11,7 +11,7 @@
       / RIGHT: two dropdowns, side-by-side, never wrap
       .col-auto
         .d-flex.align-items-center.gap-2.flex-nowrap.flex-shrink-0
-          = render "dropdown", grids: @grids, current_grid: @grid
+          = render "shared/dropdown", collection: @grids, current: @grid
           -# %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Community Summary
           = render 'grids/sections/quick_nav', grid: @grid
 

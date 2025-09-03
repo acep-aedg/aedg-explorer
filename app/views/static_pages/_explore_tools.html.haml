@@ -7,9 +7,8 @@
       %p.text-muted
         Select your community from the dropdown to access tailored energy details.
         Dive deep into the data that powers your local energy landscape.
-      = render partial: "communities/dropdown", locals: { communities: @communities, current_community: nil }
+      = render "shared/dropdown", collection: @communities, current: nil
 
-    
     .col-12.col-md-5.offset-md-1.order-1.order-md-2.text-center.mb-3
       .mb-3{ data: { controller: "lightbox" } }
         - community_image = "solar-test-site_pc-jeff-fisher.JPG"

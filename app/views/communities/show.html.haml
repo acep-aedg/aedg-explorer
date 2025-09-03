@@ -18,7 +18,7 @@
       / RIGHT: two dropdowns, side-by-side, never wrap
       .col-auto
         .d-flex.align-items-center.gap-2.flex-nowrap.flex-shrink-0
-          = render "dropdown", communities: @communities, current_community: @community
+          = render "shared/dropdown", collection: @communities, current: @community
           -# %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Community Summary
           = render 'communities/sections/quick_nav', community: @community
 

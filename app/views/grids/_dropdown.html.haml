@@ -1,3 +1,0 @@
-.d-inline-flex.me-2.flex-shrink-0{ data: { controller: "dropdown", action: "change->dropdown#update" } }
-  - grid_array = @grids.map { |grid| [grid.name, url_for(grid)] }
-  = select_tag(:grid, options_for_select(grid_array, url_for(current_grid) || ""), { prompt: '-- Select a Grid --', class: "form-select form-select-md w-auto rounded-5 text-center", data: { dropdown_target: "select" } })
