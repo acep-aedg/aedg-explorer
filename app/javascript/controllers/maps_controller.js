@@ -98,7 +98,7 @@ export default class extends Controller {
   }
 
   addMarker([lng, lat], title = this.markerTooltipTitleValue) {
-    this.clearMarker();
+    this._marker = new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
     this._showMarkerAt([lng, lat], title);
   }
 
@@ -118,6 +118,12 @@ export default class extends Controller {
   async loadLayer(url, opts = {}) {
     this.showLoading();
     try {
+      if (!this.map) throw new Error('Map not initialized');
+
+      if (!this.map.isStyleLoaded()) {
+        await new Promise((resolve) => this.map.once('load', resolve));
+      }
+
       this.clearAllLayers();
 
       const res = await fetch(url, { headers: { Accept: 'application/json' } });
@@ -125,7 +131,7 @@ export default class extends Controller {
       const fc = await res.json();
 
       const id = this._layerId(url);
-      this._addOrUpdateSource(id, fc);
+      this._addSource(id, fc);
 
       const kind = this._geomKind(fc);
       if (kind === 'poly') this._addPolygonLayers(id, opts);
@@ -197,7 +203,7 @@ export default class extends Controller {
   }
 
   _addPointLayer(id) {
-    const ptsId = `${id}-points`;
+    const ptsId = `${id}_points`;
     if (this.map.getLayer(ptsId)) return;
 
     this.map.addLayer({
@@ -284,7 +290,6 @@ export default class extends Controller {
   }
 
   _showMarkerAt([lng, lat], title = this.markerTooltipTitleValue) {
-    this._marker = new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
     const popup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: true,
@@ -345,12 +350,9 @@ export default class extends Controller {
     return new URL(url, window.location.origin).pathname.split('/').pop();
   }
 
-  _addOrUpdateSource(id, data) {
-    if (this.map.getSource(id)) {
-      this.map.getSource(id).setData(data);
-    } else {
-      this.map.addSource(id, { type: 'geojson', data });
-      this.activeSources.push(id);
-    }
+  _addSource(id, data) {
+    console.log('Adding source:', id);
+    this.map.addSource(id, { type: 'geojson', data });
+    this.activeSources.push(id);
   }
 }
