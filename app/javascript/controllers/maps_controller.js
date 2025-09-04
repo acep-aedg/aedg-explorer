@@ -351,7 +351,6 @@ export default class extends Controller {
   }
 
   _addSource(id, data) {
-    console.log('Adding source:', id);
     this.map.addSource(id, { type: 'geojson', data });
     this.activeSources.push(id);
   }
