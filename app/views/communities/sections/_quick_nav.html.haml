@@ -7,7 +7,7 @@
       "aria-expanded" => "false"
     }
       Select Section
-    %ul.dropdown-menu.w-100.p-1{ "aria-labelledby" => "quickNavDropdown" }
+    %ul.dropdown-menu{ "aria-labelledby" => "quickNavDropdown" }
       // Electricity Section
       - if @community.show_electricity_section?
         %li= nav_link "Electricity", "#electricity", parent_section: true
