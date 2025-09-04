@@ -1,110 +1,100 @@
 - content_for :title, "Community - #{@community.name}"
+/ --- Tool Bar
+.sticky-top.bg-light.p-1
+  .row.align-items-center
+    .col.d-flex.align-items-center.text-truncate.align-middle.gap-2
+      %i.bi.bi-geo-alt-fill.text-primary.fs-4
+      %span.fw-bold.fs-3.text-truncate= @community.name
+      %span.text-muted.align-middle &bull;
+      %span.fw-semibold.text-secondary.text-truncate= @borough.name
+      - if @community.grid.present?
+        %span.text-muted.align-middle &bull;
+        = link_to @community.grid.name, grid_path(@community.grid), class: "text-info text-truncate"
 
-.container-fluid.p-1.mt-n1.mt-sm-n1
-  .sticky-top.py-1{ style: "z-index:1030; background: var(--bs-body-bg);" }
-    .row.align-items-center.gx-3
-      / LEFT: title (shrinks; ellipsis)
-      .col.text-truncate
-        %i.bi.bi-geo-alt-fill.text-primary.fs-4.me-1
-        %span.fw-bold.fs-2.fs-md-4.text-truncate{ style: "max-width:100%;" }= @community.name
-        %span.text-muted.mx-2 •
-        %span.fw-semibold.text-secondary.text-truncate{ style: "max-width:30ch;" }= @borough.name
-        %span.fw-semibold.text-secondary.mt-2
-          = @borough.name
-          - if @community.grid.present?
-            %span.text-muted.fs-4.mx-2 &bull;
-            = link_to @community.grid.name, grid_path(@community.grid), class: "text-info"
+    .col-auto
+      .d-flex.align-items-center.flex-nowrap
+        = render "dropdown", communities: @communities, current_community: @community
+        = render "communities/sections/quick_nav", community: @community
 
-      / RIGHT: two dropdowns, side-by-side, never wrap
-      .col-auto
-        .d-flex.align-items-center.gap-2.flex-nowrap.flex-shrink-0
-          = render "dropdown", communities: @communities, current_community: @community
-          -# %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Community Summary
-          = render 'communities/sections/quick_nav', community: @community
-
-  .row.g-3
-    / LEFT: map (sticky)
-    .col-md-5
-      .py-1.d-flex.flex-column{ style: "position: sticky; top: 55px; height: calc(100vh - 55px);" }
-        .flex-grow-1.d-flex.flex-column#mapbox-area{
-          data: mapbox_api_data({
-            maps_map_center_value: [@community.longitude, @community.latitude],
-            maps_markers_value: [[@community.longitude, @community.latitude]],
-            maps_marker_tooltip_title_value: @community.name
-          })
-        }
-          / --- Map fills the column
-          .d-flex.gap-2.mb-2.align-items-center
-            / --- Floating map controls (top-right, inside map) ---
-            .position-absolute.top-0.end-0.p-4{ style: "z-index:5; pointer-events:none;" }
-              .btn-group.shadow-sm{ style: "pointer-events:auto;" }
-                %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                  title: "Zoom to #{@community.name}",
-                  data: {
-                    action: "click->maps#showMarker",
-                    "maps-lng-param": @community.longitude,
-                    "maps-lat-param": @community.latitude,
-                    "maps-title-param": @community.name
-                  }
-                } 
-                  %i.bi.bi-geo-alt 
-                %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                  title: "Show House District",
-                  data: {
-                    action: "click->maps#selectLayer",
-                    url: house_districts_community_maps_path(@community, format: :json),
-                    color: "#088",
-                    outline_color: "#05505e"
-                  }
-                } 
-                  %i.bi.bi-house-fill.me-1
-                  House District
-                %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                  title: "Show Senate District",
-                  data: {
-                    action: "click->maps#selectLayer",
-                    url: senate_districts_community_maps_path(@community, format: :json),
-                    color: "#e67e22",
-                    outline_color: "#a84300"
-                  }
-                } 
-                  %i.bi.bi-bank.me-1
-                  Senate District
-                %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                  title: "Reset view",
-                  data: { action: "click->maps#resetView" }
+.row
+  / --- LEFT: Map
+  .col-md-5
+    .d-flex.flex-column{ style: "position: sticky; top: 48px; height: calc(99vh - 48px);" }
+      .flex-grow-1.d-flex.flex-column#mapbox-area{
+        data: mapbox_api_data({
+          maps_map_center_value: [@community.longitude, @community.latitude],
+          maps_markers_value: [[@community.longitude, @community.latitude]],
+          maps_marker_tooltip_title_value: @community.name
+        })
+      }
+        .d-flex.align-items-center
+          / --- Floating map controls (top-right, inside map) ---
+          .position-absolute.top-0.end-0.p-4{ style: "z-index:5; pointer-events:none;" }
+            .btn-group.shadow-sm{ style: "pointer-events:auto;" }
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Zoom to #{@community.name}",
+                data: {
+                  action: "click->maps#showMarker",
+                  "maps-lng-param": @community.longitude,
+                  "maps-lat-param": @community.latitude,
+                  "maps-title-param": @community.name
                 }
-                  %i.bi.bi-arrow-counterclockwise
+              } 
+                %i.bi.bi-geo-alt 
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Show House District",
+                data: {
+                  action: "click->maps#selectLayer",
+                  url: house_districts_community_maps_path(@community, format: :json),
+                  color: "#088",
+                  outline_color: "#05505e"
+                }
+              } 
+                %i.bi.bi-house-fill.me-1
+                House District
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Show Senate District",
+                data: {
+                  action: "click->maps#selectLayer",
+                  url: senate_districts_community_maps_path(@community, format: :json),
+                  color: "#e67e22",
+                  outline_color: "#a84300"
+                }
+              } 
+                %i.bi.bi-bank.me-1
+                Senate District
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Reset view",
+                data: { action: "click->maps#resetView" }
+              }
+                %i.bi.bi-arrow-counterclockwise
 
-          / --- Map fills the remaining height below the toolbar
-          .flex-grow-1.position-relative
-            %div{ data: { maps_target: "map" }, style: "position:absolute; inset:0; width:100%; height:100%;" }
+        / --- Map fills the remaining height below the toolbar
+        .flex-grow-1.position-relative
+          %div{ data: { maps_target: "map" }, style: "position:absolute; inset:0; width:100%; height:100%;" }
 
-    / RIGHT: main content 
-    .col-md-7
-      .text-center.my-3
+  / RIGHT: main content 
+  .col-md-7
+    .text-center
+    - section_order = []
+    - section_order << 'electricity' if @community.show_electricity_section?
+    - section_order << 'prices' if @community.show_prices_section?
+    - section_order << 'background' if @community.show_background_section?
+    - section_order.each do |section|
+      - section_id = "#{section.parameterize}-section"
 
-      - section_order = []
-      - section_order << 'electricity' if @community.show_electricity_section?
-      - section_order << 'prices' if @community.show_prices_section?
-      - section_order << 'background' if @community.show_background_section?
+      / Anchor offset target (for the quick link buttons to show the header for sections)
+      %div{ id: section.parameterize, class: "anchor-offset" }
 
-      - section_order.each do |section|
-        - section_id = "#{section.parameterize}-section"
-
-        / Anchor offset target
-        %div{ id: section.parameterize, class: "anchor-offset" }
-
-        %button.collapse-btn.border-0.mb-1{ 
-          id: section.parameterize,
-          type: 'button', 
-          data: { bs_toggle: 'collapse', bs_target: "##{section_id}" }, 
-          aria: { expanded: 'true', controls: section_id }
-        }
-          %i.bi.bi-chevron-down.ms-2.arrow-icon
-          %h3.m-0= section.titleize
-
-        .collapse.show.p-1{ id: section_id }
-          = render "communities/sections/#{section}", community: @community 
-        
-        %hr/
+      %button.collapse-btn{ 
+        id: section.parameterize,
+        type: 'button', 
+        data: { bs_toggle: 'collapse', bs_target: "##{section_id}" }, 
+        aria: { expanded: 'true', controls: section_id }
+      }
+        %i.bi.bi-chevron-down.arrow-icon
+        %h3= section.titleize
+      .collapse.show{ id: section_id }
+        = render "communities/sections/#{section}", community: @community 
+      
+      %hr/
