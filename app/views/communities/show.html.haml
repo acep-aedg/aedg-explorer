@@ -1,7 +1,7 @@
 - content_for :title, "Community - #{@community.name}"
 / --- Tool Bar
 .sticky-top.bg-light.p-1
-  .row.align-items-center
+  .row.align-items-center.gx-0
     .col.d-flex.align-items-center.text-truncate.align-middle.gap-2
       %i.bi.bi-geo-alt-fill.text-primary.fs-4
       %span.fw-bold.fs-3.text-truncate= @community.name
@@ -16,7 +16,7 @@
         = render "dropdown", communities: @communities, current_community: @community
         = render "communities/sections/quick_nav", community: @community
 
-.row
+.row.gx-0
   / --- LEFT: Map
   .col-md-5
     .d-flex.flex-column{ style: "position: sticky; top: 48px; height: calc(99vh - 48px);" }
