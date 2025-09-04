@@ -16,4 +16,4 @@
               %br
               .row.justify-content-center
                 .col.col-lg-10
-                  = render partial: "dropdown", locals: { communities: @communities, current_community: nil }
+                  = render "shared/dropdown", collection: @communities, current: nil

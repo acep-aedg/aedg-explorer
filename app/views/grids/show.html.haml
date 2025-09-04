@@ -1,46 +1,71 @@
 - content_for :title, "Grid - #{@grid.name}"
+/ --- Tool Bar
+.sticky-top.bg-light.p-1
+  .row.align-items-center.gx-0
+    .col.d-flex.align-items-center.text-truncate.align-middle.gap-2
+      %i.bi.bi-grid-fill.text-primary.fs-4.ms-2
+      %span.fw-bold.fs-3.text-truncate= @grid.name
 
-.container-fluid.p-3.mt-n3.mt-sm-n5     
-  .row
-    .col-md-3
-      .position-sticky.top-0.py-3
-        .bg-body-secondary.rounded-4.p-4.mb-4.text-center
-          %h5.fw-semibold.mb-3 Select a Grid
-          = render "dropdown", grids: @grids, current_grid: @grid
+    .col-auto
+      .d-flex.align-items-center.flex-nowrap
+        = render "shared/dropdown", collection: @grids, current: @grid
+        = render 'grids/sections/quick_nav', grid: @grid
 
-        .d-grid.gap-2
-          = link_to grids_path, class: 'btn btn-secondary' do 
-            %i.bi.bi-arrow-left
-            Back
+.row.gx-0
+  / LEFT: Map
+  .col-md-5
+    .d-flex.flex-column{ style: "position: sticky; top: 50px; height: calc(100vh - 50px);" }
+      .flex-grow-1.d-flex.flex-column#mapbox-area{
+        data: mapbox_api_data({
+        })
+      }
+        / --- Map fills the column
+        .d-flex.align-items-center
+          / --- Floating map controls (top-right, inside map) ---
+          .position-absolute.top-0.end-0.p-4{ style: "z-index:5; pointer-events:none;" }
+            .btn-group.shadow-sm{ style: "pointer-events:auto;" }
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Show Communities",
+                data: {
+                  action: "click->maps#selectLayer",
+                  url: community_locations_grid_maps_path(@grid, format: :json)
+                }
+              }
+                %i.bi.bi-people-fill.me-1
+                Show Communities
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Reset view",
+                data: { action: "click->maps#resetView" }
+              }
+                %i.bi.bi-arrow-counterclockwise
 
-        .mt-5
-          = render 'grids/sections/quick_nav', grid: @grid
+        / --- Map fills the remaining height below the toolbar
+        .flex-grow-1.position-relative
+          %div{ data: { maps_target: "map" }, style: "position:absolute; inset:0; width:100%; height:100%;" }
 
-    .col-md-9
-      .text-center.my-3
-        %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Grid Summary
+  / RIGHT: main content 
+  .col-md-7
+    .text-center
+    - section_order = []
+    - section_order << 'communities' if @grid.show_communities_section?
+    - section_order << 'electricity' if @grid.show_electricity_section?
 
-        %h1.fw-bold.d-flex.justify-content-center.align-items-center.flex-wrap.gap-2
-          %i.bi.bi-geo-alt-fill.text-primary
-          = @grid.name
+    - section_order.each do |section|
+      - section_id = "#{section.parameterize}-section"
 
-      - section_order = []
-      - section_order << 'communities' if @grid.show_communities_section?
-      - section_order << 'electricity' if @grid.show_electricity_section?
+      / Anchor offset target (for the quick link buttons to show the header for sections)
+      %div{ id: section.parameterize, class: "anchor-offset" }
 
-      - section_order.each do |section|
-        - section_id = "#{section.parameterize}-section"
+      %button.collapse-btn.border-0.mb-1{ 
+        id: section.parameterize,
+        type: 'button', 
+        data: { bs_toggle: 'collapse', bs_target: "##{section_id}" }, 
+        aria: { expanded: 'true', controls: section_id }
+      }
+        %i.bi.bi-chevron-down.ms-2.arrow-icon
+        %h3.m-0= section.titleize
 
-        %button.collapse-btn.border-0.mb-1{ 
-          id: section.parameterize,
-          type: 'button', 
-          data: { bs_toggle: 'collapse', bs_target: "##{section_id}" }, 
-          aria: { expanded: 'true', controls: section_id }
-        }
-          %i.bi.bi-chevron-down.ms-2.arrow-icon
-          %h3.m-0= section.titleize
-
-        .collapse.show.p-1{ id: section_id }
-          = render "grids/sections/#{section}", grid: @grid 
-        
-        %hr
+      .collapse.show.p-1{ id: section_id }
+        = render "grids/sections/#{section}", grid: @grid 
+      
+      %hr
