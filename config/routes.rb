@@ -48,6 +48,11 @@ Rails.application.routes.draw do
           get :production_yearly
         end
       end
+      resources :maps, only: [], controller: 'grids/maps', defaults: { format: :json } do
+        collection do
+          get :community_locations
+        end
+      end
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

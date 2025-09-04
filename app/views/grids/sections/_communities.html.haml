@@ -1,5 +1,12 @@
 - cols = @grid.communities.in_groups(4, false)
- 
+%div{
+  data: {
+    controller: "maps-bridge",
+    "maps-bridge-default-layer-url-value": community_locations_grid_maps_path(@grid, format: :json)
+  }
+}
+  #communities.anchor-offset{ data: { "maps-bridge-target": "trigger" } }
+
 .container.mb-3.my-5.mx-3.mx-md-5.mt-3
   .row.g-3
     %p

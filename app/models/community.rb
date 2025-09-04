@@ -34,6 +34,7 @@ class Community < ApplicationRecord
   validates :location, presence: true, allowed_geometry_types: ['Point']
 
   default_scope { order(name: :asc) }
+  scope :with_location, -> { where.not(location: nil) }
 
   def grid
     community_grids.find_by(termination_year: 9999)&.grid

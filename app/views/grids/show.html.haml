@@ -29,6 +29,15 @@
             .position-absolute.top-0.end-0.p-4{ style: "z-index:5; pointer-events:none;" }
               .btn-group.shadow-sm{ style: "pointer-events:auto;" }
                 %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                  title: "Show Communities",
+                  data: {
+                    action: "click->maps#selectLayer",
+                    url: community_locations_grid_maps_path(@grid, format: :json)
+                  }
+                }
+                  %i.bi.bi-people-fill.me-1
+                  Show Communities
+                %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
                   title: "Reset view",
                   data: { action: "click->maps#resetView" }
                 }
