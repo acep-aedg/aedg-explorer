@@ -255,6 +255,10 @@ GEM
     rake (13.2.1)
     rdoc (6.13.1)
       psych (>= 4.0.0)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
+    redis-client (0.25.2)
+      connection_pool
     regexp_parser (2.10.0)
     reline (0.6.1)
       io-console (~> 0.5)
@@ -358,6 +362,7 @@ DEPENDENCIES
   brakeman (~> 7.1)
   capybara
   chartkick
+  connection_pool (~> 2.4)
   cssbundling-rails
   csv
   debug
@@ -374,6 +379,7 @@ DEPENDENCIES
   pg_search (~> 2.3)
   puma (>= 5.0)
   rails (~> 8.0.0)
+  redis (~> 5.0)
   rgeo
   rgeo-geojson
   rubocop
