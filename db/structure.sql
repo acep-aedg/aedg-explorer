@@ -1038,6 +1038,40 @@ ALTER SEQUENCE public.senate_districts_id_seq OWNED BY public.senate_districts.i
 
 
 --
+-- Name: service_areas; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.service_areas (
+    id bigint NOT NULL,
+    cpcn_id integer NOT NULL,
+    name character varying,
+    certificate_url character varying,
+    boundary public.geometry,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: service_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.service_areas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: service_areas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.service_areas_id_seq OWNED BY public.service_areas.id;
+
+
+--
 -- Name: taggings; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1363,6 +1397,13 @@ ALTER TABLE ONLY public.senate_districts ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- Name: service_areas id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_areas ALTER COLUMN id SET DEFAULT nextval('public.service_areas_id_seq'::regclass);
+
+
+--
 -- Name: taggings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1612,6 +1653,14 @@ ALTER TABLE ONLY public.school_districts
 
 ALTER TABLE ONLY public.senate_districts
     ADD CONSTRAINT senate_districts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: service_areas service_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_areas
+    ADD CONSTRAINT service_areas_pkey PRIMARY KEY (id);
 
 
 --
@@ -1892,6 +1941,13 @@ CREATE UNIQUE INDEX index_senate_districts_on_district ON public.senate_district
 
 
 --
+-- Name: index_service_areas_on_cpcn_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_service_areas_on_cpcn_id ON public.service_areas USING btree (cpcn_id);
+
+
+--
 -- Name: index_taggings_on_context; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2162,6 +2218,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250909214449'),
 ('20250821174649'),
 ('20250725001258'),
 ('20250707215602'),
