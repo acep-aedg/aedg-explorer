@@ -19,6 +19,7 @@ namespace :import do
     Rake::Task['import:school_districts'].invoke
     Rake::Task['import:communities'].invoke
     Rake::Task['import:community_grids'].invoke
+    Rake::Task['import:service_areas'].invoke
     Rake::Task['import:populations'].invoke
     Rake::Task['import:transportation'].invoke
     Rake::Task['import:yearly_generations'].invoke
@@ -108,6 +109,57 @@ namespace :import do
   task communities: :environment do
     filepath = Rails.root.join('db/imports/communities.geojson')
     ImportHelpers.import_geojson(filepath, Community)
+  end
+
+  desc 'Import Service Areas Data from .geojson file'
+  task service_areas: :environment do
+    if ServiceArea.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Service Area table was not empty before starting import!
+        To clear it and all realted tables, run:
+
+            rails delete:service_areas
+
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/service_areas.geojson')
+    ImportHelpers.import_geojson(filepath, ServiceArea)
+  end
+
+  desc 'Import Service Area Geoms Data from .geojson file'
+  task service_area_geoms: :environment do
+    if ServiceAreaGeom.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Service Area Geom table was not empty before starting import!
+        To clear it and all realted tables, run:
+
+            rails delete:service_area_geoms
+
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/service_area_geoms.geojson')
+    ImportHelpers.import_geojson(filepath, ServiceAreaGeom)
+  end
+
+  desc 'Import Communities Service Area Geoms Data from .csv file'
+  task communities_service_area_geoms: :environment do
+    if CommunitiesServiceAreaGeom.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Communities Service Area Geom table was not empty before starting import!
+        To clear it and all realted tables, run:
+
+            rails delete:service_area_geoms
+
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/communities_service_area_geoms.csv')
+    ImportHelpers.import_csv(filepath, CommunitiesServiceAreaGeom)
   end
 
   desc 'Import Community Grid Data from .csv file'
