@@ -1,57 +1,45 @@
-#quick-nav.m-3
-  .border-bottom.pb-1
-    %h6.text-muted.fw-semibold On This Page
-  .row.row-cols-1.row-cols-sm-3.row-cols-md-1.g-2
-    .col
-      %ul.nav.flex-column
-        - if @community.show_electricity_section?
-          %li.nav-item.mt-3.text-uppercase.text-muted.small
-            = nav_link "Electricity", "#electricity", parent_section: true
-        - if @community.show_utilities? 
-          %li.nav-item
-            = nav_link "Utilities", "#utilities"
-        - if @community.show_operators?  
-          %li.nav-item
-            = nav_link "Operators", "#operators"
-        - if @community.show_rates?    
-          %li.nav-item
-            = nav_link "Rates", "#rates"
-        - if @community.show_production?
-          %li.nav-item
-            = nav_link "Production", "#production"
-        - if @community.show_capacity?
-          %li.nav-item
-            = nav_link "Capacity", "#capacity"
-        - if @community.show_sales_revenue_customers?
-          %li.nav-item
-            = nav_link "Sales, Revenue & Customers", "#sales-revenue-customers"
-    .col
-      %ul.nav.flex-column
-        - if @community.show_prices_section?
-          %li.nav-item.mt-3.text-uppercase.text-muted.small
-            = nav_link "Prices", "#prices", parent_section: true
-        - if @community.show_fuel_prices?
-          %li.nav-item
-            = nav_link "Fuel Prices", "#fuel-prices"
-    .col
-      %ul.nav.flex-column{ data: { turbo: false } }
-        - if @community.show_background_section?
-          %li.nav-item.mt-3.text-uppercase.text-muted.small
-            = nav_link "Background", "#background", parent_section: true
-        %li.nav-item
-          = nav_link "Geography", "#geography"
-        - if @community.show_transportation?
-          %li.nav-item
-            = nav_link "Transportation", "#transportation"
-        - if @community.show_legislative_districts?
-          %li.nav-item
-            = nav_link "Legislative Districts", "#legislative-districts"
-        - if @community.show_school_districts?
-          %li.nav-item
-            = nav_link "School Districts", "#school-districts"
-        - if @community.show_population? 
-          %li.nav-item
-            = nav_link "Population", "#population"
-        - if @community.show_climate? 
-          %li.nav-item
-            = nav_link "Climate", "#climate"
+#quick-nav.m-1
+  .dropdown
+    %button.btn.btn-outline-secondary.dropdown-toggle.w-100{
+      type: "button",
+      id: "quickNavDropdown",
+      "data-bs-toggle" => "dropdown",
+      "aria-expanded" => "false"
+    }
+      Select Section
+    %ul.dropdown-menu{ "aria-labelledby" => "quickNavDropdown" }
+      // Electricity Section
+      - if @community.show_electricity_section?
+        %li= nav_link "Electricity", "#electricity", parent_section: true
+      - if @community.show_utilities?
+        %li= nav_link "Utilities", "#utilities"
+      - if @community.show_operators?
+        %li= nav_link "Operators", "#operators"
+      - if @community.show_rates?
+        %li= nav_link "Rates", "#rates"
+      - if @community.show_production?
+        %li= nav_link "Production", "#production"
+      - if @community.show_capacity?
+        %li= nav_link "Capacity", "#capacity"
+      - if @community.show_sales_revenue_customers?
+        %li= nav_link "Sales, Revenue & Customers", "#sales-revenue-customers"
+      // Prices Section
+      - if @community.show_prices_section?
+        %li= nav_link "Prices", "#prices", parent_section: true
+      - if @community.show_fuel_prices?
+        %li= nav_link "Fuel Prices", "#fuel-prices"
+      // Background Section
+      - if @community.show_background_section?
+        %li= nav_link "Background", "#background", parent_section: true
+      - if @community.show_geography?
+        %li= nav_link "Geography", "#geography"
+      - if @community.show_transportation?
+        %li= nav_link "Transportation", "#transportation"
+      - if @community.show_legislative_districts?
+        %li= nav_link "Legislative Districts", "#legislative-districts"
+      - if @community.show_school_districts?
+        %li= nav_link "School Districts", "#school-districts"
+      - if @community.show_population?
+        %li= nav_link "Population", "#population"
+      - if @community.show_climate?
+        %li= nav_link "Climate", "#climate"

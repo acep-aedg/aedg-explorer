@@ -7,14 +7,14 @@ import { application } from "./application"
 import ChartController from "./chart_controller"
 application.register("chart", ChartController)
 
-import CommunityDropdownController from "./community_dropdown_controller"
-application.register("community-dropdown", CommunityDropdownController)
-
 import CopyController from "./copy_controller"
 application.register("copy", CopyController)
 
 import DatatablesController from "./datatables_controller"
 application.register("datatables", DatatablesController)
+
+import DropdownController from "./dropdown_controller"
+application.register("dropdown", DropdownController)
 
 import FuelChartController from "./fuel_chart_controller"
 application.register("fuel-chart", FuelChartController)
@@ -27,3 +27,6 @@ application.register("maps", MapsController)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
+
+import MapsBridgeController from "./maps_bridge_controller"
+application.register("maps-bridge", MapsBridgeController)

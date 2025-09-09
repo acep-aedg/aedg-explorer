@@ -1,64 +1,71 @@
-/ Title & Overview
-.d-flex.align-items-center.mb-3
-  %i.bi.bi-map.me-2.fs-4
-  %h4#legislative-districts.mb-0.me-3.py-3 Legislative Districts
-  %hr.flex-grow-1.mt-1.mb-0
+/ ── Legislative block (maps-bridge wraps everything inside)
+%div{
+  data: {
+    controller: "maps-bridge",
+    "maps-bridge-default-layer-url-value": house_districts_community_maps_path(@community, format: :json),
+    "maps-bridge-default-color-value": "#088",
+    "maps-bridge-default-outline-color-value": "#05505e"
+  }
+}
+  .d-flex.align-items-center.mb-3
+    %i.bi.bi-map.me-2.fs-4
+    %h4#legislative-districts.mb-0.me-3.py-3.anchor-offset{ data: { "maps-bridge-target": "trigger" } } Legislative Districts
+    %hr.flex-grow-1.mt-1.mb-0
 
-= render "communities/sections/background/legislative_districts/district_overview"
+  = render "communities/sections/background/legislative_districts/district_overview"
 
-/ Two-Column Layout: Map Left, Tabs Right
-.row.g-4.mt-4
-  / Left Column: Map
-  .col-12.col-xl-6
-    - if @community.show_legislative_districts?
-      #districtsMapWrapper.tab-pane.fade.show.active{
-        data: mapbox_api_data({
-          maps_map_center_value: [@community.longitude, @community.latitude],
-          maps_default_layer_url_value: house_districts_community_maps_path(@community, format: :json)
-        })
+
+  / Map Layers header + caption
+  %h5.fw-semibold.mb-1 Choose Districts to Display on Map
+
+  / Map layer buttons (wrap on small screens)
+  .d-flex.flex-wrap.gap-2.mb-2
+    %button.btn.btn-outline-secondary.btn-sm.d-inline-flex.align-items-center.gap-1{
+      data: {
+        action: "click->maps#selectLayer",
+        layer_url: house_districts_community_maps_path(@community, format: :json),
+        color: "#088",
+        outline_color: "#05505e",
+        clear: true
       }
-        %h5.fw-semibold.text-muted.mb-3 Legislative Districts Map
-        .d-flex.gap-2.mb-3.align-items-center
-          - if @community.show_house_districts?
-            %button.btn.btn-outline-primary.active{
-              data: {
-                action: "click->maps#selectLayer",
-                url: house_districts_community_maps_path(@community, format: :json),
-                color: "#088",
-                outline_color: "#05505e"
-              }
-            } House Districts
-          - if @community.show_senate_districts?
-            %button.btn.btn-outline-primary{
-              data: {
-                action: "click->maps#selectLayer",
-                url: senate_districts_community_maps_path(@community, format: :json),
-                color: "#e67e22",
-                outline_color: "#a84300"
-              }
-            } Senate Districts
+    }
+      %i.bi.bi-house-fill
+      %span.text-nowrap House Districts Map
 
-        .map.rounded{ data: { maps_target: "map" } }
+    %button.btn.btn-outline-secondary.btn-sm.d-inline-flex.align-items-center.gap-1{
+      data: {
+        action: "click->maps#selectLayer",
+        layer_url: senate_districts_community_maps_path(@community, format: :json),
+        color: "#e67e22",
+        outline_color: "#a84300",
+        clear: true
+      }
+    }
+      %i.bi.bi-bank
+      %span.text-nowrap Senate Districts Map
 
-  / Right Column: Tabs + Data
-  .col-12.col-xl-6
-    .nav.nav-tabs.mb-2
-      - if @community.show_house_districts?  
-        %li.nav-item 
-          = link_to "#HouseDistrictData", class: "nav-link active", data: { bs_toggle: "tab" } do
-            %i.bi.bi-table.me-1
-            House District Data
-      - if @community.show_senate_districts? 
-        %li.nav-item 
-          = link_to "#SenateDistrictData", class: "nav-link", data: { bs_toggle: "tab" } do
-            %i.bi.bi-table.me-1
-            Senate District Data
+  / Datatable Tabs
+  %br
+  %ul.nav.nav-tabs.mb-2(role="tablist")
+    - if @community.show_house_districts?
+      %li.nav-item
+        = link_to "#HouseDistrictData",
+          class: "nav-link active d-inline-flex align-items-center gap-1",
+          data: { bs_toggle: "tab" }, role: "tab" do
+          %i.bi.bi-table
+          House District Data
+    - if @community.show_senate_districts?
+      %li.nav-item
+        = link_to "#SenateDistrictData",
+          class: "nav-link d-inline-flex align-items-center gap-1",
+          data: { bs_toggle: "tab" }, role: "tab" do
+          %i.bi.bi-table
+          Senate District Data
 
-    .tab-content
-      - if @community.show_house_districts? 
-        #HouseDistrictData.tab-pane.fade.show.active
-          = render "communities/sections/background/legislative_districts/house_district_data"
-
-      - if @community.show_senate_districts? 
-        #SenateDistrictData.tab-pane.fade
-          = render "communities/sections/background/legislative_districts/senate_district_data"
+  .tab-content
+    - if @community.show_house_districts?
+      #HouseDistrictData.tab-pane.fade.show.active(role="tabpanel")
+        = render "communities/sections/background/legislative_districts/house_district_data"
+    - if @community.show_senate_districts?
+      #SenateDistrictData.tab-pane.fade(role="tabpanel")
+        = render "communities/sections/background/legislative_districts/senate_district_data"

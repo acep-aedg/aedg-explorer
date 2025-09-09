@@ -1,0 +1,27 @@
+.bg-body-secondary.p-3.rounded.mb-3.d-flex.flex-wrap.justify-content-center.gap-4
+  .d-flex.align-items-center
+    %i.bi-bar-chart-line-fill.me-2
+    %strong.me-1 Total:
+    %span.text-primary= "#{stats[:total_capacity]} MW"
+
+  .d-flex.align-items-center
+    %i.bi-bullseye.me-2
+    %strong.me-1 Average:
+    %span.text-secondary= "#{stats[:average_capacity]} MW" 
+
+  .d-flex.align-items-center
+    %i.bi-arrow-up-right-circle.me-2
+    %strong.me-1 Max:
+    %span.text-success.me-1= "#{stats[:max_capacity]} MW"
+    %small.text-muted= "(#{stats[:max_fuel_type]})"
+
+  .d-flex.align-items-center
+    %i.bi-arrow-down-right-circle.me-2
+    %strong.me-1 Min:
+    %span.text-danger.me-1= "#{stats[:min_capacity]} MW"
+    %small.text-muted= "(#{stats[:min_fuel_type]})"
+
+  .d-flex.align-items-center
+    %i.bi-calendar.me-2
+    %strong.me-1 Year:
+    %span.text-muted= stats[:year]

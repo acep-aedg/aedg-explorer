@@ -1,0 +1,22 @@
+.my-5.mx-3.mx-md-5.mt-3{
+  data: {
+    controller: "maps-bridge",
+    "maps-bridge-default-layer-url-value": community_locations_grid_maps_path(@grid, format: :json)
+  }
+}
+  #communities.anchor-offset{ data: { "maps-bridge-target": "trigger" } }
+
+  .row.g-3
+    .col-12
+      %p.mb-3
+        The
+        %strong= @grid.name
+        = " serves #{pluralize(@grid.communities.size, 'community')}:"
+
+  / Responsive columns: 1 / 2 / 3 / 4 per row
+  .row.row-cols-1.row-cols-sm-2.row-cols-md-3.row-cols-lg-4.g-3
+    - @grid.communities.each do |c|
+      .col
+        %a.list-group-item.text-truncate.text-primary{
+          href: community_path(c),style: "max-width:100%;"
+        }= c.name

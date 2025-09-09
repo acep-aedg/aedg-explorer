@@ -1,57 +1,100 @@
 - content_for :title, "Community - #{@community.name}"
+/ --- Tool Bar
+.sticky-top.bg-light.p-1
+  .row.align-items-center.gx-0
+    .col.d-flex.align-items-center.text-truncate.align-middle.gap-2
+      %i.bi.bi-geo-alt-fill.text-primary.fs-4.ms-2
+      %span.fw-bold.fs-3.text-truncate= @community.name
+      %span.text-muted.align-middle &bull;
+      %span.fw-semibold.text-secondary.text-truncate= @borough.name
+      - if @community.grid.present?
+        %span.text-muted.align-middle &bull;
+        = link_to @community.grid.name, grid_path(@community.grid), class: "text-info text-truncate"
 
-.container-fluid.p-3.mt-n3.mt-sm-n5     
-  .row
-    .col-md-3
-      .position-sticky.top-0.py-3
-        .bg-body-secondary.rounded-4.p-4.mb-4.text-center
-          %h5.fw-semibold.mb-3 Select a Community
-          = render "dropdown", communities: @communities, current_community: @community
+    .col-auto
+      .d-flex.align-items-center.flex-nowrap
+        = render "shared/dropdown", collection: @communities, current: @community
+        = render 'communities/sections/quick_nav', community: @community
 
-        .d-grid.gap-2
-          -# TODO: Uncomment when the download/print functionality is implemented
-          -# %button.btn.btn-aedg-primary.px-4.py-2 
-          -#   %i.bi.bi-file-earmark-arrow-down.me-1
-          -#   Download Summary
+.row.gx-0
+  / --- LEFT: Map
+  .col-md-5
+    .d-flex.flex-column{ style: "position: sticky; top: 50px; height: calc(100vh - 50px);" }
+      .flex-grow-1.d-flex.flex-column#mapbox-area{
+        data: mapbox_api_data({
+          maps_map_center_value: [@community.longitude, @community.latitude],
+          maps_markers_value: [[@community.longitude, @community.latitude]],
+          maps_marker_tooltip_title_value: @community.name
+        })
+      }
+        .d-flex.align-items-center
+          / --- Floating map controls (top-right, inside map) ---
+          .position-absolute.top-0.end-0.p-4{ style: "z-index:5; pointer-events:none;" }
+            .btn-group.shadow-sm{ style: "pointer-events:auto;" }
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Zoom to #{@community.name}",
+                data: {
+                  action: "click->maps#showMarker",
+                  "maps-lng-param": @community.longitude,
+                  "maps-lat-param": @community.latitude,
+                  "maps-title-param": @community.name
+                }
+              } 
+                %i.bi.bi-geo-alt 
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Show House District",
+                data: {
+                  action: "click->maps#selectLayer",
+                  url: house_districts_community_maps_path(@community, format: :json),
+                  color: "#088",
+                  outline_color: "#05505e"
+                }
+              } 
+                %i.bi.bi-house-fill.me-1
+                House District
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Show Senate District",
+                data: {
+                  action: "click->maps#selectLayer",
+                  url: senate_districts_community_maps_path(@community, format: :json),
+                  color: "#e67e22",
+                  outline_color: "#a84300"
+                }
+              } 
+                %i.bi.bi-bank.me-1
+                Senate District
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Reset view",
+                data: { action: "click->maps#resetView" }
+              }
+                %i.bi.bi-arrow-counterclockwise
 
-          = link_to communities_path, class: 'btn btn-secondary' do 
-            %i.bi.bi-arrow-left
-            Back
-        .mt-5
-          = render 'communities/sections/quick_nav', community: @community
+        / --- Map fills the remaining height below the toolbar
+        .flex-grow-1.position-relative
+          %div{ data: { maps_target: "map" }, style: "position:absolute; inset:0; width:100%; height:100%;" }
 
-    .col-md-9
-      .text-center.my-3
-        %p.text-muted.fw-medium.mb-1.fs-6.text-uppercase Community Summary
+  / RIGHT: main content 
+  .col-md-7
+    .text-center
+    - section_order = []
+    - section_order << 'electricity' if @community.show_electricity_section?
+    - section_order << 'prices' if @community.show_prices_section?
+    - section_order << 'background' if @community.show_background_section?
+    - section_order.each do |section|
+      - section_id = "#{section.parameterize}-section"
 
-        %h1.fw-bold.d-flex.justify-content-center.align-items-center.flex-wrap.gap-2
-          %i.bi.bi-geo-alt-fill.text-primary
-          = @community.name
+      / Anchor offset target (for the quick link buttons to show the header for sections)
+      %div{ id: section.parameterize, class: "anchor-offset" }
 
-        %h4.fw-semibold.text-secondary.mt-2
-          = @borough.name
-          - if @community.grid.present?
-            %span.text-muted.fs-4.mx-2 &bull;
-            %span.text-info= @community.grid.name
-
-      - section_order = []
-      - section_order << 'electricity' if @community.show_electricity_section?
-      - section_order << 'prices' if @community.show_prices_section?
-      - section_order << 'background' if @community.show_background_section?
-
-      - section_order.each do |section|
-        - section_id = "#{section.parameterize}-section"
-
-        %button.collapse-btn.border-0.mb-1{ 
-          id: section.parameterize,
-          type: 'button', 
-          data: { bs_toggle: 'collapse', bs_target: "##{section_id}" }, 
-          aria: { expanded: 'true', controls: section_id }
-        }
-          %i.bi.bi-chevron-down.ms-2.arrow-icon
-          %h3.m-0= section.titleize
-
-        .collapse.show.p-1{ id: section_id }
-          = render "communities/sections/#{section}", community: @community 
-        
-        %hr/
+      %button.collapse-btn{ 
+        id: section.parameterize,
+        type: 'button', 
+        data: { bs_toggle: 'collapse', bs_target: "##{section_id}" }, 
+        aria: { expanded: 'true', controls: section_id }
+      }
+        %i.bi.bi-chevron-down.arrow-icon
+        %h3= section.titleize
+      .collapse.show{ id: section_id }
+        = render "communities/sections/#{section}", community: @community 
+      
+      %hr
