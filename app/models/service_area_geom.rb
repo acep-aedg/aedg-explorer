@@ -5,4 +5,5 @@ class ServiceAreaGeom < ApplicationRecord
   validates :service_area_cpcn_id, presence: true
 
   belongs_to :service_area, primary_key: :cpcn_id, foreign_key: :service_area_cpcn_id, inverse_of: :service_area_geoms
+  has_many :communities_service_area_geoms, foreign_key: :service_area_aedg_geom_id, primary_key: :aedg_geom_id, inverse_of: :service_area_geom, dependent: :destroy
 end

@@ -358,6 +358,38 @@ ALTER SEQUENCE public.communities_senate_districts_id_seq OWNED BY public.commun
 
 
 --
+-- Name: communities_service_area_geoms; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.communities_service_area_geoms (
+    id bigint NOT NULL,
+    community_fips_code character varying NOT NULL,
+    service_area_aedg_geom_id character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: communities_service_area_geoms_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.communities_service_area_geoms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: communities_service_area_geoms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.communities_service_area_geoms_id_seq OWNED BY public.communities_service_area_geoms.id;
+
+
+--
 -- Name: community_grids; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1304,6 +1336,13 @@ ALTER TABLE ONLY public.communities_senate_districts ALTER COLUMN id SET DEFAULT
 
 
 --
+-- Name: communities_service_area_geoms id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_service_area_geoms ALTER COLUMN id SET DEFAULT nextval('public.communities_service_area_geoms_id_seq'::regclass);
+
+
+--
 -- Name: community_grids id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1541,6 +1580,14 @@ ALTER TABLE ONLY public.communities_school_districts
 
 ALTER TABLE ONLY public.communities_senate_districts
     ADD CONSTRAINT communities_senate_districts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: communities_service_area_geoms communities_service_area_geoms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_service_area_geoms
+    ADD CONSTRAINT communities_service_area_geoms_pkey PRIMARY KEY (id);
 
 
 --
@@ -1989,6 +2036,13 @@ CREATE UNIQUE INDEX index_senate_districts_on_district ON public.senate_district
 
 
 --
+-- Name: index_service_area_geoms_on_aedg_geom_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_service_area_geoms_on_aedg_geom_id ON public.service_area_geoms USING btree (aedg_geom_id);
+
+
+--
 -- Name: index_service_area_geoms_on_service_area_cpcn_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2120,6 +2174,14 @@ CREATE INDEX taggings_taggable_context_idx ON public.taggings USING btree (tagga
 
 ALTER TABLE ONLY public.communities
     ADD CONSTRAINT fk_rails_01284b70f6 FOREIGN KEY (borough_fips_code) REFERENCES public.boroughs(fips_code);
+
+
+--
+-- Name: communities_service_area_geoms fk_rails_1a9ad2528d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_service_area_geoms
+    ADD CONSTRAINT fk_rails_1a9ad2528d FOREIGN KEY (service_area_aedg_geom_id) REFERENCES public.service_area_geoms(aedg_geom_id);
 
 
 --
@@ -2259,6 +2321,14 @@ ALTER TABLE ONLY public.reporting_entities
 
 
 --
+-- Name: communities_service_area_geoms fk_rails_c737a4bd21; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_service_area_geoms
+    ADD CONSTRAINT fk_rails_c737a4bd21 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
+
+
+--
 -- Name: communities fk_rails_d9078d9620; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2281,6 +2351,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250911181035'),
 ('20250911173625'),
 ('20250909214449'),
 ('20250821174649'),

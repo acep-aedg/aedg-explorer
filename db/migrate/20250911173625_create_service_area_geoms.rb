@@ -10,5 +10,6 @@ class CreateServiceAreaGeoms < ActiveRecord::Migration[8.0]
     add_foreign_key :service_area_geoms, :service_areas, column: :service_area_cpcn_id, primary_key: :cpcn_id
 
     add_index :service_area_geoms, :service_area_cpcn_id
+    add_index :service_area_geoms, :aedg_geom_id, unique: true
   end
 end
