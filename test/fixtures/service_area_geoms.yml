@@ -5,9 +5,9 @@
 # below each fixture, per the syntax in the comments below
 #
 one:
-  aedg_geom_id: '1_1'
+  aedg_id: '1_1'
   service_area_cpcn_id: 1
 
 two:
-  aedg_geom_id: '2_1'
+  aedg_id: '2_1'
   service_area_cpcn_id: 1

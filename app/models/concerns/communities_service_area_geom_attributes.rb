@@ -18,7 +18,7 @@ module CommunitiesServiceAreaGeomAttributes
     def assign_aedg_attributes(params)
       assign_attributes(
         community_fips_code: params[:community_fips_code],
-        service_area_aedg_geom_id: params[:service_area_geom_id]
+        service_area_geom_aedg_id: params[:service_area_geom_id]
       )
     end
   end

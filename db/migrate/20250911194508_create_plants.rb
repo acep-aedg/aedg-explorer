@@ -21,6 +21,6 @@ class CreatePlants < ActiveRecord::Migration[8.0]
     end
 
     add_foreign_key :plants, :grids
-    add_foreign_key :plants, :service_area_geoms, column: :service_area_geom_aedg_id, primary_key: :aedg_geom_id
+    add_foreign_key :plants, :service_area_geoms, column: :service_area_geom_aedg_id, primary_key: :aedg_id
   end
 end

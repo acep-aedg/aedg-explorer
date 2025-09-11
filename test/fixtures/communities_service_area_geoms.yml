@@ -6,8 +6,8 @@
 #
 one:
   community_fips_code: '0000001'
-  service_area_aedg_geom_id: '1_1'
+  service_area_geom_aedg_id: '1_1'
 #
 two:
   community_fips_code: '0000002'
-  service_area_aedg_geom_id: '2_1'
+  service_area_geom_aedg_id: '2_1'

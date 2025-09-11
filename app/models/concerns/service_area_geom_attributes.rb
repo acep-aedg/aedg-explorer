@@ -16,7 +16,7 @@ module ServiceAreaGeomAttributes
   included do
     def assign_aedg_attributes(params)
       assign_attributes(
-        aedg_geom_id: params[:id],
+        aedg_id: params[:id],
         service_area_cpcn_id: params[:service_area_entity_id],
         boundary: params[:boundary]
       )

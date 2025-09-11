@@ -4,7 +4,7 @@ class Plant < ApplicationRecord
   validates :name, presence: true
   validates :location, allowed_geometry_types: %w[Point], allow_nil: true
   belongs_to :grid, optional: true
-  belongs_to :service_area_geom, primary_key: :aedg_geom_id, foreign_key: :service_area_geom_aedg_id, optional: true, inverse_of: :plants
+  belongs_to :service_area_geom, primary_key: :aedg_id, foreign_key: :service_area_geom_aedg_id, optional: true, inverse_of: :plants
   has_one :service_area, through: :service_area_geom
   has_many :communities, through: :service_area_geom
 end

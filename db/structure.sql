@@ -364,7 +364,7 @@ ALTER SEQUENCE public.communities_senate_districts_id_seq OWNED BY public.commun
 CREATE TABLE public.communities_service_area_geoms (
     id bigint NOT NULL,
     community_fips_code character varying NOT NULL,
-    service_area_aedg_geom_id character varying,
+    service_area_geom_aedg_id character varying,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -1121,7 +1121,7 @@ ALTER SEQUENCE public.senate_districts_id_seq OWNED BY public.senate_districts.i
 
 CREATE TABLE public.service_area_geoms (
     id bigint NOT NULL,
-    aedg_geom_id character varying NOT NULL,
+    aedg_id character varying NOT NULL,
     service_area_cpcn_id integer NOT NULL,
     boundary public.geometry,
     created_at timestamp(6) without time zone NOT NULL,
@@ -2097,10 +2097,10 @@ CREATE UNIQUE INDEX index_senate_districts_on_district ON public.senate_district
 
 
 --
--- Name: index_service_area_geoms_on_aedg_geom_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_service_area_geoms_on_aedg_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_service_area_geoms_on_aedg_geom_id ON public.service_area_geoms USING btree (aedg_geom_id);
+CREATE UNIQUE INDEX index_service_area_geoms_on_aedg_id ON public.service_area_geoms USING btree (aedg_id);
 
 
 --
@@ -2238,11 +2238,11 @@ ALTER TABLE ONLY public.communities
 
 
 --
--- Name: communities_service_area_geoms fk_rails_1a9ad2528d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: communities_service_area_geoms fk_rails_20f8ef8e44; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.communities_service_area_geoms
-    ADD CONSTRAINT fk_rails_1a9ad2528d FOREIGN KEY (service_area_aedg_geom_id) REFERENCES public.service_area_geoms(aedg_geom_id);
+    ADD CONSTRAINT fk_rails_20f8ef8e44 FOREIGN KEY (service_area_geom_aedg_id) REFERENCES public.service_area_geoms(aedg_id);
 
 
 --
@@ -2346,7 +2346,7 @@ ALTER TABLE ONLY public.community_grids
 --
 
 ALTER TABLE ONLY public.plants
-    ADD CONSTRAINT fk_rails_8b58e48ec7 FOREIGN KEY (service_area_geom_aedg_id) REFERENCES public.service_area_geoms(aedg_geom_id);
+    ADD CONSTRAINT fk_rails_8b58e48ec7 FOREIGN KEY (service_area_geom_aedg_id) REFERENCES public.service_area_geoms(aedg_id);
 
 
 --
