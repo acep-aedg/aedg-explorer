@@ -769,6 +769,52 @@ ALTER SEQUENCE public.monthly_generations_id_seq OWNED BY public.monthly_generat
 
 
 --
+-- Name: plants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.plants (
+    id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    aea_plant_id integer,
+    eia_plant_id integer,
+    name character varying,
+    aea_operator_id integer,
+    eia_operator_id integer,
+    grid_id integer,
+    service_area_geom_aedg_id character varying,
+    eia_reporting boolean,
+    pce_reporting boolean,
+    combined_heat_power boolean,
+    primary_voltage numeric,
+    primary_voltage2 numeric,
+    phases character varying,
+    status character varying,
+    notes character varying,
+    location public.geometry
+);
+
+
+--
+-- Name: plants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.plants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: plants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.plants_id_seq OWNED BY public.plants.id;
+
+
+--
 -- Name: population_age_sexes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1420,6 +1466,13 @@ ALTER TABLE ONLY public.monthly_generations ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: plants id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plants ALTER COLUMN id SET DEFAULT nextval('public.plants_id_seq'::regclass);
+
+
+--
 -- Name: population_age_sexes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1676,6 +1729,14 @@ ALTER TABLE ONLY public.metadata
 
 ALTER TABLE ONLY public.monthly_generations
     ADD CONSTRAINT monthly_generations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: plants plants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plants
+    ADD CONSTRAINT plants_pkey PRIMARY KEY (id);
 
 
 --
@@ -2241,6 +2302,14 @@ ALTER TABLE ONLY public.electric_rates
 
 
 --
+-- Name: plants fk_rails_49b512915b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plants
+    ADD CONSTRAINT fk_rails_49b512915b FOREIGN KEY (grid_id) REFERENCES public.grids(id);
+
+
+--
 -- Name: community_grids fk_rails_51105f953f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2270,6 +2339,14 @@ ALTER TABLE ONLY public.communities_legislative_districts
 
 ALTER TABLE ONLY public.community_grids
     ADD CONSTRAINT fk_rails_7d3a74461c FOREIGN KEY (grid_id) REFERENCES public.grids(id);
+
+
+--
+-- Name: plants fk_rails_8b58e48ec7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plants
+    ADD CONSTRAINT fk_rails_8b58e48ec7 FOREIGN KEY (service_area_geom_aedg_id) REFERENCES public.service_area_geoms(aedg_geom_id);
 
 
 --
@@ -2351,6 +2428,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250911194508'),
 ('20250911181035'),
 ('20250911173625'),
 ('20250909214449'),

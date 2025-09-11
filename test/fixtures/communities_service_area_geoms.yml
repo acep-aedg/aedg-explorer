@@ -10,4 +10,4 @@ one:
 #
 two:
   community_fips_code: '0000002'
-  service_area_aedg_geom_id: '1_2'
+  service_area_aedg_geom_id: '2_1'
