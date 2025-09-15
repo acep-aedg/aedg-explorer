@@ -53,7 +53,7 @@
                 %li.mb-2
                   %span= d.name
                   - if d.district_type.present?
-                    %span.text-muted.mx-2= "(#{d.district_type})"
+                    %span.text-muted.mx-2= "(#{d.formatted_type})"
                   - unless d.is_active
                     %span.badge.bg-warning.text-dark.ms-2 Inactive
                   - if d.notes&.strip.present?

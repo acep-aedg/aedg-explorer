@@ -16,4 +16,15 @@ class SchoolDistrict < ApplicationRecord
       }
     }
   end
+
+  def formatted_type
+    return "" if district_type.blank?
+
+    # Only fix if it's CamelCase with no spaces
+    if district_type.match?(/\A[A-Z][a-z]+(?:[A-Z][a-z]+)+\z/)
+      district_type.underscore.titleize
+    else
+      district_type
+    end
+  end
 end
