@@ -9,7 +9,7 @@ class Borough < ApplicationRecord
   default_scope { order(name: :asc) }
 
   # Census Areas are apart of the Unorganized Borough
-  def part_of_unorganized?
+  def census_area?
     name&.match?(/\bcensus\b/i)
   end
 end
