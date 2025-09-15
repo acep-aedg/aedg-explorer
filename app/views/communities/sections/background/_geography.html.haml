@@ -35,7 +35,8 @@
       - if @community.grid.present?
         %tr
           %th.pe-3 Grid
-          %td= @community.grid.name.titleize
+          %td= link_to @community.grid.name.titleize, grid_path(@community.grid), class: "text-info"
+          
       %tr
         %th.pe-3 Latitude, Longitude
         %td
