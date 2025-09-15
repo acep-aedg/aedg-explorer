@@ -35,3 +35,18 @@
           = @community.latitude
           ,
           = @community.longitude
+
+      - if @community.show_school_districts?
+        %tr
+          %th.pe-3 School District(s)
+          %td
+            %ul.list-unstyled.mb-0
+              - @community.school_districts.each do |d|
+                %li.mb-2
+                  %span= d.name
+                  - if d.district_type.present?
+                    %span.text-muted.mx-2= "(#{d.district_type})"
+                  - unless d.is_active
+                    %span.badge.bg-warning.text-dark.ms-2 Inactive
+                  - if d.notes&.strip.present?
+                    %div.text-muted.small.mt-1.ms-2= "Notes: #{d.notes}"
