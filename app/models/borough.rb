@@ -7,4 +7,9 @@ class Borough < ApplicationRecord
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
 
   default_scope { order(name: :asc) }
+
+  # Census Areas are apart of the Unorganized Borough
+  def part_of_unorganized?
+    name&.match?(/\bcensus\b/i)
+  end
 end

@@ -5,8 +5,9 @@
     .col.d-flex.align-items-center.text-truncate.align-middle.gap-2
       %i.bi.bi-geo-alt-fill.text-primary.fs-4.ms-2
       %span.fw-bold.fs-3.text-truncate= @community.name
-      %span.text-muted.align-middle &bull;
-      %span.fw-semibold.text-secondary.text-truncate= @borough.name
+      - if @community.borough.present? && !@community.borough.part_of_unorganized?
+        %span.text-muted.align-middle &bull;
+        %span.fw-semibold.text-secondary.text-truncate= @community.borough.name
       - if @community.grid.present?
         %span.text-muted.align-middle &bull;
         = link_to @community.grid.name, grid_path(@community.grid), class: "text-info text-truncate"

@@ -11,10 +11,17 @@
           %th.pe-3 Community
           %td= @community.name
       - if @community.borough.present?
-        %tr
-          %th.pe-3 Borough
-          %td= @community.borough.name
-
+        - if @community.borough.part_of_unorganized?
+          %tr
+            %th.pe-3 Borough
+            %td None (in the Unorganized Borough)
+          %tr
+            %th.pe-3 Census Area
+            %td= @community.borough.name
+        - else
+          %tr
+            %th.pe-3 Borough
+            %td= @community.borough.name
       - if @community.regional_corporation.present?
         %tr
           %th.pe-3 Regional Corporation
