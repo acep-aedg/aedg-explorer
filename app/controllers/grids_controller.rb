@@ -15,6 +15,6 @@ class GridsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_grid
-    @grid = Grid.find(params[:id])
+    @grid = Grid.friendly.find(params[:id])
   end
 end

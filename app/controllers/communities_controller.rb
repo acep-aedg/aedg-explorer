@@ -8,7 +8,6 @@ class CommunitiesController < ApplicationController
 
   # GET /communities/1 or /communities/1.json
   def show
-    @community = Community.find(params[:id])
     @borough = @community.borough
     @communities = Community.all
     @available_price_types = @community.available_price_types
@@ -19,6 +18,6 @@ class CommunitiesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_community
-    @community = Community.find(params[:id])
+    @community = Community.friendly.find(params[:id])
   end
 end
