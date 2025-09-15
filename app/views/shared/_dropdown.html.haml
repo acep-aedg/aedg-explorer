@@ -1,16 +1,14 @@
 -# Locals:
--#   collection: required (e.g., @grids / @communities)
--#   current:    optional  (e.g., @grid / @community)
--#   param:      optional  (e.g., :grid / :community) – can be nil
--#   prompt:     optional  (defaults to "Select a <Model>")
+-#   collection:  required (e.g., @grids / @communities)
+-#   field_name:  optional  (e.g., :grid / :community) – can be nil
+-#   prompt:      optional  (defaults to "Select a <Model>")
 
 - arr      = collection.map { |item| [item.name, url_for(item)] }
-- selected = current.present? ? url_for(current) : ""
-- prompt  ||= "-- Select a #{collection.respond_to?(:klass) ? collection.klass.model_name.human(count: 1) : 'Item'} --"
-- param   ||= collection.respond_to?(:klass) ? collection.klass.model_name.param_key.to_sym : nil
+- prompt  ||= "Select a #{collection.respond_to?(:klass) ? collection.klass.model_name.human(count: 1) : 'Item'}"
+- field_name   ||= collection.respond_to?(:klass) ? collection.klass.model_name.param_key.to_sym : nil
 
 .d-inline-flex.me-2.flex-shrink-0{ data: { controller: "dropdown", action: "change->dropdown#update" } }
-  = select_tag(param, options_for_select(arr, selected),
+  = select_tag(field_name, options_for_select(arr),
       prompt: prompt,
       class: "form-select form-select-md w-auto rounded-5 text-center",
       data: { dropdown_target: "select" })
