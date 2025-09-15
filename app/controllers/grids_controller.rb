@@ -1,11 +1,13 @@
 class GridsController < ApplicationController
   before_action :set_grid, only: %i[show]
+
+  # GET /grids
   def index
     @grids = Grid.active.order(:name)
   end
 
+  # GET /grids/:slug
   def show
-    @grid = Grid.find(params[:id])
     @grids = Grid.active.order(:name)
   end
 

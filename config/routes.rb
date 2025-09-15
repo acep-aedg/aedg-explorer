@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  get 'grids/index'
-  get 'grids/show'
+
   # Defines the root path route ("/")
   root 'static_pages#home'
 
