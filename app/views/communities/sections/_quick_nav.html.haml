@@ -6,7 +6,7 @@
       "data-bs-toggle" => "dropdown",
       "aria-expanded" => "false"
     }
-      Select Section
+      Jump To
     %ul.dropdown-menu{ "aria-labelledby" => "quickNavDropdown" }
       // Electricity Section
       - if @community.show_electricity_section?
@@ -37,8 +37,6 @@
         %li= nav_link "Transportation", "#transportation"
       - if @community.show_legislative_districts?
         %li= nav_link "Legislative Districts", "#legislative-districts"
-      - if @community.show_school_districts?
-        %li= nav_link "School Districts", "#school-districts"
       - if @community.show_population?
         %li= nav_link "Population", "#population"
       - if @community.show_climate?

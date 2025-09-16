@@ -2,7 +2,7 @@ import { Controller } from '@hotwired/stimulus';
 import mapboxgl from 'mapbox-gl';
 
 const MAP_STYLE = 'mapbox://styles/mapbox/streets-v11?optimize=true';
-const DEFAULT_ZOOM = 4;
+const DEFAULT_ZOOM = 8;
 
 export default class extends Controller {
   // 1) Static config

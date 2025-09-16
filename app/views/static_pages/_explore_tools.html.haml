@@ -7,7 +7,7 @@
       %p.text-muted
         Select your community from the dropdown to access tailored energy details.
         Dive deep into the data that powers your local energy landscape.
-      = render "shared/dropdown", collection: @communities, current: nil
+      = render "shared/dropdown", collection: @communities
 
     .col-12.col-md-5.offset-md-1.order-1.order-md-2.text-center.mb-3
       .mb-3{ data: { controller: "lightbox" } }
