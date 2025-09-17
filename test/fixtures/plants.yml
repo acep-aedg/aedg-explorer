@@ -1,0 +1,39 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the {} from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one:
+  aea_plant_id: 1
+  eia_plant_id: 1
+  name: "Plant One"
+  aea_operator_id: 1
+  eia_operator_id: 1
+  grid: one
+  service_area_geom_aedg_id: '1_1'
+  eia_reporting: 1
+  pce_reporting: 1
+  combined_heat_power: false
+  primary_voltage: 1.0
+  primary_voltage2: 1.5
+  phases: null
+  status: "Plant status"
+  notes: "Notes about the plant"
+
+two:
+  aea_plant_id: 2
+  eia_plant_id: 2
+  name: "Plant Two"
+  aea_operator_id: 2
+  eia_operator_id: 2
+  grid: two
+  service_area_geom_aedg_id: '2_1'
+  eia_reporting: 2
+  pce_reporting: 2
+  combined_heat_power: false
+  primary_voltage: 2.0
+  primary_voltage2: 2.5
+  phases: null
+  status: "Plant status"
+  notes: "Notes about the plant"

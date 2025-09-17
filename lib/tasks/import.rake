@@ -18,6 +18,10 @@ namespace :import do
     Rake::Task['import:house_districts'].invoke
     Rake::Task['import:school_districts'].invoke
     Rake::Task['import:communities'].invoke
+    Rake::Task['import:service_areas'].invoke
+    Rake::Task['import:service_area_geoms'].invoke
+    Rake::Task['import:community_service_area_geoms'].invoke
+    Rake::Task['import:plants'].invoke
     Rake::Task['import:community_grids'].invoke
     Rake::Task['import:populations'].invoke
     Rake::Task['import:transportation'].invoke
@@ -33,7 +37,7 @@ namespace :import do
   desc 'Import data files from a specific GitHub tag'
   task pull_gh_data: :environment do
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    tag = 'v0.6'
+    tag = 'v0.7'
     folder_path = 'data/final'
     Rails.root.join('db/imports').to_s
     local_dir = Rails.root.join('db/imports').to_s
@@ -108,6 +112,30 @@ namespace :import do
   task communities: :environment do
     filepath = Rails.root.join('db/imports/communities.geojson')
     ImportHelpers.import_geojson(filepath, Community)
+  end
+
+  desc 'Import Service Area Data from .geojson file'
+  task service_areas: :environment do
+    filepath = Rails.root.join('db/imports/service_areas.geojson')
+    ImportHelpers.import_geojson(filepath, ServiceArea)
+  end
+
+  desc 'Import Service Area Geom Data from .geojson file'
+  task service_area_geoms: :environment do
+    filepath = Rails.root.join('db/imports/service_area_geoms.geojson')
+    ImportHelpers.import_geojson(filepath, ServiceAreaGeom)
+  end
+
+  desc 'Import Community Service Area Geom Data from .csv file'
+  task community_service_area_geoms: :environment do
+    filepath = Rails.root.join('db/imports/communities_service_area_geoms.csv')
+    ImportHelpers.import_csv(filepath, CommunitiesServiceAreaGeom)
+  end
+
+  desc 'Import Plant  Data from .geojson file'
+  task plants: :environment do
+    filepath = Rails.root.join('db/imports/plants.geojson')
+    ImportHelpers.import_geojson(filepath, Plant)
   end
 
   desc 'Import Community Grid Data from .csv file'

@@ -358,6 +358,38 @@ ALTER SEQUENCE public.communities_senate_districts_id_seq OWNED BY public.commun
 
 
 --
+-- Name: communities_service_area_geoms; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.communities_service_area_geoms (
+    id bigint NOT NULL,
+    community_fips_code character varying NOT NULL,
+    service_area_geom_aedg_id character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: communities_service_area_geoms_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.communities_service_area_geoms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: communities_service_area_geoms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.communities_service_area_geoms_id_seq OWNED BY public.communities_service_area_geoms.id;
+
+
+--
 -- Name: community_grids; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -737,6 +769,52 @@ ALTER SEQUENCE public.monthly_generations_id_seq OWNED BY public.monthly_generat
 
 
 --
+-- Name: plants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.plants (
+    id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    aea_plant_id integer,
+    eia_plant_id integer,
+    name character varying,
+    aea_operator_id integer,
+    eia_operator_id integer,
+    grid_id integer,
+    service_area_geom_aedg_id character varying,
+    eia_reporting boolean,
+    pce_reporting boolean,
+    combined_heat_power boolean,
+    primary_voltage numeric,
+    primary_voltage2 numeric,
+    phases character varying,
+    status character varying,
+    notes character varying,
+    location public.geometry
+);
+
+
+--
+-- Name: plants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.plants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: plants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.plants_id_seq OWNED BY public.plants.id;
+
+
+--
 -- Name: population_age_sexes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1038,6 +1116,73 @@ ALTER SEQUENCE public.senate_districts_id_seq OWNED BY public.senate_districts.i
 
 
 --
+-- Name: service_area_geoms; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.service_area_geoms (
+    id bigint NOT NULL,
+    aedg_id character varying NOT NULL,
+    service_area_cpcn_id integer NOT NULL,
+    boundary public.geometry,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: service_area_geoms_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.service_area_geoms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: service_area_geoms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.service_area_geoms_id_seq OWNED BY public.service_area_geoms.id;
+
+
+--
+-- Name: service_areas; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.service_areas (
+    id bigint NOT NULL,
+    cpcn_id integer NOT NULL,
+    name character varying,
+    certificate_url character varying,
+    boundary public.geometry,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: service_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.service_areas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: service_areas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.service_areas_id_seq OWNED BY public.service_areas.id;
+
+
+--
 -- Name: taggings; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1237,6 +1382,13 @@ ALTER TABLE ONLY public.communities_senate_districts ALTER COLUMN id SET DEFAULT
 
 
 --
+-- Name: communities_service_area_geoms id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_service_area_geoms ALTER COLUMN id SET DEFAULT nextval('public.communities_service_area_geoms_id_seq'::regclass);
+
+
+--
 -- Name: community_grids id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1314,6 +1466,13 @@ ALTER TABLE ONLY public.monthly_generations ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: plants id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plants ALTER COLUMN id SET DEFAULT nextval('public.plants_id_seq'::regclass);
+
+
+--
 -- Name: population_age_sexes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1360,6 +1519,20 @@ ALTER TABLE ONLY public.school_districts ALTER COLUMN id SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.senate_districts ALTER COLUMN id SET DEFAULT nextval('public.senate_districts_id_seq'::regclass);
+
+
+--
+-- Name: service_area_geoms id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_area_geoms ALTER COLUMN id SET DEFAULT nextval('public.service_area_geoms_id_seq'::regclass);
+
+
+--
+-- Name: service_areas id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_areas ALTER COLUMN id SET DEFAULT nextval('public.service_areas_id_seq'::regclass);
 
 
 --
@@ -1463,6 +1636,14 @@ ALTER TABLE ONLY public.communities_senate_districts
 
 
 --
+-- Name: communities_service_area_geoms communities_service_area_geoms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_service_area_geoms
+    ADD CONSTRAINT communities_service_area_geoms_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: community_grids community_grids_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1551,6 +1732,14 @@ ALTER TABLE ONLY public.monthly_generations
 
 
 --
+-- Name: plants plants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plants
+    ADD CONSTRAINT plants_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: population_age_sexes population_age_sexes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1612,6 +1801,22 @@ ALTER TABLE ONLY public.school_districts
 
 ALTER TABLE ONLY public.senate_districts
     ADD CONSTRAINT senate_districts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: service_area_geoms service_area_geoms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_area_geoms
+    ADD CONSTRAINT service_area_geoms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: service_areas service_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_areas
+    ADD CONSTRAINT service_areas_pkey PRIMARY KEY (id);
 
 
 --
@@ -1892,6 +2097,27 @@ CREATE UNIQUE INDEX index_senate_districts_on_district ON public.senate_district
 
 
 --
+-- Name: index_service_area_geoms_on_aedg_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_service_area_geoms_on_aedg_id ON public.service_area_geoms USING btree (aedg_id);
+
+
+--
+-- Name: index_service_area_geoms_on_service_area_cpcn_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_service_area_geoms_on_service_area_cpcn_id ON public.service_area_geoms USING btree (service_area_cpcn_id);
+
+
+--
+-- Name: index_service_areas_on_cpcn_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_service_areas_on_cpcn_id ON public.service_areas USING btree (cpcn_id);
+
+
+--
 -- Name: index_taggings_on_context; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2012,6 +2238,14 @@ ALTER TABLE ONLY public.communities
 
 
 --
+-- Name: communities_service_area_geoms fk_rails_20f8ef8e44; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_service_area_geoms
+    ADD CONSTRAINT fk_rails_20f8ef8e44 FOREIGN KEY (service_area_geom_aedg_id) REFERENCES public.service_area_geoms(aedg_id);
+
+
+--
 -- Name: datasets fk_rails_21906160cf; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2025,6 +2259,14 @@ ALTER TABLE ONLY public.datasets
 
 ALTER TABLE ONLY public.yearly_generations
     ADD CONSTRAINT fk_rails_26662eb773 FOREIGN KEY (grid_id) REFERENCES public.grids(id);
+
+
+--
+-- Name: service_area_geoms fk_rails_2c45461cbd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.service_area_geoms
+    ADD CONSTRAINT fk_rails_2c45461cbd FOREIGN KEY (service_area_cpcn_id) REFERENCES public.service_areas(cpcn_id);
 
 
 --
@@ -2060,6 +2302,14 @@ ALTER TABLE ONLY public.electric_rates
 
 
 --
+-- Name: plants fk_rails_49b512915b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plants
+    ADD CONSTRAINT fk_rails_49b512915b FOREIGN KEY (grid_id) REFERENCES public.grids(id);
+
+
+--
 -- Name: community_grids fk_rails_51105f953f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2089,6 +2339,14 @@ ALTER TABLE ONLY public.communities_legislative_districts
 
 ALTER TABLE ONLY public.community_grids
     ADD CONSTRAINT fk_rails_7d3a74461c FOREIGN KEY (grid_id) REFERENCES public.grids(id);
+
+
+--
+-- Name: plants fk_rails_8b58e48ec7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plants
+    ADD CONSTRAINT fk_rails_8b58e48ec7 FOREIGN KEY (service_area_geom_aedg_id) REFERENCES public.service_area_geoms(aedg_id);
 
 
 --
@@ -2140,6 +2398,14 @@ ALTER TABLE ONLY public.reporting_entities
 
 
 --
+-- Name: communities_service_area_geoms fk_rails_c737a4bd21; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_service_area_geoms
+    ADD CONSTRAINT fk_rails_c737a4bd21 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
+
+
+--
 -- Name: communities fk_rails_d9078d9620; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2162,6 +2428,10 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250911194508'),
+('20250911181035'),
+('20250911173625'),
+('20250909214449'),
 ('20250821174649'),
 ('20250725001258'),
 ('20250707215602'),

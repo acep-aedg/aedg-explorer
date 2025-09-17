@@ -10,6 +10,7 @@ class Grid < ApplicationRecord
   has_many :monthly_generations
   has_many :capacities
   has_many :reporting_entities
+  has_many :plants
   validates :name, presence: true, uniqueness: true
 
   scope :active, -> { joins(:community_grids).merge(CommunityGrid.active).distinct }

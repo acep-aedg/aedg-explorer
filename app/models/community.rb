@@ -22,6 +22,10 @@ class Community < ApplicationRecord
   has_many :house_districts, through: :communities_house_districts
   has_many :communities_school_districts, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :school_districts, through: :communities_school_districts
+  has_many :communities_service_area_geoms, foreign_key: :community_fips_code, primary_key: :fips_code
+  has_many :service_area_geoms, through: :communities_service_area_geoms
+  has_many :service_areas, through: :service_area_geoms
+  has_many :plants, through: :service_area_geoms
 
   # Handle the case where the name is not unique
   def slug_candidates
