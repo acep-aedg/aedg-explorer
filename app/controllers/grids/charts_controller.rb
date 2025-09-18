@@ -47,7 +47,7 @@ module Grids
     private
 
     def set_grid
-      @grid = Grid.find(params[:grid_id])
+      @grid = Grid.friendly.find(params[:grid_id])
     end
   end
 end
