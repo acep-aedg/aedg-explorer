@@ -7,4 +7,15 @@ class Plant < ApplicationRecord
   belongs_to :service_area_geom, primary_key: :aedg_id, foreign_key: :service_area_geom_aedg_id, optional: true, inverse_of: :plants
   has_one :service_area, through: :service_area_geom
   has_many :communities, through: :service_area_geom
+
+  def as_geojson
+    {
+      type: 'Feature',
+      geometry: RGeo::GeoJSON.encode(location),
+      properties: {
+        id: id,
+        tooltip: name
+      }
+    }
+  end
 end

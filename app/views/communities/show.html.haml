@@ -42,6 +42,29 @@
                 }
               } 
                 %i.bi.bi-geo-alt 
+
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Show Service Areas",
+                data: {
+                  action: "click->maps#selectLayer",
+                  url: service_area_geoms_community_maps_path(@community, format: :json),
+                  color: "#E74C3C",
+                  outline_color: "#943126"
+                }
+              }
+                %i.bi.bi-bounding-box.me-1
+                Local Service Area
+              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                title: "Show Service Area",
+                data: {
+                  action: "click->maps#selectLayer",
+                  url: service_areas_community_maps_path(@community, format: :json),
+                  color: "#E74C3C",
+                  outline_color: "#943126"
+                }
+              } 
+                %i.bi.bi-bounding-box.me-1
+                Full Service Area
               %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
                 title: "Show House District",
                 data: {

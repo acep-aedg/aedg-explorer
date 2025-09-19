@@ -8,4 +8,15 @@ class ServiceAreaGeom < ApplicationRecord
   has_many :communities_service_area_geoms, foreign_key: :service_area_geom_aedg_id, primary_key: :aedg_id, inverse_of: :service_area_geom, dependent: :destroy
   has_many :communities, through: :communities_service_area_geoms
   has_many :plants, primary_key: :aedg_id, foreign_key: :service_area_geom_aedg_id, inverse_of: :service_area_geom, dependent: :nullify
+
+  def as_geojson
+    {
+      type: 'Feature',
+      geometry: RGeo::GeoJSON.encode(boundary),
+      properties: {
+        id: id,
+        tooltip: service_area&.name
+      }
+    }
+  end
 end

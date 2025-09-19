@@ -7,7 +7,7 @@ module Grids
         {
           type: 'Feature',
           properties: {
-            title: c.name
+            tooltip: c.name
           },
           geometry: {
             type: 'Point',

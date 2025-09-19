@@ -35,6 +35,9 @@ Rails.application.routes.draw do
         collection do
           get :house_districts
           get :senate_districts
+          get :service_area_geoms
+          get :service_areas
+          get :plants
         end
       end
     end
