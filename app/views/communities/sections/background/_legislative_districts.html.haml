@@ -12,38 +12,33 @@
     %h4#legislative-districts.mb-0.me-3.py-3.anchor-offset{ data: { "maps-bridge-target": "trigger" } } Legislative Districts
     %hr.flex-grow-1.mt-1.mb-0
 
-  = render "communities/sections/background/legislative_districts/district_overview"
-
-
-  / Map Layers header + caption
-  %h5.fw-semibold.mb-1 Choose Districts to Display on Map
-
-  / Map layer buttons (wrap on small screens)
-  .d-flex.flex-wrap.gap-2.mb-2
-    %button.btn.btn-outline-secondary.btn-sm.d-inline-flex.align-items-center.gap-1{
-      data: {
-        action: "click->maps#selectLayer",
-        layer_url: house_districts_community_maps_path(@community, format: :json),
-        color: "#088",
-        outline_color: "#05505e",
-        clear: true
+  / Map Layers
+  .mb-3
+    %h6.text-uppercase.text-muted.mb-2 View on Map
+    .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
+      %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
+        data: {
+          action: "click->maps#selectLayer",
+          layer_url: house_districts_community_maps_path(@community, format: :json),
+          color: "#088",
+          outline_color: "#05505e",
+          clear: true
+        }
       }
-    }
-      %i.bi.bi-house-fill
-      %span.text-nowrap House Districts Map
+        %i.bi.bi-house-fill
+        %span.text-nowrap House Districts
 
-    %button.btn.btn-outline-secondary.btn-sm.d-inline-flex.align-items-center.gap-1{
-      data: {
-        action: "click->maps#selectLayer",
-        layer_url: senate_districts_community_maps_path(@community, format: :json),
-        color: "#e67e22",
-        outline_color: "#a84300",
-        clear: true
+      %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
+        data: {
+          action: "click->maps#selectLayer",
+          layer_url: senate_districts_community_maps_path(@community, format: :json),
+          color: "#e67e22",
+          outline_color: "#a84300",
+          clear: true
+        }
       }
-    }
-      %i.bi.bi-bank
-      %span.text-nowrap Senate Districts Map
-
+        %i.bi.bi-bank
+        %span.text-nowrap Senate Districts
   / Datatable Tabs
   %br
   %ul.nav.nav-tabs.mb-2(role="tablist")

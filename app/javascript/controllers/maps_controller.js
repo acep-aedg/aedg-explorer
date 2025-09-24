@@ -227,7 +227,8 @@ export default class extends Controller {
         const f = e.features?.[0];
         return f?.geometry?.coordinates || [e.lngLat.lng, e.lngLat.lat];
       },
-      (f) => f.properties?.title || this.markerTooltipTitleValue
+      (f) =>
+        f.properties?.tooltip || f.properties?.title || this.markerTooltipTitleValue
     );
   }
 
@@ -302,8 +303,7 @@ export default class extends Controller {
     return `
       <div>
         <strong>${title}</strong><br/>
-        Lat: ${Number(lat).toFixed(4)}<br/>
-        Lng: ${Number(lng).toFixed(4)}
+        ${Number(lat).toFixed(4)}, ${Number(lng).toFixed(4)}
       </div>
     `;
     // If you later want richer content, centralize it here.

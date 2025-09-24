@@ -44,6 +44,12 @@ class Community < ApplicationRecord
     community_grids.find_by(termination_year: 9999)&.grid
   end
 
+  def peers_by_service_area_geoms
+    @peers_by_service_area_geoms ||= Community.joins(:communities_service_area_geoms)
+                                              .where(communities_service_area_geoms: { service_area_geom_aedg_id: service_area_geom_ids })
+                                              .where.not(id: id).distinct.to_a
+  end
+
   def available_price_types
     types = []
     types << 'Survey' if any_survey_prices?
@@ -61,7 +67,45 @@ class Community < ApplicationRecord
 
   # --- Electricity Section ---
   def show_utilities?
-    @show_utilities ||= show_main_utility? || show_grid_utilities?
+    @show_utilities ||= show_service_areas? || show_utility_map_layers? || show_peers_by_service_area_geoms?
+  end
+
+  def show_service_areas?
+    @show_service_areas ||= service_areas.any?
+  end
+
+  def show_full_service_area?
+    return @show_full_service_area if instance_variable_defined?(:@show_full_service_area)
+
+    ids = Array(service_area_geom_ids).compact.uniq
+    @show_full_service_area =
+      if ids.empty?
+        false
+      else
+        ServiceArea
+          .joins(:service_area_geoms)
+          .where(service_area_geoms: { aedg_id: ids })
+          .where.not(service_areas: { boundary: nil })
+          .where.not(service_area_geoms: { boundary: nil })
+          .where(Arel.sql('NOT ST_Equals(service_areas.boundary, service_area_geoms.boundary)'))
+          .exists?
+      end
+  end
+
+  def show_service_area_geoms?
+    @show_service_area_geoms ||= service_area_geoms.exists?
+  end
+
+  def show_plants?
+    @show_plants ||= plants.exists?
+  end
+
+  def show_utility_map_layers?
+    @show_utility_map_layers ||= show_full_service_area? || show_service_area_geoms? || show_plants?
+  end
+
+  def show_peers_by_service_area_geoms?
+    @show_peers_by_service_area_geoms ||= peers_by_service_area_geoms.any?
   end
 
   def show_grid_utilities?
