@@ -11,6 +11,8 @@ class Grid < ApplicationRecord
   has_many :capacities
   has_many :reporting_entities
   has_many :plants
+  has_many :service_area_geoms, through: :plants
+  has_many :service_areas, through: :service_area_geoms
   validates :name, presence: true, uniqueness: true
 
   scope :active, -> { joins(:community_grids).merge(CommunityGrid.active).distinct }
@@ -28,7 +30,19 @@ class Grid < ApplicationRecord
 
   # --- Electricity Section ---
   def show_electricity_section?
-    @show_electricity_section ||= show_production? || show_capacity?
+    @show_electricity_section ||= show_production? || show_capacity? || show_utilities?
+  end
+
+  def show_utilities?
+    @show_utilities ||= show_service_area_geoms?
+  end
+
+  def show_utility_map_layers?
+    @show_utility_map_layers ||= show_service_area_geoms?
+  end
+
+  def show_service_area_geoms?
+    @show_service_area_geoms ||= service_area_geoms&.exists?
   end
 
   def show_capacity?

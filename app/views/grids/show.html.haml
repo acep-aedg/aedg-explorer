@@ -25,14 +25,28 @@
           .position-absolute.top-0.end-0.p-4{ style: "z-index:5; pointer-events:none;" }
             .btn-group.shadow-sm{ style: "pointer-events:auto;" }
               %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                title: "Show Communities",
+                title: "Communities",
                 data: {
                   action: "click->maps#selectLayer",
                   url: community_locations_grid_maps_path(@grid, format: :json)
                 }
               }
                 %i.bi.bi-people-fill.me-1
-                Show Communities
+                Communities
+                
+              - if @grid.show_service_area_geoms?
+                %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
+                  title: "Service Areas",
+                  data: {
+                    action: "click->maps#selectLayer",
+                    url: service_area_geoms_grid_maps_path(@grid, format: :json),
+                    color: "#E74C3C",
+                    outline_color: "#943126"
+                  }
+                }
+                  %i.bi.bi-bounding-box.me-1
+                  Service Areas
+
               %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
                 title: "Reset view",
                 data: { action: "click->maps#resetView" }
