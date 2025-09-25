@@ -25,7 +25,7 @@
     .row.g-4.w-100
       .col
         %p.mb-2
-          %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Utility providers that serve this service area" }
+          %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Utilities in this grid’s service area(s)" }
           %strong Utilities for Service Area(s):
           %ul.mb-2
             - @grid.service_areas.distinct.each do |sa|
