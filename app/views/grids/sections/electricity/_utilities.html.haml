@@ -1,0 +1,37 @@
+%div{
+  data: {
+    controller: "maps-bridge",
+    "maps-bridge-default-layer-url-value": service_area_geoms_grid_maps_path(@grid, format: :json),
+    "maps-bridge-default-color-value": "#E74C3C",
+    "maps-bridge-default-outline-color-value": "#943126"
+  }
+}
+  .d-flex.align-items-center.mb-3
+    %i.bi.bi-buildings.me-2.fs-4
+    %h4#utilities.mb-0.me-3.py-3.anchor-offset{ data: { "maps-bridge-target": "trigger" } } Utilities
+    %hr.flex-grow-1.mt-1.mb-0
+    
+  / Map
+  - if @grid.show_utility_map_layers?
+    .mb-3
+      %h6.text-uppercase.text-muted.mb-2 View on Map
+      .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
+        - if @grid.show_service_area_geoms?
+          %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{ data: { action: "click->maps#selectLayer", layer_url: service_area_geoms_grid_maps_path(@grid, format: :json), color: "#E74C3C", outline_color: "#943126", clear: true } }
+            %i.bi.bi-bounding-box
+            Service Areas
+    / === Card Body ===
+  .bg-body-secondary.p-3.rounded.mb-3
+    .row.g-4.w-100
+      .col
+        %p.mb-2
+          %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Utilities in this grid’s service area(s)" }
+          %strong Utilities for Service Area(s):
+          %ul.mb-2
+            - @grid.service_areas.distinct.each do |sa|
+              %li.d-flex.align-items-center.mb-1
+                %span= sa.name
+                - if sa.certificate_url.present?
+                  = link_to sa.certificate_url, target: "_blank", rel: "noopener", class: "btn btn-sm btn-outline-primary ms-2" do
+                    %i.bi.bi-box-arrow-up-right.me-1
+                    Certificate

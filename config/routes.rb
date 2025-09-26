@@ -49,9 +49,11 @@ Rails.application.routes.draw do
           get :production_yearly
         end
       end
+
       resources :maps, only: [], controller: 'grids/maps', defaults: { format: :json } do
         collection do
           get :community_locations
+          get :service_area_geoms
         end
       end
     end
