@@ -10,7 +10,6 @@ class Community < ApplicationRecord
   has_many :population_age_sexes, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :community_grids, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :grids, through: :community_grids
-  has_many :capacities, through: :grids
   has_many :monthly_generations, through: :grids
   has_many :yearly_generations, through: :grids
   has_many :fuel_prices, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
@@ -26,6 +25,7 @@ class Community < ApplicationRecord
   has_many :service_area_geoms, through: :communities_service_area_geoms
   has_many :service_areas, through: :service_area_geoms
   has_many :plants, through: :service_area_geoms
+  has_many :capacities, through: :plants
 
   # Handle the case where the name is not unique
   def slug_candidates

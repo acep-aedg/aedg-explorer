@@ -1,7 +1,7 @@
 class Capacity < ApplicationRecord
   include CapacityAttributes
-  belongs_to :grid
-  validates :grid_id, presence: true
+  validates :aea_plant_id, presence: true
+  belongs_to :plant, foreign_key: 'aea_plant_id', primary_key: 'aea_plant_id', inverse_of: :capacities
 
   scope :for_grid_and_year, lambda { |grid, year|
     where(grid: grid, year: year)
