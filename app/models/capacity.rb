@@ -11,6 +11,10 @@ class Capacity < ApplicationRecord
     where(grid: grid).maximum(:year)
   end
 
+  def self.available_years
+    where.not(year: nil).distinct.order(year: :desc).pluck(:year)
+  end
+
   def self.capacity_stats_for(grid, year = nil)
     year ||= latest_year_for(grid)
     records = for_grid_and_year(grid, year)

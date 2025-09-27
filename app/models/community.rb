@@ -135,7 +135,7 @@ class Community < ApplicationRecord
   end
 
   def show_capacity?
-    @show_capacity ||= grid&.capacities&.exists?
+    @show_capacity ||= plants&.any? && plants.flat_map(&:capacities)&.any?
   end
 
   def show_sales_revenue_customers?

@@ -30,18 +30,21 @@ class Communities::ChartsController < ApplicationController
   end
 
   def capacity_yearly
-    latest_year = Capacity.latest_year_for(@community.grid)
-    records = Capacity.for_grid_and_year(@community.grid, latest_year)
+    years   = @community.capacities.available_years
+    year    = params[:year].presence&.to_i || years.first
+    records = @community.capacities.where(year: year)
     grouped = records.group_by(&:fuel_type_code)
 
     dataset = grouped.map do |code, rows|
-      name = rows.first.fuel_type_name
+      name  = rows.first.fuel_type_name
       label = name.present? ? "#{name} (#{code})" : code
       [label, rows.sum(&:capacity_mw)]
     end
 
-    dataset = dataset.sort_by { |label, _| label }
-    render json: dataset
+    render json: {
+      year: year,
+      data: dataset.sort_by { |label, _| label }
+    }
   end
 
   def population_employment

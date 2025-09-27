@@ -1,12 +1,23 @@
-- chart_title = "#{@community.grid.name.titleize} Capacity by Fuel Type (#{year})"
-- chart_options = Chartkick.options.deep_merge({ title: chart_title,
-    suffix: ' MW',
-    donut: true,
-    library: { plugins: { legend: { title: { display: true, text: 'Fuel Type'} } } },
-    download: { filename: chart_title.parameterize}})
+- base_title = "#{@community.name.titleize} - Capacity by Fuel Type"
+- chart_options = Chartkick.options.deep_merge({ suffix: ' MW', donut: true, library: { plugins: { legend: { title: { display: true, text: 'Fuel Type'} } } } })
 
-#capacity-chart.responsive-fuel-chart{ data: { controller: 'fuel-chart', fuel_chart:{
-    url_value: capacity_yearly_community_charts_path(@community),
-    chart_type_value: 'pie',
-    options_value: chart_options.to_json
-}}}
+#capacity-chart-wrapper{
+  data: {
+    controller: "fuel-chart", fuel_chart: {
+      url_value: capacity_yearly_community_charts_path(@community),
+      chart_type_value: "pie",
+      base_title_value: base_title,
+      options_value: chart_options.to_json,
+    }
+  }
+}
+  - if @community.capacities.available_years.size > 1
+    .d-flex.align-items-center.gap-2.mb-2
+      %label.form-label.me-2.mb-0{ for: "capacity-year" } Year:
+      %select#capacity-year.form-select.form-select-sm.w-auto{
+        data: { action: "change->fuel-chart#changeYear" }
+      }
+        - @community.capacities.available_years.each do |y|
+          %option{ value: y }= y
+
+  #capacity-chart.responsive-fuel-chart{ data: { "fuel-chart-target": "chart" } }

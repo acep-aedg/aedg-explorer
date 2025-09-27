@@ -1,11 +1,11 @@
-- stats = Capacity.capacity_stats_for(@grid)
+/- stats = Capacity.capacity_stats_for(@grid)
 
 .d-flex.align-items-center.mb-3
   %i.bi.bi-lightning-fill.me-2.fs-4
   %h4#capacity.mb-0.me-3.py-3 Capacity
   %hr.flex-grow-1.mt-1.mb-0
 .mb-3
-  = render 'grids/sections/electricity/capacity/capacity_stats', stats: stats
+  /= render 'grids/sections/electricity/capacity/capacity_stats', stats: stats
 
   / Tabs
   .d-flex.align-items-center.mt-4
@@ -22,6 +22,6 @@
   / Tab Content
   .tab-content.mt-3
     #capacity-chart-wrapper.tab-pane.fade.show.active
-      = render 'grids/sections/electricity/capacity/capacity_chart', year: stats[:year]
+      = render 'grids/sections/electricity/capacity/capacity_chart'
     #capacity-data-wrapper.tab-pane.fade
-      = render 'grids/sections/electricity/capacity/capacity_data', year: stats[:year]
+      = render 'grids/sections/electricity/capacity/capacity_data'
