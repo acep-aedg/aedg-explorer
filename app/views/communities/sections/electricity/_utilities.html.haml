@@ -13,7 +13,7 @@
     
   / Map
   - if @community.show_utility_map_layers?
-    .mb-3
+    .mb-3.d-none.d-md-block
       %h6.text-uppercase.text-muted.mb-2 View on Map
       .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
         - if @community.show_service_area_geoms?
