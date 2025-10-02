@@ -4,17 +4,15 @@ import "controllers";
 import "bootstrap";
 import 'chartkick';
 import 'Chart.bundle';
-
-// app/javascript/application.js
 import DataTable from "datatables.net-bs5";
 
-// ONE function to clean up any DataTables under a root node
+// Destroy all DataTable instances under the given root
 function resetDataTables(root = document) {
   root.querySelectorAll('table.dataTable, table[role="grid"]').forEach((el) => {
     try {
       // Grab existing instance (if any) and destroy it
-      const api = new DataTable(el, { retrieve: true });
-      api.destroy();
+      const api = new DataTable(el, { retrieve: true }); // get existing instance
+      api.destroy(); // cleanly remove DataTable
     } catch (_) {
       // Not initialized; ignore
     }
@@ -24,8 +22,9 @@ function resetDataTables(root = document) {
   });
 }
 
-// Hook it into Turbo lifecycle (minimal glue)
+// Clean DataTables before Turbo swaps in new DOM
 document.addEventListener("turbo:before-render", () => resetDataTables(document));
+// Clean DataTables before Turbo caches current page
 document.addEventListener("turbo:before-cache",  () => resetDataTables(document));
-// If you use Turbo Frames, also clean just the frame being swapped:
+// Clean DataTables before a Turbo Frame is swapped
 document.addEventListener("turbo:before-frame-render", (ev) => resetDataTables(ev.target));
