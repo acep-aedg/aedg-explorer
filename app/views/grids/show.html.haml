@@ -17,6 +17,10 @@
     .d-flex.flex-column{ style: "position: sticky; top: 50px; height: calc(100vh - 50px);" }
       .flex-grow-1.d-flex.flex-column#mapbox-area{
         data: mapbox_api_data({
+          "maps-default-layer-url-value": community_locations_grid_maps_path(@grid, format: :json),
+          "maps-default-color-value": "#088",
+          "maps-default-outline-color-value": "#05505E",
+          "maps-fit-on-load-value": "true"
         })
       }
         / --- Map fills the column

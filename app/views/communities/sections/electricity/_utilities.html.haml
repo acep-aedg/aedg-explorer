@@ -1,33 +1,51 @@
-%div{
-  data: {
-    controller: "maps-bridge",
-    "maps-bridge-default-layer-url-value": service_area_geoms_community_maps_path(@community, format: :json),
-    "maps-bridge-default-color-value": "#E74C3C",
-    "maps-bridge-default-outline-color-value": "#943126"
-  }
-}
-  .d-flex.align-items-center.mb-3
-    %i.bi.bi-buildings.me-2.fs-4
-    %h4#utilities.mb-0.me-3.py-3.anchor-offset{ data: { "maps-bridge-target": "trigger" } } Utilities
-    %hr.flex-grow-1.mt-1.mb-0
-    
-  / Map
-  - if @community.show_utility_map_layers?
-    .mb-3.d-none.d-md-block
-      %h6.text-uppercase.text-muted.mb-2 View on Map
-      .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
-        - if @community.show_service_area_geoms?
-          %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{ data: { action: "click->maps#selectLayer", layer_url: service_area_geoms_community_maps_path(@community, format: :json), color: "#E74C3C", outline_color: "#943126", clear: true } }
-            %i.bi.bi-bounding-box
-            = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
-        - if @community.show_full_service_area?
-          %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{ data: { action: "click->maps#selectLayer", layer_url: service_areas_community_maps_path(@community, format: :json), color: "#E74C3C", outline_color: "#943126", clear: true } }
-            %i.bi.bi-bounding-box
-            Full Service Area
-        - if @community.show_plants?  
-          %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{ data: { action: "click->maps#selectLayer", layer_url: plants_community_maps_path(@community, format: :json), clear: true } }
-            %i.bi.bi-building
-            Power Plants
+/ ── Utilities
+.d-flex.align-items-center.mb-3
+  %i.bi.bi-buildings.me-2.fs-4
+  %h4#utilities.mb-0.me-3.py-3.anchor-offset Utilities
+  %hr.flex-grow-1.mt-1.mb-0
+
+/ Map
+- if @community.show_utility_map_layers?
+  .mb-3.d-none.d-md-block
+    %h6.text-uppercase.text-muted.mb-2 View on Map
+    .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
+
+      - if @community.show_service_area_geoms?
+        %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
+          data: {
+            controller: "maps-bridge",
+            layer_url: service_area_geoms_community_maps_path(@community, format: :json),
+            color: "#E74C3C",
+            outline_color: "#943126",
+            clear: true
+          }
+        }
+          %i.bi.bi-bounding-box
+          = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
+
+      - if @community.show_full_service_area?
+        %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
+          data: {
+            controller: "maps-bridge",
+            layer_url: service_areas_community_maps_path(@community, format: :json),
+            color: "#E74C3C",
+            outline_color: "#943126",
+            clear: true
+          }
+        }
+          %i.bi.bi-bounding-box
+          Full Service Area
+
+      - if @community.show_plants?
+        %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
+          data: {
+            controller: "maps-bridge",
+            layer_url: plants_community_maps_path(@community, format: :json),
+            clear: true
+          }
+        }
+          %i.bi.bi-building
+          Power Plants
 
   / === Card Body ===
   .bg-body-secondary.p-3.rounded.mb-3
