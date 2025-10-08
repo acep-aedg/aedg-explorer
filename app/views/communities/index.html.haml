@@ -1,7 +1,7 @@
 - content_for :title, 'Community Summaries'
 
 / Wider like the example
-.container-fluid.py-5
+.container-fluid
   .row.justify-content-center.mb-5
     .col-12
       .container-fluid
@@ -9,11 +9,11 @@
           .col-12.bg-opacity-75.p-4.rounded-4.bg-body-secondary
 
             / --- SEARCH BAR (unchanged) ---
-            .text-center.mt-5.mb-5
+            .text-center.mb-5
               %h1.display-5.fw-semibold Alaska Energy Data Gateway
               %p.lead.text-muted
                 Find data dashboards, tools, and new datasets.
-              .d-flex.justify-content-center.mt-4.mb-4
+              .d-flex.justify-content-center.mb-4
                 = form_with url: communities_path, method: :get, local: true, class: "d-inline-block w-50" do
                   .input-group.rounded-pill.shadow-sm.border.mx-auto
                     %span.input-group-text.bg-white.border-0
@@ -43,8 +43,8 @@
 
             / --- ALL COMMUNITIES LIST (MOVED UP) ---
             / --- ALL COMMUNITIES (collapsed by default) ---
-            .bg-body-tertiary.rounded-4.p-4.mb-5
-              .bg-white.rounded-3.p-4
+            .bg-body-tertiary.rounded-4
+              .bg-white.rounded-3.p-4.border.shadow-sm
                 .d-flex.justify-content-between.align-items-center
                   %h2.h5.mb-0
                     %i.bi.bi-list-ul.me-2
@@ -60,8 +60,9 @@
             / =========================
             /   TILE CATEGORIES 
             / =========================
+            
             %h2.text-center.fw-semibold.mt-5.mb-3 Categories
-            %p.text-center.text-muted.small.mb-4 Choose a regional grouping to browse communities.
+            %p.text-center.text-muted.small.mb-4 Below browse communities through Boroughs or Native Corporations.
 
             / --- Borough Tiles ---
             / --- Borough Tiles ---
