@@ -140,7 +140,51 @@ export default class extends Controller {
   //   })
   // }
 
-  // ---- helpers / bookkeeping ----
+  // Click from outside the map panel: load a layer and sync the map panel checkbox
+  async showLayer(event) {
+    const el = event.currentTarget;
+    const url = el.dataset.url || el.dataset.layerUrl || el.dataset.mapLayerUrl;
+    if (!url) return;
+
+    const color = el.dataset.color;
+    const outlineColor = el.dataset.outlineColor || el.dataset['outline-color'];
+    const fit = el.dataset.fit ? el.dataset.fit !== 'false' : true;
+
+    await this._ensureMapReady();
+
+    // Load (idempotent: addSource updates existing; addLayer guards by id)
+    const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color, outlineColor });
+    this._remember(sourceId, layerIds);
+
+    if (fit) {
+      const b = boundsFrom(fc);
+      if (!b.isEmpty()) this.map.fitBounds(b, { padding: 40, maxZoom: 10, duration: 0 });
+    }
+
+    // Sync the matching checkbox so UI reflects the map state
+    const cb = this._findCheckboxForUrl(url, el.dataset.checkboxId);
+    if (cb && !cb.checked) cb.checked = true;
+  }
+
+  // ---- helpers  ----
+
+  // --- helpers for showLayer ---
+  async _ensureMapReady() {
+    if (!this.map) throw new Error('Map not initialized');
+    if (!this.map.isStyleLoaded()) await new Promise((r) => this.map.once('load', r));
+  }
+    // Prefer an explicit checkbox id; otherwise match by data-url
+  _findCheckboxForUrl(url, checkboxId) {
+    if (checkboxId) return document.getElementById(checkboxId);
+    // Try inside this controller’s element first, then anywhere on the page as a fallback
+    const sel = `input.form-check-input[data-url="${this._cssEscape(url)}"]`;
+    return this.element.querySelector(sel) || document.querySelector(sel);
+  }
+
+  // Minimal CSS escaper for attribute selectors
+  _cssEscape(s = '') { return String(s).replace(/["\\]/g, '\\$&'); }
+
+  /// ------------------------------------------
 
   // Stable source id for the marker layer namespace (per-controller element)
   _markerSourceId() {
