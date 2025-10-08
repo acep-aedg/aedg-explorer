@@ -38,9 +38,9 @@ class CommunitiesController < ApplicationController
   end
 
   def apply_search(scope)
-    return scope unless params[:q].present?
+    return scope if params[:q].blank?
 
-    q = "%#{params[:q].strip}%"
+    q = "%#{params[:q].to_s.strip}%"
     scope.where(
       'communities.name ILIKE :q OR communities.fips_code ILIKE :q OR communities.gnis_code ILIKE :q',
       q: q
@@ -49,9 +49,7 @@ class CommunitiesController < ApplicationController
 
   def apply_region_filters(scope)
     scope = scope.where(borough_fips_code: params[:borough_fips_code]) if params[:borough_fips_code].present?
-    if params[:regional_corporation_fips_code].present?
-      scope = scope.where(regional_corporation_fips_code: params[:regional_corporation_fips_code])
-    end
+    scope = scope.where(regional_corporation_fips_code: params[:regional_corporation_fips_code]) if params[:regional_corporation_fips_code].present?
     scope
   end
 
