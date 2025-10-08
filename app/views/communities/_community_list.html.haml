@@ -1,0 +1,41 @@
+-# locals: communities:, frame_id: nil, columns: 5, show_jump: true
+- columns   = (local_assigns[:columns] || 5).to_i
+- show_jump = local_assigns.key?(:show_jump) ? local_assigns[:show_jump] : true
+
+- if columns == 2
+  - row_class = 'row row-cols-2 g-2'
+- elsif columns == 3
+  - row_class = 'row row-cols-2 row-cols-md-3 g-2'
+- elsif columns == 4
+  - row_class = 'row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2'
+- else
+  - row_class = 'row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2'
+
+- content_block = lambda do
+  - if communities.any?
+    - ordered = communities.sort_by { |c| c.name.to_s }
+    - groups  = ordered.group_by { |c| (c.name.to_s[0] =~ /[A-Za-z]/) ? c.name[0].upcase : '#' }
+
+    - if show_jump
+      .d-flex.flex-wrap.justify-content-center.gap-2.mb-3
+        - groups.keys.sort.each do |letter|
+          = link_to letter, "#letter-#{letter}", class: 'btn btn-sm btn-outline-secondary'
+
+    - groups.keys.sort.each do |letter|
+      - items = groups[letter]
+      %h3.h6.fw-semibold.mt-4.mb-2.text-muted.text-uppercase{ id: "letter-#{letter}" }= letter
+      %div{ class: row_class }
+        - items.each do |community|
+          .col
+            = link_to community.name,
+                      community_path(community),
+                      class: 'd-block small text-decoration-none link-primary text-truncate',
+                      title: community.name
+  - else
+    %p.text-muted.mb-0.text-center No communities found.
+
+- if local_assigns[:frame_id].present?
+  = turbo_frame_tag frame_id do
+    = content_block.call
+- else
+  = content_block.call

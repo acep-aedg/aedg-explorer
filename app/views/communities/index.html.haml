@@ -1,19 +1,123 @@
-- content_for :title, "Community Summaries"
+- content_for :title, 'Community Summaries'
 
-.container-xl.mt-4
+/ Wider like the example
+.container-fluid.py-5
   .row.justify-content-center.mb-5
-    .col
-      #community-data-hero.position-relative.text-center.rounded-4.p-0.p-md-3.p-lg-5
-        .container-fluid
-          .row.justify-content-center
-            .col-12.col-md-11.col-lg-10.bg-white.bg-opacity-75.p-4.rounded-4.shadow
-              %h1.fw-bold.m-3
-                %i.bi.bi-house-fill.me-2
-                Community Summaries
-  
-              %p.lead.fs-5.w-75.mx-auto
-                The Community Summary feature provides key insights into communities, covering geography, population and employment, fuel prices, electric rates, and more.
-              %br
-              .row.justify-content-center
-                .col.col-lg-10
-                  = render "shared/dropdown", collection: @communities
+    .col-12
+      .container-fluid
+        .row.justify-content-center
+          .col-12.bg-opacity-75.p-4.rounded-4.bg-body-secondary
+
+            / --- SEARCH BAR (unchanged) ---
+            .text-center.mt-5.mb-5
+              %h1.display-5.fw-semibold Alaska Energy Data Gateway
+              %p.lead.text-muted
+                Find data dashboards, tools, and new datasets.
+              .d-flex.justify-content-center.mt-4.mb-4
+                = form_with url: communities_path, method: :get, local: true, class: "d-inline-block w-50" do
+                  .input-group.rounded-pill.shadow-sm.border.mx-auto
+                    %span.input-group-text.bg-white.border-0
+                      %i.bi.bi-search.text-muted
+                    = text_field_tag :q, params[:q],
+                      class: "form-control border-0 rounded-end-pill py-2",
+                      placeholder: "Search for a community..."
+                    %button.btn.btn-white.border-0{ type: "submit" }
+                      %i.bi.bi-arrow-return-left.text-secondary
+
+              %p.text-muted.small.mt-3.text-center
+                All data is free to explore.
+                %br/
+                Search communities by name above or browse by borough and native corporation below.
+                %br/
+                Learn more on the
+                = link_to 'About page', about_path, class: 'text-decoration-none'
+                or view the
+                = link_to 'User Guide', user_guide_path, class: 'text-decoration-none'
+                for additional details.
+
+            - if params[:q].present?
+              %p.small.text-center.text-muted.mb-4
+                Showing results for
+                %strong= params[:q]
+                — #{@communities.size} match#{'es' unless @communities.size == 1}.
+
+            / --- ALL COMMUNITIES LIST (MOVED UP) ---
+            / --- ALL COMMUNITIES (collapsed by default) ---
+            .bg-body-tertiary.rounded-4.p-4.mb-5
+              .bg-white.rounded-3.p-4
+                .d-flex.justify-content-between.align-items-center
+                  %h2.h5.mb-0
+                    %i.bi.bi-list-ul.me-2
+                    All Communities
+                  %button.btn.btn-sm.btn-outline-secondary{ type: 'button',
+                    data: { bs_toggle: 'collapse', bs_target: '#allCommunities' },
+                    aria: { expanded: 'false', controls: 'allCommunities' } }
+                    Show / Hide
+
+                .collapse.mt-3#allCommunities
+                  = render 'community_list', communities: @communities
+
+            / =========================
+            /   TILE CATEGORIES 
+            / =========================
+            %h2.text-center.fw-semibold.mt-5.mb-3 Categories
+            %p.text-center.text-muted.small.mb-4 Choose a regional grouping to browse communities.
+
+            / --- Borough Tiles ---
+            / --- Borough Tiles ---
+            - if @boroughs.present?
+              %h3.h5.fw-semibold.text-center.mb-3 Boroughs
+              .row.g-4.justify-content-center.mb-5
+                - @boroughs.each do |borough|
+                  - collapse_id = "borough-#{borough.code}"
+                  - frame_id    = "borough_frame_#{borough.code}"
+                  .col-12.col-sm-6.col-lg-4.col-xl-3
+                    .card.bg-white.border.shadow-sm.rounded-0.h-100
+                      .card-body.text-center.py-4
+                        %h4.h6.text-primary.fw-semibold.mb-2 Borough #{borough.code}
+                        %p.card-text.text-muted.small.mb-3
+                          = pluralize(borough.communities_count, 'community')
+                        %button.btn.btn-sm.btn-outline-primary{ type: 'button',
+                          data: { bs_toggle: 'collapse', bs_target: "##{collapse_id}" },
+                          aria: { expanded: 'false', controls: collapse_id } }
+                          View communities
+                        .collapse.mt-3{id: collapse_id}
+                          = turbo_frame_tag frame_id,
+                              src: communities_path(borough_fips_code: borough.code,
+                                                    only_list: true,
+                                                    frame_id: frame_id,
+                                                    columns: 2,
+                                                    show_jump: 0),
+                              loading: :lazy do
+                            %p.text-muted.small.mb-0 Loading…
+            - else
+              %p.text-muted.small.mb-5.text-center No boroughs available.
+
+            / --- Native Corporation Tiles ---
+            - if @native_corporations.present?
+              %h3.h5.fw-semibold.text-center.mb-3 Native Corporations
+              .row.g-4.justify-content-center.mb-5
+                - @native_corporations.each do |corp|
+                  - collapse_id = "corp-#{corp.code}"
+                  - frame_id    = "corp_frame_#{corp.code}"
+                  .col-12.col-sm-6.col-lg-4.col-xl-3
+                    .card.bg-white.border.shadow-sm.rounded-0.h-100
+                      .card-body.text-center.py-4
+                        %h4.h6.text-primary.fw-semibold.mb-2 Native Corp #{corp.code}
+                        %p.card-text.text-muted.small.mb-3
+                          = pluralize(corp.communities_count, 'community')
+                        %button.btn.btn-sm.btn-outline-primary{ type: 'button',
+                          data: { bs_toggle: 'collapse', bs_target: "##{collapse_id}" },
+                          aria: { expanded: 'false', controls: collapse_id } }
+                          View communities
+                        .collapse.mt-3{id: collapse_id}
+                          = turbo_frame_tag frame_id,
+                              src: communities_path(regional_corporation_fips_code: corp.code,
+                                                    only_list: true,
+                                                    frame_id: frame_id,
+                                                    columns: 2,
+                                                    show_jump: 0),
+                              loading: :lazy do
+                            %p.text-muted.small.mb-0 Loading…
+            - else
+              %p.text-muted.small.mb-5.text-center No native corporations available.
