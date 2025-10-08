@@ -25,76 +25,86 @@
         data: mapbox_api_data({
           maps_map_center_value: [@community.longitude, @community.latitude],
           maps_markers_value: [[@community.longitude, @community.latitude]],
-          maps_marker_tooltip_title_value: @community.name
+          maps_marker_tooltip_title_value: @community.name,
         })
       }
         .d-flex.align-items-center
-          / --- Floating map controls (top-right, inside map) ---
-          .position-absolute.top-0.end-0.p-4{ style: "z-index:5; pointer-events:none;" }
-            .btn-group.shadow-sm{ style: "pointer-events:auto;" }
-              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                title: "Zoom to #{@community.name}",
-                data: {
-                  action: "click->maps#showMarker",
-                  "maps-lng-param": @community.longitude,
-                  "maps-lat-param": @community.latitude,
-                  "maps-title-param": @community.name
-                }
-              } 
-                %i.bi.bi-geo-alt 
-              - if @community.show_service_area_geoms?
-                %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                  title: "Show Service Areas",
-                  data: {
-                    action: "click->maps#selectLayer",
-                    url: service_area_geoms_community_maps_path(@community, format: :json),
-                    color: "#E74C3C",
-                    outline_color: "#943126"
-                  }
-                }
-                  %i.bi.bi-bounding-box.me-1
-                  = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
-              - if @community.show_full_service_area?  
-                %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                  title: "Show Service Area",
-                  data: {
-                    action: "click->maps#selectLayer",
-                    url: service_areas_community_maps_path(@community, format: :json),
-                    color: "#E74C3C",
-                    outline_color: "#943126"
-                  }
-                } 
-                  %i.bi.bi-bounding-box.me-1
-                  Full Service Area
-              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                title: "Show House District",
-                data: {
-                  action: "click->maps#selectLayer",
-                  url: house_districts_community_maps_path(@community, format: :json),
-                  color: "#088",
-                  outline_color: "#05505e"
-                }
-              } 
-                %i.bi.bi-house-fill.me-1
-                House District
-              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                title: "Show Senate District",
-                data: {
-                  action: "click->maps#selectLayer",
-                  url: senate_districts_community_maps_path(@community, format: :json),
-                  color: "#e67e22",
-                  outline_color: "#a84300"
-                }
-              } 
-                %i.bi.bi-bank.me-1
-                Senate District
-              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                title: "Reset view",
-                data: { action: "click->maps#resetView" }
-              }
-                %i.bi.bi-arrow-counterclockwise
+          / --- Floating controls (top-right, inside map) ---
+          .position-absolute.top-0.end-0.mt-2.me-2{ style: "z-index:5; pointer-events:none;" }
+            .bg-white.border.rounded-3.shadow-sm{ style: "pointer-events:auto; width: 180px;" }
+              .p-2
+                %div.fw-semibold.small.mb-2 Additional Layers
+                / Map Layers (checkboxes)
+                - if @community.show_service_area_geoms?
+                  - sa_url = service_area_geoms_community_maps_path(@community, format: :json)
+                  .form-check.mb-1
+                    %input.form-check-input#layer-service{
+                      type: "checkbox",
+                      style: "transform:scale(0.85); margin-top:.1rem;",
+                      data: {
+                        action: "change->maps#toggleLayer",
+                        url: sa_url,
+                        color: "#E74C3C",
+                        outline_color: "#943126",
+                        fit: true
+                      }
+                    }
+                    %label.form-check-label.small{ for: "layer-service" }
+                      = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
 
-        / --- Map fills the remaining height below the toolbar
+                - if @community.show_full_service_area?
+                  - full_sa_url = service_areas_community_maps_path(@community, format: :json)
+                  .form-check.mb-1
+                    %input.form-check-input#layer-service-full{
+                      type: "checkbox",
+                      style: "transform:scale(0.85); margin-top:.1rem;",
+                      data: {
+                        action: "change->maps#toggleLayer",
+                        url: full_sa_url,
+                        color: "#E74C3C",
+                        outline_color: "#943126",
+                        fit: true
+                      }
+                    }
+                    %label.form-check-label.small{ for: "layer-service-full" } Full Service Area
+
+                - hd_url = house_districts_community_maps_path(@community, format: :json)
+                .form-check.mb-1
+                  %input.form-check-input#layer-house{
+                    type: "checkbox",
+                    style: "transform:scale(0.85); margin-top:.1rem;",
+                    data: {
+                      action: "change->maps#toggleLayer",
+                      url: hd_url,
+                      color: "#088",
+                      outline_color: "#05505e",
+                      fit: true
+                    }
+                  }
+                  %label.form-check-label.small{ for: "layer-house" } House Districts
+
+                - sd_url = senate_districts_community_maps_path(@community, format: :json)
+                .form-check
+                  %input.form-check-input#layer-senate{
+                    type: "checkbox",
+                    style: "transform:scale(0.85); margin-top:.1rem;",
+                    data: {
+                      action: "change->maps#toggleLayer",
+                      url: sd_url,
+                      color: "#e67e22",
+                      outline_color: "#a84300",
+                      fit: true
+                    }
+                  }
+                  %label.form-check-label.small{ for: "layer-senate" } Senate Districts
+                
+                /#- This is if we ever want a "clear all layers" button
+                -# %hr.my-2
+                -# .d-flex.justify-content-end.gap-1
+                -#   %button.btn.btn-sm.px-1.py-0{ data: { action: "click->maps#clearLayers" }, title: "Clear Layers", style: "line-height:1;" }
+                -#     %i.bi.bi-trash.fs-6
+
+        / --- Map fills remaining height
         .flex-grow-1.position-relative
           %div{ data: { maps_target: "map" }, style: "position:absolute; inset:0; width:100%; height:100%;" }
 
