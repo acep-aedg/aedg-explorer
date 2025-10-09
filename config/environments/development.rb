@@ -26,7 +26,12 @@ Rails.application.configure do
   end
 
   # Change to :null_store to avoid any caching.
-  config.cache_store = :memory_store
+  config.cache_store = :redis_cache_store, {
+    url: ENV.fetch('REDIS_URL', 'redis://127.0.0.1:6379/1'),
+    error_handler: lambda do |method:, _returning:, exception:|
+      Rails.logger.warn "Redis cache error: #{method} failed: #{exception}"
+    end
+  }
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
