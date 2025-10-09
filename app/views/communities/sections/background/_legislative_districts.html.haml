@@ -9,14 +9,18 @@
   %h6.text-uppercase.text-muted.mb-2 View on Map
   .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
 
+    - hd_url = house_districts_community_maps_path(@community, format: :json)
+    - sd_url = senate_districts_community_maps_path(@community, format: :json)
+
     / House Districts
     %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
       data: {
-        controller: "maps-bridge",
-        layer_url: house_districts_community_maps_path(@community, format: :json),
+        action: "click->maps#showLayer",
+        url: hd_url,
         color: "#088",
-        outline_color: "#05505e",
-        clear: true
+        "outline-color": "#05505e",
+        fit: true,
+        checkbox_id: "layer-house"
       }
     }
       %i.bi.bi-house-fill
@@ -25,11 +29,12 @@
     / Senate Districts
     %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
       data: {
-        controller: "maps-bridge",
-        layer_url: senate_districts_community_maps_path(@community, format: :json),
+        action: "click->maps#showLayer",
+        url: sd_url,
         color: "#e67e22",
-        outline_color: "#a84300",
-        clear: true
+        "outline-color": "#a84300",
+        fit: true,
+        checkbox_id: "layer-senate"
       }
     }
       %i.bi.bi-bank

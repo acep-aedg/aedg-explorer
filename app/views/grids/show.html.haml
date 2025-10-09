@@ -1,72 +1,79 @@
 - content_for :title, "Grid - #{@grid.name}"
+
+/ Precompute URLs once for both columns
+- comm_url = community_locations_grid_maps_path(@grid, format: :json)
+- if @grid.show_service_area_geoms?
+  - sa_url = service_area_geoms_grid_maps_path(@grid, format: :json)
+
 / --- Tool Bar
 .sticky-top.bg-light.p-1
   .row.align-items-center.gx-0
     .col.d-flex.align-items-center.text-truncate.align-middle.gap-2
       %i.bi.bi-grid-fill.text-primary.fs-4.ms-2
       %span.fw-bold.fs-3.text-truncate= @grid.name
-
     .col-auto
       .d-flex.align-items-center.flex-nowrap
         = render "shared/dropdown", collection: @grids
         = render 'grids/sections/quick_nav', grid: @grid
 
-.row.gx-0
+/ Wrap BOTH columns so buttons can call maps#showLayer in the same Stimulus scope
+.row.gx-0{
+  data: mapbox_api_data({
+    maps_default_layer_url_value: comm_url
+  })
+}
   / LEFT: Map
   .col-md-5
     .d-flex.flex-column{ style: "position: sticky; top: 50px; height: calc(100vh - 50px);" }
-      .flex-grow-1.d-flex.flex-column#mapbox-area{
-        data: mapbox_api_data({
-          "maps-default-layer-url-value": community_locations_grid_maps_path(@grid, format: :json),
-          "maps-default-color-value": "#088",
-          "maps-default-outline-color-value": "#05505E",
-          "maps-fit-on-load-value": "true"
-        })
-      }
-        / --- Map fills the column
-        .d-flex.align-items-center
-          / --- Floating map controls (top-right, inside map) ---
-          .position-absolute.top-0.end-0.p-4{ style: "z-index:5; pointer-events:none;" }
-            .btn-group.shadow-sm{ style: "pointer-events:auto;" }
-              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                title: "Communities",
-                data: {
-                  action: "click->maps#selectLayer",
-                  url: community_locations_grid_maps_path(@grid, format: :json)
-                }
-              }
-                %i.bi.bi-people-fill.me-1
-                Communities
-                
-              - if @grid.show_service_area_geoms?
-                %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                  title: "Service Areas",
+      .flex-grow-1.d-flex.flex-column#mapbox-area
+        / --- Floating controls (top-right, inside map)
+        .position-absolute.top-0.end-0.mt-2.me-2{ style: "z-index:5; pointer-events:none;" }
+          .bg-white.border.rounded-3.shadow-sm{ style: "pointer-events:auto; width: 200px;" }
+            .p-2
+              %div.fw-semibold.small.mb-2 Additional Layers
+
+              / Communities (default ON)
+              .form-check.mb-1
+                %input.form-check-input#layer-communities{
+                  type: "checkbox",
+                  checked: true,
+                  style: "transform:scale(0.85); margin-top:.1rem;",
                   data: {
-                    action: "click->maps#selectLayer",
-                    url: service_area_geoms_grid_maps_path(@grid, format: :json),
-                    color: "#E74C3C",
-                    outline_color: "#943126"
+                    action: "change->maps#toggleLayer",
+                    url: comm_url,
+                    color: "#088",
+                    "outline-color": "#05505E",
+                    fit: true
                   }
                 }
-                  %i.bi.bi-bounding-box.me-1
-                  Service Areas
+                %label.form-check-label.small{ for: "layer-communities" } Communities
 
-              %button.btn.btn-light.btn-outline-secondary.btn-sm.d-flex.align-items-center.gap-1{
-                title: "Reset view",
-                data: { action: "click->maps#resetView" }
-              }
-                %i.bi.bi-arrow-counterclockwise
+              - if @grid.show_service_area_geoms?
+                .form-check.mb-1
+                  %input.form-check-input#layer-service-areas{
+                    type: "checkbox",
+                    style: "transform:scale(0.85); margin-top:.1rem;",
+                    data: {
+                      action: "change->maps#toggleLayer",
+                      url: sa_url,
+                      color: "#E74C3C",
+                      "outline-color": "#943126",
+                      fit: true
+                    }
+                  }
+                  %label.form-check-label.small{ for: "layer-service-areas" } Service Areas
 
-        / --- Map fills the remaining height below the toolbar
+        / --- Map fills remaining height
         .flex-grow-1.position-relative
           %div{ data: { maps_target: "map" }, style: "position:absolute; inset:0; width:100%; height:100%;" }
 
   / RIGHT: main content 
   .col-md-7
     .text-center
+
     - section_order = []
-    - section_order << 'communities' if @grid.show_communities_section?
-    - section_order << 'electricity' if @grid.show_electricity_section?
+    - section_order << 'electricity'  if @grid.show_electricity_section?
+    - section_order << 'communities'  if @grid.show_communities_section?
 
     - section_order.each do |section|
       - section_id = "#{section.parameterize}-section"
@@ -86,4 +93,4 @@
       .collapse.show.p-1{ id: section_id }
         = render "grids/sections/#{section}", grid: @grid 
       
-      %hr
+%hr.my-0
