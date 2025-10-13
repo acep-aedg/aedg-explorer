@@ -1,10 +1,15 @@
 class YearlyGeneration < ApplicationRecord
   include YearlyGenerationAttributes
-  belongs_to :grid
+  validates :aea_plant_id, presence: true
+  belongs_to :plant, foreign_key: 'aea_plant_id', primary_key: 'aea_plant_id', inverse_of: :yearly_generations
 
-  validates :grid_id,
+  validates :aea_plant_id,
             uniqueness: { scope: %i[year fuel_type_code],
-                          message: 'combination of grid_id, year, and fuel type_code must be unique' }
+                          message: 'combination of aea_plant_id, year, and fuel type_code must be unique' }
+
+  def self.available_years
+    where.not(year: nil).distinct.order(year: :desc).pluck(:year)
+  end
 
   def self.latest_year_for(grid)
     where(grid: grid).maximum(:year)

@@ -11,7 +11,6 @@ class Community < ApplicationRecord
   has_many :community_grids, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :grids, through: :community_grids
   has_many :monthly_generations, through: :grids
-  has_many :yearly_generations, through: :grids
   has_many :fuel_prices, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   belongs_to :reporting_entity, optional: true
   has_many :electric_rates, through: :reporting_entity
@@ -26,6 +25,7 @@ class Community < ApplicationRecord
   has_many :service_areas, through: :service_area_geoms
   has_many :plants, through: :service_area_geoms
   has_many :capacities, through: :plants
+  has_many :yearly_generations, through: :plants
 
   # Handle the case where the name is not unique
   def slug_candidates
@@ -127,7 +127,7 @@ class Community < ApplicationRecord
   end
 
   def show_yearly_generation?
-    @show_yearly_generation ||= grid&.yearly_generations&.exists?
+    @show_yearly_generation ||= plants&.any? && plants.flat_map(&:yearly_generations)&.any?
   end
 
   def show_monthly_generation?

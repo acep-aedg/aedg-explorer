@@ -6,7 +6,7 @@
       %th Fuel Type Name
       %th Year
   %tbody
-    - @community.grid.yearly_generations.each do |generation|
+    - @community.yearly_generations.each do |generation|
       %tr
         %td= generation.net_generation_mwh
         %td= generation.fuel_type_code

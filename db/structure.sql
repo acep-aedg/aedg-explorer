@@ -1297,13 +1297,14 @@ ALTER SEQUENCE public.transportations_id_seq OWNED BY public.transportations.id;
 
 CREATE TABLE public.yearly_generations (
     id bigint NOT NULL,
-    grid_id integer,
     net_generation_mwh integer,
     year integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     fuel_type_code character varying,
-    fuel_type_name character varying
+    fuel_type_name character varying,
+    aea_plant_id integer,
+    eia_plant_id integer
 );
 
 
@@ -2255,14 +2256,6 @@ ALTER TABLE ONLY public.datasets
 
 
 --
--- Name: yearly_generations fk_rails_26662eb773; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.yearly_generations
-    ADD CONSTRAINT fk_rails_26662eb773 FOREIGN KEY (grid_id) REFERENCES public.grids(id);
-
-
---
 -- Name: service_area_geoms fk_rails_2c45461cbd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2429,6 +2422,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251013200021'),
 ('20250925225447'),
 ('20250911194508'),
 ('20250911181035'),
