@@ -1,12 +1,23 @@
-- chart_title = "#{@grid.name.titleize} Net Generation by Fuel Type (#{YearlyGeneration.latest_year_for(@grid)})"
-- chart_options = Chartkick.options.deep_merge({ title: chart_title,
-    suffix: " MWh",
-    donut: true,
-    library: { plugins: { legend: { title: { display: true, text: "Fuel Type"} } } },
-    download: { filename: chart_title.parameterize}})
+- base_title = "#{@grid.name.titleize} - Net Generation by Fuel Type"
+- chart_options = Chartkick.options.deep_merge({ suffix: ' MWh', donut: true, library: { plugins: { legend: { title: { display: true, text: 'Fuel Type'} } } } })
 
-#yearly-prod-chart-2.responsive-fuel-chart{ data: { controller: "fuel-chart", fuel_chart:{
-    url_value: production_yearly_grid_charts_path(@grid),
-    chart_type_value: "pie",
-    options_value: chart_options.to_json
-}}}
+#yearly-prod-wrapper{
+  data: {
+    controller: "fuel-chart", fuel_chart: {
+      url_value: production_yearly_grid_charts_path(@grid),
+      chart_type_value: "pie",
+      base_title_value: base_title,
+      options_value: chart_options.to_json,
+    }
+  }
+}
+  - if @grid.yearly_generations.available_years.size > 1
+    .d-flex.align-items-center.gap-2.mb-2
+      %label.form-label.me-2.mb-0{ for: "yearly-prod-year" } Year:
+      %select#yearly-prod-year.form-select.form-select-sm.w-auto{
+        data: { action: "change->fuel-chart#changeYear" }
+      }
+        - @grid.yearly_generations.available_years.each do |y|
+          %option{ value: y }= y
+
+  #yearly-prod.responsive-fuel-chart{ data: { "fuel-chart-target": "chart" } }

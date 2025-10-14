@@ -16,17 +16,21 @@ module Grids
     end
 
     def production_yearly
-      latest_year = YearlyGeneration.latest_year_for(@grid)
-      records = YearlyGeneration.for_grid_and_year(@grid, latest_year)
+      years   = @grid.yearly_generations.available_years
+      year    = params[:year].presence&.to_i || years.first
+      records = @grid.yearly_generations.where(year: year)
       grouped = records.group_by(&:fuel_type_code)
+
       dataset = grouped.map do |code, rows|
-        name = rows.first.fuel_type_name
+        name  = rows.first.fuel_type_name
         label = name.present? ? "#{name} (#{code})" : code
         [label, rows.sum(&:net_generation_mwh)]
       end
 
-      dataset = dataset.sort_by { |label, _| label }
-      render json: dataset
+      render json: {
+        year: year,
+        data: dataset.sort_by { |label, _| label }
+      }
     end
 
     def capacity_yearly

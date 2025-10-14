@@ -7,11 +7,11 @@ class Grid < ApplicationRecord
   has_one :aedg_import, as: :importable
   has_many :community_grids
   has_many :communities, through: :community_grids
-  has_many :yearly_generations
   has_many :monthly_generations
   has_many :reporting_entities
   has_many :plants
   has_many :capacities, through: :plants
+  has_many :yearly_generations, through: :plants
 
   scope :active, -> { joins(:community_grids).merge(CommunityGrid.active).distinct }
 
