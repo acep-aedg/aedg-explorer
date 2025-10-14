@@ -1,6 +1,7 @@
 %table.table.table-stripped.border{ data: { controller: 'datatables', datatables: { order_value: [3, 'asc']} } }
   %thead
     %tr
+      %th Plant
       %th Net Generation (MWh)
       %th Fuel Type Code
       %th Fuel Type Name
@@ -9,6 +10,7 @@
   %tbody
     - @grid.monthly_generations.each do |generation|
       %tr
+        %td= generation.plant.name
         %td= generation.net_generation_mwh
         %td= generation.fuel_type_code
         %td= generation.fuel_type_name

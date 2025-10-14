@@ -1,4 +1,4 @@
-- chart_title = "#{@grid.name.titleize} Net Generation by Month (#{MonthlyGeneration.latest_year_for(@grid)})"
+- chart_title = "#{@grid.name.titleize} Net Generation by Month"
 = line_chart production_monthly_grid_charts_path(@grid), 
   title: chart_title, 
   xtitle: 'Month', 

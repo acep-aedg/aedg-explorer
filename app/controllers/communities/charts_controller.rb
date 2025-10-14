@@ -3,7 +3,7 @@ class Communities::ChartsController < ApplicationController
   before_action :set_community
 
   def production_monthly
-    grouped_data = @community.grid.monthly_generations.grouped_net_generation_by_year_month
+    grouped_data = @community.monthly_generations.grouped_net_generation_by_year_month
 
     dataset = grouped_data.keys.map(&:first).uniq.sort.map do |year|
       monthly_data = (1..12).map do |month|

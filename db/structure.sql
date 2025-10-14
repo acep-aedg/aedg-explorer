@@ -739,14 +739,15 @@ ALTER SEQUENCE public.metadata_id_seq OWNED BY public.metadata.id;
 
 CREATE TABLE public.monthly_generations (
     id bigint NOT NULL,
-    grid_id integer,
     net_generation_mwh numeric,
     year integer,
     month integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     fuel_type_code character varying,
-    fuel_type_name character varying
+    fuel_type_name character varying,
+    aea_plant_id integer,
+    eia_plant_id integer
 );
 
 
@@ -2280,14 +2281,6 @@ ALTER TABLE ONLY public.populations
 
 
 --
--- Name: monthly_generations fk_rails_44979977d4; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.monthly_generations
-    ADD CONSTRAINT fk_rails_44979977d4 FOREIGN KEY (grid_id) REFERENCES public.grids(id);
-
-
---
 -- Name: electric_rates fk_rails_45b5e43dbc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2422,6 +2415,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251014162658'),
 ('20251013200021'),
 ('20250925225447'),
 ('20250911194508'),

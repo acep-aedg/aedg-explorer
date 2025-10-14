@@ -1,10 +1,11 @@
 class MonthlyGeneration < ApplicationRecord
   include MonthlyGenerationAttributes
-  belongs_to :grid
+  validates :aea_plant_id, presence: true
+  belongs_to :plant, foreign_key: 'aea_plant_id', primary_key: 'aea_plant_id', inverse_of: :monthly_generations
 
-  validates :grid_id,
-            uniqueness: { scope: %i[year fuel_type_code month],
-                          message: 'combination of grid_id, year, month, and fuel_type_code must be unique' }
+  validates :aea_plant_id,
+            uniqueness: { scope: %i[year month fuel_type_code],
+                          message: 'combination of aea_plant_id, year, month and fuel type_code must be unique' }
 
   scope :grouped_net_generation_by_year_month, lambda {
     group(:year, :month).sum(:net_generation_mwh)
@@ -13,6 +14,10 @@ class MonthlyGeneration < ApplicationRecord
   scope :for_grid_and_year, lambda { |grid, year|
     where(grid: grid, year: year)
   }
+
+  def self.available_years
+    where.not(year: nil).distinct.order(year: :desc).pluck(:year)
+  end
 
   def self.latest_year_for(grid)
     where(grid: grid).maximum(:year)
