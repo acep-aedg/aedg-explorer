@@ -34,9 +34,10 @@ class Communities::ChartsController < ApplicationController
   end
 
   def capacity_yearly
-    years   = @community.capacities.available_years
-    year    = params[:year].presence&.to_i || years.first
-    records = @community.capacities.where(year: year)
+    years = Capacity.available_years_for(@community)
+    year  = params[:year].presence&.to_i || years.first
+
+    records = Capacity.for_owner_and_year(@community, year)
     grouped = records.group_by(&:fuel_type_code)
 
     dataset = grouped.map do |code, rows|

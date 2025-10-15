@@ -34,9 +34,10 @@ module Grids
     end
 
     def capacity_yearly
-      years   = @grid.capacities.available_years
-      year    = params[:year].presence&.to_i || years.first
-      records = @grid.capacities.where(year: year)
+      years = Capacity.available_years_for(@grid)
+      year  = params[:year].presence&.to_i || years.first
+
+      records = Capacity.for_owner_and_year(@grid, year)
       grouped = records.group_by(&:fuel_type_code)
 
       dataset = grouped.map do |code, rows|

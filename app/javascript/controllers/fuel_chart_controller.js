@@ -26,6 +26,8 @@ export default class extends Controller {
     options: Object,
     baseTitle: String, // <- pass from view
     baseFilename: String, // <- optional; fallback generated from baseTitle
+    summaryFrame: String,
+    summaryUrl: String
   };
 
   connect() {
@@ -136,6 +138,7 @@ export default class extends Controller {
           this.chartData = json.data ?? [];
         }
         this.renderChartData();
+        this.updateSummaryFrame(this.chartYear);
       })
       .catch((e) => console.error('Failed to update chart:', e));
   }
@@ -152,6 +155,17 @@ export default class extends Controller {
       ? `${baseFile}_${this.chartYear}`
       : baseFile;
     return { title, filename };
+  }
+
+  updateSummaryFrame(year) {
+    if (!this.hasSummaryFrameValue || !this.hasSummaryUrlValue) return;
+    const frame = document.getElementById(this.summaryFrameValue);
+    if (!frame) return;
+
+    const u = new URL(this.summaryUrlValue, window.location.origin);
+    if (year) u.searchParams.set('year', year);
+    else u.searchParams.delete('year');
+    frame.setAttribute('src', u.toString()); // Turbo will fetch & swap the frame
   }
 
   getFuelColors(labels) {
