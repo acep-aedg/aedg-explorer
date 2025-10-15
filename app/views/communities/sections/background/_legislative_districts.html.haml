@@ -1,66 +1,50 @@
-/ ── Legislative block (maps-bridge wraps everything inside)
-%div{
-  data: {
-    controller: "maps-bridge",
-    "maps-bridge-default-layer-url-value": house_districts_community_maps_path(@community, format: :json),
-    "maps-bridge-default-color-value": "#088",
-    "maps-bridge-default-outline-color-value": "#05505e"
-  }
-}
-  .d-flex.align-items-center.mb-3
-    %i.bi.bi-map.me-2.fs-4
-    %h4#legislative-districts.mb-0.me-3.py-3.anchor-offset{ data: { "maps-bridge-target": "trigger" } } Legislative Districts
-    %hr.flex-grow-1.mt-1.mb-0
+/ ── Legislative block 
+.d-flex.align-items-center.mb-3
+  %i.bi.bi-map.me-2.fs-4
+  %h4#legislative-districts.mb-0.me-3.py-3.anchor-offset Legislative Districts
+  %hr.flex-grow-1.mt-1.mb-0
 
-  / Map Layers
-  .mb-3
-    %h6.text-uppercase.text-muted.mb-2 View on Map
-    .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
-      %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
-        data: {
-          action: "click->maps#selectLayer",
-          layer_url: house_districts_community_maps_path(@community, format: :json),
-          color: "#088",
-          outline_color: "#05505e",
-          clear: true
-        }
+/ Map Layers
+.mb-3.d-none.d-md-block 
+  %h6.text-uppercase.text-muted.mb-2 View on Map
+  .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
+
+    - hd_url = house_districts_community_maps_path(@community, format: :json)
+    - sd_url = senate_districts_community_maps_path(@community, format: :json)
+
+    / House Districts
+    %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
+      data: {
+        action: "click->maps#showLayer",
+        url: hd_url,
+        color: "#088",
+        "outline-color": "#05505e",
+        fit: true,
+        checkbox_id: "layer-house"
       }
-        %i.bi.bi-house-fill
-        %span.text-nowrap House Districts
+    }
+      %i.bi.bi-house-fill
+      %span.text-nowrap House Districts
 
-      %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
-        data: {
-          action: "click->maps#selectLayer",
-          layer_url: senate_districts_community_maps_path(@community, format: :json),
-          color: "#e67e22",
-          outline_color: "#a84300",
-          clear: true
-        }
+    / Senate Districts
+    %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
+      data: {
+        action: "click->maps#showLayer",
+        url: sd_url,
+        color: "#e67e22",
+        "outline-color": "#a84300",
+        fit: true,
+        checkbox_id: "layer-senate"
       }
-        %i.bi.bi-bank
-        %span.text-nowrap Senate Districts
-  / Datatable Tabs
-  %br
-  %ul.nav.nav-tabs.mb-2(role="tablist")
-    - if @community.show_house_districts?
-      %li.nav-item
-        = link_to "#HouseDistrictData",
-          class: "nav-link active d-inline-flex align-items-center gap-1",
-          data: { bs_toggle: "tab" }, role: "tab" do
-          %i.bi.bi-table
-          House District Data
-    - if @community.show_senate_districts?
-      %li.nav-item
-        = link_to "#SenateDistrictData",
-          class: "nav-link d-inline-flex align-items-center gap-1",
-          data: { bs_toggle: "tab" }, role: "tab" do
-          %i.bi.bi-table
-          Senate District Data
+    }
+      %i.bi.bi-bank
+      %span.text-nowrap Senate Districts
 
-  .tab-content
-    - if @community.show_house_districts?
-      #HouseDistrictData.tab-pane.fade.show.active(role="tabpanel")
-        = render "communities/sections/background/legislative_districts/house_district_data"
-    - if @community.show_senate_districts?
-      #SenateDistrictData.tab-pane.fade(role="tabpanel")
-        = render "communities/sections/background/legislative_districts/senate_district_data"
+
+.tab-content
+  - if @community.show_house_districts?
+    #HouseDistrictData.tab-pane.fade.show.active(role="tabpanel")
+      = render "communities/sections/background/legislative_districts/house_district_data"
+  - if @community.show_senate_districts?
+    #SenateDistrictData.tab-pane.fade(role="tabpanel")
+      = render "communities/sections/background/legislative_districts/senate_district_data"

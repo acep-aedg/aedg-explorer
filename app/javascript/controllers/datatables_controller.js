@@ -3,7 +3,6 @@ import DataTable from "datatables.net-bs5";
 
 // Connects to data-controller="datatables"
 export default class extends Controller {
-  static targets = ["table"];
   static values = {
     order: { type: Array, default: [0, 'asc'] },
     pagesize: { type: Number, default: 10 },
@@ -11,20 +10,18 @@ export default class extends Controller {
   }
 
   connect() {
+    let table = this.element.querySelector("table");
     if (this.hasLoadValue) {
-      this.loadData(this.element)
+      this.loadData(table)  
     } else {
-      this.initializeDatatable(this.element)
+      this.initializeDatatable(table)
     }
   }
 
-  tableTargetConnected(element) {
-    this.initializeDatatable(element)
-  }
-
-  tableTargetDisconnected(element) {
-    let table = new DataTable(element, { retrieve: true });
-    table.destroy();
+  disconnect() {
+    let table = this.element.querySelector("table");
+    let dt = new DataTable(table, { retrieve: true });
+    dt.destroy();
   }
 
   loadData(element) {

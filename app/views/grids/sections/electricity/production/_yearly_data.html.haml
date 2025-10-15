@@ -1,16 +1,17 @@
-%table.table.table-stripped.border{ data: { controller: 'datatables', datatables: { order_value: [3, 'asc']} } }
-  %thead
-    %tr
-      %th Plant
-      %th Net Generation (MWh)
-      %th Fuel Type Code
-      %th Fuel Type Name
-      %th Year
-  %tbody
-    - @grid.yearly_generations.each do |generation|
+%div{ data: { controller: 'datatables', datatables: { order_value: [3, 'asc']} } }
+  %table.table.table-stripped.border{ data: { datatables_target: 'table'} }
+    %thead
       %tr
-        %td= generation.plant.name
-        %td= generation.net_generation_mwh
-        %td= generation.fuel_type_code
-        %td= generation.fuel_type_name
-        %td= generation.year
+        %th Plant
+        %th Net Generation (MWh)
+        %th Fuel Type Code
+        %th Fuel Type Name
+        %th Year
+    %tbody
+      - @grid.yearly_generations.each do |generation|
+        %tr
+          %td= generation.plant.name
+          %td= generation.net_generation_mwh
+          %td= generation.fuel_type_code
+          %td= generation.fuel_type_name
+          %td= generation.year

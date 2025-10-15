@@ -13,8 +13,6 @@
         %li= nav_link "Electricity", "#electricity", parent_section: true
       - if @community.show_utilities?
         %li= nav_link "Utilities", "#utilities"
-      - if @community.show_operators?
-        %li= nav_link "Operators", "#operators"
       - if @community.show_rates?
         %li= nav_link "Rates", "#rates"
       - if @community.show_production?

@@ -1,16 +1,17 @@
-%table.table.table-striped.border{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }
-  %thead
-    %tr
-      %th Plant
-      %th Capacity (MW)
-      %th Fuel Type Code
-      %th Fuel Type Name
-      %th Year
-  %tbody
-    - @community.capacities.each do |capacity|
+%div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }
+  %table.table.table-striped.border
+    %thead
       %tr
-        %td= capacity.plant.name
-        %td= capacity.capacity_mw
-        %td= capacity.fuel_type_code
-        %td= capacity.fuel_type_name
-        %td= capacity.year
+        %th Plant
+        %th Capacity (MW)
+        %th Fuel Type Code
+        %th Fuel Type Name
+        %th Year
+    %tbody
+      - @community.capacities.each do |capacity|
+        %tr
+          %td= capacity.plant.name
+          %td= capacity.capacity_mw
+          %td= capacity.fuel_type_code
+          %td= capacity.fuel_type_name
+          %td= capacity.year
