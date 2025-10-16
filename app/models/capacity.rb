@@ -22,7 +22,6 @@ class Capacity < ApplicationRecord
 
     {
       total_capacity: records.sum(:capacity_mw).to_f.round(2),
-      average_capacity: records.average(:capacity_mw)&.to_f&.round(2),
       min_capacity: min_rec&.capacity_mw&.to_f&.round(2),
       min_fuel_type: min_rec&.fuel_type_code,
       max_capacity: max_rec&.capacity_mw&.to_f&.round(2),

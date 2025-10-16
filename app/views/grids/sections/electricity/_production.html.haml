@@ -30,7 +30,7 @@
   .tab-content.mt-3
     - if @grid.show_monthly_generation?
       #monthly-prod-chart-wrapper.tab-pane.fade.show.active
-        /= render 'grids/sections/electricity/production/monthly_stats'
+        = render 'grids/sections/electricity/production/monthly_stats'
         = render "grids/sections/electricity/production/monthly_chart"
 
       #monthly-prod-data.tab-pane.fade

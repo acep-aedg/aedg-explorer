@@ -1,24 +1,17 @@
-- stats = MonthlyGeneration.generation_stats_for(@grid)
-      
-.bg-body-secondary.p-3.rounded.mb-3.d-flex.flex-wrap.justify-content-center.gap-4
-  .d-flex.align-items-center
-    %i.bi-bullseye.me-2.mt-1
-    %strong.me-1 Average:
-    %span.text-primary= "#{stats[:avg_generation]} MWh"
+- years          = MonthlyGeneration.available_years_for(@grid)
+- selected_year  = params[:year].presence&.to_i || years.first
 
-  .d-flex.align-items-center
-    %i.bi-arrow-up-right-circle.me-2.mt-1
-    %strong.me-1 Max:
-    %span.text-success.me-1= "#{stats[:max_generation]} MWh"
-    .text-muted= "(#{Date::ABBR_MONTHNAMES[stats[:max_month]]})"
+/ Wrapper for Stimulus controller
+#monthly_generation-chart-wrapper{ data: { controller: "summary-frame" } }
+  - if years.size > 1
+    .d-flex.align-items-center.gap-2.mb-2
+      %label.form-label.me-2.mb-0{ for: "monthly_generation-year" } Year:
+      %select#monthly_generation-year.form-select.form-select-sm.w-auto{
+        data: { action: "change->summary-frame#changeYear" }
+      }
+        - years.each do |y|
+          %option{ value: y, selected: y == selected_year }= y
 
-  .d-flex.align-items-center
-    %i.bi-arrow-down-right-circle.me-2.mt-1
-    %strong.me-1 Min:
-    %span.text-danger.me-1= "#{stats[:min_generation]} MWh"
-    .text-muted= "(#{Date::ABBR_MONTHNAMES[stats[:min_month]]})"
-
-  .d-flex.align-items-center
-    %i.bi-calendar.me-2.mt-1
-    %strong.me-1 Year:
-    %span.text-muted= stats[:year]
+  / Summary
+  %turbo-frame#monthly_generation_summary{ data: { summary_frame_target: 'frame' }, src: monthly_generation_grid_summary_path(@grid, year: selected_year)}
+    Loading summary ...

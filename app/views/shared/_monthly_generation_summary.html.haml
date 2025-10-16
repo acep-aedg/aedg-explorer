@@ -1,0 +1,23 @@
+%turbo-frame#monthly_generation_summary   
+  .bg-body-secondary.p-3.rounded.mb-3.d-flex.flex-wrap.justify-content-center.gap-4
+    .d-flex.align-items-center
+      %i.bi-bullseye.me-2.mt-1
+      %strong.me-1 Average:
+      %span.text-primary= "#{stats[:avg_generation]} MWh"
+
+    .d-flex.align-items-center
+      %i.bi-arrow-up-right-circle.me-2.mt-1
+      %strong.me-1 Max:
+      %span.text-success.me-1= "#{stats[:max_generation]} MWh"
+      .text-muted= "(#{Date::ABBR_MONTHNAMES[stats[:max_month]]})"
+
+    .d-flex.align-items-center
+      %i.bi-arrow-down-right-circle.me-2.mt-1
+      %strong.me-1 Min:
+      %span.text-danger.me-1= "#{stats[:min_generation]} MWh"
+      .text-muted= "(#{Date::ABBR_MONTHNAMES[stats[:min_month]]})"
+
+    .d-flex.align-items-center
+      %i.bi-calendar.me-2.mt-1
+      %strong.me-1 Year:
+      %span.text-muted= stats[:year]
