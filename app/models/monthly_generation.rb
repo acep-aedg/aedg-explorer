@@ -22,8 +22,8 @@ class MonthlyGeneration < ApplicationRecord
   end
 
   # --- Stats used by a summary turbo-frame (min/max/avg, months, etc.)
-  def self.generation_stats_for(owner, year)
-    #year ||= latest_year_for(owner)
+  def self.generation_stats_for(owner, year = nil)
+    year ||= latest_year_for(owner)
     records      = for_owner_and_year(owner, year)
     monthly_data = records.group(:month).sum(:net_generation_mwh) # {1=>..., 2=>...}
 
@@ -33,12 +33,12 @@ class MonthlyGeneration < ApplicationRecord
     avg_v  = values.any? ? (values.sum.to_f / values.size).round(2) : 0.0
 
     {
-      year:            year,
-      max_generation:  max_v,
-      min_generation:  min_v,
-      avg_generation:  avg_v,
-      max_month:       monthly_data.key(max_v), # integer 1..12
-      min_month:       monthly_data.key(min_v)  # integer 1..12
+      year: year,
+      max_generation: max_v,
+      min_generation: min_v,
+      avg_generation: avg_v,
+      max_month: monthly_data.key(max_v), # integer 1..12
+      min_month: monthly_data.key(min_v)  # integer 1..12
     }
   end
 end

@@ -1,5 +1,5 @@
 - chart_title = "#{@community.name.titleize} Net Generation by Month"
-= line_chart production_monthly_community_charts_path(@community), 
+= column_chart production_monthly_community_charts_path(@community), 
   title: chart_title, 
   xtitle: 'Month', 
   ytitle: 'Net Generation (MWh)', 
