@@ -3,7 +3,6 @@ require 'test_helper'
 class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @community = communities(:one)
-    @grid = @community.grid
   end
 
   test 'should get production_monthly' do
@@ -11,7 +10,7 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
-    generation = @grid.monthly_generations.first
+    generation = @community.monthly_generations.first
     month_abbr = Date::ABBR_MONTHNAMES[generation.month]
     assert_equal generation.year.to_s, body.first['name']
     assert_equal generation.net_generation_mwh.to_s, body.first['data'][month_abbr]
@@ -21,24 +20,39 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     get production_yearly_community_charts_url(@community)
     assert_response :success
     assert_equal 'application/json', @response.media_type
+
     body = JSON.parse(@response.body)
-    label, value = body.first
-    generation = @grid.yearly_generations.first
+    assert body.key?('year'), "Expected response to include 'year' key"
+    assert body.key?('data'), "Expected response to include 'data' key"
+    assert_kind_of Array, body['data'], "Expected 'data' to be an array"
+
+    label, value = body['data'].first
+    generation = @community.yearly_generations.first
+
     assert_includes label, generation.fuel_type_code
     assert_includes label, generation.fuel_type_name
-    assert_equal generation.net_generation_mwh, value
+    assert_equal generation.net_generation_mwh.to_f, value.to_f
   end
 
-  test 'should get capacity_yearly' do
-    get capacity_yearly_community_charts_url(@community)
+  test 'should get capacity_yearly for a specific year' do
+    year = 2020
+    get capacity_yearly_community_charts_url(@community, params: { year: year })
     assert_response :success
     assert_equal 'application/json', @response.media_type
+
     body = JSON.parse(@response.body)
-    label, value = body.first
-    capacity = @grid.capacities.first
+    assert_equal year, body['year'], "Expected response for year #{year}"
+    assert body.key?('data'), "Expected response to include 'data' key"
+    assert_kind_of Array, body['data'], "Expected 'data' to be an array"
+
+    # Check one row
+    label, value = body['data'].first
+    capacity = @community.capacities.find_by(year: year)
+    assert_not_nil capacity, "Expected capacity for year #{year}"
+
     assert_includes label, capacity.fuel_type_code
     assert_includes label, capacity.fuel_type_name
-    assert_equal capacity.capacity_mw, value
+    assert_in_delta capacity.capacity_mw.to_f, value.to_f, 1e-6
   end
 
   test 'should get population_employment' do
