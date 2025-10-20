@@ -37,8 +37,24 @@ class MonthlyGeneration < ApplicationRecord
       max_generation: max_v,
       min_generation: min_v,
       avg_generation: avg_v,
-      max_month: monthly_data.key(max_v), # integer 1..12
-      min_month: monthly_data.key(min_v)  # integer 1..12
+      max_month: monthly_data.key(max_v),
+      min_month: monthly_data.key(min_v)
     }
+  end
+
+  def self.series_by_year(owner, year: nil)
+    scope = for_owner(owner)
+    scope = scope.where(year: year) if year
+
+    grouped = scope.group(:year, :month).sum(:net_generation_mwh)
+    years   = grouped.keys.map(&:first).uniq.sort
+
+    years.map do |y|
+      monthly = (1..12).each_with_object({}) do |m, h|
+        h[Date::ABBR_MONTHNAMES[m]] = grouped.fetch([y, m], 0)
+      end
+
+      { name: y.to_s, data: monthly }
+    end
   end
 end

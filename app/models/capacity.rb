@@ -1,6 +1,7 @@
 class Capacity < ApplicationRecord
   include CapacityAttributes
   validates :aea_plant_id, presence: true
+
   belongs_to :plant, foreign_key: 'aea_plant_id', primary_key: 'aea_plant_id', inverse_of: :capacities
 
   scope :for_owner, ->(owner) { owner ? joins(:plant).merge(owner.plants) : all }
@@ -28,5 +29,19 @@ class Capacity < ApplicationRecord
       max_fuel_type: max_rec&.fuel_type_code,
       year: year
     }
+  end
+
+  def self.dataset_by_fuel_for(owner, year)
+    summed = for_owner_and_year(owner, year)
+             .where.not(capacity_mw: nil)
+             .group(:fuel_type_code, :fuel_type_name)
+             .sum(:capacity_mw)
+
+    dataset = summed.map do |(code, name), total|
+      label = name.present? ? "#{name} (#{code})" : code
+      [label, total]
+    end
+
+    dataset.sort_by { |label, _| label }
   end
 end
