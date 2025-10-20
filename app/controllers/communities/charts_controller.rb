@@ -1,57 +1,18 @@
 class Communities::ChartsController < ApplicationController
   include Communities::ChartsHelper
+  include Charts
   before_action :set_community
 
   def production_monthly
-    grouped_data = @community.monthly_generations.grouped_net_generation_by_year_month
-
-    dataset = grouped_data.keys.map(&:first).uniq.sort.map do |year|
-      monthly_data = (1..12).map do |month|
-        [Date::ABBR_MONTHNAMES[month], grouped_data.fetch([year, month], 0)]
-      end.to_h
-      { name: year.to_s, data: monthly_data }
-    end
-
-    render json: dataset
+    production_monthly_for(@community)
   end
 
   def production_yearly
-    years   = @community.yearly_generations.available_years
-    year    = params[:year].presence&.to_i || years.first
-    records = @community.yearly_generations.where(year: year)
-    grouped = records.group_by(&:fuel_type_code)
-
-    dataset = grouped.map do |code, rows|
-      name  = rows.first.fuel_type_name
-      label = name.present? ? "#{name} (#{code})" : code
-      [label, rows.sum(&:net_generation_mwh)]
-    end
-
-    render json: {
-      year: year,
-      data: dataset.sort_by! { |label, _| label }
-    }
+    production_yearly_for(@community)
   end
 
   def capacity_yearly
-    years = Capacity.available_years_for(@community)
-    year  = params[:year].presence&.to_i || years.first
-
-    records = Capacity.for_owner_and_year(@community, year)
-    grouped = records.group_by(&:fuel_type_code)
-
-    dataset = grouped.map do |code, rows|
-      capacities = rows.map(&:capacity_mw).compact
-      name  = rows.first.fuel_type_name
-      label = name.present? ? "#{name} (#{code})" : code
-
-      [label, capacities.sum]
-    end
-
-    render json: {
-      year: year,
-      data: dataset.sort_by! { |label, _| label }
-    }
+    capacity_yearly_for(@community)
   end
 
   def population_employment
