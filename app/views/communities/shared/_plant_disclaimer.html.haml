@@ -6,6 +6,7 @@
 
   - if @community.grid
     = link_to grid_path(@community.grid, anchor: anchor),
-      class: "small text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline gap-1" do
+      class: "small text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline gap-1",
+      data: { turbo: false } do
       %span Explore grid data
       %i.bi.bi-arrow-right
