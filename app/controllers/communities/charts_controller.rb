@@ -29,7 +29,7 @@ class Communities::ChartsController < ApplicationController
 
     render json: {
       year: year,
-      data: dataset.sort_by { |label, _| label }
+      data: dataset.sort_by! { |label, _| label }
     }
   end
 
@@ -41,14 +41,16 @@ class Communities::ChartsController < ApplicationController
     grouped = records.group_by(&:fuel_type_code)
 
     dataset = grouped.map do |code, rows|
+      capacities = rows.map(&:capacity_mw).compact
       name  = rows.first.fuel_type_name
       label = name.present? ? "#{name} (#{code})" : code
-      [label, rows.sum(&:capacity_mw)]
+
+      [label, capacities.sum]
     end
 
     render json: {
       year: year,
-      data: dataset.sort_by { |label, _| label }
+      data: dataset.sort_by! { |label, _| label }
     }
   end
 

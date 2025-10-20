@@ -41,14 +41,19 @@ module Grids
       grouped = records.group_by(&:fuel_type_code)
 
       dataset = grouped.map do |code, rows|
+        capacities = rows.map(&:capacity_mw).compact
         name  = rows.first.fuel_type_name
         label = name.present? ? "#{name} (#{code})" : code
-        [label, rows.sum(&:capacity_mw)]
+        total = capacities.sum
+
+        [label, total]
       end
+
+      dataset.sort_by! { |label, _| label }
 
       render json: {
         year: year,
-        data: dataset.sort_by { |label, _| label }
+        data: dataset
       }
     end
 
