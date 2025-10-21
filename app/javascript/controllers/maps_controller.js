@@ -33,13 +33,14 @@ export default class extends Controller {
 
     this.map.on('load', async () => {
       // place static DOM marker from server-provided coords (no hard-coding)
-      const [lng0, lat0] =
-        (this.hasMarkersValue && this.markersValue[0]) || this.mapCenterValue
-      const L0 = Number(lng0), A0 = Number(lat0)
-
-      this._domMarker = upsertDomMarker(this._domMarker, this.map, {
-        lng: L0, lat: A0, title: this.markerTooltipTitleValue
-      })
+      
+      if (this.hasMarkersValue) {
+        const [lng0, lat0] = (this.hasMarkersValue && this.markersValue[0])
+        const L0 = Number(lng0), A0 = Number(lat0);
+        this._domMarker = upsertDomMarker(this._domMarker, this.map, {
+          lng: L0, lat: A0, title: this.markerTooltipTitleValue
+        })
+      }
 
       // optional default GeoJSON layer
       if (this.hasDefaultLayerUrlValue) {
