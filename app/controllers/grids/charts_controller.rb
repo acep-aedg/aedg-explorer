@@ -4,15 +4,15 @@ module Grids
     before_action :set_grid
 
     def production_monthly
-      production_monthly_for(@grid)
+      render json: production_monthly_for(@grid)
     end
 
     def production_yearly
-      production_yearly_for(@grid)
+      render json: production_yearly_for(@grid, params[:year].presence&.to_i)
     end
 
     def capacity_yearly
-      capacity_yearly_for(@grid)
+      render json: capacity_yearly_for(@grid, params[:year].presence&.to_i)
     end
 
     private

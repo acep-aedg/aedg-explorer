@@ -8,7 +8,7 @@
   data: {
     controller: "fuel-chart summary-frame",
     fuel_chart: {
-      url_value: capacity_yearly_community_charts_path(@community),
+      url_value: capacity_yearly_community_charts_path(@community, year: selected_year),
       chart_type_value: "pie",
       base_title_value: base_title,
       options_value: chart_options.to_json,

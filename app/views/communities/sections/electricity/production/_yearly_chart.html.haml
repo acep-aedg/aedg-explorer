@@ -1,11 +1,12 @@
 - base_title = "#{@community.name.titleize} - Net Generation by Fuel Type"
 - chart_options = Chartkick.options.deep_merge({ suffix: ' MWh', donut: true, library: { plugins: { legend: { title: { display: true, text: 'Fuel Type'} } } } })
 - years          = YearlyGeneration.available_years_for(@community)
+- selected_year  = params[:year].presence&.to_i || years.first
 
 #yearly-prod-wrapper{
   data: {
     controller: "fuel-chart", fuel_chart: {
-      url_value: production_yearly_community_charts_path(@community),
+      url_value: production_yearly_community_charts_path(@community, year: selected_year),
       chart_type_value: "pie",
       base_title_value: base_title,
       options_value: chart_options.to_json,
@@ -19,6 +20,6 @@
         data: { action: "change->fuel-chart#changeYear" }
       }
         - years.each do |y|
-          %option{ value: y }= y
+          %option{ value: y, selected: y == selected_year }= y
 
   #yearly-prod.responsive-fuel-chart{ data: { "fuel-chart-target": "chart" } }

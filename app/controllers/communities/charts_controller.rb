@@ -4,15 +4,15 @@ class Communities::ChartsController < ApplicationController
   before_action :set_community
 
   def production_monthly
-    production_monthly_for(@community)
+    render json: production_monthly_for(@community)
   end
 
   def production_yearly
-    production_yearly_for(@community)
+    render json: production_yearly_for(@community, params[:year])
   end
 
   def capacity_yearly
-    capacity_yearly_for(@community)
+    render json: capacity_yearly_for(@community, params[:year])
   end
 
   def population_employment
