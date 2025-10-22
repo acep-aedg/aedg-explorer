@@ -8,11 +8,11 @@ class Communities::ChartsController < ApplicationController
   end
 
   def production_yearly
-    render json: production_yearly_for(@community, params[:year])
+    render json: production_yearly_for(@community, params[:year].presence&.to_i)
   end
 
   def capacity_yearly
-    render json: capacity_yearly_for(@community, params[:year])
+    render json: capacity_yearly_for(@community, params[:year].presence&.to_i)
   end
 
   def population_employment

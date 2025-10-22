@@ -17,12 +17,13 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get production_yearly' do
-    get production_yearly_community_charts_url(@community)
+    year = @community.yearly_generations.first.year
+    get production_yearly_community_charts_url(@community, year: year)
     assert_response :success
     assert_equal 'application/json', @response.media_type
 
     body = JSON.parse(@response.body)
-    assert body.key?('year'), "Expected response to include 'year' key"
+    assert_equal year, body['year'], "Expected response for year #{year}"
     assert body.key?('data'), "Expected response to include 'data' key"
     assert_kind_of Array, body['data'], "Expected 'data' to be an array"
 
@@ -35,8 +36,8 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get capacity_yearly for a specific year' do
-    year = 2020
-    get capacity_yearly_community_charts_url(@community, params: { year: year })
+    year = @community.capacities.first.year
+    get capacity_yearly_community_charts_url(@community, year: year)
     assert_response :success
     assert_equal 'application/json', @response.media_type
 
