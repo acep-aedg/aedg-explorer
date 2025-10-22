@@ -2,14 +2,16 @@
   %table.table.table-striped.border
     %thead
       %tr
+        %th Plant
+        %th Capacity (MW)
         %th Fuel Type Code
         %th Fuel Type Name
-        %th Capacity (MW)
         %th Year
     %tbody
-      - @community.grid.capacities.where(year: year).each do |capacity|
+      - @community.capacities.each do |capacity|
         %tr
+          %td= capacity.plant.name
+          %td= capacity.capacity_mw
           %td= capacity.fuel_type_code
           %td= capacity.fuel_type_name
-          %td= capacity.capacity_mw
           %td= capacity.year

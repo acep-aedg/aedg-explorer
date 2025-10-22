@@ -1,14 +1,14 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  grid: one
+  aea_plant_id: 1
   capacity_mw: 1.5
   fuel_type_code: 'DFO'
   fuel_type_name: 'Distillate Fuel Oil'
   year: 2020
 
 two:
-  grid: two
+  aea_plant_id: 2
   capacity_mw: 1.5
   fuel_type_code: 'NG'
   fuel_type_name: 'Natural Gas'
