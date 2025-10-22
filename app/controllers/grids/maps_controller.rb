@@ -3,23 +3,13 @@ module Grids
     before_action :set_grid
 
     def community_locations
-      features = @grid.communities.with_location.map do |c|
+      geojson = Rails.cache.fetch(['grid', @grid.id, 'community_locations'], expires_in: 12.hours) do
         {
-          type: 'Feature',
-          properties: {
-            tooltip: c.name
-          },
-          geometry: {
-            type: 'Point',
-            coordinates: [c.location.longitude.to_f, c.location.latitude.to_f]
-          }
+          type: 'FeatureCollection',
+          features: @grid.communities.with_location.map(&:as_geojson)
         }
       end
-
-      render json: {
-        type: 'FeatureCollection',
-        features: features
-      }
+      render json: geojson
     end
 
     def service_area_geoms

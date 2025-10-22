@@ -44,6 +44,19 @@ class Community < ApplicationRecord
     community_grids.find_by(termination_year: 9999)&.grid
   end
 
+  def as_geojson
+    {
+      type: 'Feature',
+      geometry: RGeo::GeoJSON.encode(location),
+      properties: {
+        title: name,
+        borough: borough&.name,
+        regional_corporation: regional_corporation&.name,
+        population: population&.total
+      }
+    }
+  end
+
   def peers_by_service_area_geoms
     @peers_by_service_area_geoms ||= Community.joins(:communities_service_area_geoms)
                                               .where(communities_service_area_geoms: { service_area_geom_aedg_id: service_area_geom_ids })
