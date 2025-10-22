@@ -52,7 +52,7 @@ class Community < ApplicationRecord
         title: name,
         borough: borough&.name,
         regional_corporation: regional_corporation&.name,
-        population: population&.total
+        population: population&.total_population
       }
     }
   end
