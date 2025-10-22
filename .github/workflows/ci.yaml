@@ -91,12 +91,6 @@ jobs:
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:drop db:create db:migrate db:seed test
 
-      - name: Import data pond
-        run: bin/rake import:all
-
-      - name: Import metadata
-        run: bin/rake metadata:import
-
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
         if: failure()
