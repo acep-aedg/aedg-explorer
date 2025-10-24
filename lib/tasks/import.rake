@@ -23,6 +23,7 @@ namespace :import do
     Rake::Task['import:community_service_area_geoms'].invoke
     Rake::Task['import:plants'].invoke
     Rake::Task['import:capacities'].invoke
+    Rake::Task['import:bulk_fuel_facilities'].invoke
     Rake::Task['import:yearly_generations'].invoke
     Rake::Task['import:monthly_generations'].invoke
     Rake::Task['import:community_grids'].invoke
@@ -37,7 +38,7 @@ namespace :import do
   desc 'Import data files from a specific GitHub tag'
   task pull_gh_data: :environment do
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    tag = 'v0.8'
+    tag = 'v0.8.2'
     folder_path = 'data/final'
     Rails.root.join('db/imports').to_s
     local_dir = Rails.root.join('db/imports').to_s
@@ -285,5 +286,20 @@ namespace :import do
 
     filepath = Rails.root.join('db/imports/fuel_prices.csv')
     ImportHelpers.import_csv(filepath, FuelPrice)
+  end
+
+  desc 'Import Bulk Fuel Facilities Data from .geojson file'
+  task bulk_fuel_facilities: :environment do
+    if BulkFuelFacility.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Bulk Fuel Facility table was not empty before starting import!
+        To clear it and all related tables, run:
+            rails delete:bulk_fuel_facilities
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/bulk_fuel.geojson')
+    ImportHelpers.import_geojson(filepath, BulkFuelFacility)
   end
 end
