@@ -22,14 +22,14 @@ namespace :import do
     Rake::Task['import:service_area_geoms'].invoke
     Rake::Task['import:community_service_area_geoms'].invoke
     Rake::Task['import:plants'].invoke
+    Rake::Task['import:capacities'].invoke
+    Rake::Task['import:yearly_generations'].invoke
+    Rake::Task['import:monthly_generations'].invoke
     Rake::Task['import:community_grids'].invoke
     Rake::Task['import:populations'].invoke
     Rake::Task['import:transportation'].invoke
-    Rake::Task['import:yearly_generations'].invoke
-    Rake::Task['import:monthly_generations'].invoke
     Rake::Task['import:populations_ages_sexes'].invoke
     Rake::Task['import:employments'].invoke
-    Rake::Task['import:capacities'].invoke
     Rake::Task['import:fuel_prices'].invoke
     puts 'Import complete'
   end
@@ -37,7 +37,7 @@ namespace :import do
   desc 'Import data files from a specific GitHub tag'
   task pull_gh_data: :environment do
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    tag = 'v0.7'
+    tag = 'v0.8'
     folder_path = 'data/final'
     Rails.root.join('db/imports').to_s
     local_dir = Rails.root.join('db/imports').to_s

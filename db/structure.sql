@@ -149,13 +149,14 @@ ALTER SEQUENCE public.boroughs_id_seq OWNED BY public.boroughs.id;
 
 CREATE TABLE public.capacities (
     id bigint NOT NULL,
-    grid_id integer,
     capacity_mw double precision,
     year integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     fuel_type_code character varying,
-    fuel_type_name character varying
+    fuel_type_name character varying,
+    aea_plant_id integer,
+    eia_plant_id integer
 );
 
 
@@ -738,14 +739,15 @@ ALTER SEQUENCE public.metadata_id_seq OWNED BY public.metadata.id;
 
 CREATE TABLE public.monthly_generations (
     id bigint NOT NULL,
-    grid_id integer,
     net_generation_mwh numeric,
     year integer,
     month integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     fuel_type_code character varying,
-    fuel_type_name character varying
+    fuel_type_name character varying,
+    aea_plant_id integer,
+    eia_plant_id integer
 );
 
 
@@ -1296,13 +1298,14 @@ ALTER SEQUENCE public.transportations_id_seq OWNED BY public.transportations.id;
 
 CREATE TABLE public.yearly_generations (
     id bigint NOT NULL,
-    grid_id integer,
     net_generation_mwh integer,
     year integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     fuel_type_code character varying,
-    fuel_type_name character varying
+    fuel_type_name character varying,
+    aea_plant_id integer,
+    eia_plant_id integer
 );
 
 
@@ -2254,14 +2257,6 @@ ALTER TABLE ONLY public.datasets
 
 
 --
--- Name: yearly_generations fk_rails_26662eb773; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.yearly_generations
-    ADD CONSTRAINT fk_rails_26662eb773 FOREIGN KEY (grid_id) REFERENCES public.grids(id);
-
-
---
 -- Name: service_area_geoms fk_rails_2c45461cbd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2283,14 +2278,6 @@ ALTER TABLE ONLY public.population_age_sexes
 
 ALTER TABLE ONLY public.populations
     ADD CONSTRAINT fk_rails_42627e1837 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
-
-
---
--- Name: monthly_generations fk_rails_44979977d4; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.monthly_generations
-    ADD CONSTRAINT fk_rails_44979977d4 FOREIGN KEY (grid_id) REFERENCES public.grids(id);
 
 
 --
@@ -2428,6 +2415,9 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251014162658'),
+('20251013200021'),
+('20250925225447'),
 ('20250911194508'),
 ('20250911181035'),
 ('20250911173625'),

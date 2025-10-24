@@ -25,8 +25,8 @@ application.register("lightbox", LightboxController)
 import MapsController from "./maps_controller"
 application.register("maps", MapsController)
 
+import SummaryFrameController from "./summary_frame_controller"
+application.register("summary-frame", SummaryFrameController)
+
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
-
-import MapsBridgeController from "./maps_bridge_controller"
-application.register("maps-bridge", MapsBridgeController)

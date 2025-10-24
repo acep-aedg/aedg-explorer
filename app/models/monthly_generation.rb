@@ -1,39 +1,60 @@
 class MonthlyGeneration < ApplicationRecord
   include MonthlyGenerationAttributes
-  belongs_to :grid
+  validates :aea_plant_id, presence: true
+  belongs_to :plant, foreign_key: 'aea_plant_id', primary_key: 'aea_plant_id', inverse_of: :monthly_generations
 
-  validates :grid_id,
-            uniqueness: { scope: %i[year fuel_type_code month],
-                          message: 'combination of grid_id, year, month, and fuel_type_code must be unique' }
+  validates :aea_plant_id,
+            uniqueness: { scope: %i[year month fuel_type_code],
+                          message: 'combination of aea_plant_id, year, month and fuel type_code must be unique' }
 
-  scope :grouped_net_generation_by_year_month, lambda {
-    group(:year, :month).sum(:net_generation_mwh)
-  }
+  scope :for_owner,          ->(owner) { owner ? joins(:plant).merge(owner.plants) : all }
+  scope :for_owner_and_year, ->(owner, year) { for_owner(owner).where(year: year) }
 
-  scope :for_grid_and_year, lambda { |grid, year|
-    where(grid: grid, year: year)
-  }
+  scope :grouped_net_generation_by_year_month, -> { group(:year, :month).sum(:net_generation_mwh) }
 
-  def self.latest_year_for(grid)
-    where(grid: grid).maximum(:year)
+  # --- Year helpers
+  def self.available_years_for(owner)
+    for_owner(owner).where.not(year: nil).distinct.order(year: :desc).pluck(:year)
   end
 
-  def self.generation_stats_for(grid, year = nil)
-    year ||= latest_year_for(grid)
-    records = for_grid_and_year(grid, year)
-    monthly_data = records.group(:month).sum(:net_generation_mwh)
+  def self.latest_year_for(owner)
+    for_owner(owner).maximum(:year)
+  end
 
-    max_generation = monthly_data.values.max || 0
-    min_generation = monthly_data.values.min || 0
-    avg_generation = ((monthly_data.values.sum.to_f / monthly_data.size).round(2) if monthly_data.any?)
+  # --- Stats used by a summary turbo-frame (min/max/avg, months, etc.)
+  def self.generation_stats_for(owner, year = nil)
+    year ||= latest_year_for(owner)
+    records      = for_owner_and_year(owner, year)
+    monthly_data = records.group(:month).sum(:net_generation_mwh) # {1=>..., 2=>...}
+
+    values = monthly_data.values
+    max_v  = values.max || 0
+    min_v  = values.min || 0
+    avg_v  = values.any? ? (values.sum.to_f / values.size).round(2) : 0.0
 
     {
-      max_generation: max_generation,
-      min_generation: min_generation,
-      avg_generation: avg_generation,
-      max_month: monthly_data.key(max_generation),
-      min_month: monthly_data.key(min_generation),
-      year: year
+      year: year,
+      max_generation: max_v,
+      min_generation: min_v,
+      avg_generation: avg_v,
+      max_month: monthly_data.key(max_v),
+      min_month: monthly_data.key(min_v)
     }
+  end
+
+  def self.series_by_year(owner, year: nil)
+    scope = for_owner(owner)
+    scope = scope.where(year: year) if year
+
+    grouped = scope.group(:year, :month).sum(:net_generation_mwh)
+    years   = grouped.keys.map(&:first).uniq.sort
+
+    years.map do |y|
+      monthly = (1..12).each_with_object({}) do |m, h|
+        h[Date::ABBR_MONTHNAMES[m]] = grouped.fetch([y, m], 0)
+      end
+
+      { name: y.to_s, data: monthly }
+    end
   end
 end

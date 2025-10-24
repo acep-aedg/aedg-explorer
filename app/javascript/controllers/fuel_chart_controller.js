@@ -1,53 +1,41 @@
-// Stimulus controller for rendering fuel-type charts using Chartkick + Chart.js.
-//
-// Features:
-// - Fetches and caches chart data from a provided URL.
-// - Renders responsive pie charts with consistent colors based on fuel type codes.
-// - Dynamically updates chart layout for small screens (legend position).
-// - Destroys any existing chart instance before re-rendering.
-// - Waits for chart container to become visible before rendering (for tabbed/hidden UIs).
-// - Redraws chart on window resize (debounced).
-// - Warns if chart type is unsupported or data is invalid.
-//
-// Requirements:
-// - Chart type must be "pie".
-// - Chart labels must include a fuel code within the label. e.g., "Natural Gas (NG)", "NG - Natural Gas", "Diesel DFO", "DFO"
-//
-// Connects to: data-controller="fuel-chart"
-
+// controllers/fuel_chart_controller.js
 import { Controller } from '@hotwired/stimulus';
 
 const FUEL_COLORS = {
-  CL: '#F1C40F', // Coal (All coal types combined)
-  DFO: '#E67E22', // Distillate Fuel Oil,
-  JF: '#D35400', // Jet Fuel
-  LFG: '#A1866F', // Landfill Gas
-  LIG: '#A0522D', // Lignite Coal
-  MWH: '#5D6D7E', // Electricity used for Energy Storage
-  NG: '#8EBFA2', // Natural Gas
-  SUB: '#34495E', // Subbituminous coal
-  SUN: '#FDB813', // Solar
-  WAT: '#3498DB', // Water at Hydroelectric Turbine
-  WC: '#4B4B4B', // Waste Coal
-  WH: '#B7410E', // Waste Heat
-  WND: '#2980B9', // Wind
-  WO: '#6E2C00', // Waste Oil
+  CL: '#F1C40F',
+  DFO: '#E67E22',
+  JF: '#D35400',
+  LFG: '#A1866F',
+  LIG: '#A0522D',
+  MWH: '#5D6D7E',
+  NG: '#8EBFA2',
+  SUB: '#34495E',
+  SUN: '#FDB813',
+  WAT: '#3498DB',
+  WC: '#4B4B4B',
+  WH: '#B7410E',
+  WND: '#2980B9',
+  WO: '#6E2C00',
 };
 
 export default class extends Controller {
+  static targets = ['chart'];
   static values = {
     url: String,
     chartType: String,
     options: Object,
+    baseTitle: String, // <- pass from view
+    baseFilename: String, // <- optional; fallback generated from baseTitle
   };
 
   connect() {
     this.chart = null;
     this.chartData = null;
+    this.chartYear = null;
+
     this.handleResize = this.debounce(() => {
       if (!this.isHidden()) this.renderChart();
     }, 300);
-
     window.addEventListener('resize', this.handleResize);
 
     if (this.isHidden()) {
@@ -62,45 +50,26 @@ export default class extends Controller {
     this.destroyChart();
   }
 
-  isHidden() {
-    return this.element.offsetParent === null;
-  }
+  // ---------- render & update ----------
 
-  waitUntilVisible(callback) {
-    const observer = new MutationObserver(() => {
-      if (!this.isHidden()) {
-        observer.disconnect();
-        callback();
+  async renderChart() {
+    try {
+      const res = await fetch(this.urlValue, {
+        headers: { Accept: 'application/json' },
+      });
+      const json = await res.json();
+
+      if (Array.isArray(json)) {
+        this.chartYear = null;
+        this.chartData = json;
+      } else {
+        this.chartYear = json.year ?? null;
+        this.chartData = json.data ?? [];
       }
-    });
 
-    observer.observe(document.body, {
-      attributes: true,
-      subtree: true,
-      attributeFilter: ['class'],
-    });
-  }
-
-  destroyChart() {
-    if (this.chart && this.chart.destroy) {
-      this.chart.destroy();
-    }
-    this.chart = null;
-  }
-
-  renderChart() {
-    if (!this.chartData) {
-      fetch(this.urlValue)
-        .then((res) => res.json())
-        .then((data) => {
-          this.chartData = data;
-          this.renderChartData();
-        })
-        .catch((error) => {
-          console.error('Failed to fetch chart data:', error);
-        });
-    } else {
       this.renderChartData();
+    } catch (e) {
+      console.error('Failed to fetch chart data:', e);
     }
   }
 
@@ -109,16 +78,18 @@ export default class extends Controller {
       console.warn(`Unsupported chart type: ${this.chartTypeValue}`);
       return;
     }
-    
-    this.destroyChart();
 
     const labels = this.chartData.map((entry) => entry[0]);
     const colors = this.getFuelColors(labels);
-    const isXSmallScreen = window.innerWidth < 576;
+    const isXSmall = window.innerWidth < 576;
+
+    const { title, filename } = this._titleAndFilename();
 
     const chartOptions = {
       ...this.optionsValue,
-      colors: colors,
+      title,
+      colors,
+      download: { filename, ...(this.optionsValue?.download || {}) },
       library: {
         ...(this.optionsValue?.library || {}),
         responsive: true,
@@ -126,34 +97,107 @@ export default class extends Controller {
         plugins: {
           ...(this.optionsValue?.library?.plugins || {}),
           legend: {
-            position: isXSmallScreen ? 'bottom' : 'left',
-            align: isXSmallScreen ? 'start' : 'end',
+            position: isXSmall ? 'bottom' : 'left',
+            align: isXSmall ? 'start' : 'end',
           },
         },
       },
     };
 
-    this.chart = new Chartkick.PieChart(
-      this.element,
-      this.chartData,
-      chartOptions
-    );
+    // Create or update in place
+    const container = this.hasChartTarget ? this.chartTarget : this.element;
+    if (this.chart?.updateData) {
+      this.chart.updateData(this.chartData, chartOptions);
+    } else {
+      this.destroyChart();
+      this.chart = new Chartkick.PieChart(
+        container,
+        this.chartData,
+        chartOptions
+      );
+    }
+  }
+
+  changeYear(e) {
+    const year = e.target.value;
+    const u = new URL(this.urlValue, window.location.origin);
+    year ? u.searchParams.set('year', year) : u.searchParams.delete('year');
+    this.urlValue = u.toString();
+
+    // Re-fetch with the new year, then update in place
+    fetch(this.urlValue, { headers: { Accept: 'application/json' } })
+      .then((res) => res.json())
+      .then((json) => {
+        if (Array.isArray(json)) {
+          this.chartYear = year || null;
+          this.chartData = json;
+        } else {
+          this.chartYear = json.year ?? year ?? null;
+          this.chartData = json.data ?? [];
+        }
+        this.renderChartData();
+      })
+      .catch((e) => console.error('Failed to update chart:', e));
+  }
+
+  // ---------- helpers ----------
+
+  _titleAndFilename() {
+    const baseTitle = this.baseTitleValue || 'Chart';
+    const baseFile = this.baseFilenameValue || this._param(baseTitle);
+    const title = this.chartYear
+      ? `${baseTitle} (${this.chartYear})`
+      : baseTitle;
+    const filename = this.chartYear
+      ? `${baseFile}_${this.chartYear}`
+      : baseFile;
+    return { title, filename };
   }
 
   getFuelColors(labels) {
     return labels.map((label) => {
-      const abbr = Object.keys(FUEL_COLORS).find(code =>
+      const abbr = Object.keys(FUEL_COLORS).find((code) =>
         label.includes(code)
       );
       return FUEL_COLORS[abbr] || '#ccc';
     });
   }
 
-  debounce(callback, delay) {
-    let timeout;
+  destroyChart() {
+    if (this.chart && this.chart.destroy) this.chart.destroy();
+    this.chart = null;
+  }
+
+  isHidden() {
+    return this.element.offsetParent === null;
+  }
+
+  waitUntilVisible(cb) {
+    const obs = new MutationObserver(() => {
+      if (!this.isHidden()) {
+        obs.disconnect();
+        cb();
+      }
+    });
+    obs.observe(document.body, {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['class'],
+    });
+  }
+
+  debounce(fn, delay) {
+    let t;
     return (...args) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => callback.apply(this, args), delay);
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), delay);
     };
+  }
+
+  _param(s) {
+    return s
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_|_$/g, '');
   }
 }

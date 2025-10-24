@@ -15,8 +15,9 @@ module CapacityAttributes
   included do
     def assign_aedg_attributes(params)
       assign_attributes(
-        grid: Grid.from_aedg_id(params[:grid_id]).first,
-        capacity_mw: params[:capacity_mw],
+        aea_plant_id: params[:aea_plant_id],
+        eia_plant_id: params[:eia_plant_id],
+        capacity_mw: params[:nameplate_capacity_mw],
         fuel_type_code: params[:fuel_type_code],
         fuel_type_name: params[:fuel_type_name],
         year: params[:year]

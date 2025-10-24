@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     resources :communities, only: %i[index show] do
       resources :charts, only: [], controller: 'communities/charts', defaults: { format: :json } do
         collection do
-          get :production_monthly # Creates production_monthly_community_charts_path
+          get :production_monthly
           get :capacity_yearly
           get :population_employment
           get :population_detail
@@ -40,6 +40,11 @@ Rails.application.routes.draw do
           get :plants
         end
       end
+
+      resource :summary, only: [], controller: 'communities/summaries' do
+        get :capacity
+        get :monthly_generation
+      end
     end
     resources :grids, only: %i[index show] do
       resources :charts, only: [], controller: 'grids/charts', defaults: { format: :json } do
@@ -55,6 +60,11 @@ Rails.application.routes.draw do
           get :community_locations
           get :service_area_geoms
         end
+      end
+
+      resource :summary, only: [], controller: 'grids/summaries' do
+        get :capacity
+        get :monthly_generation
       end
     end
   end

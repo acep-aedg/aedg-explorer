@@ -3,7 +3,7 @@
   %h4#production.mb-0.me-3.py-3.anchor-offset Production
   %hr.flex-grow-1.mt-1.mb-0
 .mb-3
-  = render 'communities/shared/grid_info'
+  = render 'communities/shared/plant_disclaimer', anchor: 'production'
     
   .d-flex.justify-content-between.align-items-center
     .nav.nav-tabs
@@ -30,6 +30,7 @@
   .tab-content.mt-3
     - if @community.show_monthly_generation?
       #monthly-prod-chart-wrapper.tab-pane.fade.show.active
+
         = render 'communities/sections/electricity/production/monthly_stats'
         = render "communities/sections/electricity/production/monthly_chart"
 

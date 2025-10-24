@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  grid: one
+  aea_plant_id: 1
   net_generation_mwh: 111.1
   fuel_type_code: 'NG'
   fuel_type_name: 'Natural Gas'
@@ -9,7 +9,7 @@ one:
   month: 11
 
 two: 
-  grid: two
+  aea_plant_id: 2
   net_generation_mwh: 222.2
   fuel_type_code: 'NG'
   fuel_type_name: 'Natural Gas'
