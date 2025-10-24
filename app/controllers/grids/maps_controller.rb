@@ -3,12 +3,17 @@ module Grids
     before_action :set_grid
 
     def community_locations
-      geojson = Rails.cache.fetch(['grid', @grid.id, 'community_locations'], expires_in: 12.hours) do
+      geojson = Rails.cache.fetch(["#{@grid.cache_key_with_version}/community_locations"], expires_in: 12.hours) do
         {
           type: 'FeatureCollection',
-          features: @grid.communities.with_location.map(&:as_geojson)
+          features: @grid.communities.with_location.map do |c|
+            feat = c.as_geojson
+            feat[:properties][:path] = helpers.community_path(c)
+            feat
+          end
         }
       end
+
       render json: geojson
     end
 
