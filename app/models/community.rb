@@ -40,6 +40,18 @@ class Community < ApplicationRecord
   default_scope { order(name: :asc) }
   scope :with_location, -> { where.not(location: nil) }
 
+  scope :search, ->(q) {
+    next none unless q.present?
+
+    adapter = ActiveRecord::Base.connection.adapter_name.downcase
+    if adapter.include?('postgres')
+      where('name ILIKE ?', "%#{q}%")
+    else
+      # works for SQLite / MySQL (forces lower-case comparison)
+      where('LOWER(name) LIKE ?', "%#{q.downcase}%")
+    end
+  }
+
   def grid
     community_grids.find_by(termination_year: 9999)&.grid
   end

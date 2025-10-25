@@ -1,54 +1,52 @@
-- content_for :title, 'Explore'
-
-/ Wider like the example
 .container-fluid
   .row.justify-content-center.mb-5
     .col-12
       .container-fluid
         .row.justify-content-center
-          .col-12.col-md-11.col-lg-10.bg-opacity-75.p-4.rounded-4.bg-body-secondary
-            %h1.fw-bold.m-3
-              %i.bi.bi-grid-fill.me-2
-              Community Summaries
-            %p.lead.fs-5.mx-3
-              Explore Alaskas Communities.
+          .col-12.bg-opacity-75.p-4.rounded-4.bg-body-secondary
 
-            -#   %p.lead.text-muted
-            -#     Find data dashboards, tools, and new datasets.
-            -#   .d-flex.justify-content-center.mb-4
-            -#     = form_with url: communities_path, method: :get, local: true, class: "d-inline-block w-50" do
-            -#       .input-group.rounded-pill.shadow-sm.border.mx-auto
-            -#         %span.input-group-text.bg-white.border-0
-            -#           %i.bi.bi-search.text-muted
-            -#         = text_field_tag :q, params[:q],
-            -#           class: "form-control border-0 rounded-end-pill py-2",
-            -#           placeholder: "Search for a community..."
-            -#         %button.btn.btn-white.border-0{ type: "submit" }
-            -#           %i.bi.bi-arrow-return-left.text-secondary
+            / --- SEARCH BAR (unchanged) ---
+            .text-center.mb-5
+              %h1.display-5.fw-semibold Alaska Energy Data Gateway
+              %p.lead.text-muted
+                Find data dashboards, tools, and new datasets.
+              .d-flex.justify-content-center.mb-4
+                = form_with url: communities_path, method: :get, local: true, class: "d-inline-block w-50" do
+                  .input-group.rounded-pill.shadow-sm.border.mx-auto
+                    %span.input-group-text.bg-white.border-0
+                      %i.bi.bi-search.text-muted
+                    = text_field_tag :q, params[:q],
+                      class: "form-control border-0 rounded-end-pill py-2",
+                      placeholder: "Search for a community..."
+                    %button.btn.btn-white.border-0{ type: "submit" }
+                      %i.bi.bi-arrow-return-left.text-secondary
 
-            -#   %p.text-muted.small.mt-3.text-center
-            -#     All data is free to explore.
-            -#     %br/
-            -#     Search communities by name above or use Advance Search.
-            -#     %br/
-            -#     Learn more on the
-            -#     = link_to 'About page', about_path, class: 'text-decoration-none'
-            -#     or view the
-            -#     = link_to 'User Guide', user_guide_path, class: 'text-decoration-none'
-            -#     for additional details.
+              %p.text-muted.small.mt-3.text-center
+                All data is free to explore.
+                %br/
+                ssss
+                = link_to 'Advanced Search', search_advanced_path, class: 'text-decoration-none'
+                %br/
+                Learn more on the
+                = link_to 'About page', about_path, class: 'text-decoration-none'
+                or view the
+                = link_to 'User Guide', user_guide_path, class: 'text-decoration-none'
+                for additional details.
+            - if params[:q].present?
+              - if @communities.present? || @metadata.present? || @grids.present?
+                .mt-4.text-start
+                  %h5.text-center.text-muted.mb-3
+                    Results for 
+                    %strong= params[:q]
 
-            -# - if params[:q].present?
-            -#   %p.small.text-center.text-muted.mb-4
-            -#     Showing results for
-            -#     %strong= params[:q]
-            -#     — #{@communities.size} match#{'es' unless @communities.size == 1}.
+                - if @communities.present?
+                  %h6.mt-3.text-primary Communities
+                  %ul.list-unstyled.ps-3
+                    - @communities.each do |community|
+                      %li.mb-1
+                        = link_to community.name, community_path(community), class: 'text-decoration-none'
 
-            / --- ALL COMMUNITIES LIST (MOVED UP) ---
-            / --- ALL COMMUNITIES (collapsed by default) ---
-            .bg-body-tertiary.rounded-4
-              .bg-white.rounded-3.p-4.border.shadow-sm
-                .mt-3#allCommunities
-                  = render 'community_list', communities: @communities
+
 
             / =========================
             /   TILE CATEGORIES 

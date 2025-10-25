@@ -1,0 +1,124 @@
+.container.m-4
+  .row
+    / === LEFT SIDEBAR: FACETS ===
+    .col-12.col-lg-3
+      .card.shadow-sm.mb-3
+        .card-body
+          %h2.h5.mb-3 Advanced search
+
+          / Keyword stays helpful for narrowing communities by name
+          = form_with url: "#", method: :get, local: true do
+            .mb-3
+              = label_tag :q, "Keyword (community name)"
+              = text_field_tag :q, nil, class: "form-control", placeholder: "e.g., Nuiqsut"
+
+            / --- Grids ---
+            .mb-3
+              %label.form-label Grids
+              .form-check
+                = check_box_tag "grids[]", "Railbelt", false, id: "grid_railbelt", class: "form-check-input"
+                %label.form-check-label{ for: "grid_railbelt" } Railbelt
+              .form-check
+                = check_box_tag "grids[]", "North Slope", false, id: "grid_northslope", class: "form-check-input"
+                %label.form-check-label{ for: "grid_northslope" } North Slope
+              .form-check
+                = check_box_tag "grids[]", "Islanded Microgrid", false, id: "grid_islanded", class: "form-check-input"
+                %label.form-check-label{ for: "grid_islanded" } Islanded Microgrid
+
+            / --- Boroughs ---
+            .mb-3
+              %label.form-label Boroughs
+              .form-check
+                = check_box_tag "boroughs[]", "North Slope Borough", false, id: "bor_ns", class: "form-check-input"
+                %label.form-check-label{ for: "bor_ns" } North Slope Borough
+              .form-check
+                = check_box_tag "boroughs[]", "Fairbanks North Star Borough", false, id: "bor_fnsb", class: "form-check-input"
+                %label.form-check-label{ for: "bor_fnsb" } Fairbanks North Star Borough
+              .form-check
+                = check_box_tag "boroughs[]", "Matanuska-Susitna Borough", false, id: "bor_mat", class: "form-check-input"
+                %label.form-check-label{ for: "bor_mat" } Matanuska-Susitna Borough
+
+            / --- Native Corporations ---
+            .mb-3
+              %label.form-label Native Corporations
+              .form-check
+                = check_box_tag "corps[]", "Arctic Slope Regional Corporation", false, id: "corp_asrc", class: "form-check-input"
+                %label.form-check-label{ for: "corp_asrc" } Arctic Slope Regional Corporation (ASRC)
+              .form-check
+                = check_box_tag "corps[]", "Doyon", false, id: "corp_doyon", class: "form-check-input"
+                %label.form-check-label{ for: "corp_doyon" } Doyon, Limited
+              .form-check
+                = check_box_tag "corps[]", "CIRI", false, id: "corp_ciri", class: "form-check-input"
+                %label.form-check-label{ for: "corp_ciri" } CIRI
+
+            .d-grid.gap-2.mt-3
+              %button.btn.btn-primary{ type: "submit" } Apply filters
+              = link_to "Reset", "#", class: "btn btn-outline-secondary w-100"
+
+    / === RIGHT: COMMUNITY RESULTS ===
+    .col-12.col-lg-9
+      %div.d-flex.justify-content-between.align-items-center.mb-3
+        %h2.h5.mb-0 Communities
+
+
+      / --- Community Card #1 ---
+      .bg-white.rounded-3.p-3.border.shadow-sm.mb-3
+        %div.d-flex.justify-content-between.flex-wrap
+          %h5.mb-1
+            %a.text-decoration-none{ href: "#"} Nuiqsut
+          %div
+            / grid links are clickable because grids have pages
+            %a.badge.bg-light.text-body.border.me-1{ href: "#" }
+              %i.bi.bi-grid-3x3-gap.me-1
+              North Slope Grid
+            %span.badge.bg-secondary.me-1 North Slope Borough
+            %span.badge.bg-secondary ASRC
+        %p.small.text-muted.mb-2
+          Quick links:
+          = link_to "Community page", "#", class: "text-decoration-none me-2"
+          = link_to "Map", "#", class: "text-decoration-none me-2"
+          = link_to "Statistics", "#", class: "text-decoration-none"
+
+        %h6.mt-3.mb-2 Datasets for this community
+        %ul.list-group.list-group-flush
+          %li.list-group-item
+            %a{ href: "#" } Eider Surveys (1994–2024)
+            %span.text-muted.small.ms-2 USFWS
+          %li.list-group-item
+            %a{ href: "#" } Willow Spring Breakup & Hydrological Assessment (2018–2025)
+            %span.text-muted.small.ms-2 ACEP
+          %li.list-group-item
+            %a{ href: "#" } Caribou Subsistence Monitoring (2009–2025)
+            %span.text-muted.small.ms-2 ConocoPhillips
+
+      / --- Community Card #2 ---
+      .bg-white.rounded-3.p-3.border.shadow-sm.mb-3
+        %div.d-flex.justify-content-between.flex-wrap
+          %h5.mb-1
+            %a.text-decoration-none{ href: "#"} Utqiaġvik
+          %div
+            %a.badge.bg-light.text-body.border.me-1{ href: "#" }
+              %i.bi.bi-grid-3x3-gap.me-1
+              North Slope Grid
+            %span.badge.bg-secondary.me-1 North Slope Borough
+            %span.badge.bg-secondary ASRC
+        %p.small.text-muted.mb-2
+          Quick links:
+          = link_to "Community page", "#", class: "text-decoration-none me-2"
+          = link_to "Map", "#", class: "text-decoration-none me-2"
+          = link_to "Statistics", "#", class: "text-decoration-none"
+
+        %h6.mt-3.mb-2 Datasets for this community
+        %ul.list-group.list-group-flush
+          %li.list-group-item
+            %a{ href: "#" } Power Quality Logs (2021–2025)
+            %span.text-muted.small.ms-2 ACEP
+          %li.list-group-item
+            %a{ href: "#" } Wind Resource Assessment (2016–2020)
+            %span.text-muted.small.ms-2 DOE
+          %li.list-group-item
+            %a{ href: "#" } Diesel Consumption Monthly (2019–2025)
+            %span.text-muted.small.ms-2 AEA
+
+      / --- Empty-state reference (keep commented until needed) ---
+      / .alert.alert-info.text-center.mt-3 No communities matched those filters. Try broadening your selection.

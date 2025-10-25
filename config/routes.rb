@@ -1,9 +1,13 @@
 Rails.application.routes.draw do
+  get "searches/show"
+  get "searches/advanced"
   # Defines the root path route ("/")
   root 'static_pages#home'
 
   get '/about', to: 'static_pages#about', as: :about
   get '/user-guide', to: 'static_pages#user_guide', as: :user_guide
+  get '/search', to: 'searches#show'
+  get '/search/advanced', to: 'searches#advanced'
 
   scope path: '/explore' do
     resources :metadata, only: %i[index show], path: 'data' do
