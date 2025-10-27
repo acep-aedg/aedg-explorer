@@ -7,12 +7,9 @@
     %strong Last Updated:
     = transportation.as_of_date
 
-.container-fluid.bg-body-secondary.rounded.p-3.mb-3
-  .row.g-3
-    - Transportation::TRANSPORT_FIELDS.each do |field_name|
-      - value = transportation.send(field_name)
-      .col-4.col-md-2.d-flex.flex-column.text-center
-        %i{ class: "bi #{value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'}" }
-        %small= field_name.titleize
+= render 'shared/icon_status_grid', 
+  title: "Transportation Methods",
+  fields: Transportation::TRANSPORT_FIELDS,
+  source: @community.transportation
 
 %p= transportation.description
