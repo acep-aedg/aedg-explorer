@@ -23,6 +23,7 @@ Metrics/ClassLength:
   Max: 162
 
 # Offense count: 2
+# Offense count: 2
 # Configuration parameters: AllowedMethods, AllowedPatterns.
 Metrics/CyclomaticComplexity:
   Max: 8
