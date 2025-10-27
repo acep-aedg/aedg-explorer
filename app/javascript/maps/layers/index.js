@@ -1,7 +1,7 @@
 import { fetchGeoJSON } from '../fetch.js'
 import { addPolygonLayers } from './polygon.js'
 import { addPointLayer } from './points.js'
-
+import { attachPopup } from '../popup.js'
 
 // Remove all non-"marker:" layers/sources and prune layerIds/sourceIds in place
 // export function clearAll(map, layerIds, sourceIds) {
@@ -53,7 +53,7 @@ export function removeSourceLayers(map, sourceId) {
 
 // Fetch GeoJSON by URL, add as a source, then add polygon/point layers accordingly
 export async function loadLayer(map, url, { color, outlineColor } = {}) {
-  if (!map.isStyleLoaded()) await new Promise(r => map.once('load', r))
+  if (!map.isStyleLoaded()) await new Promise((r) => map.once('load', r))
   const fc = await fetchGeoJSON(url)
   const sourceId = sourceIdFrom(url)
   addSource(map, sourceId, fc)
@@ -67,7 +67,7 @@ export async function loadMarkerLayer(
   fc,
   { iconSize = 1.6, color = '#1DA6B0', strokeColor = '#fff', strokeWidth = 2 } = {}
 ) {
-  if (!map.isStyleLoaded()) await new Promise(r => map.once('load', r))
+  if (!map.isStyleLoaded()) await new Promise((r) => map.once('load', r))
   addSource(map, sourceId, fc)
 
   const layerId = `${sourceId}-circle`
@@ -96,7 +96,10 @@ function addLayersForFC(map, sourceId, fc, { color, outlineColor } = {}) {
     layerIds = addPolygonLayers(map, sourceId, { color, outlineColor })
   } else {
     const id = addPointLayer(map, sourceId)
-    if (id) layerIds.push(id)
+    if (id) {
+      layerIds.push(id)
+      attachPopup(map, id)
+    }
   }
   return { fc, sourceId, layerIds }
 }

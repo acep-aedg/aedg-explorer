@@ -16,8 +16,7 @@ class Plant < ApplicationRecord
       type: 'Feature',
       geometry: RGeo::GeoJSON.encode(location),
       properties: {
-        id: id,
-        tooltip: name
+        title: name
       }
     }
   end
