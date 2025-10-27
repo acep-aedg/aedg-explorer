@@ -143,8 +143,12 @@ class Community < ApplicationRecord
     @show_sales_revenue_customers ||= reporting_entity&.sales&.exists?
   end
 
+  def show_bulk_fuel_facilities?
+    @show_bulk_fuel_facilities ||= bulk_fuel_facilities.exists?
+  end
+
   def show_electricity_section?
-    @show_electricity_section ||= show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers?
+    @show_electricity_section ||= show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers? || show_bulk_fuel_facilities?
   end
 
   # --- Prices Section ---

@@ -124,6 +124,18 @@
                   }
                   %label.form-check-label.small{ for: "layer-plants" } Power Plants
 
+                .form-check
+                  %input.form-check-input#layer-bulk-fuel-facilities{
+                    type: "checkbox",
+                    style: "transform:scale(0.85); margin-top:.1rem;",
+                    data: {
+                      action: "change->maps#toggleLayer",
+                      url: bulk_fuel_facilities_community_maps_path(@community, format: :json),
+                      fit: true
+                    }
+                  }
+                  %label.form-check-label.small{ for: "layer-bulk-fuel-facilities" } Bulk Fuel Facilities
+
         / --- Map fills remaining height
         .flex-grow-1.position-relative
           %div{ data: { maps_target: "map" }, style: "position:absolute; inset:0; width:100%; height:100%;" }

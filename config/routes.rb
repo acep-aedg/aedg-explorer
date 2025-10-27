@@ -38,6 +38,7 @@ Rails.application.routes.draw do
           get :service_area_geoms
           get :service_areas
           get :plants
+          get :bulk_fuel_facilities
         end
       end
 
