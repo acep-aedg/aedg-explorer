@@ -7,8 +7,6 @@
   - full_sa_url = service_areas_community_maps_path(@community, format: :json)
 - hd_url = house_districts_community_maps_path(@community, format: :json)
 - sd_url = senate_districts_community_maps_path(@community, format: :json)
-- if @community.show_plants?
-  - plants_url = plants_community_maps_path(@community, format: :json)
 
 / --- Tool Bar
 .sticky-top.bg-light.p-1
@@ -111,30 +109,31 @@
                 -# .d-flex.justify-content-end.gap-1
                 -#   %button.btn.btn-sm.px-1.py-0{ data: { action: "click->maps#clearLayers" }, title: "Clear Layers", style: "line-height:1;" }
                 -#     %i.bi.bi-trash.fs-6
-                  
-                .form-check
-                  %input.form-check-input#layer-plants{
-                    type: "checkbox",
-                    style: "transform:scale(0.85); margin-top:.1rem;",
-                    data: {
-                      action: "change->maps#toggleLayer",
-                      url: plants_url,
-                      fit: true
+                - if @community.show_plants?
+                  .form-check
+                    %input.form-check-input#layer-plants{
+                      type: "checkbox",
+                      style: "transform:scale(0.85); margin-top:.1rem;",
+                      data: {
+                        action: "change->maps#toggleLayer",
+                        url: plants_community_maps_path(@community, format: :json),
+                        fit: true
+                      }
                     }
-                  }
-                  %label.form-check-label.small{ for: "layer-plants" } Power Plants
-
-                .form-check
-                  %input.form-check-input#layer-bulk-fuel-facilities{
-                    type: "checkbox",
-                    style: "transform:scale(0.85); margin-top:.1rem;",
-                    data: {
-                      action: "change->maps#toggleLayer",
-                      url: bulk_fuel_facilities_community_maps_path(@community, format: :json),
-                      fit: true
+                    %label.form-check-label.small{ for: "layer-plants" } Power Plants
+                
+                - if @community.show_bulk_fuel_facilities?
+                  .form-check
+                    %input.form-check-input#layer-bulk-fuel-facilities{
+                      type: "checkbox",
+                      style: "transform:scale(0.85); margin-top:.1rem;",
+                      data: {
+                        action: "change->maps#toggleLayer",
+                        url: bulk_fuel_facilities_community_maps_path(@community, format: :json),
+                        fit: true
+                      }
                     }
-                  }
-                  %label.form-check-label.small{ for: "layer-bulk-fuel-facilities" } Bulk Fuel Facilities
+                    %label.form-check-label.small{ for: "layer-bulk-fuel-facilities" } Bulk Fuel Facilities
 
         / --- Map fills remaining height
         .flex-grow-1.position-relative
