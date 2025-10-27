@@ -65,6 +65,10 @@ class Communities::ChartsController < ApplicationController
     }
   end
 
+  def bulk_fuel_capacity_mix
+    render json: @community.bulk_fuel_facilities.capacity_by_fuel_type
+  end
+
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
 
