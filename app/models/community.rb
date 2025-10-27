@@ -50,10 +50,12 @@ class Community < ApplicationRecord
       geometry: RGeo::GeoJSON.encode(location),
       properties: {
         title: name,
-        borough: borough&.name,
+        (borough&.census_area? ? :census_area : :borough) => borough&.name,
         regional_corporation: regional_corporation&.name,
+        village_corporation: village_corporation,
+        economic_region: economic_region,
         population: population&.total_population
-      }
+      }.compact
     }
   end
 
