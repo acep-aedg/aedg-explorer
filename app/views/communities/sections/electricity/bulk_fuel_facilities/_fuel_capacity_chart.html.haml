@@ -1,0 +1,6 @@
+- base_title = "#{@community.name} - Bulk Fuel Capacity by Fuel Type"
+
+- chart_options = Chartkick.options.deep_merge( suffix: ' gal',download: { filename: base_title.parameterize}, library: { plugins: { title: { display: true, text: base_title } } } )
+
+= column_chart bulk_fuel_capacity_mix_community_charts_path(@community),
+  **chart_options

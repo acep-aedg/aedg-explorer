@@ -54,6 +54,16 @@ module Communities
       render json: geojson
     end
 
+    def bulk_fuel_facilities
+      geojson = Rails.cache.fetch(["#{@community.cache_key_with_version}/bulk_fuel_facilities"], expires_in: 12.hours) do
+        {
+          type: 'FeatureCollection',
+          features: @community.bulk_fuel_facilities.map(&:as_geojson)
+        }
+      end
+      render json: geojson
+    end
+
     private
 
     def set_community

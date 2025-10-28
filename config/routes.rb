@@ -28,6 +28,7 @@ Rails.application.routes.draw do
           get :revenue_by_customer_type
           get :customers_by_customer_type
           get :sales_by_customer_type
+          get :bulk_fuel_capacity_mix
         end
       end
 
@@ -38,6 +39,7 @@ Rails.application.routes.draw do
           get :service_area_geoms
           get :service_areas
           get :plants
+          get :bulk_fuel_facilities
         end
       end
 
