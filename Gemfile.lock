@@ -215,6 +215,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.13)
+    rack-accept (0.4.5)
+      rack (>= 0.4)
     rack-session (2.1.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -327,6 +329,9 @@ GEM
     turbo-rails (2.0.13)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
+    turnout (1.0.0)
+      rack
+      rack-accept (~> 0.4)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
@@ -389,6 +394,7 @@ DEPENDENCIES
   sprockets-rails
   stimulus-rails
   turbo-rails
+  turnout
   tzinfo-data
   web-console
 

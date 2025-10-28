@@ -72,6 +72,9 @@ group :test do
   gem 'selenium-webdriver'
 end
 
+group :production do
+  gem 'turnout'
+end
 gem 'dotenv-rails', '~> 3.1'
 
 gem 'bootstrap_form', '~> 5.4'
