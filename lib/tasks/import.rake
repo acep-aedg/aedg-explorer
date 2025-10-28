@@ -2,9 +2,6 @@ require 'csv'
 require 'rgeo/geo_json'
 require_relative 'import_helpers'
 
-# Single source of truth for the release tag
-DATA_POND_TAG = 'v0.7'.freeze
-
 namespace :import do
   desc 'Import Data Files into the Database'
   task all: [:environment] do
@@ -38,14 +35,14 @@ namespace :import do
     puts 'Import complete'
 
     # On success, record the new version (history row)
-    DataPondVersion.create!(current_version: DATA_POND_TAG)
-    puts "DataPondVersion recorded: #{DATA_POND_TAG}"
+    # DataPondVersion.create!(current_version: DATA_POND_TAG)
+    # puts "DataPondVersion recorded: #{DATA_POND_TAG}"
   end
 
   desc 'Import data files from a specific GitHub tag'
   task pull_gh_data: :environment do
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    tag = DATA_POND_TAG
+    tag = DataPondVersion.current_version.latest
     folder_path = 'data/final'
     Rails.root.join('db/imports').to_s
     local_dir = Rails.root.join('db/imports').to_s

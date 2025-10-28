@@ -1,10 +1,53 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
-  ./bin/rake import:all
-  ./bin/rake metadata:import
+# --- hard-coded target ---
+HARD_TAG="v0.7"
+
+normalize_ver() { echo "$1" | sed -E 's/^[vV]//'; }
+
+# Fail if no row; use .pick to avoid nil.method calls and raise if missing
+get_db_version() {
+  ./bin/rails runner "
+    v = DataPondVersion.order(created_at: :desc).pick(:current_version)
+    raise 'DataPondVersion row not found' unless v
+    puts v
+  "
+}
+
+# Return "1" if a < b (a is older), else "0"
+is_older() {
+  local a="$(normalize_ver "$1")"
+  local b="$(normalize_ver "$2")"
+  ./bin/rails runner "puts(Gem::Version.new('$a') < Gem::Version.new('$b') ? '1' : '0')"
+}
+
+# --- main ---
+if [ "$1" = "./bin/rails" ] && [ "$2" = "server" ]; then
+  echo "🧭 Checking DataPond version…"
+
+  # Get DB version (fail hard if missing)
+  db_tag="$(get_db_version)"
+  echo "Hard-coded version: $HARD_TAG"
+  echo "DB stored version : $db_tag"
+
+  if [ "$(is_older "$db_tag" "$HARD_TAG")" = "1" ]; then
+    echo "🚀 Hard-coded version ($HARD_TAG) is newer. Rebuilding and importing…"
+
+    DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ./bin/rails db:drop
+    ./bin/rails db:prepare
+
+    # Update the version
+    ./bin/rails runner "DataPondVersion.latest or raise('missing'); DataPondVersion.latest.update!(current_version: '$HARD_TAG')"
+    echo "✅ Updated DataPondVersion to $HARD_TAG"
+
+    # Import for the hard-coded tag — pass as rake arg to avoid envs
+    ./bin/rake "import:all[$HARD_TAG]"
+
+    ./bin/rake metadata:import
+    echo "✅ Metadata import complete."
+  else
+    echo "✅ Database already at $db_tag or newer. Skipping import."
+  fi
 fi
 
-exec "${@}"
+exec "$@"
