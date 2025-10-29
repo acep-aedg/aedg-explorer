@@ -6,6 +6,8 @@
     = favicon_link_tag 'favicon/favicon-light-mode.png', media: '(prefers-color-scheme: light)'
     = favicon_link_tag 'favicon/favicon-dark-mode.png', media: '(prefers-color-scheme: dark)'   
     %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}/
+    - unless Rails.env.production?
+      %meta{name: "robots", content: "noindex, nofollow"}
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
