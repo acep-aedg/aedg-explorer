@@ -3,7 +3,7 @@ module Grids
     before_action :set_grid
 
     def community_locations
-      geojson = Rails.cache.fetch(["#{@grid.cache_key_with_version}/community_locations"], expires_in: 12.hours) do
+      geojson = Rails.cache.fetch(['maps', @grid.cache_key_with_version, @grid.communities.cache_key_with_version], expires_in: 12.hours) do
         {
           type: 'FeatureCollection',
           features: @grid.communities.with_location.map do |c|
@@ -18,7 +18,7 @@ module Grids
     end
 
     def service_area_geoms
-      geojson = Rails.cache.fetch(['grid', @grid.id, 'service_area_geoms'], expires_in: 12.hours) do
+      geojson = Rails.cache.fetch(['maps', @grid.cache_key_with_version, @grid.service_area_geoms.cache_key_with_version], expires_in: 12.hours) do
         {
           type: 'FeatureCollection',
           features: @grid.service_area_geoms.distinct.map(&:as_geojson)
