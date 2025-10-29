@@ -329,9 +329,11 @@ GEM
     turbo-rails (2.0.13)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
-    turnout (1.0.0)
-      rack
+    turnout2024 (3.0.1)
+      i18n (>= 0.7, < 2)
+      rack (>= 3, < 4)
       rack-accept (~> 0.4)
+      tilt (>= 2.3, < 3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
@@ -394,7 +396,7 @@ DEPENDENCIES
   sprockets-rails
   stimulus-rails
   turbo-rails
-  turnout
+  turnout2024 (~> 3.0)
   tzinfo-data
   web-console
 

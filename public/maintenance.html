@@ -1,5 +1,81 @@
-<!-- TODO: We can create our own maintenance page if needed -->
-<!-- <!doctype html>
-<title>Maintenance</title>
-<h1>We'll be right back!</h1>
-<p>The site is down briefly for updates.</p> -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>We’ll Be Right Back</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, var(--bg), #020617);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 3rem 4rem;
+      border-radius: 1rem;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      max-width: 480px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: var(--muted);
+      margin: 0.5rem 0;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      margin: 2rem auto 1rem;
+      border: 4px solid rgba(255, 255, 255, 0.15);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    small {
+      display: block;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="spinner"></div>
+    <h1>We’ll Be Right Back</h1>
+    <p>Our servers are getting a quick tune-up.</p>
+    <p><small>{{ reason }}</small></p>
+  </div>
+</body>
+</html>

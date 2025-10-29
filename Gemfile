@@ -72,9 +72,6 @@ group :test do
   gem 'selenium-webdriver'
 end
 
-group :production do
-  gem 'turnout'
-end
 gem 'dotenv-rails', '~> 3.1'
 
 gem 'bootstrap_form', '~> 5.4'
@@ -99,3 +96,5 @@ gem 'brakeman', '~> 7.1'
 gem 'kramdown'
 gem 'kramdown-parser-gfm'
 gem 'simplecov', require: false, group: :test
+
+gem 'turnout2024', '~> 3.0', require: 'turnout'
