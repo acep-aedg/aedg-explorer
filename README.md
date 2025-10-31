@@ -1,7 +1,24 @@
 # AEDG Explorer
 
-Welcome to the AEDG Explorer! This project is designed to... (TBD)
+Welcome to the AEDG Explorer!
 
+### Static Content
+Most static content is located in their respective files in `config/data/`
+- [FAQ](https://aedg-dev.camio.acep.uaf.edu/user-guide#faq)
+  -  Answers Supports Markdown 
+- [AEDG Timeline](https://aedg-dev.camio.acep.uaf.edu/about#history)
+  -  Descriptions Supports Markdown 
+- [Data Creation Steps](https://aedg-dev.camio.acep.uaf.edu/user-guide#data-creation-process)
+  -  Descriptions Supports Markdown 
+- [Partners](https://aedg-dev.camio.acep.uaf.edu/about#partners)
+
+**Notes:**
+- **Markdown**: Descriptions & Answers in the YAML files for the [FAQ](https://aedg-dev.camio.acep.uaf.edu/user-guide#faq), [AEDG Timeline](https://aedg-dev.camio.acep.uaf.edu/about#history), [Data Creation Steps](https://aedg-dev.camio.acep.uaf.edu/user-guide#data-creation-process) can use Markdown for basic formatting (e.g., bold, italics, links, lists).
+- **Opening links in a new tab**: Add `{:target='_blank'}` after the link in Markdown to make it open in a new tab.
+
+---
+
+# Dev Notes
 ## Getting Started
 
 To start, we recommend reading through the [ACEP DevOps Rails Applications Guide](https://wiki.acep.uaf.edu/en/devops/rails-applications-from-scratch) for a comprehensive understanding of the setup and best practices.
@@ -59,53 +76,44 @@ Ensure you have the following dependencies installed:
 
 1. Start the Web Server
 
-    To start the web server on port 3001, run:
+    To start the web server on port 3000 or any port desired, run:
 
     ```bash
-    bin/dev -p 3001
+    bin/dev -p 3000
     ```
 ---
-### Static Content
-Most static content is located in their respective files in `config/data/`
-- [FAQ](https://aedg-dev.camio.acep.uaf.edu/user-guide#faq)
-  -  Answers Supports Markdown 
-- [AEDG Timeline](https://aedg-dev.camio.acep.uaf.edu/about#history)
-  -  Descriptions Supports Markdown 
-- [Data Creation Steps](https://aedg-dev.camio.acep.uaf.edu/user-guide#data-creation-process)
-  -  Descriptions Supports Markdown 
-- [Partners](https://aedg-dev.camio.acep.uaf.edu/about#partners)
-
-**Notes:**
-- **Markdown**: Descriptions & Answers in the YAML files for the [FAQ](https://aedg-dev.camio.acep.uaf.edu/user-guide#faq), [AEDG Timeline](https://aedg-dev.camio.acep.uaf.edu/about#history), [Data Creation Steps](https://aedg-dev.camio.acep.uaf.edu/user-guide#data-creation-process) can use Markdown for basic formatting (e.g., bold, italics, links, lists).
-- **Opening links in a new tab**: Add `{:target='_blank'}` after the link in Markdown to make it open in a new tab.
 
 ### 📂 Importing Data
 
-#### Pull Data from Github
-1. **Set up Github Repository URL**
-    - Before pulling data files from GitHub, ensure you have the correct repository URL and tag configured in your `.env` by adding:
+**Note**: See [data-pond releases](https://github.com/acep-aedg/aedg-data-pond/releases) for latest versions.
 
-        ```sh
-        GH_DATA_REPO_URL=https://github.com/acep-aedg/aedg-data-pond
-        GH_DATA_REPO_TAG=v0.1
-        ```
-        **Note**: See [data-pond releases](https://github.com/acep-aedg/aedg-data-pond/releases) for latest versions.
+1. make sure the database is dropped/truncated and created fresh:
+```bash
+rails db:truncate_all # deletes all data but keeps the schema
+# OR
+rails db:drop # drops the database Destorys all data and the schema (may need this in dev when changing or added new migrations)
 
-1. **Run the Rake Task**
-    - Use the following command to pull files from Github Repository into the `db/imports/` directory:
-        ```sh
-        rails import:pull_gh_data
-        ```
-1. **Verify Files**
-    - After running the task, check the `db/imports/` directory to ensure the files have successfully downloaded
 
+rails db:setup # creates the database, runs migrations, and seeds
+```
 #### Run a Full Database Import
-To **reset the database**, pull **latest** data files and import **all** data in the **correct** order, use:
-
+Pull **latest** data files and import **all** data in the **correct** order.
+1. update the `DATA_POND_TAG` in `lib/tasks/versioning.rb` to the desired release tag (e.g., `v0.7`)
+2. run the import task:
 ```bash
 rails import:all
 ```
-**Important**: The GitHub repository URL (`GH_DATA_REPO_URL`) must be set in `.env` before running the full import. Otherwise, the data pull will fail.
+This task will:
+- Check the current `DataPondVersion` in the database is equal to the desired `DATA_POND_TAG`
+- if it is equal it will not update the database that way in development you can run the import again without adding duplicate data
+- if it is not equal it will continue to import the data
+
+Test docker entrypoint with import prepare locally:
+```bash
+chmod +x ./bin/docker-entrypoint
+./bin/docker-entrypoint bin/dev
+```
+#### IN PRODUCTION: the task `import:prepare` will be ran first to check the version and if needed truncate/migrate the database before running the full import
 
  **Note**: Importing **GeoJSON** files with **Polygons/Multipolygons** (e.g., `Borough`, `RegionalCorporation`) can take longer due to the complexity of the spatial data.
 

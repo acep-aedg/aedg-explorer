@@ -1,5 +1,7 @@
 class DataPondVersion < ApplicationRecord
   validates :current_version, presence: true
 
-  scope :latest, -> { order(created_at: :desc).first }
+  def self.latest
+    order(created_at: :desc).first
+  end
 end

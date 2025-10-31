@@ -1,0 +1,37 @@
+require_relative 'versioning'
+
+namespace :import do
+  desc 'Prepare database based on DataPondVersion; truncates/migrates/imports if tag mismatch'
+  task prepare: :environment do
+    latest_str = DataPondVersion.latest&.current_version
+    puts "Latest DataPondVersion in DB: #{latest_str}"
+    desired_str = Import::Versioning::DATA_POND_TAG
+
+    latest = Import::Versioning.to_gem_version(latest_str) if latest_str
+    target = Import::Versioning.to_gem_version(desired_str)
+
+    if latest && latest == target
+      puts "✅ Data is current (DB=#{latest_str}, desired=#{desired_str}). Nothing to do."
+      exit 0
+    end
+
+    if latest.nil?
+      puts "🆕 Initial import to #{desired_str}."
+    elsif target > latest
+      puts "⬆️  Upgrade: #{latest_str} → #{desired_str}."
+    else
+      puts "⬇️  Rollback: #{latest_str} → #{desired_str} (clean re-seed)."
+    end
+
+    puts '🧹 Truncating all tables (rails db:truncate_all)…'
+    Rake::Task['db:truncate_all'].invoke
+    puts '🧼 Truncate complete.'
+
+    puts '📥 Importing dataset (import:all)…'
+    Rake::Task['import:all'].reenable
+    Rake::Task['import:all'].invoke
+    Rake::Task['metadata:import'].reenable
+    Rake::Task['metadata:import'].invoke
+    puts "✅ Import finished for #{desired_str}."
+  end
+end
