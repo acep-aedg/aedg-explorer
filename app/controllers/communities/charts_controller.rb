@@ -1,47 +1,18 @@
 class Communities::ChartsController < ApplicationController
   include Communities::ChartsHelper
+  include Charts
   before_action :set_community
 
   def production_monthly
-    grouped_data = @community.grid.monthly_generations.grouped_net_generation_by_year_month
-
-    dataset = grouped_data.keys.map(&:first).uniq.sort.map do |year|
-      monthly_data = (1..12).map do |month|
-        [Date::ABBR_MONTHNAMES[month], grouped_data.fetch([year, month], 0)]
-      end.to_h
-      { name: year.to_s, data: monthly_data }
-    end
-
-    render json: dataset
+    render json: production_monthly_for(@community)
   end
 
   def production_yearly
-    latest_year = YearlyGeneration.latest_year_for(@community.grid)
-    records = YearlyGeneration.for_grid_and_year(@community.grid, latest_year)
-    grouped = records.group_by(&:fuel_type_code)
-    dataset = grouped.map do |code, rows|
-      name = rows.first.fuel_type_name
-      label = name.present? ? "#{name} (#{code})" : code
-      [label, rows.sum(&:net_generation_mwh)]
-    end
-
-    dataset = dataset.sort_by { |label, _| label }
-    render json: dataset
+    render json: production_yearly_for(@community, params[:year].presence&.to_i)
   end
 
   def capacity_yearly
-    latest_year = Capacity.latest_year_for(@community.grid)
-    records = Capacity.for_grid_and_year(@community.grid, latest_year)
-    grouped = records.group_by(&:fuel_type_code)
-
-    dataset = grouped.map do |code, rows|
-      name = rows.first.fuel_type_name
-      label = name.present? ? "#{name} (#{code})" : code
-      [label, rows.sum(&:capacity_mw)]
-    end
-
-    dataset = dataset.sort_by { |label, _| label }
-    render json: dataset
+    render json: capacity_yearly_for(@community, params[:year].presence&.to_i)
   end
 
   def population_employment
@@ -92,6 +63,10 @@ class Communities::ChartsController < ApplicationController
       'Residential' => sale.residential_sales,
       'Commercial' => sale.commercial_sales
     }
+  end
+
+  def bulk_fuel_capacity_mix
+    render json: @community.bulk_fuel_facilities.capacity_by_fuel_type
   end
 
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here

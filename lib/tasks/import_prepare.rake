@@ -4,7 +4,6 @@ namespace :import do
   desc 'Prepare database based on DataPondVersion; truncates/migrates/imports if tag mismatch'
   task prepare: :environment do
     latest_str = DataPondVersion.latest&.current_version
-    puts "Latest DataPondVersion in DB: #{latest_str}"
     desired_str = Import::Versioning::DATA_POND_TAG
 
     latest = Import::Versioning.to_gem_version(latest_str) if latest_str

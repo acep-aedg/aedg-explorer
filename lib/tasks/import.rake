@@ -22,14 +22,15 @@ namespace :import do
     Rake::Task['import:service_area_geoms'].invoke
     Rake::Task['import:community_service_area_geoms'].invoke
     Rake::Task['import:plants'].invoke
+    Rake::Task['import:capacities'].invoke
+    Rake::Task['import:bulk_fuel_facilities'].invoke
+    Rake::Task['import:yearly_generations'].invoke
+    Rake::Task['import:monthly_generations'].invoke
     Rake::Task['import:community_grids'].invoke
     Rake::Task['import:populations'].invoke
     Rake::Task['import:transportation'].invoke
-    Rake::Task['import:yearly_generations'].invoke
-    Rake::Task['import:monthly_generations'].invoke
     Rake::Task['import:populations_ages_sexes'].invoke
     Rake::Task['import:employments'].invoke
-    Rake::Task['import:capacities'].invoke
     Rake::Task['import:fuel_prices'].invoke
     puts 'Import complete'
 
@@ -294,5 +295,20 @@ namespace :import do
 
     filepath = Rails.root.join('db/imports/fuel_prices.csv')
     ImportHelpers.import_csv(filepath, FuelPrice)
+  end
+
+  desc 'Import Bulk Fuel Facilities Data from .geojson file'
+  task bulk_fuel_facilities: :environment do
+    if BulkFuelFacility.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Bulk Fuel Facility table was not empty before starting import!
+        To clear it and all related tables, run:
+            rails delete:bulk_fuel_facilities
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/bulk_fuel.geojson')
+    ImportHelpers.import_geojson(filepath, BulkFuelFacility)
   end
 end

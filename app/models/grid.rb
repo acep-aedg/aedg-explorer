@@ -3,17 +3,17 @@ class Grid < ApplicationRecord
   include ImportFinders
   extend FriendlyId
   friendly_id :slug_candidates, use: :slugged
+  validates :name, presence: true, uniqueness: true
   has_one :aedg_import, as: :importable
   has_many :community_grids
   has_many :communities, through: :community_grids
-  has_many :yearly_generations
-  has_many :monthly_generations
-  has_many :capacities
   has_many :reporting_entities
   has_many :plants
   has_many :service_area_geoms, through: :plants
   has_many :service_areas, through: :service_area_geoms
-  validates :name, presence: true, uniqueness: true
+  has_many :capacities, through: :plants
+  has_many :yearly_generations, through: :plants
+  has_many :monthly_generations, through: :plants
 
   scope :active, -> { joins(:community_grids).merge(CommunityGrid.active).distinct }
 

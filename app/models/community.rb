@@ -10,9 +10,6 @@ class Community < ApplicationRecord
   has_many :population_age_sexes, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :community_grids, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :grids, through: :community_grids
-  has_many :capacities, through: :grids
-  has_many :monthly_generations, through: :grids
-  has_many :yearly_generations, through: :grids
   has_many :fuel_prices, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   belongs_to :reporting_entity, optional: true
   has_many :electric_rates, through: :reporting_entity
@@ -26,6 +23,10 @@ class Community < ApplicationRecord
   has_many :service_area_geoms, through: :communities_service_area_geoms
   has_many :service_areas, through: :service_area_geoms
   has_many :plants, through: :service_area_geoms
+  has_many :capacities, through: :plants
+  has_many :yearly_generations, through: :plants
+  has_many :monthly_generations, through: :plants
+  has_many :bulk_fuel_facilities, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
 
   # Handle the case where the name is not unique
   def slug_candidates
@@ -42,6 +43,21 @@ class Community < ApplicationRecord
 
   def grid
     community_grids.find_by(termination_year: 9999)&.grid
+  end
+
+  def as_geojson
+    {
+      type: 'Feature',
+      geometry: RGeo::GeoJSON.encode(location),
+      properties: {
+        title: name,
+        (borough&.census_area? ? :census_area : :borough) => borough&.name,
+        regional_corporation: regional_corporation&.name,
+        village_corporation: village_corporation,
+        economic_region: economic_region,
+        population: population&.total_population
+      }.compact
+    }
   end
 
   def peers_by_service_area_geoms
@@ -127,23 +143,32 @@ class Community < ApplicationRecord
   end
 
   def show_yearly_generation?
-    @show_yearly_generation ||= grid&.yearly_generations&.exists?
+    @show_yearly_generation ||= plants&.any? && plants.flat_map(&:yearly_generations)&.any?
   end
 
   def show_monthly_generation?
-    @show_monthly_generation ||= grid&.monthly_generations&.exists?
+    @show_monthly_generation ||= plants&.any? && plants.flat_map(&:monthly_generations)&.any?
   end
 
   def show_capacity?
-    @show_capacity ||= grid&.capacities&.exists?
+    @show_capacity ||= plants&.any? && plants.flat_map(&:capacities)&.any?
   end
 
   def show_sales_revenue_customers?
     @show_sales_revenue_customers ||= reporting_entity&.sales&.exists?
   end
 
+  def show_bulk_fuel_facilities?
+    @show_bulk_fuel_facilities ||= bulk_fuel_facilities.exists?
+  end
+
+  def show_bulk_fuel_capacity_chart?
+    capacity_fields = %i[gasoline_capacity diesel_capacity jet_fuel_capacity other_fuel_capacity]
+    @show_bulk_fuel_capacity_chart ||= bulk_fuel_facilities.any? { |b| capacity_fields.any? { |field| b[field].present? } }
+  end
+
   def show_electricity_section?
-    @show_electricity_section ||= show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers?
+    @show_electricity_section ||= show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers? || show_bulk_fuel_facilities?
   end
 
   # --- Prices Section ---

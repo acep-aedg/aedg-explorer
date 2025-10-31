@@ -144,18 +144,73 @@ ALTER SEQUENCE public.boroughs_id_seq OWNED BY public.boroughs.id;
 
 
 --
+-- Name: bulk_fuel_facilities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.bulk_fuel_facilities (
+    id bigint NOT NULL,
+    dcra_code uuid,
+    tank_farm_id integer,
+    uscg_id character varying,
+    aea_id character varying,
+    community_fips_code character varying,
+    name character varying,
+    number_of_tanks integer,
+    total_capacity integer,
+    gasoline_capacity integer,
+    diesel_capacity integer,
+    av_gas_capacity integer,
+    jet_fuel_capacity integer,
+    other_fuel_capacity integer,
+    barge_delivery boolean,
+    plane_delivery boolean,
+    road_delivery boolean,
+    inspected_by_uscg boolean,
+    fuel_supplier character varying,
+    recommendations_by_aea character varying,
+    distance_to_barge_mooring character varying,
+    tank_farm_evaluation_id integer,
+    data_source character varying,
+    report character varying,
+    location public.geometry,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: bulk_fuel_facilities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.bulk_fuel_facilities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bulk_fuel_facilities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.bulk_fuel_facilities_id_seq OWNED BY public.bulk_fuel_facilities.id;
+
+
+--
 -- Name: capacities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.capacities (
     id bigint NOT NULL,
-    grid_id integer,
     capacity_mw double precision,
     year integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     fuel_type_code character varying,
-    fuel_type_name character varying
+    fuel_type_name character varying,
+    aea_plant_id integer,
+    eia_plant_id integer
 );
 
 
@@ -769,14 +824,15 @@ ALTER SEQUENCE public.metadata_id_seq OWNED BY public.metadata.id;
 
 CREATE TABLE public.monthly_generations (
     id bigint NOT NULL,
-    grid_id integer,
     net_generation_mwh numeric,
     year integer,
     month integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     fuel_type_code character varying,
-    fuel_type_name character varying
+    fuel_type_name character varying,
+    aea_plant_id integer,
+    eia_plant_id integer
 );
 
 
@@ -1327,13 +1383,14 @@ ALTER SEQUENCE public.transportations_id_seq OWNED BY public.transportations.id;
 
 CREATE TABLE public.yearly_generations (
     id bigint NOT NULL,
-    grid_id integer,
     net_generation_mwh integer,
     year integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     fuel_type_code character varying,
-    fuel_type_name character varying
+    fuel_type_name character varying,
+    aea_plant_id integer,
+    eia_plant_id integer
 );
 
 
@@ -1368,6 +1425,13 @@ ALTER TABLE ONLY public.aedg_imports ALTER COLUMN id SET DEFAULT nextval('public
 --
 
 ALTER TABLE ONLY public.boroughs ALTER COLUMN id SET DEFAULT nextval('public.boroughs_id_seq'::regclass);
+
+
+--
+-- Name: bulk_fuel_facilities id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulk_fuel_facilities ALTER COLUMN id SET DEFAULT nextval('public.bulk_fuel_facilities_id_seq'::regclass);
 
 
 --
@@ -1623,6 +1687,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 ALTER TABLE ONLY public.boroughs
     ADD CONSTRAINT boroughs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bulk_fuel_facilities bulk_fuel_facilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulk_fuel_facilities
+    ADD CONSTRAINT bulk_fuel_facilities_pkey PRIMARY KEY (id);
 
 
 --
@@ -2291,6 +2363,14 @@ ALTER TABLE ONLY public.communities
 
 
 --
+-- Name: bulk_fuel_facilities fk_rails_12e76c4358; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulk_fuel_facilities
+    ADD CONSTRAINT fk_rails_12e76c4358 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
+
+
+--
 -- Name: communities_service_area_geoms fk_rails_20f8ef8e44; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2304,14 +2384,6 @@ ALTER TABLE ONLY public.communities_service_area_geoms
 
 ALTER TABLE ONLY public.datasets
     ADD CONSTRAINT fk_rails_21906160cf FOREIGN KEY (metadatum_id) REFERENCES public.metadata(id);
-
-
---
--- Name: yearly_generations fk_rails_26662eb773; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.yearly_generations
-    ADD CONSTRAINT fk_rails_26662eb773 FOREIGN KEY (grid_id) REFERENCES public.grids(id);
 
 
 --
@@ -2336,14 +2408,6 @@ ALTER TABLE ONLY public.population_age_sexes
 
 ALTER TABLE ONLY public.populations
     ADD CONSTRAINT fk_rails_42627e1837 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
-
-
---
--- Name: monthly_generations fk_rails_44979977d4; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.monthly_generations
-    ADD CONSTRAINT fk_rails_44979977d4 FOREIGN KEY (grid_id) REFERENCES public.grids(id);
 
 
 --
@@ -2481,7 +2545,11 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251020233030'),
 ('20251020182536'),
+('20251014162658'),
+('20251013200021'),
+('20250925225447'),
 ('20250911194508'),
 ('20250911181035'),
 ('20250911173625'),

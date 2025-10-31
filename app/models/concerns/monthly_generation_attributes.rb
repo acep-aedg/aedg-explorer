@@ -16,12 +16,13 @@ module MonthlyGenerationAttributes
   included do
     def assign_aedg_attributes(params)
       assign_attributes(
+        aea_plant_id: params[:aea_plant_id],
+        eia_plant_id: params[:eia_plant_id],
         fuel_type_code: params[:fuel_type_code],
         fuel_type_name: params[:fuel_type_name],
         year: params[:year],
         month: params[:month],
-        net_generation_mwh: params[:net_generation_mwh],
-        grid: Grid.from_aedg_id(params[:grid_id]).first
+        net_generation_mwh: params[:net_generation_mwh]
       )
     end
   end

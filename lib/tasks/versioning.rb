@@ -18,7 +18,6 @@ module Import
     # Returns nil if the string is nil or empty.
     # Aborts if the string isn't a valid semantic version.
     def self.to_gem_version(version_string)
-      puts "Converting version string: #{version_string}"
       normalized = normalize_version_string(version_string)
       return nil if normalized.nil?
 
