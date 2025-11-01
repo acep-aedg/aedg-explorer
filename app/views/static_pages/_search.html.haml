@@ -2,7 +2,7 @@
 
 / --- SEARCH BAR ---
 %div.text-center
-  %p.lead.text-muted.mb-2 Find data dashboards, tools, and new datasets.
+  %p.lead.text-muted.mb-2 Find data dashboards, tools, and datasets.
 
   / Submit to communities#index and replace only the frame below (no full page refresh)
   = form_with url: communities_path, method: :get, data: { turbo_frame: 'community_list' }, html: { id: 'site-search-form', class: 'd-flex justify-content-center mb-2' } do
