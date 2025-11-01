@@ -1,21 +1,19 @@
-# app/controllers/communities_controller.rb
-require 'ostruct'
 class CommunitiesController < ApplicationController
+  require 'ostruct'
   before_action :set_community, only: :show
 
-  # GET /communities
   def index
+    @query = params[:q].to_s.strip
+
     scope = Community.all
-    scope = apply_search(scope)
     scope = apply_search(scope)
     scope = apply_region_filters(scope)
     scope = apply_letter_filter(scope)
     @communities = scope.order(:name)
 
-    if params[:only_list].present?
-      cols = (params[:columns] || 5).to_i
-      show = params[:show_jump].to_s != '0'
-      render partial: 'community_list', locals: { communities: @communities, frame_id: params[:frame_id], columns: cols, show_jump: show }, layout: false and return
+    if turbo_frame_request?
+      render partial: 'communities/communities_list_frame', locals: { communities: @communities }
+      return
     end
 
     base = Community.unscoped
@@ -23,7 +21,6 @@ class CommunitiesController < ApplicationController
     @native_corporations = grouped_counts(base, :regional_corporation_fips_code)
   end
 
-  # GET /communities/:id
   def show
     @borough = @community.borough
     @communities = Community.all
@@ -43,7 +40,6 @@ class CommunitiesController < ApplicationController
     q = params[:q].to_s.strip
     return scope if q.blank?
 
-    # If your model includes the concern and defines :search_full_text:
     scope.search_full_text(q)
   end
 
@@ -51,16 +47,6 @@ class CommunitiesController < ApplicationController
     scope = scope.where(borough_fips_code: params[:borough_fips_code]) if params[:borough_fips_code].present?
     scope = scope.where(regional_corporation_fips_code: params[:regional_corporation_fips_code]) if params[:regional_corporation_fips_code].present?
     scope
-  end
-
-  def grouped_counts(base, column)
-    base
-      .where.not(column => [nil, ''])
-      .reorder(nil)
-      .group(column)
-      .count
-      .map { |code, count| OpenStruct.new(code: code, communities_count: count) }
-      .sort_by { |obj| obj.code.to_s }
   end
 
   def apply_letter_filter(scope)
@@ -71,5 +57,15 @@ class CommunitiesController < ApplicationController
     return scope unless first =~ /\A[A-Z]\z/
 
     scope.where('communities.name ILIKE ?', "#{first}%")
+  end
+
+  def grouped_counts(base, column)
+    base
+      .where.not(column => [nil, ''])
+      .reorder(nil)
+      .group(column)
+      .count
+      .map { |code, count| OpenStruct.new(code: code, communities_count: count) }
+      .sort_by { |obj| obj.code.to_s }
   end
 end
