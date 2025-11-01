@@ -1,41 +1,21 @@
--# locals: communities:, frame_id: nil, columns: 5, show_jump: true
-- columns   = (local_assigns[:columns] || 5).to_i
-- show_jump = local_assigns.key?(:show_jump) ? local_assigns[:show_jump] : true
+- letters = ('A'..'Z').to_a
 
-- if columns == 2
-  - row_class = 'row row-cols-2 g-2'
-- elsif columns == 3
-  - row_class = 'row row-cols-2 row-cols-md-3 g-2'
-- elsif columns == 4
-  - row_class = 'row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2'
-- else
-  - row_class = 'row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2'
+.text-center.mb-4.mt-4
+  = link_to 'All', communities_path(params.permit!.to_h.except(:letter)),
+    class: "btn btn-sm #{'btn-secondary' unless letters.include?(params[:letter])} btn-outline-secondary"
 
-- content_block = lambda do
-  - if communities.any?
-    - ordered = communities.sort_by { |c| c.name.to_s }
-    - groups  = ordered.group_by { |c| (c.name.to_s[0] =~ /[A-Za-z]/) ? c.name[0].upcase : '#' }
+  - letters.each do |ch|
+    - active = (params[:letter] == ch)
+    = link_to ch, communities_path(params.permit!.to_h.merge(letter: ch)),
+      class: "btn btn-sm #{active ? 'btn-secondary' : 'btn-outline-secondary'}"
 
-    - if show_jump
-      .d-flex.flex-wrap.justify-content-center.gap-2.mb-3
-        - groups.keys.sort.each do |letter|
-          = link_to letter, "#letter-#{letter}", class: 'btn btn-sm btn-outline-secondary'
-
-    - groups.keys.sort.each do |letter|
-      - items = groups[letter]
-      %h3.h6.fw-semibold.mt-4.mb-2.text-muted.text-uppercase{ id: "letter-#{letter}" }= letter
-      %div{ class: row_class }
-        - items.each do |community|
-          .col
-            = link_to community.name,
-                      community_path(community),
-                      class: 'd-block small text-decoration-none link-primary text-truncate',
-                      title: community.name
-  - else
-    %p.text-muted.mb-0.text-center No communities found.
-
-- if local_assigns[:frame_id].present?
-  = turbo_frame_tag frame_id do
-    = content_block.call
-- else
-  = content_block.call
+/ Plain 3-column list, no grouping headers
+.container-lg.py-3
+  .row.row-cols-3.row-cols-md-4.row-cols-lg-6.justify-content-center
+    - @communities.each do |c|
+      .col.g-0
+        = link_to c.name, community_path(c), class: "text-decoration-none d-block text-truncate"
+        %hr
+/ Empty state
+- if @communities.blank?
+  %p.text-muted.text-center.mt-4 No communities found.

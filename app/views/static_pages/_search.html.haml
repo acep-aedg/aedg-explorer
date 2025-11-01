@@ -1,20 +1,19 @@
 / --- SEARCH BAR ---
-%div.text-center.mb-5
-  %p.lead.text-muted
+%div.text-center
+  %p.lead.text-muted.mb-2
     Find data dashboards, tools, and new datasets.
 
-  / Center and contain search bar + button tightly
-  %div.d-flex.justify-content-center.mb-3
-    = form_with url: root_path, method: :get, local: true, data: { turbo: false }, html: { id: 'home-search-form' }, class: "d-inline-block w-50" do
-      %div.input-group.rounded-pill.shadow-sm.border.mx-auto
-        %span.input-group-text.bg-white.border-0
-          %i.bi.bi-search.text-muted
-        = text_field_tag :q, params[:q],
-          class: "form-control border-0 rounded-end-pill py-2",
-          placeholder: "Search for a community...",
-          form: 'home-search-form'
-        %button.btn.btn-white.border-0{ type: "submit", form: "home-search-form" }
-          %i.bi.bi-arrow-return-left.text-secondary
+  / --- SEARCH BAR (reusable, submits ?q=...) ---
+  = form_with url: communities_path, method: :get, local: true,
+              html: { id: 'site-search-form', class: 'd-flex justify-content-center mb-2' } do
+    .input-group.shadow-sm.border.mx-auto{ style: "border-radius: 50px; overflow: hidden; max-width: 900px;" }
+      %span.input-group-text.bg-white.border-0.py-0
+        %i.bi.bi-search.text-muted
+      = text_field_tag :q, params[:q],
+        class: "form-control border-0 py-0",
+        placeholder: "Search for a community..."
+      %button.btn.btn-white.border-0{ type: "submit" }
+        %i.bi.bi-arrow-return-left.text-secondary
 
   / Pull Advanced Search link closer to bar
   %div.mt-2

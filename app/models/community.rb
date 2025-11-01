@@ -1,6 +1,8 @@
 class Community < ApplicationRecord
   include CommunityAttributes
+  include SearchableByNameAndTags
   extend FriendlyId
+
   friendly_id :slug_candidates, use: :slugged
   belongs_to :borough, foreign_key: :borough_fips_code, primary_key: :fips_code
   belongs_to :regional_corporation, foreign_key: :regional_corporation_fips_code, primary_key: :fips_code, optional: true
@@ -26,12 +28,6 @@ class Community < ApplicationRecord
   has_many :capacities, through: :plants
   has_many :yearly_generations, through: :plants
   has_many :monthly_generations, through: :plants
-
-  # Handle the case where the name is not unique
-  def slug_candidates
-    [:name, %i[name fips_code]]
-  end
-
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
   validates :borough_fips_code, presence: true
@@ -40,17 +36,10 @@ class Community < ApplicationRecord
   default_scope { order(name: :asc) }
   scope :with_location, -> { where.not(location: nil) }
 
-  scope :search, ->(q) {
-    next none unless q.present?
-
-    adapter = ActiveRecord::Base.connection.adapter_name.downcase
-    if adapter.include?('postgres')
-      where('name ILIKE ?', "%#{q}%")
-    else
-      # works for SQLite / MySQL (forces lower-case comparison)
-      where('LOWER(name) LIKE ?', "%#{q.downcase}%")
-    end
-  }
+  # Handle the case where the name is not unique
+  def slug_candidates
+    [:name, %i[name fips_code]]
+  end
 
   def grid
     community_grids.find_by(termination_year: 9999)&.grid

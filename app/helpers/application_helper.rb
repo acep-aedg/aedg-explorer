@@ -5,8 +5,8 @@ module ApplicationHelper
       { name: 'Explore Data',
         children: [
           { name: 'Data Explorer', path: metadata_path },
-          { name: 'Community Summaries', path: communities_path },
-          { name: 'Grid Summaries', path: grids_path }
+          { name: 'Communities', path: communities_path },
+          { name: 'Grids', path: grids_path }
         ] },
       { name: 'User Guide', path: user_guide_path }
     ]

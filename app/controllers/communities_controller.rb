@@ -7,7 +7,9 @@ class CommunitiesController < ApplicationController
   def index
     scope = Community.all
     scope = apply_search(scope)
+    scope = apply_search(scope)
     scope = apply_region_filters(scope)
+    scope = apply_letter_filter(scope)
     @communities = scope.order(:name)
 
     if params[:only_list].present?
@@ -38,13 +40,11 @@ class CommunitiesController < ApplicationController
   end
 
   def apply_search(scope)
-    return scope if params[:q].blank?
+    q = params[:q].to_s.strip
+    return scope if q.blank?
 
-    q = "%#{params[:q].to_s.strip}%"
-    scope.where(
-      'communities.name ILIKE :q OR communities.fips_code ILIKE :q OR communities.gnis_code ILIKE :q',
-      q: q
-    )
+    # If your model includes the concern and defines :search_full_text:
+    scope.search_full_text(q)
   end
 
   def apply_region_filters(scope)
@@ -61,5 +61,15 @@ class CommunitiesController < ApplicationController
       .count
       .map { |code, count| OpenStruct.new(code: code, communities_count: count) }
       .sort_by { |obj| obj.code.to_s }
+  end
+
+  def apply_letter_filter(scope)
+    letter = params[:letter].to_s.strip
+    return scope if letter.blank?
+
+    first = letter[0]&.upcase
+    return scope unless first =~ /\A[A-Z]\z/
+
+    scope.where('communities.name ILIKE ?', "#{first}%")
   end
 end
