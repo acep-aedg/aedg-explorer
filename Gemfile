@@ -96,3 +96,5 @@ gem 'brakeman', '~> 7.1'
 gem 'kramdown'
 gem 'kramdown-parser-gfm'
 gem 'simplecov', require: false, group: :test
+
+gem 'turnout2024', '~> 3.0', require: 'turnout'
