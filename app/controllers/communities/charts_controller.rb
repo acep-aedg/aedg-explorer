@@ -2,6 +2,7 @@ class Communities::ChartsController < ApplicationController
   include Communities::ChartsHelper
   include Charts
   before_action :set_community
+  before_action :set_latest_sale, only: %i[revenue_by_customer_type customers_by_customer_type sales_by_customer_type]
 
   def production_monthly
     render json: production_monthly_for(@community)
@@ -68,14 +69,17 @@ class Communities::ChartsController < ApplicationController
     @community = Community.friendly.find(params[:community_id])
   end
 
-  def customer_type_chart(name, residential_attr, commercial_attr)
-    sale = @community.reporting_entity&.latest_sale
-    return {} unless sale
+  def set_latest_sale
+    @latest_sale = @community.reporting_entity&.latest_sale
+  end
 
-    Rails.cache.fetch(['charts', @community.cache_key_with_version, sale.cache_key_with_version, name], expires_in: 12.hours) do
+  def customer_type_chart(name, residential_attr, commercial_attr)
+    return {} unless @latest_sale
+
+    Rails.cache.fetch(['charts', @community.cache_key_with_version, @latest_sale.cache_key_with_version, name], expires_in: 12.hours) do
       {
-        'Residential' => sale.public_send(residential_attr),
-        'Commercial' => sale.public_send(commercial_attr)
+        'Residential' => @latest_sale.public_send(residential_attr),
+        'Commercial' => @latest_sale.public_send(commercial_attr)
       }
     end
   end
