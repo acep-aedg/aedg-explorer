@@ -55,11 +55,7 @@ class Communities::ChartsController < ApplicationController
   end
 
   def bulk_fuel_capacity_mix
-    chart_data = Rails.cache.fetch(['charts', @community.cache_key_with_version, 'bulk_fuel_capacity_mix'], expires_in: 12.hours) do
-      @community.bulk_fuel_facilities.capacity_by_fuel_type
-    end
-
-    render json: chart_data
+    @capacity_mix = @community.bulk_fuel_facilities.capacity_by_fuel_type
   end
 
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here

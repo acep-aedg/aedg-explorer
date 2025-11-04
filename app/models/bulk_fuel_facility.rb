@@ -12,7 +12,7 @@ class BulkFuelFacility < ApplicationRecord
       'Other' => scope.sum(:other_fuel_capacity)
     }
 
-    totals.reject { |_, v| v.to_i.zero? }.to_a
+    totals.reject { |_, v| v.to_i.zero? }
   end
 
   def as_geojson
