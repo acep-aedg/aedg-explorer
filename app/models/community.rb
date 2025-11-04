@@ -43,10 +43,14 @@ class Community < ApplicationRecord
   scope :in_senate,   ->(ids)   { joins(:senate_districts).where(senate_districts: { id: ids }) if ids.present? }
   scope :in_house,    ->(ids)   { joins(:house_districts).where(house_districts: { id: ids }) if ids.present? }
 
-  def self.name_matches(q, postgres: ActiveRecord::Base.connection.adapter_name.to_s.downcase.include?('postgres'))
-    return all if q.blank?
+  def self.name_matches(query, postgres: ActiveRecord::Base.connection.adapter_name.to_s.downcase.include?('postgres'))
+    return all if query.blank?
 
-    postgres ? where('name ILIKE ?', "%#{q}%") : where('LOWER(name) LIKE ?', "%#{q.downcase}%")
+    if postgres
+      where('name ILIKE ?', "%#{query}%")
+    else
+      where('LOWER(name) LIKE ?', "%#{query.downcase}%")
+    end
   end
 
   # Handle the case where the name is not unique
