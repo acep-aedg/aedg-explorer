@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include Pagy::Frontend
   def main_menu
     [
       { name: 'About', path: about_path },

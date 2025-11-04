@@ -1,4 +1,6 @@
 class SearchesController < ApplicationController
+  include Pagy::Backend
+
   def index
     @q = params[:q].to_s.strip
     @communities = @q.blank? ? Community.none : Community.search_full_text(@q)
@@ -17,6 +19,8 @@ class SearchesController < ApplicationController
 
     scope = build_scope(filters)
     @communities = scope.includes(:senate_districts, :house_districts).distinct.order(:name)
+
+    @pagy, @communities = pagy(scope)
   end
 
   private

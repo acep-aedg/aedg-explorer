@@ -13,9 +13,9 @@
 
             / Apply filters and Reset (leave these on the left)
             .d-grid.gap-1.p-2.bg-body-secondary.border.border-300.rounded-3
-              %button.btn.btn-light.text-primary.border-primary.btn-sm.w-100.rounded-1.py-1{ type: 'submit' } Apply filters
+              %button.btn.btn-warning.text-primary.border-primary.btn-sm.w-100.rounded-1.py-1{ type: 'submit' } Apply filters
               = link_to 'Clear all filters', search_advanced_path,
-                class: "btn btn-outline-secondary btn-sm w-100 rounded-1 py-1 #{'disabled' if reset_disabled}",
+                class: "btn btn-secondary btn-sm w-100 rounded-1 py-1 #{'disabled' if reset_disabled}",
                 aria: { disabled: reset_disabled }
 
             / Facets
@@ -32,9 +32,9 @@
                 id_prefix: 'hou', top_n: 6, value_of: ->(d){ d.id }, label_of: ->(d){ district_label(d) }
 
             .d-grid.gap-1.p-2.border-top.bg-body-secondary.border.border-300.rounded-3
-              %button.btn.btn-light.text-primary.border-primary.btn-sm.w-100.rounded-1.py-1{ type: 'submit' } Apply filters
+              %button.btn.btn-warning.text-primary.border-primary.btn-sm.w-100.rounded-1.py-1{ type: 'submit' } Apply filters
               = link_to 'Clear all filters', search_advanced_path,
-                class: "btn btn-outline-secondary btn-sm w-100 rounded-1 py-1 #{'disabled' if reset_disabled}",
+                class: "btn btn-secondary btn-sm w-100 rounded-1 py-1 #{'disabled' if reset_disabled}",
                 aria: { disabled: reset_disabled }
 
     / ==== RIGHT: MAIN RESULTS ====
@@ -89,6 +89,8 @@
             .vstack.gap-3
               - @communities.each do |community|
                 = render 'searches/advanced/community_card', community: community
+            .mt-4.text-center
+              = raw(pagy_bootstrap_nav(@pagy))
           - else
             .alert.alert-info.text-center.mt-3
               No communities matched those filters. Try broadening your selection.
