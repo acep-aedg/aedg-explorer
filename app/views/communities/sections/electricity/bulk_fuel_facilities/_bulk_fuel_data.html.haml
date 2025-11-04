@@ -1,0 +1,41 @@
+%div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }
+  %table.table.table-striped.border
+    %thead
+      %tr
+        %th Facility Name
+        %th Number of Tanks
+        %th Total Capacity (gal)
+        %th Gasoline Capacity (gal)
+        %th Diesel Capacity (gal)
+        %th Av Gas Capacity (gal)
+        %th Jet Fuel Capacity (gal)
+        %th Other Fuel Capacity (gal)
+        %th Barge Delivery
+        %th Plane Delivery
+        %th Road Delivery
+        %th Inspected by USCG
+        %th Fuel Supplier
+        %th Recommendations by AEA
+        %th Distance to Barge Mooring (miles)
+        %th Data Source
+        %th Report
+    %tbody
+      - @community.bulk_fuel_facilities.each do |facility|
+        %tr
+          %td= facility.name
+          %td= facility.number_of_tanks
+          %td= facility.total_capacity
+          %td= facility.gasoline_capacity
+          %td= facility.diesel_capacity
+          %td= facility.av_gas_capacity
+          %td= facility.jet_fuel_capacity
+          %td= facility.other_fuel_capacity
+          %td= facility.barge_delivery ? 'Yes' : 'No'
+          %td= facility.plane_delivery ? 'Yes' : 'No'
+          %td= facility.road_delivery ? 'Yes' : 'No'
+          %td= facility.inspected_by_uscg ? 'Yes' : 'No'    
+          %td= facility.fuel_supplier
+          %td= facility.recommendations_by_aea
+          %td= facility.distance_to_barge_mooring
+          %td= facility.data_source
+          %td= facility.report

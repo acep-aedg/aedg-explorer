@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get '/about', to: 'static_pages#about', as: :about
   get '/user-guide', to: 'static_pages#user_guide', as: :user_guide
   get '/search/advanced', to: 'searches#advanced', as: :search_advanced
+  get '/robots.txt', to: 'robots#index', defaults: { format: :text }
 
   scope path: '/explore' do
     resources :metadata, only: %i[index show], path: 'data' do
@@ -29,6 +30,7 @@ Rails.application.routes.draw do
           get :revenue_by_customer_type
           get :customers_by_customer_type
           get :sales_by_customer_type
+          get :bulk_fuel_capacity_mix
         end
       end
 
@@ -39,6 +41,7 @@ Rails.application.routes.draw do
           get :service_area_geoms
           get :service_areas
           get :plants
+          get :bulk_fuel_facilities
         end
       end
 

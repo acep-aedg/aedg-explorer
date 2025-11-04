@@ -28,6 +28,8 @@ class Community < ApplicationRecord
   has_many :capacities, through: :plants
   has_many :yearly_generations, through: :plants
   has_many :monthly_generations, through: :plants
+  has_many :bulk_fuel_facilities, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
+
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
   validates :borough_fips_code, presence: true
@@ -54,6 +56,21 @@ class Community < ApplicationRecord
 
   def grid
     community_grids.find_by(termination_year: 9999)&.grid
+  end
+
+  def as_geojson
+    {
+      type: 'Feature',
+      geometry: RGeo::GeoJSON.encode(location),
+      properties: {
+        title: name,
+        (borough&.census_area? ? :census_area : :borough) => borough&.name,
+        regional_corporation: regional_corporation&.name,
+        village_corporation: village_corporation,
+        economic_region: economic_region,
+        population: population&.total_population
+      }.compact
+    }
   end
 
   def peers_by_service_area_geoms
@@ -154,8 +171,17 @@ class Community < ApplicationRecord
     @show_sales_revenue_customers ||= reporting_entity&.sales&.exists?
   end
 
+  def show_bulk_fuel_facilities?
+    @show_bulk_fuel_facilities ||= bulk_fuel_facilities.exists?
+  end
+
+  def show_bulk_fuel_capacity_chart?
+    capacity_fields = %i[gasoline_capacity diesel_capacity jet_fuel_capacity other_fuel_capacity]
+    @show_bulk_fuel_capacity_chart ||= bulk_fuel_facilities.any? { |b| capacity_fields.any? { |field| b[field].present? } }
+  end
+
   def show_electricity_section?
-    @show_electricity_section ||= show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers?
+    @show_electricity_section ||= show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers? || show_bulk_fuel_facilities?
   end
 
   # --- Prices Section ---
