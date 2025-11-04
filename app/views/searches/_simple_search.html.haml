@@ -1,0 +1,57 @@
+/ --- SEARCH BAR ---
+%div.text-center
+  -# %p.lead.text-muted.mb-2 Find data dashboards, tools, and datasets.
+
+  / Submit to communities#index and replace only the frame below (no full page refresh)
+  = form_with url: communities_path, method: :get,
+              data: { turbo_frame: 'community_list' },
+              html: { id: 'site-search-form',
+                      class: 'd-flex justify-content-center mb-2' } do
+    .input-group.bg-white.mx-auto{
+      style: "border-radius: 50px; overflow: hidden; max-width: 900px;
+              box-shadow: 0 2px 6px rgba(0,0,0,0.22), 0 18px 36px rgba(0,0,0,0.14);" }
+      %span.input-group-text.bg-white.border-0.py-0
+        %i.bi.bi-search.text-muted
+      = text_field_tag :q, params[:q],
+        class: "form-control border-0 py-0",
+        placeholder: "Search for a community...",
+        form: 'site-search-form'
+      %button.btn.btn-white.border-0{ type: "submit" }
+        %i.bi.bi-arrow-return-left.text-secondary
+
+  / Quick links
+  .mt-2
+    = link_to 'Advanced Search', search_advanced_path,
+      class: 'text-success fw-bold text-decoration-none small transition',
+      style: 'transition: transform 0.2s ease-in-out; display: inline-block;',
+      onmouseover: "this.style.transform='scale(1.1)'",
+      onmouseout: "this.style.transform='scale(1)'"
+    %span.mx-1 &bull;
+    = link_to 'About page', about_path,
+      class: 'text-primary fw-bold text-decoration-none small transition',
+      style: 'transition: transform 0.2s ease-in-out; display: inline-block;',
+      onmouseover: "this.style.transform='scale(1.1)'",
+      onmouseout: "this.style.transform='scale(1)'"
+    %span.mx-1 &bull;
+    = link_to 'User Guide', user_guide_path,
+      class: 'text-info fw-bold text-decoration-none small transition',
+      style: 'transition: transform 0.2s ease-in-out; display: inline-block;',
+      onmouseover: "this.style.transform='scale(1.1)'",
+      onmouseout: "this.style.transform='scale(1)'"
+
+/ --- RESULTS SECTION (Turbo Frame) ---
+= turbo_frame_tag 'community_list' do
+  - if @query.present?
+    - if @communities.present?
+      .mt-5.text-center
+        %h5.text-muted.mb-3
+          Results for
+          %strong= @query
+      .d-flex.flex-wrap.justify-content-center.gap-3.mx-auto{ style: "max-width: 900px;" }
+        - @communities.each do |community|
+          %div
+            = link_to community.name, community_path(community),
+              class: "text-decoration-none text-primary fw-semibold"
+    - else
+      %p.text-center.text-muted.mt-4
+        No results found for "#{@query}".

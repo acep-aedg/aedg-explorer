@@ -35,6 +35,17 @@ class Community < ApplicationRecord
 
   default_scope { order(name: :asc) }
   scope :with_location, -> { where.not(location: nil) }
+  scope :in_boroughs, ->(codes) { where(borough_fips_code: codes) if codes.present? }
+  scope :in_corps,    ->(codes) { where(regional_corporation_fips_code: codes) if codes.present? }
+  scope :in_grids,    ->(ids)   { joins(:grids).where(grids: { id: ids }) if ids.present? }
+  scope :in_senate,   ->(ids)   { joins(:senate_districts).where(senate_districts: { id: ids }) if ids.present? }
+  scope :in_house,    ->(ids)   { joins(:house_districts).where(house_districts: { id: ids }) if ids.present? }
+
+  def self.name_matches(q, postgres: ActiveRecord::Base.connection.adapter_name.to_s.downcase.include?('postgres'))
+    return all if q.blank?
+
+    postgres ? where('name ILIKE ?', "%#{q}%") : where('LOWER(name) LIKE ?', "%#{q.downcase}%")
+  end
 
   # Handle the case where the name is not unique
   def slug_candidates

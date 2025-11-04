@@ -1,265 +1,94 @@
 - content_for :title, 'Advanced Search'
 
-.container.m-4
+.container-fluid
   .row.min-vh-100
-
-    / === LEFT SIDEBAR: ACCORDION FACETS ===
-    / === LEFT SIDEBAR: COMPACT FACETS ===
-    .col-12.col-lg-3
-      .card.shadow-sm.sticky-lg-top.border-0.rounded-0
-        .card-body.p-0
-          %h2.h6.p-1 Advanced search
-
+    / ==== LEFT: FILTERS PANEL ====
+    .col-12.col-lg-3.p-3.bg-dark-subtle
+      .card.shadow-sm.bg-body-dark.border.border-300.rounded-3.p-1
+        .card-header.bg-body-secondary.text-body-emphasis.py-2.px-3.border-bottom.rounded-0.border.border-300.rounded-3
+          %strong.small Filters
+        .card-body.p-0.bg-body-secondary.border.border-300.rounded-3
           = form_with url: search_advanced_path, method: :get, local: true do
-            .mb-2.p-1
-              = label_tag :q, "Keyword (community name)", class: "form-label small mb-1"
-              = text_field_tag :q, params[:q], class: "form-control form-control-sm", placeholder: "e.g., Nuiqsut"
+            - reset_disabled = params.except(:controller, :action).blank?
 
-            / One accordion-like list using list-group (flush + compact)
-            %ul.list-group.list-group-flush.small
+            / Apply filters and Reset (leave these on the left)
+            .d-grid.gap-1.p-2.bg-body-secondary.border.border-300.rounded-3
+              %button.btn.btn-light.text-primary.border-primary.btn-sm.w-100.rounded-1.py-1{ type: 'submit' } Apply filters
+              = link_to 'Clear all filters', search_advanced_path,
+                class: "btn btn-outline-secondary btn-sm w-100 rounded-1 py-1 #{'disabled' if reset_disabled}",
+                aria: { disabled: reset_disabled }
 
-              -# ---------------- Grids ----------------
-              - visible_grids  = @all_grids.first(12)
-              - hidden_grids   = @all_grids.drop(12)
-              - grid_checked   = ->(g) { Array(params[:grid_ids]).include?(g.id.to_s) }
-              - show_hidden_grids = hidden_grids.any? { |g| grid_checked.call(g) }
+            / Facets
+            %ul.list-group.list-group-flush.small.rounded-3
+              = render 'searches/advanced/facet_list', title: 'Grids', items: @all_grids, param_key: :grid_ids,
+                id_prefix: 'grid', top_n: 6, value_of: ->(g){ g.id }, label_of: ->(g){ g.name }
+              = render 'searches/advanced/facet_list', title: 'Boroughs', items: @all_boros, param_key: :borough_fips_codes,
+                id_prefix: 'bor', top_n: 6, value_of: ->(b){ b.fips_code }, label_of: ->(b){ b.name }
+              = render 'searches/advanced/facet_list', title: 'Native Corporations', items: @all_corps, param_key: :regional_corporation_fips_codes,
+                id_prefix: 'corp', top_n: 6, value_of: ->(c){ c.fips_code }, label_of: ->(c){ c.name }
+              = render 'searches/advanced/facet_list', title: 'Senate Districts', items: @all_senate, param_key: :senate_district_ids,
+                id_prefix: 'sen', top_n: 6, value_of: ->(d){ d.id }, label_of: ->(d){ d.district }
+              = render 'searches/advanced/facet_list', title: 'House Districts', items: @all_house, param_key: :house_district_ids,
+                id_prefix: 'hou', top_n: 6, value_of: ->(d){ d.id }, label_of: ->(d){ district_label(d) }
 
-              %li.list-group-item.p-1
-                %button.btn.btn-link.text-decoration-none.w-100.text-start.p-0{ type: "button",
-                  data: { bs_toggle: "collapse", bs_target: "#pane-grids" },
-                  aria: { expanded: "false", controls: "pane-grids" } }
-                  %span
-                    %i.bi.bi-funnel-fill
-                  %span.fw-semibold Grids
-                  %span.text-muted.ms-2= @all_grids.size
-                  %span.float-end
-                    %i.bi.bi-chevron-down
-                .collapse.mt-2#pane-grids
-                  - visible_grids.each do |grid|
-                    - cid = "grid_#{grid.id}"
-                    .form-check.mb-1
-                      = check_box_tag "grid_ids[]", grid.id, grid_checked.call(grid), id: cid, class: "form-check-input me-1"
-                      %label.form-check-label{ for: cid }= grid.name
-                  - if hidden_grids.any?
-                    - collapse_id = "moreGrids"
-                    .collapse{ id: collapse_id, class: ("show" if show_hidden_grids) }
-                      - hidden_grids.each do |grid|
-                        - cid = "grid_#{grid.id}"
-                        .form-check.mb-1
-                          = check_box_tag "grid_ids[]", grid.id, grid_checked.call(grid), id: cid, class: "form-check-input me-1"
-                          %label.form-check-label{ for: cid }= grid.name
-                    %button.btn.btn-sm.btn-outline-secondary.w-100.mt-2{ type: "button",
-                      data: { bs_toggle: "collapse", bs_target: "##{collapse_id}" },
-                      aria: { expanded: show_hidden_grids, controls: collapse_id } }
-                      = show_hidden_grids ? "Show less" : "Show more (#{hidden_grids.size})"
+            .d-grid.gap-1.p-2.border-top.bg-body-secondary.border.border-300.rounded-3
+              %button.btn.btn-light.text-primary.border-primary.btn-sm.w-100.rounded-1.py-1{ type: 'submit' } Apply filters
+              = link_to 'Clear all filters', search_advanced_path,
+                class: "btn btn-outline-secondary btn-sm w-100 rounded-1 py-1 #{'disabled' if reset_disabled}",
+                aria: { disabled: reset_disabled }
 
-              -# ---------------- Boroughs ----------------
-              - visible_boros  = @all_boros.first(8)
-              - hidden_boros   = @all_boros.drop(8)
-              - bor_checked    = ->(b) { Array(params[:borough_fips_codes]).include?(b.fips_code.to_s) }
-              - show_hidden_boros = hidden_boros.any? { |b| bor_checked.call(b) }
+    / ==== RIGHT: MAIN RESULTS ====
+    .col-12.col-lg-9.d-flex.flex-column.bg-dark-subtle.px-3{ style: "min-height: 100vh;" }
+      .bg-body-secondary.rounded-0.p-4.w-100.d-flex.flex-column{ style: "height: 100%; overflow-y: auto;" }
+        / --- Search box (top) ---
+        %div.text-center.mb-4
+          = form_with url: search_advanced_path, method: :get, local: true, html: { id: 'advanced-search-form', class: 'd-flex justify-content-center mb-2' } do
+            .input-group.shadow-lg.border.mx-auto{ style: "border-radius: 50px; overflow: hidden; max-width: 900px;" }
+              %span.input-group-text.bg-white.border-0.py-0
+                %i.bi.bi-search.text-muted
+              = text_field_tag :q, params[:q],
+                class: "form-control border-0 py-0",
+                placeholder: "Search for a community...",
+                form: "advanced-search-form"
+              %button.btn.btn-white.border-0{ type: "submit" }
+                %i.bi.bi-arrow-return-left.text-secondary
 
-              %li.list-group-item.p-1
-                %button.btn.btn-link.text-decoration-none.w-100.text-start.p-0{ type: "button",
-                  data: { bs_toggle: "collapse", bs_target: "#pane-boros" },
-                  aria: { expanded: "false", controls: "pane-boros" } }
-                  %span
-                    %i.bi.bi-funnel-fill
-                  %span.fw-semibold Boroughs
-                  %span.text-muted.ms-2= @all_boros.size
-                  %span.float-end
-                    %i.bi.bi-chevron-down
-                .collapse.mt-2#pane-boros
-                  - visible_boros.each do |bor|
-                    - bid = "bor_#{bor.fips_code}"
-                    .form-check.mb-1
-                      = check_box_tag "borough_fips_codes[]", bor.fips_code, bor_checked.call(bor), id: bid, class: "form-check-input me-1"
-                      %label.form-check-label{ for: bid }= bor.name
-                  - if hidden_boros.any?
-                    - collapse_id = "moreBoros"
-                    .collapse{ id: collapse_id, class: ("show" if show_hidden_boros) }
-                      - hidden_boros.each do |bor|
-                        - bid = "bor_#{bor.fips_code}"
-                        .form-check.mb-1
-                          = check_box_tag "borough_fips_codes[]", bor.fips_code, bor_checked.call(bor), id: bid, class: "form-check-input me-1"
-                          %label.form-check-label{ for: bid }= bor.name
-                    %button.btn.btn-sm.btn-outline-secondary.w-100.mt-2{ type: "button",
-                      data: { bs_toggle: "collapse", bs_target: "##{collapse_id}" },
-                      aria: { expanded: show_hidden_boros, controls: collapse_id } }
-                      = show_hidden_boros ? "Show less" : "Show more (#{hidden_boros.size})"
+        / --- Header and filter badges ---
+        .d-flex.flex-wrap.justify-content-between.align-items-center.mb-3
+          %h2.h5.mb-0= pluralize(@communities.size, 'Community')
 
-              -# ---------------- Native Corporations ----------------
-              - visible_corps  = @all_corps.first(8)
-              - hidden_corps   = @all_corps.drop(8)
-              - corp_checked   = ->(c) { Array(params[:regional_corporation_fips_codes]).include?(c.fips_code.to_s) }
-              - show_hidden_corps = hidden_corps.any? { |c| corp_checked.call(c) }
+          - selected_grids = selected_labels(@all_grids, :grid_ids) { |g| g.id }
+          - selected_boros = selected_labels(@all_boros, :borough_fips_codes) { |b| b.fips_code }
+          - selected_corps = selected_labels(@all_corps, :regional_corporation_fips_codes) { |c| c.fips_code }
+          - selected_sen   = selected_labels(@all_senate, :senate_district_ids) { |d| d.id }
+          - selected_hou   = selected_labels(@all_house, :house_district_ids) { |d| d.id }
 
-              %li.list-group-item.p-1
-                %button.btn.btn-link.text-decoration-none.w-100.text-start.p-0{ type: "button",
-                  data: { bs_toggle: "collapse", bs_target: "#pane-corps" },
-                  aria: { expanded: "false", controls: "pane-corps" } }
-                  %span
-                    %i.bi.bi-funnel-fill
-                  %span.fw-semibold Native Corporations
-                  %span.text-muted.ms-2= @all_corps.size
-                  %span.float-end
-                    %i.bi.bi-chevron-down
-                .collapse.mt-2#pane-corps
-                  - visible_corps.each do |corp|
-                    - nid = "corp_#{corp.fips_code}"
-                    .form-check.mb-1
-                      = check_box_tag "regional_corporation_fips_codes[]", corp.fips_code, corp_checked.call(corp), id: nid, class: "form-check-input me-1"
-                      %label.form-check-label{ for: nid }= corp.name
-                  - if hidden_corps.any?
-                    - collapse_id = "moreCorps"
-                    .collapse{ id: collapse_id, class: ("show" if show_hidden_corps) }
-                      - hidden_corps.each do |corp|
-                        - nid = "corp_#{corp.fips_code}"
-                        .form-check.mb-1
-                          = check_box_tag "regional_corporation_fips_codes[]", corp.fips_code, corp_checked.call(corp), id: nid, class: "form-check-input me-1"
-                          %label.form-check-label{ for: nid }= corp.name
-                    %button.btn.btn-sm.btn-outline-secondary.w-100.mt-2{ type: "button",
-                      data: { bs_toggle: "collapse", bs_target: "##{collapse_id}" },
-                      aria: { expanded: show_hidden_corps, controls: collapse_id } }
-                      = show_hidden_corps ? "Show less" : "Show more (#{hidden_corps.size})"
-
-              -# ---------------- Senate Districts ----------------
-              - visible_senate  = @all_senate.first(10)
-              - hidden_senate   = @all_senate.drop(10)
-              - senate_checked  = ->(d) { Array(params[:senate_district_ids]).include?(d.id.to_s) }
-              - show_hidden_senate = hidden_senate.any? { |d| senate_checked.call(d) }
-
-              %li.list-group-item.p-1
-                %button.btn.btn-link.text-decoration-none.w-100.text-start.p-0{ type: "button",
-                  data: { bs_toggle: "collapse", bs_target: "#pane-sen" },
-                  aria: { expanded: "false", controls: "pane-sen" } }
-                  %span
-                    %i.bi.bi-funnel-fill
-                  %span.fw-semibold Senate Districts
-                  %span.text-muted.ms-2= @all_senate.size
-                  %span.float-end
-                    %i.bi.bi-chevron-down
-                .collapse.mt-2#pane-sen
-                  - visible_senate.each do |sd|
-                    - s_label = sd.try(:name) || sd.try(:code) || sd.try(:number) || sd.try(:district) || sd.try(:label) || sd.id
-                    - sid = "sen_#{sd.id}"
-                    .form-check.mb-1
-                      = check_box_tag "senate_district_ids[]", sd.id, senate_checked.call(sd), id: sid, class: "form-check-input me-1"
-                      %label.form-check-label{ for: sid }= s_label
-                  - if hidden_senate.any?
-                    - collapse_id = "moreSenate"
-                    .collapse{ id: collapse_id, class: ("show" if show_hidden_senate) }
-                      - hidden_senate.each do |sd|
-                        - s_label = sd.try(:name) || sd.try(:code) || sd.try(:number) || sd.try(:district) || sd.try(:label) || sd.id
-                        - sid = "sen_#{sd.id}"
-                        .form-check.mb-1
-                          = check_box_tag "senate_district_ids[]", sd.id, senate_checked.call(sd), id: sid, class: "form-check-input me-1"
-                          %label.form-check-label{ for: sid }= s_label
-                    %button.btn.btn-sm.btn-outline-secondary.w-100.mt-2{ type: "button",
-                      data: { bs_toggle: "collapse", bs_target: "##{collapse_id}" },
-                      aria: { expanded: show_hidden_senate, controls: collapse_id } }
-                      = show_hidden_senate ? "Show less" : "Show more (#{hidden_senate.size})"
-
-              -# ---------------- House Districts ----------------
-              - visible_house   = @all_house.first(10)
-              - hidden_house    = @all_house.drop(10)
-              - house_checked   = ->(d) { Array(params[:house_district_ids]).include?(d.id.to_s) }
-              - show_hidden_house = hidden_house.any? { |d| house_checked.call(d) }
-
-              %li.list-group-item.p-1
-                %button.btn.btn-link.text-decoration-none.w-100.text-start.p-0{ type: "button",
-                  data: { bs_toggle: "collapse", bs_target: "#pane-hou" },
-                  aria: { expanded: "false", controls: "pane-hou" } }
-                  %span
-                    %i.bi.bi-funnel-fill
-                  %span.fw-semibold House Districts
-                  %span.text-muted.ms-2= @all_house.size
-                  %span.float-end
-                    %i.bi.bi-chevron-down
-                .collapse.mt-2#pane-hou
-                  - visible_house.each do |hd|
-                    - h_label = hd.try(:name) || hd.try(:code) || hd.try(:number) || hd.try(:district) || hd.try(:label) || hd.id
-                    - hid = "hou_#{hd.id}"
-                    .form-check.mb-1
-                      = check_box_tag "house_district_ids[]", hd.id, house_checked.call(hd), id: hid, class: "form-check-input me-1"
-                      %label.form-check-label{ for: hid }= h_label
-                  - if hidden_house.any?
-                    - collapse_id = "moreHouse"
-                    .collapse{ id: collapse_id, class: ("show" if show_hidden_house) }
-                      - hidden_house.each do |hd|
-                        - h_label = hd.try(:name) || hd.try(:code) || hd.try(:number) || hd.try(:district) || hd.try(:label) || hd.id
-                        - hid = "hou_#{hd.id}"
-                        .form-check.mb-1
-                          = check_box_tag "house_district_ids[]", hd.id, house_checked.call(hd), id: hid, class: "form-check-input me-1"
-                          %label.form-check-label{ for: hid }= h_label
-                    %button.btn.btn-sm.btn-outline-secondary.w-100.mt-2{ type: "button",
-                      data: { bs_toggle: "collapse", bs_target: "##{collapse_id}" },
-                      aria: { expanded: show_hidden_house, controls: collapse_id } }
-                      = show_hidden_house ? "Show less" : "Show more (#{hidden_house.size})"
-
-            .d-grid.gap-2.mt-3
-              %button.btn.btn-primary.btn-sm{ type: "submit" } Apply filters
-              = link_to "Reset", search_advanced_path, class: "btn btn-outline-secondary btn-sm"
-
-    / === RIGHT: RESULTS (scrolling pane) ===
-    .col-12.col-lg-9
-      .d-flex.flex-column.vh-100
-        .d-flex.flex-wrap.justify-content-between.align-items-center.mb-2
-          %h2.h5.mb-2= pluralize(@communities.size, "Community")
-
-          - selected_grids = @all_grids.select { |g| Array(params[:grid_ids]).include?(g.id.to_s) }
-          - selected_boros = @all_boros.select { |b| Array(params[:borough_fips_codes]).include?(b.fips_code.to_s) }
-          - selected_corps = @all_corps.select { |c| Array(params[:regional_corporation_fips_codes]).include?(c.fips_code.to_s) }
-          - selected_sen  = @all_senate.select { |d| Array(params[:senate_district_ids]).include?(d.id.to_s) }
-          - selected_hou  = @all_house.select  { |d| Array(params[:house_district_ids]).include?(d.id.to_s) }
           - if selected_grids.any? || selected_boros.any? || selected_corps.any? || selected_sen.any? || selected_hou.any? || params[:q].present?
             .d-flex.flex-wrap.gap-2
               - if params[:q].present?
                 %span.badge.bg-primary-subtle.text-primary.border
-                  %i.bi.bi-search.me-1
+                  %i.bi.bi-search.me-1.mb-1
                   = params[:q]
               - selected_grids.each do |g|
                 %span.badge.bg-light.text-body.border
-                  %i.bi.bi-grid-3x3-gap.me-1
+                  %i.bi.bi-grid-3x3-gap.me-1.mb-1
                   = g.name
               - selected_boros.each do |b|
-                %span.badge.bg-secondary= b.name
+                %span.badge.bg-secondary.text-light= b.name
               - selected_corps.each do |c|
-                %span.badge.bg-secondary= c.name
+                %span.badge.bg-success.text-light= c.name
               - selected_sen.each do |d|
-                %span.badge.bg-info-subtle.text-info.border= "Senate #{d.try(:name) || d.try(:code) || d.try(:number) || d.try(:district) || d.try(:label) || d.id}"
+                %span.badge.bg-info-subtle.text-dark.border= "Senate #{d.district}"
               - selected_hou.each do |d|
-                %span.badge.bg-info-subtle.text-info.border= "House #{d.try(:name) || d.try(:code) || d.try(:number) || d.try(:district) || d.try(:label) || d.id}"
-              = link_to "Clear all", search_advanced_path, class: "small ms-2 text-decoration-none"
+                %span.badge.bg-primary-subtle.text-primary.border= "House #{district_label(d)}"
+            = link_to 'Clear all filters', search_advanced_path, class: 'small ms-2 text-decoration-none'
 
+        / --- Scrollable results ---
         .flex-grow-1.overflow-auto
           - if @communities.any?
-            - @communities.each do |community|
-              .bg-white.rounded-3.p-3.border.shadow-sm.mb-3
-                %div.d-flex.justify-content-between.flex-wrap
-                  %h5.mb-1
-                    = link_to community.name, community_path(community), class: "text-decoration-none"
-                  %div
-                    - if (g = community.grid).present?
-                      = link_to grid_path(g), class: "badge bg-light text-body border me-1 text-decoration-none" do
-                        %i.bi.bi-grid-3x3-gap.me-1
-                        = g.name
-                    %span.badge.bg-secondary.me-1= community.borough&.name
-                    - if community.regional_corporation
-                      %span.badge.bg-secondary= community.regional_corporation.name
-
-                %p.small.text-muted.mb-2
-                  Quick links:
-                  = link_to "Community page", community_path(community), class: "text-decoration-none me-2"
-
-                - if community.respond_to?(:datasets) && community.datasets.any?
-                  %h6.mt-3.mb-2 Datasets for this community
-                  %ul.list-group.list-group-flush
-                    - community.datasets.limit(3).each do |dataset|
-                      %li.list-group-item
-                        = link_to dataset.title, "#"
-                        %span.text-muted.small.ms-2= dataset.try(:organization)
-                - else
-                  %p.text-muted.small.mb-0 No datasets listed.
+            .vstack.gap-3
+              - @communities.each do |community|
+                = render 'searches/advanced/community_card', community: community
           - else
-            .alert.alert-info.text-center.mt-3 No communities matched those filters. Try broadening your selection.
+            .alert.alert-info.text-center.mt-3
+              No communities matched those filters. Try broadening your selection.

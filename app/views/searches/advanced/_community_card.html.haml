@@ -1,0 +1,42 @@
+- community = local_assigns.fetch(:community)
+
+.bg-white.rounded-3.p-3.shadow-sm
+  .d-flex.justify-content-between.flex-wrap
+    %h5.mb-1
+      = link_to community.name, community_path(community), class: "text-decoration-none"
+
+    %div
+      - if (g = community.grid).present?
+        = link_to grid_path(g), class: "badge bg-light text-body border m-1 text-decoration-none" do
+          %i.bi.bi-grid-3x3-gap.m-0
+          = g.name
+      %span.badge.bg-secondary.text-light.m-0= community.borough&.name
+      - if community.regional_corporation
+        %span.badge.bg-success.text-light.m-0= community.regional_corporation.name
+
+      / --- Senate & House districts (show if available) ---
+      - sen_dists = Array(community.try(:senate_districts) || community.try(:senate_district)).compact
+      - sen_dists.each do |d|
+        %span.badge.bg-info-subtle.text-info.border-info
+          %i.bi.bi-bank.m-0
+          = "Senate #{d.district}"
+
+      - house_dists = Array(community.try(:house_districts) || community.try(:house_district)).compact
+      - house_dists.each do |d|
+        %span.badge.bg-primary-subtle.text-primary.border.m-0
+          %i.bi.bi-house.m-0
+          = "House #{district_label(d)}"
+
+  .mt-2
+    = link_to 'View Community', community_path(community),
+      class: 'btn btn-outline-success btn-sm px-3 fw-semibold shadow-sm'
+
+  - if community.respond_to?(:datasets) && community.datasets.any?
+    %h6.mt-3.mb-2 Datasets for this community
+    %ul.list-group.list-group-flush
+      - community.datasets.limit(3).each do |dataset|
+        %li.list-group-item
+          = link_to dataset.title, "#"
+          %span.text-muted.small.ms-2= dataset.try(:organization)
+  - else
+
