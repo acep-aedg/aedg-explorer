@@ -42,17 +42,9 @@ class Communities::ChartsController < ApplicationController
     render json: chart_data
   end
 
-  def revenue_by_customer_type
-    render json: customer_type_chart('revenue', :residential_revenue, :commercial_revenue)
-  end
-
-  def customers_by_customer_type
-    render json: customer_type_chart('customers', :residential_customers, :commercial_customers)
-  end
-
-  def sales_by_customer_type
-    render json: customer_type_chart('sales', :residential_sales, :commercial_sales)
-  end
+  def revenue_by_customer_type; end
+  def customers_by_customer_type; end
+  def sales_by_customer_type; end
 
   def bulk_fuel_capacity_mix
     @capacity_mix = @community.bulk_fuel_facilities.capacity_by_fuel_type
