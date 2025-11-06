@@ -751,6 +751,92 @@ ALTER SEQUENCE public.house_districts_id_seq OWNED BY public.house_districts.id;
 
 
 --
+-- Name: household_incomes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.household_incomes (
+    id bigint NOT NULL,
+    community_fips_code character varying,
+    e_households_total integer,
+    e_household_median_income integer,
+    e_household_inc_under_10000 integer,
+    e_household_inc_10000_14999 integer,
+    e_household_inc_15000_24999 integer,
+    e_household_inc_25000_34999 integer,
+    e_household_inc_35000_49999 integer,
+    e_household_inc_50000_74999 integer,
+    e_household_inc_75000_99999 integer,
+    e_household_inc_100000_149999 integer,
+    e_household_inc_150000_199999 integer,
+    e_household_inc_200000_plus integer,
+    start_year integer,
+    end_year integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: household_incomes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.household_incomes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: household_incomes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.household_incomes_id_seq OWNED BY public.household_incomes.id;
+
+
+--
+-- Name: income_poverties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.income_poverties (
+    id bigint NOT NULL,
+    community_fips_code character varying,
+    e_median_household_income character varying,
+    m_median_household_income character varying,
+    e_per_capita_income character varying,
+    m_per_capita_income character varying,
+    e_pop_below_poverty character varying,
+    m_pop_below_poverty character varying,
+    e_pop_of_poverty_det character varying,
+    m_pop_of_poverty_det character varying,
+    start_year character varying,
+    end_year character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: income_poverties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.income_poverties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: income_poverties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.income_poverties_id_seq OWNED BY public.income_poverties.id;
+
+
+--
 -- Name: metadata; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1516,6 +1602,20 @@ ALTER TABLE ONLY public.house_districts ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: household_incomes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.household_incomes ALTER COLUMN id SET DEFAULT nextval('public.household_incomes_id_seq'::regclass);
+
+
+--
+-- Name: income_poverties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.income_poverties ALTER COLUMN id SET DEFAULT nextval('public.income_poverties_id_seq'::regclass);
+
+
+--
 -- Name: metadata id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1785,6 +1885,22 @@ ALTER TABLE ONLY public.grids
 
 ALTER TABLE ONLY public.house_districts
     ADD CONSTRAINT house_districts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: household_incomes household_incomes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.household_incomes
+    ADD CONSTRAINT household_incomes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: income_poverties income_poverties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.income_poverties
+    ADD CONSTRAINT income_poverties_pkey PRIMARY KEY (id);
 
 
 --
@@ -2492,6 +2608,8 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251105235722'),
+('20251105225408'),
 ('20251020233030'),
 ('20251014162658'),
 ('20251013200021'),
