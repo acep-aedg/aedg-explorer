@@ -182,6 +182,19 @@ class Community < ApplicationRecord
     @show_prices_section ||= show_fuel_prices?
   end
 
+  # --- Income Section ---
+  def show_household_income?
+    @show_household_income ||= household_incomes.any?
+  end
+
+  def show_income_poverty?
+    @show_income_poverty ||= income_poverties.any?
+  end
+
+  def show_income_section?
+    @show_income_section ||= show_household_income? || show_income_poverty?
+  end
+
   # --- Background Section ---
   def show_geography?
     @show_geography ||= community_grids.any?

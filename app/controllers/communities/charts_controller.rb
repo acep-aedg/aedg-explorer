@@ -69,6 +69,10 @@ class Communities::ChartsController < ApplicationController
     render json: @community.bulk_fuel_facilities.capacity_by_fuel_type
   end
 
+  def household_income
+    @stacked_data = HouseholdIncome.stacked_by_year(@community)
+  end
+
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
 
