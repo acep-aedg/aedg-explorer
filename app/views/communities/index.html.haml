@@ -12,5 +12,5 @@
             .mx-1.mb-1
               = render 'searches/simple_search'
             / --- COMMUNITY LIST ---
-            #allCommunities
+            = turbo_frame_tag 'allCommunities' do
               = render 'communities/communities_list', communities: @communities

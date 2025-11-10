@@ -1,24 +1,17 @@
 class CommunitiesController < ApplicationController
   require 'ostruct'
   before_action :set_community, only: :show
+  before_action :set_search_params, only: :index
 
   def index
-    @query = params[:q].to_s.strip
+    @query = @search_params[:q].to_s.strip
 
     scope = Community.all
     scope = apply_search(scope)
     scope = apply_region_filters(scope)
     scope = apply_letter_filter(scope)
+
     @communities = scope.order(:name)
-
-    if turbo_frame_request?
-      render partial: 'communities/communities_list_frame', locals: { communities: @communities }
-      return
-    end
-
-    base = Community.unscoped
-    @boroughs = grouped_counts(base, :borough_fips_code)
-    @native_corporations = grouped_counts(base, :regional_corporation_fips_code)
   end
 
   def show
@@ -36,36 +29,27 @@ class CommunitiesController < ApplicationController
     @community = Community.friendly.find(params[:id])
   end
 
-  def apply_search(scope)
-    q = params[:q].to_s.strip
-    return scope if q.blank?
+  def set_search_params
+    # Allow everything you actually use
+    allowed = %i[q letter borough_fips_code regional_corporation_fips_code page per_page]
+    @search_params = params.permit(*allowed).to_h.symbolize_keys
+  end
 
-    scope.search_full_text(q)
+  def apply_search(scope)
+    q = @search_params[:q].to_s.strip
+    return scope if q.blank?
+    scope.search_full_text(q)   # or scope.name_matches(q) if that’s your API
   end
 
   def apply_region_filters(scope)
-    scope = scope.where(borough_fips_code: params[:borough_fips_code]) if params[:borough_fips_code].present?
-    scope = scope.where(regional_corporation_fips_code: params[:regional_corporation_fips_code]) if params[:regional_corporation_fips_code].present?
+    scope = scope.where(borough_fips_code: @search_params[:borough_fips_code]) if @search_params[:borough_fips_code].present?
+    scope = scope.where(regional_corporation_fips_code: @search_params[:regional_corporation_fips_code]) if @search_params[:regional_corporation_fips_code].present?
     scope
   end
 
   def apply_letter_filter(scope)
-    letter = params[:letter].to_s.strip
-    return scope if letter.blank?
-
-    first = letter[0]&.upcase
-    return scope unless first =~ /\A[A-Z]\z/
-
-    scope.where('communities.name ILIKE ?', "#{first}%")
-  end
-
-  def grouped_counts(base, column)
-    base
-      .where.not(column => [nil, ''])
-      .reorder(nil)
-      .group(column)
-      .count
-      .map { |code, count| OpenStruct.new(code: code, communities_count: count) }
-      .sort_by { |obj| obj.code.to_s }
+    l = @search_params[:letter].to_s.strip
+    return scope if l.blank?
+    scope.starts_with(l)        # uses your model scope
   end
 end
