@@ -30,7 +30,6 @@ class CommunitiesController < ApplicationController
   end
 
   def set_search_params
-    # Allow everything you actually use
     allowed = %i[q letter borough_fips_code regional_corporation_fips_code page per_page]
     @search_params = params.permit(*allowed).to_h.symbolize_keys
   end
@@ -38,7 +37,8 @@ class CommunitiesController < ApplicationController
   def apply_search(scope)
     q = @search_params[:q].to_s.strip
     return scope if q.blank?
-    scope.search_full_text(q)   # or scope.name_matches(q) if that’s your API
+
+    scope.search_full_text(q)
   end
 
   def apply_region_filters(scope)
@@ -50,6 +50,7 @@ class CommunitiesController < ApplicationController
   def apply_letter_filter(scope)
     l = @search_params[:letter].to_s.strip
     return scope if l.blank?
-    scope.starts_with(l)        # uses your model scope
+
+    scope.starts_with(l)
   end
 end

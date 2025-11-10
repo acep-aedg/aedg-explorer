@@ -46,6 +46,7 @@ class Community < ApplicationRecord
 
   def self.name_matches(query)
     return all if query.blank?
+
     where('name ILIKE ?', "%#{query}%")
   end
 
