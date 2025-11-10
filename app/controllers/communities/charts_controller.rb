@@ -60,15 +60,4 @@ class Communities::ChartsController < ApplicationController
   def set_latest_sale
     @latest_sale = @community.reporting_entity&.latest_sale
   end
-
-  def customer_type_chart(name, residential_attr, commercial_attr)
-    return {} unless @latest_sale
-
-    Rails.cache.fetch(['charts', @community.cache_key_with_version, @latest_sale.cache_key_with_version, name], expires_in: 12.hours) do
-      {
-        'Residential' => @latest_sale.public_send(residential_attr),
-        'Commercial' => @latest_sale.public_send(commercial_attr)
-      }
-    end
-  end
 end
