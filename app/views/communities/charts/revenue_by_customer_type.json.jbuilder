@@ -1,3 +1,4 @@
-json.partial! 'customer_type',
-              community: @community, sale: @latest_sale,
-              key: 'revenue', res_attr: :residential_revenue, com_attr: :commercial_revenue
+json.cache! [@latest_sale.reporting_entity&.cache_key_with_version], expires_in: 12.hours do
+  json.residential @latest_sale.residential_revenue
+  json.commercial @latest_sale.commercial_revenue
+end
