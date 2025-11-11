@@ -1,20 +1,12 @@
 class Communities::ChartsController < ApplicationController
   include Communities::ChartsHelper
-  include Charts
   before_action :set_community
   before_action :set_latest_sale, only: %i[revenue_by_customer_type customers_by_customer_type sales_by_customer_type]
+  before_action :set_year, only: %i[production_yearly capacity_yearly]
 
-  def production_monthly
-    render json: production_monthly_for(@community)
-  end
-
-  def production_yearly
-    render json: production_yearly_for(@community, params[:year].presence&.to_i)
-  end
-
-  def capacity_yearly
-    render json: capacity_yearly_for(@community, params[:year].presence&.to_i)
-  end
+  def production_monthly; end
+  def production_yearly; end
+  def capacity_yearly; end
 
   def population_employment
     employments = @community.employments.sort_by(&:measurement_year)
@@ -45,10 +37,7 @@ class Communities::ChartsController < ApplicationController
   def revenue_by_customer_type; end
   def customers_by_customer_type; end
   def sales_by_customer_type; end
-
-  def bulk_fuel_capacity_mix
-    @capacity_mix = @community.bulk_fuel_facilities.capacity_by_fuel_type
-  end
+  def bulk_fuel_capacity_mix; end
 
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
@@ -59,5 +48,9 @@ class Communities::ChartsController < ApplicationController
 
   def set_latest_sale
     @latest_sale = @community.reporting_entity&.latest_sale
+  end
+
+  def set_year
+    @year = params[:year].presence&.to_i
   end
 end
