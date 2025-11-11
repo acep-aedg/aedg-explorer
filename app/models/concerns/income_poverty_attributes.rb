@@ -17,8 +17,6 @@ module IncomePovertyAttributes
     def assign_aedg_attributes(params)
       assign_attributes(
         community_fips_code: params[:community_fips_code],
-        e_median_household_income: params[:e_median_household_income],
-        m_median_household_income: params[:m_median_household_income],
         e_per_capita_income: params[:e_per_capita_income],
         m_per_capita_income: params[:m_per_capita_income],
         e_pop_below_poverty: params[:e_pop_below_poverty],

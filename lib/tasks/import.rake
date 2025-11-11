@@ -5,7 +5,7 @@ require_relative 'import_helpers'
 namespace :import do
   desc 'Import Data Files into the Database'
   task all: [:environment] do
-    # Rake::Task['import:pull_gh_data'].invoke
+    Rake::Task['import:pull_gh_data'].invoke
 
     puts 'Importing data files...'
     Rake::Task['import:boroughs'].invoke
@@ -40,7 +40,7 @@ namespace :import do
   desc 'Import data files from a specific GitHub tag'
   task pull_gh_data: :environment do
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    tag = 'v0.8.2'
+    tag = 'v0.8.3'
     folder_path = 'data/final'
     Rails.root.join('db/imports').to_s
     local_dir = Rails.root.join('db/imports').to_s
