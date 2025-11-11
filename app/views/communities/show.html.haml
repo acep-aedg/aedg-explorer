@@ -146,7 +146,6 @@
     - section_order = []
     - section_order << 'electricity' if @community.show_electricity_section?
     - section_order << 'prices'      if @community.show_prices_section?
-    - section_order << 'income'      if @community.show_income_section?
     - section_order << 'background'  if @community.show_background_section?
     - section_order.each do |section|
       - section_id = "#{section.parameterize}-section"

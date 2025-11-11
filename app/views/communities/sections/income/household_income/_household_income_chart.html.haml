@@ -1,7 +1,0 @@
-- base_title = "#{@community.name} - 5 Year Rolling Average Household Income"
-        
-- chart_options = Chartkick.options.deep_merge(stacked: true, suffix: '%',ytitle: "% HH in Income Bracket", xtitle: "Year", min: 0, max: 100, download: { filename: base_title.parameterize }, library: { plugins: {tooltip: { mode: 'index'}, legend: { position: 'right', reverse: true}, title: { display: true, text: base_title } } })
-
-= column_chart household_income_community_charts_path(@community),
-  **chart_options
-
