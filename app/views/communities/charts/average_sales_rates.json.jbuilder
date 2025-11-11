@@ -1,5 +1,5 @@
 # app/views/communities/charts/average_sales_rates.json.jbuilder
-json.cache! [@community.reporting_entity&.cache_key_with_version], expires_in: 12.hours do
+json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
   json.array!(@community.reporting_entity&.sales&.order(year: :asc)&.map do |sale|
     data = {
       'residential' => sale.residential_rate,
