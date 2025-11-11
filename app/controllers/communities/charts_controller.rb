@@ -7,33 +7,8 @@ class Communities::ChartsController < ApplicationController
   def production_monthly; end
   def production_yearly; end
   def capacity_yearly; end
-
-  def population_employment
-    employments = @community.employments.sort_by(&:measurement_year)
-    chart_data = Rails.cache.fetch(['charts', @community.cache_key_with_version, 'population_employment'], expires_in: 12.hours) do
-      employment_chart_data(employments)
-    end
-
-    render json: chart_data
-  end
-
-  def average_sales_rates
-    sales = @community.reporting_entity.sales.order(year: :asc)
-    chart_data = Rails.cache.fetch(['charts', @community.cache_key_with_version, sales.cache_key_with_version, 'average_sales_rates'], expires_in: 12.hours) do
-      sales.map do |sale|
-        values = {
-          'Residential' => sale.residential_rate,
-          'Commercial' => sale.commercial_rate,
-          'Total' => sale.total_rate
-        }.transform_values { |v| v&.to_f&.round(2) }
-
-        { name: sale.year.to_s, data: values }
-      end
-    end
-
-    render json: chart_data
-  end
-
+  def population_employment; end
+  def average_sales_rates; end
   def revenue_by_customer_type; end
   def customers_by_customer_type; end
   def sales_by_customer_type; end
