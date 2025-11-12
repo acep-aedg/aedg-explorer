@@ -9,12 +9,12 @@
   .mb-3.d-none.d-md-block
     %h6.text-uppercase.text-muted.mb-2 View on Map
     .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
+    
       - if @grid.show_service_area_geoms?
-        - sa_url = service_area_geoms_grid_maps_path(@grid, format: :json)
         %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
           data: {
             action: "click->maps#showLayer",
-            url: sa_url,
+            url: service_area_geoms_grid_maps_path(@grid),
             color: "#E74C3C",
             "outline-color": "#943126",
             fit: true,
@@ -23,6 +23,19 @@
         }
           %i.bi.bi-bounding-box
           Service Areas
+
+      - if @grid.show_plants?
+        %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
+          data: {
+            action: "click->maps#showLayer",
+            url: plants_grid_maps_path(@grid),
+            color: "#088",
+            fit: true,
+            checkbox_id: "layer-plants"        # ensure a matching checkbox exists in the map panel
+          }
+        }
+          %i.bi.bi-building
+          Power Plants
 
 / === Card Body ===
 .bg-body-secondary.p-3.rounded.mb-3

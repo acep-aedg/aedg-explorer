@@ -63,6 +63,20 @@
                   }
                   %label.form-check-label.small{ for: "layer-service-areas" } Service Areas
 
+              - if @grid.show_plants?
+                .form-check.mb-1
+                  %input.form-check-input#layer-plants{
+                    type: "checkbox",
+                    style: "transform:scale(0.85); margin-top:.1rem;",
+                    data: {
+                      action: "change->maps#toggleLayer",
+                      url: plants_grid_maps_path(@grid),
+                      color: "#088",
+                      fit: true
+                    }
+                  }
+                  %label.form-check-label.small{ for: "layer-plants" } Plants
+
         / --- Map fills remaining height
         .flex-grow-1.position-relative
           %div{ data: { maps_target: "map" }, style: "position:absolute; inset:0; width:100%; height:100%;" }

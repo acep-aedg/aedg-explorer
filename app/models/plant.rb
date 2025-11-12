@@ -3,7 +3,7 @@ class Plant < ApplicationRecord
 
   validates :name, presence: true
   validates :location, allowed_geometry_types: %w[Point], allow_nil: true
-  belongs_to :grid, optional: true
+  belongs_to :grid, optional: true, touch: true
   belongs_to :service_area_geom, primary_key: :aedg_id, foreign_key: :service_area_geom_aedg_id, optional: true, inverse_of: :plants
   has_many :capacities, foreign_key: 'aea_plant_id', primary_key: 'aea_plant_id', dependent: :destroy, inverse_of: :plant
   has_many :yearly_generations, foreign_key: 'aea_plant_id', primary_key: 'aea_plant_id', dependent: :destroy, inverse_of: :plant
