@@ -70,6 +70,10 @@ class Community < ApplicationRecord
     community_grids.find_by(termination_year: 9999)&.grid
   end
 
+  def to_s
+    name
+  end
+
   def as_geojson
     {
       type: 'Feature',

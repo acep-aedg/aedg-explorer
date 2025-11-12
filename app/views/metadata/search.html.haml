@@ -24,8 +24,15 @@
               = filters_applied ? 'Search Results' : 'All Datasets'
               %small.ms-2.text-secondary= "#{pluralize(@metadata.size, 'dataset')} found"
           = render partial: 'metadata', collection: @metadata, as: :metadatum
-        - else 
+        - else
           %p.text-center.text-muted.fs-5.mt-5
-            No results found.
+            No datasets found.
             %br/
             Try adjusting your search or using different keywords
+
+            - if @community.present?
+              %br/
+              %p.text-center.fs-5.mt-5
+                Did you mean to search for this community?
+                %br/
+                = link_to @community.to_s, @community

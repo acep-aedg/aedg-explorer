@@ -21,6 +21,11 @@ class MetadataController < ApplicationController
 
     @metadata = @metadata.highlighted if @search[:featured].to_i == 1
 
+    if @metadata.count == 0 and @search[:search].present?
+      # TODO: Switch to using the full text search after PR #124 is completed
+      @community = Community.where('name ilike ?', @search[:search]).first
+    end
+
     @metadata = @metadata.all
   end
 
