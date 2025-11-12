@@ -19,15 +19,4 @@ module SearchesHelper
     ids = param_array(param_key)
     items.select { |item| ids.include?(yield(item).to_s) }
   end
-
-  # Unified district label:
-  # - House: "5 – Fairbanks North" (if name present), else "5"
-  # - Senate: "A" (just district)
-  def district_label(record)
-    # Prefer explicit fields if available
-    dist = record.try(:district) || record.try(:name) || record.try(:id)
-    return dist unless record.respond_to?(:name)
-
-    record.name.present? ? "#{dist} – #{record.name}" : dist
-  end
 end

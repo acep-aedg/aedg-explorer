@@ -5,6 +5,11 @@ class HouseDistrict < ApplicationRecord
 
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
 
+  def district_label
+    dist = district || name || id
+    name.present? ? "#{dist} – #{name}" : dist
+  end
+
   def as_geojson
     {
       type: 'Feature',

@@ -25,7 +25,7 @@
       - house_dists.each do |d|
         %span.badge.bg-primary-subtle.text-primary.border.m-0
           %i.bi.bi-house.m-0
-          = "House #{district_label(d)}"
+          = "House #{d.district_label}"
 
   .mt-2
     = link_to 'View Community', community_path(community),
