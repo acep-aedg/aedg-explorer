@@ -31,7 +31,8 @@ class Capacity < ApplicationRecord
     }
   end
 
-  def self.dataset_by_fuel_for(owner, year)
+  def self.dataset_by_fuel_for(owner, year = nil)
+    year ||= latest_year_for(owner)
     summed = for_owner_and_year(owner, year)
              .where.not(capacity_mw: nil)
              .group(:fuel_type_code, :fuel_type_name)

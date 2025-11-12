@@ -2,67 +2,12 @@ module Communities
   class MapsController < ApplicationController
     before_action :set_community
 
-    def house_districts
-      geojson = Rails.cache.fetch(['community', @community.fips_code, 'house_districts'], expires_in: 12.hours) do
-        {
-          type: 'FeatureCollection',
-          features: @community.house_districts.map(&:as_geojson)
-        }
-      end
-
-      render json: geojson
-    end
-
-    def senate_districts
-      geojson = Rails.cache.fetch(['community', @community.fips_code, 'senate_districts'], expires_in: 12.hours) do
-        {
-          type: 'FeatureCollection',
-          features: @community.senate_districts.map(&:as_geojson)
-        }
-      end
-
-      render json: geojson
-    end
-
-    def service_area_geoms
-      geojson = Rails.cache.fetch(['community', @community.fips_code, 'service_area_geoms'], expires_in: 12.hours) do
-        {
-          type: 'FeatureCollection',
-          features: @community.service_area_geoms.map(&:as_geojson)
-        }
-      end
-      render json: geojson
-    end
-
-    def service_areas
-      geojson = Rails.cache.fetch(['community', @community.fips_code, 'service_areas'], expires_in: 12.hours) do
-        {
-          type: 'FeatureCollection',
-          features: @community.service_areas.map(&:as_geojson)
-        }
-      end
-      render json: geojson
-    end
-
-    def plants
-      geojson = Rails.cache.fetch(['community', @community.fips_code, 'plants'], expires_in: 12.hours) do
-        {
-          type: 'FeatureCollection',
-          features: @community.plants.map(&:as_geojson)
-        }
-      end
-      render json: geojson
-    end
-
-    def bulk_fuel_facilities
-      geojson = Rails.cache.fetch(["#{@community.cache_key_with_version}/bulk_fuel_facilities"], expires_in: 12.hours) do
-        {
-          type: 'FeatureCollection',
-          features: @community.bulk_fuel_facilities.map(&:as_geojson)
-        }
-      end
-      render json: geojson
-    end
+    def house_districts; end
+    def senate_districts; end
+    def service_area_geoms; end
+    def service_areas; end
+    def plants; end
+    def bulk_fuel_facilities; end
 
     private
 
