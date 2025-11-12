@@ -1,17 +1,14 @@
 module Import
   module Versioning
     # Desired DataPond version tag for this release
-    DATA_POND_TAG = 'v0.8.2'.freeze
+    DATA_POND_TAG = 'v0.8.3'.freeze
 
     # Cleans a version string by removing leading "v"/"V" and whitespace.
     # Returns nil for nil or blank input.
     def self.normalize_version_string(raw_version)
-      return nil if raw_version.nil?
+      return nil if raw_version.blank?
 
-      normalized = raw_version.to_s.strip
-      return nil if normalized.empty?
-
-      normalized.sub(/\Av/i, '')
+      raw_version.sub(/\Av/i, '')
     end
 
     # Converts a version string into a Gem::Version object for comparison.
