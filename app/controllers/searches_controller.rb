@@ -4,12 +4,12 @@ class SearchesController < ApplicationController
   def index
     @query = params[:q]
     @communities = Community.none
-    @communities = Community.search_full_text(@query) unless @query.blank?
+    @communities = Community.search_full_text(@query) if @query.present?
   end
 
   def show
     @query = params[:q]
-    @communities = Community.search(@query) unless @query.blank?
+    @communities = Community.search(@query) if @query.present?
   end
 
   def advanced

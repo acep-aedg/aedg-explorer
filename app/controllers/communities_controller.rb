@@ -7,11 +7,11 @@ class CommunitiesController < ApplicationController
     @query = @search_params[:q]
 
     @communities = Community
-    @communities = @communities.search_full_text(@query) unless @query.blank?
-    @communities = @communities.in_borough(params[:regional_corporation_fips_code]) unless params[:regional_corporation_fips_code].blank?
-    @communities = @communities.starts_with(params[:letter]) unless params[:letter].blank?
+    @communities = @communities.search_full_text(@query) if @query.present?
+    @communities = @communities.in_borough(params[:regional_corporation_fips_code]) if params[:regional_corporation_fips_code].present?
+    @communities = @communities.starts_with(params[:letter]) if params[:letter].present?
 
-    @communities =@communities.order(:name).all
+    @communities = @communities.order(:name).all
   end
 
   def show
