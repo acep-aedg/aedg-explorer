@@ -45,4 +45,14 @@ namespace :delete do
   task bulk_fuel_facilities: :environment do
     DeleteHelpers.delete_records(BulkFuelFacility)
   end
+
+  desc 'Clear all income poverty data'
+  task income_poverty: :environment do
+    DeleteHelpers.delete_records(IncomePoverty)
+  end
+
+  desc 'Clear all household income data'
+  task household_income: :environment do
+    DeleteHelpers.delete_records(HouseholdIncome)
+  end
 end

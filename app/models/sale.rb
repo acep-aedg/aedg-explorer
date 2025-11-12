@@ -1,6 +1,7 @@
 class Sale < ApplicationRecord
   include SaleAttributes
-  belongs_to :reporting_entity
+  belongs_to :reporting_entity, touch: true
+  has_many :communities, through: :reporting_entity
 
   validates :year, presence: true
 

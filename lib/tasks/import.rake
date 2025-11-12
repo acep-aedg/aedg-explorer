@@ -18,6 +18,8 @@ namespace :import do
     Rake::Task['import:house_districts'].invoke
     Rake::Task['import:school_districts'].invoke
     Rake::Task['import:communities'].invoke
+    Rake::Task['import:income_poverty'].invoke
+    Rake::Task['import:household_income'].invoke
     Rake::Task['import:service_areas'].invoke
     Rake::Task['import:service_area_geoms'].invoke
     Rake::Task['import:community_service_area_geoms'].invoke
@@ -38,7 +40,7 @@ namespace :import do
   desc 'Import data files from a specific GitHub tag'
   task pull_gh_data: :environment do
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    tag = 'v0.8.2'
+    tag = 'v0.8.3'
     folder_path = 'data/final'
     Rails.root.join('db/imports').to_s
     local_dir = Rails.root.join('db/imports').to_s
@@ -261,7 +263,7 @@ namespace :import do
         ❌ ERROR: School District table was not empty before starting import!
         To clear it and all related tables, run:
 
-            rails delete:school_districts
+            rails delete:districts
 
         Then, try running this import task again.
       ERROR
@@ -301,5 +303,35 @@ namespace :import do
 
     filepath = Rails.root.join('db/imports/bulk_fuel.geojson')
     ImportHelpers.import_geojson(filepath, BulkFuelFacility)
+  end
+
+  desc 'Import Income Poverty Data from .csv file'
+  task income_poverty: :environment do
+    if IncomePoverty.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Income Poverty table was not empty before starting import!
+        To clear it and all related tables, run:
+            rails delete:income_poverty
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/income_poverty.csv')
+    ImportHelpers.import_csv(filepath, IncomePoverty)
+  end
+
+  desc 'Import Household Income Data from .csv file'
+  task household_income: :environment do
+    if HouseholdIncome.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Household Income table was not empty before starting import!
+        To clear it and all related tables, run:
+            rails delete:household_income
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/household_income.csv')
+    ImportHelpers.import_csv(filepath, HouseholdIncome)
   end
 end
