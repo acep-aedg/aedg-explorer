@@ -479,6 +479,37 @@ ALTER SEQUENCE public.community_grids_id_seq OWNED BY public.community_grids.id;
 
 
 --
+-- Name: data_pond_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.data_pond_versions (
+    id bigint NOT NULL,
+    current_version character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: data_pond_versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.data_pond_versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: data_pond_versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.data_pond_versions_id_seq OWNED BY public.data_pond_versions.id;
+
+
+--
 -- Name: datasets; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1544,6 +1575,13 @@ ALTER TABLE ONLY public.community_grids ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: data_pond_versions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.data_pond_versions ALTER COLUMN id SET DEFAULT nextval('public.data_pond_versions_id_seq'::regclass);
+
+
+--
 -- Name: datasets id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1819,6 +1857,14 @@ ALTER TABLE ONLY public.communities_service_area_geoms
 
 ALTER TABLE ONLY public.community_grids
     ADD CONSTRAINT community_grids_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: data_pond_versions data_pond_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.data_pond_versions
+    ADD CONSTRAINT data_pond_versions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2119,6 +2165,13 @@ CREATE UNIQUE INDEX index_communities_on_slug ON public.communities USING btree 
 --
 
 CREATE INDEX index_community_grids_on_grid_id ON public.community_grids USING btree (grid_id);
+
+
+--
+-- Name: index_data_pond_versions_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_data_pond_versions_on_created_at ON public.data_pond_versions USING btree (created_at);
 
 
 --
@@ -2609,6 +2662,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20251105235722'),
 ('20251105225408'),
 ('20251020233030'),
+('20251020182536'),
 ('20251014162658'),
 ('20251013200021'),
 ('20250925225447'),
