@@ -1,10 +1,5 @@
 - content_for :title, "Grid - #{@grid.name}"
 
-/ Precompute URLs once for both columns
-- comm_url = community_locations_grid_maps_path(@grid, format: :json)
-- if @grid.show_service_area_geoms?
-  - sa_url = service_area_geoms_grid_maps_path(@grid, format: :json)
-
 / --- Tool Bar
 .sticky-top.bg-light.p-1
   .row.align-items-center.gx-0
@@ -19,63 +14,57 @@
 / Wrap BOTH columns so buttons can call maps#showLayer in the same Stimulus scope
 .row.gx-0{
   data: mapbox_api_data({
-    maps_default_layer_url_value: comm_url
+    maps_default_layer_url_value: community_locations_grid_maps_path(@grid)
   })
 }
   / LEFT: Map
   .col-md-5
-    .d-flex.flex-column{ style: "position: sticky; top: 50px; height: calc(100vh - 50px);" }
+    .d-flex.flex-column.position-sticky{ style: "top: 50px; height: calc(100vh - 50px);" }
       .flex-grow-1.d-flex.flex-column#mapbox-area
         / --- Floating controls (top-right, inside map)
-        .position-absolute.top-0.end-0.mt-2.me-2{ style: "z-index:5; pointer-events:none;" }
-          .bg-white.border.rounded-3.shadow-sm{ style: "pointer-events:auto; width: 200px;" }
-            .p-2
-              %div.fw-semibold.small.mb-2 Additional Layers
+        .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
+          .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
 
-              / Communities (default ON)
-              .form-check.mb-1
-                %input.form-check-input#layer-communities{
-                  type: "checkbox",
-                  checked: true,
-                  style: "transform:scale(0.85); margin-top:.1rem;",
-                  data: {
-                    action: "change->maps#toggleLayer",
-                    url: comm_url,
-                    color: "#088",
-                    "outline-color": "#05505E",
-                    fit: true
-                  }
+          / Map Layer: Communities (default ON), uses default colors because of async
+          .form-check.mb-1
+            %input.form-check-input#layer-communities{
+              type: "checkbox",
+              checked: true,
+              data: {
+                action: "change->maps#toggleLayer",
+                url: community_locations_grid_maps_path(@grid),
+                fit: true
+              }
+            }
+            %label.form-check-label.small{ for: "layer-communities" } Communities
+
+          / Map Layer: Local Service Area
+          - if @grid.show_service_area_geoms?
+            .form-check.mb-1
+              %input.form-check-input#layer-service-areas{
+                type: "checkbox",
+                data: {
+                  action: "change->maps#toggleLayer",
+                  url: service_area_geoms_grid_maps_path(@grid),
+                  color: "#E74C3C",
+                  fit: true
                 }
-                %label.form-check-label.small{ for: "layer-communities" } Communities
+              }
+              %label.form-check-label.small{ for: "layer-service-areas" } Service Areas
 
-              - if @grid.show_service_area_geoms?
-                .form-check.mb-1
-                  %input.form-check-input#layer-service-areas{
-                    type: "checkbox",
-                    style: "transform:scale(0.85); margin-top:.1rem;",
-                    data: {
-                      action: "change->maps#toggleLayer",
-                      url: sa_url,
-                      color: "#E74C3C",
-                      "outline-color": "#943126",
-                      fit: true
-                    }
-                  }
-                  %label.form-check-label.small{ for: "layer-service-areas" } Service Areas
-
-              - if @grid.show_plants?
-                .form-check.mb-1
-                  %input.form-check-input#layer-plants{
-                    type: "checkbox",
-                    style: "transform:scale(0.85); margin-top:.1rem;",
-                    data: {
-                      action: "change->maps#toggleLayer",
-                      url: plants_grid_maps_path(@grid),
-                      color: "#088",
-                      fit: true
-                    }
-                  }
-                  %label.form-check-label.small{ for: "layer-plants" } Plants
+          / Map Layer: Plants
+          - if @grid.show_plants?
+            .form-check.mb-1
+              %input.form-check-input#layer-plants{
+                type: "checkbox",
+                data: {
+                  action: "change->maps#toggleLayer",
+                  url: plants_grid_maps_path(@grid),
+                  color: "#088",
+                  fit: true
+                }
+              }
+              %label.form-check-label.small{ for: "layer-plants" } Plants
 
         / --- Map fills remaining height
         .flex-grow-1.position-relative
