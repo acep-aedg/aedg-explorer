@@ -11,7 +11,8 @@ class Community < ApplicationRecord
   has_many :community_grids, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :grids, through: :community_grids
   has_many :fuel_prices, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
-  belongs_to :reporting_entity, optional: true
+  belongs_to :reporting_entity, optional: true, touch: true
+  has_many :sales, through: :reporting_entity
   has_many :electric_rates, through: :reporting_entity
   has_many :communities_senate_districts, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :senate_districts, through: :communities_senate_districts
@@ -27,6 +28,8 @@ class Community < ApplicationRecord
   has_many :yearly_generations, through: :plants
   has_many :monthly_generations, through: :plants
   has_many :bulk_fuel_facilities, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
+  has_many :income_poverties, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
+  has_many :household_incomes, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
 
   # Handle the case where the name is not unique
   def slug_candidates
@@ -178,6 +181,19 @@ class Community < ApplicationRecord
 
   def show_prices_section?
     @show_prices_section ||= show_fuel_prices?
+  end
+
+  # --- Income Section ---
+  def show_household_income?
+    @show_household_income ||= household_incomes.any?
+  end
+
+  def show_income_poverty?
+    @show_income_poverty ||= income_poverties.any?
+  end
+
+  def show_income_section?
+    @show_income_section ||= show_household_income? || show_income_poverty?
   end
 
   # --- Background Section ---

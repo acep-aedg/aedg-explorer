@@ -1,7 +1,7 @@
 class BulkFuelFacility < ApplicationRecord
   include BulkFuelFacilityAttributes
   validates :location, allowed_geometry_types: %w[Point], allow_nil: true
-  belongs_to :community, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :bulk_fuel_facilities, optional: false
+  belongs_to :community, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :bulk_fuel_facilities, optional: false, touch: true
 
   def self.capacity_by_fuel_type(scope = all)
     totals = {
@@ -12,7 +12,7 @@ class BulkFuelFacility < ApplicationRecord
       'Other' => scope.sum(:other_fuel_capacity)
     }
 
-    totals.reject { |_, v| v.to_i.zero? }.to_a
+    totals.reject { |_, v| v.to_i.zero? }
   end
 
   def as_geojson

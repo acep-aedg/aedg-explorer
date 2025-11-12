@@ -16,7 +16,8 @@ class YearlyGeneration < ApplicationRecord
     for_owner(owner).maximum(:year)
   end
 
-  def self.dataset_by_fuel_for(owner, year)
+  def self.dataset_by_fuel_for(owner, year = nil)
+    year ||= latest_year_for(owner)
     summed = for_owner_and_year(owner, year)
              .where.not(net_generation_mwh: nil)
              .group(:fuel_type_code, :fuel_type_name)
