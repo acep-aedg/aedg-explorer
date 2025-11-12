@@ -2,14 +2,14 @@ class SearchesController < ApplicationController
   include Pagy::Backend
 
   def index
-    @q = params[:q].to_s.strip
-    @communities = @q.blank? ? Community.none : Community.search_full_text(@q)
-    # @metadata    = @q.blank? ? Metadatum.none : Metadatum.search_full_text(@q).limit(20)
+    @query = params[:q]
+    @communities = Community.none
+    @communities = Community.search_full_text(@query) unless @query.blank?
   end
 
   def show
-    @query = params[:q].to_s.strip
-    @communities = Community.search(@query)
+    @query = params[:q]
+    @communities = Community.search(@query) unless @query.blank?
   end
 
   def advanced
@@ -39,7 +39,7 @@ class SearchesController < ApplicationController
   def build_scope(filters)
     Community
       .includes(:borough, :regional_corporation, :grids)
-      .name_matches(filters[:q])
+      .search_full_text(filters[:q])
       .in_boroughs(filters[:borough_fips_codes])
       .in_corps(filters[:regional_corporation_fips_codes])
       .in_grids(filters[:grid_ids])

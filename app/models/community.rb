@@ -38,17 +38,13 @@ class Community < ApplicationRecord
   default_scope { order(name: :asc) }
   scope :with_location, -> { where.not(location: nil) }
   scope :in_boroughs, ->(codes) { where(borough_fips_code: codes) if codes.present? }
+  scope :in_borough,  ->(code)  { where(borough_fips_code: code) if code.present? }
   scope :in_corps,    ->(codes) { where(regional_corporation_fips_code: codes) if codes.present? }
   scope :in_grids,    ->(ids)   { joins(:grids).where(grids: { id: ids }) if ids.present? }
   scope :in_senate,   ->(ids)   { joins(:senate_districts).where(senate_districts: { id: ids }) if ids.present? }
   scope :in_house,    ->(ids)   { joins(:house_districts).where(house_districts: { id: ids }) if ids.present? }
   scope :starts_with, ->(q)     { where('name ILIKE ?', "#{q}%") if q.present? }
-
-  def self.name_matches(query)
-    return all if query.blank?
-
-    where('name ILIKE ?', "%#{query}%")
-  end
+  scope :search_full_text, ->(q) { q.present? ? where('name ILIKE ?', "%#{q}%") : all }
 
   # Handle the case where the name is not unique
   def slug_candidates
