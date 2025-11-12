@@ -53,21 +53,6 @@ module Communities::ChartsHelper
     ]
   end
 
-  def gender_distribution_chart_data(community)
-    population = community.population_age_sexes.most_recent_for(community.fips_code)
-
-    male_estimate = population.sum(:e_pop_male)
-    female_estimate = population.sum(:e_pop_female)
-
-    male_moe = population.sum(:m_pop_male)
-    female_moe = population.sum(:m_pop_female)
-
-    {
-      "Male (±#{male_moe})" => male_estimate,
-      "Female (±#{female_moe})" => female_estimate
-    }
-  end
-
   def fuel_prices_by_season_chart_data(fuel_prices, price_type: nil)
     filtered = fuel_prices.select { |fp| fp.price_type.to_s.downcase == price_type.to_s.downcase }
 

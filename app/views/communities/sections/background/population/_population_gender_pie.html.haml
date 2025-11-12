@@ -1,6 +1,6 @@
 %p This chart shows estimated gender distribution with margin of error included in the labels.
-= pie_chart gender_distribution_chart_data(@community),
+= pie_chart gender_distribution_community_charts_path(@community),
   title: "Gender Distribution",
   donut: true,
   colors: ["#4e79a7", "#f28e2b"],
-  download: { filename: "#{@community.name}age_group_estimates_with_moe_data"}
+  download: { filename: "#{@community.name}gender_distribution_chart_data"}
