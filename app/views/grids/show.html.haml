@@ -14,7 +14,7 @@
 / Wrap BOTH columns so buttons can call maps#showLayer in the same Stimulus scope
 .row.gx-0{
   data: mapbox_api_data({
-    maps_default_layer_url_value: community_locations_grid_maps_path(@grid)
+    maps_default_layer_id_value: "layer-communities" # must match %input.form-check-input#layer-id
   })
 }
   / LEFT: Map
@@ -29,7 +29,6 @@
           .form-check.mb-1
             %input.form-check-input#layer-communities{
               type: "checkbox",
-              checked: true,
               data: {
                 action: "change->maps#toggleLayer",
                 url: community_locations_grid_maps_path(@grid),

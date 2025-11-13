@@ -10,7 +10,7 @@ export default class extends Controller {
   static values = {
     token: String,
     mapCenter: { type: Array, default: [-154.49, 63.58] },
-    defaultLayerUrl: String,
+    defaultLayerId: String,
     markers: Array,                   // [[lng,lat], ...] initial coords from view
     markerTooltipTitle: { type: String, default: 'Location' },
   }
@@ -42,13 +42,13 @@ export default class extends Controller {
         })
       }
 
-      // optional default GeoJSON layer
-      if (this.hasDefaultLayerUrlValue) {
-        const { fc, sourceId, layerIds } =
-          await loadLayer(this.map, this.defaultLayerUrlValue, {})
-        this._remember(sourceId, layerIds)
-        const b = boundsFrom(fc)
-        if (!b.isEmpty()) this.map.fitBounds(b, { padding: 40, maxZoom: 10, duration: 0 })
+      // Trigger default layer event
+      if (this.hasDefaultLayerIdValue) {
+        const checkbox = document.getElementById(this.defaultLayerIdValue)
+        if (checkbox) {
+          checkbox.checked = true
+          checkbox.dispatchEvent(new Event('change', { bubbles: true }))
+        }
       }
     })
   }
