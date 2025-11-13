@@ -1,26 +1,24 @@
-.row.g-3 
-  - if latest_sale&.residential_revenue && latest_sale&.commercial_revenue
-    .col-12.col-md-6.col-lg-4
-      - revenue_chart_title = "Revenue by Customer Type (#{latest_year})"
-      = pie_chart revenue_by_customer_type_community_charts_path(@community),
-        prefix: '$ ',
-        donut: true,
-        title: revenue_chart_title,
-        download: { filename: revenue_chart_title.parameterize }
+- charts = []
 
-  - if latest_sale&.residential_sales && latest_sale&.commercial_sales
-    .col-12.col-md-6.col-lg-4
-      - sales_chart_title = "Sales by Customer Type (#{latest_year})"
-      = pie_chart sales_by_customer_type_community_charts_path(@community),
-        suffix: ' MWh',
-        donut: true,
-        title: sales_chart_title,
-        download: { filename: sales_chart_title.parameterize }
+- if latest_sale && (latest_sale.residential_revenue || latest_sale.commercial_revenue)
+  - charts << { title: "Revenue by Customer Type (#{latest_year})",
+                path:  revenue_by_customer_type_community_charts_path(@community),
+                opts:  { prefix: '$ ', donut: true } }
 
-  - if latest_sale&.residential_customers && latest_sale&.commercial_customers
-    .col-12.col-md-6.col-lg-4
-      - customers_chart_title = "Customers by Customer Type (#{latest_year})"
-      = pie_chart customers_by_customer_type_community_charts_path(@community),
-        title: customers_chart_title,
-        donut: true,
-        download: {filename: customers_chart_title.parameterize }
+- if latest_sale && (latest_sale.residential_sales || latest_sale.commercial_sales)
+  - charts << { title: "Sales by Customer Type (#{latest_year})",
+                path:  sales_by_customer_type_community_charts_path(@community),
+                opts:  { suffix: ' MWh', donut: true } }
+
+- if latest_sale && (latest_sale.residential_customers || latest_sale.commercial_customers)
+  - charts << { title: "Customers by Customer Type (#{latest_year})",
+                path:  customers_by_customer_type_community_charts_path(@community),
+                opts:  { donut: true } }
+
+.row.g-3.row-cols-1.row-cols-md-2.row-cols-lg-3.justify-content-center
+  - charts.each do |c|
+    .col
+      = pie_chart c[:path],
+                  **c[:opts],
+                  title: c[:title],
+                  download: { filename: c[:title].parameterize }

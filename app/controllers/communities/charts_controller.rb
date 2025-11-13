@@ -1,73 +1,18 @@
 class Communities::ChartsController < ApplicationController
   include Communities::ChartsHelper
-  include Charts
   before_action :set_community
+  before_action :set_latest_sale, only: %i[revenue_by_customer_type customers_by_customer_type sales_by_customer_type]
+  before_action :set_year, only: %i[production_yearly capacity_yearly]
 
-  def production_monthly
-    render json: production_monthly_for(@community)
-  end
-
-  def production_yearly
-    render json: production_yearly_for(@community, params[:year].presence&.to_i)
-  end
-
-  def capacity_yearly
-    render json: capacity_yearly_for(@community, params[:year].presence&.to_i)
-  end
-
-  def population_employment
-    employments = @community.employments.sort_by(&:measurement_year)
-    render json: employment_chart_data(employments)
-  end
-
-  def average_sales_rates
-    sales = @community.reporting_entity.sales.order(year: :asc)
-    dataset = sales.map do |sale|
-      values = {
-        'Residential' => sale.residential_rate,
-        'Commercial' => sale.commercial_rate,
-        'Total' => sale.total_rate
-      }.transform_values { |v| v&.to_f&.round(2) }
-
-      { name: sale.year.to_s, data: values }
-    end
-
-    render json: dataset
-  end
-
-  def revenue_by_customer_type
-    sale = @community.reporting_entity.latest_sale
-    return render json: {} unless sale
-
-    render json: {
-      'Residential' => sale.residential_revenue,
-      'Commercial' => sale.commercial_revenue
-    }
-  end
-
-  def customers_by_customer_type
-    sale = @community.reporting_entity.latest_sale
-    return render json: {} unless sale
-
-    render json: {
-      'Residential' => sale.residential_customers,
-      'Commercial' => sale.commercial_customers
-    }
-  end
-
-  def sales_by_customer_type
-    sale = @community.reporting_entity.latest_sale
-    return render json: {} unless sale
-
-    render json: {
-      'Residential' => sale.residential_sales,
-      'Commercial' => sale.commercial_sales
-    }
-  end
-
-  def bulk_fuel_capacity_mix
-    render json: @community.bulk_fuel_facilities.capacity_by_fuel_type
-  end
+  def production_monthly; end
+  def production_yearly; end
+  def capacity_yearly; end
+  def population_employment; end
+  def average_sales_rates; end
+  def revenue_by_customer_type; end
+  def customers_by_customer_type; end
+  def sales_by_customer_type; end
+  def bulk_fuel_capacity_mix; end
 
   def gender_distribution; end
 
@@ -76,5 +21,13 @@ class Communities::ChartsController < ApplicationController
 
   def set_community
     @community = Community.friendly.find(params[:community_id])
+  end
+
+  def set_latest_sale
+    @latest_sale = @community.reporting_entity&.latest_sale
+  end
+
+  def set_year
+    @year = params[:year].presence&.to_i
   end
 end

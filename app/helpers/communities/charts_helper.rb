@@ -1,18 +1,6 @@
 module Communities::ChartsHelper
   require 'bigdecimal'
   # structured for chartkick
-  def employment_chart_data(employments)
-    [
-      {
-        name: 'Residents Employed',
-        data: employments.map { |e| [e.measurement_year, e.residents_employed] }
-      },
-      {
-        name: 'Unemployment Insurance Claimants',
-        data: employments.map { |e| [e.measurement_year, e.unemployment_insurance_claimants] }
-      }
-    ]
-  end
 
   def age_group_estimates_with_moe_data(community)
     population_age_sexes = PopulationAgeSex.most_recent_for(community.fips_code).ordered
