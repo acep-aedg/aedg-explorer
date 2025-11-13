@@ -41,6 +41,6 @@ module SearchableByNameAndTags
     }
     scope_options[:ignoring] = :accents if has_unaccent
 
-    pg_search_scope(:search_full_text, **scope_options)
+    pg_search_scope(:search_text_fts, **scope_options)
   end
 end

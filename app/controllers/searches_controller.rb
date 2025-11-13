@@ -17,15 +17,15 @@ class SearchesController < ApplicationController
     @query  = filters[:q]
     preload_choices
 
-    scope = build_scope(filters).includes(:borough, :regional_corporation, :grids, :senate_districts, :house_districts).distinct.order(:name)
-    @pagy, @communities = pagy(scope)
+    query = build_scope(filters)
+    @pagy, @communities = pagy(query)
   end
 
   private
 
   def extract_filters
     {
-      q: params[:q].to_s.strip.presence,
+      q: params[:q],
       grid_ids: Array(params[:grid_ids]).reject(&:blank?),
       borough_fips_codes: Array(params[:borough_fips_codes]).reject(&:blank?),
       regional_corporation_fips_codes: Array(params[:regional_corporation_fips_codes]).reject(&:blank?),
@@ -35,13 +35,18 @@ class SearchesController < ApplicationController
   end
 
   def build_scope(filters)
-    Community
-      .search_full_text(filters[:q])
-      .in_boroughs(filters[:borough_fips_codes])
-      .in_corps(filters[:regional_corporation_fips_codes])
-      .in_grids(filters[:grid_ids])
-      .in_senate(filters[:senate_district_ids])
-      .in_house(filters[:house_district_ids])
+    # base scope
+    base = Community.all
+    # Text search (pg_search_scope)
+    base = base.search_full_text(filters[:q])                       if filters[:q].present?
+    # Facets (these can add joins and conditions)
+    base = base.in_boroughs(filters[:borough_fips_codes])           if filters[:borough_fips_codes].present?
+    base = base.in_corps(filters[:regional_corporation_fips_codes]) if filters[:regional_corporation_fips_codes].present?
+    base = base.in_grids(filters[:grid_ids])                        if filters[:grid_ids].present?
+    base = base.in_senate(filters[:senate_district_ids])            if filters[:senate_district_ids].present?
+    base = base.in_house(filters[:house_district_ids])              if filters[:house_district_ids].present?
+    # Subquery + DISTINCT fixes join duplicates and avoids pg_search ORDER issues.
+    Community.from(base, :communities).distinct.order('communities.name ASC').preload(:borough, :regional_corporation, :grids, :senate_districts, :house_districts)
   end
 
   def preload_choices
