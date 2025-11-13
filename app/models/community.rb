@@ -40,13 +40,17 @@ class Community < ApplicationRecord
 
   default_scope { order(name: :asc) }
   scope :with_location, -> { where.not(location: nil) }
-  scope :in_boroughs, ->(codes) { where(borough_fips_code: codes) if codes.present? }
-  scope :in_borough,  ->(code)  { where(borough_fips_code: code) if code.present? }
-  scope :in_corps,    ->(codes) { where(regional_corporation_fips_code: codes) if codes.present? }
-  scope :in_grids,    ->(ids)   { joins(:grids).where(grids: { id: ids }) if ids.present? }
-  scope :in_senate,   ->(ids)   { joins(:senate_districts).where(senate_districts: { id: ids }) if ids.present? }
-  scope :in_house,    ->(ids)   { joins(:house_districts).where(house_districts: { id: ids }) if ids.present? }
-  scope :starts_with, ->(q)     { where('name ILIKE ?', "#{q}%") if q.present? }
+  scope :in_boroughs, ->(codes) { codes.present? ? where(borough_fips_code: codes) : all }
+  scope :in_borough, ->(code) { code.present? ? where(borough_fips_code: code) : all }
+  scope :in_corps, ->(codes) { codes.present? ? where(regional_corporation_fips_code: codes) : all }
+  scope :in_grids, ->(ids) { ids.present? ? where(id: joins(:grids).where(grids: { id: ids }).select(:id)) : all }
+  scope :in_senate, lambda { |ids|
+    ids.present? ? where(id: joins(:senate_districts).where(senate_districts: { id: ids }).group('communities.id').having('COUNT(DISTINCT senate_districts.id) = ?', ids.size).select(:id)) : all
+  }
+  scope :in_house, lambda { |ids|
+    ids.present? ? where(id: joins(:house_districts).where(house_districts: { id: ids }).group('communities.id').having('COUNT(DISTINCT house_districts.id) = ?', ids.size).select(:id)) : all
+  }
+  scope :starts_with, ->(q) { where('name ILIKE ?', "#{q}%") if q.present? }
   scope :search_full_text, ->(q) { q.present? ? where('name ILIKE ?', "%#{q}%") : all }
 
   # Handle the case where the name is not unique

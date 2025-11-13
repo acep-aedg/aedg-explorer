@@ -17,9 +17,7 @@ class SearchesController < ApplicationController
     @query  = filters[:q]
     preload_choices
 
-    scope = build_scope(filters)
-    @communities = scope.includes(:senate_districts, :house_districts).distinct.order(:name)
-
+    scope = build_scope(filters).includes(:borough, :regional_corporation, :grids, :senate_districts, :house_districts).distinct.order(:name)
     @pagy, @communities = pagy(scope)
   end
 
@@ -38,7 +36,6 @@ class SearchesController < ApplicationController
 
   def build_scope(filters)
     Community
-      .includes(:borough, :regional_corporation, :grids)
       .search_full_text(filters[:q])
       .in_boroughs(filters[:borough_fips_codes])
       .in_corps(filters[:regional_corporation_fips_codes])
