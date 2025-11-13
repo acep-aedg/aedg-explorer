@@ -5,7 +5,7 @@
     %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
       data: {
         action: "click->maps#showLayer",
-        url: bulk_fuel_facilities_community_maps_path(@community, format: :json),
+        url: bulk_fuel_facilities_community_maps_path(@community),
         fit: true,
         checkbox_id: "layer-bulk-fuel-facilities"        # ensure a matching checkbox exists in the map panel
       }

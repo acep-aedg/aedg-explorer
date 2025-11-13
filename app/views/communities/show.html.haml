@@ -47,7 +47,6 @@
                     action: "change->maps#toggleLayer",
                     url: service_area_geoms_community_maps_path(@community),
                     color: "#E74C3C",
-                    outlineColor: "#943126",
                     fit: true
                   }
                 }
@@ -63,7 +62,6 @@
                     action: "change->maps#toggleLayer",
                     url: service_areas_community_maps_path(@community),
                     color: "#E74C3C",
-                    outlineColor: "#943126",
                     fit: true
                   }
                 }
@@ -77,7 +75,6 @@
                   action: "change->maps#toggleLayer",
                   url: house_districts_community_maps_path(@community),
                   color: "#088",
-                  outlineColor: "#05505e",
                   fit: true
                 }
               }
@@ -91,7 +88,6 @@
                   action: "change->maps#toggleLayer",
                   url: senate_districts_community_maps_path(@community),
                   color: "#e67e22",
-                  outlineColor: "#a84300",
                   fit: true
                 }
               }
@@ -110,7 +106,8 @@
                   type: "checkbox",
                   data: {
                     action: "change->maps#toggleLayer",
-                    url: plants_community_maps_path(@community, format: :json),
+                    url: plants_community_maps_path(@community),
+                    color: "#088",
                     fit: true
                   }
                 }
@@ -123,7 +120,8 @@
                   type: "checkbox",
                   data: {
                     action: "change->maps#toggleLayer",
-                    url: bulk_fuel_facilities_community_maps_path(@community, format: :json),
+                    url: bulk_fuel_facilities_community_maps_path(@community),
+                    color: "#E74C3C",
                     fit: true
                   }
                 }

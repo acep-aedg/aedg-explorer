@@ -95,13 +95,11 @@ export default class extends Controller {
     const el = event.currentTarget
     const url = el.dataset.url || el.dataset.layerUrl || el.dataset.mapLayerUrl
     if (!url) return
-
+    let color = el.dataset.color 
+    let outlineColor = el.dataset.outlineColor || color ? this._computeOutlineColor(color) : undefined;
     if (el.checked) {
       // load the layer (polygon or point) with optional colors
-      const { fc, sourceId, layerIds } = await loadLayer(this.map, url, {
-        color: el.dataset.color,
-        outlineColor: el.dataset.outlineColor || el.dataset['outline-color'],
-      })
+      const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color: color, outlineColor: outlineColor })
       this._remember(sourceId, layerIds)
 
       // optional fit when enabling
@@ -147,14 +145,14 @@ export default class extends Controller {
     const url = el.dataset.url || el.dataset.layerUrl || el.dataset.mapLayerUrl;
     if (!url) return;
 
-    const color = el.dataset.color;
-    const outlineColor = el.dataset.outlineColor || el.dataset['outline-color'];
+    const color = el.dataset.color
+    let outlineColor = el.dataset.outlineColor || color ? this._computeOutlineColor(color) : undefined;
     const fit = el.dataset.fit ? el.dataset.fit !== 'false' : true;
 
     await this._ensureMapReady();
 
     // Load (idempotent: addSource updates existing; addLayer guards by id)
-    const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color, outlineColor });
+    const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color:color, outlineColor:outlineColor });
     this._remember(sourceId, layerIds);
 
     if (fit) {
@@ -228,5 +226,31 @@ export default class extends Controller {
     this.layerIds.splice(0).forEach((id) => { if (this.map?.getLayer(id)) this.map.removeLayer(id) })
     this.sourceIds.splice(0).forEach((id) => { if (this.map?.getSource(id)) this.map.removeSource(id) })
     this.layersBySource.clear()
+  }
+  
+  _computeOutlineColor(color) {
+    let hex = color.replace('#', '')
+
+    // Expand shorthand "#abc" → "#aabbcc"
+    if (hex.length === 3) {
+      hex = hex.split('').map(c => c + c).join('')
+    }
+  
+    // Convert to RGB
+    let r = parseInt(hex.substring(0, 2), 16)
+    let g = parseInt(hex.substring(2, 4), 16)
+    let b = parseInt(hex.substring(4, 6), 16)
+  
+    // Darken by 25%
+    const factor = 0.75
+  
+    r = Math.floor(r * factor)
+    g = Math.floor(g * factor)
+    b = Math.floor(b * factor)
+  
+    // Convert back to hex
+    const toHex = (v) => v.toString(16).padStart(2, '0')
+
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`
   }
 }

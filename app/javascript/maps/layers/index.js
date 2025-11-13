@@ -95,7 +95,7 @@ function addLayersForFC(map, sourceId, fc, { color, outlineColor } = {}) {
   if (/Polygon/i.test(type)) {
     layerIds = addPolygonLayers(map, sourceId, { color, outlineColor })
   } else {
-    const id = addPointLayer(map, sourceId)
+    const id = addPointLayer(map, sourceId, { color, outlineColor })
     if (id) {
       layerIds.push(id)
       attachPopup(map, id)

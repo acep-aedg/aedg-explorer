@@ -11,30 +11,26 @@
     .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
 
       - if @community.show_service_area_geoms?
-        - sa_url = service_area_geoms_community_maps_path(@community, format: :json)
         %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
           data: {
             action: "click->maps#showLayer",
-            url: sa_url,
+            url: service_area_geoms_community_maps_path(@community),
             color: "#E74C3C",
-            "outline-color": "#943126",
             fit: true,
-            checkbox_id: "layer-service"     # toggles the real checkbox in map panel
+            checkbox_id: "layer-service" # toggles checkbox in map panel, ensure checkbox exists
           }
         }
           %i.bi.bi-bounding-box
           = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
 
       - if @community.show_full_service_area?
-        - full_sa_url = service_areas_community_maps_path(@community, format: :json)
         %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
           data: {
             action: "click->maps#showLayer",
-            url: full_sa_url,
+            url: service_areas_community_maps_path(@community),
             color: "#E74C3C",
-            "outline-color": "#943126",
             fit: true,
-            checkbox_id: "layer-service-full"  # toggles the real checkbox in map panel
+            checkbox_id: "layer-service-full"  # toggles checkbox in map panel, ensure checkbox exists
           }
         }
           %i.bi.bi-bounding-box
@@ -46,7 +42,7 @@
             action: "click->maps#showLayer",
             url: plants_community_maps_path(@community),
             fit: true,
-            checkbox_id: "layer-plants"        # ensure a matching checkbox exists in the map panel
+            checkbox_id: "layer-plants" # toggles checkbox in map panel, ensure checkbox exists
           }
         }
           %i.bi.bi-building
