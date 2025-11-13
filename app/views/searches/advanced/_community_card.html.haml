@@ -19,13 +19,13 @@
       - sen_dists.each do |d|
         %span.badge.bg-info-subtle.text-info.border-info
           %i.bi.bi-bank.m-0
-          = "Senate #{d.district}"
+          = "Senate District #{d}"
 
       - house_dists = Array(community.try(:house_districts) || community.try(:house_district)).compact
       - house_dists.each do |d|
         %span.badge.bg-primary-subtle.text-primary.border.m-0
           %i.bi.bi-house.m-0
-          = "House #{d.district_label}"
+          = "House District #{d}"
 
   .mt-2
     = link_to 'View Community', community_path(community),
