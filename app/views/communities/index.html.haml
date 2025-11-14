@@ -1,16 +1,9 @@
 - content_for :title, 'Communities'
-.container-fluid
-  .row.justify-content-center
-    .col-12
-      .container-fluid
-        .row.justify-content-center
-          .col-12.bg-opacity-75.p-4.rounded-4.bg-body-secondary
-            .text-center
-              %h1.display-6.fw-semibold Communities
-              .d-flex.justify-content-center
-            / --- SEARCH BAR just under title ---
-            .mx-1.mb-1
-              = render 'searches/simple_search'
-            / --- COMMUNITY LIST ---
-            = turbo_frame_tag 'allCommunities' do
-              = render 'communities/communities_list', communities: @communities
+.container-fluid.p-4
+  .bg-opacity-75.p-4.rounded-4.bg-body-secondary.text-center
+    %h1 Communities
+    = render 'simple_search'
+/ --- COMMUNITY LIST ---
+= turbo_frame_tag 'communities' do
+  = render 'results_pagination', letters: @active_letters
+  = render 'results_list', communities: @communities

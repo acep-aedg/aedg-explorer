@@ -3,19 +3,19 @@
 .container-fluid
   .row.min-vh-100
     / ==== LEFT: FILTERS PANEL ====
-    .col-12.col-lg-3.p-3.bg-dark-subtle
+    .col-lg-3.bg-dark-subtle
       .card.shadow-sm.bg-body-dark.border.border-300.rounded-3.p-1
-        .card-header.bg-body-secondary.text-body-emphasis.py-2.px-3.border-bottom.rounded-0.border.border-300.rounded-3
+        .card-header.bg-body-secondary.text-body-emphasis.py-2.px-3.border-bottom.rounded-0.border.rounded-3
           %strong.small Filters
-        .card-body.p-0.bg-body-secondary.border.border-300.rounded-3
+        .card-body.p-0.bg-body-secondary.border.rounded-3
           = form_with url: search_advanced_path, method: :get, local: true do
             - reset_disabled = params.except(:controller, :action).blank?
 
             / Apply filters and Reset (leave these on the left)
-            .d-grid.gap-1.p-2.bg-body-secondary.border.border-300.rounded-3
-              %button.btn.btn-warning.text-primary.border-primary.btn-sm.w-100.rounded-1.py-1{ type: 'submit' } Apply filters
+            .d-grid.gap-1.p-2.bg-body-secondary.border.rounded-3
+              %button.btn.btn-warning.btn-sm.btn-block{ type: 'submit' } Apply filters
               = link_to 'Clear all filters', search_advanced_path,
-                class: "btn btn-secondary btn-sm w-100 rounded-1 py-1 #{'disabled' if reset_disabled}",
+                class: "btn btn-secondary btn-sm #{'disabled' if reset_disabled}",
                 aria: { disabled: reset_disabled }
 
             / Facets
@@ -32,13 +32,13 @@
                 id_prefix: 'hou', top_n: 6, value_of: ->(d){ d.id }, label_of: ->(d){ d }
 
             .d-grid.gap-1.p-2.border-top.bg-body-secondary.border.border-300.rounded-3
-              %button.btn.btn-warning.text-primary.border-primary.btn-sm.w-100.rounded-1.py-1{ type: 'submit' } Apply filters
+              %button.btn.btn-warning.btn-sm{ type: 'submit' } Apply filters
               = link_to 'Clear all filters', search_advanced_path,
-                class: "btn btn-secondary btn-sm w-100 rounded-1 py-1 #{'disabled' if reset_disabled}",
+                class: "btn btn-secondary btn-sm #{'disabled' if reset_disabled}",
                 aria: { disabled: reset_disabled }
 
     / ==== RIGHT: MAIN RESULTS ====
-    .col-12.col-lg-9.d-flex.flex-column.bg-dark-subtle.px-3{ style: "min-height: 100vh;" }
+    .col-lg-9.d-flex.flex-column.bg-dark-subtle{ style: "min-height: 100vh;" }
       .bg-body-secondary.rounded-0.p-4.w-100.d-flex.flex-column{ style: "height: 100%; overflow-y: auto;" }
         / --- Search box (top) ---
         %div.text-center.mb-4
@@ -55,7 +55,7 @@
 
         / --- Header and filter badges ---
         .d-flex.flex-wrap.justify-content-between.align-items-center.mb-3
-          %h2.h5.mb-0= pluralize(@communities.size, 'Community')
+          %h2.h5.mb-0= pluralize(@pagy.count, 'Community')
 
           - selected_grids = selected_labels(@all_grids, :grid_ids) { |g| g.id }
           - selected_boros = selected_labels(@all_boros, :borough_fips_codes) { |b| b.fips_code }
@@ -85,7 +85,7 @@
 
         / --- Scrollable results ---
         .flex-grow-1.overflow-auto
-          - if @communities.any?
+          - if @pagy.count > 0
             .vstack.gap-3
               - @communities.each do |community|
                 = render 'searches/advanced/community_card', community: community

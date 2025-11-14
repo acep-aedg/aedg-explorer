@@ -1,3 +1,8 @@
+\restrict jnfecPetvnquvkxq3XEHLd5SNjAuxnXPEquelj98ObZ233g8RkgEmBdaNl4q9mv
+
+-- Dumped from database version 16.9 (Debian 16.9-1.pgdg110+1)
+-- Dumped by pg_dump version 16.10 (Ubuntu 16.10-0ubuntu0.24.04.1)
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -259,7 +264,8 @@ CREATE TABLE public.communities (
     reporting_entity_id bigint,
     village_corporation character varying,
     operators character varying[] DEFAULT '{}'::character varying[],
-    heating_degree_days integer
+    heating_degree_days integer,
+    tsvector_data tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, COALESCE((name)::text, ''::text))) STORED
 );
 
 
@@ -2603,9 +2609,12 @@ ALTER TABLE ONLY public.communities
 -- PostgreSQL database dump complete
 --
 
+\unrestrict jnfecPetvnquvkxq3XEHLd5SNjAuxnXPEquelj98ObZ233g8RkgEmBdaNl4q9mv
+
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251114225412'),
 ('20251105235722'),
 ('20251105225408'),
 ('20251020233030'),
@@ -2685,4 +2694,3 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20241212215118'),
 ('20241212215109'),
 ('20241212214531');
-

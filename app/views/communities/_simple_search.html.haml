@@ -1,16 +1,14 @@
 / --- SEARCH BAR ---
 %div.text-center
-  = form_with url: communities_path, method: :get,
-              data: { turbo_frame: 'community_list' },
-              html: { id: 'site-search-form', class: 'd-flex justify-content-center mb-2' } do
+  = form_with url: communities_path, method: :get do |f|
     .input-group.bg-white.mx-auto.search-bar
       %span.input-group-text.bg-white.border-0.py-0
         %i.bi.bi-search.text-muted
-      = text_field_tag :q, params[:q],
-        class: "form-control border-0 py-0",
-        placeholder: "Search for a community...",
-        form: 'site-search-form'
-      %button.btn.btn-white.border-0{ type: "submit" }
+      = f.text_field :q, value: @query, class: "form-control border-0 py-0", placeholder: "Search for a community..."
+      - if @query.present?
+        = link_to communities_path, class: 'btn btn-white border-0' do
+          %i.bi.bi-x.text-secondary
+      = f.button name: nil, class: 'btn btn-white border-0' do
         %i.bi.bi-arrow-return-left.text-secondary
 
   / Quick links
@@ -23,9 +21,3 @@
     %span.mx-1 &bull;
     = link_to 'User Guide', user_guide_path,
       class: 'text-info fw-bold text-decoration-none small link-hover'
-
-/ --- RESULTS SECTION (Turbo Frame) ---
-- if @search_params.present?
-  = render 'communities/communities_list_frame', communities: @communities
-- else
-  = turbo_frame_tag 'community_list'

@@ -5,10 +5,13 @@ class CommunitiesController < ApplicationController
 
   def index
     @query = @search_params[:q]
-    @communities = Community
-    @communities = @communities.starts_with(params[:letter]) if params[:letter].present?
+    @communities = Community.order(:name)
     @communities = @communities.search_full_text(@query) if @query.present?
-    @communities = @communities.order(:name).all
+
+    @active_letters = @communities.pluck(:name).map(&:first).uniq.sort
+
+    @communities = @communities.starts_with(params[:letter]) if params[:letter].present?
+    @communities = @communities.all
   end
 
   def show
