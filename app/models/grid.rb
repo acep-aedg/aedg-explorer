@@ -60,7 +60,7 @@ class Grid < ApplicationRecord
   def show_monthly_generation?
     @show_monthly_generation ||= monthly_generations&.exists?
   end
-  
+
   def show_plants?
     @show_plants ||= plants&.exists?
   end

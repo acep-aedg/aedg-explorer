@@ -31,6 +31,7 @@
               type: "checkbox",
               data: {
                 action: "change->maps#toggleLayer",
+                color: "#EE4B2B",
                 url: community_locations_grid_maps_path(@grid),
                 fit: true
               }
@@ -67,7 +68,7 @@
 
         / --- Map fills remaining height
         .flex-grow-1.position-relative
-          %div{ data: { maps_target: "map" }, style: "position:absolute; inset:0; width:100%; height:100%;" }
+          .h-100{ data: { maps_target: "map" }}
 
   / RIGHT: main content 
   .col-md-7
