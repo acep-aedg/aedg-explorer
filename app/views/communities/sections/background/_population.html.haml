@@ -1,10 +1,23 @@
 - employment_present = @community.population.present?
 - age_data_present = @community.population_age_sexes.present?
+- most_recent_population = PopulationAgeSex.most_recent_for(@community)
 
 .d-flex.align-items-center.mb-3
   %i.bi.bi-people-fill.me-2.fs-4
   %h4#population.mb-0.me-3.py-3.anchor-offset Population
   %hr.flex-grow-1.mt-1.mb-0
+
+.d-flex.justify-content-between.align-items-center.bg-body-secondary.p-3.rounded.mb-3.flex-wrap
+  %div
+    %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "American Community Survey (ACS) 5-year estimate (#{most_recent_population.start_year}–#{most_recent_population.end_year})" }
+    %strong.me-2
+      Estimated Population (#{most_recent_population.end_year}):
+    %strong.text-primary.fw-bold
+      = number_with_delimiter(most_recent_population.e_pop_total)
+    - if most_recent_population.m_pop_total.present?
+      %span.text-muted
+        (±#{number_with_delimiter(most_recent_population.m_pop_total)})
+
 %ul.nav.nav-tabs
   - if employment_present
     %li.nav-item

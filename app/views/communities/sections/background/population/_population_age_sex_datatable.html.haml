@@ -1,12 +1,9 @@
 %div{ data: { controller: 'datatables', datatables: { order_value: [3, 'asc'], scroll_x: true } } }
-  %h5.text-center.mt-2 Populations Ages and Sexes Table
   %table.table.table-stripped.border
     %thead
       %tr
-        %th Community FIPS Code
         %th Start Year
         %th End Year
-        %th Is Most Recent
         %th Geo Source
         %th Estimated Total Population
         %th Margin of Error Total Population
@@ -57,10 +54,8 @@
     %tbody
       - @community.population_age_sexes.each do |row|
         %tr
-          %td= row.community_fips_code
           %td= row.start_year
           %td= row.end_year
-          %td= row.is_most_recent
           %td= row.geo_src
           %td= row.e_pop_age_total
           %td= row.m_pop_age_total
