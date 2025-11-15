@@ -31,7 +31,6 @@
               type: "checkbox",
               data: {
                 action: "change->maps#toggleLayer",
-                color: "#EE4B2B",
                 url: community_locations_grid_maps_path(@grid),
                 fit: true
               }
@@ -41,16 +40,15 @@
           / Map Layer: Local Service Area
           - if @grid.show_service_area_geoms?
             .form-check.mb-1
-              %input.form-check-input#layer-service-areas{
+              %input.form-check-input#layer-service-area-local{
                 type: "checkbox",
                 data: {
                   action: "change->maps#toggleLayer",
                   url: service_area_geoms_grid_maps_path(@grid),
-                  color: "#E74C3C",
                   fit: true
                 }
               }
-              %label.form-check-label.small{ for: "layer-service-areas" } Service Areas
+              %label.form-check-label.small{ for: "layer-service-area-local" } Service Areas
 
           / Map Layer: Plants
           - if @grid.show_plants?
@@ -60,7 +58,6 @@
                 data: {
                   action: "change->maps#toggleLayer",
                   url: plants_grid_maps_path(@grid),
-                  color: "#088",
                   fit: true
                 }
               }

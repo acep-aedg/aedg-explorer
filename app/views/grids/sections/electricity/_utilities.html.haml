@@ -15,9 +15,8 @@
           data: {
             action: "click->maps#showLayer",
             url: service_area_geoms_grid_maps_path(@grid),
-            color: "#E74C3C",
             fit: true,
-            checkbox_id: "layer-service-areas"
+            checkbox_id: "layer-service-area-local"
           }
         }
           %i.bi.bi-bounding-box
@@ -28,7 +27,6 @@
           data: {
             action: "click->maps#showLayer",
             url: plants_grid_maps_path(@grid),
-            color: "#088",
             fit: true,
             checkbox_id: "layer-plants"        # ensure a matching checkbox exists in the map panel
           }

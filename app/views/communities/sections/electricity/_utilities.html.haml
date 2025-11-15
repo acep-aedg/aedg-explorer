@@ -15,9 +15,8 @@
           data: {
             action: "click->maps#showLayer",
             url: service_area_geoms_community_maps_path(@community),
-            color: "#E74C3C",
             fit: true,
-            checkbox_id: "layer-service" # toggles checkbox in map panel, ensure checkbox exists
+            checkbox_id: "layer-service-area-local" # toggles checkbox in map panel, ensure checkbox exists
           }
         }
           %i.bi.bi-bounding-box
@@ -28,9 +27,8 @@
           data: {
             action: "click->maps#showLayer",
             url: service_areas_community_maps_path(@community),
-            color: "#E74C3C",
             fit: true,
-            checkbox_id: "layer-service-full"  # toggles checkbox in map panel, ensure checkbox exists
+            checkbox_id: "layer-service-area-full"  # toggles checkbox in map panel, ensure checkbox exists
           }
         }
           %i.bi.bi-bounding-box

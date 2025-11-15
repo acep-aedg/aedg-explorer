@@ -41,31 +41,29 @@
             / Map Layer: Local Service Area
             - if @community.show_service_area_geoms?
               .form-check.mb-1
-                %input.form-check-input#layer-service{
+                %input.form-check-input#layer-service-area-local{
                   type: "checkbox",
                   data: {
                     action: "change->maps#toggleLayer",
                     url: service_area_geoms_community_maps_path(@community),
-                    color: "#E74C3C",
                     fit: true
                   }
                 }
-                %label.form-check-label.small{ for: "layer-service" }
+                %label.form-check-label.small{ for: "layer-service-area-local" }
                   = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
             
             / Map Layer: Full Service Area (if applicable)
             - if @community.show_full_service_area?
               .form-check.mb-1
-                %input.form-check-input#layer-service-full{
+                %input.form-check-input#layer-service-area-full{
                   type: "checkbox",
                   data: {
                     action: "change->maps#toggleLayer",
                     url: service_areas_community_maps_path(@community),
-                    color: "#E74C3C",
                     fit: true
                   }
                 }
-                %label.form-check-label.small{ for: "layer-service-full" } Full Service Area
+                %label.form-check-label.small{ for: "layer-service-area-full" } Full Service Area
             
             / Map Layer: House Districts
             .form-check.mb-1
@@ -74,7 +72,6 @@
                 data: {
                   action: "change->maps#toggleLayer",
                   url: house_districts_community_maps_path(@community),
-                  color: "#088",
                   fit: true
                 }
               }
@@ -87,7 +84,6 @@
                 data: {
                   action: "change->maps#toggleLayer",
                   url: senate_districts_community_maps_path(@community),
-                  color: "#e67e22",
                   fit: true
                 }
               }
@@ -107,7 +103,6 @@
                   data: {
                     action: "change->maps#toggleLayer",
                     url: plants_community_maps_path(@community),
-                    color: "#088",
                     fit: true
                   }
                 }
@@ -121,7 +116,6 @@
                   data: {
                     action: "change->maps#toggleLayer",
                     url: bulk_fuel_facilities_community_maps_path(@community),
-                    color: "#786a39",
                     fit: true
                   }
                 }

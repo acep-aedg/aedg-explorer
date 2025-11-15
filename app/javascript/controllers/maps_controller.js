@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import mapboxgl from 'mapbox-gl'
-import { MAP_STYLE, DEFAULT_ZOOM } from '../maps/config.js'
+import { MAP_STYLE, DEFAULT_ZOOM, LAYER_COLORS } from '../maps/config.js'
 import { loadLayer, loadMarkerLayer, removeSourceLayers } from '../maps/layers/index.js'
 import { boundsFrom, featureCollectionFromLngLats } from '../maps/geo.js'
 import { upsertDomMarker } from '../maps/dom_marker.js'
@@ -90,12 +90,12 @@ export default class extends Controller {
     }
   }
 
-  // Checkbox: add/remove generic GeoJSON layers (districts, service areas, etc.)
+  // Checkbox: add/remove generic GeoJSON layers from map legend (districts, service areas, etc.)
   async toggleLayer(event) {
     const el = event.currentTarget
     const url = el.dataset.url || el.dataset.layerUrl || el.dataset.mapLayerUrl
     if (!url) return
-    let color = el.dataset.color 
+    let color = el.dataset.color || LAYER_COLORS[el.id];
     let outlineColor = el.dataset.outlineColor || color ? this._computeOutlineColor(color) : undefined;
     if (el.checked) {
       // load the layer (polygon or point) with optional colors
@@ -145,10 +145,9 @@ export default class extends Controller {
     const url = el.dataset.url || el.dataset.layerUrl || el.dataset.mapLayerUrl;
     if (!url) return;
 
-    const color = el.dataset.color
+    let color = el.dataset.color || LAYER_COLORS[el.dataset.checkboxId];
     let outlineColor = el.dataset.outlineColor || color ? this._computeOutlineColor(color) : undefined;
     const fit = el.dataset.fit ? el.dataset.fit !== 'false' : true;
-
     await this._ensureMapReady();
 
     // Load (idempotent: addSource updates existing; addLayer guards by id)
