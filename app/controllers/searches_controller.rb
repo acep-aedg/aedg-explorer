@@ -40,14 +40,12 @@ class SearchesController < ApplicationController
     # Text search (pg_search_scope)
     base = base.search_full_text(filters[:q])
                .reorder('communities.name ASC') if filters[:q].present?
-    # Facets (these can add joins and conditions)
+    # Apply filters
     base = base.in_boroughs(filters[:borough_fips_codes])           if filters[:borough_fips_codes].present?
     base = base.in_corps(filters[:regional_corporation_fips_codes]) if filters[:regional_corporation_fips_codes].present?
     base = base.in_grids(filters[:grid_ids])                        if filters[:grid_ids].present?
     base = base.in_senate(filters[:senate_district_ids])            if filters[:senate_district_ids].present?
     base = base.in_house(filters[:house_district_ids])              if filters[:house_district_ids].present?
-    # Subquery + DISTINCT fixes join duplicates and avoids pg_search ORDER issues.
-    # Community.from(base, :communities).distinct.order('communities.name ASC').preload(:borough, :regional_corporation, :grids, :senate_districts, :house_districts)
 
     base.distinct.all
   end

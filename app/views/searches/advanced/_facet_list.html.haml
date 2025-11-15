@@ -5,9 +5,9 @@
 - visible = items.first(top_n)
 - hidden  = items.drop(top_n)
 
-%li.list-group-item.p-0.border-0
+%li.list-group-item.bg-light
   / Header row (gray, square, plus icon)
-  %button.w-100.text-start.bg-body-white.border.border-300.py-2.px-3.d-flex.align-items-center.justify-content-between.collapsed{ 
+  %button.w-100.border-0.d-flex.align-items-center.justify-content-between.collapsed.bg-light{ 
     "data-bs-toggle" => "collapse",
     "data-bs-target" => "##{collapse_id}",
     "aria-expanded"  => open,

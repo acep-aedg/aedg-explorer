@@ -1,57 +1,15 @@
 - content_for :title, 'Advanced Search'
 
 .container-fluid
-  .row.min-vh-100
+  .row
     / ==== LEFT: FILTERS PANEL ====
-    .col-lg-3.bg-dark-subtle
-      .card.shadow-sm.bg-body-dark.border.border-300.rounded-3.p-1
-        .card-header.bg-body-secondary.text-body-emphasis.py-2.px-3.border-bottom.rounded-0.border.rounded-3
-          %strong.small Filters
-        .card-body.p-0.bg-body-secondary.border.rounded-3
-          = form_with url: search_advanced_path, method: :get, local: true do
-            - reset_disabled = params.except(:controller, :action).blank?
-
-            / Apply filters and Reset (leave these on the left)
-            .d-grid.gap-1.p-2.bg-body-secondary.border.rounded-3
-              %button.btn.btn-warning.btn-sm.btn-block{ type: 'submit' } Apply filters
-              = link_to 'Clear all filters', search_advanced_path,
-                class: "btn btn-secondary btn-sm #{'disabled' if reset_disabled}",
-                aria: { disabled: reset_disabled }
-
-            / Facets
-            %ul.list-group.list-group-flush.small.rounded-3
-              = render 'searches/advanced/facet_list', title: 'Grids', items: @all_grids, param_key: :grid_ids,
-                id_prefix: 'grid', top_n: 6, value_of: ->(g){ g.id }, label_of: ->(g){ g.name }
-              = render 'searches/advanced/facet_list', title: 'Boroughs', items: @all_boros, param_key: :borough_fips_codes,
-                id_prefix: 'bor', top_n: 6, value_of: ->(b){ b.fips_code }, label_of: ->(b){ b.name }
-              = render 'searches/advanced/facet_list', title: 'Native Corporations', items: @all_corps, param_key: :regional_corporation_fips_codes,
-                id_prefix: 'corp', top_n: 6, value_of: ->(c){ c.fips_code }, label_of: ->(c){ c.name }
-              = render 'searches/advanced/facet_list', title: 'Senate Districts', items: @all_senate, param_key: :senate_district_ids,
-                id_prefix: 'sen', top_n: 6, value_of: ->(d){ d.id }, label_of: ->(d){ d }
-              = render 'searches/advanced/facet_list', title: 'House Districts', items: @all_house, param_key: :house_district_ids,
-                id_prefix: 'hou', top_n: 6, value_of: ->(d){ d.id }, label_of: ->(d){ d }
-
-            .d-grid.gap-1.p-2.border-top.bg-body-secondary.border.border-300.rounded-3
-              %button.btn.btn-warning.btn-sm{ type: 'submit' } Apply filters
-              = link_to 'Clear all filters', search_advanced_path,
-                class: "btn btn-secondary btn-sm #{'disabled' if reset_disabled}",
-                aria: { disabled: reset_disabled }
+    .col-lg-4.p-0.bg-light
+      .card.rounded-0
+        = render 'searches/advanced/form'
 
     / ==== RIGHT: MAIN RESULTS ====
-    .col-lg-9.d-flex.flex-column.bg-dark-subtle{ style: "min-height: 100vh;" }
+    .col-lg.p-0{ style: "min-height: 100vh;" }
       .bg-body-secondary.rounded-0.p-4.w-100.d-flex.flex-column{ style: "height: 100%; overflow-y: auto;" }
-        / --- Search box (top) ---
-        %div.text-center.mb-4
-          = form_with url: search_advanced_path, method: :get, local: true, html: { id: 'advanced-search-form', class: 'd-flex justify-content-center mb-2' } do
-            .input-group.shadow-lg.border.mx-auto{ style: "border-radius: 50px; overflow: hidden; max-width: 900px;" }
-              %span.input-group-text.bg-white.border-0.py-0
-                %i.bi.bi-search.text-muted
-              = text_field_tag :q, params[:q],
-                class: "form-control border-0 py-0",
-                placeholder: "Search for a community...",
-                form: "advanced-search-form"
-              %button.btn.btn-white.border-0{ type: "submit" }
-                %i.bi.bi-arrow-return-left.text-secondary
 
         / --- Header and filter badges ---
         .d-flex.flex-wrap.justify-content-between.align-items-center.mb-3
@@ -81,7 +39,8 @@
                 %span.badge.bg-info-subtle.text-dark.border= "Senate District #{d.district}"
               - selected_hou.each do |d|
                 %span.badge.bg-primary-subtle.text-primary.border= "House District #{d}"
-            = link_to 'Clear all filters', search_advanced_path, class: 'small ms-2 text-decoration-none'
+
+            = link_to 'Clear all', search_advanced_path, class: 'small ms-2 text-decoration-none'
 
         / --- Scrollable results ---
         .flex-grow-1.overflow-auto

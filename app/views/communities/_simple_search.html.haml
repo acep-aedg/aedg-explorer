@@ -1,15 +1,13 @@
 / --- SEARCH BAR ---
 %div.text-center
   = form_with url: communities_path, method: :get do |f|
-    .input-group.bg-white.mx-auto.search-bar
-      %span.input-group-text.bg-white.border-0.py-0
-        %i.bi.bi-search.text-muted
-      = f.text_field :q, value: @query, class: "form-control border-0 py-0", placeholder: "Search for a community..."
+    .input-group.bg-white.mx-auto.search-bar.ps-4
+      = f.text_field :q, value: @query, class: "form-control border-0", placeholder: "Search for a community..."
       - if @query.present?
         = link_to communities_path, class: 'btn btn-white border-0' do
           %i.bi.bi-x.text-secondary
       = f.button name: nil, class: 'btn btn-white border-0' do
-        %i.bi.bi-arrow-return-left.text-secondary
+        %i.bi.bi-search.text-muted
 
   / Quick links
   .mt-2.quick-links

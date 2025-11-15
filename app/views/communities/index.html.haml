@@ -1,7 +1,7 @@
 - content_for :title, 'Communities'
-.container-fluid.p-4
-  .bg-opacity-75.p-4.rounded-4.bg-body-secondary.text-center
-    %h1 Communities
+.container-fluid.p-2
+  .bg-body-light.text-center
+    %h1.pb-2 Communities
     = render 'simple_search'
 / --- COMMUNITY LIST ---
 = turbo_frame_tag 'communities' do
