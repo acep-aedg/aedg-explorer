@@ -39,26 +39,27 @@ class Community < ApplicationRecord
   validates :location, presence: true, allowed_geometry_types: ['Point']
 
   # default_scope { order(name: :asc) }
-  scope :with_location, -> { where.not(location: nil) }
-  scope :in_boroughs, ->(codes) { joins(:borough).where(boroughs: { fips_code: codes }) }
-  scope :in_corps,    ->(codes) { where(regional_corporation_fips_code: codes) }
-  scope :in_grids,    ->(ids)   { joins(:grids).where(grids: { id: ids }) }
-  scope :in_senate,   ->(ids)   { joins(:senate_districts).where(senate_districts: { id: ids }) }
-  scope :in_house,    ->(ids)   { joins(:house_districts).where(house_districts: { id: ids }) }
+  scope :with_location, ->        { where.not(location: nil) }
+  scope :in_boroughs,   ->(codes) { joins(:borough).where(boroughs: { fips_code: codes }) }
+  scope :in_corps,      ->(codes) { where(regional_corporation_fips_code: codes) }
+  scope :in_grids,      ->(ids)   { joins(:grids).where(grids: { id: ids }) }
+  scope :in_senate,     ->(ids)   { joins(:senate_districts).where(senate_districts: { id: ids }) }
+  scope :in_house,      ->(ids)   { joins(:house_districts).where(house_districts: { id: ids }) }
   # uses the pg_search_scope defined in SearchableByNameAndTags concern
-  scope :starts_with,      ->(ch) { where('name ilike ?', "#{ch}%") }
+  scope :starts_with,   ->(ch)    { where('name ilike ?', "#{ch}%") }
 
   include PgSearch::Model
+
   pg_search_scope :search_full_text,
-    against: [:name],
-    using: {
-      # dmetaphone: {},
-      tsearch: {
-        prefix: true,
-        tsvector_column: 'tsvector_data'
-      },
-      # trigram: { }
-    }
+                  against: [:name],
+                  using: {
+                    # dmetaphone: {},
+                    tsearch: {
+                      prefix: true,
+                      tsvector_column: 'tsvector_data'
+                    }
+                    # trigram: {}
+                  }
 
   # Handle the case where the name is not unique
   def slug_candidates

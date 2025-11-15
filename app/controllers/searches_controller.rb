@@ -38,8 +38,10 @@ class SearchesController < ApplicationController
     # base scope
     base = Community.preload(:borough, :regional_corporation, :grids, :senate_districts, :house_districts)
     # Text search (pg_search_scope)
-    base = base.search_full_text(filters[:q])
-               .reorder('communities.name ASC') if filters[:q].present?
+    if filters[:q].present?
+      base = base.search_full_text(filters[:q])
+                 .reorder('communities.name ASC')
+    end
     # Apply filters
     base = base.in_boroughs(filters[:borough_fips_codes])           if filters[:borough_fips_codes].present?
     base = base.in_corps(filters[:regional_corporation_fips_codes]) if filters[:regional_corporation_fips_codes].present?
