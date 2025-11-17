@@ -13,7 +13,7 @@
 
         / --- Header and filter badges ---
         .d-flex.flex-wrap.justify-content-between.align-items-center.mb-3
-          %h2.h5.mb-0= pluralize(@pagy.count, 'Community')
+          %h5.mb-0= pluralize(@pagy.count, 'Community')
 
           - selected_grids = selected_labels(@all_grids, :grid_ids) { |g| g.id }
           - selected_boros = selected_labels(@all_boros, :borough_fips_codes) { |b| b.fips_code }
