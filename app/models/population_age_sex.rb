@@ -5,17 +5,17 @@ class PopulationAgeSex < ApplicationRecord
   # Scope to community records
   scope :for_community, ->(community) { where(community_fips_code: community.fips_code) }
 
-  # Class method that returns *one* record: the one with the highest end_year
-  def self.most_recent_for(community)
+  # Returns the most recent record for this community,
+  # ensuring all fields in the required_group are NOT NULL (if provided).
+  def self.most_recent_for(community, required_fields: nil)
     rel = for_community(community)
-    max_year = rel.maximum(:end_year)
-    return nil unless max_year
 
-    rel.find_by(end_year: max_year)
+    Array(required_fields).each do |field|
+      rel = rel.where.not(field => nil)
+    end
+
+    rel.order(end_year: :desc).first
   end
-
-  # Scope to filter by gender
-  scope :by_gender, ->(gender) { where(gender: gender) }
 
   # Scope to order by start year if needed
   scope :ordered, -> { order(start_year: :desc) }

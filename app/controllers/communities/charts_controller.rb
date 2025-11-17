@@ -33,6 +33,12 @@ class Communities::ChartsController < ApplicationController
   end
 
   def set_latest_population
-    @population_distribution = PopulationAgeSex.most_recent_for(@community)
+    @population_distribution =
+      case action_name
+      when 'gender_distribution'
+        PopulationAgeSex.most_recent_for(@community, required_fields: %i[e_pop_male m_pop_male])
+      else
+        PopulationAgeSex.most_recent_for(@community)
+      end
   end
 end
