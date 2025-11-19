@@ -11,15 +11,7 @@
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
-    / === Google Analytics (GA4) ===
-    - if Rails.env.production?
-      %script{ async: true, src: "https://www.googletagmanager.com/gtag/js?id=G-69QPN5BN10" }
-      %script
-        :plain
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-69QPN5BN10');
+    = render 'layouts/google_analytics'
     = javascript_importmap_tags
     %link{rel: 'stylesheet', href: 'https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css' }
   %body.d-flex.flex-column.min-vh-100
