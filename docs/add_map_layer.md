@@ -34,7 +34,7 @@ Add a button to the view, if the layer already exists in the map legend, ensure 
 
 
 ### Add a default layer to the map
-This will trigger the layer to be on by default.
+Add this to where the map is being initialized (ex. `show.html.haml`) to add a default layer to the map.
 ```haml
 .row.gx-0{
   data: mapbox_api_data({
@@ -44,6 +44,7 @@ This will trigger the layer to be on by default.
 ```
 
 ### Add a default marker and a center value
+Add this to where the map is being initialized (ex. `show.html.haml`) to add a default marker or center value.
 ```haml
 .row.gx-0{
   data: mapbox_api_data({
