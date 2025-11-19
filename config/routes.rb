@@ -62,6 +62,7 @@ Rails.application.routes.draw do
         collection do
           get :community_locations
           get :service_area_geoms
+          get :plants
         end
       end
 

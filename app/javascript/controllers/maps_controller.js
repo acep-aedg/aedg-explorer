@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import mapboxgl from 'mapbox-gl'
-import { MAP_STYLE, DEFAULT_ZOOM } from '../maps/config.js'
+import { MAP_STYLE, DEFAULT_ZOOM, LAYER_COLORS } from '../maps/config.js'
 import { loadLayer, loadMarkerLayer, removeSourceLayers } from '../maps/layers/index.js'
 import { boundsFrom, featureCollectionFromLngLats } from '../maps/geo.js'
 import { upsertDomMarker } from '../maps/dom_marker.js'
@@ -10,7 +10,7 @@ export default class extends Controller {
   static values = {
     token: String,
     mapCenter: { type: Array, default: [-154.49, 63.58] },
-    defaultLayerUrl: String,
+    defaultLayerId: String,
     markers: Array,                   // [[lng,lat], ...] initial coords from view
     markerTooltipTitle: { type: String, default: 'Location' },
   }
@@ -42,13 +42,13 @@ export default class extends Controller {
         })
       }
 
-      // optional default GeoJSON layer
-      if (this.hasDefaultLayerUrlValue) {
-        const { fc, sourceId, layerIds } =
-          await loadLayer(this.map, this.defaultLayerUrlValue, {})
-        this._remember(sourceId, layerIds)
-        const b = boundsFrom(fc)
-        if (!b.isEmpty()) this.map.fitBounds(b, { padding: 40, maxZoom: 10, duration: 0 })
+      // Trigger default layer event
+      if (this.hasDefaultLayerIdValue) {
+        const checkbox = document.getElementById(this.defaultLayerIdValue)
+        if (checkbox) {
+          checkbox.checked = true
+          checkbox.dispatchEvent(new Event('change', { bubbles: true }))
+        }
       }
     })
   }
@@ -90,18 +90,16 @@ export default class extends Controller {
     }
   }
 
-  // Checkbox: add/remove generic GeoJSON layers (districts, service areas, etc.)
+  // Checkbox: add/remove generic GeoJSON layers from map legend (districts, service areas, etc.)
   async toggleLayer(event) {
     const el = event.currentTarget
     const url = el.dataset.url || el.dataset.layerUrl || el.dataset.mapLayerUrl
     if (!url) return
-
+    let color = el.dataset.color || LAYER_COLORS[el.id];
+    let outlineColor = el.dataset.outlineColor || color ? this._computeOutlineColor(color) : undefined;
     if (el.checked) {
       // load the layer (polygon or point) with optional colors
-      const { fc, sourceId, layerIds } = await loadLayer(this.map, url, {
-        color: el.dataset.color,
-        outlineColor: el.dataset.outlineColor || el.dataset['outline-color'],
-      })
+      const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color: color, outlineColor: outlineColor })
       this._remember(sourceId, layerIds)
 
       // optional fit when enabling
@@ -147,14 +145,13 @@ export default class extends Controller {
     const url = el.dataset.url || el.dataset.layerUrl || el.dataset.mapLayerUrl;
     if (!url) return;
 
-    const color = el.dataset.color;
-    const outlineColor = el.dataset.outlineColor || el.dataset['outline-color'];
+    let color = el.dataset.color || LAYER_COLORS[el.dataset.checkboxId];
+    let outlineColor = el.dataset.outlineColor || color ? this._computeOutlineColor(color) : undefined;
     const fit = el.dataset.fit ? el.dataset.fit !== 'false' : true;
-
     await this._ensureMapReady();
 
     // Load (idempotent: addSource updates existing; addLayer guards by id)
-    const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color, outlineColor });
+    const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color:color, outlineColor:outlineColor });
     this._remember(sourceId, layerIds);
 
     if (fit) {
@@ -228,5 +225,31 @@ export default class extends Controller {
     this.layerIds.splice(0).forEach((id) => { if (this.map?.getLayer(id)) this.map.removeLayer(id) })
     this.sourceIds.splice(0).forEach((id) => { if (this.map?.getSource(id)) this.map.removeSource(id) })
     this.layersBySource.clear()
+  }
+  
+  _computeOutlineColor(color) {
+    let hex = color.replace('#', '')
+
+    // Expand shorthand "#abc" → "#aabbcc"
+    if (hex.length === 3) {
+      hex = hex.split('').map(c => c + c).join('')
+    }
+  
+    // Convert to RGB
+    let r = parseInt(hex.substring(0, 2), 16)
+    let g = parseInt(hex.substring(2, 4), 16)
+    let b = parseInt(hex.substring(4, 6), 16)
+  
+    // Darken by 25%
+    const factor = 0.75
+  
+    r = Math.floor(r * factor)
+    g = Math.floor(g * factor)
+    b = Math.floor(b * factor)
+  
+    // Convert back to hex
+    const toHex = (v) => v.toString(16).padStart(2, '0')
+
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`
   }
 }
