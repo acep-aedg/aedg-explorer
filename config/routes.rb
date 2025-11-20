@@ -30,6 +30,8 @@ Rails.application.routes.draw do
           get :customers_by_customer_type
           get :sales_by_customer_type
           get :bulk_fuel_capacity_mix
+          get :gender_distribution
+          get :age_distribution
         end
       end
 
