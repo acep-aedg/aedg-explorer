@@ -3,17 +3,18 @@
   %script{ async: true, src: "https://www.googletagmanager.com/gtag/js?id=G-6GQPN5BN10" }
   %script
     :plain
+      // Boot Google Analytics
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-6GQPN5BN10');
 
-  :javascript
-    document.addEventListener('turbolinks:load', function(event) {
-      if (typeof gtag === 'function') {
-        gtag('event', 'page_view', {
-          page_path: event.data.url,
-          page_title: document.title
-        });
-      }
-    });
+      // Track page views with Turbolinks navigation
+      document.addEventListener('turbolinks:load', function(event) {
+        if (typeof gtag === 'function') {
+          gtag('event', 'page_view', {
+            page_path: event.data.url,
+            page_title: document.title
+          });
+        }
+      });
