@@ -1,5 +1,5 @@
 # app/views/communities/charts/age_distribution.json.jbuilder
-json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
+json.cache! [@community.cache_key_with_version, @population_distribution.end_year], expires_in: 12.hours do
   age_groups = [
     { label: '0-4',   key: 'under_5' },
     { label: '5-9',   key: '5_9' },

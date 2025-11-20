@@ -3,7 +3,7 @@ class Communities::ChartsController < ApplicationController
   before_action :set_community
   before_action :set_latest_sale, only: %i[revenue_by_customer_type customers_by_customer_type sales_by_customer_type]
   before_action :set_year, only: %i[production_yearly capacity_yearly]
-  before_action :set_latest_population, only: %i[age_distribution gender_distribution]
+  before_action :set_population_distribution, only: %i[age_distribution gender_distribution]
 
   def production_monthly; end
   def production_yearly; end
@@ -32,7 +32,9 @@ class Communities::ChartsController < ApplicationController
     @year = params[:year].presence&.to_i
   end
 
-  def set_latest_population
-    @population_distribution = PopulationAgeSex.most_recent_for(@community)
+  def set_population_distribution
+    return if params[:end_year].blank?
+
+    @population_distribution = @community.population_age_sexes.find_by(end_year: params[:end_year].to_i)
   end
 end

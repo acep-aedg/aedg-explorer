@@ -1,57 +1,85 @@
-- employment_present = @community.population.present?
-- age_data_present = @community.population_age_sexes.present?
-- @most_recent_population = PopulationAgeSex.most_recent_for(@community)
-- start_year = @most_recent_population.start_year
-- end_year = @most_recent_population.end_year
-
 .d-flex.align-items-center.mb-3
   %i.bi.bi-people-fill.me-2.fs-4
   %h4#population.mb-0.me-3.py-3.anchor-offset Population
   %hr.flex-grow-1.mt-1.mb-0
 
-.d-flex.justify-content-between.align-items-center.bg-body-secondary.p-3.rounded.mb-3.flex-wrap
-  %div
-    %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "American Community Survey (ACS) 5-year estimate (#{start_year}–#{end_year})" }
-    %strong.me-2
-      Estimated Population (#{@most_recent_population.end_year}):
-    %strong.text-primary.fw-bold
-      = number_with_delimiter(@most_recent_population.e_pop_total)
-    - if @most_recent_population.m_pop_total.present?
-      %span.text-muted
-        (±#{number_with_delimiter(@most_recent_population.m_pop_total)})
+- if @community.show_population_age_sexes?
+  - population_periods = @community.population_age_sexes.order(end_year: :desc)
+  - most_recent_population = population_periods.first
+
+  - selected_end_year  = most_recent_population.end_year
+  - population_period = population_periods.find { |p| p.end_year == selected_end_year } || most_recent_population
+  
+  - gender_periods = population_periods.select { |p| p.e_pop_male.present? && p.e_pop_female.present? }
+  - gender_selected_period = gender_periods.find { |p| p.end_year == selected_end_year } || gender_periods.first
+
+  .d-flex.justify-content-between.align-items-center.bg-body-secondary.p-3.rounded.mb-3.flex-wrap
+    %div
+      %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{
+        data: { controller: 'tooltip', bs_toggle: 'tooltip' },
+        title: "American Community Survey (ACS) 5-year estimate (#{population_period.start_year}–#{population_period.end_year})"
+      }
+      %strong.me-2
+        Estimated Population (#{population_period.end_year}):
+      %strong.text-primary.fw-bold
+        = number_with_delimiter(most_recent_population.e_pop_total)
+      - if most_recent_population.m_pop_total.present?
+        %span.text-muted
+          (±#{number_with_delimiter(most_recent_population.m_pop_total)})
 
 %ul.nav.nav-tabs
-  - if employment_present
+  - if @community.show_employment?
     %li.nav-item
-      = link_to "#employment-chart", class: "nav-link#{' active' if employment_present}", data: { bs_toggle: "tab" }, role: "tab" do
+      = link_to "#employment-chart",
+        class: "nav-link#{' active' if @community.show_employment?}",
+        data: { bs_toggle: "tab" },
+        role: "tab" do
         %i.bi.bi-graph-up.me-1
         Employment Status Chart
 
-  - if age_data_present
+  - if @community.show_population_age_sexes?
     %li.nav-item
-      = link_to "#age-chart", class: "nav-link#{' active' if !employment_present && age_data_present}", data: { bs_toggle: "tab" }, role: "tab" do
+      = link_to "#age-chart",
+        class: "nav-link#{' active' if !@community.show_employment?}",
+        data: { bs_toggle: "tab" },
+        role: "tab" do
         %i.bi.bi-bar-chart-steps.me-1
         Age Distribution Chart
 
     %li.nav-item
-      = link_to "#gender-pie", class: "nav-link", data: { bs_toggle: "tab" }, role: "tab" do
+      = link_to "#gender-pie",
+        class: "nav-link",
+        data: { bs_toggle: "tab" },
+        role: "tab" do
         %i.bi.bi-pie-chart.me-1
         Gender Distribution Chart
+
     %li.nav-item
-      = link_to "#age-sex-table", class: "nav-link", data: { bs_toggle: "tab" }, role: "tab" do
+      = link_to "#age-sex-table",
+        class: "nav-link",
+        data: { bs_toggle: "tab" },
+        role: "tab" do
         %i.bi.bi-table.me-1
         Population, Age & Sex Data
+
 .tab-content.mt-3
-  - if employment_present
-    .tab-pane.fade#employment-chart{ class: "tab-pane fade#{' show active' if employment_present}", role: "tabpanel" }
+  - if @community.show_employment?
+    .tab-pane.fade#employment-chart{ class: "tab-pane fade#{' show active' if @community.show_employment?}", role: "tabpanel" }
       = render 'communities/sections/background/population/population_employment'
 
-  - if age_data_present
-    .tab-pane.fade#age-chart{ class: "tab-pane fade#{' show active' if !employment_present && age_data_present}", role: "tabpanel" }
-      = render 'communities/sections/background/population/population_age_chart'
-
-    .tab-pane.fade#age-sex-table{ role: "tabpanel" }
-      = render 'communities/sections/background/population/population_age_sex_datatable'
+  - if @community.show_population_age_sexes?
+    .tab-pane.fade#age-chart{
+      class: "tab-pane fade#{' show active' if !@community.show_employment?}",
+      role: "tabpanel"
+    }
+      = render 'communities/sections/background/population/population_age_chart',
+        population_periods: population_periods,
+        selected_period: population_period
 
     .tab-pane.fade#gender-pie{ role: "tabpanel" }
-      = render 'communities/sections/background/population/population_gender_pie'
+      = render 'communities/sections/background/population/population_gender_pie',
+        population_periods: gender_periods,
+        selected_period: gender_selected_period
+    
+    .tab-pane.fade#age-sex-table{ role: "tabpanel" }
+      = render 'communities/sections/background/population/population_age_sex_datatable'
