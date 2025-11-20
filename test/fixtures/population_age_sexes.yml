@@ -4,7 +4,6 @@ one:
   community_fips_code: '0000001'
   start_year: 2020
   end_year: 2021
-  is_most_recent: true
   geo_src: 'P'
   e_pop_age_total: 1000
   m_pop_age_total: 10
@@ -79,7 +78,6 @@ two:
   community_fips_code: '0000002'
   start_year: 2022
   end_year: 2023
-  is_most_recent: false
   geo_src: 'E'
   e_pop_age_total: 2000
   m_pop_age_total: 15

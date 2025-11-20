@@ -1,0 +1,10 @@
+- if letters.any?
+  .text-center.mb-4.mt-4
+    = link_to 'All', communities_path(@search_params.except(:letter)),
+      class: "btn btn-sm btn-light #{ 'active' unless @search_params[:letter].present?}",
+      data: { turbo_frame: '_top' }
+
+    - letters.each do |ch|
+      = link_to ch, communities_path(@search_params.merge(letter: ch)),
+        class: "btn btn-sm btn-light #{'active' if ch == @search_params[:letter]}",
+        data: { turbo_frame: '_top' }

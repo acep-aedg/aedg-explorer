@@ -5,6 +5,10 @@ class SenateDistrict < ApplicationRecord
 
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
 
+  def to_s
+    district
+  end
+
   def as_geojson
     {
       type: 'Feature',

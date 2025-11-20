@@ -6,8 +6,7 @@ class PopulationAgeSexAttributesTest < ActiveSupport::TestCase
   def setup
     @community = communities(:one)
     @valid_props = {
-      community_fips_code: @community.fips_code,
-      is_most_recent: true
+      community_fips_code: @community.fips_code
     }
   end
 
@@ -19,7 +18,6 @@ class PopulationAgeSexAttributesTest < ActiveSupport::TestCase
 
     assert_equal @community, pas.community
     assert_equal @valid_props[:community_fips_code], pas.community_fips_code
-    assert_equal @valid_props[:is_most_recent], pas.is_most_recent
   end
 
   test 'import_aedg! raises RecordInvalid when community fips code does not match an existing community' do

@@ -963,7 +963,6 @@ CREATE TABLE public.population_age_sexes (
     community_fips_code character varying NOT NULL,
     start_year integer,
     end_year integer,
-    is_most_recent boolean,
     geo_src character varying,
     e_pop_age_total integer,
     m_pop_age_total integer,
@@ -2206,13 +2205,6 @@ CREATE INDEX index_population_age_sexes_on_community_fips_code ON public.populat
 
 
 --
--- Name: index_population_age_sexes_on_is_most_recent; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_population_age_sexes_on_is_most_recent ON public.population_age_sexes USING btree (is_most_recent);
-
-
---
 -- Name: index_populations_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2608,6 +2600,7 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20251119233833'),
 ('20251114225412'),
+('20251113203819'),
 ('20251105235722'),
 ('20251105225408'),
 ('20251020233030'),
