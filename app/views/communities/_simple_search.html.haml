@@ -1,0 +1,21 @@
+/ --- SEARCH BAR ---
+%div.text-center
+  = form_with url: communities_path, method: :get do |f|
+    .input-group.bg-white.mx-auto.search-bar.ps-4
+      = f.text_field :q, value: @query, class: "form-control border-0", placeholder: "Search for a community..."
+      - if @query.present?
+        = link_to communities_path, class: 'btn btn-white border-0' do
+          %i.bi.bi-x.text-secondary
+      = f.button name: nil, class: 'btn btn-white border-0' do
+        %i.bi.bi-search.text-muted
+
+  / Quick links
+  .mt-2.quick-links
+    = link_to 'Advanced Search', search_advanced_path,
+      class: 'text-success fw-bold text-decoration-none small link-hover'
+    %span.mx-1 &bull;
+    = link_to 'About page', about_path,
+      class: 'text-primary fw-bold text-decoration-none small link-hover'
+    %span.mx-1 &bull;
+    = link_to 'User Guide', user_guide_path,
+      class: 'text-info fw-bold text-decoration-none small link-hover'

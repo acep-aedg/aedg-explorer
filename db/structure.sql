@@ -259,7 +259,8 @@ CREATE TABLE public.communities (
     reporting_entity_id bigint,
     village_corporation character varying,
     operators character varying[] DEFAULT '{}'::character varying[],
-    heating_degree_days integer
+    heating_degree_days integer,
+    tsvector_data tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, COALESCE((name)::text, ''::text))) STORED
 );
 
 
@@ -2651,6 +2652,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251114225412'),
 ('20251113203819'),
 ('20251105235722'),
 ('20251105225408'),

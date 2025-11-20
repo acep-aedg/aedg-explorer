@@ -1,12 +1,13 @@
 module ApplicationHelper
+  include Pagy::Frontend
   def main_menu
     [
       { name: 'About', path: about_path },
       { name: 'Explore Data',
         children: [
           { name: 'Data Explorer', path: metadata_path },
-          { name: 'Community Summaries', path: communities_path },
-          { name: 'Grid Summaries', path: grids_path }
+          { name: 'Communities', path: communities_path },
+          { name: 'Grids', path: grids_path }
         ] },
       { name: 'User Guide', path: user_guide_path }
     ]

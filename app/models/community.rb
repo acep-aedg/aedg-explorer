@@ -1,6 +1,8 @@
 class Community < ApplicationRecord
   include CommunityAttributes
+  # include SearchableByNameAndTags
   extend FriendlyId
+
   friendly_id :slug_candidates, use: :slugged
   belongs_to :borough, foreign_key: :borough_fips_code, primary_key: :fips_code
   belongs_to :regional_corporation, foreign_key: :regional_corporation_fips_code, primary_key: :fips_code, optional: true
@@ -31,18 +33,38 @@ class Community < ApplicationRecord
   has_many :income_poverties, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :household_incomes, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
 
-  # Handle the case where the name is not unique
-  def slug_candidates
-    [:name, %i[name fips_code]]
-  end
-
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
   validates :borough_fips_code, presence: true
   validates :location, presence: true, allowed_geometry_types: ['Point']
 
-  default_scope { order(name: :asc) }
-  scope :with_location, -> { where.not(location: nil) }
+  # default_scope { order(name: :asc) }
+  scope :with_location, ->        { where.not(location: nil) }
+  scope :in_boroughs,   ->(codes) { joins(:borough).where(boroughs: { fips_code: codes }) }
+  scope :in_corps,      ->(codes) { where(regional_corporation_fips_code: codes) }
+  scope :in_grids,      ->(ids)   { joins(:grids).where(grids: { id: ids }) }
+  scope :in_senate,     ->(ids)   { joins(:senate_districts).where(senate_districts: { id: ids }) }
+  scope :in_house,      ->(ids)   { joins(:house_districts).where(house_districts: { id: ids }) }
+  # uses the pg_search_scope defined in SearchableByNameAndTags concern
+  scope :starts_with,   ->(ch)    { where('name ilike ?', "#{ch}%") }
+
+  include PgSearch::Model
+
+  pg_search_scope :search_full_text,
+                  against: [:name],
+                  using: {
+                    # dmetaphone: {},
+                    tsearch: {
+                      prefix: true,
+                      tsvector_column: 'tsvector_data'
+                    }
+                    # trigram: {}
+                  }
+
+  # Handle the case where the name is not unique
+  def slug_candidates
+    [:name, %i[name fips_code]]
+  end
 
   def grid
     community_grids.find_by(termination_year: 9999)&.grid

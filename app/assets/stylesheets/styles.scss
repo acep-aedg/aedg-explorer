@@ -73,9 +73,6 @@
   }
 }
 
-.hero-gradient {
-  background: linear-gradient(to bottom, #e0f0ff 0%, #fff7e6 50%, #ffffff 100%);
-}
 
 // Reusable button styles
 .btn-aedg-primary {
@@ -119,7 +116,6 @@
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   background-color: $partner-card-bg;
 }
-
 
 .timeline {
   border-left: 1px solid hsl(0, 0%, 90%);
@@ -291,4 +287,28 @@
 // This moves the selection name below the tool bar when clicking on secion links in dropdown on right
 .anchor-offset {
   scroll-margin-top: 8vh; /* position anchor below nav  */
+}
+
+.pagy-bootstrap-nav {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+
+  .pagination {
+    margin-bottom: 0;
+    .page-link {
+      padding: 0.25rem 0.6rem;
+      font-size: 0.85rem;
+      color: #198754; // Bootstrap success green
+      border: 1px solid #dee2e6;
+      &:hover {
+        background-color: #e9f7ef;
+      }
+    }
+    .page-item.active .page-link {
+      background-color: #198754;
+      border-color: #198754;
+      color: #fff;
+    }
+  }
 }
