@@ -1,12 +1,12 @@
 require 'csv'
 require 'rgeo/geo_json'
 require_relative 'import_helpers'
+require_relative 'versioning'
 
 namespace :import do
   desc 'Import Data Files into the Database'
   task all: [:environment] do
     Rake::Task['import:pull_gh_data'].invoke
-
     puts 'Importing data files...'
     Rake::Task['import:boroughs'].invoke
     Rake::Task['import:regional_corporations'].invoke
@@ -35,12 +35,21 @@ namespace :import do
     Rake::Task['import:employments'].invoke
     Rake::Task['import:fuel_prices'].invoke
     puts 'Import complete'
+
+    # On success, record the new version
+    if DataPondVersion.latest&.current_version == Import::Versioning::DATA_POND_TAG
+      puts "DataPondVersion already up to date: #{Import::Versioning::DATA_POND_TAG}"
+    else
+      data_pond_tag = Import::Versioning::DATA_POND_TAG
+      DataPondVersion.create!(current_version: data_pond_tag)
+      puts "DataPondVersion recorded: #{data_pond_tag}"
+    end
   end
 
   desc 'Import data files from a specific GitHub tag'
   task pull_gh_data: :environment do
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    tag = 'v0.8.3'
+    tag = Import::Versioning::DATA_POND_TAG
     folder_path = 'data/final'
     Rails.root.join('db/imports').to_s
     local_dir = Rails.root.join('db/imports').to_s

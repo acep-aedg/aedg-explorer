@@ -240,7 +240,7 @@ class Community < ApplicationRecord
   end
 
   def show_population?
-    @show_population ||= population_age_sexes.exists?
+    @show_population ||= show_population_age_sexes? || show_employment?
   end
 
   def show_school_districts?
@@ -262,5 +262,13 @@ class Community < ApplicationRecord
 
   def show_heating_degree_days?
     @show_heating_degree_days ||= heating_degree_days.present? && heating_degree_days.positive?
+  end
+
+  def show_population_age_sexes?
+    @show_population_age_sexes ||= population_age_sexes.exists?
+  end
+
+  def show_employment?
+    @show_employment ||= employments.exists?
   end
 end

@@ -5,6 +5,8 @@ module Grids
     def community_locations; end
     def service_area_geoms; end
 
+    def plants; end
+
     private
 
     def set_grid

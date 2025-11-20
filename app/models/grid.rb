@@ -61,6 +61,10 @@ class Grid < ApplicationRecord
     @show_monthly_generation ||= monthly_generations&.exists?
   end
 
+  def show_plants?
+    @show_plants ||= plants&.exists?
+  end
+
   def utility_names(exclude: nil)
     query = reporting_entities
     query = query.where.not(name: exclude) if exclude.present?
