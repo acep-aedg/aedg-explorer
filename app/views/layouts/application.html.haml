@@ -11,6 +11,7 @@
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = render 'layouts/google_analytics'
     = javascript_importmap_tags
     %link{rel: 'stylesheet', href: 'https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css' }
   %body.d-flex.flex-column.min-vh-100
