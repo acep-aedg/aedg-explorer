@@ -6,7 +6,7 @@ class CommunitiesController < ApplicationController
   def index
     @query = @search_params[:q]
     @communities = Community.order(:name)
-    @communities = @communities.search_full_text(@query) if @query.present?
+    @communities = @communities.search_related(@query) if @query.present?
 
     @active_letters = @communities.pluck(:name).map(&:first).uniq.sort
 
