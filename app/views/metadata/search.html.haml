@@ -30,9 +30,10 @@
             %br/
             Try adjusting your search or using different keywords
 
-            - if @community.present?
+            - if @communities.present?
               %br/
               %p.text-center.fs-5.mt-5
-                Did you mean to search for this community?
+                Did you mean to search for a community?
                 %br/
-                = link_to @community.to_s, @community
+                - @communities.each do |community|
+                  = link_to community.to_s, community, class: 'btn btn-outline-secondary m-1'

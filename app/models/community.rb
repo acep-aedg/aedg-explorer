@@ -61,6 +61,19 @@ class Community < ApplicationRecord
                     # trigram: {}
                   }
 
+  pg_search_scope :search_related,
+                  against: [:name],
+                  associated_against: {
+                    house_districts: :name,
+                    grids: :name
+                  },
+                  using: {
+                    # dmetaphone: {},
+                    tsearch: {
+                      prefix: true
+                    }
+                    # trigram: {}
+                  }
   # Handle the case where the name is not unique
   def slug_candidates
     [:name, %i[name fips_code]]
