@@ -61,6 +61,19 @@ class Community < ApplicationRecord
                     # trigram: {}
                   }
 
+  pg_search_scope :search_related,
+                  against: [:name],
+                  associated_against: {
+                    house_districts: :name,
+                    grids: :name
+                  },
+                  using: {
+                    # dmetaphone: {},
+                    tsearch: {
+                      prefix: true
+                    }
+                    # trigram: {}
+                  }
   # Handle the case where the name is not unique
   def slug_candidates
     [:name, %i[name fips_code]]
@@ -68,6 +81,10 @@ class Community < ApplicationRecord
 
   def grid
     community_grids.find_by(termination_year: 9999)&.grid
+  end
+
+  def to_s
+    name
   end
 
   def as_geojson
