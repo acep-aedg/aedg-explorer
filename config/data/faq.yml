@@ -3,10 +3,12 @@ categories:
     questions:
       - question: "What is the Alaska Energy Data Gateway (AEDG)?"
         answer: |
-          The Alaska Energy Data Gateway is a centralized platform providing access to energy and socioeconomic data across Alaska.
+          The Alaska Energy Data Gateway is a centralized platform providing access to energy and socioeconomic data across Alaska. It is available to anyone interested in exploring this data, including researchers, policymakers, industry professionals, and the general public.
+      
       - question: "How do I submit feedback or send suggestions?"
         answer: |
           If you have feedback, suggestions, or questions, please reach out to [akenergygateway@alaska.edu](mailto:akenergygateway@alaska.edu). Your input helps improve the AEDG to better support your needs. 
+      
       - question: "How is energy data defined?"
         answer: |
           AEDG adopts the definition of energy data developed for the 2023 Alaska Energy Security Task Force’s [*State Energy Data Subcommittee Report*](https://www.akenergyauthority.org/LinkClick.aspx?fileticket=9yFSLzf61MA%3d&portalid=0){:target='_blank'}:
@@ -14,6 +16,7 @@ categories:
            **“Information about how electricity, heat, and transportation fuels are sourced, generated, stored, distributed, used, and governed; and the impacts on the built, natural, and socioeconomic environments.”** 
            
            Many of the expert advisors to the AEDG 3.0 revitalization effort were members of this subcommittee.
+      
       - question: "How were communities selected?"
         answer: |
           Time was taken to define what consititues a community and how a community relates to other governmental organizations like Boroughs and Legislative Districts and energy-related entities like electrical grids and operators. Relational definitions like this are called an **ontology**. For AEDG summaries, communities are required to:
@@ -28,11 +31,13 @@ categories:
           - Alaska Center for Energy and Power. "Alaska Energy Ontology." Accessed May 13, 2025. <https://acep-aedg.github.io/alaskan-community-ontology>{:target='_blank'}
 
           - Booshehri, Meisam, Lukas Emele, Simon Flügel, Hannah Förster, Johannes Frey, Ulrich Frey, Martin Glauer, et al. 2021. "Introducing the Open Energy Ontology: Enhancing Data Interpretation and Interfacing in Energy Systems Analysis." *Energy and AI* 5 (September): 100074. <https://doi.org/10.1016/j.egyai.2021.100074>{:target='_blank'}
+
       - question: "How do I cite the AEDG?"
         answer: |
           To cite the **AEDG as a whole**, use the general citation available [here](https://aedg-dev.camio.acep.uaf.edu/user-guide#cite-aedg). This citation is formatted in Chicago style and is appropriate when citing the platform broadly.
 
           To cite a **specific dataset**, navigate to its page in the **Data Explorer** and open the **Cite** tab. Each dataset includes a Chicago style citation that can be copied and included in references. 
+
       - question: "What is next for the AEDG? Do you have a product roadmap?"
         answer: |
           In 2024-2025 the AEDG 3.0 revitalization team set out to update the look and feel of the AEDG, the underlying software, and the datasets. After consulting the expert community for energy and economic data, the team identified **three key features** to deliver in the first year of the project: 
@@ -42,16 +47,30 @@ categories:
 
           Looking forward the team hopes to establish a **Developers, Data Providers, and Users Group (DDPUG)** to guide development of the gateway over time and ensure it meets a broad base of needs for energy and economic data for the state of Alaska.
 
-  - name: 'Data Access'
+  - name: 'Data'
     questions:
       - question: "How can I find data the AEDG?"
         answer: |
           The [Data Explorer](https://aedg-dev.camio.acep.uaf.edu/explore/data) provides access to all available datasets and their metadata. Each dataset has a dedicated page with data, metadata, and data dictionary, along with descriptions, context, and download options. 
 
           The [Community Summaries](https://aedg-dev.camio.acep.uaf.edu/explore/communities) tool displays information for individual communities. While full datasets are not available in this section, the displayed data is derived from the same sources used in the Data Explorer and is tailored to highlight community-specific insights. 
-      - question: "Can I download Data?"
+      - question: "Can I download data?"
         answer: |
           **Yes, data from the AEDG is available for download.** Each dataset page in the Data Explorer includes buttons in the top right corner to download both the dataset and its metadata.
+      - question: "Why isn't the data up to date?"
+        answer: |
+          The energy landscape in Alaska is very complex, with approximately 106 utilities providing power to approximately 186 grids. Some utilities report data to federal entities such as the [Energy Information Administration (EIA)](https://www.eia.gov/), while others report to state entities like [Alaska Energy Authority (AEA)](https://www.akenergyauthority.org/). Some communities don’t have a requirement to report their data at all. These factors make it difficult to gather comprehensive energy data for the entire state. Many of the data sources used by AEDG have been verified and validated by subject matter experts, which takes time and effort.
+          
+          Currently our flagship data product, statewide electricity capacity and generation, is available through 2021. Updating this dataset is a high-priority, high-effort situation. We are pleased to offer up the best available data for the state of Alaska, and look forward to providing more up-to-date data in the near future.
+          
+      - question: "How often is the data updated?"
+        answer: |
+          The data sourced by AEDG is updated monthly to yearly, depending on the source that the data comes from. For information about a specific dataset, please consult the corresponding metadata, which provides essential details regarding the data structure, fields, units, and date.
+          
+      - question: "Why does my community summary display a generation source I know doesn’t exist in my community?"
+        answer: |
+          Due to the interconnected nature of electrical grids, electricity to a community is sometimes provided by a generation source far distant from the community. We associated generation sources to communities using utility service areas, the most granular aggregation available. However utility service areas may be very large, so a community such as Delta Junction is served by generation sources as far distant as Healy.
+
   - name: 'Metadata'
     questions: 
       - question: 'How are variables defined in the AEDG?  Where is the data dictionary?'
