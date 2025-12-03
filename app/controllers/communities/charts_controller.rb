@@ -17,6 +17,12 @@ class Communities::ChartsController < ApplicationController
   def gender_distribution; end
   def age_distribution; end
 
+  def fuel_prices
+    @price_type = params[:price_type].to_s
+    @fuel_prices = @community.fuel_prices
+    @heating_degree_days = @community.heating_degree_days
+  end
+
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
 
