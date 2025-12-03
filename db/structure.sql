@@ -754,7 +754,8 @@ CREATE TABLE public.heating_degree_days (
     id bigint NOT NULL,
     community_fips_code character varying,
     year integer,
-    days integer,
+    month integer,
+    heating_degree_days integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );

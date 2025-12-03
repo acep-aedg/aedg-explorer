@@ -3,7 +3,8 @@ class CreateHeatingDegreeDays < ActiveRecord::Migration[8.0]
     create_table :heating_degree_days do |t|
       t.string :community_fips_code
       t.integer :year
-      t.integer :days
+      t.integer :month
+      t.integer :heating_degree_days
 
       t.timestamps
     end

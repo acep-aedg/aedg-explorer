@@ -17,7 +17,8 @@ module HeatingDegreeDayAttributes
       assign_attributes(
         community_fips_code: params[:community_fips_code],
         year: params[:year],
-        days: params[:hdd]
+        month: params[:month],
+        heating_degree_days: params[:monthly_hdd_sum]
       )
     end
   end
