@@ -21,6 +21,8 @@ class MetadataController < ApplicationController
 
     @metadata = @metadata.highlighted if @search[:featured].to_i == 1
 
+    @communities = Community.search_related(@search[:search]).reorder(:name) if @metadata.count.zero? && @search[:search].present?
+
     @metadata = @metadata.all
   end
 

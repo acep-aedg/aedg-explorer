@@ -64,11 +64,11 @@ jobs:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
-      # redis:
-      #   image: redis
-      #   ports:
-      #     - 6379:6379
-      #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - name: Install packages
@@ -88,8 +88,8 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgis://postgres:postgres@localhost:5432
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:drop db:create db:migrate db:seed test
+          REDIS_URL: redis://localhost:6379/0
+        run: bin/rails db:prepare test
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4

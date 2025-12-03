@@ -23,10 +23,17 @@ namespace :import do
     end
 
     puts '🧹 Truncating all tables (rails db:truncate_all)…'
+
+    previous = ENV['DISABLE_DATABASE_ENVIRONMENT_CHECK']
+    ENV['DISABLE_DATABASE_ENVIRONMENT_CHECK'] = '1'
+
+    Rake::Task['db:truncate_all'].reenable
     Rake::Task['db:truncate_all'].invoke
+
+    ENV['DISABLE_DATABASE_ENVIRONMENT_CHECK'] = previous
+
     puts '🧼 Truncate complete.'
 
-    puts '📥 Importing dataset (import:all)…'
     Rake::Task['import:all'].reenable
     Rake::Task['import:all'].invoke
     Rake::Task['metadata:import'].reenable

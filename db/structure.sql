@@ -613,38 +613,6 @@ ALTER SEQUENCE public.employments_id_seq OWNED BY public.employments.id;
 
 
 --
--- Name: feature_flags; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.feature_flags (
-    id bigint NOT NULL,
-    name character varying NOT NULL,
-    state character varying DEFAULT 'disabled'::character varying NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: feature_flags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.feature_flags_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: feature_flags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.feature_flags_id_seq OWNED BY public.feature_flags.id;
-
-
---
 -- Name: friendly_id_slugs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1635,13 +1603,6 @@ ALTER TABLE ONLY public.employments ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- Name: feature_flags id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.feature_flags ALTER COLUMN id SET DEFAULT nextval('public.feature_flags_id_seq'::regclass);
-
-
---
 -- Name: friendly_id_slugs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1928,14 +1889,6 @@ ALTER TABLE ONLY public.electric_rates
 
 ALTER TABLE ONLY public.employments
     ADD CONSTRAINT employments_pkey PRIMARY KEY (id);
-
-
---
--- Name: feature_flags feature_flags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.feature_flags
-    ADD CONSTRAINT feature_flags_pkey PRIMARY KEY (id);
 
 
 --
@@ -2233,13 +2186,6 @@ CREATE INDEX index_datasets_on_metadatum_id ON public.datasets USING btree (meta
 --
 
 CREATE INDEX index_electric_rates_on_reporting_entity_id ON public.electric_rates USING btree (reporting_entity_id);
-
-
---
--- Name: index_feature_flags_on_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_feature_flags_on_name ON public.feature_flags USING btree (name);
 
 
 --
@@ -2709,6 +2655,7 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20251120205210'),
 ('20251120200227'),
+('20251119233833'),
 ('20251114225412'),
 ('20251113203819'),
 ('20251105235722'),
