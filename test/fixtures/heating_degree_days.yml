@@ -3,9 +3,11 @@
 one:
   community_fips_code: '0000001'
   year: 2021
-  days: 1
+  month: 1
+  heating_degree_days: 1
 
 two:
   community_fips_code: '0000002'
   year: 2022
-  days: 2
+  month: 2
+  heating_degree_days: 2
