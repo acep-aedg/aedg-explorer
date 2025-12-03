@@ -1,5 +1,4 @@
 class Communities::ChartsController < ApplicationController
-  include Communities::ChartsHelper
   before_action :set_community
   before_action :set_latest_sale, only: %i[revenue_by_customer_type customers_by_customer_type sales_by_customer_type]
   before_action :set_year, only: %i[production_yearly capacity_yearly]

@@ -252,10 +252,6 @@ class Community < ApplicationRecord
     @show_background_section ||= show_transportation? || show_legislative_districts? || show_population?
   end
 
-  def show_climate?
-    @show_climate ||= show_heating_degree_days?
-  end
-
   def show_heating_degree_days?
     @show_heating_degree_days ||= heating_degree_days.present?
   end
