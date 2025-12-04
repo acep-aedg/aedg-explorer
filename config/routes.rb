@@ -33,6 +33,7 @@ Rails.application.routes.draw do
           get :bulk_fuel_capacity_mix
           get :gender_distribution
           get :age_distribution
+          get :median_household_income
         end
       end
 

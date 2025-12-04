@@ -1,0 +1,13 @@
+.d-flex.align-items-center.mb-3
+  %i.bi.bi-thermometer-snow.me-2.fs-4
+  %h4#income.mb-0.me-3.py-3.anchor-offset Income
+  %hr.flex-grow-1.mt-1.mb-0
+
+- base_title = "#{@community.name} - Median Household Income"
+
+= line_chart median_household_income_community_charts_path(@community),
+  prefix:   '$',
+  title:    base_title,
+  xtitle:   "Year",
+  ytitle:   "Median Household Income (USD)",
+  download: { filename: base_title.parameterize }
