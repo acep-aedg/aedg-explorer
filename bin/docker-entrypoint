@@ -1,10 +1,22 @@
 #!/bin/bash -e
 # Run this to test the entrypoint locally (since docker-compose does not have entrypoint args):
-#   ./bin/docker-entrypoint ./bin/rails server
+#  RAILS_ENV=production ./bin/docker-entrypoint ./bin/rails server
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare # will run any pending migrations
+  ./bin/rails db:prepare
+
+  # start server in background so it can handle HTTP
+  ./bin/rails server &
+  SERVER_PID=$!
+
+  sleep 5
+
+  ./bin/rake maintenance:start
   ./bin/rails import:prepare
+  ./bin/rake maintenance:end
+
+  wait "$SERVER_PID"
+  exit $?
 fi
 
-exec "${@}"
+exec "$@"
