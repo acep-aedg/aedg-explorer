@@ -11,3 +11,12 @@
   xtitle:   "Year",
   ytitle:   "Median Household Income (USD)",
   download: { filename: base_title.parameterize }
+
+- per_capita_title = "#{@community.name} - Per Capita Income"
+
+= line_chart per_capita_income_community_charts_path(@community),
+  prefix:   '$',
+  title:    per_capita_title,
+  xtitle:   "Year",
+  ytitle:   "Per Capita Income (USD)",
+  download: { filename: per_capita_title.parameterize }

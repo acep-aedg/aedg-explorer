@@ -34,6 +34,7 @@ Rails.application.routes.draw do
           get :gender_distribution
           get :age_distribution
           get :median_household_income
+          get :per_capita_income
         end
       end
 
