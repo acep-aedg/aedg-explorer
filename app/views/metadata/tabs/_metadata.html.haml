@@ -9,5 +9,5 @@
 
     / Pre: second on small screens, first on md+
     %pre.mb-0.flex-grow-1.w-100.overflow-auto.order-1.order-md-0(style="word-break: break-word;")
-      %code.d-block{'data-copy-target' => 'source'}= JSON.pretty_generate(metadatum.data)
+      %code.d-block{'data-copy-target' => 'source'}= JSON.pretty_generate(metadatum.cleaned_data)
   
