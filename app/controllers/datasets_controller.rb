@@ -34,7 +34,10 @@ class DatasetsController < ApplicationController
   def data_as_json
     case @dataset.format.downcase
     when 'csv'
-      data = CSV.parse(URI.open(@dataset.path).read, headers: true).map(&:to_h)
+      fields = @dataset.schema['fields'].map { |f| f['name'] }
+      data = CSV.parse(URI.open(@dataset.path).read, headers: true).map do |row|
+        fields.index_with { |f| row[f] }
+      end
       {
         recordsTotal: data.size,
         data: data,
