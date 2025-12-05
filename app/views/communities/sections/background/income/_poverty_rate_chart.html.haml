@@ -1,0 +1,8 @@
+- poverty_rate_title = "#{@community.name} - Poverty Rate"
+
+= line_chart poverty_rate_community_charts_path(@community),
+  suffix:   '%',
+  title:    poverty_rate_title,
+  xtitle:   "Year",
+  ytitle:   "Poverty Rate",
+  download: { filename: poverty_rate_title.parameterize }
