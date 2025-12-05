@@ -36,6 +36,7 @@ Rails.application.routes.draw do
           get :median_household_income
           get :per_capita_income
           get :poverty_rate
+          get :household_income
         end
       end
 

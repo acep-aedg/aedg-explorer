@@ -5,6 +5,18 @@
 
 - base_title = "#{@community.name} - Median Household Income"
 
+= column_chart household_income_community_charts_path(@community),
+  suffix:   '%',
+  min:      0,
+  max:      100,
+  stacked:  true,
+  xtitle:   "Year",
+  round:    2,
+  zeros:    true,
+  ytitle:   "Household Income Brackets",
+  download: { filename: base_title.parameterize },
+  library: { plugins: { legend: { display:true, position: 'right', reverse: true }, tooltip: { mode: 'index', intersect: false, reverse: true } }}
+
 = line_chart median_household_income_community_charts_path(@community),
   prefix:   '$',
   title:    base_title,
