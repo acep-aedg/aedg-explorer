@@ -1,1 +1,37 @@
-%h4 TODO: Household Income Data
+%div{ data: { controller: 'datatables' }}
+  %table.table.table-striped.border
+    %thead
+      %tr
+        %th start_year
+        %th end_year
+        %th e_households_total
+        %th e_household_median_income
+        %th e_household_inc_under_10000
+        %th e_household_inc_10000_14999
+        %th e_household_inc_15000_24999
+        %th e_household_inc_25000_34999
+        %th e_household_inc_35000_49999
+        %th e_household_inc_50000_74999
+        %th e_household_inc_75000_99999
+        %th e_household_inc_100000_149999
+        %th e_household_inc_150000_199999
+        %th e_household_inc_200000_plus
+       
+    %tbody
+      - @community.household_incomes.each do |income|
+        %tr
+          %td= income.start_year
+          %td= income.end_year
+          %td= income.e_households_total
+          %td= income.e_household_median_income
+          %td= income.e_household_inc_under_10000
+          %td= income.e_household_inc_10000_14999
+          %td= income.e_household_inc_15000_24999
+          %td= income.e_household_inc_25000_34999
+          %td= income.e_household_inc_35000_49999
+          %td= income.e_household_inc_50000_74999
+          %td= income.e_household_inc_75000_99999
+          %td= income.e_household_inc_100000_149999
+          %td= income.e_household_inc_150000_199999
+          %td= income.e_household_inc_200000_plus
+        

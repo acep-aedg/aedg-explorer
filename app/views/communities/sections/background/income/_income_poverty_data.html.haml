@@ -1,1 +1,25 @@
-%h4 TODO: Income Poverty Data
+%div{ data: { controller: 'datatables' }}
+  %table.table.table-striped.border
+    %thead
+      %tr
+        %th start_year
+        %th end_year
+        %th e_per_capita_income
+        %th m_per_capita_income
+        %th e_pop_below_poverty
+        %th m_pop_below_poverty
+        %th e_pop_of_poverty_det
+        %th m_pop_of_poverty_det
+        
+    %tbody
+      - @community.income_poverties.each do |income|
+        %tr
+          %td= income.start_year
+          %td= income.end_year
+          %td= income.e_per_capita_income
+          %td= income.m_per_capita_income
+          %td= income.e_pop_below_poverty
+          %td= income.m_pop_below_poverty
+          %td= income.e_pop_of_poverty_det
+          %td= income.m_pop_of_poverty_det
+        
