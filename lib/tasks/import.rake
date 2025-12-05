@@ -84,6 +84,47 @@ namespace :import do
     puts "Import complete! #{tag} files copied to #{local_dir}."
   end
 
+  desc 'Import data files from a specific GitHub PR (TEMP for testing)'
+  task test_pr_data: :environment do
+    repo_url   = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
+    pr_number  = 49 # <<< TEMP: hardcode the PR you want to test
+    folder_path = 'data/final'
+    local_dir   = Rails.root.join('db/imports').to_s
+
+    # Ensure the local directory & keep file exists
+    FileUtils.mkdir_p(local_dir)
+    keep_file = File.join(local_dir, '.keep')
+    FileUtils.touch(keep_file) unless File.exist?(keep_file)
+
+    Dir.mktmpdir do |temp_dir|
+      # Clone the repo without checking out a branch yet
+      system("git clone --no-checkout #{repo_url} #{temp_dir}") or
+        raise "Failed to clone #{repo_url}"
+
+      Dir.chdir(temp_dir) do
+        # Fetch the PR ref into a local branch pr-<number>
+        # This grabs the PR's HEAD (contributor branch), not the auto-merge ref.
+        system("git fetch origin pull/#{pr_number}/head:pr-#{pr_number}") or
+          raise "Failed to fetch PR ##{pr_number} from origin"
+
+        # Check out the PR branch
+        system("git checkout pr-#{pr_number}") or
+          raise "Failed to checkout PR branch pr-#{pr_number}"
+
+        # Enable sparse-checkout
+        system('git sparse-checkout init --cone') or
+          raise 'Failed to init sparse-checkout'
+        system("git sparse-checkout set #{folder_path}") or
+          raise "Failed to set sparse-checkout path #{folder_path}"
+
+        # Sync only new/updated files
+        system("rsync -av --update --exclude='*.md' #{folder_path}/ #{local_dir}/")
+      end
+    end
+
+    puts "Import complete! PR ##{pr_number} files copied to #{local_dir}."
+  end
+
   desc 'Import Borough Data from .geojson file'
   task boroughs: :environment do
     filepath = Rails.root.join('db/imports/boroughs.geojson')
