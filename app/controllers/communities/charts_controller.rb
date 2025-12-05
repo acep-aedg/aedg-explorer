@@ -16,10 +16,9 @@ class Communities::ChartsController < ApplicationController
   def bulk_fuel_capacity_mix; end
   def gender_distribution; end
   def age_distribution; end
-  def median_household_income; end
-  def per_capita_income; end
   def poverty_rate; end
-  def household_income; end
+  def household_income_brackets; end
+  def income; end
 
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private

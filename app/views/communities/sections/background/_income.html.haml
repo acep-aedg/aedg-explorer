@@ -3,10 +3,11 @@
   %h4#income.mb-0.me-3.py-3.anchor-offset Income
   %hr.flex-grow-1.mt-1.mb-0
 
-- base_title = "#{@community.name} - Median Household Income"
+- hh_income_bracket_title = "#{@community.name} - Household Income Brackets"
 
-= column_chart household_income_community_charts_path(@community),
+= column_chart household_income_brackets_community_charts_path(@community),
   suffix:   '%',
+  title:    hh_income_bracket_title,
   min:      0,
   max:      100,
   stacked:  true,
@@ -14,24 +15,17 @@
   round:    2,
   zeros:    true,
   ytitle:   "Household Income Brackets",
-  download: { filename: base_title.parameterize },
+  download: { filename: hh_income_bracket_title.parameterize },
   library: { plugins: { legend: { display:true, position: 'right', reverse: true }, tooltip: { mode: 'index', intersect: false, reverse: true } }}
 
-= line_chart median_household_income_community_charts_path(@community),
-  prefix:   '$',
-  title:    base_title,
-  xtitle:   "Year",
-  ytitle:   "Median Household Income (USD)",
-  download: { filename: base_title.parameterize }
+- income_title = "#{@community.name} - Income"
 
-- per_capita_title = "#{@community.name} - Per Capita Income"
-
-= line_chart per_capita_income_community_charts_path(@community),
+= line_chart income_community_charts_path(@community),
   prefix:   '$',
-  title:    per_capita_title,
+  title:    income_title,
   xtitle:   "Year",
-  ytitle:   "Per Capita Income (USD)",
-  download: { filename: per_capita_title.parameterize }
+  ytitle:   "Income (USD)",
+  download: { filename: income_title.parameterize }
 
 - poverty_rate_title = "#{@community.name} - Poverty Rate"
 

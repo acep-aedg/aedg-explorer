@@ -33,10 +33,9 @@ Rails.application.routes.draw do
           get :bulk_fuel_capacity_mix
           get :gender_distribution
           get :age_distribution
-          get :median_household_income
-          get :per_capita_income
           get :poverty_rate
-          get :household_income
+          get :household_income_brackets
+          get :income
         end
       end
 
