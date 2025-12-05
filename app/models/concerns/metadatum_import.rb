@@ -28,7 +28,7 @@ module MetadatumImport
       errors = []
 
       Rails.logger.info "Importing metadata from #{path}..."
-      Dir.glob("#{path}/*.json").each do |file|
+      Dir.glob(File.join(path, '**', '*.json')).each do |file|
         data = JSON.parse(File.read(file))
         find_or_initialize_by(name: data['name']).tap do |metadata|
           metadata.import_attributes!(file, data)
