@@ -5,20 +5,12 @@
 
 %ul.nav.nav-tabs
   %li.nav-item
-    = link_to "#hh-income-dist-chart",
+    = link_to "#income-poverty-charts",
       class: "nav-link active",
       data: { bs_toggle: "tab" },
       role: "tab" do
-      %i.bi.bi-bar-chart-fill.me-1
-      Household Income Distribution
-
-  %li.nav-item
-    = link_to "#income-poverty-charts",
-      class: "nav-link",
-      data: { bs_toggle: "tab" },
-      role: "tab" do
       %i.bi.bi-graph-up.me-1
-      Income & Poverty
+      Income & Poverty Charts
 
   %li.nav-item
     = link_to "#household-income-data",
@@ -37,10 +29,8 @@
       Income Poverty Data
 
 .tab-content.mt-3
-  .tab-pane.fade#hh-income-dist-chart{ class: "show active", role: "tabpanel" }
+  .tab-pane.fade.active.show#income-poverty-charts{ role: "tabpanel" }
     = render 'communities/sections/background/income/household_income_distribution_chart'
-    
-  .tab-pane.fade#income-poverty-charts{ role: "tabpanel" }
     = render 'communities/sections/background/income/income_chart'
     = render 'communities/sections/background/income/poverty_rate_chart'
 
