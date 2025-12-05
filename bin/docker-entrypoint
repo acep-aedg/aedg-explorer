@@ -3,15 +3,12 @@
 #  RAILS_ENV=production ./bin/docker-entrypoint ./bin/rails server
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
-
   # start server in background so it can handle HTTP
   ./bin/rails server &
   SERVER_PID=$!
 
-  sleep 5
-
   ./bin/rake maintenance:start
+  ./bin/rails db:prepare
   ./bin/rails import:prepare
   ./bin/rake maintenance:end
 
