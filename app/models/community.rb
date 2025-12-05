@@ -232,8 +232,8 @@ class Community < ApplicationRecord
     @show_income_poverty ||= income_poverties.any?
   end
 
-  def show_income_section?
-    @show_income_section ||= show_household_income? || show_income_poverty?
+  def show_income?
+    @show_income ||= show_household_income? || show_income_poverty?
   end
 
   # --- Background Section ---

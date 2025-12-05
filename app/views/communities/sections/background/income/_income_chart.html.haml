@@ -1,0 +1,8 @@
+- income_title = "#{@community.name} - Income"
+
+= line_chart income_community_charts_path(@community),
+  prefix:   '$',
+  title:    income_title,
+  xtitle:   "Year",
+  ytitle:   "Income (USD)",
+  download: { filename: income_title.parameterize }

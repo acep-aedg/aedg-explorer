@@ -15,6 +15,9 @@ class Communities::ChartsController < ApplicationController
   def bulk_fuel_capacity_mix; end
   def gender_distribution; end
   def age_distribution; end
+  def poverty_rate; end
+  def household_income_brackets; end
+  def income; end
 
   def fuel_prices
     @price_type = params[:price_type].to_s
