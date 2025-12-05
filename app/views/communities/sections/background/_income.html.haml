@@ -12,30 +12,37 @@
       %i.bi.bi-graph-up.me-1
       Income & Poverty Charts
 
-  %li.nav-item
-    = link_to "#household-income-data",
-      class: "nav-link",
-      data: { bs_toggle: "tab" },
-      role: "tab" do
-      %i.bi.bi-table.me-1
-      Household Income Data
+    - if @community.show_household_income?
+      %li.nav-item
+        = link_to "#household-income-data",
+          class: "nav-link",
+          data: { bs_toggle: "tab" },
+          role: "tab" do
+          %i.bi.bi-table.me-1
+          Household Income Data
 
-  %li.nav-item
-    = link_to "#income-poverty-data",
-      class: "nav-link",
-      data: { bs_toggle: "tab" },
-      role: "tab" do
-      %i.bi.bi-table.me-1
-      Income Poverty Data
+    - if @community.show_income_poverty?
+      %li.nav-item
+        = link_to "#income-poverty-data",
+          class: "nav-link",
+          data: { bs_toggle: "tab" },
+          role: "tab" do
+          %i.bi.bi-table.me-1
+          Income Poverty Data
 
 .tab-content.mt-3
   .tab-pane.fade.active.show#income-poverty-charts{ role: "tabpanel" }
-    = render 'communities/sections/background/income/household_income_distribution_chart'
+    - if @community.show_household_income?
+      = render 'communities/sections/background/income/household_income_distribution_chart'
+
     = render 'communities/sections/background/income/income_chart'
-    = render 'communities/sections/background/income/poverty_rate_chart'
 
-  .tab-pane.fade#household-income-data{ role: "tabpanel" }
-    = render 'communities/sections/background/income/household_income_data'
-
-  .tab-pane.fade#income-poverty-data{ role: "tabpanel" }
-    = render 'communities/sections/background/income/income_poverty_data'
+    - if @community.show_income_poverty?
+      = render 'communities/sections/background/income/poverty_rate_chart'
+    
+  - if @community.show_household_income?  
+    .tab-pane.fade#household-income-data{ role: "tabpanel" }
+      = render 'communities/sections/background/income/household_income_data'
+  - if @community.show_income_poverty?
+    .tab-pane.fade#income-poverty-data{ role: "tabpanel" }
+      = render 'communities/sections/background/income/income_poverty_data'

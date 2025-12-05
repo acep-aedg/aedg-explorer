@@ -39,5 +39,7 @@
         %li= nav_link "Legislative Districts", "#legislative-districts"
       - if @community.show_population?
         %li= nav_link "Population", "#population"
+      - if @community.show_income? 
+        %li= nav_link "Income", "#income"
       - if @community.show_climate?
         %li= nav_link "Climate", "#climate"
