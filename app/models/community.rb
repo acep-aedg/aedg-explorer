@@ -32,6 +32,7 @@ class Community < ApplicationRecord
   has_many :bulk_fuel_facilities, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :income_poverties, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :household_incomes, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
+  has_many :heating_degree_days, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
 
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
@@ -264,21 +265,12 @@ class Community < ApplicationRecord
     @show_school_districts ||= school_districts.exists?
   end
 
-  def show_operators?
-    ## Check for the presence of grid as some communities spatially have operators but no a grid
-    @show_operators ||= operators.present? && grid.present?
-  end
-
   def show_background_section?
     @show_background_section ||= show_transportation? || show_legislative_districts? || show_population?
   end
 
-  def show_climate?
-    @show_climate ||= show_heating_degree_days?
-  end
-
   def show_heating_degree_days?
-    @show_heating_degree_days ||= heating_degree_days.present? && heating_degree_days.positive?
+    @show_heating_degree_days ||= heating_degree_days.present?
   end
 
   def show_population_age_sexes?

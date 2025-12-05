@@ -20,6 +20,7 @@ namespace :import do
     Rake::Task['import:communities'].invoke
     Rake::Task['import:income_poverty'].invoke
     Rake::Task['import:household_income'].invoke
+    Rake::Task['import:heating_degree_days'].invoke
     Rake::Task['import:service_areas'].invoke
     Rake::Task['import:service_area_geoms'].invoke
     Rake::Task['import:community_service_area_geoms'].invoke
@@ -82,6 +83,21 @@ namespace :import do
     end
 
     puts "Import complete! #{tag} files copied to #{local_dir}."
+  end
+
+  desc 'Import Heating Degree Days Data from .csv file'
+  task heating_degree_days: :environment do
+    if HeatingDegreeDay.count > 0
+      raise <<~ERROR
+        ❌ ERROR: Heating Degree Days table was not empty before starting import!
+        To clear it, run:
+            rails delete:heating_degree_days
+        Then, try running this import task again.
+      ERROR
+    end
+
+    filepath = Rails.root.join('db/imports/heating_degree_days.csv')
+    ImportHelpers.import_csv(filepath, HeatingDegreeDay)
   end
 
   desc 'Import Borough Data from .geojson file'
@@ -287,7 +303,7 @@ namespace :import do
     if FuelPrice.count > 0
       raise <<~ERROR
         ❌ ERROR: Fuel Price table was not empty before starting import!
-        To clear it and all realted tables, run:
+        To clear it, run:
 
             rails delete:fuel_prices
 
@@ -304,7 +320,7 @@ namespace :import do
     if BulkFuelFacility.count > 0
       raise <<~ERROR
         ❌ ERROR: Bulk Fuel Facility table was not empty before starting import!
-        To clear it and all related tables, run:
+        To clear it, run:
             rails delete:bulk_fuel_facilities
         Then, try running this import task again.
       ERROR
@@ -319,7 +335,7 @@ namespace :import do
     if IncomePoverty.count > 0
       raise <<~ERROR
         ❌ ERROR: Income Poverty table was not empty before starting import!
-        To clear it and all related tables, run:
+        To clear it, run:
             rails delete:income_poverty
         Then, try running this import task again.
       ERROR
@@ -334,7 +350,7 @@ namespace :import do
     if HouseholdIncome.count > 0
       raise <<~ERROR
         ❌ ERROR: Household Income table was not empty before starting import!
-        To clear it and all related tables, run:
+        To clear it, run:
             rails delete:household_income
         Then, try running this import task again.
       ERROR

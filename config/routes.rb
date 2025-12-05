@@ -36,6 +36,7 @@ Rails.application.routes.draw do
           get :poverty_rate
           get :household_income_brackets
           get :income
+          get :fuel_prices
         end
       end
 
