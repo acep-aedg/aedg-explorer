@@ -2,6 +2,7 @@
 .row.g-3
   .col
     = column_chart average_sales_rates_community_charts_path(@community),
-      suffix: ' $/MWh',
+      prefix: '$',
+      suffix: '/kWh',
       title: chart_title,
       download: { filename: chart_title.parameterize}

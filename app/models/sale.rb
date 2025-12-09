@@ -6,21 +6,15 @@ class Sale < ApplicationRecord
   validates :year, presence: true
 
   def residential_rate
-    return nil if residential_sales.to_f.zero?
-
-    residential_revenue.to_f / residential_sales
+    calculate_kwh_rate(residential_revenue, residential_sales)
   end
 
   def commercial_rate
-    return nil if commercial_sales.to_f.zero?
-
-    commercial_revenue.to_f / commercial_sales
+    calculate_kwh_rate(commercial_revenue, commercial_sales)
   end
 
   def total_rate
-    return nil if total_sales.to_f.zero?
-
-    total_revenue.to_f / total_sales
+    calculate_kwh_rate(total_revenue, total_sales)
   end
 
   def any_customer_type_data?
@@ -32,5 +26,12 @@ class Sale < ApplicationRecord
       residential_revenue,
       commercial_revenue
     ].any?(&:present?)
+  end
+
+  def calculate_kwh_rate(revenue, sales_mwh)
+    return nil if sales_mwh.to_f.zero?
+
+    # Revenue / (Sales MWh * 1000 to get kWh)
+    revenue.to_f / (sales_mwh * 1000)
   end
 end
