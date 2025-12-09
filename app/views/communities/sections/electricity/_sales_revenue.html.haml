@@ -1,6 +1,6 @@
 .d-flex.align-items-center.mb-3
   %i.bi.bi-cash-coin.me-2.fs-4
-  %h4#sales-revenue-customers.mb-0.me-3.py-3.anchor-offset Sales, Revenue & Customers
+  %h4#sales-revenue.mb-0.me-3.py-3.anchor-offset Sales & Revenue
   %hr.flex-grow-1.mt-1.mb-0
 
 - latest_sale = @community.reporting_entity.latest_sale
@@ -21,7 +21,7 @@
       %li.nav-item
         = link_to "#sales-data", class: "nav-link", data: { bs_toggle: "tab" } do
           %i.bi.bi-table.me-1
-          Sales, Revenue & Customer Data
+          Sales & Revenue Data
 
 .tab-content
   #average_rates.tab-pane.fade.show.active

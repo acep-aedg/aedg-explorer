@@ -197,8 +197,8 @@ class Community < ApplicationRecord
     @show_capacity ||= plants&.any? && plants.flat_map(&:capacities)&.any?
   end
 
-  def show_sales_revenue_customers?
-    @show_sales_revenue_customers ||= reporting_entity&.sales&.exists?
+  def show_sales_revenue?
+    @show_sales_revenue ||= reporting_entity&.sales&.exists?
   end
 
   def show_bulk_fuel_facilities?
@@ -211,7 +211,7 @@ class Community < ApplicationRecord
   end
 
   def show_electricity_section?
-    @show_electricity_section ||= show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue_customers? || show_bulk_fuel_facilities?
+    @show_electricity_section ||= show_utilities? || show_rates? || show_production? || show_capacity? || show_sales_revenue? || show_bulk_fuel_facilities?
   end
 
   # --- Prices Section ---
