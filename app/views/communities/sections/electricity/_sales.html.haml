@@ -15,9 +15,9 @@
           Energy Sold
       - if latest_sale&.any_customer_type_data?
         %li.nav-item
-          = link_to "#by-customer-type", class: "nav-link", data: { bs_toggle: "tab" } do
+          = link_to "#customer-breakdown", class: "nav-link", data: { bs_toggle: "tab" } do
             %i.bi.bi-pie-chart.me-1
-            Customer Types
+            Customer Breakdown
       %li.nav-item
         = link_to "#sales-data", class: "nav-link", data: { bs_toggle: "tab" } do
           %i.bi.bi-table.me-1
@@ -26,7 +26,7 @@
 .tab-content
   #energy_sold.tab-pane.fade.show.active
     = render "communities/sections/electricity/sales/energy_sold"
-  #by-customer-type.tab-pane.fade
-    = render "communities/sections/electricity/sales/by_customer_type", latest_sale: latest_sale, latest_year: latest_year
+  #customer-breakdown.tab-pane.fade
+    = render "communities/sections/electricity/sales/customer_breakdown", latest_sale: latest_sale, latest_year: latest_year
   #sales-data.tab-pane.fade
     = render "communities/sections/electricity/sales/data"

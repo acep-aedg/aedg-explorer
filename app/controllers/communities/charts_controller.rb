@@ -1,6 +1,6 @@
 class Communities::ChartsController < ApplicationController
   before_action :set_community
-  before_action :set_latest_sale, only: %i[revenue_by_customer_type customers_by_customer_type sales_by_customer_type energy_sold]
+  before_action :set_latest_sale, only: %i[customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold]
   before_action :set_year, only: %i[production_yearly capacity_yearly]
   before_action :set_population_distribution, only: %i[age_distribution gender_distribution]
 
@@ -8,9 +8,9 @@ class Communities::ChartsController < ApplicationController
   def production_yearly; end
   def capacity_yearly; end
   def population_employment; end
-  def revenue_by_customer_type; end
-  def customers_by_customer_type; end
-  def sales_by_customer_type; end
+  def customer_breakdown_revenue; end
+  def customer_breakdown_customers; end
+  def customer_breakdown_sales; end
   def bulk_fuel_capacity_mix; end
   def gender_distribution; end
   def age_distribution; end

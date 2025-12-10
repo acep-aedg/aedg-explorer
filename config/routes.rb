@@ -26,9 +26,9 @@ Rails.application.routes.draw do
           get :population_detail
           get :production_yearly
           get :fuel_prices
-          get :revenue_by_customer_type
-          get :customers_by_customer_type
-          get :sales_by_customer_type
+          get :customer_breakdown_revenue
+          get :customer_breakdown_customers
+          get :customer_breakdown_sales
           get :bulk_fuel_capacity_mix
           get :gender_distribution
           get :age_distribution
