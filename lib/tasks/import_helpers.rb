@@ -2,6 +2,8 @@ module ImportHelpers
   # Imports geographic data from a GeoJSON file and processes it into the given model.
   # It assumes there is an `import_aedg_with_geom!` method for the given model to store the data.
   def self.import_geojson(filepath, model)
+    raise "ERROR: Missing import file for #{model.name}: #{filepath}" unless File.exist?(filepath)
+
     puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
     data = File.read(filepath)
     feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
@@ -20,6 +22,8 @@ module ImportHelpers
   # Imports tabular data from a CSV file and processes it into the given model.
   # It assumes there is an `import_aedg!` method for the given model to store the data.
   def self.import_csv(filepath, model)
+    raise "ERROR: Missing import file for #{model.name}: #{filepath}" unless File.exist?(filepath)
+
     puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
     csv = CSV.read(filepath, headers: true)
 
