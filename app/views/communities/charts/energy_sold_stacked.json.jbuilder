@@ -1,29 +1,25 @@
-sales = @community.reporting_entity&.sales&.order(year: :asc) || []
+# app/views/communities/charts/energy_sold.json.jbuilder
+json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
+  if @sales.empty?
+    json.array! []
+  else
+    res_data = {}
+    com_data = {}
 
-residential_data = {}
-commercial_data  = {}
+    @sales.each do |sale|
+      year = sale.year.to_s
+      res_data[year] = sale.residential_sales
+      com_data[year] = sale.commercial_sales
+    end
 
-sales.each do |sale|
-  year = sale.year.to_s
+    series = [
+      { name: 'Residential', data: res_data },
+      { name: 'Commercial',  data: com_data }
+    ]
 
-  # Residential
-  if (val = sale.residential_sales).present?
-    residential_data[year] = val.to_f.round(2)
+    json.array! series do |s|
+      json.name s[:name]
+      json.data s[:data]
+    end
   end
-
-  # Commercial
-  if (val = sale.commercial_sales).present?
-    commercial_data[year] = val.to_f.round(2)
-  end
-end
-
-series = [
-  { name: 'Residential', data: residential_data },
-  { name: 'Commercial',  data: commercial_data }
-]
-
-# 4. Render
-json.array! series do |s|
-  json.name s[:name]
-  json.data s[:data]
 end
