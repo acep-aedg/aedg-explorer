@@ -65,13 +65,13 @@ namespace :import do
       ERROR
     end
 
-    filepath = Rails.root.join('db/imports/heating_degree_days.csv')
+    filepath = Rails.root.join('db/imports/heating_degree_days/heating_degree_days.csv')
     ImportHelpers.import_csv(filepath, HeatingDegreeDay)
   end
 
   desc 'Import Borough Data from .geojson file'
   task boroughs: :environment do
-    filepath = Rails.root.join('db/imports/boroughs/boroughs.geojson')
+    filepath = Rails.root.join('db/imports/boroughs.geojson')
     ImportHelpers.import_geojson(filepath, Borough)
   end
 
