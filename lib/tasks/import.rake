@@ -4,9 +4,10 @@ require_relative 'import_helpers'
 require_relative 'versioning'
 
 namespace :import do
-  desc 'Import Data Files into the Database'
+  desc 'Import Data Files into the Database (Pass PR=123 to test a PR, otherwise pulls DATA_POND_TAG)'
   task all: [:environment] do
-    Rake::Task['import:pull_gh_data'].invoke
+    Rake::Task['import:download_data'].invoke
+
     puts 'Importing data files...'
     Rake::Task['import:boroughs'].invoke
     Rake::Task['import:regional_corporations'].invoke
@@ -36,8 +37,9 @@ namespace :import do
     Rake::Task['import:fuel_prices'].invoke
     puts 'Import complete'
 
-    # On success, record the new version
-    if DataPondVersion.latest&.current_version == Import::Versioning::DATA_POND_TAG
+    if ENV['PR'].present?
+      puts 'Skipping version tag update because this is a PR test.'
+    elsif DataPondVersion.latest&.current_version == Import::Versioning::DATA_POND_TAG
       puts "DataPondVersion already up to date: #{Import::Versioning::DATA_POND_TAG}"
     else
       data_pond_tag = Import::Versioning::DATA_POND_TAG
@@ -46,83 +48,61 @@ namespace :import do
     end
   end
 
-  desc 'Import data files from a specific GitHub tag'
-  task pull_gh_data: :environment do
-    repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    tag = Import::Versioning::DATA_POND_TAG
-    folder_path = 'data/final'
-    Rails.root.join('db/imports').to_s
-    local_dir = Rails.root.join('db/imports').to_s
-
-    # Ensure the local directory & keep file exists
-    FileUtils.mkdir_p(local_dir)
-    keep_file = File.join(local_dir, '.keep')
-    FileUtils.touch(keep_file) unless File.exist?(keep_file)
-
-    # Check if the tag exists before cloning
-    tag_exists = system("git ls-remote --tags #{repo_url} refs/tags/#{tag} | grep #{tag}")
-    raise "Error: Tag '#{tag}' not found in repository #{repo_url}." unless tag_exists
-
-    Dir.mktmpdir do |temp_dir|
-      system("git clone --no-checkout #{repo_url} #{temp_dir}")
-
-      Dir.chdir(temp_dir) do
-        system('git fetch --tags')
-
-        # Checkout the specific tag
-        system("git checkout tags/#{tag} -b temp-tag-branch")
-
-        # Enable sparse-checkout
-        system('git sparse-checkout init --cone')
-        system("git sparse-checkout set #{folder_path}")
-
-        # Sync only new/updated files
-        system("rsync -av --update --exclude='*.md' #{folder_path}/ #{local_dir}/")
-      end
-    end
-
-    puts "Import complete! #{tag} files copied to #{local_dir}."
-  end
-
-  desc 'Import data files from a specific GitHub PR (TEMP for testing)'
-  task test_pr_data: :environment do
-    repo_url   = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    pr_number  = 49 # <<< TEMP: hardcode the PR you want to test
+  desc 'Download data files (Defaults to Tag, or pass PR=123 to test a PR)'
+  task download_data: :environment do
+    repo_url    = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
     folder_path = 'data/final'
     local_dir   = Rails.root.join('db/imports').to_s
 
-    # Ensure the local directory & keep file exists
+    # Determine Source (Tag vs PR)
+    if ENV['PR'].present?
+      pr_number = ENV['PR']
+      puts "PR detected! Preparing to fetch Pull Request ##{pr_number}..."
+
+      # Git commands for PR
+      fetch_cmd    = "git fetch origin pull/#{pr_number}/head:pr-#{pr_number}"
+      checkout_cmd = "git checkout pr-#{pr_number}"
+      source_name  = "PR ##{pr_number}"
+    else
+      tag = Import::Versioning::DATA_POND_TAG
+      # Check if tag exists remotely before starting expensive clone
+      tag_exists = system("git ls-remote --tags #{repo_url} refs/tags/#{tag} | grep #{tag}")
+      raise "ERROR: Tag '#{tag}' not found in repo #{repo_url}" unless tag_exists
+
+      # Git commands for Tag
+      fetch_cmd    = 'git fetch --tags'
+      checkout_cmd = "git checkout tags/#{tag} -b temp-tag-branch"
+      source_name  = "Tag #{tag}"
+    end
+
+    # Create local directory for import
     FileUtils.mkdir_p(local_dir)
     keep_file = File.join(local_dir, '.keep')
     FileUtils.touch(keep_file) unless File.exist?(keep_file)
 
+    # Pull data from remote repository
     Dir.mktmpdir do |temp_dir|
-      # Clone the repo without checking out a branch yet
-      system("git clone --no-checkout #{repo_url} #{temp_dir}") or
-        raise "Failed to clone #{repo_url}"
+      puts '⬇️ Cloning repository...'
+      system("git clone --no-checkout #{repo_url} #{temp_dir}") or raise "Failed to clone #{repo_url}"
 
       Dir.chdir(temp_dir) do
-        # Fetch the PR ref into a local branch pr-<number>
-        # This grabs the PR's HEAD (contributor branch), not the auto-merge ref.
-        system("git fetch origin pull/#{pr_number}/head:pr-#{pr_number}") or
-          raise "Failed to fetch PR ##{pr_number} from origin"
+        puts '🔄 Fetching specific ref...'
+        system(fetch_cmd) or raise "Failed to fetch #{source_name}"
 
-        # Check out the PR branch
-        system("git checkout pr-#{pr_number}") or
-          raise "Failed to checkout PR branch pr-#{pr_number}"
+        puts "Checking out #{source_name}..."
+        system(checkout_cmd) or raise "Failed to checkout #{source_name}"
 
         # Enable sparse-checkout
-        system('git sparse-checkout init --cone') or
-          raise 'Failed to init sparse-checkout'
-        system("git sparse-checkout set #{folder_path}") or
-          raise "Failed to set sparse-checkout path #{folder_path}"
+        system('git sparse-checkout init --cone') or raise 'Failed to init sparse-checkout'
+        system("git sparse-checkout set #{folder_path}") or raise "Failed to set sparse-checkout path #{folder_path}"
 
-        # Sync only new/updated files
+        # Sync files
+        puts "📂 Syncing files to #{local_dir}..."
         system("rsync -av --update --exclude='*.md' #{folder_path}/ #{local_dir}/")
       end
     end
 
-    puts "Import complete! PR ##{pr_number} files copied to #{local_dir}."
+    puts "Download complete! #{source_name} files copied to #{local_dir}."
   end
 
   desc 'Import Borough Data from .geojson file'
