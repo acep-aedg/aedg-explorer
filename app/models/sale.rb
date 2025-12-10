@@ -2,20 +2,7 @@ class Sale < ApplicationRecord
   include SaleAttributes
   belongs_to :reporting_entity, touch: true
   has_many :communities, through: :reporting_entity
-
   validates :year, presence: true
-
-  def residential_rate
-    calculate_kwh_rate(residential_revenue, residential_sales)
-  end
-
-  def commercial_rate
-    calculate_kwh_rate(commercial_revenue, commercial_sales)
-  end
-
-  def total_rate
-    calculate_kwh_rate(total_revenue, total_sales)
-  end
 
   def any_customer_type_data?
     [

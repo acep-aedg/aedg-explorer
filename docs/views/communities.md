@@ -28,7 +28,7 @@ views/communities/
     │   ├── _fuel.html.haml
     │   ├── _production.html.haml
     │   ├── _rates.html.haml
-    │   ├── _sales_revenue.html.haml
+    │   ├── _sales.html.haml
     │   └── _utility.html.haml
 ```
 

@@ -26,7 +26,6 @@ Rails.application.routes.draw do
           get :population_detail
           get :production_yearly
           get :fuel_prices
-          get :average_sales_rates
           get :revenue_by_customer_type
           get :customers_by_customer_type
           get :sales_by_customer_type
@@ -37,6 +36,8 @@ Rails.application.routes.draw do
           get :household_income_brackets
           get :income
           get :fuel_prices
+          get :energy_sold
+          get :energy_sold_stacked
         end
       end
 

@@ -21,8 +21,8 @@
         %li= nav_link "Capacity", "#capacity"
       - if @community.show_bulk_fuel_facilities?
         %li= nav_link "Bulk Fuel Facilities", "#bulk-fuel-facilities"
-      - if @community.show_sales_revenue?
-        %li= nav_link "Sales & Revenue", "#sales-revenue"
+      - if @community.show_sales?
+        %li= nav_link "Sales", "#sales"
       // Prices Section
       - if @community.show_prices_section?
         %li= nav_link "Prices", "#prices", parent_section: true
