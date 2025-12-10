@@ -4,7 +4,7 @@ require_relative 'import_helpers'
 require_relative 'versioning'
 
 namespace :import do
-  desc 'Import Data Files into the Database (Pass PR=123 to test a PR, otherwise pulls DATA_POND_TAG)'
+  desc 'Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)'
   task all: [:environment] do
     Rake::Task['import:download_data'].invoke
 
@@ -48,61 +48,9 @@ namespace :import do
     end
   end
 
-  desc 'Download data files (Defaults to Tag, or pass PR=123 to test a PR)'
+  desc 'Download data files (Defaults to DATA_POND_TAG, or pass PR=123 to test a PR)'
   task download_data: :environment do
-    repo_url    = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
-    folder_path = 'data/final'
-    local_dir   = Rails.root.join('db/imports').to_s
-
-    # Determine Source (Tag vs PR)
-    if ENV['PR'].present?
-      pr_number = ENV['PR']
-      puts "PR detected! Preparing to fetch Pull Request ##{pr_number}..."
-
-      # Git commands for PR
-      fetch_cmd    = "git fetch origin pull/#{pr_number}/head:pr-#{pr_number}"
-      checkout_cmd = "git checkout pr-#{pr_number}"
-      source_name  = "PR ##{pr_number}"
-    else
-      tag = Import::Versioning::DATA_POND_TAG
-      # Check if tag exists remotely before starting expensive clone
-      tag_exists = system("git ls-remote --tags #{repo_url} refs/tags/#{tag} | grep #{tag}")
-      raise "ERROR: Tag '#{tag}' not found in repo #{repo_url}" unless tag_exists
-
-      # Git commands for Tag
-      fetch_cmd    = 'git fetch --tags'
-      checkout_cmd = "git checkout tags/#{tag} -b temp-tag-branch"
-      source_name  = "Tag #{tag}"
-    end
-
-    # Create local directory for import
-    FileUtils.mkdir_p(local_dir)
-    keep_file = File.join(local_dir, '.keep')
-    FileUtils.touch(keep_file) unless File.exist?(keep_file)
-
-    # Pull data from remote repository
-    Dir.mktmpdir do |temp_dir|
-      puts '⬇️ Cloning repository...'
-      system("git clone --no-checkout #{repo_url} #{temp_dir}") or raise "Failed to clone #{repo_url}"
-
-      Dir.chdir(temp_dir) do
-        puts '🔄 Fetching specific ref...'
-        system(fetch_cmd) or raise "Failed to fetch #{source_name}"
-
-        puts "Checking out #{source_name}..."
-        system(checkout_cmd) or raise "Failed to checkout #{source_name}"
-
-        # Enable sparse-checkout
-        system('git sparse-checkout init --cone') or raise 'Failed to init sparse-checkout'
-        system("git sparse-checkout set #{folder_path}") or raise "Failed to set sparse-checkout path #{folder_path}"
-
-        # Sync files
-        puts "📂 Syncing files to #{local_dir}..."
-        system("rsync -av --update #{folder_path}/ #{local_dir}/")
-      end
-    end
-
-    puts "Download complete! #{source_name} files copied to #{local_dir}."
+    ImportHelpers.download_data('data/final', Rails.root.join('db/imports').to_s)
   end
 
   desc 'Import Borough Data from .geojson file'
