@@ -98,7 +98,7 @@ namespace :import do
 
         # Sync files
         puts "📂 Syncing files to #{local_dir}..."
-        system("rsync -av --update --exclude='*.md' #{folder_path}/ #{local_dir}/")
+        system("rsync -av --update #{folder_path}/ #{local_dir}/")
       end
     end
 
