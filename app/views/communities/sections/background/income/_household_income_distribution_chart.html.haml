@@ -1,0 +1,14 @@
+- hh_income_bracket_title = "#{@community.name} - Household Income Brackets"
+
+= column_chart household_income_brackets_community_charts_path(@community),
+  suffix:   '%',
+  title:    hh_income_bracket_title,
+  min:      0,
+  max:      100,
+  stacked:  true,
+  xtitle:   "Year",
+  round:    2,
+  zeros:    true,
+  ytitle:   "Household Income Brackets",
+  download: { filename: hh_income_bracket_title.parameterize },
+  library: { plugins: { legend: { display:true, position: 'right', reverse: true }, tooltip: { mode: 'index', intersect: false, reverse: true } }}

@@ -1,5 +1,4 @@
 class Communities::ChartsController < ApplicationController
-  include Communities::ChartsHelper
   before_action :set_community
   before_action :set_latest_sale, only: %i[revenue_by_customer_type customers_by_customer_type sales_by_customer_type]
   before_action :set_year, only: %i[production_yearly capacity_yearly]
@@ -16,6 +15,15 @@ class Communities::ChartsController < ApplicationController
   def bulk_fuel_capacity_mix; end
   def gender_distribution; end
   def age_distribution; end
+  def poverty_rate; end
+  def household_income_brackets; end
+  def income; end
+
+  def fuel_prices
+    @price_type = params[:price_type].to_s
+    @fuel_prices = @community.fuel_prices
+    @heating_degree_days = @community.heating_degree_days
+  end
 
   # Figure out if we can utilize this method from CommunitiesController instead of duplicating it here
   private
