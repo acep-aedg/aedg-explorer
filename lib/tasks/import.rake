@@ -71,7 +71,7 @@ namespace :import do
 
   desc 'Import Borough Data from .geojson file'
   task boroughs: :environment do
-    filepath = Rails.root.join('db/imports/boroughs.geojson')
+    filepath = Rails.root.join('db/imports/boroughs/boroughs.geojson')
     ImportHelpers.import_geojson(filepath, Borough)
   end
 
