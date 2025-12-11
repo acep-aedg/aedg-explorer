@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta http-equiv="refresh" content="30">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>We’ll Be Right Back</title>
@@ -133,25 +134,5 @@
     </div>
     <small>2024 AEDG Explorer</small>
   </div>
-
-  <!-- Adaptive auto-refresh -->
-  <script>
-    const attempts = Number(sessionStorage.getItem("maintenanceAttempts")) || 0;
-
-    let interval;
-    if (attempts < 6) {
-      interval = 5;   
-    } else if (attempts < 20) {
-      interval = 15;  
-    } else {
-      interval = 30;  
-    }
-
-    sessionStorage.setItem("maintenanceAttempts", attempts + 1);
-
-    setTimeout(() => {
-      window.location.reload();
-    }, interval * 1000);
-  </script>
 </body>
 </html>
