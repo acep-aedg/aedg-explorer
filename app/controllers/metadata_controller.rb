@@ -27,12 +27,8 @@ class MetadataController < ApplicationController
   end
 
   def download
-    json_output = JSON.pretty_generate(@metadatum.cleaned_data)
-
-    send_data json_output,
-              filename: @metadatum.filename,
-              type: 'application/json',
-              disposition: 'attachment'
+    send_data @metadatum.data.to_json, filename: @metadatum.filename, type: 'application/json',
+                                       disposition: 'attachment'
   end
 
   private
