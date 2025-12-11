@@ -57,16 +57,4 @@ class Metadatum < ApplicationRecord
     # Format the citation chicago style
     "#{author}. *#{title}*. Version #{version}. Alaska Energy Data Gateway, #{publication_year}. #{dataset_url}. Accessed #{access_date}."
   end
-
-  # Returns a hash that is cleaned of empty values and sorted for readability
-  def cleaned_data
-    # 1. Reject keys with blank values
-    clean = data.reject { |_, v| v.blank? }
-
-    # 2. Define which keys should appear at the top
-    top_keys = %w[name title description]
-
-    # 3. Sort the hash
-    clean.sort_by { |k, _| top_keys.index(k) || 999 }.to_h
-  end
 end
