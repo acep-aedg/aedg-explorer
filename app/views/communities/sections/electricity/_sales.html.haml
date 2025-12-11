@@ -1,6 +1,6 @@
 .d-flex.align-items-center.mb-3
   %i.bi.bi-cash-coin.me-2.fs-4
-  %h4#sales-revenue-customers.mb-0.me-3.py-3.anchor-offset Sales, Revenue & Customers
+  %h4#sales.mb-0.me-3.py-3.anchor-offset Sales
   %hr.flex-grow-1.mt-1.mb-0
 
 - latest_sale = @community.reporting_entity.latest_sale
@@ -10,23 +10,23 @@
   .d-flex.justify-content-between.align-items-center
     .nav.nav-tabs
       %li.nav-item
-        = link_to "#average_rates", class: "nav-link active", data: { bs_toggle: "tab" } do
+        = link_to "#energy_sold", class: "nav-link active", data: { bs_toggle: "tab" } do
           %i.bi.bi-bar-chart-fill.me-1
-          Average Rates Chart
+          Energy Sold
       - if latest_sale&.any_customer_type_data?
         %li.nav-item
-          = link_to "#by-customer-type", class: "nav-link", data: { bs_toggle: "tab" } do
+          = link_to "#customer-breakdown", class: "nav-link", data: { bs_toggle: "tab" } do
             %i.bi.bi-pie-chart.me-1
-            Customer Type Chart
+            Customer Breakdown
       %li.nav-item
         = link_to "#sales-data", class: "nav-link", data: { bs_toggle: "tab" } do
           %i.bi.bi-table.me-1
-          Sales, Revenue & Customer Data
+          Data
 
 .tab-content
-  #average_rates.tab-pane.fade.show.active
-    = render "communities/sections/electricity/sales/average_rates"
-  #by-customer-type.tab-pane.fade
-    = render "communities/sections/electricity/sales/by_customer_type", latest_sale: latest_sale, latest_year: latest_year
+  #energy_sold.tab-pane.fade.show.active
+    = render "communities/sections/electricity/sales/energy_sold"
+  #customer-breakdown.tab-pane.fade
+    = render "communities/sections/electricity/sales/customer_breakdown", latest_sale: latest_sale, latest_year: latest_year
   #sales-data.tab-pane.fade
     = render "communities/sections/electricity/sales/data"

@@ -11,7 +11,8 @@
           .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
             %i.bi.bi-house-door-fill.text-primary.fs-3.me-3
             .flex-grow-1
-              .text-muted Residential Rate (#{latest_rate.year})
+              .text-muted
+                = "#{@community.pce_eligible ? 'Residential PCE Rate' : 'Residential Rate'} (#{latest_rate.year})"
               .fw-semibold= number_to_currency(latest_rate.residential_rate, unit: "$") + "/kWh"
 
     - if latest_rate.commercial_rate
