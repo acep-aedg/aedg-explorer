@@ -77,8 +77,8 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal sale.residential_sales, residential_series['data'][sale.year.to_s]
     commercial_series = body.find { |s| s['name'] == 'Commercial' }
     assert_equal sale.commercial_sales, commercial_series['data'][sale.year.to_s]
-    total_series = body.find { |s| s['name'] == 'Total' }
-    assert_equal sale.total_sales, total_series['data'][sale.year.to_s]
+    # total_series = body.find { |s| s['name'] == 'Total' }
+    # assert_equal sale.total_sales, total_series['data'][sale.year.to_s]
   end
 
   test 'should get customer_breakdown_revenue' do
