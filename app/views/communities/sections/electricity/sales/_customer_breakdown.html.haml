@@ -3,17 +3,17 @@
 - if latest_sale && (latest_sale.residential_revenue || latest_sale.commercial_revenue)
   - charts << { title: "Revenue (#{latest_year})",
                 path:  customer_breakdown_revenue_community_charts_path(@community),
-                opts:  { prefix: '$ ', donut: true } }
+                opts:  { prefix: '$ ', donut: true, colors: ['#1f77b4', '#ff7f0e'] } }
 
 - if latest_sale && (latest_sale.residential_sales || latest_sale.commercial_sales)
   - charts << { title: "Sales (#{latest_year})",
                 path:  customer_breakdown_sales_community_charts_path(@community),
-                opts:  { suffix: ' MWh', donut: true } }
+                opts:  { suffix: ' MWh', donut: true,  colors: ['#1f77b4', '#ff7f0e'] } }
 
 - if latest_sale && (latest_sale.residential_customers || latest_sale.commercial_customers)
   - charts << { title: "Customers (#{latest_year})",
                 path:  customer_breakdown_customers_community_charts_path(@community),
-                opts:  { donut: true } }
+                opts:  { donut: true, colors: ['#1f77b4', '#ff7f0e'] } }
 
 .row.g-3.row-cols-1.row-cols-md-2.row-cols-lg-3.justify-content-center
   - charts.each do |c|
