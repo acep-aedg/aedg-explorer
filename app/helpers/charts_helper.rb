@@ -13,7 +13,7 @@ module ChartsHelper
     dark_green: '#006D2C',
     soft_green: '#8EBFA2',
     medium_yellow: '#FDB813',
-    red_orange: '#D35400',
+    light_red: '#D77A7D',
     dark_red: '#810000',
     light_grey: '#D6D6D6',
     medium_grey: '#5D6D7E',

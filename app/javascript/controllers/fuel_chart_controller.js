@@ -5,7 +5,7 @@ import { Controller } from '@hotwired/stimulus';
 const FUEL_COLORS = {
   CL: '#D6D6D6', // light_grey
   DFO: '#f28e2b', // soft_orange
-  JF: '#D35400', // red_orange
+  JF: '#D77A7D', // light_red
   LFG: '#A1866F', // light_brown
   MWH: '#5D6D7E', // medium_grey
   NG: '#8EBFA2', //soft_green
