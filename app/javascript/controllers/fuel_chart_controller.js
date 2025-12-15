@@ -1,21 +1,19 @@
 // controllers/fuel_chart_controller.js
 import { Controller } from '@hotwired/stimulus';
 
+// TODO: refactor into using the colors define in charts_helper.rb
 const FUEL_COLORS = {
-  CL: '#F1C40F',
-  DFO: '#E67E22',
-  JF: '#D35400',
-  LFG: '#A1866F',
-  LIG: '#A0522D',
-  MWH: '#5D6D7E',
-  NG: '#8EBFA2',
-  SUB: '#34495E',
-  SUN: '#FDB813',
-  WAT: '#3498DB',
-  WC: '#4B4B4B',
-  WH: '#B7410E',
-  WND: '#2980B9',
-  WO: '#6E2C00',
+  CL: '#D6D6D6', // light_grey
+  DFO: '#f28e2b', // soft_orange
+  JF: '#D35400', // red_orange
+  LFG: '#A1866F', // light_brown
+  MWH: '#5D6D7E', // medium_grey
+  NG: '#8EBFA2', //soft_green
+  SUN: '#FDB813', // medium_yellow
+  WAT: '#1f77b4', // blue
+  WH: '#810000', // dark_red
+  WND: '#6BAED6', // light_blue
+  WO: '#6E2C00', // dark_brown
 };
 
 export default class extends Controller {
