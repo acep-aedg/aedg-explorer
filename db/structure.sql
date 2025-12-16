@@ -357,8 +357,6 @@ CREATE TABLE public.communities (
     economic_region character varying,
     reporting_entity_id bigint,
     village_corporation character varying,
-    operators character varying[] DEFAULT '{}'::character varying[],
-    heating_degree_days integer,
     tsvector_data tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, COALESCE((name)::text, ''::text))) STORED
 );
 
@@ -813,6 +811,40 @@ CREATE SEQUENCE public.grids_id_seq
 --
 
 ALTER SEQUENCE public.grids_id_seq OWNED BY public.grids.id;
+
+
+--
+-- Name: heating_degree_days; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.heating_degree_days (
+    id bigint NOT NULL,
+    community_fips_code character varying,
+    year integer,
+    month integer,
+    heating_degree_days integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: heating_degree_days_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.heating_degree_days_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: heating_degree_days_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.heating_degree_days_id_seq OWNED BY public.heating_degree_days.id;
 
 
 --
@@ -1712,6 +1744,13 @@ ALTER TABLE ONLY public.grids ALTER COLUMN id SET DEFAULT nextval('public.grids_
 
 
 --
+-- Name: heating_degree_days id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.heating_degree_days ALTER COLUMN id SET DEFAULT nextval('public.heating_degree_days_id_seq'::regclass);
+
+
+--
 -- Name: house_districts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2018,6 +2057,14 @@ ALTER TABLE ONLY public.fuel_prices
 
 ALTER TABLE ONLY public.grids
     ADD CONSTRAINT grids_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: heating_degree_days heating_degree_days_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.heating_degree_days
+    ADD CONSTRAINT heating_degree_days_pkey PRIMARY KEY (id);
 
 
 --
@@ -2660,6 +2707,14 @@ ALTER TABLE ONLY public.community_grids
 
 
 --
+-- Name: heating_degree_days fk_rails_530993735a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.heating_degree_days
+    ADD CONSTRAINT fk_rails_530993735a FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
+
+
+--
 -- Name: fuel_prices fk_rails_5a86c9fa5a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2787,6 +2842,8 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20251205180925'),
+('20251120205210'),
+('20251120200227'),
 ('20251119233833'),
 ('20251114225412'),
 ('20251113203819'),

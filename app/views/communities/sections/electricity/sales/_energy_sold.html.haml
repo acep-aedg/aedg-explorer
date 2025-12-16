@@ -1,0 +1,16 @@
+- chart_title = 'Energy Sold'
+
+= column_chart energy_sold_community_charts_path(@community),
+  suffix: ' MWh',
+  xtitle: 'Year',
+  ytitle: 'Energy Sold',
+  title: chart_title,
+  download: { filename: chart_title.parameterize }
+
+-#  TODO: Finish implementing stacked energy sold chart when multiple years are available
+-# = column_chart energy_sold_stacked_community_charts_path(@community),
+-#   stacked: true,
+-#   xtitle: 'Year',
+-#   ytitle: 'Energy Sold',
+-#   suffix: ' MWh',
+-#   download: { filename: chart_title.parameterize }

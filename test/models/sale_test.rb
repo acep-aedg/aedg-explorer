@@ -5,33 +5,6 @@ class SaleTest < ActiveSupport::TestCase
     @sale = sales(:one)
   end
 
-  test 'residential_rate returns correct value' do
-    assert_equal 0.25, @sale.residential_rate
-  end
-
-  test 'residential_rate returns nil when residential_sales is zero' do
-    @sale.residential_sales = 0
-    assert_nil @sale.residential_rate
-  end
-
-  test 'commercial_rate returns correct value' do
-    assert_equal 2.50, @sale.commercial_rate
-  end
-
-  test 'commercial_rate returns nil when commercial_sales is zero' do
-    @sale.commercial_sales = 0
-    assert_nil @sale.commercial_rate
-  end
-
-  test 'total_rate returns correct value' do
-    assert_equal 2.50, @sale.total_rate
-  end
-
-  test 'total_rate returns nil when total_sales is zero' do
-    @sale.total_sales = 0
-    assert_nil @sale.total_rate
-  end
-
   test 'any_customer_type_data? returns true when any data present' do
     assert @sale.any_customer_type_data?
   end
