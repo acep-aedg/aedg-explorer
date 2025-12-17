@@ -172,10 +172,6 @@ class Community < ApplicationRecord
     @show_grid_utilities ||= grid&.reporting_entities&.exists?
   end
 
-  def show_main_utility?
-    @show_main_utility ||= reporting_entity.present?
-  end
-
   def show_rates?
     @show_rates ||= electric_rates&.any? do |rate|
       rate.residential_rate || rate.commercial_rate || rate.industrial_rate
@@ -199,7 +195,7 @@ class Community < ApplicationRecord
   end
 
   def show_sales?
-    @show_sales ||= reporting_entity&.sales&.exists?
+    @show_sales ||= sales&.exists?
   end
 
   def show_bulk_fuel_facilities?

@@ -21,4 +21,22 @@ class Sale < ApplicationRecord
     # Revenue / (Sales MWh * 1000 to get kWh)
     revenue.to_f / (sales_mwh * 1000)
   end
+
+  def self.latest_summary_for(sales_relation)
+    # 1. Find the max year within the passed list
+    latest_year = sales_relation.maximum(:year)
+    return nil unless latest_year
+
+    # 2. Filter the list to just that year
+    records = sales_relation.where(year: latest_year).includes(:reporting_entity)
+
+    # 3. Return the calculated summary
+    OpenStruct.new(
+      year:            latest_year,
+      total_sales:     records.sum(:total_sales),
+      total_revenue:   records.sum(:total_revenue),
+      total_customers: records.sum(:total_customers),
+      reporter_names:  records.map { |s| s.reporting_entity.name }.uniq.to_sentence
+    )
+  end
 end
