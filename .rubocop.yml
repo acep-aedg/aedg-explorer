@@ -5,7 +5,7 @@ plugins: rubocop-rails
 AllCops:
   Exclude:
     - 'db/migrate/**/*'
-    - 'db/schema.rb'    
+    - 'db/structure.sql'
     - 'node_modules/**/*'
     - 'vendor/**/*'
     - 'bin/**/*'
