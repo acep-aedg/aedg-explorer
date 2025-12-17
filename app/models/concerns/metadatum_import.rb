@@ -13,6 +13,10 @@ module MetadatumImport
       raise 'Expected a single resource, but none found.' unless resource
 
       dataset = Dataset.import_resource(resource)
+
+      source_directory = File.dirname(file)
+      dataset.attach_directory_as_zip(source_directory)
+
       keyword_list.add(dataset.keyword_list)
       topic_list.add(dataset.topic_list)
       format_list.add(dataset.format)
