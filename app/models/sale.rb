@@ -3,6 +3,7 @@ class Sale < ApplicationRecord
   belongs_to :reporting_entity, touch: true
   has_many :communities, through: :reporting_entity
   validates :year, presence: true
+  validates :reporting_entity_id, presence: true
 
   def any_customer_type_data?
     [
