@@ -98,3 +98,19 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+          
+  notify_failure:
+      runs-on: ubuntu-latest
+      needs: [scan_ruby, scan_js, lint, test]
+      if: failure() && github.ref == 'refs/heads/main'
+      steps:
+        - uses: mattermost/action-mattermost-notify@master
+          with:
+            MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
+            MATTERMOST_ICON_URL: https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678069-sign-error-512.png
+            TEXT: |
+              :warning: **CI Failed**
+              **Repo:** ${{ github.repository }}
+              **Author:** ${{ github.actor }}
+              
+              [View Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})

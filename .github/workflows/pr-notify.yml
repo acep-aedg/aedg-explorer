@@ -2,7 +2,7 @@ name: Notify Mattermost on Ready PR
 
 on:
   pull_request:
-    types: [opened, ready_for_review]
+    types: [ready_for_review]
 
 jobs:
   notify:
@@ -13,10 +13,9 @@ jobs:
         uses: mattermost/action-mattermost-notify@master
         with:
           MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
-          MATTERMOST_USERNAME: GitHub-Actions-Bot
           MATTERMOST_ICON_URL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           TEXT: |
-            :dart: **PR Ready for Review**
+            :dart: **Ready for Review**
             
             **Repository:** ${{ github.repository }}
             **PR:** #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}
