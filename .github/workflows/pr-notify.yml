@@ -7,7 +7,6 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
     steps:
       - name: Send Alert to Mattermost
         uses: mattermost/action-mattermost-notify@master
@@ -15,7 +14,7 @@ jobs:
           MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
           MATTERMOST_ICON_URL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           TEXT: |
-            :dart: **Ready for Review**
+            :dart: **Review Requested**
             
             **Repository:** ${{ github.repository }}
             **PR:** #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}
