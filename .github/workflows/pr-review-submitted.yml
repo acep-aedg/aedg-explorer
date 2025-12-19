@@ -14,11 +14,10 @@ jobs:
           MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
           MATTERMOST_ICON_URL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           TEXT: |
-            :eyes: **Review Submitted**
+            ${{ github.event.review.state == 'approved' && ':white_check_mark: **PR Approved**' || (github.event.review.state == 'changes_requested' && ':arrows_counterclockwise: **PR Changes Requested**' || ':speech_balloon: **PR Comment**') }}
             
             **Repo:** ${{ github.repository }}
             **PR:** #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}
             **Reviewer:** ${{ github.actor }}
-            **Verdict:** ${{ github.event.review.state }}
             
             [Read Review](${{ github.event.review.html_url }})
