@@ -29,13 +29,15 @@ namespace :import do
 
     Rake::Task['db:truncate_all'].reenable
     Rake::Task['db:truncate_all'].invoke
+    Rake::Task['storage:clear'].reenable
+    Rake::Task['storage:clear'].invoke
 
     ENV['DISABLE_DATABASE_ENVIRONMENT_CHECK'] = previous
 
     puts '🧼 Truncate complete.'
 
-    Rake::Task['import:all'].reenable
-    Rake::Task['import:all'].invoke
+    # Rake::Task['import:all'].reenable
+    # Rake::Task['import:all'].invoke
     Rake::Task['metadata:import'].reenable
     Rake::Task['metadata:import'].invoke
     puts "✅ Import finished for #{desired_str}."
