@@ -8,8 +8,7 @@
     / === TAGS AREA ===
     .d-flex.flex-wrap.gap-1
       - if community.respond_to?(:grids)
-        - community.grids.each do |g|
-          - next unless g.reporting_entities.any?
+        - community.grids.active.each do |g|
           = link_to grid_path(g), class: "badge bg-light text-body border text-decoration-none" do
             %i.bi.bi-grid-3x3-gap.me-1
             = g.name
