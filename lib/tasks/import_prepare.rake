@@ -36,8 +36,8 @@ namespace :import do
 
     puts '🧼 Truncate complete.'
 
-    # Rake::Task['import:all'].reenable
-    # Rake::Task['import:all'].invoke
+    Rake::Task['import:all'].reenable
+    Rake::Task['import:all'].invoke
     Rake::Task['metadata:import'].reenable
     Rake::Task['metadata:import'].invoke
     puts "✅ Import finished for #{desired_str}."
