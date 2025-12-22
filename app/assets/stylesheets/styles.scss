@@ -299,16 +299,16 @@
     .page-link {
       padding: 0.25rem 0.6rem;
       font-size: 0.85rem;
-      color: #198754; // Bootstrap success green
+      color: $aedg-navy;
       border: 1px solid #dee2e6;
       &:hover {
         background-color: #e9f7ef;
       }
     }
     .page-item.active .page-link {
-      background-color: #198754;
-      border-color: #198754;
-      color: #fff;
+      background-color: $aedg-yellow;
+      border-color: $aedg-yellow;
+      color: $aedg-navy;
     }
   }
 }
