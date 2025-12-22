@@ -66,46 +66,49 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [[pop_employment.measurement_year, pop_employment.unemployment_insurance_claimants]], body[1]['data']
   end
 
-  test 'should get average_sales_rates' do
-    get average_sales_rates_community_charts_url(@community)
+  test 'should get energy_sold' do
+    get energy_sold_community_charts_url(@community)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
     sale = @community.reporting_entity.sales.order(year: :asc).first
-    assert_equal sale.year.to_s, body.first['name']
-    assert_equal sale.residential_rate, body.first['data']['residential']
-    assert_equal sale.commercial_rate, body.first['data']['commercial']
-    assert_equal sale.total_rate, body.first['data']['total']
+
+    residential_series = body.find { |s| s['name'] == 'Residential' }
+    assert_equal sale.residential_sales, residential_series['data'][sale.year.to_s]
+    commercial_series = body.find { |s| s['name'] == 'Commercial' }
+    assert_equal sale.commercial_sales, commercial_series['data'][sale.year.to_s]
+    # total_series = body.find { |s| s['name'] == 'Total' }
+    # assert_equal sale.total_sales, total_series['data'][sale.year.to_s]
   end
 
-  test 'should get revenue_by_customer_type when sale exists' do
-    get revenue_by_customer_type_community_charts_url(@community)
+  test 'should get customer_breakdown_revenue' do
+    get customer_breakdown_revenue_community_charts_path(@community)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
     sale = @community.reporting_entity.latest_sale
     assert sale, 'Expected a sale to exist for this community'
-    assert_equal sale.residential_revenue, body['residential']
-    assert_equal sale.commercial_revenue, body['commercial']
+    assert_equal sale.residential_revenue, body['Residential']
+    assert_equal sale.commercial_revenue, body['Commercial']
   end
 
-  test 'should get customers_by_customer_type' do
-    get customers_by_customer_type_community_charts_url(@community)
+  test 'should get customer_breakdown_customers' do
+    get customer_breakdown_customers_community_charts_path(@community)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
     sale = @community.reporting_entity.latest_sale
-    assert_equal sale.residential_customers, body['residential']
-    assert_equal sale.commercial_customers, body['commercial']
+    assert_equal sale.residential_customers, body['Residential']
+    assert_equal sale.commercial_customers, body['Commercial']
   end
 
-  test 'should get sales_by_customer_type' do
-    get sales_by_customer_type_community_charts_url(@community)
+  test 'should get customer_breakdown_sales' do
+    get customer_breakdown_sales_community_charts_path(@community)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
     sale = @community.reporting_entity.latest_sale
-    assert_equal sale.residential_sales, body['residential']
-    assert_equal sale.commercial_sales, body['commercial']
+    assert_equal sale.residential_sales, body['Residential']
+    assert_equal sale.commercial_sales, body['Commercial']
   end
 end

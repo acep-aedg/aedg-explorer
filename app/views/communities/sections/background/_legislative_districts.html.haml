@@ -32,11 +32,24 @@
       %i.bi.bi-bank
       %span.text-nowrap Senate Districts
 
+.d-flex.justify-content-between.align-items-center
+  .nav.nav-tabs
+    - if @community.show_house_districts?
+      %li.nav-item
+        = link_to "#HouseDistrictData", class: "nav-link active", data: { bs_toggle: "tab" } do
+          %i.bi.bi-table.me-1
+          House District Data
+    - if @community.show_senate_districts?
+      %li.nav-item
+        = link_to "#SenateDistrictData", class: "nav-link", data: { bs_toggle: "tab" } do
+          %i.bi.bi-table.me-1
+          Senate District Data
 
-.tab-content
+
+.tab-content.mt-3
   - if @community.show_house_districts?
-    #HouseDistrictData.tab-pane.fade.show.active(role="tabpanel")
+    #HouseDistrictData.tab-pane.fade.show.active
       = render "communities/sections/background/legislative_districts/house_district_data"
   - if @community.show_senate_districts?
-    #SenateDistrictData.tab-pane.fade(role="tabpanel")
+    #SenateDistrictData.tab-pane.fade
       = render "communities/sections/background/legislative_districts/senate_district_data"

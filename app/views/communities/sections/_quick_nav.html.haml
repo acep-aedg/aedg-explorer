@@ -8,26 +8,6 @@
     }
       Jump To
     %ul.dropdown-menu{ "aria-labelledby" => "quickNavDropdown" }
-      // Electricity Section
-      - if @community.show_electricity_section?
-        %li= nav_link "Electricity", "#electricity", parent_section: true
-      - if @community.show_utilities?
-        %li= nav_link "Utilities", "#utilities"
-      - if @community.show_rates?
-        %li= nav_link "Rates", "#rates"
-      - if @community.show_production?
-        %li= nav_link "Production", "#production"
-      - if @community.show_capacity?
-        %li= nav_link "Capacity", "#capacity"
-      - if @community.show_bulk_fuel_facilities?
-        %li= nav_link "Bulk Fuel Facilities", "#bulk-fuel-facilities"
-      - if @community.show_sales_revenue_customers?
-        %li= nav_link "Sales, Revenue & Customers", "#sales-revenue-customers"
-      // Prices Section
-      - if @community.show_prices_section?
-        %li= nav_link "Prices", "#prices", parent_section: true
-      - if @community.show_fuel_prices?
-        %li= nav_link "Fuel Prices", "#fuel-prices"
       // Background Section
       - if @community.show_background_section?
         %li= nav_link "Background", "#background", parent_section: true
@@ -41,3 +21,24 @@
         %li= nav_link "Population", "#population"
       - if @community.show_income? 
         %li= nav_link "Income", "#income"
+      // Electricity Section
+      - if @community.show_electricity_section?
+        %li= nav_link "Electricity", "#electricity", parent_section: true
+      - if @community.show_utilities?
+        %li= nav_link "Utilities", "#utilities"
+      - if @community.show_production?
+        %li= nav_link "Production", "#production"
+      - if @community.show_capacity?
+        %li= nav_link "Capacity", "#capacity"
+      - if @community.show_bulk_fuel_facilities?
+        %li= nav_link "Bulk Fuel Facilities", "#bulk-fuel-facilities"
+      - if @community.show_rates?
+        %li= nav_link "Rates", "#rates"
+      - if @community.show_sales?
+        %li= nav_link "Sales", "#sales"
+      // Prices Section
+      - if @community.show_prices_section?
+        %li= nav_link "Prices", "#prices", parent_section: true
+      - if @community.show_fuel_prices?
+        %li= nav_link "Fuel Prices", "#fuel-prices"
+
