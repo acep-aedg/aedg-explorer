@@ -21,11 +21,6 @@ class MetadataControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should download metadatum' do
-    get download_metadatum_url(@metadatum)
-    assert_response :success
-  end
-
   test 'should download metadatum/dataset archive via active storage' do
     dataset = @metadatum.dataset
     attach_virtual_zip(dataset)
