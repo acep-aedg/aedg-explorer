@@ -1,11 +1,12 @@
-/ Plain 3–6 column responsive grid
-.row.row-cols-3.row-cols-md-4.row-cols-lg-6.text-center.justify-content-center
+.row.row-cols-4.row-cols-md-6.row-cols-lg-8.g-3.text-center.justify-content-center
   - communities.each do |c|
-    .col.border-bottom
+    .col
       = link_to c.name, community_path(c),
-                class: "link-underline link-offset-3-hover link-underline-opacity-0 link-underline-opacity-75-hover d-block py-2",
-                data: { turbo_frame: '_top' }
+        class: "btn btn-light border w-100 py-1 d-flex align-items-center justify-content-center shadow-sm text-wrap",
+        data: { turbo_frame: '_top' }
 
-/ Empty state
+-# Empty state
 - if communities.blank?
-  %p.text-secondary.text-center.mt-4 No communities found.
+  .text-center.mt-5
+    %i.bi.bi-search.display-4.text-muted.mb-3
+    %p.lead.text-secondary No communities found matching your search.

@@ -1,9 +1,39 @@
-- content_for :title, 'Communities'
-.container-fluid.p-2
-  .bg-body-light.text-center
-    %h1.pb-2 Communities
-    = render 'simple_search'
-/ --- COMMUNITY LIST ---
-= turbo_frame_tag 'communities' do
-  = render 'results_pagination', letters: @active_letters
-  = render 'results_list', communities: @communities
+- content_for :title, 'Communities Explorer'
+
+.container-xl.mt-4
+  .row.justify-content-center.mb-5
+    .col
+      -# Hero Section with ID for background image styling
+      #community-data-hero.position-relative.text-center.rounded-4.p-0.p-md-3.p-lg-5
+        .container-fluid
+          .row.justify-content-center
+            .col-12.col-md-11.col-lg-10.bg-white.bg-opacity-75.p-4.rounded-4.shadow
+              %h1.fw-bold.m-3
+                -# Using a people icon for "Communities" context
+                %i.bi.bi-people-fill.me-2
+                Explore Communities
+
+              -# Added a lead paragraph to match the visual style
+              %p.lead.fs-5.w-75.mx-auto.mb-4
+                Browse and search through communities across Alaska.
+
+              .d-flex.flex-column.flex-sm-row.justify-content-center.align-items-center.gap-3.mb-4
+                = link_to "Datasets", search_metadata_path, class: "btn btn-lg btn-aedg-primary"
+                = link_to "Advanced Explorer", search_advanced_path, class: "btn btn-lg btn-aedg-secondary"
+
+
+              .row.justify-content-center
+                .col.col-lg-10
+                  -# Your original search partial
+                  = render 'simple_search'
+
+      -# Photo Credit
+      .text-end.text-small.text-muted.mt-2
+        Photo Credit: Gwen Holdmann
+
+-# Main Content / Results Section
+.row.justify-content-center.g-5.mb-5.mx-0
+  .col-11.col-lg-8.mt-0
+    = turbo_frame_tag 'communities' do
+      = render 'results_pagination', letters: @active_letters
+      = render 'results_list', communities: @communities

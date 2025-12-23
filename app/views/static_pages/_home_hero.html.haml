@@ -4,6 +4,17 @@
   %h2.mb-5.fw-bold Energy Data for Alaska Communities
   = render 'communities/simple_search'
 
+  / Quick links
+  .mt-2.quick-links
+    = link_to 'Advanced Search', search_advanced_path,
+      class: 'text-success fw-bold text-decoration-none small link-hover'
+    %span.mx-1 &bull;
+    = link_to 'About page', about_path,
+      class: 'text-primary fw-bold text-decoration-none small link-hover'
+    %span.mx-1 &bull;
+    = link_to 'User Guide', user_guide_path,
+      class: 'text-info fw-bold text-decoration-none small link-hover'
+
   .row.justify-content-center.g-4.mt-2
     .col-md-4.d-flex
       = link_to user_guide_path, class: "p-4 bg-white shadow rounded h-100 w-100 text-decoration-none text-dark hover-shadow" do
