@@ -44,7 +44,7 @@ module ImportHelpers
   def self.download_data(remote_path, local_path)
     repo_url = ENV.fetch('GH_DATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
 
-    # --- 1. Determine Source (PR vs Tag) ---
+    # --- 1. Determine Source (PR, Branch, Tag) ---
     if ENV['PR'].present?
       pr_number = ENV['PR']
       puts "⚠️  PR detected! Preparing to fetch Pull Request ##{pr_number}..."
@@ -52,6 +52,14 @@ module ImportHelpers
       fetch_cmd    = "git fetch origin pull/#{pr_number}/head:pr-#{pr_number}"
       checkout_cmd = "git checkout pr-#{pr_number}"
       source_name  = "PR ##{pr_number}"
+
+    elsif ENV['BRANCH'].present?
+      branch = ENV['BRANCH']
+      puts "⚠️  Branch detected! Preparing to fetch Branch '#{branch}'..."
+
+      fetch_cmd    = "git fetch origin #{branch}"
+      checkout_cmd = "git checkout -B #{branch} origin/#{branch}"
+      source_name  = "Branch '#{branch}'"
     else
       tag = Import::Versioning::DATA_POND_TAG
       # Quick check to ensure tag exists
