@@ -20,7 +20,7 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.dataTable.destroy();
+    this.dataTable?.destroy();
   }
 
   loadData(element) {
