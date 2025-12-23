@@ -39,7 +39,7 @@ class Communities::ChartsController < ApplicationController
   end
 
   def set_sales
-    @sales = @community.reporting_entity&.sales&.order(year: :asc) || []
+    @sales = @community.sales.order(year: :asc) || []
   end
 
   def set_year

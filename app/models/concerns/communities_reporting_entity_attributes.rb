@@ -16,7 +16,7 @@ module CommunitiesReportingEntityAttributes
     def assign_aedg_attributes(params)
       assign_attributes(
         community_fips_code: params[:community_fips_code],
-        reporting_entity_id: params[:reporting_entity_id]
+        reporting_entity: ReportingEntity.from_aedg_id(params[:reporting_entity_id]).first
       )
     end
   end
