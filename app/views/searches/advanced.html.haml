@@ -39,21 +39,19 @@
         - if has_filters
           .d-flex.flex-wrap.gap-2.mb-4
             - if params[:q].present?
-              %span.badge.bg-primary-subtle.text-primary.border
-                %i.bi.bi-search.me-1
+              %span.badge.bg-secondary.text-light.border
                 = params[:q]
             - selected_grids.each do |g|
-              %span.badge.bg-light.text-body.border
-                %i.bi.bi-grid-3x3-gap.me-1
+              %span.badge.bg-secondary.text-light.border
                 = g.name
             - selected_boros.each do |b|
               %span.badge.bg-secondary.text-light= b.name
             - selected_corps.each do |c|
-              %span.badge.bg-success.text-light= c.name
+              %span.badge.bg-secondary.text-light= c.name
             - selected_sen.each do |d|
-              %span.badge.bg-info-subtle.text-dark.border= "Senate District #{d.district}"
+              %span.badge.bg-secondary.text-light.border= "Senate District - #{d.district}"
             - selected_hou.each do |d|
-              %span.badge.bg-primary-subtle.text-primary.border= "House District #{d}"
+              %span.badge.bg-secondary.text-light.border= "House District - #{d.name || d } #{d.district}"
 
         / --- Results List ---
         - if @pagy.count > 0

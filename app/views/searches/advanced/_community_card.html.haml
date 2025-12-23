@@ -9,8 +9,7 @@
     .d-flex.flex-wrap.gap-1
       - if community.respond_to?(:grids)
         - community.grids.active.each do |g|
-          = link_to grid_path(g), class: "badge border border-primary text-dark bg-white text-decoration-none" do
-            %i.bi.bi-grid-3x3-gap.me-1
+          = link_to grid_path(g), class: "badge bg-secondary me-1 mb-1 text-decoration-none" do
             = g.name
 
       - if (b = community.borough).present?
@@ -24,15 +23,12 @@
       - if community.respond_to?(:senate_districts)
         - community.senate_districts.each do |d|
           %span.badge.bg-secondary.me-1.mb-1.text-capitalize
-            %i.bi.bi-bank.me-1
-            = "Senate District #{d.district || d}"
+            = "Senate District - #{d.district || d}"
 
       - if community.respond_to?(:house_districts)
         - community.house_districts.each do |d|
           %span.badge.bg-secondary.me-1.mb-1.text-capitalize
-            %i.bi.bi-house.me-1
-            - label = d.respond_to?(:name) && d.name.present? ? d.name : "House District #{d.district || d}"
-            = label
+            = "House District - #{d.name || d } #{d.district}"
 
   .border-top.px-3.py-2.d-flex.justify-content-end.align-items-center
     = link_to community_path(community), class: "btn btn-aedg-primary d-flex align-items-center" do

@@ -19,8 +19,8 @@
     = render 'searches/advanced/facet_list', title: 'Grids',              items: @all_grids, param_key: :grid_ids,                     id_prefix: 'grid', top_n: 6, value_of: ->(g){ g.id }, label_of: ->(g){ g.name }
     = render 'searches/advanced/facet_list', title: 'Boroughs',           items: @all_boros, param_key: :borough_fips_codes,           id_prefix: 'bor',  top_n: 6, value_of: ->(b){ b.fips_code }, label_of: ->(b){ b.name }
     = render 'searches/advanced/facet_list', title: 'Native Corporations',items: @all_corps, param_key: :regional_corporation_fips_codes, id_prefix: 'corp', top_n: 6, value_of: ->(c){ c.fips_code }, label_of: ->(c){ c.name }
-    = render 'searches/advanced/facet_list', title: 'Senate Districts',   items: @all_senate, param_key: :senate_district_ids,         id_prefix: 'sen',  top_n: 6, value_of: ->(d){ d.id }, label_of: ->(d){ d }
-    = render 'searches/advanced/facet_list', title: 'House Districts',    items: @all_house, param_key: :house_district_ids,           id_prefix: 'hou',  top_n: 6, value_of: ->(d){ d.id }, label_of: ->(d){ d }
+    = render 'searches/advanced/facet_list', title: 'Senate Districts',   items: @all_senate, param_key: :senate_district_ids,         id_prefix: 'sen',  top_n: 6, value_of: ->(d){ d.id }, label_of: ->(d){ d.district }
+    = render 'searches/advanced/facet_list', title: 'House Districts', items: @all_house.sort_by { |d| d.name.to_s }, param_key: :house_district_ids, id_prefix: 'hou', top_n: 6, value_of: ->(d){ d.id }, label_of: ->(d){ "#{d.name} #{d.district}" }
 
   / Apply and Reset (bottom)
   .d-flex.justify-content-end.gap-2.mt-4
