@@ -4,6 +4,8 @@ class Sale < ApplicationRecord
   has_many :communities, through: :reporting_entity
   validates :year, presence: true
   validates :reporting_entity_id, presence: true
+  
+  scope :latest, -> { where(year: select(:year).order(year: :desc).limit(1)) }
 
   def any_customer_type_data?
     [
