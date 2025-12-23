@@ -33,7 +33,7 @@
 
 -# Main Content / Results Section
 .row.justify-content-center.g-5.mb-5.mx-0
-  .col-11.col-lg-8.mt-0
+  .col-xl-8.mt-0
     = turbo_frame_tag 'communities' do
       = render 'results_pagination', letters: @active_letters
       = render 'results_list', communities: @communities

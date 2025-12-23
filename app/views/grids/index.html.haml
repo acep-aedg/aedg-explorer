@@ -1,26 +1,41 @@
 - content_for :title, "Grid Summaries"
 
-.container-xl
+.container-xl.mt-4
   .row.justify-content-center.mb-5
     .col
-      .container-fluid
-        .row.justify-content-center
-          .col-12.col-md-11.col-lg-10.bg-opacity-75.p-4.rounded-4.bg-body-secondary
-            %h1.fw-bold.m-3
-              %i.bi.bi-grid-fill.me-2
-              Grid Summaries
+      #grids-hero.position-relative.text-center.rounded-4.p-0.p-md-3.p-lg-5
+        .container-fluid
+          .row.justify-content-center
+            .col-12.col-md-11.col-lg-10.bg-white.bg-opacity-75.p-4.rounded-4.shadow
+              %h1.fw-bold.m-3
+                %i.bi.bi-grid-fill.me-2
+                Grid Summaries
 
-            %p.lead.fs-5.mx-3
-              Explore grid-level insights, from communities served to energy metrics.
+              %p.lead.fs-5.w-75.mx-auto.mb-4
+                Explore grid-level insights, from communities served to energy metrics.
 
-            / --- GRID LINKS IN 3 COLUMNS ---
-            - cols = @grids.in_groups(3, false)
-            .bg-body-tertiary.rounded-4.p-4
-              .bg-white.rounded-3.p-4
-                .row.g-4
-                  - cols.each do |group|
-                    .col-12.col-md-4
-                      %ul.list-group.list-group-flush.small
-                        - group.each do |grid|
-                          %li.list-group-item
-                            = link_to grid.name, grid_path(grid), class: "text-decoration-none stretched-link"
+              -# --- BUTTONS SECTION ---
+              .d-flex.flex-column.flex-sm-row.justify-content-center.align-items-center.gap-3.mb-4
+                = link_to "#{Community.count} Communities", communities_path, class: "btn btn-lg btn-aedg-primary"
+                = link_to "Datasets", search_metadata_path, class: "btn btn-lg btn-aedg-secondary"
+
+      -# Photo Credit
+      .text-end.text-small.text-muted.mt-2
+        Photo Credit: Gwen Holdmann
+
+-# Main Content / Results Section
+.row.justify-content-center.g-5.mb-5.mx-0
+  .col-xl-8.mt-0
+    = turbo_frame_tag 'grids' do
+      .row.row-cols-4.row-cols-md-6.row-cols-lg-8.g-3.text-center.justify-content-center
+        - @grids.each do |grid|
+          .col
+            = link_to grid.name, grid_path(grid),
+              class: "btn btn-light border w-100 py-1 d-flex align-items-center justify-content-center shadow-sm text-wrap",
+              data: { turbo_frame: '_top' }
+
+      -# Empty State
+      - if @grids.blank?
+        .text-center.mt-5
+          %i.bi.bi-search.display-4.text-muted.mb-3
+          %p.lead.text-secondary No grids found matching your search.

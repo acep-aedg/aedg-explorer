@@ -278,6 +278,11 @@
   background-image: linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)), url('landscape_pc-gwen-holdmann.jpg');
   }
 
+ #grids-hero {
+  @extend .hero-section;
+  background-image: linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)), url('landscape_pc-gwen-holdmann.jpg');
+}
+
 #quick-nav .nav-link:hover {
   background-color: $gray-200; 
   color: darken($primary, 25%);
