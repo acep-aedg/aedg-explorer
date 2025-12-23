@@ -42,19 +42,11 @@ class MonthlyGeneration < ApplicationRecord
     }
   end
 
-  def self.series_by_year(owner, year: nil)
-    scope = for_owner(owner)
-    scope = scope.where(year: year) if year
+  def self.data_by_year(owner, year)
+    grouped = for_owner_and_year(owner, year).group(:month).sum(:net_generation_mwh)
 
-    grouped = scope.group(:year, :month).sum(:net_generation_mwh)
-    years   = grouped.keys.map(&:first).uniq.sort
-
-    years.map do |y|
-      monthly = (1..12).each_with_object({}) do |m, h|
-        h[Date::ABBR_MONTHNAMES[m]] = grouped.fetch([y, m], 0)
-      end
-
-      { name: y.to_s, data: monthly }
+    (1..12).each_with_object({}) do |m, h|
+      h[Date::ABBR_MONTHNAMES[m]] = grouped.fetch(m, 0)
     end
   end
 end

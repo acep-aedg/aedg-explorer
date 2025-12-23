@@ -2,7 +2,7 @@ class Communities::ChartsController < ApplicationController
   before_action :set_community
   before_action :set_latest_sale, only: %i[customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales]
   before_action :set_sales, only: %i[energy_sold energy_sold_stacked]
-  before_action :set_year, only: %i[production_yearly capacity_yearly]
+  before_action :set_year, only: %i[production_yearly capacity_yearly production_monthly]
   before_action :set_population_distribution, only: %i[age_distribution gender_distribution]
 
   def production_monthly; end

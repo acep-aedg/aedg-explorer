@@ -33,3 +33,6 @@ application.register("summary-frame", SummaryFrameController)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
+
+import WidgetFilterController from "./widget_filter_controller"
+application.register("widget-filter", WidgetFilterController)
