@@ -14,19 +14,21 @@ export default class extends Controller {
     const param = this.paramNameValue
 
     // 1. Update Frames
-    this.frameTargets.forEach(frame => {
-      this._updateFrameUrl(frame, value, param)
-    })
+    if (this.frameTargets.length > 0) {
+      this.frameTargets.forEach(frame => {
+        this._updateFrameUrl(frame, value, param)
+      })
+    }
 
     // 2. Update Chart
-    this._updateChart(value, param)
+    if (this.chartIdValue && this.chartUrlValue) {
+      this._updateChart(value, param)
+    }
   }
 
   // --- Helpers ---
 
   _updateChart(value, param) {
-    if (!this.chartIdValue || !this.chartUrlValue) return
-
     const chart = Chartkick.charts[this.chartIdValue]
     
     if (chart) {
