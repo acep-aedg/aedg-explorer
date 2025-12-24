@@ -1,6 +1,6 @@
+- base_title = "#{@community.name.titleize} Energy Profile"
 - years          = MonthlyGeneration.available_years_for(@community)
 - selected_year  = params[:year].presence&.to_i || years.first
-- chart_title = "#{@community.name.titleize} Energy Profile (#{selected_year})"
 - chart_id = "monthly-prod-chart"
 
 / Wrapper: Now clearly a "Widget"
@@ -10,7 +10,8 @@
     widget_filter: {
       chart_id_value: chart_id,
       chart_url_value: production_monthly_community_charts_path(@community),
-      param_name_value: "year"
+      param_name_value: "year",
+      base_title_value: base_title
     }
   }
 }
@@ -25,15 +26,15 @@
         - years.each do |y|
           %option{ value: y, selected: y == selected_year }= y
 
-  / Summary: Targeted by the controller
-  %turbo-frame#monthly_generation_summary{ data: { widget_filter_target: 'summary' }, src: monthly_generation_community_summary_path(@community, year: selected_year)}
+  / Summary Frame: Targeted by the controller
+  %turbo-frame#monthly_generation_summary{ data: { widget_filter_target: 'frame' }, src: monthly_generation_community_summary_path(@community, year: selected_year)}
     Loading summary ...
 
   / Chart: Updated by ID
   = column_chart production_monthly_community_charts_path(@community, year: selected_year),
     id: chart_id,
-    title: chart_title,
+    title: "#{base_title} (#{selected_year})",
     xtitle: 'Month',
-    download: {filename: chart_title.parameterize},
+    download: {filename: base_title.parameterize},
     colors: [color(:blue), color(:orange)],
     library: { scales: { y: { type: "linear", position: "left", title: { display: true, text: "Net Generation (MWh)" } }, y1: { type: "linear", position: "right", title: { display: true, text: "Heating Degree Days" } } } }
