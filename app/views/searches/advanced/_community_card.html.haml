@@ -30,10 +30,51 @@
           %span.badge.bg-secondary.me-1.mb-1.text-capitalize
             = "House District - #{d.name || d } #{d.district}"
 
-  .border-top.px-3.py-2.d-flex.justify-content-end.align-items-center
-    = link_to community_path(community), class: "btn btn-aedg-primary d-flex align-items-center" do
-      View
-      %i.bi.bi-arrow-right.ms-2
+  .border-top.px-3.py-2.d-flex.justify-content-between.align-items-center.gap-3
+    -# Population Section
+    .d-flex.align-items-center
+      - if community.respond_to?(:population) && community.population
+        -# Gold Icon
+        %i.bi.bi-people-fill.me-2
+        -# Bold number + "Residents" label
+        %span.fw-bold.small= number_with_delimiter(community.population.total_population)
+        %span.text-muted.small.ms-1 Residents
+
+    -# PCE STATUS SECTION
+    .d-flex.align-items-center.me-2
+      - if community.try(:pce_active?)
+        %i.bi.bi-lightning-charge-fill.text-warning.me-2{ title: "PCE is currently active" }
+        %span.text-dark PCE Active
+      - elsif community.try(:pce_eligible?)
+        %i.bi.bi-lightning-charge.text-warning.me-2{ title: "Eligible for PCE" }
+        %span.text-dark PCE Eligible
+      - else
+        %i.bi.bi-lightning-slash.me-2.text-muted{ style: "opacity: 0.5;", title: "Not eligible for PCE" }
+        %span.text-muted No PCE
+
+    -# Transportation Section
+    .d-flex.align-items-center
+      - if community.respond_to?(:transportation) && (t = community.transportation)
+        - if t.road_connection?
+          %i.bi.bi-car-front-fill.me-2{ title: "Connected to Road System" }
+          %span.small.text-dark.me-2 On Road System
+        - if t.state_ferry?
+          %i.bi.bi-water.me-2.text-primary{ title: "Alaska Marine Highway System" }
+          %span.small.text-dark.me-2 Ferry Access
+        - if t.airport?
+          %i.bi.bi-airplane-fill.me-2{ title: "Has Airport" }
+          %span.small.text-muted.me-2 Has Airport
+        - if t.harbor_dock?
+          %i.bi.bi-water.me-2.text-primary{ title: "Harbor or Dock available" }
+          %span.small.text-muted.me-2 Harbor or Dock Available
+        - else
+          %span.small.text-muted --
+
+    -# View Button
+    .ms-auto
+      = link_to community_path(community), class: "btn btn-aedg-primary d-flex align-items-center btn-sm" do
+        View
+        %i.bi.bi-arrow-right.ms-2
 
   - if community.respond_to?(:datasets) && community.datasets.any?
     %h6.mt-3.mb-2 Datasets for this community
