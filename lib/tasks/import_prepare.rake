@@ -29,6 +29,8 @@ namespace :import do
 
     Rake::Task['db:truncate_all'].reenable
     Rake::Task['db:truncate_all'].invoke
+    Rake::Task['storage:clear'].reenable
+    Rake::Task['storage:clear'].invoke
 
     ENV['DISABLE_DATABASE_ENVIRONMENT_CHECK'] = previous
 

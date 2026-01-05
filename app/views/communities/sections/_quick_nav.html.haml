@@ -8,6 +8,19 @@
     }
       Jump To
     %ul.dropdown-menu{ "aria-labelledby" => "quickNavDropdown" }
+      // Background Section
+      - if @community.show_background_section?
+        %li= nav_link "Background", "#background", parent_section: true
+      - if @community.show_geography?
+        %li= nav_link "Geography", "#geography"
+      - if @community.show_transportation?
+        %li= nav_link "Transportation", "#transportation"
+      - if @community.show_legislative_districts?
+        %li= nav_link "Legislative Districts", "#legislative-districts"
+      - if @community.show_population?
+        %li= nav_link "Population", "#population"
+      - if @community.show_income? 
+        %li= nav_link "Income", "#income"
       // Electricity Section
       - if @community.show_electricity_section?
         %li= nav_link "Electricity", "#electricity", parent_section: true
@@ -28,16 +41,4 @@
         %li= nav_link "Prices", "#prices", parent_section: true
       - if @community.show_fuel_prices?
         %li= nav_link "Fuel Prices", "#fuel-prices"
-      // Background Section
-      - if @community.show_background_section?
-        %li= nav_link "Background", "#background", parent_section: true
-      - if @community.show_geography?
-        %li= nav_link "Geography", "#geography"
-      - if @community.show_transportation?
-        %li= nav_link "Transportation", "#transportation"
-      - if @community.show_legislative_districts?
-        %li= nav_link "Legislative Districts", "#legislative-districts"
-      - if @community.show_population?
-        %li= nav_link "Population", "#population"
-      - if @community.show_income? 
-        %li= nav_link "Income", "#income"
+
