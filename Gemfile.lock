@@ -393,6 +393,7 @@ DEPENDENCIES
   rgeo-geojson
   rubocop
   rubocop-rails
+  rubyzip (>= 2.3.0)
   selenium-webdriver
   simplecov
   sprockets-rails

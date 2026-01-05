@@ -1,7 +1,7 @@
 module Import
   module Versioning
     # Desired DataPond version tag for this release
-    DATA_POND_TAG = 'v1.0.1'.freeze
+    DATA_POND_TAG = 'v1.0.2'.freeze
 
     # Cleans a version string by removing leading "v"/"V" and whitespace.
     # Returns nil for nil or blank input.
