@@ -1,12 +1,12 @@
-.row.row-cols-4.row-cols-md-6.row-cols-lg-8.g-3.text-center.justify-content-center
-  - communities.each do |c|
-    .col
-      = link_to c.name, community_path(c),
-        class: "btn btn-light border w-100 py-1 d-flex align-items-center justify-content-center shadow-sm text-wrap",
-        data: { turbo_frame: '_top' }
-
--# Empty state
-- if communities.blank?
+- if communities.empty?
   .text-center.mt-5
     %i.bi.bi-search.display-4.text-muted.mb-3
     %p.lead.text-secondary No communities found matching your search.
+
+- else
+  .row.g-2
+    - communities.each do |c|
+      .col-6.col-sm-4.col-lg-2
+        = link_to c.name, community_path(c),
+          class: "btn btn-light border w-100 h-100 shadow-sm d-flex align-items-center justify-content-center text-wrap",
+          data: { turbo_frame: '_top' }
