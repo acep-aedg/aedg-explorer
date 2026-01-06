@@ -1,7 +1,7 @@
 require 'open-uri'
 class DatasetsController < ApplicationController
   before_action :set_metadatum
-  before_action :set_dataset, only: %i[download show]
+  before_action :set_dataset, only: %i[show]
 
   # GET /datasets/1 or /datasets/1.json
   def show
@@ -9,23 +9,6 @@ class DatasetsController < ApplicationController
       # This is a workaround for rendering the data out to the datatables
       format.json { render json: data_as_json }
       format.any  { head :not_acceptable }
-    end
-  end
-
-  # This is just a workaround to be able to fetch the data from another site and return it
-  # for the datatables to load
-  # This isn't great because it loads all of the data in memory for rails, instead we should
-  # have some ingest process that can precreate these files and serve them up to the user
-  def download
-    respond_to do |format|
-      format.geojson do
-        send_data URI.open(@dataset.path).read, filename: @dataset.filename, type: 'application/geo+json',
-                                                disposition: 'attachment'
-      end
-      format.csv do
-        send_data URI.open(@dataset.path).read, filename: @dataset.filename, type: 'text/csv',
-                                                disposition: 'attachment'
-      end
     end
   end
 
