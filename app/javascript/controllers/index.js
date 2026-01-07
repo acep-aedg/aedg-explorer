@@ -28,5 +28,5 @@ application.register("maps", MapsController)
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
 
-import WidgetFilterController from "./widget_filter_controller"
-application.register("widget-filter", WidgetFilterController)
+import WidgetFilterController from "./widget_update_controller"
+application.register("widget-update", WidgetFilterController)

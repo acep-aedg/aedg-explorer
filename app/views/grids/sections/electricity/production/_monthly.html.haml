@@ -6,8 +6,8 @@
 / Wrapper: Now clearly a "Widget"
 #monthly_generation-chart-wrapper{
   data: {
-    controller: "widget-filter",
-    widget_filter: {
+    controller: "widget-update",
+    widget_update: {
       chart_id_value: chart_id,
       chart_url_value: production_monthly_grid_charts_path(@grid),
       param_name_value: "year",
@@ -21,13 +21,13 @@
 
       / Select: triggers the 'update' action
       %select#monthly-generation-year.form-select.form-select-sm.w-auto{
-        data: { action: "change->widget-filter#update" }
+        data: { action: "change->widget-update#update" }
       }
         - years.each do |y|
           %option{ value: y, selected: y == selected_year }= y
 
   / Summary Frame: Targeted by the controller
-  %turbo-frame#monthly_generation_summary{ data: { widget_filter_target: 'frame' }, src: monthly_generation_grid_summary_path(@grid, year: selected_year)}
+  %turbo-frame#monthly_generation_summary{ data: { widget_update_target: 'frame' }, src: monthly_generation_grid_summary_path(@grid, year: selected_year)}
     Loading summary ...
 
   = column_chart production_monthly_grid_charts_path(@grid, year: selected_year), 

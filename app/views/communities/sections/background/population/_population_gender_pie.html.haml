@@ -7,8 +7,8 @@
 -# Wrapper: Holds the Controller and Configuration
 %div{
   data: {
-    controller: "widget-filter",
-    widget_filter: {
+    controller: "widget-update",
+    widget_update: {
       chart_id_value: chart_id,
       chart_url_value: gender_distribution_community_charts_path(@community),
       base_title_value: base_title,
@@ -30,7 +30,7 @@
 
     %select#gender-period.form-select.form-select-sm.w-auto{
       disabled: disable_select,
-      data: { action: ("change->widget-filter#update" unless disable_select) }
+      data: { action: ("change->widget-update#update" unless disable_select) }
     }
       - population_periods.each do |p|
         - label = "#{p.start_year}–#{p.end_year}"
