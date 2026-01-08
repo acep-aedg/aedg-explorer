@@ -3,7 +3,7 @@
 -#   field_name:  optional  (e.g., :grid / :community) – can be nil
 -#   prompt:      optional  (defaults to "Select a <Model>")
 
-- arr = collection.to_a.sort_by { |item| item.name.to_s.downcase }.map { |item| [item.name, url_for(item)] }
+- arr = collection.map { |item| [item.name, url_for(item)] }
 - prompt  ||= "Select a #{collection.respond_to?(:klass) ? collection.klass.model_name.human(count: 1) : 'Item'}"
 - field_name   ||= collection.respond_to?(:klass) ? collection.klass.model_name.param_key.to_sym : nil
 

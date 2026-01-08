@@ -6,7 +6,7 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
     total   = r[:e_pop_of_poverty_det]&.to_f
 
     value =
-      if poverty.nil? || total.nil? || total.zero?
+      if poverty.nil? || poverty.zero? || total.nil? || total.zero?
         nil
       else
         ((poverty / total) * 100).round(2)
