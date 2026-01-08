@@ -1,7 +1,7 @@
 module Grids
   class ChartsController < ApplicationController
     before_action :set_grid
-    before_action :set_year, only: %i[production_yearly capacity_yearly]
+    before_action :set_year
 
     def production_monthly; end
     def production_yearly; end

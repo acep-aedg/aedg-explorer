@@ -6,13 +6,13 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get production_monthly' do
-    get production_monthly_community_charts_url(@community)
+    get production_monthly_community_charts_url(@community, year: @community.monthly_generations.first.year)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
     generation = @community.monthly_generations.first
     month_abbr = Date::ABBR_MONTHNAMES[generation.month]
-    assert_equal generation.year.to_s, body.first['name']
+    assert_equal 'Net Generation (MWh)', body.first['name']
     assert_equal generation.net_generation_mwh.to_s, body.first['data'][month_abbr]
   end
 

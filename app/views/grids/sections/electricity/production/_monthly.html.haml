@@ -1,0 +1,40 @@
+- base_title = "#{@grid.name.titleize} Energy Profile"
+- years          = MonthlyGeneration.available_years_for(@grid)
+- selected_year  = params[:year].presence&.to_i || years.first
+- chart_id = "monthly-prod-chart"
+
+/ Wrapper: Now clearly a "Widget"
+#monthly_generation-chart-wrapper{
+  data: {
+    controller: "widget-update",
+    widget_update: {
+      chart_id_value: chart_id,
+      chart_url_value: production_monthly_grid_charts_path(@grid),
+      param_name_value: "year",
+      base_title_value: base_title
+    }
+  }
+}
+  - if years.size > 1
+    .d-flex.align-items-center.gap-2.mb-2
+      %label.form-label.me-2.mb-0{ for: "monthly-generation-year" } Year:
+
+      / Select: triggers the 'update' action
+      %select#monthly-generation-year.form-select.form-select-sm.w-auto{
+        data: { action: "change->widget-update#update" }
+      }
+        - years.each do |y|
+          %option{ value: y, selected: y == selected_year }= y
+
+  / Summary Frame: Targeted by the controller
+  %turbo-frame#monthly_generation_summary{ data: { widget_update_target: 'frame' }, src: monthly_generation_grid_summary_path(@grid, year: selected_year)}
+    Loading summary ...
+
+  = column_chart production_monthly_grid_charts_path(@grid, year: selected_year), 
+    id: chart_id,
+    title: "#{base_title} (#{selected_year})", 
+    xtitle: 'Month', 
+    ytitle: 'Net Generation (MWh)', 
+    suffix: ' MWh',
+    colors: [color(:blue)],
+    download: {filename: base_title.parameterize}
