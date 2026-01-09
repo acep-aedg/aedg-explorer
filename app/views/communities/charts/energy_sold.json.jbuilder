@@ -6,10 +6,10 @@ json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
     has_breakdown = @sales.any? do |sale|
       sale.residential_sales.to_f.positive? || sale.commercial_sales.to_f.positive?
     end
-  
+
     json.array! @sales do |sale|
       json.name sale.reporting_entity.name
-  
+
       if has_breakdown
         json.data [
           ['Residential', sale.residential_sales.to_f],
