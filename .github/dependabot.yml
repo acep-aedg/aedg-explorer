@@ -1,0 +1,28 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Optional: Raise pull requests for version updates with a limit
+    open-pull-requests-limit: 5
+    # Optional: Group updates for a less noisy PR list
+    groups:
+      rails:
+        patterns:
+          - "rails"
+          - "actionmailer"
+          - "actionpack"
+          - "actionview"
+          - "activejob"
+          - "activemodel"
+          - "activerecord"
+          - "activestorage"
+          - "activesupport"
+          - "railtie"
+          - "sprockets-rails"
