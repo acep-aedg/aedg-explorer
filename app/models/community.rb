@@ -40,6 +40,8 @@ class Community < ApplicationRecord
   validates :borough_fips_code, presence: true
   validates :location, presence: true, allowed_geometry_types: ['Point']
 
+  default_scope { order(name: :asc) }
+
   # default_scope { order(name: :asc) }
   scope :with_location, ->        { where.not(location: nil) }
   scope :in_boroughs,   ->(codes) { joins(:borough).where(boroughs: { fips_code: codes }) }

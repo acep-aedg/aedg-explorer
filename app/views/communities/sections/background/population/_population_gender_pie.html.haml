@@ -2,42 +2,46 @@
 - selected_period    ||= population_periods.first
 - chart_id           = "gender-distribution-chart"
 - selected_end_year  = selected_period&.end_year
+- base_title         = "Gender Distribution"
 
-%p This chart shows estimated gender distribution with margin of error included in the labels.
-
-.d-flex.align-items-center.gap-2.mb-3
-  %i.bi.bi-info-circle-fill.text-aedg-navy{
-    data: { controller: 'tooltip', bs_toggle: 'tooltip' },
-    title: "American Community Survey (ACS)"
+-# Wrapper: Holds the Controller and Configuration
+%div{
+  data: {
+    controller: "widget-update",
+    widget_update: {
+      chart_id_value: chart_id,
+      chart_url_value: gender_distribution_community_charts_path(@community),
+      base_title_value: base_title,
+      param_name_value: "end_year"
+    }
   }
-  
-  %label.form-label.me-2.mb-0.fw-bold{ for: "gender-period" } ACS 5-year period:
+}
+  %p This chart shows estimated gender distribution with margin of error included in the labels.
 
-  - disable_select = population_periods.size <= 1
+  .d-flex.align-items-center.gap-2.mb-3
+    %i.bi.bi-info-circle-fill.text-aedg-navy{
+      data: { controller: 'tooltip', bs_toggle: 'tooltip' },
+      title: "American Community Survey (ACS)"
+    }
+    
+    %label.form-label.me-2.mb-0.fw-bold{ for: "gender-period" } ACS 5-year period:
 
-  %select#gender-period.form-select.form-select-sm.w-auto{
-    disabled: disable_select,
-    data: (disable_select ? {} : {
-      controller: "chart-update",
-      action:     "change->chart-update#change",
-      chart_update: {
-        chart_id_value: chart_id,
-        base_url_value: gender_distribution_community_charts_path(@community),
-        param_name_value: "end_year"
-      }
-    })
-  }
-    - population_periods.each do |p|
-      - label = "#{p.start_year}–#{p.end_year}"
-      %option{
-        value: p.end_year,
-        selected: p.end_year == selected_end_year
-      }= label
+    - disable_select = population_periods.size <= 1
 
+    %select#gender-period.form-select.form-select-sm.w-auto{
+      disabled: disable_select,
+      data: { action: ("change->widget-update#update" unless disable_select) }
+    }
+      - population_periods.each do |p|
+        - label = "#{p.start_year}–#{p.end_year}"
+        %option{
+          value: p.end_year,
+          selected: p.end_year == selected_end_year
+        }= label
 
-= pie_chart gender_distribution_community_charts_path(@community, end_year: selected_period.end_year),
-  id:       chart_id,
-  title:    "Gender Distribution",
-  donut:    true,
-  colors:   [color(:soft_blue), color(:soft_orange)],
-  download: { filename: "#{@community.name}gender_distribution_#{selected_period.end_year}" }
+  = pie_chart gender_distribution_community_charts_path(@community, end_year: selected_period.end_year),
+    id:       chart_id,
+    title:    base_title,
+    donut:    true,
+    colors:   [color(:soft_blue), color(:soft_orange)],
+    download: { filename: "#{@community.name}gender_distribution_#{selected_period.end_year}" }

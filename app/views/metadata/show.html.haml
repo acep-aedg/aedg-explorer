@@ -17,24 +17,14 @@
 
     .col-12.col-lg-3.offset-lg-1.mt-3.mt-lg-0
       .d-flex.flex-row.flex-lg-column.align-items-md-end.gap-2
-        = link_to download_metadatum_path(@metadatum), target: '_blank', class: 'btn btn-aedg-secondary px-4 py-2 w-100' do
-          %i.bi.bi-file-earmark-arrow-down.me-1
-          Download Metadata
-
-        = link_to download_metadatum_dataset_path(@metadatum, @dataset, format: @dataset.format.downcase), target: '_blank', class: 'btn btn-aedg-primary px-4 py-2 w-100' do
-          - if @dataset.format.downcase == 'csv'
-            %i.bi.bi-filetype-csv.me-1
-          - elsif @dataset.format.downcase == 'geojson'
-            %i.bi.bi-filetype-geojson.me-1
-          - else
-            %i.bi.bi-file-earmark-arrow-down.me-1
-          Download Data
-  / Navigation Tabs
+        - if @metadatum.dataset&.archive&.attached?
+          = link_to rails_blob_path(@metadatum.dataset.archive, disposition: "attachment"), class: 'btn btn-aedg-primary px-4 py-2 w-100' do
+            %i.bi.bi-file-zip.me-1
+            Download
+    / Navigation Tabs
   .nav.nav-tabs
     %li.nav-item
       = link_to 'About', '#about', class: 'nav-link active', data: { bs_toggle: 'tab' }
-    %li.nav-item
-      = link_to 'Metadata', '#metadata', class: 'nav-link', data: { bs_toggle: 'tab' }
     %li.nav-item
       = link_to 'Fields', '#fields', class: 'nav-link', data: { bs_toggle: 'tab' }
     %li.nav-item
@@ -49,10 +39,6 @@
   .tab-content.my-3
     #about.tab-pane.fade.show.active.p-3
       = render 'datasets/tabs/about', dataset: @dataset
-
-    #metadata.tab-pane.fade.p-3
-      = render 'metadata/tabs/metadata', metadatum: @metadatum
-    
     #fields.tab-pane.fade.p-3
       = render 'datasets/tabs/fields', dataset: @dataset
     #data.tab-pane.fade.p-3
@@ -65,4 +51,3 @@
     / Not yet implemented
     /#related.tab-pane.fade.p-3
     /  = render 'metadata/tabs/related', metadatum: @metadatum
-

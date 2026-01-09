@@ -98,3 +98,19 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+          
+  notify_status:
+      runs-on: ubuntu-latest
+      needs: [scan_ruby, scan_js, lint, test]
+      if: always() && github.ref == 'refs/heads/main'
+      steps:
+        - uses: mattermost/action-mattermost-notify@master
+          with:
+            MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
+            MATTERMOST_ICON_URL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+            TEXT: |
+              ${{ contains(toJSON(needs), 'failure') && ':x: **CI Failed on Push to Main**' || ':white_check_mark: **CI Passed on Push to Main**' }}
+              **Repo:** ${{ github.repository }}
+              **Author:** ${{ github.actor }}
+              
+              [View Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})

@@ -15,6 +15,7 @@ class Grid < ApplicationRecord
   has_many :yearly_generations, through: :plants
   has_many :monthly_generations, through: :plants
 
+  default_scope { order(name: :asc) }
   scope :active, -> { joins(:community_grids).merge(CommunityGrid.active).distinct }
 
   def slug_candidates
