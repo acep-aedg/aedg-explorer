@@ -6,6 +6,11 @@ class Sale < ApplicationRecord
   validates :reporting_entity_id, presence: true
   
   scope :latest, -> { where(year: select(:year).order(year: :desc).limit(1)) }
+  scope :for_owner, ->(owner) { owner ? joins(:reporting_entity).merge(owner.reporting_entities) : all }
+
+  def self.available_years_for(owner)
+    for_owner(owner).where.not(year: nil).distinct.order(year: :desc).pluck(:year)
+  end
 
   def any_customer_type_data?
     [

@@ -1,10 +1,10 @@
-- base_title = "#{@community.name.titleize} Energy Profile"
+- base_title = "#{@community.name.titleize} - Energy Generation Profile"
 - years          = MonthlyGeneration.available_years_for(@community)
-- selected_year  = params[:year].presence&.to_i || years.first
+- selected_year  = years.first
 - chart_id = "monthly-prod-chart"
 
 / Wrapper: Now clearly a "Widget"
-#monthly_generation-chart-wrapper{
+#monthly-generation-chart-wrapper{
   data: {
     controller: "widget-update",
     widget_update: {

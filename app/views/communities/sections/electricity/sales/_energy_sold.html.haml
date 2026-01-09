@@ -1,11 +1,39 @@
-- chart_title = 'Energy Sold'
+- years   = Sale.available_years_for(@community)
+- selected_year = years.first
+- chart_id      = "energy-sold-chart"
+- base_title = "#{@community.name.titleize} - Energy Sold by Customer Type"
 
-= column_chart energy_sold_community_charts_path(@community),
+#energy-sold-chart-wrapper{
+  data: {
+    controller: "widget-update",
+    widget_update: {
+      chart_id_value: chart_id,
+      chart_url_value: energy_sold_community_charts_path(@community),
+      param_name_value: "year",
+      base_title_value: base_title
+    }
+  }
+}
+  - if years.size > 1
+    .d-flex.align-items-center.gap-2.mb-2
+      %label.form-label.me-2.mb-0{ for: "energy-sold-year" } Year:
+
+      / Select: triggers the 'update' action
+      %select#energy-sold-year.form-select.form-select-sm.w-auto{
+        data: { action: "change->widget-update#update" }
+      }
+        - years.each do |y|
+          %option{ value: y, selected: y == selected_year }= y
+
+= column_chart energy_sold_community_charts_path(@community, year: selected_year),
+  id: chart_id,
+  stacked: true,
   suffix: ' MWh',
-  xtitle: 'Year',
+  xtitle: 'Customer Type',
   ytitle: 'Energy Sold',
-  title: chart_title,
-  download: { filename: chart_title.parameterize }
+  title: "#{base_title} (#{selected_year})",
+  colors: [color(:blue), color(:orange), color(:dark_red), color(:dark_green)],
+  download: { filename: base_title.parameterize }
 
 -#  TODO: Finish implementing stacked energy sold chart when multiple years are available
 -# = column_chart energy_sold_stacked_community_charts_path(@community),
@@ -13,4 +41,4 @@
 -#   xtitle: 'Year',
 -#   ytitle: 'Energy Sold',
 -#   suffix: ' MWh',
--#   download: { filename: chart_title.parameterize }
+-#   download: { filename: base_title.parameterize }
