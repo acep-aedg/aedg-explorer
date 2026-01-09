@@ -7,10 +7,14 @@
   data: {
     controller: "widget-update",
     widget_update: {
-      chart_id_value: chart_id,
-      chart_url_value: energy_sold_community_charts_path(@community),
-      param_name_value: "year",
-      base_title_value: base_title
+      charts_value: [
+        { 
+          id: chart_id, 
+          url: energy_sold_community_charts_path(@community),
+          baseTitle: base_title,
+          param: "year"
+        }
+      ].to_json
     }
   }
 }

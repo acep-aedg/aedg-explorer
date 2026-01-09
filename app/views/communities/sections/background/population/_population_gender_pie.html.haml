@@ -9,10 +9,14 @@
   data: {
     controller: "widget-update",
     widget_update: {
-      chart_id_value: chart_id,
-      chart_url_value: gender_distribution_community_charts_path(@community),
-      base_title_value: base_title,
-      param_name_value: "end_year"
+      charts_value: [
+        { 
+          id: chart_id, 
+          url: gender_distribution_community_charts_path(@community),
+          baseTitle: base_title,
+          param: "end_year"
+        }
+      ].to_json
     }
   }
 }
@@ -41,7 +45,7 @@
 
   = pie_chart gender_distribution_community_charts_path(@community, end_year: selected_period.end_year),
     id:       chart_id,
-    title:    base_title,
+    title:    "#{base_title} (#{selected_end_year})",
     donut:    true,
     colors:   [color(:soft_blue), color(:soft_orange)],
     download: { filename: "#{@community.name}gender_distribution_#{selected_period.end_year}" }

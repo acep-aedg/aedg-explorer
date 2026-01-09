@@ -3,46 +3,59 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["frame"]
   static values = {
-    paramName: { type: String, default: "year" },
-    chartId: String,   // ID of the chart DOM element
-    chartUrl: String,   // Base URL for the chart JSON data
-    baseTitle: String // Chart Title excluding year
+    /* Configuration for the charts to be updated.
+      Expects an Array of Objects. Example:
+      [
+        {
+          id: "production-monthly",                                    // REQUIRED: DOM ID of the chart
+          url: "production_monthly_community_charts_path(@community)", // REQUIRED: Data URL
+          param: "year",                                               // REQUIRED: The query param to update
+          baseTitle: "Monthly Production"                              // OPTIONAL: Title prefix
+        }
+      ]
+    */
+    charts: { type: Array, default: [] }
   }
 
   update(event) {
     const value = event.target.value
-    const param = this.paramNameValue
 
     // 1. Update Frames
+    // Checks for data-param="year" on the frame, or defaults to "year"
     if (this.frameTargets.length > 0) {
       this.frameTargets.forEach(frame => {
+        const param = frame.dataset.param || 'year'
         this._updateFrameUrl(frame, value, param)
       })
     }
 
-    // 2. Update Chart
-    if (this.chartIdValue && this.chartUrlValue) {
-      this._updateChart(value, param)
-    }
+    // 2. Update Charts
+    this.chartsValue.forEach(config => {
+      const paramName = config.param
+      this._updateChart(config, value, paramName)
+    })
   }
 
   // --- Helpers ---
 
-  _updateChart(value, param) {
-    const chart = Chartkick.charts[this.chartIdValue]
+  _updateChart(config, value, param) {
+    const { id, url, baseTitle } = config 
+    
+    // Safety check for Chartkick
+    const chartLib = window.Chartkick || Chartkick
+    if (!chartLib) return
+
+    const chart = chartLib.charts[id]
     
     if (chart) {
-      // 1. Update Title in Options (if base title exists)
-      if (this.baseTitleValue) {
-        // If value exists: "Title (2023)", else: "Title"
-        chart.options.title = value 
-          ? `${this.baseTitleValue} (${value})` 
-          : this.baseTitleValue
+      if (baseTitle) {
+        chart.options.title = value ? `${baseTitle} (${value})` : baseTitle
       }
 
-      // 2. Fetch New Data
-      const newUrl = this._buildUrl(this.chartUrlValue, value, param)
-      chart.updateData(newUrl)
+      if (url) {
+        const newUrl = this._buildUrl(url, value, param)
+        chart.updateData(newUrl)
+      }
     }
   }
 

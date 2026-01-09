@@ -11,10 +11,10 @@
         = link_to "#energy_sold", class: "nav-link active", data: { bs_toggle: "tab" } do
           %i.bi.bi-bar-chart-fill.me-1
           Energy Sold
-      -# %li.nav-item
-      -#   = link_to "#customer-breakdown", class: "nav-link", data: { bs_toggle: "tab" } do
-      -#     %i.bi.bi-pie-chart.me-1
-      -#     Customer Breakdown
+      %li.nav-item
+        = link_to "#customer-breakdown", class: "nav-link", data: { bs_toggle: "tab" } do
+          %i.bi.bi-pie-chart.me-1
+          Customer Breakdown
       %li.nav-item
         = link_to "#sales-data", class: "nav-link", data: { bs_toggle: "tab" } do
           %i.bi.bi-table.me-1
@@ -24,7 +24,7 @@
 .tab-content
   #energy_sold.tab-pane.fade.show.active
     = render "communities/sections/electricity/sales/energy_sold"
-  -# #customer-breakdown.tab-pane.fade
-  -#   = render "communities/sections/electricity/sales/customer_breakdown"
+  #customer-breakdown.tab-pane.fade
+    = render "communities/sections/electricity/sales/customer_breakdown"
   #sales-data.tab-pane.fade
     = render "communities/sections/electricity/sales/data"

@@ -1,24 +1,69 @@
+- base_title = "#{@community.name.titleize} - Energy Generation Profile"
+- years          = Sale.available_years_for(@community)
+- selected_year  = years.first
+
+- revenue_chart_id = "revenue-chart"
+- revenue_base_title = "Revenue"
+- customer_chart_id = "customer-chart"
+- customer_base_title = "Customers"
+- sales_chart_id = "sales-chart"
+- sales_base_title = "Sales"
+
+#customer-breakdown-charts-wrapper{
+  data: {
+    controller: "widget-update",
+    widget_update: {
+      charts_value: [
+        { 
+          id: revenue_chart_id, 
+          url: customer_breakdown_revenue_community_charts_path(@community),
+          baseTitle: revenue_base_title,
+          param: "year"
+        },
+        { 
+          id: sales_chart_id, 
+          url: customer_breakdown_sales_community_charts_path(@community), 
+          baseTitle: customer_base_title, 
+        },
+        {
+          id: customer_chart_id,
+          url: customer_breakdown_customers_community_charts_path(@community), 
+          baseTitle: customer_base_title
+        }
+      ].to_json,
+    }
+  }
+}
+  - if years.size > 1
+    .d-flex.align-items-center.gap-2.mb-2
+      %label.form-label.me-2.mb-0{ for: "sales-breakdown-year" } Year:
+
+      / Select: triggers the 'update' action
+      %select#sales-breakdown-year.form-select.form-select-sm.w-auto{
+        data: { action: "change->widget-update#update" }
+      }
+        - years.each do |y|
+          %option{ value: y, selected: y == selected_year }= y
+
 - charts = []
 
-- if latest_sale && (latest_sale.residential_revenue || latest_sale.commercial_revenue)
-  - charts << { title: "Revenue (#{latest_year})",
-                path:  customer_breakdown_revenue_community_charts_path(@community),
-                opts:  { prefix: '$ ', donut: true, colors: [color(:soft_blue), color(:soft_orange)] } }
+- charts << { id: revenue_chart_id, title: "#{revenue_base_title} (#{selected_year})",
+              path:  customer_breakdown_revenue_community_charts_path(@community, year: selected_year),
+              opts:  { prefix: '$ ', donut: true, colors: [color(:soft_blue), color(:soft_orange)] } }
 
-- if latest_sale && (latest_sale.residential_sales || latest_sale.commercial_sales)
-  - charts << { title: "Sales (#{latest_year})",
-              path:  customer_breakdown_sales_community_charts_path(@community),
+- charts << { id: sales_chart_id, title: "#{sales_base_title} (#{selected_year})",
+              path:  customer_breakdown_sales_community_charts_path(@community, year: selected_year),
               opts:  { suffix: ' MWh', donut: true,  colors: [color(:soft_blue), color(:soft_orange)] } }
 
-- if latest_sale && (latest_sale.residential_customers || latest_sale.commercial_customers)
-  - charts << { title: "Customers (#{latest_year})",
-                path:  customer_breakdown_customers_community_charts_path(@community),
-                opts:  { donut: true, colors: [color(:soft_blue), color(:soft_orange)] } }
+- charts << { id: customer_chart_id, title: "#{customer_base_title} (#{selected_year})",
+              path:  customer_breakdown_customers_community_charts_path(@community, year: selected_year),
+              opts:  { donut: true, colors: [color(:soft_blue), color(:soft_orange)] } }
 
 .row.g-3.row-cols-1.row-cols-md-2.row-cols-lg-3.justify-content-center
   - charts.each do |c|
     .col
       = pie_chart c[:path],
                   **c[:opts],
+                  id: c[:id],
                   title: c[:title],
                   download: { filename: c[:title].parameterize }
