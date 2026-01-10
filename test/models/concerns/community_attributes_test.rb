@@ -18,7 +18,7 @@ class CommunityAttributesTest < ActiveSupport::TestCase
       name: 'Test Community',
       regional_corporation_fips_code: @regional_corporation.fips_code,
       borough_fips_code: @borough.fips_code,
-      grid_id: VALID_AEDG_ID,
+      grid_id: VALID_AEDG_ID
     }
   end
 
