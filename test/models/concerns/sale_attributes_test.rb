@@ -5,7 +5,7 @@ class SaleAttributesTest < ActiveSupport::TestCase
 
   def setup
     @grid = grids(:one)
-    @reporting_entity = ReportingEntity.create!(aedg_id: VALID_AEDG_ID, name: 'Test Utility', year: 2021, grid: @grid)
+    @reporting_entity = ReportingEntity.create!(aedg_id: VALID_AEDG_ID, name: 'Test Utility', most_recent_year: 2021, grid: @grid)
     @valid_props = {
       reporting_entity_id: VALID_AEDG_ID,
       year: 2021,
