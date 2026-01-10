@@ -10,7 +10,7 @@ module ReportingEntityAttributes
 
       ReportingEntity.create!(
         aedg_id: properties[:id],
-        year: properties[:year],
+        most_recent_year: properties[:most_recent_year],
         name: properties[:name],
         grid: Grid.from_aedg_id(properties[:grid_id]).first
       )

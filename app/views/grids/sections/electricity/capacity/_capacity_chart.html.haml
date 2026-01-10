@@ -26,7 +26,7 @@
           %option{ value: y, selected: y == selected_year }= y
 
   / Summary
-  %turbo-frame#capacity_summary{ data: { widget_update_target: 'frame' }, src: capacity_grid_summary_path(@grid, year: selected_year)}
+  %turbo-frame#capacity_summary{ data: { widget_update_target: 'frame', param: 'year' }, src: capacity_grid_summary_path(@grid, year: selected_year)}
     Loading summary ...
   / Chart
   #capacity-chart.responsive-fuel-chart{ data: { "fuel-chart-target": "chart" } }

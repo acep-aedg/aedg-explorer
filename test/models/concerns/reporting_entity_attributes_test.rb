@@ -8,7 +8,7 @@ class ReportingEntityAttributesTest < ActiveSupport::TestCase
     @valid_props = {
       id: VALID_AEDG_ID,
       name: 'Test Utility',
-      year: 2021,
+      most_recent_year: 2021,
       grid_id: VALID_AEDG_ID
     }
   end
@@ -20,7 +20,7 @@ class ReportingEntityAttributesTest < ActiveSupport::TestCase
 
     assert_equal @valid_props[:name], reporting_entity.name
     assert_equal @valid_props[:id], reporting_entity.aedg_id
-    assert_equal @valid_props[:year], reporting_entity.year
+    assert_equal @valid_props[:most_recent_year], reporting_entity.most_recent_year
     assert_equal @grid, reporting_entity.grid
   end
 

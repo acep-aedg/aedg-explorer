@@ -12,15 +12,13 @@ class CommunityAttributesTest < ActiveSupport::TestCase
     @borough = boroughs(:one)
 
     @grid = Grid.create!(aedg_id: VALID_AEDG_ID, name: 'Test Grid')
-    @reporting_entity = ReportingEntity.create!(aedg_id: VALID_AEDG_ID, name: 'Test RE', year: 2021, grid: @grid)
 
     @valid_props = {
       fips_code: VALID_FIPS_CODE,
       name: 'Test Community',
       regional_corporation_fips_code: @regional_corporation.fips_code,
       borough_fips_code: @borough.fips_code,
-      grid_id: VALID_AEDG_ID,
-      reporting_entity_id: VALID_AEDG_ID
+      grid_id: VALID_AEDG_ID
     }
   end
 
@@ -35,8 +33,6 @@ class CommunityAttributesTest < ActiveSupport::TestCase
     assert_equal @regional_corporation, community.regional_corporation
     assert_equal @borough, community.borough
     assert_equal @point_geom.as_text, community.location.as_text
-    assert_equal @reporting_entity, community.reporting_entity
-    assert_equal @grid, community.reporting_entity.grid
   end
 
   test 'import_aedg_with_geom! raises RecordInvalid with missing fips code' do

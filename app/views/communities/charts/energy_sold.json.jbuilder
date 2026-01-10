@@ -1,36 +1,25 @@
 # app/views/communities/charts/energy_sold.json.jbuilder
-json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
+json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
   if @sales.empty?
     json.array! []
   else
-    res_data = {}
-    com_data = {}
-    tot_data = {}
-
-    @sales.each do |sale|
-      year = sale.year.to_s
-      res_data[year] = sale.residential_sales
-      com_data[year] = sale.commercial_sales
-      tot_data[year] = sale.total_sales
+    has_breakdown = @sales.any? do |sale|
+      sale.residential_sales.to_f.positive? || sale.commercial_sales.to_f.positive?
     end
 
-    has_breakdown = res_data.values.compact.sum.positive? || com_data.values.compact.sum.positive?
+    json.array! @sales do |sale|
+      json.name sale.reporting_entity.name
 
-    series_list = if has_breakdown
-                    [
-                      { name: 'Residential', data: res_data, color: color(:blue) },
-                      { name: 'Commercial',  data: com_data, color: color(:orange) }
-                    ]
-                  else
-                    [
-                      { name: 'Total',       data: tot_data, color: color(:blue_grey) }
-                    ]
-                  end
-
-    json.array! series_list do |series|
-      json.name series[:name]
-      json.data series[:data]
-      json.color series[:color]
+      if has_breakdown
+        json.data [
+          ['Residential', sale.residential_sales.to_f],
+          ['Commercial',  sale.commercial_sales.to_f]
+        ]
+      else
+        json.data [
+          ['Total', sale.total_sales.to_f]
+        ]
+      end
     end
   end
 end

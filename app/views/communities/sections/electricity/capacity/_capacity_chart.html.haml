@@ -1,7 +1,7 @@
 - base_title     = "#{@community.name.titleize} - Capacity by Fuel Type"
 - chart_options  = Chartkick.options.deep_merge({ suffix: ' MW', donut: true, library: { plugins: { legend: { title: { display: true, text: 'Fuel Type' } } } } })
 - years          = Capacity.available_years_for(@community)
-- selected_year  = params[:year].presence&.to_i || years.first
+- selected_year  = years.first
 
 / Wrapper for Stimulus controller
 #capacity-chart-wrapper{
@@ -25,7 +25,7 @@
           %option{ value: y, selected: y == selected_year }= y
 
   / Summary
-  %turbo-frame#capacity_summary{ data: { widget_update_target: 'frame' }, src: capacity_community_summary_path(@community, year: selected_year)}
+  %turbo-frame#capacity_summary{ data: { widget_update_target: 'frame', param: 'year' }, src: capacity_community_summary_path(@community, year: selected_year)}
     Loading summary ...
   / Chart
   #capacity-chart.responsive-fuel-chart{ data: { "fuel-chart-target": "chart" } }

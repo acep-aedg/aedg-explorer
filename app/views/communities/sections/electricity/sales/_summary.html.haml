@@ -1,31 +1,35 @@
+- summary = Sale.latest_summary_for(@community.sales)
 
-- if latest_sale
+- if summary
   .row.g-3.mb-3
+    -# CARD 1: ENERGY
     .col-12.col-md-6.col-lg-4
       .d-flex.h-100
         .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
           %i.bi.bi-lightning-fill.text-warning.fs-3.me-3
           .flex-grow-1
-            .text-muted Total Energy Sold (#{latest_year})
-            %p.fw-semibold.mb-0= number_with_delimiter(latest_sale.total_sales) + " MWh"
+            .text-muted Total Energy Sold (#{summary.year})
+            %p.fw-semibold.mb-0= number_with_delimiter(summary.total_sales) + " MWh"
     
+    -# CARD 2: REVENUE
     .col-12.col-md-6.col-lg-4
       .d-flex.h-100
         .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
           %i.bi.bi-cash-coin.text-success.fs-3.me-3
           .flex-grow-1
-            .text-muted Total Revenue (#{latest_year})
-            %p.fw-semibold.mb-0= number_to_currency(latest_sale.total_revenue, precision: 0)
+            .text-muted Total Revenue (#{summary.year})
+            %p.fw-semibold.mb-0= number_to_currency(summary.total_revenue, precision: 0)
     
+    -# CARD 3: CUSTOMERS
     .col-12.col-md-6.col-lg-4
       .d-flex.h-100
         .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
           %i.bi.bi-people-fill.text-info.fs-3.me-3
           .flex-grow-1
-            .text-muted Total Customers (#{latest_year})
-            %p.fw-semibold.mb-0= number_with_delimiter(latest_sale.total_customers)
+            .text-muted Total Customers (#{summary.year})
+            %p.fw-semibold.mb-0= number_with_delimiter(summary.total_customers)
 
-.mb-3
-  %small.text-muted.mb-3
-    %strong Reported by:
-    = @community.reporting_entity.name
+  .mb-3
+    %small.text-muted.mb-3
+      %strong Reported by:
+      = summary.reporter_names

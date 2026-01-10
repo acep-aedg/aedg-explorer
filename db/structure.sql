@@ -355,7 +355,6 @@ CREATE TABLE public.communities (
     puma_code character varying,
     subsistence boolean,
     economic_region character varying,
-    reporting_entity_id bigint,
     village_corporation character varying,
     tsvector_data tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, COALESCE((name)::text, ''::text))) STORED
 );
@@ -444,6 +443,38 @@ CREATE SEQUENCE public.communities_legislative_districts_id_seq
 --
 
 ALTER SEQUENCE public.communities_legislative_districts_id_seq OWNED BY public.communities_legislative_districts.id;
+
+
+--
+-- Name: communities_reporting_entities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.communities_reporting_entities (
+    id bigint NOT NULL,
+    community_fips_code character varying NOT NULL,
+    reporting_entity_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: communities_reporting_entities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.communities_reporting_entities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: communities_reporting_entities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.communities_reporting_entities_id_seq OWNED BY public.communities_reporting_entities.id;
 
 
 --
@@ -1240,7 +1271,7 @@ ALTER SEQUENCE public.regional_corporations_id_seq OWNED BY public.regional_corp
 CREATE TABLE public.reporting_entities (
     id bigint NOT NULL,
     name character varying,
-    year integer,
+    most_recent_year integer,
     grid_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
@@ -1667,6 +1698,13 @@ ALTER TABLE ONLY public.communities_legislative_districts ALTER COLUMN id SET DE
 
 
 --
+-- Name: communities_reporting_entities id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_reporting_entities ALTER COLUMN id SET DEFAULT nextval('public.communities_reporting_entities_id_seq'::regclass);
+
+
+--
 -- Name: communities_school_districts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1969,6 +2007,14 @@ ALTER TABLE ONLY public.communities_legislative_districts
 
 ALTER TABLE ONLY public.communities
     ADD CONSTRAINT communities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: communities_reporting_entities communities_reporting_entities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_reporting_entities
+    ADD CONSTRAINT communities_reporting_entities_pkey PRIMARY KEY (id);
 
 
 --
@@ -2319,17 +2365,17 @@ CREATE INDEX index_communities_on_location ON public.communities USING gist (loc
 
 
 --
--- Name: index_communities_on_reporting_entity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_communities_on_reporting_entity_id ON public.communities USING btree (reporting_entity_id);
-
-
---
 -- Name: index_communities_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_communities_on_slug ON public.communities USING btree (slug);
+
+
+--
+-- Name: index_communities_reporting_entities_on_reporting_entity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_communities_reporting_entities_on_reporting_entity_id ON public.communities_reporting_entities USING btree (reporting_entity_id);
 
 
 --
@@ -2635,6 +2681,14 @@ ALTER TABLE ONLY public.communities
 
 
 --
+-- Name: communities_reporting_entities fk_rails_03bd4313db; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_reporting_entities
+    ADD CONSTRAINT fk_rails_03bd4313db FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
+
+
+--
 -- Name: bulk_fuel_facilities fk_rails_12e76c4358; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2696,6 +2750,14 @@ ALTER TABLE ONLY public.electric_rates
 
 ALTER TABLE ONLY public.plants
     ADD CONSTRAINT fk_rails_49b512915b FOREIGN KEY (grid_id) REFERENCES public.grids(id);
+
+
+--
+-- Name: communities_reporting_entities fk_rails_4f377e09ec; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_reporting_entities
+    ADD CONSTRAINT fk_rails_4f377e09ec FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
 
 
 --
@@ -2827,20 +2889,15 @@ ALTER TABLE ONLY public.communities
 
 
 --
--- Name: communities fk_rails_ed1b8d8a4f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.communities
-    ADD CONSTRAINT fk_rails_ed1b8d8a4f FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
-
-
---
 -- PostgreSQL database dump complete
 --
 
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251217205218'),
+('20251217202750'),
+('20251217202552'),
 ('20251205180925'),
 ('20251120205210'),
 ('20251120200227'),
