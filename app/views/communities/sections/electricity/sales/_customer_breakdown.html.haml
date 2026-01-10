@@ -18,17 +18,19 @@
           id: revenue_chart_id, 
           url: customer_breakdown_revenue_community_charts_path(@community),
           baseTitle: revenue_base_title,
-          param: "year"
+          param: 'year'
         },
         { 
           id: sales_chart_id, 
           url: customer_breakdown_sales_community_charts_path(@community), 
-          baseTitle: customer_base_title, 
+          baseTitle: sales_base_title,
+          param: 'year'
         },
         {
           id: customer_chart_id,
           url: customer_breakdown_customers_community_charts_path(@community), 
-          baseTitle: customer_base_title
+          baseTitle: customer_base_title,
+          param: 'year'
         }
       ].to_json,
     }
@@ -45,25 +47,26 @@
         - years.each do |y|
           %option{ value: y, selected: y == selected_year }= y
 
-- charts = []
-
-- charts << { id: revenue_chart_id, title: "#{revenue_base_title} (#{selected_year})",
-              path:  customer_breakdown_revenue_community_charts_path(@community, year: selected_year),
-              opts:  { prefix: '$ ', donut: true, colors: [color(:soft_blue), color(:soft_orange)] } }
-
-- charts << { id: sales_chart_id, title: "#{sales_base_title} (#{selected_year})",
-              path:  customer_breakdown_sales_community_charts_path(@community, year: selected_year),
-              opts:  { suffix: ' MWh', donut: true,  colors: [color(:soft_blue), color(:soft_orange)] } }
-
-- charts << { id: customer_chart_id, title: "#{customer_base_title} (#{selected_year})",
-              path:  customer_breakdown_customers_community_charts_path(@community, year: selected_year),
-              opts:  { donut: true, colors: [color(:soft_blue), color(:soft_orange)] } }
-
 .row.g-3.row-cols-1.row-cols-md-2.row-cols-lg-3.justify-content-center
-  - charts.each do |c|
-    .col
-      = pie_chart c[:path],
-                  **c[:opts],
-                  id: c[:id],
-                  title: c[:title],
-                  download: { filename: c[:title].parameterize }
+  .col
+    = pie_chart customer_breakdown_revenue_community_charts_path(@community, year: selected_year),
+      id: revenue_chart_id,
+      title: "#{revenue_base_title} (#{selected_year})",
+      prefix: '$ ',
+      donut: true,
+      colors: [color(:soft_blue), color(:soft_orange)]
+
+  .col
+    = pie_chart customer_breakdown_sales_community_charts_path(@community, year: selected_year),
+      id: sales_chart_id,
+      title: "#{sales_base_title} (#{selected_year})",
+      suffix: ' MWh',
+      donut: true,
+      colors: [color(:soft_blue), color(:soft_orange)]
+
+  .col
+    = pie_chart customer_breakdown_customers_community_charts_path(@community, year: selected_year),
+      id: customer_chart_id,
+      title: "#{customer_base_title} (#{selected_year})",
+      donut: true,
+      colors: [color(:soft_blue), color(:soft_orange)]

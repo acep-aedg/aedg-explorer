@@ -40,11 +40,11 @@ class Sale < ApplicationRecord
 
     # 3. Return the calculated summary
     OpenStruct.new(
-      year:            latest_year,
-      total_sales:     records.sum(:total_sales),
-      total_revenue:   records.sum(:total_revenue),
+      year: latest_year,
+      total_sales: records.sum(:total_sales),
+      total_revenue: records.sum(:total_revenue),
       total_customers: records.sum(:total_customers),
-      reporter_names:  records.map { |s| s.reporting_entity.name }.uniq.to_sentence
+      reporter_names: records.map { |s| s.reporting_entity.name }.uniq.to_sentence
     )
   end
 end

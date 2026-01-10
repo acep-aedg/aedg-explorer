@@ -9,7 +9,7 @@ export default class extends Controller {
         {
           id: "production-monthly",                                    // REQUIRED: DOM ID of the chart
           url: "production_monthly_community_charts_path(@community)", // REQUIRED: Data URL
-          param: "year",                                               // REQUIRED: The query param to update
+          param: "year",                                               // REQUIRED: The query param to update, defaults to 'year'
           baseTitle: "Monthly Production"                              // OPTIONAL: Title prefix
         }
       ]
@@ -31,7 +31,7 @@ export default class extends Controller {
 
     // 2. Update Charts
     this.chartsValue.forEach(config => {
-      const paramName = config.param
+      const paramName = config.param || 'year'
       this._updateChart(config, value, paramName)
     })
   }
