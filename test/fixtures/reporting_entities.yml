@@ -14,3 +14,8 @@ two:
   most_recent_year: 2021
   grid: two
 
+three:
+  name: 'Test Utility Three'
+  most_recent_year: 2020
+  grid: one
+

@@ -4,7 +4,7 @@ class Sale < ApplicationRecord
   has_many :communities, through: :reporting_entity
   validates :year, presence: true
   validates :reporting_entity_id, presence: true
-  
+
   scope :latest, -> { where(year: select(:year).order(year: :desc).limit(1)) }
   scope :for_owner, ->(owner) { owner ? joins(:reporting_entity).merge(owner.reporting_entities) : all }
 

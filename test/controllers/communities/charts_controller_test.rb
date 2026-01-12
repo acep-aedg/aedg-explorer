@@ -67,17 +67,39 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [[pop_employment.measurement_year, pop_employment.unemployment_insurance_claimants]], body[1]['data']
   end
 
-  test 'should get energy_sold' do
-    target_sale = @community.sales.order(year: :desc).first
-    get energy_sold_community_charts_url(@community, year: target_sale.year)
+  test 'should get energy_sold (one reporting_entity)' do
+    expected_res = 400
+    expected_com = 300
+    expected_entity_name = 'Test Utility One'
+
+    get energy_sold_community_charts_url(@community, year: @sales_year)
     assert_response :success
+
     body = JSON.parse(@response.body)
 
-    residential_data = entity_item['data'].find { |row| row[0] == 'Residential' }
-    commercial_data  = entity_item['data'].find { |row| row[0] == 'Commercial' }
+    entity_series = body.find { |series| series['name'] == expected_entity_name }
+    series_data = entity_series['data']
+    res_row = series_data.find { |row| row[0] == 'Residential' }
+    com_row = series_data.find { |row| row[0] == 'Commercial' }
 
-    assert_equal target_sale.residential_sales.to_f, residential_data[1]
-    assert_equal target_sale.commercial_sales.to_f,  commercial_data[1]
+    assert_not_nil entity_series, "Could not find series for #{expected_entity_name}"
+    assert_equal expected_res, res_row[1]
+    assert_equal expected_com, com_row[1]
+  end
+
+  test 'should get energy_sold with multiple reporting entities' do
+    expected_entity1 = 'Test Utility One'
+    expected_entity2 = 'Test Utility Three'
+
+    get energy_sold_community_charts_url(@community, year: @sales_year)
+    assert_response :success
+
+    body = JSON.parse(@response.body)
+    entity_names = body.map { |series| series['name'] }
+
+    assert_equal 2, entity_names.size, "Expected 2 entities, but got #{entity_names.size}"
+    assert_includes entity_names, expected_entity1
+    assert_includes entity_names, expected_entity2
   end
 
   test 'should get customer_breakdown_revenue' do
@@ -90,8 +112,9 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     body = JSON.parse(@response.body)
 
     residential_row = body.find { |row| row[0] == 'Residential' }
-    assert_equal expected_res, residential_row[1]
     commercial_row = body.find { |row| row[0] == 'Commercial' }
+
+    assert_equal expected_res, residential_row[1]
     assert_equal expected_com, commercial_row[1]
   end
 
@@ -105,8 +128,9 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     body = JSON.parse(@response.body)
 
     residential_row = body.find { |row| row[0] == 'Residential' }
-    assert_equal expected_res, residential_row[1]
     commercial_row = body.find { |row| row[0] == 'Commercial' }
+
+    assert_equal expected_res, residential_row[1]
     assert_equal expected_com, commercial_row[1]
   end
 
@@ -120,8 +144,9 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     body = JSON.parse(@response.body)
 
     residential_row = body.find { |row| row[0] == 'Residential' }
-    assert_equal expected_res, residential_row[1]
     commercial_row = body.find { |row| row[0] == 'Commercial' }
+
+    assert_equal expected_res, residential_row[1]
     assert_equal expected_com, commercial_row[1]
   end
 end

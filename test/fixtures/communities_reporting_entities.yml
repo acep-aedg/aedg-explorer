@@ -11,3 +11,7 @@ one:
 two:
   community_fips_code: '0000002'
   reporting_entity: two
+
+three:
+  community_fips_code: '0000001'
+  reporting_entity: three

@@ -27,7 +27,7 @@ two:
   total_customers: 1
 
 three:
-  reporting_entity: one
+  reporting_entity: three
   year: 2020
   residential_revenue: 100
   residential_sales: 100
