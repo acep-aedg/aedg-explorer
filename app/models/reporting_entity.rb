@@ -3,8 +3,8 @@ class ReportingEntity < ApplicationRecord
   include ImportFinders
   has_one :aedg_import, as: :importable, dependent: :destroy
   belongs_to :grid, touch: true
-  has_many :community_reporting_entities, dependent: :destroy
-  has_many :communities, through: :community_reporting_entities
+  has_many :communities_reporting_entities, dependent: :destroy
+  has_many :communities, through: :communities_reporting_entities
   has_many :electric_rates, dependent: :nullify
   has_many :sales, dependent: :nullify
 
