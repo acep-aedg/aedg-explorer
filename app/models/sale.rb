@@ -7,27 +7,13 @@ class Sale < ApplicationRecord
 
   scope :latest, -> { where(year: select(:year).order(year: :desc).limit(1)) }
   scope :for_owner, ->(owner) { owner ? joins(:reporting_entity).merge(owner.reporting_entities) : all }
+  scope :with_revenue_breakdown,   -> { where('residential_revenue > 0 OR commercial_revenue > 0') }
+  scope :with_sales_breakdown,     -> { where('residential_sales > 0 OR commercial_sales > 0') }
+  scope :with_customers_breakdown, -> { where('residential_customers > 0 OR commercial_customers > 0') }
+  scope :with_any_breakdown_data, -> { with_revenue_breakdown.or(with_sales_breakdown).or(with_customers_breakdown) }
 
   def self.available_years_for(owner)
     for_owner(owner).where.not(year: nil).distinct.order(year: :desc).pluck(:year)
-  end
-
-  def any_customer_type_data?
-    [
-      residential_customers,
-      commercial_customers,
-      residential_sales,
-      commercial_sales,
-      residential_revenue,
-      commercial_revenue
-    ].any?(&:present?)
-  end
-
-  def calculate_kwh_rate(revenue, sales_mwh)
-    return nil if sales_mwh.to_f.zero?
-
-    # Revenue / (Sales MWh * 1000 to get kWh)
-    revenue.to_f / (sales_mwh * 1000)
   end
 
   def self.latest_summary_for(sales_relation)

@@ -10,8 +10,4 @@ class ReportingEntity < ApplicationRecord
 
   validates :name, presence: true
   validates :grid, presence: true
-
-  def latest_sale
-    sales.order(year: :desc).first
-  end
 end

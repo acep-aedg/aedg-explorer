@@ -1,72 +1,73 @@
-- base_title = "#{@community.name.titleize} - Energy Generation Profile"
-- years          = Sale.available_years_for(@community)
-- selected_year  = years.first
-
+-# SETUP: Define Variables and Check Data Availability
+- base_title    = "#{@community.name.titleize} - Energy Generation Profile"
+- years         = Sale.available_years_for(@community)
+- selected_year = years.first
 - revenue_chart_id = "revenue-chart"
 - revenue_base_title = "Revenue"
-- customer_chart_id = "customer-chart"
-- customer_base_title = "Customers"
 - sales_chart_id = "sales-chart"
 - sales_base_title = "Sales"
+- customer_chart_id = "customer-chart"
+- customer_base_title = "Customers"
 
+-# Check availability to decide layout stability
+- show_revenue   = @community.sales.with_revenue_breakdown.exists?
+- show_sales     = @community.sales.with_sales_breakdown.exists?
+- show_customers = @community.sales.with_customers_breakdown.exists?
+
+-# CONFIG: Build the JSON for the Stimulus Controller dynamically
+- active_charts_config = []
+- if show_revenue
+  - active_charts_config << { id: revenue_chart_id,  url: customer_breakdown_revenue_community_charts_path(@community), baseTitle: revenue_base_title,   param: 'year' }
+- if show_sales
+  - active_charts_config << { id: sales_chart_id,    url: customer_breakdown_sales_community_charts_path(@community),   baseTitle: sales_base_title,     param: 'year' }
+- if show_customers
+  - active_charts_config << { id: customer_chart_id, url: customer_breakdown_customers_community_charts_path(@community), baseTitle: customer_base_title, param: 'year' }
+
+
+-# WRAPPER
 #customer-breakdown-charts-wrapper{
   data: {
     controller: "widget-update",
     widget_update: {
-      charts_value: [
-        { 
-          id: revenue_chart_id, 
-          url: customer_breakdown_revenue_community_charts_path(@community),
-          baseTitle: revenue_base_title,
-          param: 'year'
-        },
-        { 
-          id: sales_chart_id, 
-          url: customer_breakdown_sales_community_charts_path(@community), 
-          baseTitle: sales_base_title,
-          param: 'year'
-        },
-        {
-          id: customer_chart_id,
-          url: customer_breakdown_customers_community_charts_path(@community), 
-          baseTitle: customer_base_title,
-          param: 'year'
-        }
-      ].to_json,
+      charts_value: active_charts_config.to_json
     }
   }
 }
+  -# THE DROPDOWN
   - if years.size > 1
     .d-flex.align-items-center.gap-2.mb-2
       %label.form-label.me-2.mb-0{ for: "sales-breakdown-year" } Year:
 
-      / Select: triggers the 'update' action
       %select#sales-breakdown-year.form-select.form-select-sm.w-auto{
         data: { action: "change->widget-update#update" }
       }
         - years.each do |y|
           %option{ value: y, selected: y == selected_year }= y
 
-.row.g-3.row-cols-1.row-cols-md-2.row-cols-lg-3.justify-content-center
-  .col
-    = pie_chart customer_breakdown_revenue_community_charts_path(@community, year: selected_year),
-      id: revenue_chart_id,
-      title: "#{revenue_base_title} (#{selected_year})",
-      prefix: '$ ',
-      donut: true,
-      colors: [color(:soft_blue), color(:soft_orange)]
+  -# THE CHARTS
+  .row.g-3.row-cols-1.row-cols-md-2.row-cols-lg-3.justify-content-center
+    - if show_revenue
+      .col
+        = pie_chart customer_breakdown_revenue_community_charts_path(@community, year: selected_year),
+          id: revenue_chart_id,
+          title: "#{revenue_base_title} (#{selected_year})",
+          prefix: '$ ',
+          donut: true,
+          colors: [color(:soft_blue), color(:soft_orange)]
 
-  .col
-    = pie_chart customer_breakdown_sales_community_charts_path(@community, year: selected_year),
-      id: sales_chart_id,
-      title: "#{sales_base_title} (#{selected_year})",
-      suffix: ' MWh',
-      donut: true,
-      colors: [color(:soft_blue), color(:soft_orange)]
+    - if show_sales
+      .col
+        = pie_chart customer_breakdown_sales_community_charts_path(@community, year: selected_year),
+          id: sales_chart_id,
+          title: "#{sales_base_title} (#{selected_year})",
+          suffix: ' MWh',
+          donut: true,
+          colors: [color(:soft_blue), color(:soft_orange)]
 
-  .col
-    = pie_chart customer_breakdown_customers_community_charts_path(@community, year: selected_year),
-      id: customer_chart_id,
-      title: "#{customer_base_title} (#{selected_year})",
-      donut: true,
-      colors: [color(:soft_blue), color(:soft_orange)]
+    - if show_customers
+      .col
+        = pie_chart customer_breakdown_customers_community_charts_path(@community, year: selected_year),
+          id: customer_chart_id,
+          title: "#{customer_base_title} (#{selected_year})",
+          donut: true,
+          colors: [color(:soft_blue), color(:soft_orange)]
