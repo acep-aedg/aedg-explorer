@@ -7,10 +7,11 @@
 .mb-3
   .d-flex.justify-content-between.align-items-center
     .nav.nav-tabs
-      %li.nav-item
-        = link_to "#energy_sold", class: "nav-link active", data: { bs_toggle: "tab" } do
-          %i.bi.bi-bar-chart-fill.me-1
-          Energy Sold
+      - if @community.sales.with_sales.exists?  
+        %li.nav-item
+          = link_to "#energy_sold", class: "nav-link active", data: { bs_toggle: "tab" } do
+            %i.bi.bi-bar-chart-fill.me-1
+            Energy Sold
       - if @community.sales.with_any_breakdown_data.exists?
         %li.nav-item
           = link_to "#customer-breakdown", class: "nav-link", data: { bs_toggle: "tab" } do
@@ -23,8 +24,9 @@
 
 
 .tab-content
-  #energy_sold.tab-pane.fade.show.active
-    = render "communities/sections/electricity/sales/energy_sold"
+  - if @community.sales.with_sales.exists?  
+    #energy_sold.tab-pane.fade.show.active
+      = render "communities/sections/electricity/sales/energy_sold"
   - if @community.sales.with_any_breakdown_data.exists?      
     #customer-breakdown.tab-pane.fade
       = render "communities/sections/electricity/sales/customer_breakdown"

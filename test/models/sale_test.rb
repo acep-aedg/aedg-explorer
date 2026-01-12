@@ -40,6 +40,23 @@ class SaleTest < ActiveSupport::TestCase
     assert_not_includes results, none
   end
 
+  test 'scope :with_sales includes records with only total_sales' do
+    total_only = Sale.create!(default_params.merge(total_sales: 500))
+
+    assert_includes Sale.with_sales, total_only
+    assert_not_includes Sale.with_sales_breakdown, total_only
+  end
+
+  test 'scope :with_sales includes records with breakdown data' do
+    part_only = Sale.create!(default_params.merge(residential_sales: 100))
+    assert_includes Sale.with_sales, part_only
+  end
+
+  test 'scope :with_sales excludes records with no sales data' do
+    no_sales = Sale.create!(default_params.merge(total_sales: 0, residential_sales: 0, commercial_sales: 0))
+    assert_not_includes Sale.with_sales, no_sales
+  end
+
   test 'scope :with_any_breakdown_data combines all filters' do
     # 1. Has Revenue only
     s1 = Sale.create!(default_params.merge(residential_revenue: 100, residential_sales: 0, residential_customers: 0))

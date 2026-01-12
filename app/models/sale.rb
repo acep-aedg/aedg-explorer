@@ -7,9 +7,19 @@ class Sale < ApplicationRecord
 
   scope :latest, -> { where(year: select(:year).order(year: :desc).limit(1)) }
   scope :for_owner, ->(owner) { owner ? joins(:reporting_entity).merge(owner.reporting_entities) : all }
+
+  # BREAKDOWN SCOPES (For Pie Charts / Stacked Bars)
+  # These ensure we have the specific parts needed for detailed charts.
   scope :with_revenue_breakdown,   -> { where('residential_revenue > 0 OR commercial_revenue > 0') }
   scope :with_sales_breakdown,     -> { where('residential_sales > 0 OR commercial_sales > 0') }
   scope :with_customers_breakdown, -> { where('residential_customers > 0 OR commercial_customers > 0') }
+
+  # GENERAL SCOPES (For "Do we have data?" checks)
+  # These check if we have ANY data at all, including the aggregate 'total' columns.
+  scope :with_sales, -> { where('total_sales > 0 OR residential_sales > 0 OR commercial_sales > 0') }
+
+  # COMBINED SCOPES (For "Do we have data?" checks)
+  # "Do we have enough data for the Breakdown Tab?"
   scope :with_any_breakdown_data, -> { with_revenue_breakdown.or(with_sales_breakdown).or(with_customers_breakdown) }
 
   def self.available_years_for(owner)
