@@ -1,13 +1,12 @@
 -# SETUP: Define Variables and Check Data Availability
-- base_title    = "#{@community.name.titleize} - Energy Generation Profile"
 - years         = Sale.available_years_for(@community)
 - selected_year = years.first
 - revenue_chart_id = "revenue-chart"
-- revenue_base_title = "Revenue"
+- revenue_base_title = "#{@community.name.titleize} - Revenue"
 - sales_chart_id = "sales-chart"
-- sales_base_title = "Sales"
+- sales_base_title = "#{@community.name.titleize} - Sales"
 - customer_chart_id = "customer-chart"
-- customer_base_title = "Customers"
+- customer_base_title = "#{@community.name.titleize} - Customers"
 
 -# Check availability to decide layout stability
 - show_revenue   = @community.sales.with_revenue_breakdown.exists?
