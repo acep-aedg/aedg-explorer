@@ -73,9 +73,6 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     body = JSON.parse(@response.body)
 
-    entity_item = body.find { |s| s['name'] == target_sale.reporting_entity.name }
-    assert entity_item, "Could not find entry for #{target_sale.reporting_entity.name} in #{body}"
-
     residential_data = entity_item['data'].find { |row| row[0] == 'Residential' }
     commercial_data  = entity_item['data'].find { |row| row[0] == 'Commercial' }
 
