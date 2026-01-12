@@ -74,7 +74,7 @@ end
 
 gem 'dotenv-rails', '~> 3.1'
 
-gem 'bootstrap_form', '~> 5.4'
+gem 'bootstrap_form', '~> 5.5'
 
 gem 'haml-rails', '~> 2.1'
 
