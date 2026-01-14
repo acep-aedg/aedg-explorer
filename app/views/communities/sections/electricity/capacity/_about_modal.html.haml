@@ -1,0 +1,31 @@
+-# 1. The Trigger Button
+%button.btn.btn-sm.btn-aedg-secondary.ms-2{ type: "button", data: { bs_toggle: "modal", bs_target: "#capacityInfoModal" } }
+  %i.bi.bi-info-circle.me-1
+  About this Data
+
+-# 2. The Modal
+#capacityInfoModal.modal.fade{ tabindex: "-1", aria: { labelledby: "capacityInfoModalLabel" } }
+  .modal-dialog.modal-dialog-centered
+    .modal-content
+      .modal-header
+        %h5#capacityInfoModalLabel.modal-title About Capacity Data
+        %button.btn-close{ type: "button", data: { bs_dismiss: "modal" }, aria: { label: "Close" } }
+      .modal-body
+        .d-flex.mb-4
+          %i.bi.bi-geo-alt.text-primary.fs-4
+          .flex-grow-1.ms-3
+            %h6.fw-bold.mb-1 Service Area
+            %p.text-muted.mb-1
+              This section displays data from power plants within this community’s
+              = @community.show_full_service_area? ? 'local service area.' : ' service area.'
+              
+            - if @community.grid
+              = link_to grid_path(@community.grid, anchor: 'capacity'),
+                class: "small text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline gap-1",
+                data: { turbo: false } do
+                %span Explore Grid Data
+                %i.bi.bi-arrow-right
+      
+      .modal-footer
+        %button.btn.btn-secondary{ type: "button", data: { bs_dismiss: "modal" } } Close
+          
