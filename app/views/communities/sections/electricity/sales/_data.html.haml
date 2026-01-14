@@ -1,32 +1,25 @@
-%div{ data: { controller: 'datatables', datatables: { order_value: [4, 'asc'] } }}
+%div{ data: { controller: 'datatables', datatables: { order_value: [5, 'desc'] } }} 
   %table.table.table-striped.border
     %thead
       %tr
+        %th Reporting Entity
         %th Customer Type
         %th Customers 
         %th Sales (MWh)
-        %th Revenue ($)
+        %th Revenue
         %th Year
     %tbody
-      - @community.reporting_entity.sales.each do |sale|
-        - if sale.residential_customers || sale.residential_sales || sale.residential_revenue
+      - @community.sales.order(year: :desc).each do |sale|
+        - rows = []
+        - rows << { label: 'Total',       customers: sale.total_customers,       sales: sale.total_sales,       revenue: sale.total_revenue }
+        - rows << { label: 'Residential', customers: sale.residential_customers, sales: sale.residential_sales, revenue: sale.residential_revenue }
+        - rows << { label: 'Commercial',  customers: sale.commercial_customers,  sales: sale.commercial_sales,  revenue: sale.commercial_revenue }
+
+        - rows.each do |row|
           %tr
-            %td Residential
-            %td= number_with_delimiter(sale.residential_customers)
-            %td= number_with_delimiter(sale.residential_sales)
-            %td= number_to_currency(sale.residential_revenue, precision: 0)
-            %td= sale.year
-        - if sale.commercial_customers || sale.commercial_sales || sale.commercial_revenue
-          %tr
-            %td Commercial
-            %td= number_with_delimiter(sale.commercial_customers)
-            %td= number_with_delimiter(sale.commercial_sales)
-            %td= number_to_currency(sale.commercial_revenue, precision: 0)
-            %td= sale.year
-        - if sale.total_customers || sale.total_sales || sale.total_revenue
-          %tr
-            %td Total
-            %td= number_with_delimiter(sale.total_customers)
-            %td= number_with_delimiter(sale.total_sales)
-            %td= number_to_currency(sale.total_revenue, precision: 0)
+            %td= sale.reporting_entity.name
+            %td= row[:label]
+            %td= number_with_delimiter(row[:customers])|| '-'
+            %td= number_with_delimiter(row[:sales])|| '-'
+            %td= number_to_currency(row[:revenue], precision: 0)|| '-'
             %td= sale.year

@@ -1,17 +1,21 @@
-- base_title = "#{@community.name.titleize} Energy Profile"
+- base_title = "#{@community.name.titleize} - Energy Generation Profile"
 - years          = MonthlyGeneration.available_years_for(@community)
-- selected_year  = params[:year].presence&.to_i || years.first
+- selected_year  = years.first
 - chart_id = "monthly-prod-chart"
 
 / Wrapper: Now clearly a "Widget"
-#monthly_generation-chart-wrapper{
+#monthly-generation-chart-wrapper{
   data: {
     controller: "widget-update",
     widget_update: {
-      chart_id_value: chart_id,
-      chart_url_value: production_monthly_community_charts_path(@community),
-      param_name_value: "year",
-      base_title_value: base_title
+      charts_value: [
+        { 
+          id: chart_id, 
+          url: production_monthly_community_charts_path(@community),
+          baseTitle: base_title,
+          param: 'year'
+        }
+      ].to_json
     }
   }
 }
@@ -27,7 +31,7 @@
           %option{ value: y, selected: y == selected_year }= y
 
   / Summary Frame: Targeted by the controller
-  %turbo-frame#monthly_generation_summary{ data: { widget_update_target: 'frame' }, src: monthly_generation_community_summary_path(@community, year: selected_year)}
+  %turbo-frame#monthly_generation_summary{ data: { widget_update_target: 'frame', param: 'year' }, src: monthly_generation_community_summary_path(@community, year: selected_year)}
     Loading summary ...
 
   / Chart: Updated by ID

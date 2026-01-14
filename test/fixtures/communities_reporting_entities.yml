@@ -5,17 +5,13 @@
 # below each fixture, per the syntax in the comments below
 #
 one:
-  name: 'Test Utility One'
-  most_recent_year: 2020
-  grid: one
+  community_fips_code: '0000001'
+  reporting_entity: one
 
 two:
-  name: 'Test Utility Two'
-  most_recent_year: 2021
-  grid: two
+  community_fips_code: '0000002'
+  reporting_entity: two
 
 three:
-  name: 'Test Utility Three'
-  most_recent_year: 2020
-  grid: one
-
+  community_fips_code: '0000001'
+  reporting_entity: three

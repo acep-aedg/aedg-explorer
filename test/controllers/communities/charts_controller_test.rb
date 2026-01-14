@@ -3,6 +3,7 @@ require 'test_helper'
 class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @community = communities(:one)
+    @sales_year = @community.sales.maximum(:year)
   end
 
   test 'should get production_monthly' do
@@ -66,49 +67,86 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [[pop_employment.measurement_year, pop_employment.unemployment_insurance_claimants]], body[1]['data']
   end
 
-  test 'should get energy_sold' do
-    get energy_sold_community_charts_url(@community)
-    assert_response :success
-    assert_equal 'application/json', @response.media_type
-    body = JSON.parse(@response.body)
-    sale = @community.reporting_entity.sales.order(year: :asc).first
+  test 'should get energy_sold (one reporting_entity)' do
+    expected_res = 400
+    expected_com = 300
+    expected_entity_name = 'Test Utility One'
 
-    residential_series = body.find { |s| s['name'] == 'Residential' }
-    assert_equal sale.residential_sales, residential_series['data'][sale.year.to_s]
-    commercial_series = body.find { |s| s['name'] == 'Commercial' }
-    assert_equal sale.commercial_sales, commercial_series['data'][sale.year.to_s]
-    # total_series = body.find { |s| s['name'] == 'Total' }
-    # assert_equal sale.total_sales, total_series['data'][sale.year.to_s]
+    get energy_sold_community_charts_url(@community, year: @sales_year)
+    assert_response :success
+
+    body = JSON.parse(@response.body)
+
+    entity_series = body.find { |series| series['name'] == expected_entity_name }
+    series_data = entity_series['data']
+    res_row = series_data.find { |row| row[0] == 'Residential' }
+    com_row = series_data.find { |row| row[0] == 'Commercial' }
+
+    assert_not_nil entity_series, "Could not find series for #{expected_entity_name}"
+    assert_equal expected_res, res_row[1]
+    assert_equal expected_com, com_row[1]
+  end
+
+  test 'should get energy_sold with multiple reporting entities' do
+    expected_entity1 = 'Test Utility One'
+    expected_entity2 = 'Test Utility Three'
+
+    get energy_sold_community_charts_url(@community, year: @sales_year)
+    assert_response :success
+
+    body = JSON.parse(@response.body)
+    entity_names = body.map { |series| series['name'] }
+
+    assert_equal 2, entity_names.size, "Expected 2 entities, but got #{entity_names.size}"
+    assert_includes entity_names, expected_entity1
+    assert_includes entity_names, expected_entity2
   end
 
   test 'should get customer_breakdown_revenue' do
-    get customer_breakdown_revenue_community_charts_path(@community)
+    expected_res = 200
+    expected_com = 950
+
+    get customer_breakdown_revenue_community_charts_path(@community, year: @sales_year)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
-    sale = @community.reporting_entity.latest_sale
-    assert sale, 'Expected a sale to exist for this community'
-    assert_equal sale.residential_revenue, body['Residential']
-    assert_equal sale.commercial_revenue, body['Commercial']
+
+    residential_row = body.find { |row| row[0] == 'Residential' }
+    commercial_row = body.find { |row| row[0] == 'Commercial' }
+
+    assert_equal expected_res, residential_row[1]
+    assert_equal expected_com, commercial_row[1]
   end
 
   test 'should get customer_breakdown_customers' do
-    get customer_breakdown_customers_community_charts_path(@community)
+    expected_res = 300
+    expected_com = 1700
+
+    get customer_breakdown_customers_community_charts_path(@community, year: @sales_year)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
-    sale = @community.reporting_entity.latest_sale
-    assert_equal sale.residential_customers, body['Residential']
-    assert_equal sale.commercial_customers, body['Commercial']
+
+    residential_row = body.find { |row| row[0] == 'Residential' }
+    commercial_row = body.find { |row| row[0] == 'Commercial' }
+
+    assert_equal expected_res, residential_row[1]
+    assert_equal expected_com, commercial_row[1]
   end
 
   test 'should get customer_breakdown_sales' do
-    get customer_breakdown_sales_community_charts_path(@community)
+    expected_res = 500
+    expected_com = 500
+
+    get customer_breakdown_sales_community_charts_path(@community, year: @sales_year)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
-    sale = @community.reporting_entity.latest_sale
-    assert_equal sale.residential_sales, body['Residential']
-    assert_equal sale.commercial_sales, body['Commercial']
+
+    residential_row = body.find { |row| row[0] == 'Residential' }
+    commercial_row = body.find { |row| row[0] == 'Commercial' }
+
+    assert_equal expected_res, residential_row[1]
+    assert_equal expected_com, commercial_row[1]
   end
 end
