@@ -11,7 +11,8 @@
         %h5#capacityInfoModalLabel.modal-title About Capacity Data
         %button.btn-close{ type: "button", data: { bs_dismiss: "modal" }, aria: { label: "Close" } }
       .modal-body
-        = render 'grids/shared/modal/plant_connection'
+        .d-flex
+          = render 'grids/shared/modal/plant_connection'
               
       .modal-footer
         %button.btn.btn-secondary{ type: "button", data: { bs_dismiss: "modal" } } Close
