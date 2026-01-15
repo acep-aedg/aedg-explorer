@@ -1,12 +1,13 @@
-.d-flex.justify-content-between.align-items-center.bg-body-secondary.p-3.rounded.mb-3.flex-wrap
-  %p.text-muted.small.mb-1.mb-sm-0
-    %i.bi.bi-info-circle.me-1.text-aedg-navy
+%i.bi.bi-geo-alt.text-primary.fs-4
+.flex-grow-1.ms-3
+  %h6.fw-bold.mb-1 Service Area
+  %p.text-muted.mb-1
     This section displays data from power plants within this community’s
     = @community.show_full_service_area? ? 'local service area.' : ' service area.'
-
+    
   - if @community.grid
-    = link_to grid_path(@community.grid, anchor: anchor),
+    = link_to grid_path(@community.grid, anchor: 'capacity'),
       class: "small text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline gap-1",
       data: { turbo: false } do
-      %span Explore grid data
+      %span Explore Grid Data
       %i.bi.bi-arrow-right
