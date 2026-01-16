@@ -412,40 +412,6 @@ ALTER SEQUENCE public.communities_id_seq OWNED BY public.communities.id;
 
 
 --
--- Name: communities_legislative_districts; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.communities_legislative_districts (
-    id bigint NOT NULL,
-    election_region integer,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    house_district_id bigint NOT NULL,
-    senate_district_id bigint NOT NULL,
-    community_fips_code character varying
-);
-
-
---
--- Name: communities_legislative_districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.communities_legislative_districts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: communities_legislative_districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.communities_legislative_districts_id_seq OWNED BY public.communities_legislative_districts.id;
-
-
---
 -- Name: communities_reporting_entities; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1691,13 +1657,6 @@ ALTER TABLE ONLY public.communities_house_districts ALTER COLUMN id SET DEFAULT 
 
 
 --
--- Name: communities_legislative_districts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.communities_legislative_districts ALTER COLUMN id SET DEFAULT nextval('public.communities_legislative_districts_id_seq'::regclass);
-
-
---
 -- Name: communities_reporting_entities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1991,14 +1950,6 @@ ALTER TABLE ONLY public.capacities
 
 ALTER TABLE ONLY public.communities_house_districts
     ADD CONSTRAINT communities_house_districts_pkey PRIMARY KEY (id);
-
-
---
--- Name: communities_legislative_districts communities_legislative_districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.communities_legislative_districts
-    ADD CONSTRAINT communities_legislative_districts_pkey PRIMARY KEY (id);
 
 
 --
@@ -2330,17 +2281,17 @@ CREATE UNIQUE INDEX index_boroughs_on_fips_code ON public.boroughs USING btree (
 
 
 --
--- Name: index_communities_legislative_districts_on_house_district_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_communities_house_districts_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_communities_legislative_districts_on_house_district_id ON public.communities_legislative_districts USING btree (house_district_id);
+CREATE INDEX index_communities_house_districts_on_community_fips_code ON public.communities_house_districts USING btree (community_fips_code);
 
 
 --
--- Name: index_communities_legislative_districts_on_senate_district_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_communities_house_districts_on_house_district_district; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_communities_legislative_districts_on_senate_district_id ON public.communities_legislative_districts USING btree (senate_district_id);
+CREATE INDEX index_communities_house_districts_on_house_district_district ON public.communities_house_districts USING btree (house_district_district);
 
 
 --
@@ -2376,6 +2327,34 @@ CREATE UNIQUE INDEX index_communities_on_slug ON public.communities USING btree 
 --
 
 CREATE INDEX index_communities_reporting_entities_on_reporting_entity_id ON public.communities_reporting_entities USING btree (reporting_entity_id);
+
+
+--
+-- Name: index_communities_school_districts_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_communities_school_districts_on_community_fips_code ON public.communities_school_districts USING btree (community_fips_code);
+
+
+--
+-- Name: index_communities_school_districts_on_school_district_district; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_communities_school_districts_on_school_district_district ON public.communities_school_districts USING btree (school_district_district);
+
+
+--
+-- Name: index_communities_senate_districts_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_communities_senate_districts_on_community_fips_code ON public.communities_senate_districts USING btree (community_fips_code);
+
+
+--
+-- Name: index_communities_senate_districts_on_senate_district_district; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_communities_senate_districts_on_senate_district_district ON public.communities_senate_districts USING btree (senate_district_district);
 
 
 --
@@ -2750,6 +2729,14 @@ ALTER TABLE ONLY public.service_area_geoms
 
 
 --
+-- Name: communities_school_districts fk_rails_2f18d3d586; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_school_districts
+    ADD CONSTRAINT fk_rails_2f18d3d586 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code) ON DELETE CASCADE;
+
+
+--
 -- Name: population_age_sexes fk_rails_3da0e0a743; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2763,6 +2750,14 @@ ALTER TABLE ONLY public.population_age_sexes
 
 ALTER TABLE ONLY public.populations
     ADD CONSTRAINT fk_rails_42627e1837 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
+
+
+--
+-- Name: communities_school_districts fk_rails_437791b944; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_school_districts
+    ADD CONSTRAINT fk_rails_437791b944 FOREIGN KEY (school_district_district) REFERENCES public.school_districts(district) ON DELETE CASCADE;
 
 
 --
@@ -2814,14 +2809,6 @@ ALTER TABLE ONLY public.fuel_prices
 
 
 --
--- Name: communities_legislative_districts fk_rails_62b26fb9e7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.communities_legislative_districts
-    ADD CONSTRAINT fk_rails_62b26fb9e7 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
-
-
---
 -- Name: community_grids fk_rails_7d3a74461c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2862,6 +2849,22 @@ ALTER TABLE ONLY public.taggings
 
 
 --
+-- Name: communities_senate_districts fk_rails_a1c3ae2d0e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_senate_districts
+    ADD CONSTRAINT fk_rails_a1c3ae2d0e FOREIGN KEY (senate_district_district) REFERENCES public.senate_districts(district) ON DELETE CASCADE;
+
+
+--
+-- Name: communities_house_districts fk_rails_a83f81cd35; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_house_districts
+    ADD CONSTRAINT fk_rails_a83f81cd35 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code) ON DELETE CASCADE;
+
+
+--
 -- Name: transportations fk_rails_af73741a29; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2870,27 +2873,11 @@ ALTER TABLE ONLY public.transportations
 
 
 --
--- Name: communities_legislative_districts fk_rails_b3e1d61bb2; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.communities_legislative_districts
-    ADD CONSTRAINT fk_rails_b3e1d61bb2 FOREIGN KEY (house_district_id) REFERENCES public.house_districts(id);
-
-
---
 -- Name: sales fk_rails_b5eeb5e842; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sales
     ADD CONSTRAINT fk_rails_b5eeb5e842 FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
-
-
---
--- Name: communities_legislative_districts fk_rails_b629a56790; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.communities_legislative_districts
-    ADD CONSTRAINT fk_rails_b629a56790 FOREIGN KEY (senate_district_id) REFERENCES public.senate_districts(id);
 
 
 --
@@ -2934,12 +2921,30 @@ ALTER TABLE ONLY public.communities
 
 
 --
+-- Name: communities_house_districts fk_rails_e19cffa2ca; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_house_districts
+    ADD CONSTRAINT fk_rails_e19cffa2ca FOREIGN KEY (house_district_district) REFERENCES public.house_districts(district) ON DELETE CASCADE;
+
+
+--
+-- Name: communities_senate_districts fk_rails_fa42f1c180; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.communities_senate_districts
+    ADD CONSTRAINT fk_rails_fa42f1c180 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code) ON DELETE CASCADE;
+
+
+--
 -- PostgreSQL database dump complete
 --
 
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260115215649'),
+('20260115214036'),
 ('20260115205258'),
 ('20251217205218'),
 ('20251217202750'),
