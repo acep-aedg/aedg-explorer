@@ -2407,6 +2407,13 @@ CREATE INDEX index_electric_rates_on_reporting_entity_id ON public.electric_rate
 
 
 --
+-- Name: index_employments_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_employments_on_community_fips_code ON public.employments USING btree (community_fips_code);
+
+
+--
 -- Name: index_friendly_id_slugs_on_slug_and_sluggable_type; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2460,6 +2467,20 @@ CREATE INDEX index_house_districts_on_boundary ON public.house_districts USING g
 --
 
 CREATE UNIQUE INDEX index_house_districts_on_district ON public.house_districts USING btree (district);
+
+
+--
+-- Name: index_household_incomes_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_household_incomes_on_community_fips_code ON public.household_incomes USING btree (community_fips_code);
+
+
+--
+-- Name: index_income_poverties_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_income_poverties_on_community_fips_code ON public.income_poverties USING btree (community_fips_code);
 
 
 --
@@ -2689,6 +2710,14 @@ ALTER TABLE ONLY public.communities_reporting_entities
 
 
 --
+-- Name: income_poverties fk_rails_0ce49ca0a4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.income_poverties
+    ADD CONSTRAINT fk_rails_0ce49ca0a4 FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code) ON DELETE CASCADE;
+
+
+--
 -- Name: bulk_fuel_facilities fk_rails_12e76c4358; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2801,6 +2830,14 @@ ALTER TABLE ONLY public.community_grids
 
 
 --
+-- Name: household_incomes fk_rails_86aa4bf24c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.household_incomes
+    ADD CONSTRAINT fk_rails_86aa4bf24c FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code) ON DELETE CASCADE;
+
+
+--
 -- Name: plants fk_rails_8b58e48ec7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2865,6 +2902,14 @@ ALTER TABLE ONLY public.reporting_entities
 
 
 --
+-- Name: employments fk_rails_c191440d7e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.employments
+    ADD CONSTRAINT fk_rails_c191440d7e FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code) ON DELETE CASCADE;
+
+
+--
 -- Name: active_storage_attachments fk_rails_c3b3935057; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2895,6 +2940,7 @@ ALTER TABLE ONLY public.communities
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260115205258'),
 ('20251217205218'),
 ('20251217202750'),
 ('20251217202552'),
