@@ -8,13 +8,11 @@
       id: "price_type",
       class: "form-select form-select-sm",
       onchange: "this.form.requestSubmit();"
-  - else
 
 %turbo-frame#fuel_prices_chart
-  = column_chart fuel_prices_by_season_chart_data(@community.fuel_prices, price_type: @selected_price_type),
-    colors: ["#6BAED6", "#08519C", "#74C476", "#006D2C"],
-    title: "Fuel Types and Prices by Year and Season (#{@selected_price_type})",
-    xtitle: "Year",
-    ytitle: "Price (USD)",
-    prefix: "$",
-    download: {filename: "#{@community.name.parameterize}_fuel_prices", format: "png"}
+  = column_chart fuel_prices_community_charts_path( @community, price_type: @selected_price_type),
+      colors:   [color(:light_blue), color(:dark_blue), color(:light_green), color(:dark_green), color(:orange)],
+      title:    "Fuel Types and Prices by Year and Season (#{@selected_price_type})",
+      download: { filename: "#{@community.name.parameterize}_fuel_prices", format: "png" },
+      library: { scales: { y: { type: "linear", prefix: "$", position: "left", title: { display: true, text: "$ Price (USD)" } }, y1: { type: "linear", position: "right", title: { display: true, text: "Heating Degree Days" } } } }
+      

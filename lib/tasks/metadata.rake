@@ -1,39 +1,29 @@
+require_relative 'import_helpers'
+
 namespace :metadata do
-  desc 'Download metadata files'
-  task download: :environment do
-    repo_url = ENV.fetch('GH_METADATA_REPO_URL', 'https://github.com/acep-aedg/aedg-data-pond')
+  desc 'Download and Import metadata (Pass PR=123 to test a PR)'
+  task import: :environment do
+    Rake::Task['metadata:download_data'].invoke
 
-    folder_path = 'data/public'
-    local_dir = Rails.root.join('db/imports/metadata').to_s
+    puts 'Starting metadata import...'
+    filepath = Rails.root.join('db/imports/metadata')
+    errors = Metadatum.import_metadata(filepath)
 
-    # Ensure the local directory & keep file exists
-    FileUtils.mkdir_p(local_dir)
-
-    Dir.mktmpdir do |temp_dir|
-      system("git clone --filter=blob:none --no-checkout #{repo_url} #{temp_dir}")
-
-      Dir.chdir(temp_dir) do
-        # Enable sparse-checkout
-        system('git sparse-checkout init --cone')
-        system("git sparse-checkout set #{folder_path}")
-        system('git checkout main')
-        # Sync only new/updated files
-        system("rsync -avh --delete #{folder_path}/ #{local_dir}/")
-      end
+    if errors.any?
+      puts "Import finished with errors:\n#{errors.join("\n")}"
+    else
+      puts 'Metadata import completed successfully.'
     end
   end
 
-  desc 'Import metadata files'
-  task import: %i[environment download] do
-    puts 'Starting metadata import'
-    filepath = Rails.root.join('db/imports/metadata')
-    errors = Metadatum.import_metadata(filepath)
-    puts errors.join("\n")
-    puts 'Metadata import completed'
+  desc 'Download data files (Defaults to DATA_POND_TAG, pass PR=123 for testing)'
+  task download_data: [:environment] do
+    ImportHelpers.download_data('data/public', Rails.root.join('db/imports/metadata').to_s)
   end
 
   desc 'Clear metadata records'
-  task clear: :environment do
+  task clear: [:environment] do
+    puts 'Clearing metadata table...'
     Metadatum.destroy_all
   end
 end

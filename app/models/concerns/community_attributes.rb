@@ -38,10 +38,7 @@ module CommunityAttributes
         puma_code: params[:puma_code],
         subsistence: params[:subsistence],
         economic_region: params[:economic_region],
-        village_corporation: params[:village_corporation],
-        heating_degree_days: params[:heating_degree_days],
-        reporting_entity: ReportingEntity.from_aedg_id(params[:reporting_entity_id]).first,
-        operators: params[:operator]
+        village_corporation: params[:village_corporation]
       )
     end
   end

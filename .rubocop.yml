@@ -2,5 +2,13 @@ inherit_from: .rubocop_todo.yml
 
 plugins: rubocop-rails
 
+AllCops:
+  Exclude:
+    - 'db/migrate/**/*'
+    - 'db/structure.sql'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'bin/**/*'
+    
 Style/FrozenStringLiteralComment:
   Enabled: false

@@ -10,11 +10,9 @@ Rails.application.routes.draw do
   scope path: '/explore' do
     resources :metadata, only: %i[index show], path: 'data' do
       resources :datasets, only: [] do
-        get :download, on: :member
         get :show, on: :member, defaults: { format: :json }
       end
       get :search, on: :collection
-      get :download, on: :member
     end
 
     resources :communities, only: %i[index show] do
@@ -26,13 +24,18 @@ Rails.application.routes.draw do
           get :population_detail
           get :production_yearly
           get :fuel_prices
-          get :average_sales_rates
-          get :revenue_by_customer_type
-          get :customers_by_customer_type
-          get :sales_by_customer_type
+          get :customer_breakdown_revenue
+          get :customer_breakdown_customers
+          get :customer_breakdown_sales
           get :bulk_fuel_capacity_mix
           get :gender_distribution
           get :age_distribution
+          get :poverty_rate
+          get :household_income_brackets
+          get :income
+          get :fuel_prices
+          get :energy_sold
+          get :energy_sold_stacked
         end
       end
 

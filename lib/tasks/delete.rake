@@ -55,4 +55,9 @@ namespace :delete do
   task household_income: :environment do
     DeleteHelpers.delete_records(HouseholdIncome)
   end
+
+  desc 'Clear all heating degree day data'
+  task heating_degree_days: :environment do
+    DeleteHelpers.delete_records(HeatingDegreeDay)
+  end
 end

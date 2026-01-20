@@ -97,3 +97,4 @@ gem 'kramdown'
 gem 'kramdown-parser-gfm'
 gem 'pagy', '~> 6.4'
 gem 'simplecov', require: false, group: :test
+gem 'rubyzip', '>= 2.3.0'

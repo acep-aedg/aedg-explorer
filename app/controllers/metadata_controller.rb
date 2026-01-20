@@ -1,5 +1,5 @@
 class MetadataController < ApplicationController
-  before_action :set_metadatum, only: %i[download show]
+  before_action :set_metadatum, only: %i[show]
   before_action :set_dataset, only: %i[show]
 
   def index
@@ -24,11 +24,6 @@ class MetadataController < ApplicationController
     @communities = Community.search_related(@search[:search]).reorder(:name) if @metadata.count.zero? && @search[:search].present?
 
     @metadata = @metadata.all
-  end
-
-  def download
-    send_data @metadatum.data.to_json, filename: @metadatum.filename, type: 'application/json',
-                                       disposition: 'attachment'
   end
 
   private
