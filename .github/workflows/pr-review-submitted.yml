@@ -1,8 +1,9 @@
 name: Notify Mattermost on Review Decision
 
-on:
-  pull_request_review:
-    types: [submitted]
+on: workflow_dispatch
+# on:
+#   pull_request_review:
+#     types: [submitted]
 
 jobs:
   notify-author:
