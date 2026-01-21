@@ -1,9 +1,8 @@
-#!/bin/bash -e
-# Run this to test the entrypoint locally (since docker-compose does not have entrypoint args):
 #   ./bin/docker-entrypoint ./bin/rails server
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
+  ./bin/rails db:prepare # will run any pending migrations
   ./bin/rails import:prepare
 fi
-exec "$@"
+
+exec "${@}"
