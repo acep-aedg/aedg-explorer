@@ -51,7 +51,6 @@ Rails.application.routes.draw do
       end
 
       resource :summary, only: [], controller: 'communities/summaries' do
-        get :capacity
         get :monthly_generation
       end
     end
@@ -73,7 +72,6 @@ Rails.application.routes.draw do
       end
 
       resource :summary, only: [], controller: 'grids/summaries' do
-        get :capacity
         get :monthly_generation
       end
     end
