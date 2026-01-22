@@ -7,7 +7,7 @@ module ApplicationHelper
         children: [
           { name: 'Data Explorer', path: metadata_path },
           { name: 'Communities', path: communities_path },
-          { name: 'Grids', path: grids_path }
+          { name: 'Electric Grids', path: grids_path }
         ] },
       { name: 'User Guide', path: user_guide_path }
     ]
