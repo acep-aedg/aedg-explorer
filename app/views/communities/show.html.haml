@@ -131,6 +131,7 @@
     - tab_order << 'general'  if @community.show_background_section?
     - tab_order << 'demographics'
     - tab_order << 'income'
+    - tab_order << 'electricity_rates_sales'
     - tab_order << 'electricity' if @community.show_electricity_section?
     - tab_order << 'prices'      if @community.show_prices_section?
     
@@ -148,7 +149,10 @@
             role: 'tab', |
             aria: { controls: "#{tab.parameterize}-pane", selected: is_active } |
           }
-            = tab.titleize
+            - if tab == 'electricity_rates_sales'
+              = 'Electricity Rates & Sales'
+            - else
+              = tab.titleize
   
     -# --- Tab Content Panels ---
     .tab-content
