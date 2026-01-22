@@ -130,6 +130,7 @@
     - tab_order = []
     - tab_order << 'general'  if @community.show_background_section?
     - tab_order << 'demographics'
+    - tab_order << 'income'
     - tab_order << 'electricity' if @community.show_electricity_section?
     - tab_order << 'prices'      if @community.show_prices_section?
     
