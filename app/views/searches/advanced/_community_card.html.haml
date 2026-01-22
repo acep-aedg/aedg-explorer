@@ -1,87 +1,90 @@
 - community = local_assigns.fetch(:community)
 
-.mb-4.border.rounded.overflow-hidden.bg-light-subtle
+.mb-4.border.rounded.overflow-hidden.bg-light-subtle.shadow-sm-hover{ style: "transition: all 0.2s;" }
   .p-3
+    -# HEADER
     %h5.mb-2.d-flex.align-items-center.flex-wrap
-      = link_to community.name, community_path(community), class: 'text-dark text-decoration-none'
-
-    / === TAGS AREA ===
-    .d-flex.flex-wrap.gap-1
-      - if community.respond_to?(:grids)
-        - community.grids.active.each do |g|
-          = link_to grid_path(g), class: "badge bg-secondary me-1 mb-1 text-decoration-none" do
-            = g.name
-
-      - if (b = community.borough).present?
-        %span.badge.bg-secondary.me-1.mb-1.text-capitalize
-          = b.name
-
-      - if (rc = community.regional_corporation).present?
-        %span.badge.bg-secondary.me-1.mb-1.text-capitalize
-          = rc.name
-
-      - if community.respond_to?(:senate_districts)
-        - community.senate_districts.each do |d|
-          %span.badge.bg-secondary.me-1.mb-1.text-capitalize
-            = "Senate District - #{d.district || d}"
-
-      - if community.respond_to?(:house_districts)
-        - community.house_districts.each do |d|
-          %span.badge.bg-secondary.me-1.mb-1.text-capitalize
-            = "House District - #{d.name || d } #{d.district}"
-
-  .border-top.px-3.py-2.d-flex.justify-content-between.align-items-center.gap-3
-    -# Population Section
-    .d-flex.align-items-center
-      - if community.respond_to?(:population) && community.population
-        -# Gold Icon
-        %i.bi.bi-people-fill.me-2
-        -# Bold number + "Residents" label
-        %span.fw-bold.small= number_with_delimiter(community.population.total_population)
-        %span.text-muted.small.ms-1 Residents
-
-    -# PCE STATUS SECTION
-    .d-flex.align-items-center.me-2
-      - if community.try(:pce_active?)
-        %i.bi.bi-lightning-charge-fill.text-warning.me-2{ title: "PCE is currently active" }
-        %span.text-dark PCE Active
-      - elsif community.try(:pce_eligible?)
-        %i.bi.bi-lightning-charge.text-warning.me-2{ title: "Eligible for PCE" }
-        %span.text-dark PCE Eligible
+      %i.bi.bi-geo-alt-fill.me-2
+      = link_to community.name, community_path(community), class: "text-reset text-decoration-none"
+      - if community.grid.present?
+        %span.ms-2.text-secondary.fw-semibold.small= "• #{community.grid.name}"
       - else
-        %i.bi.bi-lightning-slash.me-2.text-muted{ style: "opacity: 0.5;", title: "Not eligible for PCE" }
-        %span.text-muted No PCE
 
-    -# Transportation Section
-    .d-flex.align-items-center
-      - if community.respond_to?(:transportation) && (t = community.transportation)
-        - if t.road_connection?
-          %i.bi.bi-car-front-fill.me-2{ title: "Connected to Road System" }
-          %span.small.text-dark.me-2 On Road System
-        - if t.state_ferry?
-          %i.bi.bi-water.me-2.text-primary{ title: "Alaska Marine Highway System" }
-          %span.small.text-dark.me-2 Ferry Access
-        - if t.airport?
-          %i.bi.bi-airplane-fill.me-2{ title: "Has Airport" }
-          %span.small.text-muted.me-2 Has Airport
-        - if t.harbor_dock?
-          %i.bi.bi-water.me-2.text-primary{ title: "Harbor or Dock available" }
-          %span.small.text-muted.me-2 Harbor or Dock Available
-        - else
-          %span.small.text-muted --
+    -# BODY
+    .mb-3.text-muted.small
+      -# -# UTILITIES
+      -# - if community.respond_to?(:show_service_areas?) && community.show_service_areas?
+      -#   .mb-2
+      -#     %i.bi.bi-lightning-charge-fill.me-1
+      -#     %strong Utilities:
+      -#     - if community.service_areas.count == 1
+      -#       = community.service_areas.first.name
+      -#     - else
+      -#       %ul.list-unstyled.mb-0.ms-3.mt-1
+      -#         - community.service_areas.each do |sa|
+      -#           %li.mb-1= sa.name
 
-    -# View Button
-    .ms-auto
-      = link_to community_path(community), class: "btn btn-aedg-primary d-flex align-items-center btn-sm" do
-        View
-        %i.bi.bi-arrow-right.ms-2
+      -# -# POWER PLANTS 
+      -# - if community.respond_to?(:show_plants?) && community.show_plants?
+      -#   .mb-2
+      -#     %i.bi.bi-ev-station-fill.me-1
+      -#     %strong Power Plants:
+      -#     - if community.plants.size > 3
+      -#       %span.fst-italic #{community.plants.size} Plants
+      -#     - else
+      -#       = community.plants.map(&:name).join(", ")
 
-  - if community.respond_to?(:datasets) && community.datasets.any?
-    %h6.mt-3.mb-2 Datasets for this community
-    %ul.list-group.list-group-flush
-      - community.datasets.limit(3).each do |dataset|
-        %li.list-group-item
-          = link_to dataset.title, "#"
-          %span.text-muted.small.ms-2= dataset.try(:organization)
-  - else
-    -# no datasets shown
+      - if community.borough.present?
+        .mb-1
+          %strong= community.borough.census_area? ? "Census Area:" : "Borough:"
+          = community.borough.name
+      
+      - if community.regional_corporation.present?
+        .mb-1
+          %strong Native Corporation:
+          = community.regional_corporation.name
+
+      -# Lighter and with more spacing
+      %hr.border-secondary-subtle.my-3
+      - if community.respond_to?(:population) && community.population.present?
+        .mb-2
+          %i.bi.bi-people-fill.me-1
+          %strong Population:
+          = number_with_delimiter(community.population.total_population)
+
+      - if community.respond_to?(:house_districts) || community.respond_to?(:senate_districts)
+        .mb-2
+          %i.bi.bi-bank2.me-1
+          %strong Leg. Dists:
+          - total_count = (community.try(:house_districts)&.count || 0) + (community.try(:senate_districts)&.count || 0)
+          
+          - if total_count > 4
+            %span.fst-italic Multiple Districts
+          - else
+            - dists = []
+            - dists += community.house_districts.map { |d| "HD #{d.district}" } if community.respond_to?(:house_districts)
+            - dists += community.senate_districts.map { |d| "SD #{d.district}" } if community.respond_to?(:senate_districts)
+            = dists.join(", ")
+
+      -# -# SCHOOL
+      -# - if community.respond_to?(:show_school_districts?) && community.show_school_districts?
+      -#   .mb-2
+      -#     %i.bi.bi-book.me-1
+      -#     %strong School:
+      -#     - if community.school_districts.count > 1
+      -#       = "#{community.school_districts.first.name} (+ #{community.school_districts.count - 1} more)"
+      -#     - else
+      -#       = community.school_districts.first&.name
+
+    -# TAGS
+    .d-flex.flex-wrap
+      - if community.try(:pce_active?)
+        %span.badge.bg-secondary.me-1.mb-1 PCE Active
+      - elsif community.try(:pce_eligible?)
+        %span.badge.bg-secondary.me-1.mb-1 PCE Eligible
+
+  -# FOOTER 
+  .border-top.px-3.py-2.d-flex.justify-content-end.align-items-center.bg-light
+    = link_to community_path(community), class: "btn btn-sm btn-aedg-primary d-flex align-items-center" do
+      View
+      %i.bi.bi-arrow-right.ms-1
