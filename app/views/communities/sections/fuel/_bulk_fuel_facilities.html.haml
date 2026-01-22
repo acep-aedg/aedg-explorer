@@ -1,3 +1,4 @@
+- parent_tab = 'fuel'
 - show_chart = @community.show_bulk_fuel_capacity_chart?
 - active_tab = show_chart ? :chart : :data
 
@@ -7,8 +8,8 @@
   %hr.flex-grow-1.mt-1.mb-0
 
 .mb-3
-  = render 'communities/sections/electricity/bulk_fuel_facilities/map_controls'
-  = render 'communities/sections/electricity/bulk_fuel_facilities/fuel_delivery'
+  = render "communities/sections/#{parent_tab}/bulk_fuel_facilities/map_controls"
+  = render "communities/sections/#{parent_tab}/bulk_fuel_facilities/fuel_delivery"
 
   / Tabs
   .d-flex.align-items-center.mt-4
@@ -28,7 +29,7 @@
   .tab-content.mt-3
     - if show_chart
       #bulk-fuel-capacity-chart-wrapper.tab-pane.fade{ class: ("show active" if active_tab == :chart) }
-        = render 'communities/sections/electricity/bulk_fuel_facilities/fuel_capacity_chart'
+        = render "communities/sections/#{parent_tab}/bulk_fuel_facilities/fuel_capacity_chart"
 
     #bulk-fuel-data-wrapper.tab-pane.fade{ class: ("show active" if active_tab == :data) }
-      = render 'communities/sections/electricity/bulk_fuel_facilities/bulk_fuel_data'
+      = render "communities/sections/#{parent_tab}/bulk_fuel_facilities/bulk_fuel_data"
