@@ -30,7 +30,7 @@
   })
 }
   / --- LEFT: Map
-  .col-md-4.d-none.d-md-block
+  .col-md-5.d-none.d-md-block
     .d-flex.flex-column.position-sticky{ style: "top: 50px; height: calc(100vh - 50px);" }
       .flex-grow-1.d-flex.flex-column#mapbox-area
         .d-flex.align-items-center
@@ -126,37 +126,26 @@
           .h-100{ data: { maps_target: "map" } }
 
   / RIGHT: main content 
-  .col-md-8
-    - tab_order = []
-    - tab_order << 'general'  if @community.show_background_section?
-    - tab_order << 'demographics'
-    - tab_order << 'electricity' if @community.show_electricity_section?
-    - tab_order << 'prices'      if @community.show_prices_section?
-    
-  
-    -# --- Tab Navigation Menu ---
-    %ul.nav.nav-tabs.m-4{ role: 'tablist' }
-      - tab_order.each_with_index do |tab, index|
-        - is_active = index.zero?
-        %li.nav-item{ role: 'presentation' }
-          %button.nav-link{ |
-            class: (is_active ? 'active' : ''), |
-            id: "#{tab.parameterize}-tab", |
-            data: { bs_toggle: 'tab', bs_target: "##{tab.parameterize}-pane" }, |
-            type: 'button', |
-            role: 'tab', |
-            aria: { controls: "#{tab.parameterize}-pane", selected: is_active } |
-          }
-            = tab.titleize
-  
-    -# --- Tab Content Panels ---
-    .tab-content
-      - tab_order.each_with_index do |tab, index|
-        - is_active = index.zero?
-        .tab-pane.fade{ |
-          class: (is_active ? 'show active' : ''), |
-          id: "#{tab.parameterize}-pane", |
-          role: 'tabpanel', |
-          aria: { labelledby: "#{tab.parameterize}-tab" } |
-        }
-          = render "communities/sections/#{tab}", community: @community
+  .col-md-7
+    .text-center
+
+    - section_order = []
+    - section_order << 'background'  if @community.show_background_section?
+    - section_order << 'electricity' if @community.show_electricity_section?
+    - section_order << 'prices'      if @community.show_prices_section?
+    - section_order.each do |section|
+      - section_id = "#{section.parameterize}-section"
+
+      / Anchor offset target (for the quick link buttons to show the header for sections)
+      %div{ id: section.parameterize, class: "anchor-offset" }
+
+      %button.collapse-btn{ 
+        id: section.parameterize,
+        type: 'button', 
+        data: { bs_toggle: 'collapse', bs_target: "##{section_id}" }, 
+        aria: { expanded: 'true', controls: section_id }
+      }
+        %i.bi.bi-chevron-down.arrow-icon
+        %h3= section.titleize
+      .collapse.show{ id: section_id }
+        = render "communities/sections/#{section}", community: @community 

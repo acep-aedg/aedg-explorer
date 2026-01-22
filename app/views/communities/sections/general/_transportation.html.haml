@@ -2,14 +2,13 @@
   %i.bi.bi-car-front.me-2.fs-4
   %h4#transportation.mb-0.me-3.py-3.anchor-offset Transportation
   %hr.flex-grow-1.mt-1.mb-0
-.mb-3
-  %small.text-muted
-    %strong Last Updated:
-    = transportation.as_of_date
 
 = render 'shared/icon_status_grid', 
-  title: "Transportation Methods",
   fields: Transportation::TRANSPORT_FIELDS,
   source: @community.transportation
 
 %p= transportation.description
+.mb-3
+  %small.text-muted
+    %strong Last Updated:
+    = transportation.as_of_date

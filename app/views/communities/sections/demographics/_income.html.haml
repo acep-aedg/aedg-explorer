@@ -1,3 +1,4 @@
+- parent_tab = 'demographics'
 .d-flex.align-items-center.mb-3
   %i.bi.bi-cash-coin.me-2.fs-4
   %h4#income.mb-0.me-3.py-3.anchor-offset Income
@@ -33,16 +34,16 @@
 .tab-content.mt-3
   .tab-pane.fade.active.show#income-poverty-charts{ role: "tabpanel" }
     - if @community.show_household_income?
-      = render 'communities/sections/background/income/household_income_distribution_chart'
+      = render "communities/sections/#{parent_tab}/income/household_income_distribution_chart"
 
-    = render 'communities/sections/background/income/income_chart'
+    = render "communities/sections/#{parent_tab}/income/income_chart"
 
     - if @community.show_income_poverty?
-      = render 'communities/sections/background/income/poverty_rate_chart'
+      = render "communities/sections/#{parent_tab}/income/poverty_rate_chart"
     
   - if @community.show_household_income?  
     .tab-pane.fade#household-income-data{ role: "tabpanel" }
-      = render 'communities/sections/background/income/household_income_data'
+      = render "communities/sections/#{parent_tab}/income/household_income_data"
   - if @community.show_income_poverty?
     .tab-pane.fade#income-poverty-data{ role: "tabpanel" }
-      = render 'communities/sections/background/income/income_poverty_data'
+      = render "communities/sections/#{parent_tab}/income/income_poverty_data"
