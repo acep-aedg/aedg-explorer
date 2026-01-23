@@ -11,16 +11,17 @@ class Metadatum < ApplicationRecord
                   },
                   using: {
                     dmetaphone: {
-                      tsvector_column: 'tsvector_data'
+                      tsvector_column: "tsvector_data"
                     },
                     tsearch: {
-                      dictionary: 'english',
-                      tsvector_column: 'tsvector_data'
+                      dictionary: "english",
+                      tsvector_column: "tsvector_data"
                     },
                     trigram: {}
                   }
 
   extend FriendlyId
+
   friendly_id :name, use: :slugged
 
   acts_as_taggable_on :keywords
@@ -45,13 +46,13 @@ class Metadatum < ApplicationRecord
   end
 
   def citation
-    author = data.dig('resources', 0, 'context', 'publisher').presence || 'Unknown Author'
-    title = data['title'].presence&.titleize || 'Untitled Dataset'
-    publication_date = data.dig('resources', 0, 'publicationDate')
+    author = data.dig("resources", 0, "context", "publisher").presence || "Unknown Author"
+    title = data["title"].presence&.titleize || "Untitled Dataset"
+    publication_date = data.dig("resources", 0, "publicationDate")
     publication_year = Date.parse(publication_date).year if publication_date.present?
-    version = 'v3.0'
-    access_date = Time.zone.today.strftime('%B %-d, %Y')
-    base_url = 'https://akenergygateway.alaska.edu'
+    version = "v3.0"
+    access_date = Time.zone.today.strftime("%B %-d, %Y")
+    base_url = "https://akenergygateway.alaska.edu"
     path = Rails.application.routes.url_helpers.metadatum_path(self)
     dataset_url = "#{base_url}#{path}"
     # Format the citation chicago style

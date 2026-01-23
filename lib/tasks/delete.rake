@@ -1,27 +1,27 @@
-require_relative 'delete_helpers'
+require_relative "delete_helpers"
 
 namespace :delete do
-  desc 'Clear monthly generations data'
+  desc "Clear monthly generations data"
   task monthly_generations: :environment do
     DeleteHelpers.delete_records(MonthlyGeneration)
   end
 
-  desc 'Clear employments data'
+  desc "Clear employments data"
   task employments: :environment do
     DeleteHelpers.delete_records(Employment)
   end
 
-  desc 'Clear capacities data'
+  desc "Clear capacities data"
   task capacities: :environment do
     DeleteHelpers.delete_records(Capacity)
   end
 
-  desc 'Clear house districts data'
+  desc "Clear house districts data"
   task house_districts: :environment do
     DeleteHelpers.delete_records(HouseDistrict)
   end
 
-  desc 'Clear all district-related tables'
+  desc "Clear all district-related tables"
   task districts: :environment do
     DeleteHelpers.delete_records(CommunitiesLegislativeDistrict)
     DeleteHelpers.delete_records(CommunitiesSenateDistrict)
@@ -31,32 +31,32 @@ namespace :delete do
     DeleteHelpers.delete_records(SchoolDistrict)
   end
 
-  desc 'Clear all fuel prices data'
+  desc "Clear all fuel prices data"
   task fuel_prices: :environment do
     DeleteHelpers.delete_records(FuelPrice)
   end
 
-  desc 'Clear all electric rate data'
+  desc "Clear all electric rate data"
   task electric_rates: :environment do
     DeleteHelpers.delete_records(ElectricRate)
   end
 
-  desc 'Clear all bulk fuel facilities data'
+  desc "Clear all bulk fuel facilities data"
   task bulk_fuel_facilities: :environment do
     DeleteHelpers.delete_records(BulkFuelFacility)
   end
 
-  desc 'Clear all income poverty data'
+  desc "Clear all income poverty data"
   task income_poverty: :environment do
     DeleteHelpers.delete_records(IncomePoverty)
   end
 
-  desc 'Clear all household income data'
+  desc "Clear all household income data"
   task household_income: :environment do
     DeleteHelpers.delete_records(HouseholdIncome)
   end
 
-  desc 'Clear all heating degree day data'
+  desc "Clear all heating degree day data"
   task heating_degree_days: :environment do
     DeleteHelpers.delete_records(HeatingDegreeDay)
   end

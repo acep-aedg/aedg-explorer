@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'rgeo'
+require "test_helper"
+require "rgeo"
 
 class CommunityAttributesTest < ActiveSupport::TestCase
   include TestConstants
@@ -11,18 +11,18 @@ class CommunityAttributesTest < ActiveSupport::TestCase
     @regional_corporation = regional_corporations(:one)
     @borough = boroughs(:one)
 
-    @grid = Grid.create!(aedg_id: VALID_AEDG_ID, name: 'Test Grid')
+    @grid = Grid.create!(aedg_id: VALID_AEDG_ID, name: "Test Grid")
 
     @valid_props = {
       fips_code: VALID_FIPS_CODE,
-      name: 'Test Community',
+      name: "Test Community",
       regional_corporation_fips_code: @regional_corporation.fips_code,
       borough_fips_code: @borough.fips_code,
       grid_id: VALID_AEDG_ID
     }
   end
 
-  test 'import_aedg_with_geom! creates community with valid props and geometry' do
+  test "import_aedg_with_geom! creates community with valid props and geometry" do
     community = nil
     assert_difference -> { Community.count }, +1 do
       community = Community.import_aedg_with_geom!(@valid_props, @point_geom)
@@ -35,14 +35,14 @@ class CommunityAttributesTest < ActiveSupport::TestCase
     assert_equal @point_geom.as_text, community.location.as_text
   end
 
-  test 'import_aedg_with_geom! raises RecordInvalid with missing fips code' do
+  test "import_aedg_with_geom! raises RecordInvalid with missing fips code" do
     invalid_props = @valid_props.merge(fips_code: nil)
     assert_raises(ActiveRecord::RecordInvalid) do
       Community.import_aedg_with_geom!(invalid_props, @point_geom)
     end
   end
 
-  test 'import_aedg_with_geom! raises ArgumentError with missing geometry' do
+  test "import_aedg_with_geom! raises ArgumentError with missing geometry" do
     assert_raises(ArgumentError) do
       Community.import_aedg_with_geom!(@valid_props)
     end

@@ -1,5 +1,6 @@
 class HouseDistrict < ApplicationRecord
   include HouseDistrictAttributes
+
   has_many :communities_house_districts, dependent: :destroy
   has_many :communities, through: :communities_house_districts
 
@@ -11,7 +12,7 @@ class HouseDistrict < ApplicationRecord
 
   def as_geojson
     {
-      type: 'Feature',
+      type: "Feature",
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
         id: district,

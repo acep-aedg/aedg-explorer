@@ -1,20 +1,20 @@
-require 'test_helper'
+require "test_helper"
 
 class CapacityAttributesTest < ActiveSupport::TestCase
   include TestConstants
 
   def setup
-    @plant = Plant.create!(aea_plant_id: VALID_AEDG_ID, name: 'Test Plant')
+    @plant = Plant.create!(aea_plant_id: VALID_AEDG_ID, name: "Test Plant")
     @valid_props = {
       aea_plant_id: VALID_AEDG_ID,
       nameplate_capacity_mw: 10,
-      fuel_type_code: 'TEST',
-      fuel_type_name: 'Test Fuel Type',
+      fuel_type_code: "TEST",
+      fuel_type_name: "Test Fuel Type",
       year: 2021
     }
   end
 
-  test 'import_aedg! creates capacity with valid props' do
+  test "import_aedg! creates capacity with valid props" do
     capacity = nil
     assert_difference -> { Capacity.count }, +1 do
       capacity = Capacity.import_aedg!(@valid_props)
@@ -26,7 +26,7 @@ class CapacityAttributesTest < ActiveSupport::TestCase
     assert_equal @valid_props[:year], capacity.year
   end
 
-  test 'import_aedg! raises RecordInvalid when associated plant does not exist' do
+  test "import_aedg! raises RecordInvalid when associated plant does not exist" do
     invalid_props = @valid_props.merge(aea_plant_id: INVALID_AEDG_ID)
     assert_raises(ActiveRecord::RecordInvalid) do
       Capacity.import_aedg!(invalid_props)
