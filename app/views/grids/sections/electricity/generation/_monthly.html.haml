@@ -11,7 +11,7 @@
       charts_value: [
         { 
           id: chart_id, 
-          url: production_monthly_grid_charts_path(@grid),
+          url: generation_monthly_grid_charts_path(@grid),
           baseTitle: base_title,
           param: "year"
         }
@@ -34,7 +34,7 @@
   %turbo-frame#monthly_generation_summary{ data: { widget_update_target: 'frame', param: 'year' }, src: monthly_generation_grid_summary_path(@grid, year: selected_year)}
     Loading summary ...
 
-  = column_chart production_monthly_grid_charts_path(@grid, year: selected_year), 
+  = column_chart generation_monthly_grid_charts_path(@grid, year: selected_year), 
     id: chart_id,
     title: "#{base_title} (#{selected_year})", 
     xtitle: 'Month', 

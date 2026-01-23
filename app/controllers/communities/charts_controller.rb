@@ -1,12 +1,12 @@
 class Communities::ChartsController < ApplicationController
   before_action :set_community
   before_action :set_year,
-                only: %i[production_yearly capacity_yearly production_monthly customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
+                only: %i[generation_yearly capacity_yearly generation_monthly customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
   before_action :set_sales, only: %i[customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
   before_action :set_population_distribution, only: %i[age_distribution gender_distribution]
 
-  def production_monthly; end
-  def production_yearly; end
+  def generation_monthly; end
+  def generation_yearly; end
   def capacity_yearly; end
   def population_employment; end
   def customer_breakdown_revenue; end
