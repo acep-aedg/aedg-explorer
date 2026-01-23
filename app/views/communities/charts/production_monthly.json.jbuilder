@@ -6,7 +6,7 @@ json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
 
   series = [
     {
-      name: 'Net Generation (MWh)',
+      name: 'Generation (MWh)',
       data: gen_data,
       library: { yAxisID: 'y' }
     },

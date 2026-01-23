@@ -1,4 +1,4 @@
-- base_title = "#{@community.name.titleize} - Net Generation by Fuel Type"
+- base_title = "#{@community.name.titleize} - Generation by Fuel Type"
 - chart_options = Chartkick.options.deep_merge({ suffix: ' MWh', donut: true, library: { plugins: { legend: { title: { display: true, text: 'Fuel Type'} } } } })
 - years          = YearlyGeneration.available_years_for(@community)
 - selected_year  = params[:year].presence&.to_i || years.first
