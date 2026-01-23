@@ -282,14 +282,18 @@ class Community < ApplicationRecord
 
   def self.global_search_suggestions(term)
     return [] if term.blank?
-    
+
     results = []
     sql_term = "%#{term}%"
-    results += Grid.where("name ILIKE ?", sql_term).limit(5).map do |r| { label: r.name, category: 'Electric Grid', param_key: :grid_ids, value: r.id } end
-    results += Borough.where("name ILIKE ?", sql_term).limit(5).map do |r| { label: r.name, category: 'Borough', param_key: :borough_fips_codes, value: r.fips_code } end
-    results += RegionalCorporation.where("name ILIKE ?", sql_term).limit(5).map do |r| { label: r.name, category: 'Regional Corp', param_key: :regional_corporation_fips_codes, value: r.fips_code } end
-    results += SenateDistrict.where("district ILIKE ?", sql_term).limit(5).map do |r| { label: "District #{r.district}", category: 'Senate District', param_key: :senate_district_ids, value: r.id } end
-    results += HouseDistrict.where("name ILIKE ?", sql_term).limit(5).map do |r| { label: "District #{r.name}", category: 'House District', param_key: :house_district_ids, value: r.id } end
+    results += Grid.where('name ILIKE ?', sql_term).limit(5).map { |r| { label: r.name, category: 'Electric Grid', param_key: :grid_ids, value: r.id } }
+    results += Borough.where('name ILIKE ?', sql_term).limit(5).map { |r| { label: r.name, category: 'Borough', param_key: :borough_fips_codes, value: r.fips_code } }
+    results += RegionalCorporation.where('name ILIKE ?', sql_term).limit(5).map do |r|
+      { label: r.name, category: 'Regional Corp', param_key: :regional_corporation_fips_codes, value: r.fips_code }
+    end
+    results += SenateDistrict.where('district ILIKE ?', sql_term).limit(5).map do |r|
+      { label: "District #{r.district}", category: 'Senate District', param_key: :senate_district_ids, value: r.id }
+    end
+    results += HouseDistrict.where('name ILIKE ?', sql_term).limit(5).map { |r| { label: "District #{r.name}", category: 'House District', param_key: :house_district_ids, value: r.id } }
     results
   end
 end

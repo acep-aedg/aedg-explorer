@@ -6,9 +6,9 @@ class SenateDistrict < ApplicationRecord
 
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
 
-  scope :facet_search, ->(term) { where("district ILIKE ?", "%#{term}%") }
-  scope :facet_alpha,  ->(char) { where("district ILIKE ?", "#{char}%") }
-  
+  scope :facet_search, ->(term) { where('district ILIKE ?', "%#{term}%") }
+  scope :facet_alpha,  ->(char) { where('district ILIKE ?', "#{char}%") }
+
   def to_s
     district
   end

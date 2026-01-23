@@ -12,7 +12,7 @@ class SearchesController < ApplicationController
     @communities = Community.search(@query) if @query.present?
   end
 
-def advanced
+  def advanced
     @global_search_results = []
     if params[:q_global].present?
       %i[q_grid q_boro q_corp q_senate q_house].each { |key| params[key] = params[:q_global] }
