@@ -4,7 +4,7 @@ module RegionalCorporationAttributes
 
   class_methods do
     def import_aedg_with_geom!(properties, geom)
-      properties['boundary'] = geom
+      properties["boundary"] = geom
       properties.symbolize_keys!
 
       RegionalCorporation.find_or_initialize_by(fips_code: properties[:fips_code]).tap do |reg_corp|

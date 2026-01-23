@@ -1,5 +1,6 @@
 class HouseholdIncome < ApplicationRecord
   include HouseholdIncomeAttributes
+
   validates :community_fips_code, presence: true
   belongs_to :community,
              foreign_key: :community_fips_code,

@@ -3,8 +3,8 @@ module FooterHelper
 
   def footer_links
     [
-      { name: 'About AEDG', path: about_path, title: 'About AEDG' },
-      { name: 'User Guide', path: user_guide_path, title: 'User Guide' }
+      { name: "About AEDG", path: about_path, title: "About AEDG" },
+      { name: "User Guide", path: user_guide_path, title: "User Guide" }
     ]
   end
 end
