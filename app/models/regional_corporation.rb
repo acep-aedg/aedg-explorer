@@ -1,5 +1,6 @@
 class RegionalCorporation < ApplicationRecord
   include RegionalCorporationAttributes
+  include Facetable
   has_many :communities, foreign_key: 'regional_corporation_fips_code', primary_key: 'fips_code'
 
   validates :fips_code, presence: true, uniqueness: true

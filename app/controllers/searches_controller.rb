@@ -12,13 +12,29 @@ class SearchesController < ApplicationController
     @communities = Community.search(@query) if @query.present?
   end
 
-  def advanced
-    filters = extract_filters
-    @query  = filters[:q]
-    preload_choices
+def advanced
+    @global_search_results = []
+    if params[:q_global].present?
+      %i[q_grid q_boro q_corp q_senate q_house].each { |key| params[key] = params[:q_global] }
+      @global_search_results = Community.global_search_suggestions(params[:q_global])
+    end
 
-    query = build_scope(filters)
-    @pagy, @communities = pagy(query)
+    @pagy, @communities = pagy(build_scope(extract_filters))
+    @pagy_grids, @current_grids = pagy(
+      Grid.filter_by_params(params, :q_grid, :alpha_grid)
+    )
+    @pagy_boros, @current_boros = pagy(
+      Borough.filter_by_params(params, :q_boro, :alpha_boro)
+    )
+    @pagy_corps, @current_corps = pagy(
+      RegionalCorporation.filter_by_params(params, :q_corp, :alpha_corp)
+    )
+    @pagy_senate, @current_senate = pagy(
+      SenateDistrict.filter_by_params(params, :q_senate, :alpha_senate, :district)
+    )
+    @pagy_house, @current_house = pagy(
+      HouseDistrict.filter_by_params(params, :q_house, :alpha_house, :district)
+    )
   end
 
   private

@@ -33,3 +33,6 @@ application.register("summary-frame", SummaryFrameController)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
+
+import OffcanvasGroupController from "./offcanvas_group_controller"
+application.register("offcanvas-group", OffcanvasGroupController)

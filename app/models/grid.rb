@@ -1,5 +1,6 @@
 class Grid < ApplicationRecord
   include GridAttributes
+  include Facetable
   include ImportFinders
   extend FriendlyId
   friendly_id :slug_candidates, use: :slugged
