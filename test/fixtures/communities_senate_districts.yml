@@ -2,8 +2,8 @@
 
 one:
   community_fips_code: '0000001'
-  senate_district_district: one
+  senate_district_district: 'A'
 
 two:
   community_fips_code: '0000002'
-  senate_district_district: two
+  senate_district_district: 'B'

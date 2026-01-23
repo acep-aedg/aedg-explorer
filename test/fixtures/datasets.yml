@@ -4,7 +4,7 @@ csv_dataset:
   name: 'CSV Dataset'
   metadatum: one
   data:
-    path: 'test/fixtures/files/test.csv'
+    path: 'test/fixtures/files/test_csv/test_csv.csv'
     type: 'table'
     title: 'CSV Dataset'
     format: 'CSV'
@@ -27,7 +27,7 @@ geojson_dataset:
   name: 'GeoJSON Dataset'
   metadatum: one
   data:
-    path: 'test/fixtures/files/test.geojson'
+    path: 'test/fixtures/files/test_geojson/test_geojson.geojson'
     format: 'GeoJSON'
     title: 'Geo Test'
     schema:

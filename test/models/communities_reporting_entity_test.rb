@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CommunitiesLegislativeDistrictTest < ActiveSupport::TestCase
+class CommunitiesReportingEntityTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

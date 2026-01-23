@@ -6,11 +6,16 @@
 #
 one:
   name: 'Test Utility One'
-  year: 2020
+  most_recent_year: 2020
   grid: one
 
 two:
   name: 'Test Utility Two'
-  year: 2021
+  most_recent_year: 2021
   grid: two
+
+three:
+  name: 'Test Utility Three'
+  most_recent_year: 2020
+  grid: one
 

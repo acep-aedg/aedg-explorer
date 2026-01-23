@@ -1,11 +1,12 @@
-/ Plain 3–6 column responsive grid
-.row.row-cols-3.row-cols-md-4.row-cols-lg-6.text-center.justify-content-center
-  - communities.each do |c|
-    .col.border-bottom
-      = link_to c.name, community_path(c),
-                class: "link-underline link-offset-3-hover link-underline-opacity-0 link-underline-opacity-75-hover d-block py-2",
-                data: { turbo_frame: '_top' }
+- if communities.empty?
+  .text-center.mt-5
+    %i.bi.bi-search.display-4.text-muted.mb-3
+    %p.lead.text-secondary No communities found matching your search.
 
-/ Empty state
-- if communities.blank?
-  %p.text-secondary.text-center.mt-4 No communities found.
+- else
+  .row.g-2
+    - communities.each do |c|
+      .col-6.col-sm-4.col-lg-2
+        = link_to c.name, community_path(c),
+          class: "btn btn-light border w-100 h-100 shadow-sm d-flex align-items-center justify-content-center text-wrap",
+          data: { turbo_frame: '_top' }

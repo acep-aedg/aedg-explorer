@@ -1,8 +1,13 @@
 %turbo-frame#monthly_generation_summary   
   .bg-body-secondary.p-3.rounded.mb-3.d-flex.flex-wrap.justify-content-center.gap-4
     .d-flex.align-items-center
+      %i.bi-calendar.me-2.mt-1
+      %strong.me-1 Year:
+      %span.text-muted= stats[:year]
+      
+    .d-flex.align-items-center
       %i.bi-bullseye.me-2.mt-1
-      %strong.me-1 Average:
+      %strong.me-1 Avg:
       %span.text-primary= "#{number_with_delimiter (stats[:avg_generation])} MWh"
 
     .d-flex.align-items-center
@@ -16,8 +21,3 @@
       %strong.me-1 Min:
       %span.text-danger.me-1= "#{number_with_delimiter (stats[:min_generation])} MWh"
       .text-muted= "(#{Date::ABBR_MONTHNAMES[stats[:min_month]]})"
-
-    .d-flex.align-items-center
-      %i.bi-calendar.me-2.mt-1
-      %strong.me-1 Year:
-      %span.text-muted= stats[:year]

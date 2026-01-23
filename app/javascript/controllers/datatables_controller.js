@@ -11,6 +11,7 @@ export default class extends Controller {
 
   connect() {
     let table = this.element.querySelector("table");
+
     if (this.hasLoadValue) {
       this.loadData(table)  
     } else {
@@ -19,9 +20,7 @@ export default class extends Controller {
   }
 
   disconnect() {
-    let table = this.element.querySelector("table");
-    let dt = new DataTable(table, { retrieve: true });
-    dt.destroy();
+    this.dataTable?.destroy();
   }
 
   loadData(element) {
@@ -30,9 +29,9 @@ export default class extends Controller {
       .then(json => this.initializeDatatable(element, json.data, json.columns))
   }
 
-  initializeDatatable(element, data, columns) {
-    new DataTable(element, {
-      retrieve: true,
+  initializeDatatable(element, data, columns) {  
+    this.dataTable = new DataTable(element, {
+      destroy: true, // overwrite any "Zombie" tables left by Turbo.
       data: data,
       columns: columns,
       order: [this.orderValue],

@@ -1,8 +1,8 @@
 class Communities::ChartsController < ApplicationController
   before_action :set_community
-  before_action :set_latest_sale, only: %i[customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales]
-  before_action :set_sales, only: %i[energy_sold energy_sold_stacked]
-  before_action :set_year, only: %i[production_yearly capacity_yearly]
+  before_action :set_year,
+                only: %i[production_yearly capacity_yearly production_monthly customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
+  before_action :set_sales, only: %i[customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
   before_action :set_population_distribution, only: %i[age_distribution gender_distribution]
 
   def production_monthly; end
@@ -34,12 +34,8 @@ class Communities::ChartsController < ApplicationController
     @community = Community.friendly.find(params[:community_id])
   end
 
-  def set_latest_sale
-    @latest_sale = @community.reporting_entity&.latest_sale
-  end
-
   def set_sales
-    @sales = @community.reporting_entity&.sales&.order(year: :asc) || []
+    @sales = @community.sales.where(year: @year)
   end
 
   def set_year

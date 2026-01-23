@@ -25,3 +25,16 @@ two:
   total_revenue: 1
   total_sales: 1
   total_customers: 1
+
+three:
+  reporting_entity: three
+  year: 2020
+  residential_revenue: 100
+  residential_sales: 100
+  residential_customers: 100
+  commercial_revenue: 200
+  commercial_sales: 200
+  commercial_customers: 200
+  total_revenue: 0
+  total_sales: 0
+  total_customers: 0

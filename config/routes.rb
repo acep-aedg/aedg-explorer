@@ -10,11 +10,9 @@ Rails.application.routes.draw do
   scope path: '/explore' do
     resources :metadata, only: %i[index show], path: 'data' do
       resources :datasets, only: [] do
-        get :download, on: :member
         get :show, on: :member, defaults: { format: :json }
       end
       get :search, on: :collection
-      get :download, on: :member
     end
 
     resources :communities, only: %i[index show] do
@@ -53,7 +51,6 @@ Rails.application.routes.draw do
       end
 
       resource :summary, only: [], controller: 'communities/summaries' do
-        get :capacity
         get :monthly_generation
       end
     end
@@ -75,7 +72,6 @@ Rails.application.routes.draw do
       end
 
       resource :summary, only: [], controller: 'grids/summaries' do
-        get :capacity
         get :monthly_generation
       end
     end
