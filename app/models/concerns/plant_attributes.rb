@@ -17,7 +17,7 @@ module PlantAttributes
     def assign_aedg_attributes(params)
       assign_attributes(
         aea_plant_id: params[:aea_plant_id],
-        eia_plant_id: params[:eia_plant_id],
+        eia_plant_ids: params[:eia_plant_id].to_s.split(',').map(&:to_i),
         name: params[:name],
         aea_operator_id: params[:aea_operator_id],
         eia_operator_id: params[:eia_operator_id],
