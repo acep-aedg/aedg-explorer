@@ -13,27 +13,29 @@ class SearchesController < ApplicationController
   end
 
   def advanced
-    @global_search_results = []
-    if params[:q_global].present?
-      %i[q_grid q_boro q_corp q_senate q_house].each { |key| params[key] = params[:q_global] }
-      @global_search_results = Community.global_search_suggestions(params[:q_global])
-    end
+    # --- MAIN COMMUNITY SEARCH ---
+    @pagy, @communities = pagy(build_scope(extract_filters), page_param: :page)
 
-    @pagy, @communities = pagy(build_scope(extract_filters))
+    # --- SIDEBAR FACETS ---
     @pagy_grids, @current_grids = pagy(
-      Grid.filter_by_params(params, :q_grid, :alpha_grid)
+      Grid.filter_by_params(params, :q_grid, :alpha_grid),
+      page_param: :page_grid
     )
     @pagy_boros, @current_boros = pagy(
-      Borough.filter_by_params(params, :q_boro, :alpha_boro)
+      Borough.filter_by_params(params, :q_boro, :alpha_boro),
+      page_param: :page_boro
     )
     @pagy_corps, @current_corps = pagy(
-      RegionalCorporation.filter_by_params(params, :q_corp, :alpha_corp)
+      RegionalCorporation.filter_by_params(params, :q_corp, :alpha_corp),
+      page_param: :page_corp
     )
     @pagy_senate, @current_senate = pagy(
-      SenateDistrict.filter_by_params(params, :q_senate, :alpha_senate, :district)
+      SenateDistrict.filter_by_params(params, :q_senate, :alpha_senate, :district),
+      page_param: :page_senate
     )
     @pagy_house, @current_house = pagy(
-      HouseDistrict.filter_by_params(params, :q_house, :alpha_house, :district)
+      HouseDistrict.filter_by_params(params, :q_house, :alpha_house, :district),
+      page_param: :page_house
     )
   end
 
