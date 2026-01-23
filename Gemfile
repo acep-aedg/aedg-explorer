@@ -96,8 +96,5 @@ gem 'brakeman', '~> 7.1'
 gem 'kramdown'
 gem 'kramdown-parser-gfm'
 gem 'pagy', '~> 6.4'
-gem 'simplecov', require: false, group: :test
-
-gem 'turnout2024', '~> 3.0', require: 'turnout'
-
 gem 'rubyzip', '>= 2.3.0'
+gem 'simplecov', require: false, group: :test
