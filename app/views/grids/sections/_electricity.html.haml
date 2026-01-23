@@ -1,9 +1,9 @@
 - if @grid.show_utilities?
   .my-5.mx-3.mx-md-5.mt-3
     = render 'grids/sections/electricity/utilities'
-- if @grid.show_production?
+- if @grid.show_generation?
   .my-5.mx-3.mx-md-5
-    = render 'grids/sections/electricity/production'
+    = render 'grids/sections/electricity/generation'
 - if @grid.show_capacity?
   .my-5.mx-3.mx-md-5
     = render 'grids/sections/electricity/capacity'

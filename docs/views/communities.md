@@ -26,7 +26,7 @@ views/communities/
     │   └── _transportation.html.haml
     ├── electricity/                # Partials for "Electricity"
     │   ├── _fuel.html.haml
-    │   ├── _production.html.haml
+    │   ├── _generation.html.haml
     │   ├── _rates.html.haml
     │   ├── _sales.html.haml
     │   └── _utility.html.haml

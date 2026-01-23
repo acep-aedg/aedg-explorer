@@ -6,8 +6,8 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     @sales_year = @community.sales.maximum(:year)
   end
 
-  test 'should get production_monthly' do
-    get production_monthly_community_charts_url(@community, year: @community.monthly_generations.first.year)
+  test 'should get generation_monthly' do
+    get generation_monthly_community_charts_url(@community, year: @community.monthly_generations.first.year)
     assert_response :success
     assert_equal 'application/json', @response.media_type
     body = JSON.parse(@response.body)
@@ -17,9 +17,9 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal generation.net_generation_mwh.to_s, body.first['data'][month_abbr]
   end
 
-  test 'should get production_yearly' do
+  test 'should get generation_yearly' do
     year = @community.yearly_generations.first.year
-    get production_yearly_community_charts_url(@community, year: year)
+    get generation_yearly_community_charts_url(@community, year: year)
     assert_response :success
     assert_equal 'application/json', @response.media_type
 

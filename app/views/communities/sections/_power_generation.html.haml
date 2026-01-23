@@ -1,0 +1,10 @@
+- tab = 'power_generation'
+- if @community.show_utilities?
+  .my-5.mx-3.mx-md-5.mt-3
+    = render "communities/sections/#{tab}/utilities"
+- if @community.show_generation?
+  .my-5.mx-3.mx-md-5
+    = render "communities/sections/#{tab}/generation"
+- if @community.show_capacity?
+  .my-5.mx-3.mx-md-5
+    = render "communities/sections/#{tab}/capacity"

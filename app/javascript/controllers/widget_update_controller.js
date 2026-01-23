@@ -7,10 +7,10 @@ export default class extends Controller {
       Expects an Array of Objects. Example:
       [
         {
-          id: "production-monthly",                                    // REQUIRED: DOM ID of the chart
-          url: "production_monthly_community_charts_path(@community)", // REQUIRED: Data URL
+          id: "generation-monthly",                                    // REQUIRED: DOM ID of the chart
+          url: "generation_monthly_community_charts_path(@community)", // REQUIRED: Data URL
           param: "year",                                               // REQUIRED: The query param to update, defaults to 'year'
-          baseTitle: "Monthly Production"                              // OPTIONAL: Title prefix
+          baseTitle: "Monthly Generation"                              // OPTIONAL: Title prefix
         }
       ]
     */

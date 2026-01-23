@@ -18,11 +18,11 @@ Rails.application.routes.draw do
     resources :communities, only: %i[index show] do
       resources :charts, only: [], controller: 'communities/charts', defaults: { format: :json } do
         collection do
-          get :production_monthly
+          get :generation_monthly
           get :capacity_yearly
           get :population_employment
           get :population_detail
-          get :production_yearly
+          get :generation_yearly
           get :fuel_prices
           get :customer_breakdown_revenue
           get :customer_breakdown_customers
@@ -57,9 +57,9 @@ Rails.application.routes.draw do
     resources :grids, only: %i[index show] do
       resources :charts, only: [], controller: 'grids/charts', defaults: { format: :json } do
         collection do
-          get :production_monthly
+          get :generation_monthly
           get :capacity_yearly
-          get :production_yearly
+          get :generation_yearly
         end
       end
 

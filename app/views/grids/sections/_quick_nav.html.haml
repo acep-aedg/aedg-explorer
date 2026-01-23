@@ -15,7 +15,7 @@
         %li= nav_link "Electricity", "#electricity", parent_section: true
       - if @grid.show_utilities?
         %li= nav_link "Utilities", "#utilities"
-      - if @grid.show_production?
-        %li= nav_link "Production", "#production"
+      - if @grid.show_generation?
+        %li= nav_link "Generation", "#generation"
       - if @grid.show_capacity?
         %li= nav_link "Capacity", "#capacity"

@@ -7,9 +7,10 @@
 .container-fluid.bg-body-secondary.rounded.p-3.mb-3
   .d-flex.flex-column.flex-md-row.align-items-center.justify-content-between.flex-wrap.gap-3
     / --- Title Block ---
-    .d-flex.flex-column.text-center.text-md-start.me-md-4.pe-md-3.border-md-end.border-secondary-subtle
-      %h6.text-muted.mb-0.text-wrap
-        = title
+    - if local_assigns[:title]
+      .d-flex.flex-column.text-center.text-md-start.me-md-4.pe-md-3.border-md-end.border-secondary-subtle
+        %h6.text-muted.mb-0.text-wrap
+          = title
 
     / --- Icons and Fields ---
     .d-flex.flex-wrap.justify-content-evenly.flex-grow-1.gap-3

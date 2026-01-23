@@ -3,8 +3,8 @@ module Grids
     before_action :set_grid
     before_action :set_year
 
-    def production_monthly; end
-    def production_yearly; end
+    def generation_monthly; end
+    def generation_yearly; end
     def capacity_yearly; end
 
     private
