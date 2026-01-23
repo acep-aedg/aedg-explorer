@@ -18,18 +18,16 @@ module PlantAttributes
       assign_attributes(
         aea_plant_id: params[:aea_plant_id],
         eia_plant_id: params[:eia_plant_id],
-        name: params[:plant_name],
+        name: params[:name],
         aea_operator_id: params[:aea_operator_id],
         eia_operator_id: params[:eia_operator_id],
         grid: Grid.from_aedg_id(params[:grid_id]).first,
         service_area_geom_aedg_id: params[:service_area_geom_id],
-        eia_reporting: params[:eia_reporting],
-        pce_reporting: params[:pce_reporting],
+        pce_reporting_id: params[:pce_reporting_id],
         combined_heat_power: params[:combined_heat_power],
-        primary_voltage: params[:primary_voltage],
-        primary_voltage2: params[:primary_voltage2],
+        grid_primary_voltage_kv: params[:grid_primary_voltage_kv],
+        grid_primary_voltage_2_kv: params[:grid_primary_voltage_2_kv],
         phases: params[:phases],
-        status: params[:status],
         notes: params[:notes],
         location: params[:location]
       )

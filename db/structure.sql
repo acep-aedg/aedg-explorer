@@ -1005,7 +1005,7 @@ ALTER SEQUENCE public.metadata_id_seq OWNED BY public.metadata.id;
 
 CREATE TABLE public.monthly_generations (
     id bigint NOT NULL,
-    net_generation_mwh numeric,
+    generation_mwh numeric,
     year integer,
     month integer,
     created_at timestamp(6) without time zone NOT NULL,
@@ -1013,7 +1013,12 @@ CREATE TABLE public.monthly_generations (
     fuel_type_code character varying,
     fuel_type_name character varying,
     aea_plant_id integer,
-    eia_plant_id integer
+    eia_plant_id integer,
+    physical_unit_label character varying,
+    pce_fuel_price numeric,
+    quantity_consumed_in_physical_units_for_electric_generation numeric,
+    quantity_consumed_for_electricity_mmbtu numeric,
+    source character varying
 );
 
 
@@ -1051,15 +1056,13 @@ CREATE TABLE public.plants (
     eia_operator_id integer,
     grid_id integer,
     service_area_geom_aedg_id character varying,
-    eia_reporting boolean,
-    pce_reporting boolean,
     combined_heat_power boolean,
-    primary_voltage numeric,
-    primary_voltage2 numeric,
+    grid_primary_voltage_kv numeric,
+    grid_primary_voltage_2_kv numeric,
     phases character varying,
-    status character varying,
     notes character varying,
-    location public.geometry
+    location public.geometry,
+    pce_reporting_id integer
 );
 
 
@@ -1563,14 +1566,19 @@ ALTER SEQUENCE public.transportations_id_seq OWNED BY public.transportations.id;
 
 CREATE TABLE public.yearly_generations (
     id bigint NOT NULL,
-    net_generation_mwh integer,
+    generation_mwh integer,
     year integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     fuel_type_code character varying,
     fuel_type_name character varying,
     aea_plant_id integer,
-    eia_plant_id integer
+    eia_plant_id integer,
+    physical_unit_label character varying,
+    avg_pce_fuel_price numeric,
+    quantity_consumed_in_physical_units_for_electric_generation numeric,
+    quantity_consumed_for_electricity_mmbtu numeric,
+    source character varying
 );
 
 
@@ -2943,6 +2951,9 @@ ALTER TABLE ONLY public.communities_senate_districts
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260123003703'),
+('20260123003623'),
+('20260121214810'),
 ('20260115215649'),
 ('20260115214036'),
 ('20260115205258'),
