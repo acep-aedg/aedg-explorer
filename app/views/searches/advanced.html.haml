@@ -1,55 +1,72 @@
-- content_for :title, 'Advanced Search'
+- content_for :title, 'Community Explorer - Search'
 
-.container-fluid
-  .row
-    / ==== LEFT: FILTERS PANEL ====
-    .col-lg-4.p-0.bg-light
-      .card.rounded-0
+.container-xxl
+  / --- Back Button ---
+  .row.mb-3
+    .col-12
+      = link_to :back, class: 'text-decoration-none ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
+        %i.bi.bi-arrow-left.me-1
+        Back
+
+  .row.g-4.mb-3
+    / ==== LEFT: FILTERS PANEL (Sticky Sidebar) ====
+    .col-md-4
+      .mb-4.position-sticky.top-0.py-3
+        %h2.fw-bold.mb-1  Community Explorer
+        %p.text-muted Filter communities by specific criteria below.
         = render 'searches/advanced/form'
 
     / ==== RIGHT: MAIN RESULTS ====
-    .col-lg.p-0{ style: "min-height: 100vh;" }
-      .bg-body-secondary.rounded-0.p-4.w-100.d-flex.flex-column{ style: "height: 100%; overflow-y: auto;" }
+    .col-md-8.border-md-start.ps-md-4
+      .mb-3.py-3
+        - selected_grids = selected_labels(@all_grids, :grid_ids) { |g| g.id }
+        - selected_boros = selected_labels(@all_boros, :borough_fips_codes) { |b| b.fips_code }
+        - selected_corps = selected_labels(@all_corps, :regional_corporation_fips_codes) { |c| c.fips_code }
+        - selected_sen   = selected_labels(@all_senate, :senate_district_ids) { |d| d.id }
+        - selected_hou   = selected_labels(@all_house, :house_district_ids) { |d| d.id }
+        - has_filters    = selected_grids.any? || selected_boros.any? || selected_corps.any? || selected_sen.any? || selected_hou.any? || params[:q].present?
 
-        / --- Header and filter badges ---
-        .d-flex.flex-wrap.justify-content-between.align-items-center.mb-3
-          %h5.mb-0= pluralize(@pagy.count, 'Community')
+        / --- Header ---
+        .d-flex.justify-content-between.align-items-center.mb-3
+          %span.text-muted.fs-5
+            = has_filters ? 'Search Results' : 'All Communities'
+            %small.ms-2.text-secondary= "#{pluralize(@pagy.count, 'Community')} found"
+          
+          - if has_filters
+            = link_to 'Clear all', search_advanced_path, class: 'small text-decoration-none text-danger'
 
-          - selected_grids = selected_labels(@all_grids, :grid_ids) { |g| g.id }
-          - selected_boros = selected_labels(@all_boros, :borough_fips_codes) { |b| b.fips_code }
-          - selected_corps = selected_labels(@all_corps, :regional_corporation_fips_codes) { |c| c.fips_code }
-          - selected_sen   = selected_labels(@all_senate, :senate_district_ids) { |d| d.id }
-          - selected_hou   = selected_labels(@all_house, :house_district_ids) { |d| d.id }
+        / --- Active Filter Badges ---
+        - if has_filters
+          .d-flex.flex-wrap.gap-2.mb-4
+            - if params[:q].present?
+              %span.badge.bg-primary-subtle.text-primary.border
+                %i.bi.bi-search.me-1
+                = params[:q]
+            - selected_grids.each do |g|
+              %span.badge.bg-light.text-body.border
+                %i.bi.bi-grid-3x3-gap.me-1
+                = g.name
+            - selected_boros.each do |b|
+              %span.badge.bg-secondary.text-light= b.name
+            - selected_corps.each do |c|
+              %span.badge.bg-success.text-light= c.name
+            - selected_sen.each do |d|
+              %span.badge.bg-info-subtle.text-dark.border= "Senate District #{d.district}"
+            - selected_hou.each do |d|
+              %span.badge.bg-primary-subtle.text-primary.border= "House District #{d}"
 
-          - if selected_grids.any? || selected_boros.any? || selected_corps.any? || selected_sen.any? || selected_hou.any? || params[:q].present?
-            .d-flex.flex-wrap.gap-2
-              - if params[:q].present?
-                %span.badge.bg-primary-subtle.text-primary.border
-                  %i.bi.bi-search.me-1.mb-1
-                  = params[:q]
-              - selected_grids.each do |g|
-                %span.badge.bg-light.text-body.border
-                  %i.bi.bi-grid-3x3-gap.me-1.mb-1
-                  = g.name
-              - selected_boros.each do |b|
-                %span.badge.bg-secondary.text-light= b.name
-              - selected_corps.each do |c|
-                %span.badge.bg-success.text-light= c.name
-              - selected_sen.each do |d|
-                %span.badge.bg-info-subtle.text-dark.border= "Senate District #{d.district}"
-              - selected_hou.each do |d|
-                %span.badge.bg-primary-subtle.text-primary.border= "House District #{d}"
-
-            = link_to 'Clear all', search_advanced_path, class: 'small ms-2 text-decoration-none'
-
-        / --- Scrollable results ---
-        .flex-grow-1.overflow-auto
-          - if @pagy.count > 0
-            .vstack.gap-3
-              - @communities.each do |community|
-                = render 'searches/advanced/community_card', community: community
-            .mt-4.text-center
-              = raw(pagy_bootstrap_nav(@pagy))
-          - else
-            .alert.alert-info.text-center.mt-3
-              No communities matched those filters. Try broadening your selection.
+        / --- Results List ---
+        - if @pagy.count > 0
+          .vstack.gap-3
+            - @communities.each do |community|
+              = render 'searches/advanced/community_card', community: community
+          
+          / --- Pagination ---
+          .mt-5.text-center
+            = raw(pagy_bootstrap_nav(@pagy))
+            
+        - else
+          .alert.alert-light.text-center.mt-5.py-5.border
+            %i.bi.bi-search.display-6.text-muted.mb-3
+            %p.fs-5.text-muted No communities matched those filters.
+            %p.small Try removing some filters or broadening your search terms.

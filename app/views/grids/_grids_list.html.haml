@@ -1,0 +1,12 @@
+- if grids.empty?
+  .text-center.mt-5
+    %i.bi.bi-grid-3x3-gap.display-4.text-muted.mb-3
+    %p.lead.text-secondary No grids found matching your search.
+
+- else
+  .row.g-2.mt-4
+    - grids.each do |grid|
+      .col-6.col-sm-4.col-lg-2
+        = link_to grid.name, grid_path(grid),
+          class: "btn btn-light border w-100 h-100 shadow-sm d-flex align-items-center justify-content-center text-wrap",
+          data: { turbo_frame: '_top' }
