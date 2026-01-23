@@ -13,8 +13,8 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     body = JSON.parse(@response.body)
     generation = @community.monthly_generations.first
     month_abbr = Date::ABBR_MONTHNAMES[generation.month]
-    assert_equal 'Net Generation (MWh)', body.first['name']
-    assert_equal generation.net_generation_mwh.to_s, body.first['data'][month_abbr]
+    assert_equal 'Generation (MWh)', body.first['name']
+    assert_equal generation.generation_mwh.to_s, body.first['data'][month_abbr]
   end
 
   test 'should get production_yearly' do
@@ -33,7 +33,7 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes label, generation.fuel_type_code
     assert_includes label, generation.fuel_type_name
-    assert_equal generation.net_generation_mwh.to_f, value.to_f
+    assert_equal generation.generation_mwh.to_f, value.to_f
   end
 
   test 'should get capacity_yearly for a specific year' do

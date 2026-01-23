@@ -2,14 +2,14 @@
 
 one:
   aea_plant_id: 1
-  net_generation_mwh: 5000
+  generation_mwh: 5000
   fuel_type_code: 'NG'
   fuel_type_name: 'Natural Gas'
   year: 2020
 
 two:
   aea_plant_id: 2
-  net_generation_mwh: 1500
+  generation_mwh: 1500
   fuel_type_code: 'DFO'
   fuel_type_name: 'Distillate Fuel Oil'
   year: 2021
