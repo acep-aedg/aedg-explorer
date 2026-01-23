@@ -1,0 +1,26 @@
+- parent_tab = 'power_generation'
+.d-flex.align-items-center.mb-3
+  %i.bi.bi-lightning-fill.me-2.fs-4
+  %h4#capacity.mb-0.me-2.py-3.anchor-offset Capacity
+  %hr.flex-grow-1.mt-1.mb-0.mx-2
+  = render "communities/sections/#{parent_tab}/capacity/about_modal"
+
+.mb-3
+  / Tabs
+  .d-flex.align-items-center.mt-4
+    .nav.nav-tabs
+      %li.nav-item
+        = link_to "#capacity-chart", class: "nav-link active", data: { bs_toggle: "tab" } do
+          %i.bi.bi-pie-chart.me-1
+          Chart
+      %li.nav-item
+        = link_to "#capacity-data", class: "nav-link", data: { bs_toggle: "tab" } do
+          %i.bi.bi-table.me-1
+          Data
+
+  / Tab Content
+  .tab-content.mt-3
+    #capacity-chart.tab-pane.fade.show.active
+      = render "communities/sections/#{parent_tab}/capacity/capacity_chart"
+    #capacity-data.tab-pane.fade
+      = render "communities/sections/#{parent_tab}/capacity/capacity_data"
