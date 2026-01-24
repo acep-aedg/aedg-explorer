@@ -1,11 +1,11 @@
 - content_for :title, 'Community Explorer - Search'
 
 -# --- WRAPPER FOR CONTROLLER ---
-%div{ data: { controller: "offcanvas-group", action: "change->offcanvas-group#autoSubmit" } }
+.container-xxl{ data: { controller: "offcanvas-group", action: "change->offcanvas-group#autoSubmit" } }
   = render 'searches/advanced/hidden_form'
 
   -# MAIN LAYOUT CONTAINER
-  .d-flex.w-100{ style: "min-height: calc(100vh - 70px); overflow-x: hidden;" }
+  .d-flex.p-4{ style: "min-height: calc(100vh - 70px); overflow-x: hidden;" }
   
     -# LEFT COLUMN: Sidebar & Pop-out Panels (Sticky Wrapper)
     = render 'searches/advanced/sidebar_and_panels'
