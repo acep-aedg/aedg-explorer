@@ -20,6 +20,7 @@ class Communities::ChartsController < ApplicationController
   def income; end
   def energy_sold; end
   def energy_sold_stacked; end
+  def electric_rates; end
 
   def fuel_prices
     @price_type = params[:price_type].to_s

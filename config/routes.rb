@@ -36,6 +36,7 @@ Rails.application.routes.draw do
           get :fuel_prices
           get :energy_sold
           get :energy_sold_stacked
+          get :electric_rates
         end
       end
 

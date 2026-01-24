@@ -1,0 +1,9 @@
+- chart_title = "#{@community.name.titleize} - Electricity Rates Over Time"
+= line_chart electric_rates_community_charts_path(@community), 
+      title: chart_title,
+      prefix: '$',
+      suffix: '/kWh',
+      ytitle: "Rate ($/kWh)",
+      xtitle: "Year",
+      download: { filename: chart_title.parameterize },
+      library: { plugins: { tooltip: { mode: 'index', intersect: false } } }
