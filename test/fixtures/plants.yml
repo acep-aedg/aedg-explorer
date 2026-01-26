@@ -6,7 +6,7 @@
 #
 one:
   aea_plant_id: 1
-  eia_plant_id: 1
+  eia_plant_ids: [1]
   name: "Plant One"
   aea_operator_id: 1
   eia_operator_id: 1
@@ -21,7 +21,7 @@ one:
 
 two:
   aea_plant_id: 2
-  eia_plant_id: 2
+  eia_plant_ids: [2,3]
   name: "Plant Two"
   aea_operator_id: 2
   eia_operator_id: 2
