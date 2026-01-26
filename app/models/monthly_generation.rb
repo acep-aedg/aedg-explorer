@@ -6,7 +6,7 @@ class MonthlyGeneration < ApplicationRecord
 
   validates :aea_plant_id,
             uniqueness: { scope: %i[year month fuel_type_code source],
-                          message: 'combination of aea_plant_id, year, month, fuel type_code, and source must be unique' }
+                          message: "combination of aea_plant_id, year, month, fuel type_code, and source must be unique" }
 
   scope :for_owner,          ->(owner) { owner ? joins(:plant).merge(owner.plants) : all }
   scope :for_owner_and_year, ->(owner, year) { for_owner(owner).where(year: year) }

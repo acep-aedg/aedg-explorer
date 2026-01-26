@@ -8,8 +8,8 @@ class MonthlyGenerationAttributesTest < ActiveSupport::TestCase
     @valid_props = {
       aea_plant_id: VALID_AEDG_ID,
       generation_mwh: 10,
-      fuel_type_code: 'ABC',
-      fuel_type_name: 'Test Fuel Type',
+      fuel_type_code: "ABC",
+      fuel_type_name: "Test Fuel Type",
       year: 2021,
       month: 1
     }

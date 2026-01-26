@@ -13,8 +13,8 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     body = JSON.parse(@response.body)
     generation = @community.monthly_generations.first
     month_abbr = Date::ABBR_MONTHNAMES[generation.month]
-    assert_equal 'Generation (MWh)', body.first['name']
-    assert_equal generation.generation_mwh.to_s, body.first['data'][month_abbr]
+    assert_equal "Generation (MWh)", body.first["name"]
+    assert_equal generation.generation_mwh.to_s, body.first["data"][month_abbr]
   end
 
   test "should get production_yearly" do
