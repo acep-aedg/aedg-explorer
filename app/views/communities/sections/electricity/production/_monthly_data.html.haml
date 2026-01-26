@@ -12,7 +12,7 @@
       %th Quantity Consumed for Electric Generation (Physical Unit)
       %th Source
     %tbody
-      - @community.monthly_generations.each do |generation|
+      - @community.monthly_generations.includes(:plant).each do |generation|
         %tr
           %td= generation.plant.name
           %td= generation.year

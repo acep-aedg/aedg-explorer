@@ -8,7 +8,7 @@
         %th Fuel Type Name
         %th Year
     %tbody
-      - @community.capacities.each do |capacity|
+      - @community.capacities.includes(:plant).each do |capacity|
         %tr
           %td= capacity.plant.name
           %td= capacity.capacity_mw

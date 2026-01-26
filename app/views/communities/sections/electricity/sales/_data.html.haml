@@ -9,7 +9,7 @@
         %th Revenue
         %th Year
     %tbody
-      - @community.sales.order(year: :desc).each do |sale|
+      - @community.sales.includes(:reporting_entity).order(year: :desc).each do |sale|
         - rows = []
         - rows << { label: 'Total',       customers: sale.total_customers,       sales: sale.total_sales,       revenue: sale.total_revenue }
         - rows << { label: 'Residential', customers: sale.residential_customers, sales: sale.residential_sales, revenue: sale.residential_revenue }

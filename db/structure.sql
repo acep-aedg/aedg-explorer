@@ -2233,10 +2233,45 @@ ALTER TABLE ONLY public.yearly_generations
 
 
 --
+-- Name: idx_csag_on_aedg_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_csag_on_aedg_id ON public.communities_service_area_geoms USING btree (service_area_geom_aedg_id);
+
+
+--
+-- Name: idx_csag_on_fips; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_csag_on_fips ON public.communities_service_area_geoms USING btree (community_fips_code);
+
+
+--
+-- Name: idx_monthly_gen_composite; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_monthly_gen_composite ON public.monthly_generations USING btree (aea_plant_id, year, month);
+
+
+--
 -- Name: idx_on_community_fips_code_grid_id_connection_year_dab7f92833; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX idx_on_community_fips_code_grid_id_connection_year_dab7f92833 ON public.community_grids USING btree (community_fips_code, grid_id, connection_year);
+
+
+--
+-- Name: idx_plants_on_sa_geom_aedg_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_plants_on_sa_geom_aedg_id ON public.plants USING btree (service_area_geom_aedg_id);
+
+
+--
+-- Name: idx_yearly_gen_on_aea_id_and_year; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_yearly_gen_on_aea_id_and_year ON public.yearly_generations USING btree (aea_plant_id, year);
 
 
 --
@@ -2951,6 +2986,7 @@ ALTER TABLE ONLY public.communities_senate_districts
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260126194042'),
 ('20260123003703'),
 ('20260123003623'),
 ('20260121214810'),
