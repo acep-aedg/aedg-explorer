@@ -30,10 +30,6 @@
         - years.each do |y|
           %option{ value: y, selected: y == selected_year }= y
 
-  / Summary Frame: Targeted by the controller
-  %turbo-frame#monthly_generation_summary{ data: { widget_update_target: 'frame', param: 'year' }, src: monthly_generation_community_summary_path(@community, year: selected_year)}
-    Loading summary ...
-
   / Chart: Updated by ID
   = column_chart production_monthly_community_charts_path(@community, year: selected_year),
     id: chart_id,
