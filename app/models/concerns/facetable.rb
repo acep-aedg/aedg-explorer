@@ -2,8 +2,8 @@ module Facetable
   extend ActiveSupport::Concern
 
   included do
-    scope :facet_search, ->(term) { where('name ILIKE ?', "%#{term}%") }
-    scope :facet_alpha,  ->(char) { where('name ILIKE ?', "#{char}%") }
+    scope :facet_search, ->(term) { where("name ILIKE ?", "%#{term}%") }
+    scope :facet_alpha,  ->(char) { where("name ILIKE ?", "#{char}%") }
   end
 
   class_methods do

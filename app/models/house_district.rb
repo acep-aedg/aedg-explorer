@@ -1,6 +1,7 @@
 class HouseDistrict < ApplicationRecord
   include HouseDistrictAttributes
   include Facetable
+
   has_many :communities_house_districts, dependent: :destroy
   has_many :communities, through: :communities_house_districts
 
