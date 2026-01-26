@@ -9,8 +9,11 @@ json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
       name: 'Generation (MWh)',
       data: gen_data,
       library: { yAxisID: 'y' }
-    },
-    {
+    }
+  ]
+
+  if hdd_data.present?
+    series << {
       name: 'Heating Degree Days',
       data: hdd_data,
       library: {
@@ -19,7 +22,7 @@ json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
         pointRadius: 3
       }
     }
-  ]
+  end
 
   json.array! series do |s|
     json.name    s[:name]
