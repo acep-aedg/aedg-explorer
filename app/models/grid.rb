@@ -3,6 +3,7 @@ class Grid < ApplicationRecord
   include Facetable
   include ImportFinders
   extend FriendlyId
+
   friendly_id :slug_candidates, use: :slugged
   validates :name, presence: true, uniqueness: true
   has_one :aedg_import, as: :importable

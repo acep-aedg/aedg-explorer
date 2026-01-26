@@ -1,11 +1,12 @@
 class MonthlyGeneration < ApplicationRecord
   include MonthlyGenerationAttributes
+
   validates :aea_plant_id, presence: true
-  belongs_to :plant, foreign_key: 'aea_plant_id', primary_key: 'aea_plant_id', inverse_of: :monthly_generations
+  belongs_to :plant, foreign_key: "aea_plant_id", primary_key: "aea_plant_id", inverse_of: :monthly_generations
 
   validates :aea_plant_id,
             uniqueness: { scope: %i[year month fuel_type_code],
-                          message: 'combination of aea_plant_id, year, month and fuel type_code must be unique' }
+                          message: "combination of aea_plant_id, year, month and fuel type_code must be unique" }
 
   scope :for_owner,          ->(owner) { owner ? joins(:plant).merge(owner.plants) : all }
   scope :for_owner_and_year, ->(owner, year) { for_owner(owner).where(year: year) }

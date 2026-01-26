@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'rgeo'
+require "test_helper"
+require "rgeo"
 
 class HouseDistrictAttributesTest < ActiveSupport::TestCase
   def setup
@@ -18,13 +18,13 @@ class HouseDistrictAttributesTest < ActiveSupport::TestCase
     @polygon_geom = @geom_factory.multi_polygon([polygon])
 
     @valid_props = {
-      name: 'Test House District',
-      district: '1000',
-      as_of_date: '2023-01-01'
+      name: "Test House District",
+      district: "1000",
+      as_of_date: "2023-01-01"
     }
   end
 
-  test 'creates a new house district with geometry and attributes' do
+  test "creates a new house district with geometry and attributes" do
     house_district = nil
 
     assert_difference -> { HouseDistrict.count }, +1 do
@@ -37,7 +37,7 @@ class HouseDistrictAttributesTest < ActiveSupport::TestCase
     assert_equal @polygon_geom.as_text, house_district.boundary.as_text
   end
 
-  test 'is invalid with incorrect geometry type' do
+  test "is invalid with incorrect geometry type" do
     line = @geom_factory.line_string([
                                        @geom_factory.point(0, 0),
                                        @geom_factory.point(1, 1)

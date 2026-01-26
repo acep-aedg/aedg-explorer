@@ -1,8 +1,9 @@
 class Capacity < ApplicationRecord
   include CapacityAttributes
+
   validates :aea_plant_id, presence: true
 
-  belongs_to :plant, foreign_key: 'aea_plant_id', primary_key: 'aea_plant_id', inverse_of: :capacities
+  belongs_to :plant, foreign_key: "aea_plant_id", primary_key: "aea_plant_id", inverse_of: :capacities
 
   scope :for_owner, ->(owner) { owner ? joins(:plant).merge(owner.plants) : all }
   scope :for_owner_and_year, ->(owner, year) { for_owner(owner).where(year: year) }
@@ -23,9 +24,9 @@ class Capacity < ApplicationRecord
 
     {
       total_capacity: records.sum(:capacity_mw).to_f.round(2),
-      min_capacity: min_rec&.capacity_mw&.to_f&.round(2),
+      min_capacity: min_rec&.capacity_mw.to_f.round(2),
       min_fuel_type: min_rec&.fuel_type_code,
-      max_capacity: max_rec&.capacity_mw&.to_f&.round(2),
+      max_capacity: max_rec&.capacity_mw.to_f.round(2),
       max_fuel_type: max_rec&.fuel_type_code,
       year: year
     }

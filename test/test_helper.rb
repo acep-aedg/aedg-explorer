@@ -1,11 +1,11 @@
-ENV['RAILS_ENV'] ||= 'test'
-require 'simplecov'
-SimpleCov.start 'rails'
+ENV["RAILS_ENV"] ||= "test"
+require "simplecov"
+SimpleCov.start "rails"
 
-require_relative '../config/environment'
-require 'rails/test_help'
-require 'mocha/minitest'
-require_relative 'helpers/test_constants'
+require_relative "../config/environment"
+require "rails/test_help"
+require "mocha/minitest"
+require_relative "helpers/test_constants"
 
 module ActiveSupport
   class TestCase

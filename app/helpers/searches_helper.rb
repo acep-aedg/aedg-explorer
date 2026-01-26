@@ -1,6 +1,6 @@
 module SearchesHelper
   def param_array(key)
-    Array(params[key]).reject(&:blank?).map(&:to_s)
+    Array(params[key]).compact_blank.map(&:to_s)
   end
 
   # Determine whether a value should be checked in a facet checkbox

@@ -4,7 +4,7 @@ module BoroughAttributes
 
   class_methods do
     def import_aedg_with_geom!(properties, geom)
-      properties['boundary'] = geom
+      properties["boundary"] = geom
       properties.symbolize_keys!
 
       Borough.find_or_initialize_by(fips_code: properties[:fips_code]).tap do |borough|

@@ -12,7 +12,7 @@ class HouseDistrict < ApplicationRecord
 
   def as_geojson
     {
-      type: 'Feature',
+      type: "Feature",
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
         id: district,

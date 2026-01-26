@@ -5,7 +5,7 @@ module CommunitiesServiceAreaGeomAttributes
     def import_aedg!(properties)
       properties.symbolize_keys!
 
-      raise 'Skipped: missing service_area_geom_id' if properties[:service_area_geom_id].blank?
+      raise "Skipped: missing service_area_geom_id" if properties[:service_area_geom_id].blank?
 
       CommunitiesServiceAreaGeom.new.tap do |service_area_geom|
         service_area_geom.assign_aedg_attributes(properties)

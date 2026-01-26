@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'rgeo'
+require "test_helper"
+require "rgeo"
 
 class BoroughAttributesTest < ActiveSupport::TestCase
   def setup
@@ -14,12 +14,12 @@ class BoroughAttributesTest < ActiveSupport::TestCase
                                 ])
     )
     @valid_props = {
-      fips_code: '123',
-      name: 'Test Borough'
+      fips_code: "123",
+      name: "Test Borough"
     }
   end
 
-  test 'import_aedg_with_geom! creates borough with valid props and geometry' do
+  test "import_aedg_with_geom! creates borough with valid props and geometry" do
     borough = nil
     assert_difference -> { Borough.count }, +1 do
       borough = Borough.import_aedg_with_geom!(@valid_props, @polygon_geom)
@@ -29,7 +29,7 @@ class BoroughAttributesTest < ActiveSupport::TestCase
     assert_equal @polygon_geom.as_text, borough.boundary.as_text
   end
 
-  test 'import_aedg_with_geom! raises error with incorrect geometry type' do
+  test "import_aedg_with_geom! raises error with incorrect geometry type" do
     line = @geom_factory.line_string([
                                        @geom_factory.point(0, 0),
                                        @geom_factory.point(1, 1)
@@ -40,7 +40,7 @@ class BoroughAttributesTest < ActiveSupport::TestCase
     end
   end
 
-  test 'import_aedg_with_geom! raises ArgumentError with missing geometry' do
+  test "import_aedg_with_geom! raises ArgumentError with missing geometry" do
     assert_raises(ArgumentError) do
       Borough.import_aedg_with_geom!(@valid_props)
     end
