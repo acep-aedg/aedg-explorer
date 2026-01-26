@@ -26,11 +26,11 @@ class SearchesController < ApplicationController
   def extract_filters
     {
       q: params[:q],
-      grid_ids: Array(params[:grid_ids]).reject(&:blank?),
-      borough_fips_codes: Array(params[:borough_fips_codes]).reject(&:blank?),
-      regional_corporation_fips_codes: Array(params[:regional_corporation_fips_codes]).reject(&:blank?),
-      senate_district_ids: Array(params[:senate_district_ids]).reject(&:blank?),
-      house_district_ids: Array(params[:house_district_ids]).reject(&:blank?)
+      grid_ids: Array(params[:grid_ids]).compact_blank,
+      borough_fips_codes: Array(params[:borough_fips_codes]).compact_blank,
+      regional_corporation_fips_codes: Array(params[:regional_corporation_fips_codes]).compact_blank,
+      senate_district_ids: Array(params[:senate_district_ids]).compact_blank,
+      house_district_ids: Array(params[:house_district_ids]).compact_blank
     }
   end
 
@@ -40,7 +40,7 @@ class SearchesController < ApplicationController
     # Text search (pg_search_scope)
     if filters[:q].present?
       base = base.search_full_text(filters[:q])
-                 .reorder('communities.name ASC')
+                 .reorder("communities.name ASC")
     end
     # Apply filters
     base = base.in_boroughs(filters[:borough_fips_codes])           if filters[:borough_fips_codes].present?

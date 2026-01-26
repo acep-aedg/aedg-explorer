@@ -19,11 +19,11 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
 
   json.array! [
     {
-      name: 'Per Capita Income',
+      name: "Per Capita Income",
       data: @per_capita_income_data
     },
     {
-      name: 'Median Household Income',
+      name: "Median Household Income",
       data: @median_hh_income_data
     }
   ]

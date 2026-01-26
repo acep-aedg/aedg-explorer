@@ -1,15 +1,16 @@
 # lib/tasks/grids.rake
-require 'net/http'
-require 'uri'
+require "net/http"
+require "uri"
 namespace :grids do
-  desc 'Check grid show pages render without error'
+  desc "Check grid show pages render without error"
   task test_show_view: :environment do
     include Rails.application.routes.url_helpers
-    Rails.application.routes.default_url_options[:host] = 'localhost:3000'
+
+    Rails.application.routes.default_url_options[:host] = "localhost:3000"
 
     failed = []
 
-    puts 'Checking grid show pages...'
+    puts "Checking grid show pages..."
 
     Grid.find_each do |grid|
       url = URI.parse(grid_url(grid))
@@ -17,7 +18,7 @@ namespace :grids do
       begin
         response = Net::HTTP.get_response(url)
 
-        if response.code != '200'
+        if response.code != "200"
           puts "Failed: #{grid.name}: HTTP #{response.code}, Message: #{response.message}"
           failed << { name: grid.name, code: response.code }
         end
@@ -29,7 +30,7 @@ namespace :grids do
 
     puts "\n Summary:"
     if failed.empty?
-      puts 'All grid pages loaded successfully!'
+      puts "All grid pages loaded successfully!"
     else
       puts "#{failed.count} grids failed to load:"
       failed.each do |entry|

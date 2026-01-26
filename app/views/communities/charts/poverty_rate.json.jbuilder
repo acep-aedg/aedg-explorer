@@ -16,7 +16,7 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
 
   json.array! [
     {
-      name: 'Poverty Rate',
+      name: "Poverty Rate",
       data: @poverty_rate_percentage_data
     }
   ]

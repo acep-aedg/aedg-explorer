@@ -1,5 +1,6 @@
 class SchoolDistrict < ApplicationRecord
   include SchoolDistrictAttributes
+
   has_many :communities_school_districts, dependent: :destroy
   has_many :communities, through: :communities_school_districts
 
@@ -8,7 +9,7 @@ class SchoolDistrict < ApplicationRecord
 
   def as_geojson
     {
-      type: 'Feature',
+      type: "Feature",
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
         id: district,
@@ -18,7 +19,7 @@ class SchoolDistrict < ApplicationRecord
   end
 
   def formatted_type
-    return '' if district_type.blank?
+    return "" if district_type.blank?
 
     # Only fix if it's CamelCase with no spaces
     if district_type.match?(/\A[A-Z][a-z]+(?:[A-Z][a-z]+)+\z/)

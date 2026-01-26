@@ -3,7 +3,7 @@ module PlantAttributes
 
   class_methods do
     def import_aedg_with_geom!(properties, geom)
-      properties['location'] = geom
+      properties["location"] = geom
       properties.symbolize_keys!
 
       Plant.new.tap do |plant|

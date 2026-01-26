@@ -1,7 +1,8 @@
 class MonthlyGeneration < ApplicationRecord
   include MonthlyGenerationAttributes
+
   validates :aea_plant_id, presence: true
-  belongs_to :plant, foreign_key: 'aea_plant_id', primary_key: 'aea_plant_id', inverse_of: :monthly_generations
+  belongs_to :plant, foreign_key: "aea_plant_id", primary_key: "aea_plant_id", inverse_of: :monthly_generations
 
   validates :aea_plant_id,
             uniqueness: { scope: %i[year month fuel_type_code source],

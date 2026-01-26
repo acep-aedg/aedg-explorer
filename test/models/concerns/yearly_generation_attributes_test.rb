@@ -1,10 +1,10 @@
-require 'test_helper'
+require "test_helper"
 
 class YearlyGenerationAttributesTest < ActiveSupport::TestCase
   include TestConstants
 
   def setup
-    @plant = Plant.create!(aea_plant_id: VALID_AEDG_ID, name: 'Test Plant')
+    @plant = Plant.create!(aea_plant_id: VALID_AEDG_ID, name: "Test Plant")
     @valid_props = {
       aea_plant_id: VALID_AEDG_ID,
       generation_mwh: 10,
@@ -14,7 +14,7 @@ class YearlyGenerationAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test 'import_aedg! creates a yearly generation record with valid props' do
+  test "import_aedg! creates a yearly generation record with valid props" do
     yg = nil
 
     assert_difference -> { YearlyGeneration.count }, +1 do
@@ -28,7 +28,7 @@ class YearlyGenerationAttributesTest < ActiveSupport::TestCase
     assert_equal @valid_props[:year], yg.year
   end
 
-  test 'import_aedg! raises RecordInvalid when associated plant cannot be found' do
+  test "import_aedg! raises RecordInvalid when associated plant cannot be found" do
     invalid_props = @valid_props.merge(aea_plant_id: INVALID_AEDG_ID)
     assert_raises(ActiveRecord::RecordInvalid) do
       YearlyGeneration.import_aedg!(invalid_props)

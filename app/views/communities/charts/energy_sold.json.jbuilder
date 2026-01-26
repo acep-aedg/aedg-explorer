@@ -12,12 +12,12 @@ json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
 
       if has_breakdown
         json.data [
-          ['Residential', sale.residential_sales.to_f],
-          ['Commercial',  sale.commercial_sales.to_f]
+          ["Residential", sale.residential_sales.to_f],
+          ["Commercial",  sale.commercial_sales.to_f]
         ]
       else
         json.data [
-          ['Total', sale.total_sales.to_f]
+          ["Total", sale.total_sales.to_f]
         ]
       end
     end

@@ -1,10 +1,10 @@
-require 'test_helper'
+require "test_helper"
 
 class MonthlyGenerationAttributesTest < ActiveSupport::TestCase
   include TestConstants
 
   def setup
-    @plant = Plant.create!(aea_plant_id: VALID_AEDG_ID, name: 'Test Plant')
+    @plant = Plant.create!(aea_plant_id: VALID_AEDG_ID, name: "Test Plant")
     @valid_props = {
       aea_plant_id: VALID_AEDG_ID,
       generation_mwh: 10,
@@ -15,7 +15,7 @@ class MonthlyGenerationAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test 'import_aedg! creates a Monthly Generation Record' do
+  test "import_aedg! creates a Monthly Generation Record" do
     mg = nil
     assert_difference -> { MonthlyGeneration.count }, +1 do
       mg = MonthlyGeneration.import_aedg!(@valid_props)
@@ -29,7 +29,7 @@ class MonthlyGenerationAttributesTest < ActiveSupport::TestCase
     assert_equal @valid_props[:month], mg.month
   end
 
-  test 'fails when aea_plant_id does not resolve to a plant' do
+  test "fails when aea_plant_id does not resolve to a plant" do
     props = @valid_props.merge(aea_plant_id: INVALID_AEDG_ID)
 
     assert_raises(ActiveRecord::RecordInvalid) do

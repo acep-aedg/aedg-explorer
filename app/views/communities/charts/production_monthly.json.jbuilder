@@ -17,8 +17,8 @@ json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
       name: 'Heating Degree Days',
       data: hdd_data,
       library: {
-        type: 'line',
-        yAxisID: 'y1',
+        type: "line",
+        yAxisID: "y1",
         pointRadius: 3
       }
     }

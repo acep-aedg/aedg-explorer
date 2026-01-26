@@ -3,7 +3,7 @@ module BulkFuelFacilityAttributes
 
   class_methods do
     def import_aedg_with_geom!(properties, geom)
-      properties['location'] = geom
+      properties["location"] = geom
       properties.symbolize_keys!
 
       BulkFuelFacility.new.tap do |facility|

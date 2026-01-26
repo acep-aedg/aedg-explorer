@@ -6,7 +6,7 @@
 / Wrapper for Stimulus controller
 #capacity-chart-wrapper{
   data: {
-    controller: "fuel-chart widget-update",
+    controller: "fuel-chart",
     fuel_chart: {
       url_value: capacity_yearly_grid_charts_path(@grid, year: selected_year),
       chart_type_value: "pie",
@@ -20,13 +20,10 @@
     .d-flex.align-items-center.gap-2.mb-2
       %label.form-label.me-2.mb-0{ for: "capacity-year" } Year:
       %select#capacity-year.form-select.form-select-sm.w-auto{
-        data: { action: "change->fuel-chart#changeYear change->widget-update#update" }
+        data: { action: "change->fuel-chart#changeYear" }
       }
         - years.each do |y|
           %option{ value: y, selected: y == selected_year }= y
 
-  / Summary
-  %turbo-frame#capacity_summary{ data: { widget_update_target: 'frame', param: 'year' }, src: capacity_grid_summary_path(@grid, year: selected_year)}
-    Loading summary ...
   / Chart
   #capacity-chart.responsive-fuel-chart{ data: { "fuel-chart-target": "chart" } }

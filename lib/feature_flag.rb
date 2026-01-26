@@ -1,23 +1,23 @@
 # REDIS-BASED FEATURE FLAG MANAGEMENT
 class FeatureFlag
-  PREFIX = 'feature_flag:'.freeze
+  PREFIX = "feature_flag:".freeze
 
   class << self
     def enabled?(name)
       REDIS_POOL.with do |redis|
-        redis.get(key(name)) == 'enabled'
+        redis.get(key(name)) == "enabled"
       end
     end
 
     def enable!(name)
       REDIS_POOL.with do |redis|
-        redis.set(key(name), 'enabled')
+        redis.set(key(name), "enabled")
       end
     end
 
     def disable!(name)
       REDIS_POOL.with do |redis|
-        redis.set(key(name), 'disabled')
+        redis.set(key(name), "disabled")
       end
     end
 
@@ -35,7 +35,7 @@ class FeatureFlag
 
     def scan_all_flags
       flags = {}
-      cursor = '0'
+      cursor = "0"
 
       REDIS_POOL.with do |redis|
         loop do
@@ -46,7 +46,7 @@ class FeatureFlag
             flags[name] = redis.get(k)
           end
 
-          break if cursor == '0'
+          break if cursor == "0"
         end
       end
 

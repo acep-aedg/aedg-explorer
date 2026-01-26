@@ -16,10 +16,10 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
     years = filtered.map(&:reporting_year).uniq.sort
 
     categories = [
-      'Winter Gasoline',
-      'Winter Heating Fuel',
-      'Summer Gasoline',
-      'Summer Heating Fuel'
+      "Winter Gasoline",
+      "Winter Heating Fuel",
+      "Summer Gasoline",
+      "Summer Heating Fuel"
     ]
 
     # [year, category] -> price
@@ -36,9 +36,9 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
         name: label,
         data: years.index_with { |year| price_map[[year, label]] },
         library: {
-          type: 'bar',
-          yAxisID: 'y',
-          suffix: ' $'
+          type: "bar",
+          yAxisID: "y",
+          suffix: " $"
         }
       }
     end
@@ -49,11 +49,11 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
                   .transform_values { |rows| rows.sum { |r| r.heating_degree_days.to_f } }
 
     hdd_series = {
-      name: 'Heating Degree Days',
+      name: "Heating Degree Days",
       data: years.index_with { |year| hdd_by_year[year] },
       library: {
-        type: 'line',
-        yAxisID: 'y1',
+        type: "line",
+        yAxisID: "y1",
         pointRadius: 3
       }
     }

@@ -1,5 +1,6 @@
 class ServiceArea < ApplicationRecord
   include ServiceAreaAttributes
+
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
   validates :cpcn_id, presence: true, uniqueness: true
 
@@ -8,7 +9,7 @@ class ServiceArea < ApplicationRecord
 
   def as_geojson
     {
-      type: 'Feature',
+      type: "Feature",
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
         id: cpcn_id,
