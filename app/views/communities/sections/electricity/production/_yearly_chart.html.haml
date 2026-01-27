@@ -1,25 +1,11 @@
-- base_title = "#{@community.name.titleize} - Generation by Fuel Type"
-- chart_options = Chartkick.options.deep_merge({ suffix: ' MWh', donut: true, library: { plugins: { legend: { title: { display: true, text: 'Fuel Type'} } } } })
-- years          = YearlyGeneration.available_years_for(@community)
-- selected_year  = params[:year].presence&.to_i || years.first
-
-#yearly-prod-wrapper{
-  data: {
-    controller: "fuel-chart", fuel_chart: {
-      url_value: production_yearly_community_charts_path(@community, year: selected_year),
-      chart_type_value: "pie",
-      base_title_value: base_title,
-      options_value: chart_options.to_json,
-    }
-  }
-}
-  - if years.size > 1
-    .d-flex.align-items-center.gap-2.mb-2
-      %label.form-label.me-2.mb-0{ for: "yearly-prod-year" } Year:
-      %select#yearly-prod-year.form-select.form-select-sm.w-auto{
-        data: { action: "change->fuel-chart#changeYear" }
-      }
-        - years.each do |y|
-          %option{ value: y, selected: y == selected_year }= y
-
-  #yearly-prod.responsive-fuel-chart{ data: { "fuel-chart-target": "chart" } }
+- base_title = "#{@community.name} - Generation by Energy Source"
+= area_chart production_yearly_new_community_charts_path(@community), 
+  stacked: true,
+  title: base_title,
+  legend: 'left',
+  height: '500px',
+  suffix: " MWh",
+  xtitle: "Year",                                                       
+  ytitle: "Generation (MWh)",
+  download: {filename: base_title.parameterize},
+  library: { elements: { line: { color: 'white' }, point: { radius: 0, borderColor: 'white' } }, plugins: { tooltip: { mode: 'index', intersect: false } }, scales: { x: { stacked: true }, y: { stacked: true, ticks: { maxTicksLimit: 10 } } } } 
