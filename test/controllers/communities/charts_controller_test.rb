@@ -18,22 +18,30 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get generation_yearly" do
-    year = @community.yearly_generations.first.year
-    get generation_yearly_community_charts_url(@community, year: year)
+    generation = @community.yearly_generations.first
+    expected_series_name = "#{generation.fuel_type_name} (#{generation.fuel_type_code})"
+    get generation_yearly_community_charts_url(@community)
+
     assert_response :success
     assert_equal "application/json", @response.media_type
 
     body = JSON.parse(@response.body)
-    assert_equal year, body["year"], "Expected response for year #{year}"
-    assert body.key?("data"), "Expected response to include 'data' key"
-    assert_kind_of Array, body["data"], "Expected 'data' to be an array"
 
-    label, value = body["data"].first
-    generation = @community.yearly_generations.first
+    assert_kind_of Array, body, "Expected root to be an Array of series"
+    assert_not_empty body
 
-    assert_includes label, generation.fuel_type_code
-    assert_includes label, generation.fuel_type_name
-    assert_equal generation.generation_mwh.to_f, value.to_f
+    series = body.find { |s| s["name"] == expected_series_name }
+    assert_not_nil series, "Could not find series with name: #{expected_series_name}"
+
+    assert series.key?("color"), "Expected series to include 'color'"
+    assert series.key?("data"), "Expected series to include 'data'"
+
+    # Verify the custom RGBA color helper worked
+    assert_match(/^rgba\(.*, .*\)$/, series["color"])
+    actual_amount = series["data"][generation.year.to_s]
+
+    assert_not_nil actual_amount, "Expected data for year #{generation.year}"
+    assert_in_delta generation.generation_mwh.to_f, actual_amount.to_f, 0.01
   end
 
   test "should get capacity_yearly for a specific year" do
