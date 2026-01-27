@@ -1,14 +1,14 @@
 -# 1. The Trigger Button
-%button.btn.btn-sm.btn-aedg-secondary.ms-2{ type: "button", data: { bs_toggle: "modal", bs_target: "#productionInfoModal" } }
+%button.btn.btn-sm.btn-aedg-secondary.ms-2{ type: "button", data: { bs_toggle: "modal", bs_target: "#generationInfoModal" } }
   %i.bi.bi-info-circle.me-1
   About this Data
 
 -# 2. The Modal
-#productionInfoModal.modal.fade{ tabindex: "-1", aria: { labelledby: "productionInfoModalLabel" } }
+#generationInfoModal.modal.fade{ tabindex: "-1", aria: { labelledby: "generationInfoModalLabel" } }
   .modal-dialog.modal-dialog-centered
     .modal-content
       .modal-header
-        %h5#productionInfoModalLabel.modal-title About Production Data
+        %h5#generationInfoModalLabel.modal-title About Generation Data
         %button.btn-close{ type: "button", data: { bs_dismiss: "modal" }, aria: { label: "Close" } }
       .modal-body
         .d-flex.mb-4
@@ -21,7 +21,7 @@
           = render 'shared/modal/community_service_area'
       
         .d-flex
-          = render 'shared/modal/ipp_production'
+          = render 'shared/modal/ipp_generation'
           
       .modal-footer
         %button.btn.btn-secondary{ type: "button", data: { bs_dismiss: "modal" } } Close

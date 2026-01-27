@@ -26,8 +26,8 @@
         %li= nav_link "Electricity", "#electricity", parent_section: true
       - if @community.show_utilities?
         %li= nav_link "Utilities", "#utilities"
-      - if @community.show_production?
-        %li= nav_link "Production", "#production"
+      - if @community.show_generation?
+        %li= nav_link "Generation", "#generation"
       - if @community.show_capacity?
         %li= nav_link "Capacity", "#capacity"
       - if @community.show_bulk_fuel_facilities?

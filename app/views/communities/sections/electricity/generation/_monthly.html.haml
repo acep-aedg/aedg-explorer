@@ -11,7 +11,7 @@
       charts_value: [
         { 
           id: chart_id, 
-          url: production_monthly_community_charts_path(@community),
+          url: generation_monthly_community_charts_path(@community),
           baseTitle: base_title,
           param: 'year'
         }
@@ -31,7 +31,7 @@
           %option{ value: y, selected: y == selected_year }= y
 
   / Chart: Updated by ID
-  = column_chart production_monthly_community_charts_path(@community, year: selected_year),
+  = column_chart generation_monthly_community_charts_path(@community, year: selected_year),
     id: chart_id,
     title: "#{base_title} (#{selected_year})",
     xtitle: 'Month',

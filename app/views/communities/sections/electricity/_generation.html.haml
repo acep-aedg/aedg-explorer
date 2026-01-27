@@ -3,9 +3,9 @@
 
 .d-flex.align-items-center.mb-3
   %i.bi.bi-building-gear.me-2.fs-4
-  %h4#production.mb-0.me-2.py-3.anchor-offset Production
+  %h4#generation.mb-0.me-2.py-3.anchor-offset Generation
   %hr.flex-grow-1.mt-1.mb-0.mx-2
-  = render "communities/sections/electricity/production/about_modal"
+  = render "communities/sections/electricity/generation/about_modal"
 
 .mb-3
   .d-flex.justify-content-between.align-items-center
@@ -32,11 +32,11 @@
     - if show_monthly_gen || show_yearly_gen
       #gen-charts.tab-pane.fade.show.active
         .mb-5
-          = render "communities/sections/electricity/production/monthly"
-        = render "communities/sections/electricity/production/yearly_chart"
+          = render "communities/sections/electricity/generation/monthly"
+        = render "communities/sections/electricity/generation/yearly_chart"
     - if show_monthly_gen
       #monthly-prod-data.tab-pane.fade
-        = render "communities/sections/electricity/production/monthly_data"
+        = render "communities/sections/electricity/generation/monthly_data"
     - if show_yearly_gen
       #yearly-prod-data.tab-pane.fade
-        = render "communities/sections/electricity/production/yearly_data"
+        = render "communities/sections/electricity/generation/yearly_data"
