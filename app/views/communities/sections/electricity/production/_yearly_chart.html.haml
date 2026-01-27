@@ -1,11 +1,11 @@
 - base_title = "#{@community.name} - Generation by Energy Source"
-= area_chart production_yearly_new_community_charts_path(@community), 
+= area_chart production_yearly_community_charts_path(@community),
   stacked: true,
   title: base_title,
   legend: 'left',
   height: '500px',
   suffix: " MWh",
-  xtitle: "Year",                                                       
+  xtitle: "Year",
   ytitle: "Generation (MWh)",
   download: {filename: base_title.parameterize},
-  library: { elements: { line: { color: 'white' }, point: { radius: 0, borderColor: 'white' } }, plugins: { tooltip: { mode: 'index', intersect: false } }, scales: { x: { stacked: true }, y: { stacked: true, ticks: { maxTicksLimit: 10 } } } } 
+  library: { plugins: { tooltip: { mode: 'index', intersect: false } }, scales: { x: { stacked: true }, y: { stacked: true, ticks: { maxTicksLimit: 10 } } }, elements: { point: { radius: 1 } } }
