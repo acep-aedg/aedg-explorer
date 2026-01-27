@@ -2233,6 +2233,13 @@ ALTER TABLE ONLY public.yearly_generations
 
 
 --
+-- Name: idx_comm_grids_on_grid_and_fips; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_comm_grids_on_grid_and_fips ON public.community_grids USING btree (grid_id, community_fips_code);
+
+
+--
 -- Name: idx_csag_on_aedg_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2503,6 +2510,13 @@ CREATE INDEX index_household_incomes_on_community_fips_code ON public.household_
 --
 
 CREATE INDEX index_income_poverties_on_community_fips_code ON public.income_poverties USING btree (community_fips_code);
+
+
+--
+-- Name: index_plants_on_grid_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_plants_on_grid_id ON public.plants USING btree (grid_id);
 
 
 --
@@ -2986,6 +3000,7 @@ ALTER TABLE ONLY public.communities_senate_districts
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260127184326'),
 ('20260126194042'),
 ('20260123003703'),
 ('20260123003623'),
