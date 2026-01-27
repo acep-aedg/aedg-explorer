@@ -11,7 +11,7 @@
       %th Quantity Consumed for Electric Generation (Physical Unit)
       %th Source
     %tbody
-      - @grid.yearly_generations.each do |generation|
+      - @grid.yearly_generations.includes(:plant).each do |generation|
         %tr
           %td= generation.plant.name
           %td= generation.year

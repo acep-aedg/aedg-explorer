@@ -8,7 +8,7 @@
         %th Fuel Type Name
         %th Year
     %tbody
-      - @grid.capacities.each do |capacity|
+      - @grid.capacities.includes(:plant).each do |capacity|
         %tr
           %td= capacity.plant.name
           %td= capacity.capacity_mw
