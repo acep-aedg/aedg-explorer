@@ -1,6 +1,6 @@
 -# Expects variable: 'entity' (which is either a Community or Grid)
 - sources = entity.monthly_generations.pluck(:source).uniq.compact
-- entity_name = entity.is_a?(Community) ? "community" : "grid"
+- entity = entity.is_a?(Community) ? "community" : "grid"
 
 .d-flex.align-items-start
   %i.bi.bi-clipboard-data.text-warning.fs-4
@@ -12,17 +12,16 @@
         %span.badge.bg-warning.text-dark Mixed Reporting Sources
         
       %p.text-muted.mb-0
-        This #{entity_name} includes data from both 
+        This #{entity} includes data from both 
         %strong= sources.to_sentence
-        programs. This indicates the utility switched reporting programs over time, resulting in a combination of 
+        programs, resulting in a combination of 
         %em Gross (PCE) 
         and 
         %em Net (EIA) 
-        generation figures.
+        generation values. Check out the data to see which sources contributed to specific totals.
         
     - else
       %p.text-muted.mb-0
-        This #{entity_name} reports exclusively to the 
+        This #{entity} includes data from the
         %strong= sources.first
-        program, so all data shown reflects 
-        = sources.first == 'PCE' ? 'Gross Generation.' : 'Net Generation.'
+        program.
