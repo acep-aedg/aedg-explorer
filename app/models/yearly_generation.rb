@@ -37,21 +37,27 @@ class YearlyGeneration < ApplicationRecord
                     .group(:fuel_type_code, :fuel_type_name, :year)
                     .sum(:generation_mwh)
 
-    grouped = raw_data.each_with_object({}) do |((code, name, year), amount), result|
-      next if amount.zero?
+    years_present = raw_data.keys.map(&:last)
+    return [] if years_present.empty?
 
-      result[code] ||= { name: name, data: {} }
-      result[code][:data][year] = amount
-    end
+    all_years = (years_present.min..years_present.max).to_a
+    unique_sources = raw_data.keys.pluck(0..1).uniq
 
-    series_list = grouped.map do |code, info|
+    series_list = unique_sources.map do |code, name|
+      padded_data = all_years.each_with_object({}) do |year, hash|
+        # Use nil for missing years to create ensure chronological order
+        value = raw_data[[code, name, year]]
+        hash[year.to_s] = value&.zero? ? nil : value
+      end
+
       {
-        name: "#{info[:name]} (#{code})",
+        name: "#{name} (#{code})",
         code: code,
-        data: info[:data].sort.to_h
+        data: padded_data
       }
     end
 
-    series_list.sort_by { |series| series[:data].values.sum }
+    series_list.reject! { |s| s[:data].values.compact.empty? }
+    series_list.sort_by { |s| s[:data].values.compact.sum }
   end
 end
