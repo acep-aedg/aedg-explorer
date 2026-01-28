@@ -1,9 +1,11 @@
-- chart_title = "#{@community.name.titleize} - Electricity Rates Over Time"
+- chart_title = "#{@community.name.titleize} - Electric Rates"
 = line_chart electric_rates_community_charts_path(@community), 
-      title: chart_title,
-      prefix: '$',
-      suffix: '/kWh',
-      ytitle: "Rate ($/kWh)",
-      xtitle: "Year",
-      download: { filename: chart_title.parameterize },
-      library: { plugins: { tooltip: { mode: 'index', intersect: false } } }
+    height: '400px',
+    title: chart_title,
+    legend: 'bottom',
+    prefix: '$',
+    suffix: '/kWh',
+    ytitle: "Rate ($/kWh)",
+    xtitle: "Year",
+    download: { filename: chart_title.parameterize },
+    library: { plugins: { tooltip: { mode: 'index', intersect: false }, legend: { align: 'center', title: { display: true, text: 'Click rate to hide/show', font: { size: 12 , weight: 'bold' }, padding: { top: 20, bottom: 10 } } } } }
