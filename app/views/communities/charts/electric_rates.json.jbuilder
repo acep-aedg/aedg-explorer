@@ -26,15 +26,17 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
     sorted_entities.each_with_index do |entity, index|
       entity_rates = grouped_by_entity[entity]
       style = entity_styles[index] || fallback_style
+      all_years = entity_rates.map(&:year).uniq.sort
 
       %w[residential commercial industrial].each do |sector|
         method_name = "#{sector}_rate"
 
-        points = entity_rates.map { |r| [r.year.to_s, r.send(method_name)] }
-                             .reject { |pt| pt[1].nil? }
-                             .sort_by { |pt| pt[0] }
+        points = all_years.map do |year|
+          rate_for_year = entity_rates.find { |r| r.year == year }
+          [year.to_s, rate_for_year&.send(method_name)]
+        end
 
-        next unless points.any?
+        next unless points.any? { |pt| pt[1].present? }
 
         chart_data << {
           name: "#{entity.name} - #{sector.titleize}",
