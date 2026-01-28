@@ -180,8 +180,8 @@ class Community < ApplicationRecord
     end
   end
 
-  def show_production?
-    @show_production ||= show_monthly_generation? || show_yearly_generation?
+  def show_generation?
+    @show_generation ||= show_monthly_generation? || show_yearly_generation?
   end
 
   def show_yearly_generation?
@@ -210,7 +210,7 @@ class Community < ApplicationRecord
   end
 
   def show_electricity_section?
-    @show_electricity_section ||= show_utilities? || show_rates? || show_production? || show_capacity? || show_sales? || show_bulk_fuel_facilities?
+    @show_electricity_section ||= show_utilities? || show_rates? || show_generation? || show_capacity? || show_sales? || show_bulk_fuel_facilities?
   end
 
   # --- Prices Section ---

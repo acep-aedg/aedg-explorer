@@ -1,10 +1,10 @@
-# app/views/grids/charts/production_monthly.json.jbuilder
+# app/views/grids/charts/generation_monthly.json.jbuilder
 json.cache! [@grid.cache_key_with_version, @year], expires_in: 12.hours do
   gen_data = MonthlyGeneration.data_by_year(@grid, @year)
 
   series = [
     {
-      name: "Net Generation (MWh)",
+      name: "Generation (MWh)",
       data: gen_data
     }
   ]

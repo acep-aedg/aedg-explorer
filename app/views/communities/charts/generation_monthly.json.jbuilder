@@ -1,4 +1,4 @@
-# app/views/communities/charts/production_monthly.json.jbuilder
+# app/views/communities/charts/generation_monthly.json.jbuilder
 
 json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
   gen_data = MonthlyGeneration.data_by_year(@community, @year)
@@ -6,11 +6,14 @@ json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
 
   series = [
     {
-      name: "Net Generation (MWh)",
+      name: "Generation (MWh)",
       data: gen_data,
       library: { yAxisID: "y" }
-    },
-    {
+    }
+  ]
+
+  if hdd_data.present?
+    series << {
       name: "Heating Degree Days",
       data: hdd_data,
       library: {
@@ -19,7 +22,7 @@ json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
         pointRadius: 3
       }
     }
-  ]
+  end
 
   json.array! series do |s|
     json.name    s[:name]

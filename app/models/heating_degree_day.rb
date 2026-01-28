@@ -9,6 +9,8 @@ class HeatingDegreeDay < ApplicationRecord
               .group(:month)
               .sum(:heating_degree_days)
 
+    return {} if grouped.empty?
+
     (1..12).each_with_object({}) do |m, h|
       h[Date::ABBR_MONTHNAMES[m]] = grouped.fetch(m, 0)
     end

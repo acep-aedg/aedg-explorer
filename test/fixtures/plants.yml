@@ -6,34 +6,30 @@
 #
 one:
   aea_plant_id: 1
-  eia_plant_id: 1
+  eia_plant_ids: [1]
   name: "Plant One"
   aea_operator_id: 1
   eia_operator_id: 1
   grid: one
   service_area_geom_aedg_id: '1_1'
-  eia_reporting: 1
-  pce_reporting: 1
   combined_heat_power: false
-  primary_voltage: 1.0
-  primary_voltage2: 1.5
+  grid_primary_voltage_kv: 1.0
+  grid_primary_voltage_2_kv: 1.5
   phases: null
-  status: "Plant status"
   notes: "Notes about the plant"
+  pce_reporting_id: 1
 
 two:
   aea_plant_id: 2
-  eia_plant_id: 2
+  eia_plant_ids: [2,3]
   name: "Plant Two"
   aea_operator_id: 2
   eia_operator_id: 2
   grid: two
   service_area_geom_aedg_id: '2_1'
-  eia_reporting: 2
-  pce_reporting: 2
   combined_heat_power: false
-  primary_voltage: 2.0
-  primary_voltage2: 2.5
+  grid_primary_voltage_kv: 2.0
+  grid_primary_voltage_2_kv: 2.5
   phases: null
-  status: "Plant status"
   notes: "Notes about the plant"
+  pce_reporting_id: 2

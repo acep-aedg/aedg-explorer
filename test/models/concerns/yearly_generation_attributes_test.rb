@@ -7,7 +7,7 @@ class YearlyGenerationAttributesTest < ActiveSupport::TestCase
     @plant = Plant.create!(aea_plant_id: VALID_AEDG_ID, name: "Test Plant")
     @valid_props = {
       aea_plant_id: VALID_AEDG_ID,
-      net_generation_mwh: 10,
+      generation_mwh: 10,
       fuel_type_code: "TEST",
       fuel_type_name: "Test Fuel Type",
       year: 2021
@@ -22,7 +22,7 @@ class YearlyGenerationAttributesTest < ActiveSupport::TestCase
     end
 
     assert_equal @plant, yg.plant
-    assert_equal @valid_props[:net_generation_mwh], yg.net_generation_mwh
+    assert_equal @valid_props[:generation_mwh], yg.generation_mwh
     assert_equal @valid_props[:fuel_type_code], yg.fuel_type_code
     assert_equal @valid_props[:fuel_type_name], yg.fuel_type_name
     assert_equal @valid_props[:year], yg.year
