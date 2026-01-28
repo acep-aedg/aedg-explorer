@@ -37,8 +37,9 @@
       
     - if @community.household_incomes.show_median_income_chart? || @community.income_poverties.show_per_capita_income_chart? 
       = render 'communities/sections/background/income/income_chart'
-
-    = render 'communities/sections/background/income/poverty_rate_chart'
+      
+    - if @community.income_poverties.show_poverty_chart?
+      = render 'communities/sections/background/income/poverty_rate_chart'
     
   - if @community.show_household_income?  
     .tab-pane.fade#household-income-data{ role: "tabpanel" }

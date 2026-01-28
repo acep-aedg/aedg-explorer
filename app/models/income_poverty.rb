@@ -7,4 +7,8 @@ class IncomePoverty < ApplicationRecord
   def self.show_per_capita_income_chart?
     where("e_per_capita_income > 0").exists?
   end
+
+  def self.show_poverty_chart?
+    where("e_pop_below_poverty > 0 AND e_pop_of_poverty_det > 0").exists?
+  end
 end
