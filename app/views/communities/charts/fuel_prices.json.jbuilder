@@ -1,14 +1,13 @@
 # app/views/communities/charts/fuel_prices.json.jbuilder
 json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
-  
   category_colors = {
-    "Winter Gasoline"     => ChartsHelper.color(:light_blue),
-    "Winter Heating Fuel"  => ChartsHelper.color(:dark_blue),
-    "Summer Gasoline"     => ChartsHelper.color(:light_green),
-    "Summer Heating Fuel"  => ChartsHelper.color(:dark_green),
+    "Winter Gasoline" => ChartsHelper.color(:light_blue),
+    "Winter Heating Fuel" => ChartsHelper.color(:dark_blue),
+    "Summer Gasoline" => ChartsHelper.color(:light_green),
+    "Summer Heating Fuel" => ChartsHelper.color(:dark_green),
     "Heating Degree Days" => ChartsHelper.color(:orange)
   }
-  
+
   # Normalize optional filter
   price_type = @price_type.to_s.downcase.presence
 
