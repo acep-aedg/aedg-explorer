@@ -32,32 +32,36 @@ class YearlyGeneration < ApplicationRecord
     dataset.sort_by { |label, _| label }
   end
 
-  def self.yearly_series_by_energy_source(owner)
+  def self.series_by_energy_source(owner)
     raw_data = owner.yearly_generations
                     .group(:fuel_type_code, :fuel_type_name, :year)
                     .sum(:generation_mwh)
 
-    years_present = raw_data.keys.map(&:last)
-    return [] if years_present.empty?
+    return [] if raw_data.empty?
 
-    all_years = (years_present.min..years_present.max).to_a
+    all_years = (raw_data.keys.map(&:last).min..raw_data.keys.map(&:last).max).to_a
     unique_sources = raw_data.keys.pluck(0..1).uniq
 
     series_list = unique_sources.map do |code, name|
-      padded_data = all_years.each_with_object({}) do |year, hash|
-        # Use nil for missing years to create ensure chronological order
-        value = raw_data[[code, name, year]]
-        hash[year.to_s] = value&.zero? ? nil : value
-      end
-
-      {
-        name: "#{name} (#{code})",
-        code: code,
-        data: padded_data
-      }
+      build_series_item(code, name, all_years, raw_data)
     end
 
-    series_list.reject! { |s| s[:data].values.compact.empty? }
-    series_list.sort_by { |s| s[:data].values.compact.sum }
+    # Filter out series with no non-zero data and sort by total volume
+    series_list.reject { |s| s[:data].values.compact.empty? }
+               .sort_by { |s| s[:data].values.compact.sum }
+  end
+
+  def self.build_series_item(code, name, all_years, raw_data)
+    timeline_data = all_years.each_with_object({}) do |year, hash|
+      value = raw_data[[code, name, year]]
+      # Treat 0 or 0.0 as nil to create "holes" in the chart
+      hash[year.to_s] = value&.zero? ? nil : value
+    end
+
+    {
+      name: "#{name} (#{code})",
+      code: code,
+      data: timeline_data
+    }
   end
 end
