@@ -13,12 +13,30 @@ class SearchesController < ApplicationController
   end
 
   def advanced
-    filters = extract_filters
-    @query  = filters[:q]
-    preload_choices
+    # --- MAIN COMMUNITY SEARCH ---
+    @pagy, @communities = pagy(build_scope(extract_filters), page_param: :page)
 
-    query = build_scope(filters)
-    @pagy, @communities = pagy(query)
+    # --- SIDEBAR FACETS ---
+    @pagy_grids, @current_grids = pagy(
+      Grid.filter_by_params(params, :q_grid, :alpha_grid),
+      page_param: :page_grid
+    )
+    @pagy_boros, @current_boros = pagy(
+      Borough.filter_by_params(params, :q_boro, :alpha_boro),
+      page_param: :page_boro
+    )
+    @pagy_corps, @current_corps = pagy(
+      RegionalCorporation.filter_by_params(params, :q_corp, :alpha_corp),
+      page_param: :page_corp
+    )
+    @pagy_senate, @current_senate = pagy(
+      SenateDistrict.filter_by_params(params, :q_senate, :alpha_senate, :district),
+      page_param: :page_senate
+    )
+    @pagy_house, @current_house = pagy(
+      HouseDistrict.filter_by_params(params, :q_house, :alpha_house, :district),
+      page_param: :page_house
+    )
   end
 
   private
