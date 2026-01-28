@@ -34,11 +34,11 @@
   .tab-pane.fade.active.show#income-poverty-charts{ role: "tabpanel" }
     - if @community.show_household_income?
       = render 'communities/sections/background/income/household_income_distribution_chart'
+      
+    - if @community.household_incomes.show_median_income_chart? || @community.income_poverties.show_per_capita_income_chart? 
+      = render 'communities/sections/background/income/income_chart'
 
-    = render 'communities/sections/background/income/income_chart'
-
-    - if @community.show_income_poverty?
-      = render 'communities/sections/background/income/poverty_rate_chart'
+    = render 'communities/sections/background/income/poverty_rate_chart'
     
   - if @community.show_household_income?  
     .tab-pane.fade#household-income-data{ role: "tabpanel" }

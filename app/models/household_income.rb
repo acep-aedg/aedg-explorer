@@ -49,4 +49,8 @@ class HouseholdIncome < ApplicationRecord
       [year, percent]
     end.sort_by(&:first)
   end
+
+  def self.show_median_income_chart?
+    where("e_household_median_income > 0").exists?
+  end
 end
