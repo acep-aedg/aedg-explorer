@@ -32,7 +32,7 @@
 
 .tab-content.mt-3
   .tab-pane.fade.active.show#income-poverty-charts{ role: "tabpanel" }
-    - if @community.show_household_income?
+    - if @community.household_incomes.show_income_distribution_chart?
       = render 'communities/sections/background/income/household_income_distribution_chart'
       
     - if @community.household_incomes.show_median_income_chart? || @community.income_poverties.show_per_capita_income_chart? 
