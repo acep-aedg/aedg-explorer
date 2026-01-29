@@ -10,7 +10,7 @@ on:
 jobs:
   notify-on-request:
     if: github.event.action == 'review_requested'
-    uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@main
+    uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@nicole/adjust-mattermost-message
     with:
       preset: "review_request"
     secrets:
@@ -18,7 +18,7 @@ jobs:
 
   notify-on-submit:
     if: github.event.action == 'submitted'
-    uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@main
+    uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@nicole/adjust-mattermost-message
     with:
       preset: "review_decision"
     secrets:
