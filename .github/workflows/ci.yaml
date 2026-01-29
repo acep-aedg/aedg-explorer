@@ -101,7 +101,7 @@ jobs:
           
   notify-on-failure:
       needs: [scan_ruby, scan_js, lint, test]
-      if: always() && github.ref == 'refs/heads/main' # this will be changed to failure() I just want to test that it works
+      if: failure() # && github.ref == 'refs/heads/main'#commented out to test brakeman failure
       uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@nicole/adjust-mattermost-message
       with:
         preset: "status"
