@@ -99,18 +99,13 @@ jobs:
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
           
-  notify_status:
-      runs-on: ubuntu-latest
+  notify-on-failure:
       needs: [scan_ruby, scan_js, lint, test]
-      if: failure() && github.ref == 'refs/heads/main'
-      steps:
-        - uses: mattermost/action-mattermost-notify@master
-          with:
-            MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
-            MATTERMOST_ICON_URL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-            TEXT: |
-              :x: **CI Failed on Push to Main**
-              **Repo:** ${{ github.repository }}
-              **Author:** ${{ github.actor }}
-              
-              [View Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+      if: always() && github.ref == 'refs/heads/main' # this will be changed to failure() I just want to test that it works
+      uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@nicole/adjust-mattermost-message
+      with:
+        preset: "status"
+        job_status: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
+        title: "CI on Push to Main"
+      secrets:
+        MM_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
