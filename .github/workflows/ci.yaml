@@ -101,8 +101,8 @@ jobs:
           
   notify-on-failure:
       needs: [scan_ruby, scan_js, lint, test]
-      if: failure() # && github.ref == 'refs/heads/main'#commented out to test brakeman failure
-      uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@nicole/adjust-mattermost-message
+      if: failure() && github.ref == 'refs/heads/main'
+      uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@main
       with:
         preset: "status"
         job_status: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
