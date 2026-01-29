@@ -2,9 +2,10 @@
 
 = form_with url: search_metadata_path, method: :get, local: true do |f|
   - if simple
-    .input-group.input-group-lg
-      = f.text_field :search, value: @search[:search], class: 'form-control', placeholder: 'Search Keywords, Datasets...'
-      = f.submit 'Search', class: 'btn btn-aedg-primary'
+    .input-group.bg-white.mx-auto.search-bar.ps-4
+      = f.text_field :search, value: @search[:search], class: 'form-control border-0', placeholder: 'Search Keywords, Datasets...'
+      = f.button type: "submit", class: "btn btn-white border-0" do
+        %i.bi.bi-search.me-2
   - unless simple
     .mb-3
       = f.label :search, 'Search', class: 'form-label visually-hidden'

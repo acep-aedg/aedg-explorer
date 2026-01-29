@@ -3,12 +3,20 @@ inherit_from: .rubocop_todo.yml
 plugins: rubocop-rails
 
 AllCops:
+  TargetRubyVersion: 3.3
+  NewCops: enable
   Exclude:
     - 'db/migrate/**/*'
     - 'db/structure.sql'
     - 'node_modules/**/*'
     - 'vendor/**/*'
     - 'bin/**/*'
-    
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
 Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
   Enabled: false

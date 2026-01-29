@@ -13,8 +13,8 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
     end
 
     series = [
-      { name: 'Residential', data: res_data },
-      { name: 'Commercial',  data: com_data }
+      { name: "Residential", data: res_data },
+      { name: "Commercial",  data: com_data }
     ]
 
     json.array! series do |s|

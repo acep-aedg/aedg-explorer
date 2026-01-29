@@ -1,7 +1,9 @@
 class Grid < ApplicationRecord
   include GridAttributes
+  include Facetable
   include ImportFinders
   extend FriendlyId
+
   friendly_id :slug_candidates, use: :slugged
   validates :name, presence: true, uniqueness: true
   has_one :aedg_import, as: :importable
@@ -31,7 +33,7 @@ class Grid < ApplicationRecord
 
   # --- Electricity Section ---
   def show_electricity_section?
-    @show_electricity_section ||= show_production? || show_capacity? || show_utilities?
+    @show_electricity_section ||= show_generation? || show_capacity? || show_utilities?
   end
 
   def show_utilities?
@@ -50,8 +52,8 @@ class Grid < ApplicationRecord
     @show_capacity ||= capacities&.exists?
   end
 
-  def show_production?
-    @show_production ||= show_monthly_generation? || show_yearly_generation?
+  def show_generation?
+    @show_generation ||= show_monthly_generation? || show_yearly_generation?
   end
 
   def show_yearly_generation?

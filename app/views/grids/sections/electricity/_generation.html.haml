@@ -1,0 +1,42 @@
+- show_monthly_gen = @grid.show_monthly_generation?
+- show_yearly_gen = @grid.show_yearly_generation?
+
+.d-flex.align-items-center.mb-3
+  %i.bi.bi-building-gear.me-2.fs-4
+  %h4#generation.mb-0.me-2.py-3.anchor-offset Generation
+  %hr.flex-grow-1.mt-1.mb-0.mx-2
+  = render "grids/sections/electricity/generation/about_modal"
+  
+.mb-3
+  .d-flex.justify-content-between.align-items-center
+    .nav.nav-tabs
+      - if show_monthly_gen || show_yearly_gen    
+        %li.nav-item
+          = link_to "#gen-charts", class: "nav-link active", data: { bs_toggle: "tab" } do
+            %i.bi.bi-graph-up.me-1
+            Generation Charts
+
+      - if show_monthly_gen
+        %li.nav-item
+          = link_to "#monthly-prod-data", class: "nav-link", data: { bs_toggle: "tab" } do
+            %i.bi.bi-table.me-1
+            Monthly Data
+
+      - if show_yearly_gen
+        %li.nav-item
+          = link_to "#yearly-prod-data", class: "nav-link", data: { bs_toggle: "tab" } do
+            %i.bi.bi-table.me-1
+            Yearly Data
+
+  .tab-content.mt-3
+    - if show_monthly_gen || show_yearly_gen
+      #gen-charts.tab-pane.fade.show.active
+        .mb-5
+          = render "grids/sections/electricity/generation/monthly"
+        = render "grids/sections/electricity/generation/yearly_chart"
+    - if show_monthly_gen
+      #monthly-prod-data.tab-pane.fade
+        = render "grids/sections/electricity/generation/monthly_data"
+    - if show_yearly_gen
+      #yearly-prod-data.tab-pane.fade
+        = render "grids/sections/electricity/generation/yearly_data"

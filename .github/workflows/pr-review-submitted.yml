@@ -8,6 +8,7 @@ on: workflow_dispatch
 jobs:
   notify-author:
     runs-on: ubuntu-latest
+    if: ${{ github.event.review.state == 'approved' || github.event.review.state == 'changes_requested' }}
     steps:
       - name: Send Alert to Mattermost
         uses: mattermost/action-mattermost-notify@master
@@ -15,7 +16,7 @@ jobs:
           MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
           MATTERMOST_ICON_URL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           TEXT: |
-            ${{ github.event.review.state == 'approved' && ':white_check_mark: **PR Approved**' || (github.event.review.state == 'changes_requested' && ':arrows_counterclockwise: **PR Changes Requested**' || ':speech_balloon: **PR Comment**') }}
+            ${{ github.event.review.state == 'approved' && ':white_check_mark: **PR Approved**' || ':arrows_counterclockwise: **PR Changes Requested**' }}
             
             **Repo:** ${{ github.repository }}
             **PR:** #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}

@@ -1,0 +1,61 @@
+-# --- LEFT COLUMN WRAPPER ---
+.d-flex.flex-column.flex-shrink-0{ style: "width: 360px; position: sticky; top: 0; height: calc(100vh - 70px); z-index: 1045;" }
+  
+  .d-flex.flex-column.bg-white.h-100.overflow-auto
+    .px-3
+      -# Back Button & Title
+      .mb-3
+        = link_to communities_path, class: 'text-decoration-none text-primary d-inline-flex align-items-center' do
+          %i.bi.bi-arrow-left.me-2
+          Back
+
+        %h2.fw-bold.mb-1.mt-4 Community Explorer
+        %p.text-muted Filter communities by specific criteria.
+
+      -# --- SEARCH FORM ---
+      = form_with url: request.path, method: :get, local: true, class: "mb-3 mt-3", data: { turbo: false } do |f|
+        -# Preserve existing filters so we don't lose them when searching
+        - request.query_parameters.except(:q_global, :action, :controller, :utf8).each do |key, value|
+          - if value.is_a?(Array)
+            - value.each do |v|
+              = hidden_field_tag "#{key}[]", v
+          - else
+            = hidden_field_tag key, value
+        
+        .input-group
+          %span.input-group-text.bg-white.text-muted.border-end-0
+            %i.bi.bi-search
+          = text_field_tag :q_global, params[:q_global], class: "form-control border-start-0 ps-0", placeholder: "Search filters (e.g. lake)..."
+          
+          - if params[:q_global].present?
+            = link_to request.query_parameters.except(:q_global), class: "btn btn-outline-secondary border-start-0 border-top-0 border-bottom-0 z-index-5" do
+              %i.bi.bi-x-lg
+
+      -# --- ACTIVE TAGS ---
+      = render 'searches/advanced/active_filters'
+
+    -# --- CONDITIONAL BODY ---
+    - if params[:q_global].present?
+      -# SHOW SEARCH RESULTS
+      .list-group.list-group-flush
+        - if @global_search_results&.any?
+          .p-2.small.text-muted.fw-bold Found #{@global_search_results.count} matches:
+          - @global_search_results.each do |res|
+            -# Link adds the specific filter AND removes the q_global search term
+            -# This makes the sidebar "reset" to the nav buttons but with the new filter applied
+            = link_to request.query_parameters.merge(res[:param_key] => (params[res[:param_key]] || []) + [res[:value].to_s]).except(:q_global), class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3" do
+              %div
+                .fw-bold.text-dark= res[:label]
+                .small.text-muted= res[:category]
+              %i.bi.bi-plus-circle.text-primary
+        - else
+          .p-4.text-center.text-muted
+            %i.bi.bi-search.display-6.mb-3
+            %p No filters found matching "#{params[:q_global]}"
+            
+    - else
+      -# SHOW NORMAL NAV BUTTONS
+      = render 'searches/advanced/nav_buttons'
+
+  -# OFF CANVAS PANELS (Hidden unless specifically opened)
+  = render 'searches/advanced/panels', sidebar_width: '360px'

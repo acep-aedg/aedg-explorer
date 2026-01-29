@@ -1,5 +1,13 @@
 # app/views/communities/charts/fuel_prices.json.jbuilder
 json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
+  category_colors = {
+    "Winter Gasoline" => ChartsHelper.color(:light_blue),
+    "Winter Heating Fuel" => ChartsHelper.color(:dark_blue),
+    "Summer Gasoline" => ChartsHelper.color(:light_green),
+    "Summer Heating Fuel" => ChartsHelper.color(:dark_green),
+    "Heating Degree Days" => ChartsHelper.color(:orange)
+  }
+
   # Normalize optional filter
   price_type = @price_type.to_s.downcase.presence
 
@@ -16,10 +24,10 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
     years = filtered.map(&:reporting_year).uniq.sort
 
     categories = [
-      'Winter Gasoline',
-      'Winter Heating Fuel',
-      'Summer Gasoline',
-      'Summer Heating Fuel'
+      "Winter Gasoline",
+      "Winter Heating Fuel",
+      "Summer Gasoline",
+      "Summer Heating Fuel"
     ]
 
     # [year, category] -> price
@@ -31,36 +39,45 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
     end
 
     # --- Bar series for fuel prices -> left axis "y" ---
-    series = categories.map do |label|
+    active_categories = categories.select do |label|
+      years.any? { |year| price_map[[year, label]].present? }
+    end
+
+    series = active_categories.map do |label|
       {
         name: label,
         data: years.index_with { |year| price_map[[year, label]] },
+        color: category_colors[label],
         library: {
-          type: 'bar',
-          yAxisID: 'y',
-          suffix: ' $'
+          type: "bar",
+          yAxisID: "y",
+          prefix: "$ "
         }
       }
     end
 
     # --- Line series for Heating Degree Days -> right axis "y1" ---
-    hdd_by_year = @heating_degree_days
-                  .group_by(&:year)
-                  .transform_values { |rows| rows.sum { |r| r.heating_degree_days.to_f } }
+    hdd_series = if @community.show_heating_degree_days?
+                   hdd_by_year = @heating_degree_days
+                                 .group_by(&:year)
+                                 .transform_values { |rows| rows.sum { |r| r.heating_degree_days.to_f } }
+                   {
+                     name: "Heating Degree Days",
+                     data: years.index_with { |year| hdd_by_year[year] },
+                     color: ChartsHelper.color(:orange),
+                     library: {
+                       type: "line",
+                       yAxisID: "y1",
+                       pointRadius: 3
+                     }
+                   }
+                 end
 
-    hdd_series = {
-      name: 'Heating Degree Days',
-      data: years.index_with { |year| hdd_by_year[year] },
-      library: {
-        type: 'line',
-        yAxisID: 'y1',
-        pointRadius: 3
-      }
-    }
-
-    json.array!(series + [hdd_series]) do |s|
+    # Merge and remove nil if show_heating_degree_days? was false
+    json.array!((series + [hdd_series]).compact) do |s|
       json.name    s[:name]
       json.data    s[:data]
+      json.color   s[:color]
       json.library s[:library]
     end
   end

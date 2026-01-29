@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'rgeo'
+require "test_helper"
+require "rgeo"
 
 class SenateDistrictAttributesTest < ActiveSupport::TestCase
   def setup
@@ -16,12 +16,12 @@ class SenateDistrictAttributesTest < ActiveSupport::TestCase
 
     @polygon_geom = @geom_factory.multi_polygon([polygon])
     @valid_props = {
-      district: 'ABC',
-      as_of_date: '2022-01-01'
+      district: "ABC",
+      as_of_date: "2022-01-01"
     }
   end
 
-  test 'creates a new senate district with geometry and attributes' do
+  test "creates a new senate district with geometry and attributes" do
     senate_district = nil
     assert_difference -> { SenateDistrict.count }, +1 do
       senate_district = SenateDistrict.import_aedg_with_geom!(@valid_props, @polygon_geom)
@@ -31,7 +31,7 @@ class SenateDistrictAttributesTest < ActiveSupport::TestCase
     assert_equal @polygon_geom.as_text, senate_district.boundary.as_text
   end
 
-  test 'is invalid with incorrect geometry type' do
+  test "is invalid with incorrect geometry type" do
     line = @geom_factory.line_string([
                                        @geom_factory.point(0, 0),
                                        @geom_factory.point(1, 1)

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class TransportationAttributesTest < ActiveSupport::TestCase
   include TestConstants
@@ -16,12 +16,12 @@ class TransportationAttributesTest < ActiveSupport::TestCase
       road_connection: true,
       coastal: true,
       road_or_ferry: true,
-      description: 'Test description',
-      as_of_date: '2023-10-01'
+      description: "Test description",
+      as_of_date: "2023-10-01"
     }
   end
 
-  test 'import_aedg! creates a transportation record with valid props' do
+  test "import_aedg! creates a transportation record with valid props" do
     transportation = nil
     assert_difference -> { Transportation.count }, +1 do
       transportation = Transportation.import_aedg!(@valid_props)
@@ -40,7 +40,7 @@ class TransportationAttributesTest < ActiveSupport::TestCase
     assert_equal Date.parse(@valid_props[:as_of_date]), transportation.as_of_date
   end
 
-  test 'import_aedg! does not create duplicate transportation for the same community' do
+  test "import_aedg! does not create duplicate transportation for the same community" do
     Transportation.import_aedg!(@valid_props)
 
     assert_no_difference -> { Transportation.count } do
@@ -48,7 +48,7 @@ class TransportationAttributesTest < ActiveSupport::TestCase
     end
   end
 
-  test 'import_aedg! raises RecordInvalid when no matching community is found' do
+  test "import_aedg! raises RecordInvalid when no matching community is found" do
     props_with_invalid_fips = @valid_props.merge(community_fips_code: INVALID_FIPS_CODE)
     assert_raises(ActiveRecord::RecordInvalid) do
       Transportation.import_aedg!(props_with_invalid_fips)

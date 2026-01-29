@@ -1,5 +1,6 @@
 class HouseholdIncome < ApplicationRecord
   include HouseholdIncomeAttributes
+
   validates :community_fips_code, presence: true
   belongs_to :community,
              foreign_key: :community_fips_code,
@@ -47,5 +48,13 @@ class HouseholdIncome < ApplicationRecord
 
       [year, percent]
     end.sort_by(&:first)
+  end
+
+  def self.show_median_income_chart?
+    where("e_household_median_income > 0").exists?
+  end
+
+  def self.show_income_distribution_chart?
+    where(INCOME_BRACKET_FIELDS.map { |field| "#{field} > 0" }.join(" OR ")).exists?
   end
 end

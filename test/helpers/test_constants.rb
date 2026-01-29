@@ -7,6 +7,6 @@
 module TestConstants
   VALID_AEDG_ID = 1111
   INVALID_AEDG_ID = 9999
-  VALID_FIPS_CODE = '0000'.freeze
-  INVALID_FIPS_CODE = '9999'.freeze
+  VALID_FIPS_CODE = "0000".freeze
+  INVALID_FIPS_CODE = "9999".freeze
 end

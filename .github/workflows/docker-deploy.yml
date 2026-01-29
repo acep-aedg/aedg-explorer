@@ -112,14 +112,14 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     needs: [merge]
-    if: always()
+    if: failure()
     steps:
       - uses: mattermost/action-mattermost-notify@master
         with:
           MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
           MATTERMOST_ICON_URL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           TEXT: |
-            ${{ needs.merge.result == 'success' && ':white_check_mark: **Docker Deploy Succeeded**' || ':x: **Docker Deploy Failed**' }}
+            ':x: **Docker Deploy Failed**'
             **Repo:** ${{ github.repository }}
             **Ref:** ${{ github.ref_name }}
             **Author:** ${{ github.actor }}

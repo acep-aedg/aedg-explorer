@@ -1,0 +1,27 @@
+-# Expects variable: 'entity' (which is either a Community or Grid)
+- sources = entity.monthly_generations.pluck(:source).uniq.compact
+- entity = entity.is_a?(Community) ? "community" : "grid"
+
+.d-flex.align-items-start
+  %i.bi.bi-clipboard-data.text-warning.fs-4
+  .flex-grow-1.ms-3
+    %h6.fw-bold.mb-1 Data Reporting
+    
+    - if sources.count > 1
+      .mb-2
+        %span.badge.bg-warning.text-dark Mixed Reporting Sources
+        
+      %p.text-muted.mb-0
+        This #{entity} includes data from both 
+        %strong= sources.to_sentence
+        programs, resulting in a combination of 
+        %em Gross (PCE) 
+        and 
+        %em Net (EIA) 
+        generation values. Check out the data to see which sources contributed to specific totals.
+        
+    - else
+      %p.text-muted.mb-0
+        This #{entity} includes data from the
+        %strong= sources.first
+        program.

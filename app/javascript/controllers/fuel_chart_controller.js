@@ -1,23 +1,23 @@
 // controllers/fuel_chart_controller.js
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
 // TODO: refactor into using the colors define in charts_helper.rb
 const FUEL_COLORS = {
-  CL: '#D6D6D6', // light_grey
-  DFO: '#f28e2b', // soft_orange
-  JF: '#D77A7D', // light_red
-  LFG: '#A1866F', // light_brown
-  MWH: '#5D6D7E', // medium_grey
-  NG: '#8EBFA2', //soft_green
-  SUN: '#FDB813', // medium_yellow
-  WAT: '#1f77b4', // blue
-  WH: '#810000', // dark_red
-  WND: '#6BAED6', // light_blue
-  WO: '#6E2C00', // dark_brown
+  CL: "#D6D6D6", // light_grey
+  DFO: "#f28e2b", // soft_orange
+  JF: "#D77A7D", // light_red
+  LFG: "#A1866F", // light_brown
+  MWH: "#5D6D7E", // medium_grey
+  NG: "#8EBFA2", //soft_green
+  SUN: "#FDB813", // medium_yellow
+  WAT: "#1f77b4", // blue
+  WH: "#810000", // dark_red
+  WND: "#6BAED6", // light_blue
+  WO: "#6E2C00", // dark_brown
 };
 
 export default class extends Controller {
-  static targets = ['chart'];
+  static targets = ["chart"];
   static values = {
     url: String,
     chartType: String,
@@ -34,7 +34,7 @@ export default class extends Controller {
     this.handleResize = this.debounce(() => {
       if (!this.isHidden()) this.renderChart();
     }, 300);
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener("resize", this.handleResize);
 
     if (this.isHidden()) {
       this.waitUntilVisible(() => this.renderChart());
@@ -44,7 +44,7 @@ export default class extends Controller {
   }
 
   disconnect() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener("resize", this.handleResize);
     this.destroyChart();
   }
 
@@ -53,7 +53,7 @@ export default class extends Controller {
   async renderChart() {
     try {
       const res = await fetch(this.urlValue, {
-        headers: { Accept: 'application/json' },
+        headers: { Accept: "application/json" },
       });
       const json = await res.json();
 
@@ -67,12 +67,12 @@ export default class extends Controller {
 
       this.renderChartData();
     } catch (e) {
-      console.error('Failed to fetch chart data:', e);
+      console.error("Failed to fetch chart data:", e);
     }
   }
 
   renderChartData() {
-    if (this.chartTypeValue !== 'pie') {
+    if (this.chartTypeValue !== "pie") {
       console.warn(`Unsupported chart type: ${this.chartTypeValue}`);
       return;
     }
@@ -95,8 +95,9 @@ export default class extends Controller {
         plugins: {
           ...(this.optionsValue?.library?.plugins || {}),
           legend: {
-            position: isXSmall ? 'bottom' : 'left',
-            align: isXSmall ? 'start' : 'end',
+            ...(this.optionsValue?.library?.plugins?.legend || {}),
+            position: isXSmall ? "bottom" : "left",
+            align: isXSmall ? "start" : "end",
           },
         },
       },
@@ -111,7 +112,7 @@ export default class extends Controller {
       this.chart = new Chartkick.PieChart(
         container,
         this.chartData,
-        chartOptions
+        chartOptions,
       );
     }
   }
@@ -119,11 +120,11 @@ export default class extends Controller {
   changeYear(e) {
     const year = e.target.value;
     const u = new URL(this.urlValue, window.location.origin);
-    year ? u.searchParams.set('year', year) : u.searchParams.delete('year');
+    year ? u.searchParams.set("year", year) : u.searchParams.delete("year");
     this.urlValue = u.toString();
 
     // Re-fetch with the new year, then update in place
-    fetch(this.urlValue, { headers: { Accept: 'application/json' } })
+    fetch(this.urlValue, { headers: { Accept: "application/json" } })
       .then((res) => res.json())
       .then((json) => {
         if (Array.isArray(json)) {
@@ -135,13 +136,13 @@ export default class extends Controller {
         }
         this.renderChartData();
       })
-      .catch((e) => console.error('Failed to update chart:', e));
+      .catch((e) => console.error("Failed to update chart:", e));
   }
 
   // ---------- helpers ----------
 
   _titleAndFilename() {
-    const baseTitle = this.baseTitleValue || 'Chart';
+    const baseTitle = this.baseTitleValue || "Chart";
     const baseFile = this.baseFilenameValue || this._param(baseTitle);
     const title = this.chartYear
       ? `${baseTitle} (${this.chartYear})`
@@ -155,9 +156,9 @@ export default class extends Controller {
   getFuelColors(labels) {
     return labels.map((label) => {
       const abbr = Object.keys(FUEL_COLORS).find((code) =>
-        label.includes(code)
+        label.includes(code),
       );
-      return FUEL_COLORS[abbr] || '#ccc';
+      return FUEL_COLORS[abbr] || "#ccc";
     });
   }
 
@@ -180,7 +181,7 @@ export default class extends Controller {
     obs.observe(document.body, {
       attributes: true,
       subtree: true,
-      attributeFilter: ['class'],
+      attributeFilter: ["class"],
     });
   }
 
@@ -195,7 +196,7 @@ export default class extends Controller {
   _param(s) {
     return s
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '_')
-      .replace(/^_|_$/g, '');
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_|_$/g, "");
   }
 }

@@ -21,7 +21,12 @@ module YearlyGenerationAttributes
         year: params[:year],
         fuel_type_code: params[:fuel_type_code],
         fuel_type_name: params[:fuel_type_name],
-        net_generation_mwh: params[:net_generation_mwh]
+        generation_mwh: params[:generation_mwh],
+        avg_pce_fuel_price: params[:avg_pce_fuel_price],
+        physical_unit_label: params[:physical_unit_label],
+        quantity_consumed_in_physical_units_for_electric_generation: params[:quantity_consumed_in_physical_units_for_electric_generation],
+        quantity_consumed_for_electricity_mmbtu: params[:quantity_consumed_for_electricity_mmbtu],
+        source: params[:source]
       )
     end
   end
