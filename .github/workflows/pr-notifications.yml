@@ -1,0 +1,25 @@
+name: PR Notifications
+
+on:
+  pull_request:
+    types: [review_requested]
+  
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  notify-on-request:
+    if: github.event.action == 'review_requested'
+    uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@main
+    with:
+      preset: "review_request"
+    secrets:
+      MM_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
+
+  notify-on-submit:
+    if: github.event.action == 'submitted'
+    uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@main
+    with:
+      preset: "review_decision"
+    secrets:
+      MM_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}

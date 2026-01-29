@@ -1,8 +1,9 @@
 name: Notify Mattermost on Review Requested
 
-on:
-  pull_request:
-    types: [review_requested]
+on: workflow_dispatch
+# on:
+#   pull_request:
+#     types: [review_requested]
 
 jobs:
   notify-reviewer:
