@@ -1,48 +1,45 @@
 - parent_tab = 'power_generation'
 - show_monthly_gen = @community.show_monthly_generation?
 - show_yearly_gen = @community.show_yearly_generation?
-- show_gen_tabs = show_monthly_gen || show_yearly_gen
 
+-# --- Header Section ---
 .d-flex.align-items-center.mb-3
   %i.bi.bi-building-gear.me-2.fs-4
   %h4.mb-0.me-2.py-3.anchor-offset Generation
   %hr.flex-grow-1.mt-1.mb-0.mx-2
   = render "communities/tabs/#{parent_tab}/generation/about_modal"
 
-.mb-3
-  .d-flex.justify-content-between.align-items-center
-    .nav.nav-tabs
-      - if show_gen_tabs
-        %li.nav-item
-          = link_to "#gen-charts", class: "nav-link active", data: { bs_toggle: "tab" } do
-            %i.bi.bi-graph-up.me-1
-            Generation Charts
-            
-      - if show_monthly_gen
-        %li.nav-item
-          = link_to "#monthly-gen-data", class: "nav-link", data: { bs_toggle: "tab" } do
-            %i.bi.bi-table.me-1
-            Monthly Data
-
-      - if show_yearly_gen
-        %li.nav-item
-          = link_to "#yearly-gen-data", class: "nav-link", data: { bs_toggle: "tab" } do
-            %i.bi.bi-table.me-1
-            Yearly Data
-
-  .tab-content.mt-3
-    - if show_gen_tabs
-      #gen-charts.tab-pane.fade.show.active
-        - if show_monthly_gen
-          = render "communities/tabs/#{parent_tab}/generation/monthly"
-  
-        - if show_yearly_gen
-          = render "communities/tabs/#{parent_tab}/generation/yearly_chart"
+-# --- Tab Navigation (Monthly vs Yearly) ---
+- if show_monthly_gen && show_yearly_gen
+  .d-flex.justify-content-between.align-items-center.mb-3
+    %ul.nav.nav-tabs
+      %li.nav-item
+        = link_to "#yearly-gen-pane", class: "nav-link active", data: { bs_toggle: "tab" } do
+          %i.bi.bi-calendar-event.me-1
+          Yearly Generation
       
-    - if show_monthly_gen
-      #monthly-gen-data.tab-pane.fade
-        = render "communities/tabs/#{parent_tab}/generation/monthly_data"
+      %li.nav-item
+        = link_to "#monthly-gen-pane", class: "nav-link", data: { bs_toggle: "tab" } do
+          %i.bi.bi-calendar3.me-1
+          Monthly Generation
 
-    - if show_yearly_gen
-      #yearly-gen-data.tab-pane.fade
-        = render "communities/tabs/#{parent_tab}/generation/yearly_data"
+-# --- Tab Content ---
+.tab-content
+  - if show_yearly_gen
+    #yearly-gen-pane.tab-pane.fade.show.active
+      .row.mb-4
+        .col-12
+          .p-3.border.rounded.bg-light.mb-3
+            = render "communities/tabs/#{parent_tab}/generation/yearly_chart"
+          .mt-2
+            = render "communities/tabs/#{parent_tab}/generation/yearly_data"
+
+  - if show_monthly_gen
+    - monthly_active = !show_yearly_gen
+    #monthly-gen-pane.tab-pane.fade{ class: ("show active" if monthly_active) }
+      .row.mb-4
+        .col-12
+          .p-3.border.rounded.bg-light.mb-3
+            = render "communities/tabs/#{parent_tab}/generation/monthly"
+          .mt-2
+            = render "communities/tabs/#{parent_tab}/generation/monthly_data"
