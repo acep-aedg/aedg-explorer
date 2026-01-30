@@ -1,19 +1,21 @@
 - tab = 'general'
 
--# --- ROW 1: Geography & Transportation ---
-.my-5.mx-3.mx-md-5.mt-3
-  .row.g-4
-    -# Determine Geography Width: if transportation is present, use half width (col-lg-6).
-    - geo_width = @community.show_transportation? ? 'col-lg-6' : 'col-12'
-    
-    %div{ class: geo_width }
-      = render "communities/tabs/#{tab}/geography"
+- links = [ |
+    { title: 'Geography', anchor: '#geography', icon: 'map' }, |
+    { title: 'Transportation', anchor: '#transportation', icon: 'truck', show: @community.show_transportation? }, |
+    { title: 'Legislative Districts', anchor: '#legislative', icon: 'bank', show: @community.show_legislative_districts? } |
+  ] |
 
-    - if @community.show_transportation?
-      .col-12.col-lg-6
-        = render "communities/tabs/#{tab}/transportation", transportation: @community.transportation
+= render 'shared/tab_nav', links: links
 
--# --- ROW 2: Legislative Districts ---
+-# --- Content Sections ---
+#geography.scroll-section.my-5.mx-3.mx-md-5
+  = render "communities/tabs/#{tab}/geography"
+
+- if @community.show_transportation?
+  #transportation.scroll-section.my-5.mx-3.mx-md-5
+    = render "communities/tabs/#{tab}/transportation", transportation: @community.transportation
+
 - if @community.show_legislative_districts?
-  .my-5.mx-3.mx-md-5
+  #legislative.scroll-section.my-5.mx-3.mx-md-5
     = render "communities/tabs/#{tab}/legislative_districts"

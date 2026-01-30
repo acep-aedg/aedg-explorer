@@ -1,7 +1,14 @@
 - tab = 'electric_rates_sales'
+- links = [ |
+    { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.show_rates? }, |
+    { title: 'Sales', anchor: '#sales', icon: 'cash-coin', show: @community.show_sales? }, |
+  ] |
+
+= render 'shared/tab_nav', links: links
+
 - if @community.show_rates?
-  .my-5.mx-3.mx-md-5.mt-3
+  #rates.scroll-section.my-5.mx-3.mx-md-5.mt-3
     = render "communities/tabs/#{tab}/rates"
 - if @community.show_sales?
-  .my-5.mx-3.mx-md-5
+  #sales.scroll-section.my-5.mx-3.mx-md-5
     = render "communities/tabs/#{tab}/sales"
