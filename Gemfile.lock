@@ -370,7 +370,7 @@ DEPENDENCIES
   acts-as-taggable-on (~> 12.0)
   bootsnap
   bootstrap_form (~> 5.4)
-  brakeman (~> 8.0)
+  brakeman (~> 8.0.0)
   capybara
   chartkick
   connection_pool (~> 2.4)
