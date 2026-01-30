@@ -1,26 +1,43 @@
 - content_for :title, "Community - #{@community.name}"
 
-/ --- Tool Bar
-.sticky-top.bg-light.p-1
-  .row.align-items-center.gx-0
-    .col.d-flex.align-items-center.text-truncate.align-middle.gap-2
-      %i.bi.bi-geo-alt-fill.text-primary.fs-4.ms-2
-      / Name
-      %span.fw-bold.fs-3.text-truncate= @community.name
-      / Borough (not census area)
-      - if @community.borough.present? && !@community.borough.census_area?
-        %span.text-muted.align-middle &bull;
-        %span.fw-semibold.text-secondary.text-truncate= @community.borough.name
-      / Grid
-      - if @community.grid.present?
-        %span.text-muted.align-middle &bull;
-        = link_to @community.grid.name, grid_path(@community.grid), class: "text-info text-truncate"
+- tab_order = []
+- tab_order << 'general'  if @community.show_background_section?
+- tab_order << 'power_generation' if @community.show_electricity_section?
+- tab_order << 'electric_rates_sales'
+- tab_order << 'fuel'
+- tab_order << 'demographics'
+- tab_order << 'income'
 
-    .col-auto
-      .d-flex.align-items-center.flex-nowrap
-        = render "shared/dropdown", collection: @communities
+/ --- Sticky Tool Bar
+.sticky-top.bg-light.border-bottom{ style: "z-index: 1020;" }
+  .p-2
+    .row.align-items-center.gx-0
+      .col.d-flex.align-items-center.text-truncate.align-middle.gap-2
+        %i.bi.bi-geo-alt-fill.text-primary.fs-4.ms-2
+        %span.fw-bold.fs-3.text-truncate= @community.name
+        - if @community.borough.present? && !@community.borough.census_area?
+          %span.text-muted.align-middle &bull;
+          %span.fw-semibold.text-secondary.text-truncate= @community.borough.name
 
-/ Wrap BOTH columns with the maps controller so buttons can reach it
+      / --- Tab Navigation ---
+      .col-auto.px-3
+        %ul.nav.nav-pills.flex-nowrap{ role: 'tablist' }
+          - tab_order.each_with_index do |tab, index|
+            %li.nav-item{ role: 'presentation' }
+              %button.nav-link.py-1.px-3{ 
+                class: "#{'active' if index.zero?} small fw-bold", 
+                id: "#{tab}-tab", 
+                type: 'button', 
+                role: 'tab',
+                data: { bs_toggle: 'tab', bs_target: "##{tab}-pane" } 
+              }
+                = tab == 'electric_rates_sales' ? 'Rates & Sales' : tab.titleize
+
+      .col-auto
+        .d-flex.align-items-center.flex-nowrap
+          = render "shared/dropdown", collection: @communities
+
+/ --- Main Layout Wrapper
 .row.gx-0{
   data: mapbox_api_data({
     maps_map_center_value: [@community.longitude, @community.latitude],
@@ -28,134 +45,49 @@
     maps_marker_tooltip_title_value: @community.name
   })
 }
-  / --- LEFT: Map
+  / --- LEFT: Map 
   .col-md-4.d-none.d-lg-block
-    .d-flex.flex-column.position-sticky{ style: "top: 50px; height: calc(100vh - 50px);" }
+    .d-flex.flex-column.position-sticky{ style: "top: 60px; height: calc(100vh - 60px);" }
       .flex-grow-1.d-flex.flex-column#mapbox-area
         .d-flex.align-items-center
-          / --- Floating controls (top-right, inside map) ---
+          / --- Floating controls ---
           .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
             .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
-
-            / Map Layer: Local Service Area
+            
             - if @community.show_service_area_geoms?
               .form-check.mb-1
-                %input.form-check-input#layer-service-area-local{
-                  type: "checkbox",
-                  data: {
-                    action: "change->maps#toggleLayer",
-                    url: service_area_geoms_community_maps_path(@community),
-                    fit: true
-                  }
-                }
-                %label.form-check-label.small{ for: "layer-service-area-local" }
-                  = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
+                %input.form-check-input#layer-service-area-local{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: service_area_geoms_community_maps_path(@community), fit: true } }
+                %label.form-check-label.small{ for: "layer-service-area-local" } Service Area
 
-            / Map Layer: Full Service Area (if applicable)
-            - if @community.show_full_service_area?
-              .form-check.mb-1
-                %input.form-check-input#layer-service-area-full{
-                  type: "checkbox",
-                  data: {
-                    action: "change->maps#toggleLayer",
-                    url: service_areas_community_maps_path(@community),
-                    fit: true
-                  }
-                }
-                %label.form-check-label.small{ for: "layer-service-area-full" } Full Service Area
-
-            / Map Layer: House Districts
             .form-check.mb-1
-              %input.form-check-input#layer-house{
-                type: "checkbox",
-                data: {
-                  action: "change->maps#toggleLayer",
-                  url: house_districts_community_maps_path(@community),
-                  fit: true
-                }
-              }
+              %input.form-check-input#layer-house{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: house_districts_community_maps_path(@community), fit: true } }
               %label.form-check-label.small{ for: "layer-house" } House Districts
 
-            / Map Layer: Senate Districts
             .form-check.mb-1
-              %input.form-check-input#layer-senate{
-                type: "checkbox",
-                data: {
-                  action: "change->maps#toggleLayer",
-                  url: senate_districts_community_maps_path(@community),
-                  fit: true
-                }
-              }
+              %input.form-check-input#layer-senate{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: senate_districts_community_maps_path(@community), fit: true } }
               %label.form-check-label.small{ for: "layer-senate" } Senate Districts
 
-            /#- This is if we ever want a "clear all layers" button
-            -# %hr.my-2
-            -# .d-flex.justify-content-end.gap-1
-            -#   %button.btn.btn-sm.px-1.py-0{ data: { action: "click->maps#clearLayers" }, title: "Clear Layers", style: "line-height:1;" }
-            -#     %i.bi.bi-trash.fs-6
-
-            / Map Layer: Plants
             - if @community.show_plants?
               .form-check.mb-1
-                %input.form-check-input#layer-plants{
-                  type: "checkbox",
-                  data: {
-                    action: "change->maps#toggleLayer",
-                    url: plants_community_maps_path(@community),
-                    fit: true
-                  }
-                }
+                %input.form-check-input#layer-plants{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: plants_community_maps_path(@community), fit: true } }
                 %label.form-check-label.small{ for: "layer-plants" } Power Plants
 
-            / Map Layer: Bulk Fuel Facilities
             - if @community.show_bulk_fuel_facilities?
               .form-check.mb-1
-                %input.form-check-input#layer-bulk-fuel-facilities{
-                  type: "checkbox",
-                  data: {
-                    action: "change->maps#toggleLayer",
-                    url: bulk_fuel_facilities_community_maps_path(@community),
-                    fit: true
-                  }
-                }
+                %input.form-check-input#layer-bulk-fuel-facilities{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: bulk_fuel_facilities_community_maps_path(@community), fit: true } }
                 %label.form-check-label.small{ for: "layer-bulk-fuel-facilities" } Bulk Fuel Facilities
 
-        / --- Map fills remaining height
         .flex-grow-1.position-relative
           .h-100{ data: { maps_target: "map" } }
 
+  / --- RIGHT: Tabbed Content
   .col-md-12.col-lg-8
-    - tab_order = []
-    - tab_order << 'general'  if @community.show_background_section?
-    - tab_order << 'power_generation' if @community.show_electricity_section?
-    - tab_order << 'electric_rates_sales'
-    - tab_order << 'fuel'
-    - tab_order << 'demographics'
-    - tab_order << 'income'
-    
-  
-    -# --- Tab Navigation Menu ---
-    %ul.nav.nav-tabs.mx-4.mt-4{ role: 'tablist' }
-      - tab_order.each_with_index do |tab, index|
-        - is_active = index.zero?
-        %li.nav-item{ role: 'presentation' }
-          %button.nav-link{ 
-            class: "#{'active' if is_active} fs-6 fw-semibold", 
-            id: "#{tab}-tab", 
-            type: 'button', 
-            role: 'tab',
-            data: { 
-              bs_toggle: 'tab', 
-              bs_target: "##{tab}-pane" 
-            } 
-          }
-            = tab == 'electric_rates_sales' ? 'Electric Rates & Sales' : tab.titleize
-  
     .tab-content
       - tab_order.each_with_index do |tab, index|
         .tab-pane.fade{ 
           class: ('show active' if index.zero?), 
           id: "#{tab}-pane", 
-          role: 'tabpanel' 
+          role: 'tabpanel',
+          aria: { labelledby: "#{tab}-tab" }
         }
           = render "communities/tabs/#{tab}"
