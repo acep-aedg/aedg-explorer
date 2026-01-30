@@ -44,17 +44,17 @@
         - if @community.show_employment?
           .col-12
             %h5.text-muted.mb-3 Employment Status
-            = render "communities/sections/#{parent_tab}/population/population_employment"
+            = render "communities/tabs/#{parent_tab}/population/population_employment"
             %hr.my-4.text-muted
 
         - if @community.show_population_age_sexes?
           .col-12.col-lg-8
             %h5.text-muted.mb-3 Age Distribution
-            = render "communities/sections/#{parent_tab}/population/population_age_chart", population_periods: population_periods, selected_period: population_period
+            = render "communities/tabs/#{parent_tab}/population/population_age_chart", population_periods: population_periods, selected_period: population_period
           
           .col-12.col-lg-4
             %h5.text-muted.mb-3 Gender Distribution
-            = render "communities/sections/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
+            = render "communities/tabs/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
 
     #population-data.tab-pane.fade{ role: "tabpanel" }
-      = render "communities/sections/#{parent_tab}/population/population_age_sex_datatable"
+      = render "communities/tabs/#{parent_tab}/population/population_age_sex_datatable"

@@ -19,7 +19,7 @@
     .col-auto
       .d-flex.align-items-center.flex-nowrap
         = render "shared/dropdown", collection: @communities
-        = render 'communities/sections/quick_nav', community: @community
+        = render 'communities/tabs/quick_nav', community: @community
 
 / Wrap BOTH columns with the maps controller so buttons can reach it
 .row.gx-0{
@@ -129,11 +129,11 @@
   .col-md-8
     - tab_order = []
     - tab_order << 'general'  if @community.show_background_section?
+    - tab_order << 'power_generation' if @community.show_electricity_section?
+    - tab_order << 'electric_rates_sales'
+    - tab_order << 'fuel'
     - tab_order << 'demographics'
     - tab_order << 'income'
-    - tab_order << 'electricity_rates_sales'
-    - tab_order << 'power_generation' if @community.show_electricity_section?
-    - tab_order << 'fuel'
     
   
     -# --- Tab Navigation Menu ---
@@ -149,8 +149,8 @@
             role: 'tab', |
             aria: { controls: "#{tab.parameterize}-pane", selected: is_active } |
           }
-            - if tab == 'electricity_rates_sales'
-              = 'Electricity Rates & Sales'
+            - if tab == 'electric_rates_sales'
+              = 'Electric Rates & Sales'
             - else
               = tab.titleize
   
@@ -164,4 +164,4 @@
           role: 'tabpanel', |
           aria: { labelledby: "#{tab.parameterize}-tab" } |
         }
-          = render "communities/sections/#{tab}", community: @community
+          = render "communities/tabs/#{tab}", community: @community

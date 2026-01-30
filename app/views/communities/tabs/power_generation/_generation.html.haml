@@ -7,7 +7,7 @@
   %i.bi.bi-building-gear.me-2.fs-4
   %h4#generation.mb-0.me-2.py-3.anchor-offset Generation
   %hr.flex-grow-1.mt-1.mb-0.mx-2
-  = render "communities/sections/#{parent_tab}/generation/about_modal"
+  = render "communities/tabs/#{parent_tab}/generation/about_modal"
 
 .mb-3
   .d-flex.justify-content-between.align-items-center
@@ -16,7 +16,7 @@
         %li.nav-item
           = link_to "#gen-charts", class: "nav-link active", data: { bs_toggle: "tab" } do
             %i.bi.bi-graph-up.me-1
-            Charts
+            Generation Charts
             
       - if show_monthly_gen
         %li.nav-item
@@ -34,15 +34,15 @@
     - if show_gen_tabs
       #gen-charts.tab-pane.fade.show.active
         - if show_monthly_gen
-          = render "communities/sections/#{parent_tab}/generation/monthly"
+          = render "communities/tabs/#{parent_tab}/generation/monthly"
   
         - if show_yearly_gen
-          = render "communities/sections/#{parent_tab}/generation/yearly_chart"
+          = render "communities/tabs/#{parent_tab}/generation/yearly_chart"
       
     - if show_monthly_gen
       #monthly-gen-data.tab-pane.fade
-        = render "communities/sections/#{parent_tab}/generation/monthly_data"
+        = render "communities/tabs/#{parent_tab}/generation/monthly_data"
 
     - if show_yearly_gen
       #yearly-gen-data.tab-pane.fade
-        = render "communities/sections/#{parent_tab}/generation/yearly_data"
+        = render "communities/tabs/#{parent_tab}/generation/yearly_data"

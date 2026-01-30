@@ -7,13 +7,13 @@
     - geo_width = @community.show_transportation? ? 'col-lg-6' : 'col-12'
     
     %div{ class: geo_width }
-      = render "communities/sections/#{tab}/geography"
+      = render "communities/tabs/#{tab}/geography"
 
     - if @community.show_transportation?
       .col-12.col-lg-6
-        = render "communities/sections/#{tab}/transportation", transportation: @community.transportation
+        = render "communities/tabs/#{tab}/transportation", transportation: @community.transportation
 
 -# --- ROW 2: Legislative Districts ---
 - if @community.show_legislative_districts?
   .my-5.mx-3.mx-md-5
-    = render "communities/sections/#{tab}/legislative_districts"
+    = render "communities/tabs/#{tab}/legislative_districts"

@@ -1,10 +1,10 @@
-- parent_tab = 'electricity_rates_sales'
+- parent_tab = 'electric_rates_sales'
 .d-flex.align-items-center.mb-3
   %i.bi.bi-cash-coin.me-2.fs-4
   %h4#sales.mb-0.me-3.py-3.anchor-offset Sales
   %hr.flex-grow-1.mt-1.mb-0
 
-= render "communities/sections/#{parent_tab}/sales/summary"
+= render "communities/tabs/#{parent_tab}/sales/summary"
 .mb-3
   .d-flex.justify-content-between.align-items-center
     .nav.nav-tabs
@@ -23,10 +23,10 @@
   #sales-charts.tab-pane.fade.show.active
     - if @community.sales.with_sales.exists?  
       .mb-3
-        = render "communities/sections/#{parent_tab}/sales/energy_sold"
+        = render "communities/tabs/#{parent_tab}/sales/energy_sold"
 
     - if @community.sales.with_any_breakdown_data.exists?      
       .mb-3
-        = render "communities/sections/#{parent_tab}/sales/customer_breakdown"
+        = render "communities/tabs/#{parent_tab}/sales/customer_breakdown"
   #sales-data.tab-pane.fade
-    = render "communities/sections/#{parent_tab}/sales/data"
+    = render "communities/tabs/#{parent_tab}/sales/data"
