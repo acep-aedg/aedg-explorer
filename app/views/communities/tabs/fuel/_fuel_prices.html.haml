@@ -1,24 +1,13 @@
 - parent_tab = "fuel"
 
 .d-flex.align-items-center.mb-3
-  %i.bi.bi-coin.me-2.fs-4
+  %i.bi.bi-fuel-pump.me-2.fs-4
   %h4.mb-0.me-3.py-3.anchor-offset Fuel Prices
-  %hr.flex-grow-1.mt-1.mb-0
+  %hr.flex-grow-1.mt-1.mb-0.mx-2
+
+.mb-5
+  .p-3.border.rounded.bg-light.mb-3
+    = render "communities/tabs/#{parent_tab}/fuel_prices/chart"
 
 .mb-3
-  .d-flex.justify-content-between.align-items-center
-    .nav.nav-tabs
-      %li.nav-item
-        = link_to "#fuel-prices-chart", class: "nav-link active", data: { bs_toggle: "tab" } do
-          %i.bi.bi-bar-chart-fill.me-1
-          Fuel Price Chart
-      %li.nav-item
-        = link_to "#fuel-prices-data", class: "nav-link", data: { bs_toggle: "tab" } do
-          %i.bi.bi-table.me-1
-          Fuel Price Data
-
-.tab-content
-  #fuel-prices-chart.tab-pane.fade.show.active
-    = render "communities/tabs/#{parent_tab}/fuel_prices/chart"
-  #fuel-prices-data.tab-pane.fade
-    = render "communities/tabs/#{parent_tab}/fuel_prices/datatable"
+  = render "communities/tabs/#{parent_tab}/fuel_prices/datatable"
