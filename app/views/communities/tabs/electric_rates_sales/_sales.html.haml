@@ -1,32 +1,22 @@
 - parent_tab = 'electric_rates_sales'
+
 .d-flex.align-items-center.mb-3
   %i.bi.bi-cash-coin.me-2.fs-4
   %h4.mb-0.me-3.py-3.anchor-offset Sales
   %hr.flex-grow-1.mt-1.mb-0
 
-= render "communities/tabs/#{parent_tab}/sales/summary"
+.mb-4
+  = render "communities/tabs/#{parent_tab}/sales/summary"
+
+- if @community.sales.with_sales.exists?
+  .mb-5
+    .p-3.border.rounded.bg-light.mb-3
+      = render "communities/tabs/#{parent_tab}/sales/energy_sold"
+
+- if @community.sales.with_any_breakdown_data.exists?
+  .mb-5
+    .p-3.border.rounded.bg-light.mb-3
+      = render "communities/tabs/#{parent_tab}/sales/customer_breakdown"
+
 .mb-3
-  .d-flex.justify-content-between.align-items-center
-    .nav.nav-tabs
-      - if @community.sales.with_sales.exists? or @community.sales.with_any_breakdown_data.exists?
-        %li.nav-item
-          = link_to "#sales-charts", class: "nav-link active", data: { bs_toggle: "tab" } do
-            %i.bi.bi-bar-chart-fill.me-1
-            Charts
-      %li.nav-item
-        = link_to "#sales-data", class: "nav-link", data: { bs_toggle: "tab" } do
-          %i.bi.bi-table.me-1
-          Data
-
-
-.tab-content
-  #sales-charts.tab-pane.fade.show.active
-    - if @community.sales.with_sales.exists?  
-      .mb-3
-        = render "communities/tabs/#{parent_tab}/sales/energy_sold"
-
-    - if @community.sales.with_any_breakdown_data.exists?      
-      .mb-3
-        = render "communities/tabs/#{parent_tab}/sales/customer_breakdown"
-  #sales-data.tab-pane.fade
-    = render "communities/tabs/#{parent_tab}/sales/data"
+  = render "communities/tabs/#{parent_tab}/sales/data"
