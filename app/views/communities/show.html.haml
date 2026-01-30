@@ -40,21 +40,22 @@
             
             / Map Layer: Local Service Area
             - if @community.show_service_area_geoms?
-              .form-check.mb-1
-                %input.form-check-input#layer-service-area-local{
-                  type: "checkbox",
-                  data: {
+              .form-check.d-flex.align-items-center.mb-1
+                %input.form-check-input#layer-service-area-local{ 
+                  type: "checkbox", 
+                  data: { 
                     action: "change->maps#toggleLayer",
-                    url: service_area_geoms_community_maps_path(@community),
+                    url: service_area_geoms_community_maps_path(@community), 
                     fit: true
                   }
                 }
-                %label.form-check-label.small{ for: "layer-service-area-local" }
+                %label.form-check-label.small.ms-2{ for: "layer-service-area-local" }
+                  %span.legend-swatch{ data: { maps_target: "swatch" } }
                   = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
-            
+
             / Map Layer: Full Service Area (if applicable)
             - if @community.show_full_service_area?
-              .form-check.mb-1
+              .form-check.d-flex.align-items-center.mb-1
                 %input.form-check-input#layer-service-area-full{
                   type: "checkbox",
                   data: {
@@ -63,64 +64,67 @@
                     fit: true
                   }
                 }
-                %label.form-check-label.small{ for: "layer-service-area-full" } Full Service Area
-            
+                %label.form-check-label.small.ms-2{ for: "layer-service-area-full" }
+                  %span.legend-swatch{ data: { maps_target: "swatch" } }
+                  Full Service Area
+
             / Map Layer: House Districts
-            .form-check.mb-1
-              %input.form-check-input#layer-house{
-                type: "checkbox",
-                data: {
-                  action: "change->maps#toggleLayer",
-                  url: house_districts_community_maps_path(@community),
-                  fit: true
+            .form-check.d-flex.align-items-center.mb-1
+              %input.form-check-input#layer-house{ 
+                type: "checkbox", 
+                data: { 
+                  action: "change->maps#toggleLayer", 
+                  url: house_districts_community_maps_path(@community), 
+                  fit: true 
                 }
               }
-              %label.form-check-label.small{ for: "layer-house" } House Districts
-            
+              %label.form-check-label.small.ms-2{ for: "layer-house" }
+                %span.legend-swatch{ data: { maps_target: "swatch" } }
+                House Districts
+
             / Map Layer: Senate Districts
-            .form-check.mb-1
-              %input.form-check-input#layer-senate{
+            .form-check.d-flex.align-items-center.mb-1
+              %input.form-check-input#layer-senate{ 
                 type: "checkbox",
-                data: {
+                data: { 
                   action: "change->maps#toggleLayer",
                   url: senate_districts_community_maps_path(@community),
                   fit: true
                 }
               }
-              %label.form-check-label.small{ for: "layer-senate" } Senate Districts
-            
-            /#- This is if we ever want a "clear all layers" button
-            -# %hr.my-2
-            -# .d-flex.justify-content-end.gap-1
-            -#   %button.btn.btn-sm.px-1.py-0{ data: { action: "click->maps#clearLayers" }, title: "Clear Layers", style: "line-height:1;" }
-            -#     %i.bi.bi-trash.fs-6
-            
+              %label.form-check-label.small.ms-2{ for: "layer-senate" }
+                %span.legend-swatch{ data: { maps_target: "swatch" } }
+                Senate Districts
+
             / Map Layer: Plants
             - if @community.show_plants?
-              .form-check.mb-1
+              .form-check.d-flex.align-items-center.mb-1
                 %input.form-check-input#layer-plants{
                   type: "checkbox",
                   data: {
-                    action: "change->maps#toggleLayer",
+                    action: "change->maps#toggleLayer", 
                     url: plants_community_maps_path(@community),
-                    fit: true
+                    fit: true 
                   }
                 }
-                %label.form-check-label.small{ for: "layer-plants" } Power Plants
-            
+                %label.form-check-label.small.ms-2{ for: "layer-plants" }
+                  %span.legend-swatch{ data: { maps_target: "swatch" } }
+                  Power Plants
+
             / Map Layer: Bulk Fuel Facilities 
             - if @community.show_bulk_fuel_facilities?
-              .form-check.mb-1
+              .form-check.d-flex.align-items-center.mb-1
                 %input.form-check-input#layer-bulk-fuel-facilities{
                   type: "checkbox",
                   data: {
                     action: "change->maps#toggleLayer",
                     url: bulk_fuel_facilities_community_maps_path(@community),
-                    fit: true
+                    fit: true 
                   }
                 }
-                %label.form-check-label.small{ for: "layer-bulk-fuel-facilities" } Bulk Fuel Facilities
-
+                %label.form-check-label.small.ms-2{ for: "layer-bulk-fuel-facilities" }
+                  %span.legend-swatch{ data: { maps_target: "swatch" } }
+                  Bulk Fuel Facilities
         / --- Map fills remaining height
         .flex-grow-1.position-relative
           .h-100{ data: { maps_target: "map" } }

@@ -1,1 +1,17 @@
 //TODO:  keeping this file incase we need styles for maps with new refactor 
+.legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 4px;
+  /* Ensure it doesn't look like a checkbox */
+  border: 1px solid rgba(0, 0, 0, 0.1); 
+  background-color: #ccc;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.form-check-input:not(:checked) ~ .form-check-label .legend-swatch {
+  opacity: 0.3;
+  filter: grayscale(50%);
+}
