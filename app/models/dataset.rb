@@ -1,6 +1,7 @@
-require 'zip'
+require "zip"
 class Dataset < ApplicationRecord
   extend FriendlyId
+
   friendly_id :name, use: :slugged
 
   acts_as_taggable_on :keywords
@@ -18,11 +19,11 @@ class Dataset < ApplicationRecord
   has_one_attached :archive
 
   def self.import_resource(json)
-    Rails.logger.debug "Resource: #{json['name']}"
-    find_or_initialize_by(name: json['name']).tap do |dataset|
+    Rails.logger.debug { "Resource: #{json['name']}" }
+    find_or_initialize_by(name: json["name"]).tap do |dataset|
       dataset.data = json
-      dataset.keyword_list.add(json['keywords'])
-      dataset.topic_list.add(json['topics'])
+      dataset.keyword_list.add(json["keywords"])
+      dataset.topic_list.add(json["topics"])
     end
   end
 
@@ -30,7 +31,7 @@ class Dataset < ApplicationRecord
     return unless Dir.exist?(directory_path)
 
     compressed_stream = Zip::OutputStream.write_buffer do |zio|
-      Dir.glob(File.join(directory_path, '**', '*')).each do |disk_file_path|
+      Dir.glob(File.join(directory_path, "**", "*")).each do |disk_file_path|
         next if File.directory?(disk_file_path)
 
         zip_entry_name = Pathname.new(disk_file_path).relative_path_from(Pathname.new(directory_path)).to_s
@@ -45,11 +46,11 @@ class Dataset < ApplicationRecord
     archive.attach(
       io: compressed_stream,
       filename: "#{name}.zip",
-      content_type: 'application/zip'
+      content_type: "application/zip"
     )
   end
 
   def filename
-    [name, format.downcase].join('.')
+    [name, format.downcase].join(".")
   end
 end

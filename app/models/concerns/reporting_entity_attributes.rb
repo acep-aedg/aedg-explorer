@@ -6,7 +6,7 @@ module ReportingEntityAttributes
     def import_aedg!(properties)
       properties.symbolize_keys!
 
-      raise 'id is required' if properties[:id].nil?
+      raise "id is required" if properties[:id].nil?
 
       ReportingEntity.create!(
         aedg_id: properties[:id],

@@ -1005,7 +1005,7 @@ ALTER SEQUENCE public.metadata_id_seq OWNED BY public.metadata.id;
 
 CREATE TABLE public.monthly_generations (
     id bigint NOT NULL,
-    net_generation_mwh numeric,
+    generation_mwh numeric,
     year integer,
     month integer,
     created_at timestamp(6) without time zone NOT NULL,
@@ -1013,7 +1013,12 @@ CREATE TABLE public.monthly_generations (
     fuel_type_code character varying,
     fuel_type_name character varying,
     aea_plant_id integer,
-    eia_plant_id integer
+    eia_plant_id integer,
+    physical_unit_label character varying,
+    pce_fuel_price numeric,
+    quantity_consumed_in_physical_units_for_electric_generation numeric,
+    quantity_consumed_for_electricity_mmbtu numeric,
+    source character varying
 );
 
 
@@ -1045,21 +1050,19 @@ CREATE TABLE public.plants (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     aea_plant_id integer,
-    eia_plant_id integer,
+    eia_plant_ids integer[] DEFAULT '{}'::integer[],
     name character varying,
     aea_operator_id integer,
     eia_operator_id integer,
     grid_id integer,
     service_area_geom_aedg_id character varying,
-    eia_reporting boolean,
-    pce_reporting boolean,
     combined_heat_power boolean,
-    primary_voltage numeric,
-    primary_voltage2 numeric,
+    grid_primary_voltage_kv numeric,
+    grid_primary_voltage_2_kv numeric,
     phases character varying,
-    status character varying,
     notes character varying,
-    location public.geometry
+    location public.geometry,
+    pce_reporting_id integer
 );
 
 
@@ -1563,14 +1566,19 @@ ALTER SEQUENCE public.transportations_id_seq OWNED BY public.transportations.id;
 
 CREATE TABLE public.yearly_generations (
     id bigint NOT NULL,
-    net_generation_mwh integer,
+    generation_mwh integer,
     year integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     fuel_type_code character varying,
     fuel_type_name character varying,
     aea_plant_id integer,
-    eia_plant_id integer
+    eia_plant_id integer,
+    physical_unit_label character varying,
+    avg_pce_fuel_price numeric,
+    quantity_consumed_in_physical_units_for_electric_generation numeric,
+    quantity_consumed_for_electricity_mmbtu numeric,
+    source character varying
 );
 
 
@@ -2225,10 +2233,52 @@ ALTER TABLE ONLY public.yearly_generations
 
 
 --
+-- Name: idx_comm_grids_on_grid_and_fips; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_comm_grids_on_grid_and_fips ON public.community_grids USING btree (grid_id, community_fips_code);
+
+
+--
+-- Name: idx_csag_on_aedg_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_csag_on_aedg_id ON public.communities_service_area_geoms USING btree (service_area_geom_aedg_id);
+
+
+--
+-- Name: idx_csag_on_fips; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_csag_on_fips ON public.communities_service_area_geoms USING btree (community_fips_code);
+
+
+--
+-- Name: idx_monthly_gen_composite; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_monthly_gen_composite ON public.monthly_generations USING btree (aea_plant_id, year, month);
+
+
+--
 -- Name: idx_on_community_fips_code_grid_id_connection_year_dab7f92833; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX idx_on_community_fips_code_grid_id_connection_year_dab7f92833 ON public.community_grids USING btree (community_fips_code, grid_id, connection_year);
+
+
+--
+-- Name: idx_plants_on_sa_geom_aedg_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_plants_on_sa_geom_aedg_id ON public.plants USING btree (service_area_geom_aedg_id);
+
+
+--
+-- Name: idx_yearly_gen_on_aea_id_and_year; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_yearly_gen_on_aea_id_and_year ON public.yearly_generations USING btree (aea_plant_id, year);
 
 
 --
@@ -2460,6 +2510,13 @@ CREATE INDEX index_household_incomes_on_community_fips_code ON public.household_
 --
 
 CREATE INDEX index_income_poverties_on_community_fips_code ON public.income_poverties USING btree (community_fips_code);
+
+
+--
+-- Name: index_plants_on_grid_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_plants_on_grid_id ON public.plants USING btree (grid_id);
 
 
 --
@@ -2943,6 +3000,11 @@ ALTER TABLE ONLY public.communities_senate_districts
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260127184326'),
+('20260126194042'),
+('20260123003703'),
+('20260123003623'),
+('20260121214810'),
 ('20260115215649'),
 ('20260115214036'),
 ('20260115205258'),

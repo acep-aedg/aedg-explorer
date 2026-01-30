@@ -1,0 +1,17 @@
+%div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }
+  %table.table.table-striped.border
+    %thead
+      %tr
+        %th Report Entity
+        %th Year
+        %th Residential Rate
+        %th Commercial Rate
+        %th Industrial Rate
+    %tbody
+      - @community.electric_rates.each do |rate|
+        %tr
+          %td= rate.reporting_entity.name
+          %td= rate.year
+          %td= rate.residential_rate
+          %td= rate.commercial_rate
+          %td= rate.industrial_rate

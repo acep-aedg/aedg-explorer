@@ -38,7 +38,7 @@ class Community < ApplicationRecord
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
   validates :borough_fips_code, presence: true
-  validates :location, presence: true, allowed_geometry_types: ['Point']
+  validates :location, presence: true, allowed_geometry_types: ["Point"]
 
   default_scope { order(name: :asc) }
 
@@ -50,7 +50,7 @@ class Community < ApplicationRecord
   scope :in_senate,     ->(ids)   { joins(:senate_districts).where(senate_districts: { id: ids }) }
   scope :in_house,      ->(ids)   { joins(:house_districts).where(house_districts: { id: ids }) }
   # uses the pg_search_scope defined in SearchableByNameAndTags concern
-  scope :starts_with,   ->(ch)    { where('name ilike ?', "#{ch}%") }
+  scope :starts_with,   ->(ch)    { where("name ilike ?", "#{ch}%") }
 
   include PgSearch::Model
 
@@ -60,7 +60,7 @@ class Community < ApplicationRecord
                     # dmetaphone: {},
                     tsearch: {
                       prefix: true,
-                      tsvector_column: 'tsvector_data'
+                      tsvector_column: "tsvector_data"
                     }
                     # trigram: {}
                   }
@@ -93,7 +93,7 @@ class Community < ApplicationRecord
 
   def as_geojson
     {
-      type: 'Feature',
+      type: "Feature",
       geometry: RGeo::GeoJSON.encode(location),
       properties: {
         title: name,
@@ -114,17 +114,17 @@ class Community < ApplicationRecord
 
   def available_price_types
     types = []
-    types << 'Survey' if any_survey_prices?
-    types << 'Regional' if any_regional_prices?
+    types << "Survey" if any_survey_prices?
+    types << "Regional" if any_regional_prices?
     types
   end
 
   def any_survey_prices?
-    @any_survey_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == 'survey' && fp.price.present? }
+    @any_survey_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == "survey" && fp.price.present? }
   end
 
   def any_regional_prices?
-    @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == 'regional' && fp.price.present? }
+    @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == "regional" && fp.price.present? }
   end
 
   # --- Electricity Section ---
@@ -149,7 +149,7 @@ class Community < ApplicationRecord
           .where(service_area_geoms: { aedg_id: ids })
           .where.not(service_areas: { boundary: nil })
           .where.not(service_area_geoms: { boundary: nil })
-          .where(Arel.sql('NOT ST_Equals(service_areas.boundary, service_area_geoms.boundary)'))
+          .where(Arel.sql("NOT ST_Equals(service_areas.boundary, service_area_geoms.boundary)"))
           .exists?
       end
   end
@@ -278,5 +278,22 @@ class Community < ApplicationRecord
 
   def show_employment?
     @show_employment ||= employments.exists?
+  end
+
+  def self.global_search_suggestions(term)
+    return [] if term.blank?
+
+    results = []
+    sql_term = "%#{term}%"
+    results += Grid.where("name ILIKE ?", sql_term).limit(5).map { |r| { label: r.name, category: "Electric Grid", param_key: :grid_ids, value: r.id } }
+    results += Borough.where("name ILIKE ?", sql_term).limit(5).map { |r| { label: r.name, category: "Borough", param_key: :borough_fips_codes, value: r.fips_code } }
+    results += RegionalCorporation.where("name ILIKE ?", sql_term).limit(5).map do |r|
+      { label: r.name, category: "Regional Corp", param_key: :regional_corporation_fips_codes, value: r.fips_code }
+    end
+    results += SenateDistrict.where("district ILIKE ?", sql_term).limit(5).map do |r|
+      { label: "District #{r.district}", category: "Senate District", param_key: :senate_district_ids, value: r.id }
+    end
+    results += HouseDistrict.where("name ILIKE ?", sql_term).limit(5).map { |r| { label: "District #{r.name}", category: "House District", param_key: :house_district_ids, value: r.id } }
+    results
   end
 end

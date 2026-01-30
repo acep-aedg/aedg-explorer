@@ -1,5 +1,5 @@
 class CommunitiesController < ApplicationController
-  require 'ostruct'
+  require "ostruct"
   before_action :set_community, only: :show
   before_action :set_search_params, only: :index
 

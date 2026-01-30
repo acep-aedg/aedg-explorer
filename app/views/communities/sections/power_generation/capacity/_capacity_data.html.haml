@@ -1,5 +1,5 @@
 %div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }
-  %table.table.table-striped.border
+  %table.table.table-sm.table-striped.border
     %thead
       %tr
         %th Plant
@@ -8,7 +8,7 @@
         %th Fuel Type Name
         %th Year
     %tbody
-      - @community.capacities.each do |capacity|
+      - @community.capacities.includes(:plant).each do |capacity|
         %tr
           %td= capacity.plant.name
           %td= capacity.capacity_mw

@@ -1,4 +1,4 @@
-require 'open-uri'
+require "open-uri"
 class DatasetsController < ApplicationController
   before_action :set_metadatum
   before_action :set_dataset, only: %i[show]
@@ -16,17 +16,17 @@ class DatasetsController < ApplicationController
 
   def data_as_json
     case @dataset.format.downcase
-    when 'csv'
-      fields = @dataset.schema['fields'].map { |f| f['name'] }
+    when "csv"
+      fields = @dataset.schema["fields"].pluck("name")
       data = CSV.parse(URI.open(@dataset.path).read, headers: true).map do |row|
         fields.index_with { |f| row[f] }
       end
       {
         recordsTotal: data.size,
         data: data,
-        columns: @dataset.schema['fields'].map { |f| { data: f['name'], title: f['name'] } }
+        columns: @dataset.schema["fields"].map { |f| { data: f["name"], title: f["name"] } }
       }.to_json
-    when 'geojson'
+    when "geojson"
       JSON.parse(URI.open(@dataset.path).read)
     end
   end

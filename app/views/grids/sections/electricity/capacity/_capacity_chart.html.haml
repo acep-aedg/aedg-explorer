@@ -1,5 +1,5 @@
-- base_title     = "#{@grid.name.titleize} - Capacity by Fuel Type"
-- chart_options  = Chartkick.options.deep_merge({ suffix: ' MW', donut: true, library: { plugins: { legend: { title: { display: true, text: 'Fuel Type' } } } } })
+- base_title     = "#{@grid.name.titleize} - Capacity by Energy Source"
+- chart_options  = Chartkick.options.deep_merge({ suffix: ' MW', donut: true, library: { plugins: { legend: { title: { display: true, text: 'Click on a source to hide/show', font: { size: 12, weight: 'bold' } } } } } })
 - years          = Capacity.available_years_for(@grid)
 - selected_year  = params[:year].presence&.to_i || years.first
 

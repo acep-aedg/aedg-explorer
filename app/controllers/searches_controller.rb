@@ -13,12 +13,30 @@ class SearchesController < ApplicationController
   end
 
   def advanced
-    filters = extract_filters
-    @query  = filters[:q]
-    preload_choices
+    # --- MAIN COMMUNITY SEARCH ---
+    @pagy, @communities = pagy(build_scope(extract_filters), page_param: :page)
 
-    query = build_scope(filters)
-    @pagy, @communities = pagy(query)
+    # --- SIDEBAR FACETS ---
+    @pagy_grids, @current_grids = pagy(
+      Grid.filter_by_params(params, :q_grid, :alpha_grid),
+      page_param: :page_grid
+    )
+    @pagy_boros, @current_boros = pagy(
+      Borough.filter_by_params(params, :q_boro, :alpha_boro),
+      page_param: :page_boro
+    )
+    @pagy_corps, @current_corps = pagy(
+      RegionalCorporation.filter_by_params(params, :q_corp, :alpha_corp),
+      page_param: :page_corp
+    )
+    @pagy_senate, @current_senate = pagy(
+      SenateDistrict.filter_by_params(params, :q_senate, :alpha_senate, :district),
+      page_param: :page_senate
+    )
+    @pagy_house, @current_house = pagy(
+      HouseDistrict.filter_by_params(params, :q_house, :alpha_house, :district),
+      page_param: :page_house
+    )
   end
 
   private
@@ -26,11 +44,11 @@ class SearchesController < ApplicationController
   def extract_filters
     {
       q: params[:q],
-      grid_ids: Array(params[:grid_ids]).reject(&:blank?),
-      borough_fips_codes: Array(params[:borough_fips_codes]).reject(&:blank?),
-      regional_corporation_fips_codes: Array(params[:regional_corporation_fips_codes]).reject(&:blank?),
-      senate_district_ids: Array(params[:senate_district_ids]).reject(&:blank?),
-      house_district_ids: Array(params[:house_district_ids]).reject(&:blank?)
+      grid_ids: Array(params[:grid_ids]).compact_blank,
+      borough_fips_codes: Array(params[:borough_fips_codes]).compact_blank,
+      regional_corporation_fips_codes: Array(params[:regional_corporation_fips_codes]).compact_blank,
+      senate_district_ids: Array(params[:senate_district_ids]).compact_blank,
+      house_district_ids: Array(params[:house_district_ids]).compact_blank
     }
   end
 
@@ -40,7 +58,7 @@ class SearchesController < ApplicationController
     # Text search (pg_search_scope)
     if filters[:q].present?
       base = base.search_full_text(filters[:q])
-                 .reorder('communities.name ASC')
+                 .reorder("communities.name ASC")
     end
     # Apply filters
     base = base.in_boroughs(filters[:borough_fips_codes])           if filters[:borough_fips_codes].present?

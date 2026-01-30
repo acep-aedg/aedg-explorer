@@ -1,19 +1,26 @@
 %div{ data: { controller: 'datatables', datatables: { order_value: [3, 'asc']} } }
-  %table.table.table-stripped.border{ data: { datatables_target: 'table'} }
+  %table.table.table-sm.table-stripped.border{ data: { datatables_target: 'table'} }
     %thead
-      %tr
-        %th Plant
-        %th Net Generation (MWh)
-        %th Fuel Type Code
-        %th Fuel Type Name
-        %th Month
-        %th Year
+      %th Plant
+      %th Year
+      %th Month
+      %th Generation (MWh)
+      %th Fuel Type Name (Code)
+      - if @grid.communities.exists?(pce_eligible: true)
+        %th PCE Fuel Price ($/MWh)
+      %th Quantity Consumed for Electricity (MMBtu)
+      %th Quantity Consumed for Electric Generation (Physical Unit)
+      %th Source
     %tbody
-      - @grid.monthly_generations.each do |generation|
+      - @grid.monthly_generations.includes(:plant).each do |generation|
         %tr
           %td= generation.plant.name
-          %td= generation.net_generation_mwh
-          %td= generation.fuel_type_code
-          %td= generation.fuel_type_name
-          %td= generation.month
           %td= generation.year
+          %td= generation.month
+          %td= generation.generation_mwh
+          %td= "#{generation.fuel_type_name} (#{generation.fuel_type_code})"
+          - if @grid.communities.exists?(pce_eligible: true)
+            %td= generation.pce_fuel_price
+          %td= generation.quantity_consumed_for_electricity_mmbtu
+          %td= "#{generation.quantity_consumed_in_physical_units_for_electric_generation} #{generation.physical_unit_label}"
+          %td= generation.source

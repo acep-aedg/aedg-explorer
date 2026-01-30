@@ -1,6 +1,7 @@
 class ReportingEntity < ApplicationRecord
   include ReportingEntityAttributes
   include ImportFinders
+
   has_one :aedg_import, as: :importable, dependent: :destroy
   belongs_to :grid, touch: true
   has_many :communities_reporting_entities, dependent: :destroy
@@ -9,5 +10,4 @@ class ReportingEntity < ApplicationRecord
   has_many :sales, dependent: :nullify
 
   validates :name, presence: true
-  validates :grid, presence: true
 end

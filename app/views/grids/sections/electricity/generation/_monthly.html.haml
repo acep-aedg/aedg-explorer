@@ -30,15 +30,9 @@
         - years.each do |y|
           %option{ value: y, selected: y == selected_year }= y
 
-  / Summary Frame: Targeted by the controller
-  %turbo-frame#monthly_generation_summary{ data: { widget_update_target: 'frame', param: 'year' }, src: monthly_generation_grid_summary_path(@grid, year: selected_year)}
-    Loading summary ...
-
   = column_chart generation_monthly_grid_charts_path(@grid, year: selected_year), 
     id: chart_id,
-    title: "#{base_title} (#{selected_year})", 
-    xtitle: 'Month', 
-    ytitle: 'Net Generation (MWh)', 
+    ytitle: 'Generation (MWh)', 
     suffix: ' MWh',
     colors: [color(:blue)],
     download: {filename: base_title.parameterize}
