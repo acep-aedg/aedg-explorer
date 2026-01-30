@@ -90,7 +90,7 @@ GEM
     bootstrap_form (5.5.0)
       actionpack (>= 7.2)
       activemodel (>= 7.2)
-    brakeman (7.1.2)
+    brakeman (8.0.0)
       racc
     builder (3.3.0)
     capybara (3.40.0)
@@ -370,7 +370,7 @@ DEPENDENCIES
   acts-as-taggable-on (~> 12.0)
   bootsnap
   bootstrap_form (~> 5.4)
-  brakeman (~> 7.1)
+  brakeman (~> 8.0)
   capybara
   chartkick
   connection_pool (~> 2.4)
