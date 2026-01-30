@@ -126,7 +126,7 @@
           .h-100{ data: { maps_target: "map" } }
 
   / RIGHT: main content 
-  .col-md-8
+  .col-md-12.col-lg-8
     - tab_order = []
     - tab_order << 'general'  if @community.show_background_section?
     - tab_order << 'power_generation' if @community.show_electricity_section?
