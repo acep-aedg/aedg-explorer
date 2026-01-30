@@ -1,50 +1,50 @@
 - parent_tab = "income"
+
+-# --- Header Section ---
 .d-flex.align-items-center.mb-3
   %i.bi.bi-cash-coin.me-2.fs-4
   %h4#income.mb-0.me-3.py-3.anchor-offset Income
-  %hr.flex-grow-1.mt-1.mb-0
+  %hr.flex-grow-1.mt-1.mb-0.mx-2
 
-%ul.nav.nav-tabs
-  %li.nav-item
-    = link_to "#income-poverty-charts",
-      class: "nav-link active",
-      data: { bs_toggle: "tab" },
-      role: "tab" do
-      %i.bi.bi-graph-up.me-1
-      Income & Poverty Charts
-
-    - if @community.show_household_income?
-      %li.nav-item
-        = link_to "#household-income-data",
-          class: "nav-link",
-          data: { bs_toggle: "tab" },
-          role: "tab" do
-          %i.bi.bi-table.me-1
-          Household Income Data
-
-    - if @community.show_income_poverty?
-      %li.nav-item
-        = link_to "#income-poverty-data",
-          class: "nav-link",
-          data: { bs_toggle: "tab" },
-          role: "tab" do
-          %i.bi.bi-table.me-1
-          Income Poverty Data
-
-.tab-content.mt-3
-  .tab-pane.fade.active.show#income-poverty-charts{ role: "tabpanel" }
-    - if @community.household_incomes.show_income_distribution_chart?
+-# --- 1. Charts Section ---
+- if @community.household_incomes.show_income_distribution_chart?
+  .mb-5
+    .p-3.border.rounded.bg-light
       = render "communities/tabs/#{parent_tab}/household_income_distribution_chart"
-      
-    - if @community.household_incomes.show_median_income_chart? || @community.income_poverties.show_per_capita_income_chart? 
+
+- if @community.household_incomes.show_median_income_chart? || @community.income_poverties.show_per_capita_income_chart? 
+  .mb-5
+    .p-3.border.rounded.bg-light
       = render "communities/tabs/#{parent_tab}/income_chart"
-      
-    - if @community.income_poverties.show_poverty_chart?
+
+- if @community.income_poverties.show_poverty_chart?
+  .mb-5
+    .p-3.border.rounded.bg-light
       = render "communities/tabs/#{parent_tab}/poverty_rate_chart"
-    
-  - if @community.show_household_income?  
-    .tab-pane.fade#household-income-data{ role: "tabpanel" }
-      = render "communities/tabs/#{parent_tab}/household_income_data"
-  - if @community.show_income_poverty?
-    .tab-pane.fade#income-poverty-data{ role: "tabpanel" }
-      = render "communities/tabs/#{parent_tab}/income_poverty_data"
+
+-# --- 2. Data Section ---
+- if @community.show_household_income? || @community.show_income_poverty?
+  .mt-4
+    %ul.nav.nav-tabs{ role: "tablist" }
+      - if @community.show_household_income?
+        %li.nav-item
+          = link_to "#household-income-pane", class: "nav-link active", data: { bs_toggle: "tab" } do
+            %i.bi.bi-table.me-1
+            Household Income Data
+            
+      - if @community.show_income_poverty?
+        %li.nav-item
+          - poverty_active = !@community.show_household_income?
+          = link_to "#income-poverty-pane", class: "nav-link #{'active' if poverty_active}", data: { bs_toggle: "tab" } do
+            %i.bi.bi-table.me-1
+            Income Poverty Data
+
+    .tab-content
+      - if @community.show_household_income?
+        #household-income-pane.tab-pane.fade.show.active{ role: "tabpanel" }
+          = render "communities/tabs/#{parent_tab}/household_income_data"
+
+      - if @community.show_income_poverty?
+        - poverty_active = !@community.show_household_income?
+        #income-poverty-pane.tab-pane.fade{ class: ("show active" if poverty_active), role: "tabpanel" }
+          = render "communities/tabs/#{parent_tab}/income_poverty_data"
