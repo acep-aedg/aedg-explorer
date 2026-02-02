@@ -15,7 +15,8 @@
 
     -# Main Content Area
     .col-md-12.col-lg-8
-      = turbo_frame_tag "community_tab_content" do
+      = turbo_frame_tag "community_tab_content", data: { controller: "scroll", 
+                                  action: "turbo:frame-render->scroll#scrollToTop" } do
         = yield
 
 = render template: "layouts/application"

@@ -23,7 +23,7 @@
             - if tab[:visible]
               %li.nav-item
                 = link_to tab[:label], tab[:path], 
-                          data: { turbo_frame: "community_tab_content", turbo_action: "advance", turbo_frame: :_top }, 
+                          data: { turbo_frame: "community_tab_content", turbo_action: "advance"}, 
                           class: "nav-link"
 
       .col-auto
