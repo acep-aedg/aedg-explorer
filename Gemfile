@@ -93,7 +93,7 @@ gem "pg_search", "~> 2.3"
 gem "rubocop", require: false
 gem "rubocop-rails", require: false
 
-gem "brakeman", "~> 8.0.1"
+gem "brakeman", "~> 8.0"
 gem "kramdown"
 gem "kramdown-parser-gfm"
 gem "pagy", "~> 6.4"
