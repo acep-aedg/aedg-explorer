@@ -1,0 +1,21 @@
+- content_for :title, "Community - #{@community&.name}"
+- content_for :content do
+  -# Sticky Toolbar
+  = render 'communities/sticky_toolbar'
+
+  .row.gx-0{ data: mapbox_api_data({
+      maps_map_center_value: [@community.longitude, @community.latitude],
+      maps_markers_value: [[@community.longitude, @community.latitude]],
+      maps_marker_tooltip_title_value: @community.name
+    })
+  }
+    -# Sidebar with Map
+    .col-md-4.d-none.d-lg-block
+      = render 'communities/map_sidebar'
+
+    -# Main Content Area
+    .col-md-12.col-lg-8
+      = turbo_frame_tag "community_tab_content" do
+        = yield
+
+= render template: "layouts/application"

@@ -1,0 +1,32 @@
+.d-flex.flex-column.position-sticky{ style: "top: 60px; height: calc(100vh - 60px);" }
+  .flex-grow-1.d-flex.flex-column#mapbox-area
+    .d-flex.align-items-center
+      / --- Floating controls ---
+      .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
+        .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
+        
+        - if @community.show_service_area_geoms?
+          .form-check.mb-1
+            %input.form-check-input#layer-service-area-local{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: service_area_geoms_community_maps_path(@community), fit: true } }
+            %label.form-check-label.small{ for: "layer-service-area-local" } Service Area
+
+        .form-check.mb-1
+          %input.form-check-input#layer-house{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: house_districts_community_maps_path(@community), fit: true } }
+          %label.form-check-label.small{ for: "layer-house" } House Districts
+
+        .form-check.mb-1
+          %input.form-check-input#layer-senate{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: senate_districts_community_maps_path(@community), fit: true } }
+          %label.form-check-label.small{ for: "layer-senate" } Senate Districts
+
+        - if @community.show_plants?
+          .form-check.mb-1
+            %input.form-check-input#layer-plants{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: plants_community_maps_path(@community), fit: true } }
+            %label.form-check-label.small{ for: "layer-plants" } Power Plants
+
+        - if @community.show_bulk_fuel_facilities?
+          .form-check.mb-1
+            %input.form-check-input#layer-bulk-fuel-facilities{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: bulk_fuel_facilities_community_maps_path(@community), fit: true } }
+            %label.form-check-label.small{ for: "layer-bulk-fuel-facilities" } Bulk Fuel Facilities
+
+    .flex-grow-1.position-relative
+      .h-100{ data: { maps_target: "map" } }

@@ -31,18 +31,18 @@
     .mb-5
       .p-4.border.rounded.bg-light
         %h5.text-muted.mb-3 Employment Status
-        = render "communities/tabs/#{parent_tab}/population/population_employment"
+        = render "communities/#{parent_tab}/population/population_employment"
 
   .row.g-4.mb-5
     .col-12.col-xl-8
       .p-4.border.rounded.bg-light.h-100
         %h5.text-muted.mb-3 Age Distribution
-        = render "communities/tabs/#{parent_tab}/population/population_age_chart", population_periods: population_periods, selected_period: population_period
+        = render "communities/#{parent_tab}/population/population_age_chart", population_periods: population_periods, selected_period: population_period
     
     .col-12.col-xl-4
       .p-4.border.rounded.bg-light.h-100
         %h5.text-muted.mb-3 Gender Distribution
-        = render "communities/tabs/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
+        = render "communities/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
 
   .mb-3
-    = render "communities/tabs/#{parent_tab}/population/population_age_sex_datatable"
+    = render "communities/#{parent_tab}/population/population_age_sex_datatable"

@@ -40,7 +40,7 @@
       %i.bi.bi-table.me-2.text-primary
       %h5.mb-0 House Districts
     .mb-3
-      = render "communities/tabs/#{parent_tab}/legislative_districts/house_district_data"
+      = render "communities/#{parent_tab}/legislative_districts/house_district_data"
 
 - if @community.show_senate_districts?
   .row
@@ -49,4 +49,4 @@
       %h5.mb-0 Senate Districts
     
     .mb-3
-      = render "communities/tabs/#{parent_tab}/legislative_districts/senate_district_data"
+      = render "communities/#{parent_tab}/legislative_districts/senate_district_data"

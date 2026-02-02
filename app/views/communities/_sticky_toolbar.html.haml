@@ -1,0 +1,31 @@
+- tabs = [ |
+  { label: "General", path: general_community_path(@community), visible: @community.show_background_section? }, |
+  { label: "Power Generation", path: power_generation_community_path(@community), visible: @community.show_electricity_section? }, |
+  { label: "Rates & Sales", path: electric_rates_sales_community_path(@community), visible: true }, |
+  { label: "Fuel", path: fuel_community_path(@community), visible: true }, |
+  { label: "Demographics", path: demographics_community_path(@community), visible: true }, |
+  { label: "Income", path: income_community_path(@community), visible: true } |
+] |
+
+.sticky-top.bg-light.border-bottom{ style: "z-index: 1020;" }
+  .p-2
+    .row.align-items-center.gx-0
+      .col.d-flex.align-items-center.text-truncate.align-middle.gap-2
+        %i.bi.bi-geo-alt-fill.text-primary.fs-4.ms-2
+        %span.fw-bold.fs-3.text-truncate= @community.name
+        - if @community.borough.present? && !@community.borough.census_area?
+          %span.text-muted.align-middle &bull;
+          %span.fw-semibold.text-secondary.text-truncate= @community.borough.name
+
+      .col-auto.px-3
+        %ul.nav.nav-tabs
+          - tabs.each do |tab|
+            - if tab[:visible]
+              %li.nav-item
+                = link_to tab[:label], tab[:path], 
+                          data: { turbo_frame: "community_tab_content", turbo_action: "advance" }, 
+                          class: "nav-link"
+
+      .col-auto
+        .d-flex.align-items-center.flex-nowrap
+          = render "shared/dropdown", collection: @communities

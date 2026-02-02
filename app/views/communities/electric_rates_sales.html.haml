@@ -1,0 +1,15 @@
+= turbo_frame_tag "community_tab_content" do
+  - tab = 'electric_rates_sales'
+  - links = [ |
+      { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.show_rates? }, |
+      { title: 'Sales', anchor: '#sales', icon: 'cash-coin', show: @community.show_sales? }, |
+    ] |
+  
+  = render 'shared/tab_nav', links: links
+  
+  - if @community.show_rates?
+    #rates.scroll-section.my-5.mx-3.mx-md-5.mt-3
+      = render "communities/#{tab}/rates"
+  - if @community.show_sales?
+    #sales.scroll-section.my-5.mx-3.mx-md-5
+      = render "communities/#{tab}/sales"

@@ -6,17 +6,17 @@
   %hr.flex-grow-1.mt-1.mb-0
 
 .mb-4
-  = render "communities/tabs/#{parent_tab}/sales/summary"
+  = render "communities/#{parent_tab}/sales/summary"
 
 - if @community.sales.with_sales.exists?
   .mb-5
     .p-3.border.rounded.bg-light.mb-3
-      = render "communities/tabs/#{parent_tab}/sales/energy_sold"
+      = render "communities/#{parent_tab}/sales/energy_sold"
 
 - if @community.sales.with_any_breakdown_data.exists?
   .mb-5
     .p-3.border.rounded.bg-light.mb-3
-      = render "communities/tabs/#{parent_tab}/sales/customer_breakdown"
+      = render "communities/#{parent_tab}/sales/customer_breakdown"
 
 .mb-3
-  = render "communities/tabs/#{parent_tab}/sales/data"
+  = render "communities/#{parent_tab}/sales/data"

@@ -1,0 +1,22 @@
+= turbo_frame_tag "community_tab_content" do
+  - tab = 'general'
+  
+  - links = [ |
+      { title: 'Geography', anchor: '#geography', icon: 'map' }, |
+      { title: 'Transportation', anchor: '#transportation', icon: 'truck', show: @community.show_transportation? }, |
+      { title: 'Legislative Districts', anchor: '#legislative', icon: 'bank', show: @community.show_legislative_districts? } |
+    ] |
+  
+  = render 'shared/tab_nav', links: links
+  
+  -# --- Content Sections ---
+  #geography.scroll-section.my-5.mx-3.mx-md-5
+    = render "communities/#{tab}/geography"
+  
+  - if @community.show_transportation?
+    #transportation.scroll-section.my-5.mx-3.mx-md-5
+      = render "communities/#{tab}/transportation"
+  
+  - if @community.show_legislative_districts?
+    #legislative.scroll-section.my-5.mx-3.mx-md-5
+      = render "communities/#{tab}/legislative_districts"

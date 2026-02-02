@@ -7,7 +7,7 @@
   %i.bi.bi-building-gear.me-2.fs-4
   %h4.mb-0.me-2.py-3.anchor-offset Generation
   %hr.flex-grow-1.mt-1.mb-0.mx-2
-  = render "communities/tabs/#{parent_tab}/generation/about_modal"
+  = render "communities/#{parent_tab}/generation/about_modal"
 
 -# --- Tab Navigation (Monthly vs Yearly) ---
 - if show_monthly_gen && show_yearly_gen
@@ -30,9 +30,9 @@
       .row.mb-4
         .col-12
           .p-3.border.rounded.bg-light.mb-3
-            = render "communities/tabs/#{parent_tab}/generation/yearly_chart"
+            = render "communities/#{parent_tab}/generation/yearly_chart"
           .mt-2
-            = render "communities/tabs/#{parent_tab}/generation/yearly_data"
+            = render "communities/#{parent_tab}/generation/yearly_data"
 
   - if show_monthly_gen
     - monthly_active = !show_yearly_gen
@@ -40,6 +40,6 @@
       .row.mb-4
         .col-12
           .p-3.border.rounded.bg-light.mb-3
-            = render "communities/tabs/#{parent_tab}/generation/monthly"
+            = render "communities/#{parent_tab}/generation/monthly"
           .mt-2
-            = render "communities/tabs/#{parent_tab}/generation/monthly_data"
+            = render "communities/#{parent_tab}/generation/monthly_data"

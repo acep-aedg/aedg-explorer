@@ -1,6 +1,7 @@
 class CommunitiesController < ApplicationController
   require "ostruct"
-  before_action :set_community, only: :show
+  before_action :set_community, except: %i[index]
+  before_action :set_communities
   before_action :set_search_params, only: :index
 
   def index
@@ -12,19 +13,34 @@ class CommunitiesController < ApplicationController
 
     @communities = @communities.starts_with(params[:letter]) if params[:letter].present?
     @communities = @communities.all
+    # Ensure that the application layout is rendered NOT the communities layout for this action
+    render layout: "application"
   end
 
   def show
-    @borough = @community.borough
-    @communities = Community.all
+    redirect_to general_community_path(@community), status: :see_other
+  end
+
+  def general; end
+  def power_generation; end
+  def electric_rates_sales; end
+
+  def fuel
     @available_price_types = @community.available_price_types
     @selected_price_type = (params[:price_type] if @available_price_types.include?(params[:price_type])) || @available_price_types.first
   end
+
+  def demographics; end
+  def income; end
 
   private
 
   def set_community
     @community = Community.friendly.find(params[:id])
+  end
+
+  def set_communities
+    @communities = Community.order(:name)
   end
 
   def set_search_params

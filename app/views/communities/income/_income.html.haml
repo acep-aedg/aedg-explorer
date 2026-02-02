@@ -10,17 +10,17 @@
 - if @community.household_incomes.show_income_distribution_chart?
   .mb-5
     .p-3.border.rounded.bg-light
-      = render "communities/tabs/#{parent_tab}/household_income_distribution_chart"
+      = render "communities/#{parent_tab}/household_income_distribution_chart"
 
 - if @community.household_incomes.show_median_income_chart? || @community.income_poverties.show_per_capita_income_chart? 
   .mb-5
     .p-3.border.rounded.bg-light
-      = render "communities/tabs/#{parent_tab}/income_chart"
+      = render "communities/#{parent_tab}/income_chart"
 
 - if @community.income_poverties.show_poverty_chart?
   .mb-5
     .p-3.border.rounded.bg-light
-      = render "communities/tabs/#{parent_tab}/poverty_rate_chart"
+      = render "communities/#{parent_tab}/poverty_rate_chart"
 
 -# --- 2. Data Section ---
 - if @community.show_household_income? || @community.show_income_poverty?
@@ -42,9 +42,9 @@
     .tab-content
       - if @community.show_household_income?
         #household-income-pane.tab-pane.fade.show.active{ role: "tabpanel" }
-          = render "communities/tabs/#{parent_tab}/household_income_data"
+          = render "communities/#{parent_tab}/household_income_data"
 
       - if @community.show_income_poverty?
         - poverty_active = !@community.show_household_income?
         #income-poverty-pane.tab-pane.fade{ class: ("show active" if poverty_active), role: "tabpanel" }
-          = render "communities/tabs/#{parent_tab}/income_poverty_data"
+          = render "communities/#{parent_tab}/income_poverty_data"

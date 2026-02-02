@@ -4,11 +4,11 @@
   %i.bi.bi-lightning-fill.me-2.fs-4
   %h4.mb-0.me-2.py-3.anchor-offset Capacity
   %hr.flex-grow-1.mt-1.mb-0.mx-2
-  = render "communities/tabs/#{parent_tab}/capacity/about_modal"
+  = render "communities/#{parent_tab}/capacity/about_modal"
 
 .mb-5
   .p-3.border.rounded.bg-light.mb-3
-    = render "communities/tabs/#{parent_tab}/capacity/capacity_chart"
+    = render "communities/#{parent_tab}/capacity/capacity_chart"
 
 .mb-3
-  = render "communities/tabs/#{parent_tab}/capacity/capacity_data"
+  = render "communities/#{parent_tab}/capacity/capacity_data"

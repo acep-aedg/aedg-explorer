@@ -7,8 +7,8 @@
   fields: Transportation::TRANSPORT_FIELDS,
   source: @community.transportation
 
-%p= transportation.description
+%p= @community.transportation.description
 .mb-3
   %small.text-muted
     %strong Last Updated:
-    = transportation.as_of_date
+    = @community.transportation.as_of_date
