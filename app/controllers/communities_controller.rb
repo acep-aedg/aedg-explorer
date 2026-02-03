@@ -3,6 +3,7 @@ class CommunitiesController < ApplicationController
   before_action :set_community, except: %i[index]
   before_action :set_communities
   before_action :set_search_params, only: :index
+  layout :determine_layout
 
   def index
     @query = @search_params[:q]
@@ -13,8 +14,6 @@ class CommunitiesController < ApplicationController
 
     @communities = @communities.starts_with(params[:letter]) if params[:letter].present?
     @communities = @communities.all
-    # Ensure that the application layout is rendered NOT the communities layout for this action
-    render layout: "application"
   end
 
   def show
@@ -46,5 +45,9 @@ class CommunitiesController < ApplicationController
   def set_search_params
     allowed = %i[q letter borough_fips_code regional_corporation_fips_code page per_page]
     @search_params = params.permit(*allowed).to_h.symbolize_keys
+  end
+
+  def determine_layout
+    action_name == "index" ? "application" : "communities"
   end
 end
