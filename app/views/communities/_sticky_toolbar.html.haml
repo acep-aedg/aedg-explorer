@@ -18,13 +18,13 @@
           %span.fw-semibold.text-secondary.text-truncate= @community.borough.name
 
       .col-auto.px-3
-        %ul.nav.nav-tabs
+        %ul.nav.nav-tabs{ data: { controller: "turbo-active-link" } }
           - tabs.each do |tab|
             - if tab[:visible]
-              %li.nav-item
+              %li.nav-item.bg-light
                 = link_to tab[:label], tab[:path], 
-                          data: { turbo_frame: "community_tab_content", turbo_action: "advance"}, 
-                          class: "nav-link"
+                          data: { turbo_active_link_target: "link", turbo_frame: "community_tab_content", turbo_action: "advance"}, 
+                          class: "nav-link bg-light"
 
       .col-auto
         .d-flex.align-items-center.flex-nowrap

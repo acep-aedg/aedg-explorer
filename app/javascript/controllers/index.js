@@ -34,5 +34,8 @@ application.register("scroll", ScrollController)
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
 
+import TurboActiveLinkController from "./turbo_active_link_controller"
+application.register("turbo-active-link", TurboActiveLinkController)
+
 import WidgetUpdateController from "./widget_update_controller"
 application.register("widget-update", WidgetUpdateController)
