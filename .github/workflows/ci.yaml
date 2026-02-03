@@ -101,11 +101,11 @@ jobs:
           
   notify-on-failure:
       needs: [scan_ruby, scan_js, lint, test]
-      if: ! success() && github.ref == 'refs/heads/main'
+      if: (failure() || cancelled()) && github.ref == 'refs/heads/main'
       uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@main
       with:
         preset: "status"
-        job_status: ${{ contains(needs.*.result, 'failure') && 'failure' || 'other' }}
+        job_status: ${{ contains(needs.*.result, 'failure') && 'failure' || 'Cancelled' }}
         title: "CI on Push to Main"
       secrets:
         MM_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}

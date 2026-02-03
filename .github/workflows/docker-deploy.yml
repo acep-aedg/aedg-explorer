@@ -111,7 +111,7 @@ jobs:
 
   notify-on-failure:
     needs: [merge]
-    if: ! success()
+    if: failure() || cancelled()
     uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@main
     with:
       preset: "status"
