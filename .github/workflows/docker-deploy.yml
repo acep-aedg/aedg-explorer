@@ -109,18 +109,14 @@ jobs:
         run: |
           docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
 
-  notify:
-    runs-on: ubuntu-latest
+  notify-on-failure:
     needs: [merge]
-    if: failure()
-    steps:
-      - uses: mattermost/action-mattermost-notify@master
-        with:
-          MATTERMOST_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
-          MATTERMOST_ICON_URL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-          TEXT: |
-            ':x: **Docker Deploy Failed**'
-            **Repo:** ${{ github.repository }}
-            **Ref:** ${{ github.ref_name }}
-            **Author:** ${{ github.actor }}
-            [View Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+    if: ! success()
+    uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@main
+    with:
+      preset: "status"
+      job_status: ${{ needs.merge.result }}
+      title: >-
+        Docker Deploy on ${{ github.ref_type == 'tag' && 'Release' || 'Branch' }} (${{ github.ref_name }})
+    secrets:
+      MM_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
