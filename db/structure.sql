@@ -1062,7 +1062,7 @@ CREATE TABLE public.plants (
     phases character varying,
     notes character varying,
     location public.geometry,
-    pce_reporting_id integer
+    pce_reporting_id character varying
 );
 
 
@@ -2331,6 +2331,13 @@ CREATE UNIQUE INDEX index_boroughs_on_fips_code ON public.boroughs USING btree (
 
 
 --
+-- Name: index_capacities_on_aea_plant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_capacities_on_aea_plant_id ON public.capacities USING btree (aea_plant_id);
+
+
+--
 -- Name: index_communities_house_districts_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2510,6 +2517,20 @@ CREATE INDEX index_household_incomes_on_community_fips_code ON public.household_
 --
 
 CREATE INDEX index_income_poverties_on_community_fips_code ON public.income_poverties USING btree (community_fips_code);
+
+
+--
+-- Name: index_monthly_generations_on_aea_plant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_monthly_generations_on_aea_plant_id ON public.monthly_generations USING btree (aea_plant_id);
+
+
+--
+-- Name: index_plants_on_aea_plant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_plants_on_aea_plant_id ON public.plants USING btree (aea_plant_id);
 
 
 --
@@ -2702,6 +2723,13 @@ CREATE INDEX index_transportations_on_community_fips_code ON public.transportati
 
 
 --
+-- Name: index_yearly_generations_on_aea_plant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_yearly_generations_on_aea_plant_id ON public.yearly_generations USING btree (aea_plant_id);
+
+
+--
 -- Name: index_yearly_generations_on_year; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2866,6 +2894,14 @@ ALTER TABLE ONLY public.fuel_prices
 
 
 --
+-- Name: yearly_generations fk_rails_7d294bf76d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yearly_generations
+    ADD CONSTRAINT fk_rails_7d294bf76d FOREIGN KEY (aea_plant_id) REFERENCES public.plants(aea_plant_id);
+
+
+--
 -- Name: community_grids fk_rails_7d3a74461c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2970,6 +3006,14 @@ ALTER TABLE ONLY public.communities_service_area_geoms
 
 
 --
+-- Name: capacities fk_rails_ce150acde9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.capacities
+    ADD CONSTRAINT fk_rails_ce150acde9 FOREIGN KEY (aea_plant_id) REFERENCES public.plants(aea_plant_id);
+
+
+--
 -- Name: communities fk_rails_d9078d9620; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2994,12 +3038,22 @@ ALTER TABLE ONLY public.communities_senate_districts
 
 
 --
+-- Name: monthly_generations fk_rails_ff6014c62c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.monthly_generations
+    ADD CONSTRAINT fk_rails_ff6014c62c FOREIGN KEY (aea_plant_id) REFERENCES public.plants(aea_plant_id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260203175849'),
+('20260203175626'),
 ('20260127184326'),
 ('20260126194042'),
 ('20260123003703'),
