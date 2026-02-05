@@ -26,42 +26,51 @@
           .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
 
           / Map Layer: Communities (default ON), uses default colors because of async
-          .form-check.mb-1
+          .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-communities{
               type: "checkbox",
               data: {
                 action: "change->maps#toggleLayer",
                 url: community_locations_grid_maps_path(@grid),
                 fit: true
-              }
+              },
+              style: "margin-top: 0;"
             }
-            %label.form-check-label.small{ for: "layer-communities" } Communities
+            %label.form-check-label.small.ms-2{ for: "layer-communities" }
+              %span.legend-swatch{ data: { maps_target: "swatch" } }
+              Communities
 
           / Map Layer: Local Service Area
           - if @grid.show_service_area_geoms?
-            .form-check.mb-1
-              %input.form-check-input#layer-service-area-local{
-                type: "checkbox",
-                data: {
-                  action: "change->maps#toggleLayer",
-                  url: service_area_geoms_grid_maps_path(@grid),
-                  fit: true
-                }
+            .form-check.d-flex.align-items-center.mb-1
+              %input.form-check-input#layer-service-area-local{ 
+                type: "checkbox", 
+                data: { 
+                  action: "change->maps#toggleLayer", 
+                  url: service_area_geoms_grid_maps_path(@grid), 
+                  fit: true 
+                }, 
+                style: "margin-top: 0;" 
               }
-              %label.form-check-label.small{ for: "layer-service-area-local" } Service Areas
+              %label.form-check-label.small.ms-2{ for: "layer-service-area-local" }
+                %span.legend-swatch{ data: { maps_target: "swatch" } }
+                Service Areas
 
           / Map Layer: Plants
           - if @grid.show_plants?
-            .form-check.mb-1
-              %input.form-check-input#layer-plants{
-                type: "checkbox",
-                data: {
-                  action: "change->maps#toggleLayer",
-                  url: plants_grid_maps_path(@grid),
-                  fit: true
-                }
+            .form-check.d-flex.align-items-center.mb-1
+              %input.form-check-input#layer-plants{ 
+                type: "checkbox", 
+                data: { 
+                  action: "change->maps#toggleLayer", 
+                  url: plants_grid_maps_path(@grid), 
+                  fit: true 
+                }, 
+                style: "margin-top: 0;" 
               }
-              %label.form-check-label.small{ for: "layer-plants" } Plants
+              %label.form-check-label.small.ms-2{ for: "layer-plants" }
+                %span.legend-swatch{ data: { maps_target: "swatch" } }
+                Plants
 
         / --- Map fills remaining height
         .flex-grow-1.position-relative

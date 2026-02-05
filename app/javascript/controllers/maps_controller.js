@@ -6,7 +6,7 @@ import { boundsFrom, featureCollectionFromLngLats } from '../maps/geo.js'
 import { upsertDomMarker } from '../maps/dom_marker.js'
 
 export default class extends Controller {
-  static targets = ['map', 'loading']
+  static targets = ['map', 'loading', 'swatch']
   static values = {
     token: String,
     mapCenter: { type: Array, default: [-154.49, 63.58] },
@@ -28,6 +28,9 @@ export default class extends Controller {
       center: this.mapCenterValue,
       zoom: DEFAULT_ZOOM,
     })
+
+    this.initSwatches()
+
     // expose for global cleanup (turbo:before-render / before-cache)
     this.mapTarget._mapbox = this.map
 
@@ -54,6 +57,17 @@ export default class extends Controller {
   }
 
   // ---- PUBLIC ACTIONS ----
+
+  initSwatches() {
+    this.swatchTargets.forEach((swatch) => {
+      const checkbox = swatch.closest('.form-check').querySelector('input');
+      const color = LAYER_COLORS[checkbox.id];
+    
+      if (color) {
+        swatch.style.backgroundColor = color;
+      }
+    });
+  }
 
  // Move the persistent DOM marker to a section’s coords and center the map
   focusSection(event) {

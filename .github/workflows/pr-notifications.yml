@@ -17,7 +17,9 @@ jobs:
       MM_WEBHOOK_URL: ${{ secrets.MM_WEBHOOK_URL }}
 
   notify-on-submit:
-    if: github.event.action == 'submitted'
+    if: >
+      github.event.action == 'submitted' && 
+      (github.event.review.state == 'approved' || github.event.review.state == 'changes_requested')
     uses: acep-devops/workflows/.github/workflows/mattermost-notify.yml@main
     with:
       preset: "review_decision"
