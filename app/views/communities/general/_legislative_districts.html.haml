@@ -1,52 +1,36 @@
 - parent_tab = 'general'
-/ ── Legislative block 
-.d-flex.align-items-center.mb-3
-  %i.bi.bi-map.me-2.fs-4
-  %h4#legislative-districts.mb-0.me-3.py-3.anchor-offset Legislative Districts
-  %hr.flex-grow-1.mt-1.mb-0
+      
+= render 'shared/section_header', 
+    icon: 'map', 
+    title: 'Legislative Districts', 
+    description: 'State representation and map boundaries'
 
-/ Map Layers
-.mb-3.d-none.d-md-block 
-  %h6.text-uppercase.text-muted.mb-2 View on Map
-  .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
-    / House Districts
-    %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
-      data: {
-        action: "click->maps#showLayer",
-        url: house_districts_community_maps_path(@community),
-        fit: true,
-        checkbox_id: "layer-house"
-      }
-    }
-      %i.bi.bi-house-fill
-      %span.text-nowrap House Districts
+.section-body.m-5
+  / Map Tools "Shelf"
+  .mb-4.p-3.border.rounded-3.d-none.d-md-block.shadow-sm
+    %h6.text-uppercase.text-muted.small.fw-bold.mb-3 View on Map
+    .btn-group.btn-group-sm{ role: "group" }
+      %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{ data: { action: "click->maps#showLayer", url: house_districts_community_maps_path(@community), fit: true, checkbox_id: "layer-house" } }
+        %i.bi.bi-house-fill
+        House Districts
+      %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{ data: { action: "click->maps#showLayer", url: senate_districts_community_maps_path(@community), fit: true, checkbox_id: "layer-senate" } }
+        %i.bi.bi-bank
+        Senate Districts
 
-    / Senate Districts
-    %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
-      data: {
-        action: "click->maps#showLayer",
-        url: senate_districts_community_maps_path(@community),
-        fit: true,
-        checkbox_id: "layer-senate"
-      }
-    }
-      %i.bi.bi-bank
-      %span.text-nowrap Senate Districts
+  / Sub-sections for District Data
+  .row.g-4
+    - if @community.show_house_districts?
+      .col-12.col-lg-6
+        .p-3.border.rounded-3.h-100.shadow-sm
+          .d-flex.align-items-center.mb-3.border-bottom.pb-2
+            %i.bi.bi-table.me-2.text-primary
+            %h6.mb-0.fw-bold House District Data
+          = render "communities/#{parent_tab}/legislative_districts/house_district_data"
 
-
-- if @community.show_house_districts?
-  .row
-    .d-flex.align-items-center.mb-3
-      %i.bi.bi-table.me-2.text-primary
-      %h5.mb-0 House Districts
-    .mb-3
-      = render "communities/#{parent_tab}/legislative_districts/house_district_data"
-
-- if @community.show_senate_districts?
-  .row
-    .d-flex.align-items-center.mb-3
-      %i.bi.bi-table.me-2.text-primary
-      %h5.mb-0 Senate Districts
-    
-    .mb-3
-      = render "communities/#{parent_tab}/legislative_districts/senate_district_data"
+    - if @community.show_senate_districts?
+      .col-12.col-lg-6
+        .p-3.border.rounded-3.h-100.shadow-sm
+          .d-flex.align-items-center.mb-3.border-bottom.pb-2
+            %i.bi.bi-table.me-2.text-primary
+            %h6.mb-0.fw-bold Senate District Data
+          = render "communities/#{parent_tab}/legislative_districts/senate_district_data"

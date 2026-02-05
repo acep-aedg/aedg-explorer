@@ -1,48 +1,61 @@
 - parent_tab = 'demographics'
 
--# --- Header Section ---
-.d-flex.align-items-center.mb-3
-  %i.bi.bi-people-fill.me-2.fs-4
-  %h4#population.mb-0.me-3.py-3.anchor-offset Population
-  %hr.flex-grow-1.mt-1.mb-0
+-# --- Section Header ---
+= render 'shared/section_header',
+  icon: 'people-fill',
+  title: 'Population',
+  description: 'Demographic breakdown including age, gender, and employment status'
 
-- if @community.show_population_age_sexes?
-  - population_periods = @community.population_age_sexes.order(end_year: :desc)
-  - most_recent_population = population_periods.first
-  - selected_end_year  = most_recent_population.end_year
-  - population_period = population_periods.find { |p| p.end_year == selected_end_year } || most_recent_population
-  
-  - gender_periods = population_periods.select { |p| p.e_pop_male.present? && p.e_pop_female.present? }
-  - gender_selected_period = gender_periods.find { |p| p.end_year == selected_end_year } || gender_periods.first
-
-  -# --- Summary Card ---
-  .d-flex.justify-content-between.align-items-center.bg-body-secondary.p-3.rounded.mb-4.flex-wrap
-    %div
-      %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "American Community Survey (ACS) 5-year estimate (#{population_period.start_year}–#{population_period.end_year})" }
-      %strong.me-2
-        Estimated Population (#{population_period.end_year}):
-      %strong.text-primary.fw-bold
-        = number_with_delimiter(most_recent_population.e_pop_total)
-      - if most_recent_population.m_pop_total.present?
-        %span.text-muted
-          (±#{number_with_delimiter(most_recent_population.m_pop_total)})
-
-  - if @community.show_employment?
-    .mb-5
-      .p-4.border.rounded.bg-light
-        %h5.text-muted.mb-3 Employment Status
-        = render "communities/#{parent_tab}/population/population_employment"
-
-  .row.g-4.mb-5
-    .col-12.col-xl-8
-      .p-4.border.rounded.bg-light.h-100
-        %h5.text-muted.mb-3 Age Distribution
-        = render "communities/#{parent_tab}/population/population_age_chart", population_periods: population_periods, selected_period: population_period
+-# --- Section Body ---
+.section-body.mx-md-5.mx-3
+  - if @community.show_population_age_sexes?
+    - population_periods = @community.population_age_sexes.order(end_year: :desc)
+    - most_recent_population = population_periods.first
+    - selected_end_year = most_recent_population.end_year
+    - population_period = population_periods.find { |p| p.end_year == selected_end_year } || most_recent_population
     
-    .col-12.col-xl-4
-      .p-4.border.rounded.bg-light.h-100
-        %h5.text-muted.mb-3 Gender Distribution
-        = render "communities/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
+    - gender_periods = population_periods.select { |p| p.e_pop_male.present? && p.e_pop_female.present? }
+    - gender_selected_period = gender_periods.find { |p| p.end_year == selected_end_year } || gender_periods.first
 
-  .mb-3
-    = render "communities/#{parent_tab}/population/population_age_sex_datatable"
+    -# 1. Population Summary Bar (Updated styling to match your new "shelf" look)
+    .d-flex.justify-content-between.align-items-center.bg-white.border.p-3.rounded-3.mb-4.shadow-sm
+      %div
+        %i.bi.bi-info-circle-fill.me-2.text-primary{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "ACS 5-year estimate (#{population_period.start_year}–#{population_period.end_year})" }
+        %span.text-muted.text-uppercase.small.fw-bold.tracking-wider Estimated Population (#{population_period.end_year}):
+        %span.ms-2.fs-5.fw-bold.text-navy
+          = number_with_delimiter(most_recent_population.e_pop_total)
+        - if most_recent_population.m_pop_total.present?
+          %small.text-muted
+            (±#{number_with_delimiter(most_recent_population.m_pop_total)})
+
+    -# 2. Main Data Card
+    .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
+      -# Employment Status (Full Width)
+      - if @community.show_employment?
+        .mb-5
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-briefcase.me-2.text-primary
+            %h6.mb-0.fw-bold Employment Status
+          = render "communities/#{parent_tab}/population/population_employment"
+
+      -# Age and Gender (Split Layout inside the Card)
+      .pt-5.border-top
+        .row.g-4
+          .col-12.col-xl-8
+            .d-flex.align-items-center.mb-3
+              %i.bi.bi-bar-chart-steps.me-2.text-primary
+              %h6.mb-0.fw-bold Age Distribution
+            = render "communities/#{parent_tab}/population/population_age_chart", population_periods: population_periods, selected_period: population_period
+          
+          .col-12.col-xl-4.border-start-xl
+            .d-flex.align-items-center.mb-3
+              %i.bi.bi-gender-ambiguous.me-2.text-primary
+              %h6.mb-0.fw-bold Gender Distribution
+            = render "communities/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
+
+      -# Data Table Section
+      .pt-5.border-top.mt-5
+        .d-flex.align-items-center.mb-3
+          %i.bi.bi-table.me-2.text-primary
+          %h6.mb-0.fw-bold Population Data
+        = render "communities/#{parent_tab}/population/population_age_sex_datatable"

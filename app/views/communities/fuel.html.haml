@@ -1,17 +1,16 @@
+- tab = 'fuel'
+- links = [ |
+    { title: 'Fuel Prices', anchor: '#fuel-prices', icon: 'coin', show: @community.show_fuel_prices? }, |
+    { title: 'Bulk Fuel', anchor: '#bulk-fuel-facilities', icon: 'fuel-pump', show: @community.show_bulk_fuel_facilities? }, |
+  ] |
+  
 = turbo_frame_tag "community_tab_content" do
-  - tab = 'fuel'
-  
-  - links = [ |
-      { title: 'Fuel Prices', anchor: '#fuel-prices', icon: 'coin', show: @community.show_fuel_prices? }, |
-      { title: 'Bulk Fuel', anchor: '#bulk-fuel-facilities', icon: 'fuel-pump', show: @community.show_bulk_fuel_facilities? }, |
-    ] |
-  
   = render 'shared/tab_nav', links: links
   
   - if @community.show_fuel_prices?
-    #fuel-prices.scroll-section.my-5.mx-3.mx-md-5.mt-3
+    #fuel-prices.scroll-section.mb-5
       = render "communities/#{tab}/fuel_prices"
   
   - if @community.show_bulk_fuel_facilities?
-    #bulk-fuel-facilities.scroll-section.my-5.mx-3.mx-md-5
+    #bulk-fuel-facilities.scroll-section.mb-5
       = render "communities/#{tab}/bulk_fuel_facilities"

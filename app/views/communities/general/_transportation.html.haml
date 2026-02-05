@@ -1,14 +1,17 @@
-.d-flex.align-items-center.mb-3
-  %i.bi.bi-car-front.me-2.fs-4
-  %h4#transportation.mb-0.me-3.py-3.anchor-offset Transportation
-  %hr.flex-grow-1.mt-1.mb-0
-
-= render 'shared/icon_status_grid', 
-  fields: Transportation::TRANSPORT_FIELDS,
-  source: @community.transportation
-
-%p= @community.transportation.description
-.mb-3
-  %small.text-muted
-    %strong Last Updated:
-    = @community.transportation.as_of_date
+= render 'shared/section_header', 
+    icon: 'car-front', 
+    title: 'Transportation', 
+    description: 'Transit infrastructure and community mobility'
+.section-body.m-5
+  .p-3.border.rounded-3.h-100.shadow-sm
+    .mb-4
+      = render 'shared/icon_status_grid', 
+        fields: Transportation::TRANSPORT_FIELDS,
+        source: @community.transportation
+  
+      %p.text-secondary= @community.transportation.description
+  
+    .mt-3.pt-2.d-flex.justify-content-end
+      %small.text-muted
+        %strong Last Updated:
+        %span.ms-1= @community.transportation.as_of_date

@@ -1,5 +1,6 @@
+- tab = 'income'
+
 = turbo_frame_tag "community_tab_content" do
-  - tab = 'income'
   -if @community.show_income?
-    .my-5.mx-3.mx-md-5
+    .mb-5
       = render "communities/#{tab}/income"

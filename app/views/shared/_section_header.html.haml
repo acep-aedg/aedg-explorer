@@ -1,0 +1,19 @@
+-# locals: (icon:, title:, description:)
+
+.section-title-bar.bg-light.border-start.border-primary.border-5.p-3.shadow-sm.mb-4
+  .d-flex.align-items-center
+    -# 1. Icon Container
+    .bg-primary-subtle.rounded-circle.p-3.me-3.d-inline-flex.align-items-center.justify-content-center{ style: "flex-shrink: 0;" }
+      %i.fs-3.text-primary.lh-1{ class: "bi bi-#{icon} " }
+    
+    -# 2. Text Content 
+    %div
+      %h3.h5.mb-0.text-uppercase.fw-bold
+        = title
+      - if description.present?
+        %small.text-muted= description
+
+    -# 3. Yield Modal
+    - if block_given?
+      .ms-auto.me-3
+        = yield

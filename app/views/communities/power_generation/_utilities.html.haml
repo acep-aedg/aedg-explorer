@@ -1,103 +1,90 @@
 - parent_tab = 'power_generation'
-/ ── Utilities
-.d-flex.align-items-center.mb-3
-  %i.bi.bi-buildings.me-2.fs-4
-  %h4.mb-0.me-3.py-3.anchor-offset Utilities
-  %hr.flex-grow-1.mt-1.mb-0
 
-/ Map
-- if @community.show_utility_map_layers?
-  .mb-3.d-none.d-md-block
-    %h6.text-uppercase.text-muted.mb-2 View on Map
-    .btn-group.btn-group-sm{ role: "group", "aria-label": "Map layers" }
+-# --- Section Header ---
+= render 'shared/section_header', 
+    icon: 'buildings', 
+    title: 'Utilities', 
+    description: 'Electrical providers, service areas, and grid infrastructure'
 
-      - if @community.show_service_area_geoms?
-        %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
-          data: {
-            action: "click->maps#showLayer",
-            url: service_area_geoms_community_maps_path(@community),
-            fit: true,
-            checkbox_id: "layer-service-area-local" # toggles checkbox in map panel, ensure checkbox exists
-          }
-        }
-          %i.bi.bi-bounding-box
-          = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
+.section-body.mx-md-5.mx-3
+  -# Map Buttons
+  - if @community.show_utility_map_layers?
+    .mb-4.p-3.bg-white.border.rounded-3.d-none.d-md-block
+      %h6.text-uppercase.text-muted.small.fw-bold.mb-3 View on Map
+      .btn-group.btn-group-sm{ role: "group" }
+        - if @community.show_service_area_geoms?
+          %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{ data: { action: "click->maps#showLayer", url: service_area_geoms_community_maps_path(@community), fit: true, checkbox_id: "layer-service-area-local" } }
+            %i.bi.bi-bounding-box
+            = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
 
-      - if @community.show_full_service_area?
-        %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
-          data: {
-            action: "click->maps#showLayer",
-            url: service_areas_community_maps_path(@community),
-            fit: true,
-            checkbox_id: "layer-service-area-full"  # toggles checkbox in map panel, ensure checkbox exists
-          }
-        }
-          %i.bi.bi-bounding-box
-          Full Service Area
+        - if @community.show_full_service_area?
+          %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{ data: { action: "click->maps#showLayer", url: service_areas_community_maps_path(@community), fit: true, checkbox_id: "layer-service-area-full" } }
+            %i.bi.bi-bounding-box
+            Full Service Area
 
-      - if @community.show_plants?
-        %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
-          data: {
-            action: "click->maps#showLayer",
-            url: plants_community_maps_path(@community),
-            fit: true,
-            checkbox_id: "layer-plants" # toggles checkbox in map panel, ensure checkbox exists
-          }
-        }
-          %i.bi.bi-building
-          Power Plants
+        - if @community.show_plants?
+          %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{ data: { action: "click->maps#showLayer", url: plants_community_maps_path(@community), fit: true, checkbox_id: "layer-plants", turbo: "false" } }
+            %i.bi.bi-building
+            Power Plants
 
-/ === Card Body ===
-.p-3.border.rounded.bg-light.mb-3
-  .row.g-4.w-100
-    .col
-      - if @community.show_service_areas?
-        %p.mb-2
-          %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Utility providers that serve this service area" }
-          %strong Utilities for Service Area(s):
-          %ul.mb-2
-            - @community.service_areas.each do |sa|
-              %li.d-flex.align-items-center
-                %span= sa.name
-                - if sa.certificate_url.present?
-                  = link_to sa.certificate_url, target: "_blank", rel: "noopener", class: "btn btn-sm btn-outline-primary ms-2" do
-                    %i.bi.bi-box-arrow-up-right.me-1
-                    Certificate
-      %p.mb-2
-        %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "The electrical grid serving this community" }
-        %strong Grid:
-        - if @community.grid.nil?
-          None
-        - else
-          = link_to @community.grid.name.titleize, grid_path(@community.grid)
+  -# Data Content Area
+  .row.g-4
+    -# Left Column: Utility & Grid Details
+    .col-12.col-lg-7
+      .p-4.border.rounded-3.bg-white.h-100.shadow-sm
+        .d-flex.align-items-center.mb-3.border-bottom.pb-2
+          %i.bi.bi-info-circle.me-2.text-primary
+          %h6.mb-0.fw-bold Service & Grid Details
+        
+        - if @community.show_service_areas?
+          .mb-3
+            %label.text-muted.small.text-uppercase.fw-bold.d-block Providers
+            %ul.list-unstyled.mt-1
+              - @community.service_areas.each do |sa|
+                %li.d-flex.align-items-center.mb-2
+                  %span.fw-semibold= sa.name
+                  - if sa.certificate_url.present?
+                    = link_to sa.certificate_url, target: "_blank", rel: "noopener", class: "btn btn-sm btn-outline-primary py-0 px-2 ms-2", style: "font-size: 0.75rem;" do
+                      %i.bi.bi-box-arrow-up-right
+                      Cert
+        
+        .row.mt-3
+          .col-md-6.mb-3
+            %label.text-muted.small.text-uppercase.fw-bold.d-block Grid Connection
+            - if @community.grid.nil?
+              %span.text-secondary None
+            - else
+              %i.bi.bi-lightning-charge.text-warning.me-1
+              = link_to @community.grid.name.titleize, grid_path(@community.grid), class: "fw-bold"
 
-      %p.mb-2
-        %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Power Cost Equalization (PCE) Status" }
-        %strong PCE Status:
-        = @community.pce_eligible ? "Eligible" : "Ineligible"
+          .col-md-6.mb-3
+            %label.text-muted.small.text-uppercase.fw-bold.d-block PCE Status
+            %span.badge{ class: @community.pce_eligible ? "bg-success-subtle text-success border border-success" : "bg-light text-muted border" }
+              = @community.pce_eligible ? "Eligible" : "Ineligible"
 
-  .row.gx-5
-    / --- LEFT COLUMN ---
-    .col-auto
-      - if @community.show_plants?
-        %p.mb-0
-          %i.bi.bi-info-circle-fill.me-2.text-aedg-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: (@community.show_full_service_area? ? "Power plants within the local service area" : "Power plants within the service area")}
-          %strong Power Plants (#{@community.plants.size}):
-          %ul.mb-2
-            - @community.plants.each do |plant|
-              %li= plant.name
+    -# Right Column: Power Plants & Peers
+    .col-12.col-lg-5
+      .p-4.border.rounded-3.bg-white.h-100.shadow-sm
+        - if @community.show_plants?
+          .mb-4
+            .d-flex.align-items-center.mb-3.border-bottom.pb-2
+              %i.bi.bi-building.me-2.text-primary
+              %h6.mb-0.fw-bold Power Plants (#{@community.plants.size})
+            %ul.list-unstyled.mb-0
+              - @community.plants.each do |plant|
+                %li.mb-1
+                  %i.bi.bi-dot.text-primary
+                  = plant.name
 
-    / --- RIGHT COLUMN ---
-    .col-auto
-      - if @community.show_peers_by_service_area_geoms?
-        - peers = @community.peers_by_service_area_geoms
-        %h6.fw-bold.mb-2
-          Other communities within the 
-          = @community.show_full_service_area? ? "local service area" : "service area"
-          (#{peers.size}):
-        .row
-          - peers.in_groups(2, false).each do |col|
-            .col-6
-              %ul.list-unstyled.mb-0
-                - col.each do |peer|
-                  %li= link_to peer.name, community_path(peer)
+        - if @community.show_peers_by_service_area_geoms?
+          .mt-2
+            .d-flex.align-items-center.mb-3.border-bottom.pb-2
+              %i.bi.bi-people.me-2.text-primary
+              %h6.mb-0.fw-bold Area Peers
+            %p.small.text-muted.mb-2 Communities in same area:
+            .row
+              - @community.peers_by_service_area_geoms.in_groups(2, false).each do |col|
+                .col-6
+                  %ul.list-unstyled.small.mb-0
+                    - col.each do |peer|
+                      %li.text-truncate= link_to peer.name, community_path(peer), class: "text-decoration-none", data: { turbo: false }

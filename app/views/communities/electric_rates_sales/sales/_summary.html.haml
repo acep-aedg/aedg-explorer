@@ -28,8 +28,8 @@
           .flex-grow-1
             .text-muted Total Customers (#{summary.year})
             %p.fw-semibold.mb-0= number_with_delimiter(summary.total_customers)
-
-  .mb-3
-    %small.text-muted.mb-3
+      
+  .mt-3.pt-2.d-flex.justify-content-end
+    %small.text-muted
       %strong Reported by:
-      = summary.reporter_names
+      %span.ms-1= summary.reporter_names
