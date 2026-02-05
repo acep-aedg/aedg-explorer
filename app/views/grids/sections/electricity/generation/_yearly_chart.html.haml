@@ -1,24 +1,11 @@
-- base_title = "#{@grid.name.titleize} - Generation by Energy Source"
-- chart_options = Chartkick.options.deep_merge({ suffix: ' MWh', donut: true, library: { plugins: { legend: { title: { display: true, text: 'Click on a source to hide/show', font: { size: 12, weight: 'bold' } } } } }})
-- years          = YearlyGeneration.available_years_for(@grid)
-- selected_year  = params[:year].presence&.to_i || years.first
-#yearly-prod-wrapper{
-  data: {
-    controller: "fuel-chart", fuel_chart: {
-      url_value: generation_yearly_grid_charts_path(@grid, year: selected_year),
-      chart_type_value: "pie",
-      base_title_value: base_title,
-      options_value: chart_options.to_json,
-    }
-  }
-}
-  - if years.size > 1
-    .d-flex.align-items-center.gap-2.mb-2
-      %label.form-label.me-2.mb-0{ for: "yearly-prod-year" } Year:
-      %select#yearly-prod-year.form-select.form-select-sm.w-auto{
-        data: { action: "change->fuel-chart#changeYear" }
-      }
-        - years.each do |y|
-          %option{ value: y }= y
-
-  #yearly-prod.responsive-fuel-chart{ data: { "fuel-chart-target": "chart" } }
+- base_title = "#{@grid.name} - Generation by Energy Source"
+= area_chart generation_yearly_grid_charts_path(@grid),
+  stacked: true,
+  title: base_title,
+  legend: 'right',
+  height: '500px',
+  suffix: " MWh",
+  xtitle: "Year",
+  ytitle: "Generation (MWh)",
+  download: {filename: base_title.parameterize},
+  library: { plugins: { legend: { title: { display: true, text: 'Click on a source to hide/show', font: { size: 12, weight: 'bold' } } }, tooltip: { mode: 'index', intersect: false } }, scales: { x: { stacked: true }, y: { stacked: true, ticks: { maxTicksLimit: 10 } } }, elements: { point: { radius: 1 } } }
