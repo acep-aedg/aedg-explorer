@@ -7,9 +7,10 @@
 = turbo_frame_tag "community_tab_content" do
   = render 'shared/tab_nav', links: links
   
-  - if @community.show_rates?
-    #rates.scroll-section.mb-5
-      = render "communities/#{tab}/rates"
-  - if @community.show_sales?
-    #sales.scroll-section.mb-5
-      = render "communities/#{tab}/sales"
+  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump_nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+    - if @community.show_rates?
+      #rates.scroll-section.mb-5
+        = render "communities/#{tab}/rates"
+    - if @community.show_sales?
+      #sales.scroll-section.mb-5
+        = render "communities/#{tab}/sales"

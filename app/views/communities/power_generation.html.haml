@@ -5,15 +5,16 @@
   { title: 'Capacity', anchor: '#capacity', icon: 'lightning-fill', show: @community.show_capacity? } |
 ] |
 
-= turbo_frame_tag "community_tab_content" do
+= turbo_frame_tag "community_tab_content" do  
   = render 'shared/tab_nav', links: links
   
-  - if @community.show_utilities?
-    #utilities.scroll-section.mb-5
-      = render "communities/#{tab}/utilities"
-  - if @community.show_generation?
-    #generation.scroll-section.mb-5
-      = render "communities/#{tab}/generation"
-  - if @community.show_capacity?
-    #capacity.scroll-section.mb-5
-      = render "communities/#{tab}/capacity"
+  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump_nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+    - if @community.show_utilities?
+      #utilities.scroll-section.mb-5
+        = render "communities/#{tab}/utilities"
+    - if @community.show_generation?
+      #generation.scroll-section.mb-5
+        = render "communities/#{tab}/generation"
+    - if @community.show_capacity?
+      #capacity.scroll-section.mb-5
+        = render "communities/#{tab}/capacity"

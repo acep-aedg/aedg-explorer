@@ -1,11 +1,11 @@
--# app/views/shared/_tab_nav.html.haml
-.sticky-top.bg-light.border-bottom.py-3{ style: "top: 50px; z-index: 1010;" }
+-# Needs links and action_name
+.sticky-top.bg-light.border-bottom.py-3{ id: "jump_nav", style: "top: 50px; z-index: 1010;" }
   .mx-3.mx-md-5
     .d-flex.justify-content-center.align-items-center.flex-wrap.gap-2
       %small.text-uppercase.fw-bold.text-muted.me-2 Jump To:
       
       - links.each do |link|
-        - if link[:show].nil? || link[:show]
+        - if link.fetch(:show, true)
           = link_to link[:anchor], class: "btn btn-sm btn-outline-primary rounded-pill", data: { turbo: "false" } do
             - if link[:icon].present?
               %i{ class: "bi bi-#{link[:icon]} me-1" }

@@ -8,14 +8,16 @@
 = turbo_frame_tag "community_tab_content" do
 
   = render 'shared/tab_nav', links: links
+  
+  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump_nav", bs_smooth_scroll: "true" }, tabindex: "0" }
 
-  #geography.scroll-section.mb-5
-    = render "communities/#{tab}/geography"
-
-  - if @community.show_transportation?
-    #transportation.scroll-section.mb-5
-      = render "communities/#{tab}/transportation"
-
-  - if @community.show_legislative_districts?
-    #legislative.scroll-section.mb-5
-      = render "communities/#{tab}/legislative_districts"
+    #geography.scroll-section.mb-5
+      = render "communities/#{tab}/geography"
+  
+    - if @community.show_transportation?
+      #transportation.scroll-section.mb-5
+        = render "communities/#{tab}/transportation"
+  
+    - if @community.show_legislative_districts?
+      #legislative.scroll-section.mb-5
+        = render "communities/#{tab}/legislative_districts"

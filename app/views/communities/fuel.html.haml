@@ -6,11 +6,11 @@
   
 = turbo_frame_tag "community_tab_content" do
   = render 'shared/tab_nav', links: links
-  
-  - if @community.show_fuel_prices?
-    #fuel-prices.scroll-section.mb-5
-      = render "communities/#{tab}/fuel_prices"
-  
-  - if @community.show_bulk_fuel_facilities?
-    #bulk-fuel-facilities.scroll-section.mb-5
-      = render "communities/#{tab}/bulk_fuel_facilities"
+  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump_nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+    - if @community.show_fuel_prices?
+      #fuel-prices.scroll-section.mb-5
+        = render "communities/#{tab}/fuel_prices"
+    
+    - if @community.show_bulk_fuel_facilities?
+      #bulk-fuel-facilities.scroll-section.mb-5
+        = render "communities/#{tab}/bulk_fuel_facilities"

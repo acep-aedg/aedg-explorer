@@ -31,6 +31,9 @@ application.register("offcanvas-group", OffcanvasGroupController)
 import ScrollController from "./scroll_controller"
 application.register("scroll", ScrollController)
 
+import ScrollspyController from "./scrollspy_controller"
+application.register("scrollspy", ScrollspyController)
+
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
 
