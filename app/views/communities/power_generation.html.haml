@@ -1,0 +1,42 @@
+- tab = 'power_generation'
+- links = [ |
+  { title: 'Utilities', anchor: '#utilities', icon: 'buildings', show: @community.show_utilities? }, |
+  { title: 'Generation', anchor: '#generation', icon: 'building-gear', show: @community.show_generation? }, |
+  { title: 'Capacity', anchor: '#capacity', icon: 'lightning-fill', show: @community.show_capacity? } |
+] |
+
+= turbo_frame_tag "community_tab_content" do  
+  = render 'shared/tab_nav', links: links
+  
+  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump_nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+    - if @community.show_utilities?
+      #utilities.scroll-section.mb-5
+        = render 'shared/section_header', 
+            icon: 'buildings', 
+            title: 'Utilities', 
+            description: 'Electrical providers, service areas, and grid infrastructure',
+            anchor: '#utilities'
+      
+        = render "communities/#{tab}/utilities"
+        
+    - if @community.show_generation?
+      #generation.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'building-gear',
+          title: 'Generation',
+          description: 'Energy generation trends and fuel source mix',
+          anchor: '#generation' do
+          = render "communities/#{tab}/generation/about_modal"
+        
+        = render "communities/#{tab}/generation"
+        
+    - if @community.show_capacity?
+      #capacity.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'lightning-fill',
+          title: 'Capacity',
+          description: 'Installed infrastructure and maximum power output',
+          anchor: '#capacity' do
+          = render "communities/#{tab}/capacity/about_modal"
+          
+        = render "communities/#{tab}/capacity"

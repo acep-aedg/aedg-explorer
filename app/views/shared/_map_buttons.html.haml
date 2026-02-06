@@ -1,0 +1,20 @@
+-# locals: ( buttons: [])
+
+- visible_buttons = buttons.select { |btn| btn.fetch(:visible, true) }
+
+- if visible_buttons.any?
+  .mb-4.p-3.border.rounded-3.d-none.d-md-block.shadow-sm
+    %h6.text-uppercase.text-muted.small.fw-bold.mb-3 View on Map
+    .btn-group.btn-group-sm{ role: "group" }
+      - visible_buttons.each do |btn|
+        %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{
+          data: {
+            action: "click->maps#showLayer",
+            url: btn[:url],
+            fit: true,
+            checkbox_id: btn[:id],
+            turbo: btn[:turbo] || false
+          }
+        }
+          %i{ class: "bi bi-#{btn[:icon]}" }
+          = btn[:label]

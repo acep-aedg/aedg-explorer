@@ -1,13 +1,13 @@
 # Communities Views Structure
 
-This directory organizes the views for rendering community-related data. The `sections/` directory contains partials that are used to render collapsible sections from the `show` view.
+This directory organizes the views for rendering community-related data. The `tabs/` directory contains partials that are used to render collapsible tabs from the `show` view.
 
 ## Naming & Directory Structure
 
-- The `sections/` directory contains partials for collapsible sections.
-- Each `.html.haml` file in `sections/` corresponds to a section on the community page.
+- The `tabs/` directory contains partials for collapsible tabs.
+- Each `.html.haml` file in `tabs/` corresponds to a section on the community page.
 - Each section has its own subdirectory containing related partials.
-- These sections are rendered in **the order defined in `show.html.haml`**.
+- These tabs are rendered in **the order defined in `show.html.haml`**.
 
 **Example Structure**
 
@@ -16,7 +16,7 @@ views/communities/
 ├── _dropdown.html.haml            # Dropdown partial
 ├── index.html.haml                # Index view
 ├── show.html.haml                 # Show view (defines order and renders section)
-└── sections/                      # Contains collapsible sections & related partials
+└── tabs/                      # Contains tabs & related partials
     ├── _background.html.haml       # Background section
     ├── _electricity.html.haml      # Electricity section
     ├── background/                 # Partials for "Background"
@@ -34,8 +34,7 @@ views/communities/
 
 ### Rendering Behavior
 
-- Each section in `sections/` is included in `show.html.haml`, defining the display order.
-- Sections are collapsible to keep the UI clean and structured.
+- Each section in `tabs/` is included in `show.html.haml`, defining the display order.
 - Partials within each section’s subdirectory are used for rendering subsections.
 
 ### Adding a New Section

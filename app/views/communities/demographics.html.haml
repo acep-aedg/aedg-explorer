@@ -1,0 +1,7 @@
+- tab = 'demographics'
+
+= turbo_frame_tag "community_tab_content" do
+  - if @community.show_population?
+    .mb-5
+      = render "communities/#{tab}/population"
+  
