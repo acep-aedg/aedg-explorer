@@ -2,6 +2,12 @@
 
 = turbo_frame_tag "community_tab_content" do
   - if @community.show_population?
-    .mb-5
+    #population.mb-5
+      = render 'shared/section_header',
+        icon: 'people-fill',
+        title: 'Population',
+        description: 'Demographic breakdown including age, gender, and employment status',
+        anchor: '#population'
+      
       = render "communities/#{tab}/population"
   
