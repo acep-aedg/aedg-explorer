@@ -1,19 +1,34 @@
--# locals: (icon:, title:, description:)
+-# locals: (icon:, title:, description:, anchor: nil)
 
 .section-title-bar.bg-body-secondary.border-start.border-primary.border-5.p-3.shadow-sm.mb-4
   .d-flex.align-items-center
-    -# 1. Icon Container
+    -# Icon Container
     .bg-primary-subtle.rounded-circle.p-3.me-3.d-inline-flex.align-items-center.justify-content-center{ style: "flex-shrink: 0;" }
-      %i.fs-3.text-primary.lh-1{ class: "bi bi-#{icon} " }
-    
-    -# 2. Text Content 
+      %i.fs-3.text-primary.lh-1{ class: "bi bi-#{icon}" }
+
+    -# Text Content
     %div
-      %h3.h5.mb-0.text-uppercase.fw-bold
+      %h3.h5.mb-0.text-uppercase.fw-bold.d-flex.align-items-center
         = title
+        
+        -# Share Button
+        - if anchor.present?
+          %button.btn.btn-link.p-0.ms-2{ data: { controller: "copy",
+            action: "copy#copy",
+            copy_url_value: "#{request.base_url}#{request.path}#{anchor}",
+            copy_target: "button",
+            copy_icon_original: "bi-link-45deg",
+            copy_icon_success: "bi-check-lg",
+            copy_active_class: "text-success",
+            copy_original_class: "text-muted" } }
+  
+            %i.bi.bi-link-45deg.fs-4{ data: { copy_target: "icon" } }
+
+      -# Description
       - if description.present?
         %small.text-muted= description
 
-    -# 3. Yield Modal
+    -# Yield Modal
     - if block_given?
       .ms-auto.me-3
         = yield

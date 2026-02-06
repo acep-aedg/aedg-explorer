@@ -1,13 +1,7 @@
 - parent_tab = 'demographics'
 
--# --- Section Header ---
-= render 'shared/section_header',
-  icon: 'people-fill',
-  title: 'Population',
-  description: 'Demographic breakdown including age, gender, and employment status'
-
 -# --- Section Body ---
-.section-body.mx-md-5.mx-3
+.section-body.m-5.mt-3
   - if @community.show_population_age_sexes?
     - population_periods = @community.population_age_sexes.order(end_year: :desc)
     - most_recent_population = population_periods.first

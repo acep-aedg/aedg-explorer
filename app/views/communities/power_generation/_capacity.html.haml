@@ -1,14 +1,7 @@
 - parent_tab = 'power_generation'
 
--# --- Section Header ---
-= render 'shared/section_header',
-  icon: 'lightning-fill',
-  title: 'Capacity',
-  description: 'Installed infrastructure and maximum power output' do
-  = render "communities/#{parent_tab}/capacity/about_modal"
-
 -# --- Section Body ---
-.section-body.mx-md-5.mx-3
+.section-body.m-5.mt-3
   .row
     .col-12
       -# Main Chart Card

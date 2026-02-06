@@ -2,7 +2,7 @@
 - links = [ |
     { title: 'Geography', anchor: '#geography', icon: 'map' }, |
     { title: 'Transportation', anchor: '#transportation', icon: 'truck', show: @community.show_transportation? }, |
-    { title: 'Legislative Districts', anchor: '#legislative', icon: 'bank', show: @community.show_legislative_districts? } |
+    { title: 'Legislative Districts', anchor: '#legislative-districts', icon: 'bank', show: @community.show_legislative_districts? } |
   ] |
 
 = turbo_frame_tag "community_tab_content" do
@@ -12,12 +12,30 @@
   .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump_nav", bs_smooth_scroll: "true" }, tabindex: "0" }
 
     #geography.scroll-section.mb-5
+      = render 'shared/section_header', 
+        icon: 'globe', 
+        title: 'Geography', 
+        description: 'Location and regional associations',
+        anchor: '#geography'
+
       = render "communities/#{tab}/geography"
   
     - if @community.show_transportation?
       #transportation.scroll-section.mb-5
+        = render 'shared/section_header', 
+            icon: 'car-front', 
+            title: 'Transportation', 
+            description: 'Transit infrastructure and community mobility',
+            anchor: '#transportation'
+
         = render "communities/#{tab}/transportation"
   
     - if @community.show_legislative_districts?
-      #legislative.scroll-section.mb-5
+      #legislative-districts.scroll-section.mb-5
+        = render 'shared/section_header', 
+            icon: 'map', 
+            title: 'Legislative Districts', 
+            description: 'State representation and map boundaries',
+            anchor: '#legislative-districts'
+        
         = render "communities/#{tab}/legislative_districts"

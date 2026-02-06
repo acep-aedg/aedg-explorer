@@ -1,39 +1,66 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="copy"
 export default class extends Controller {
-  static targets = ['source', 'button', 'icon', 'label'];
+  static targets = ["source", "button", "icon", "label"];
+  static values = { url: String };
 
-  copy() {
-    if (!this.hasSourceTarget) return;
+  copy(event) {
+    if (event) event.preventDefault();
 
-    const text = this.sourceTarget.textContent.trim();
+    // Determine what to copy: Priority to URL Value, then Source Target
+    let textToCopy = "";
+    if (this.hasUrlValue) {
+      textToCopy = this.urlValue;
+    } else if (this.hasSourceTarget) {
+      textToCopy = this.sourceTarget.textContent.trim();
+    }
+
+    if (!textToCopy) return;
 
     navigator.clipboard
-      .writeText(text)
+      .writeText(textToCopy)
       .then(() => this.showCopiedState())
-      .catch((err) => {
-        console.error('Failed to copy:', err);
-      });
+      .catch((err) => console.error("Failed to copy:", err));
   }
 
   showCopiedState() {
-    if (this.hasButtonTarget && this.hasIconTarget && this.hasLabelTarget) {
-      this.buttonTarget.classList.replace(
-        'btn-outline-secondary',
-        'btn-success'
-      );
-      this.iconTarget.classList.replace('bi-clipboard', 'bi-clipboard-check');
-      this.labelTarget.textContent = 'Copied';
+    // Dynamic Class Swapping, check data attributes on the button target, falling back to defaults
+    const btn = this.hasButtonTarget ? this.buttonTarget : this.element;
 
-      setTimeout(() => {
-        this.buttonTarget.classList.replace(
-          'btn-success',
-          'btn-outline-secondary'
-        );
-        this.iconTarget.classList.replace('bi-clipboard-check', 'bi-clipboard');
-        this.labelTarget.textContent = 'Copy';
-      }, 3000);
+    const iconOriginal = btn.dataset.copyIconOriginal || "bi-clipboard";
+    const iconSuccess = btn.dataset.copyIconSuccess || "bi-clipboard-check";
+    const activeClass = btn.dataset.copyActiveClass || "btn-success";
+    const originalClass =
+      btn.dataset.copyOriginalClass || "btn-outline-secondary";
+
+    // Swap Button Classes
+    if (this.hasButtonTarget) {
+      this.buttonTarget.classList.replace(originalClass, activeClass);
     }
+
+    // Swap Icons
+    if (this.hasIconTarget) {
+      this.iconTarget.classList.replace(iconOriginal, iconSuccess);
+    }
+
+    // Swap Labels
+    const originalLabel = this.hasLabelTarget
+      ? this.labelTarget.textContent
+      : "Copy";
+    if (this.hasLabelTarget) {
+      this.labelTarget.textContent = "Copied";
+    }
+
+    setTimeout(() => {
+      if (this.hasButtonTarget) {
+        this.buttonTarget.classList.replace(activeClass, originalClass);
+      }
+      if (this.hasIconTarget) {
+        this.iconTarget.classList.replace(iconSuccess, iconOriginal);
+      }
+      if (this.hasLabelTarget) {
+        this.labelTarget.textContent = originalLabel;
+      }
+    }, 2000);
   }
 }
