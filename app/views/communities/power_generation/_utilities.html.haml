@@ -1,5 +1,29 @@
 - parent_tab = 'power_generation'
 
+- map_buttons = [ |
+    { |
+      label: (@community.show_full_service_area? ? "Local Service Area" : "Service Area"), |
+      url: service_area_geoms_community_maps_path(@community), |
+      icon: 'bounding-box', |
+      id: 'layer-service-area-local', |
+      visible: @community.show_service_area_geoms? |
+    }, |
+    { |
+      label: "Full Service Area", |
+      url: service_areas_community_maps_path(@community), |
+      icon: 'bounding-box', |
+      id: 'layer-service-area-full', |
+      visible: @community.show_full_service_area? |
+    }, |
+    { |
+      label: "Power Plants", |
+      url: plants_community_maps_path(@community), |
+      icon: 'building', |
+      id: 'layer-plants', |
+      visible: @community.show_plants? |
+    } |
+  ] |
+
 -# --- Section Header ---
 = render 'shared/section_header', 
     icon: 'buildings', 
@@ -7,25 +31,7 @@
     description: 'Electrical providers, service areas, and grid infrastructure'
 
 .section-body.mx-md-5.mx-3
-  -# Map Buttons
-  - if @community.show_utility_map_layers?
-    .mb-4.p-3.bg-white.border.rounded-3.d-none.d-md-block
-      %h6.text-uppercase.text-muted.small.fw-bold.mb-3 View on Map
-      .btn-group.btn-group-sm{ role: "group" }
-        - if @community.show_service_area_geoms?
-          %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{ data: { action: "click->maps#showLayer", url: service_area_geoms_community_maps_path(@community), fit: true, checkbox_id: "layer-service-area-local" } }
-            %i.bi.bi-bounding-box
-            = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
-
-        - if @community.show_full_service_area?
-          %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{ data: { action: "click->maps#showLayer", url: service_areas_community_maps_path(@community), fit: true, checkbox_id: "layer-service-area-full" } }
-            %i.bi.bi-bounding-box
-            Full Service Area
-
-        - if @community.show_plants?
-          %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{ data: { action: "click->maps#showLayer", url: plants_community_maps_path(@community), fit: true, checkbox_id: "layer-plants", turbo: "false" } }
-            %i.bi.bi-building
-            Power Plants
+  = render 'shared/map_buttons', buttons: map_buttons
 
   -# Data Content Area
   .row.g-4

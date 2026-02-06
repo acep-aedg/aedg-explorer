@@ -1,4 +1,12 @@
 - parent_tab = 'fuel'
+- map_buttons = [ |
+    { |
+      label: "Bulk Fuel Facilities", |
+      url: bulk_fuel_facilities_community_maps_path(@community), |
+      icon: 'building', |
+      id: 'layer-bulk-fuel-facilities' |
+    } |
+  ] |
 
 -# --- Section Header ---
 = render 'shared/section_header',
@@ -8,13 +16,17 @@
 
 -# --- Section Body ---
 .section-body.mx-md-5.mx-3
-  -# 1. Map Controls (The Shelf)
-  .mb-4
-    = render "communities/#{parent_tab}/bulk_fuel_facilities/map_controls"
-  
-  -# 2. Delivery Summary
-  .mb-4
-    = render "communities/#{parent_tab}/bulk_fuel_facilities/fuel_delivery"
+  .row.mb-4.g-4
+    -# Map Buttons
+    .col-12.col-md-4
+      = render 'shared/map_buttons', buttons: map_buttons
+    
+    -# Delivery Summary
+    .col-12.col-md-8
+      = render 'shared/icon_status_grid', 
+        title: "Fuel Delivery Methods",
+        fields: %i(barge_delivery plane_delivery road_delivery),
+        source: @community.bulk_fuel_facilities
 
   .row
     .col-12

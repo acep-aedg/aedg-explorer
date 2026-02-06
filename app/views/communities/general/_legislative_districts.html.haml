@@ -1,4 +1,18 @@
 - parent_tab = 'general'
+- legislative_buttons = [ |
+          { |
+            label: "House Districts", |
+            url: house_districts_community_maps_path(@community), |
+            icon: 'house-fill', |
+            id: 'layer-house' |
+          }, |
+          { |
+            label: "Senate Districts", |
+            url: senate_districts_community_maps_path(@community), |
+            icon: 'bank', |
+            id: 'layer-senate' |
+          } |
+        ] |
       
 = render 'shared/section_header', 
     icon: 'map', 
@@ -6,17 +20,9 @@
     description: 'State representation and map boundaries'
 
 .section-body.m-5
-  / Map Tools "Shelf"
-  .mb-4.p-3.border.rounded-3.d-none.d-md-block.shadow-sm
-    %h6.text-uppercase.text-muted.small.fw-bold.mb-3 View on Map
-    .btn-group.btn-group-sm{ role: "group" }
-      %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{ data: { action: "click->maps#showLayer", url: house_districts_community_maps_path(@community), fit: true, checkbox_id: "layer-house" } }
-        %i.bi.bi-house-fill
-        House Districts
-      %button.btn.btn-outline-primary.d-inline-flex.align-items-center.gap-2{ data: { action: "click->maps#showLayer", url: senate_districts_community_maps_path(@community), fit: true, checkbox_id: "layer-senate" } }
-        %i.bi.bi-bank
-        Senate Districts
-
+  / Map Buttons
+  = render 'shared/map_buttons', buttons: legislative_buttons
+  
   / Sub-sections for District Data
   .row.g-4
     - if @community.show_house_districts?
