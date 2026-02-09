@@ -28,18 +28,18 @@ class SearchesController < ApplicationController
       format.turbo_stream do
         render turbo_stream: [
           # Update Sidebar Badges
-          turbo_stream.replace("active_filters_frame", 
-                              partial: "searches/advanced/active_filters"),
-          
+          turbo_stream.replace("active_filters_frame",
+                               partial: "searches/advanced/active_filters"),
+
           # Update Results List
-          turbo_stream.replace("results_frame", 
-                              partial: "searches/advanced/results", 
-                              locals: { communities: @communities, pagy: @pagy })
+          turbo_stream.replace("results_frame",
+                               partial: "searches/advanced/results",
+                               locals: { communities: @communities, pagy: @pagy })
         ]
       end
     end
   end
-  
+
   private
 
   def extract_filters
