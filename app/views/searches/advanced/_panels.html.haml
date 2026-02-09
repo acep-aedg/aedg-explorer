@@ -1,8 +1,4 @@
--# CONFIG: Shared Styles
-- custom_width = "600px"
-- offset_style = "width: #{custom_width} !important; min-width: #{custom_width} !important; --bs-offcanvas-width: #{custom_width}; position: absolute; left: 360px; top: 0; height: 100%; border-left: 1px solid #dee2e6; z-index: 1050; background: white;"
-
--# CONFIG: Define the 5 Panels
+-# TODO: clean or refactor not sure its that readable
 - panels = []
 - panels << { id: 'offcanvasGrids',    title: 'Electric Grid',             name: 'Grids',    prefix: 'grid',   items: @current_grids,  pagy: @pagy_grids,  key: :grid_ids,                        val: ->(i){ i.id },        lbl: ->(i){ i.name } }
 - panels << { id: 'offcanvasBoroughs', title: 'Borough / Census Area',     name: 'Boroughs', prefix: 'boro',   items: @current_boros,  pagy: @pagy_boros,  key: :borough_fips_codes,              val: ->(i){ i.fips_code }, lbl: ->(i){ i.name } }
@@ -10,11 +6,12 @@
 - panels << { id: 'offcanvasSenate',   title: 'Senate District',           name: 'Senate',   prefix: 'senate', items: @current_senate, pagy: @pagy_senate, key: :senate_district_ids,             val: ->(i){ i.id },        lbl: ->(i){ "#{i.district}" } }
 - panels << { id: 'offcanvasHouse',    title: 'House District',            name: 'House',    prefix: 'house',  items: @current_house,  pagy: @pagy_house,  key: :house_district_ids,              val: ->(i){ i.id },        lbl: ->(i){ "#{i.name}" } }
 
--# RENDER LOOP
 - panels.each do |p|
-  .offcanvas.offcanvas-start{ id: p[:id], style: offset_style, "data-bs-scroll" => "true", "data-bs-backdrop" => "false", class: params[:expanded] == p[:name] ? 'show' : '' }
-    .offcanvas-header.border-bottom
-      %h5.offcanvas-title.fw-bold= p[:title]
-      %button.btn-close{ type: "button", data: { action: "click->offcanvas-group#close" } }
-    .offcanvas-body.p-0
-      = render 'searches/advanced/facet', id_prefix: p[:prefix], items: p[:items], pagy: p[:pagy], param_key: p[:key], search_param: :"q_#{p[:prefix]}", alpha_param: :"alpha_#{p[:prefix]}", value_of: p[:val], label_of: p[:lbl], panel_name: p[:name]
+  - is_open = params[p[:key]].present? || params[:expanded] == p[:name]
+  .collapse.collapse-horizontal{ id: p[:id], class: (is_open ? 'show' : '') }
+    .facet-shelf-content{ style: "width: 500px;" }
+      .p-3.border-bottom.bg-white.d-flex.justify-content-between.align-items-center
+        %h5.mb-0.fw-bold= p[:title]
+        %button.btn-close{ type: "button", data: { action: "click->search-panels#close" } }
+      .bg-white.overflow-auto{ style: "height: calc(85vh - 60px);" }
+        = render 'searches/advanced/facet', panel: p

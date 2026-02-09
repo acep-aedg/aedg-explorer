@@ -1,53 +1,55 @@
-= turbo_frame_tag "#{id_prefix}_frame", class: "d-flex flex-column h-100" do
-  
-  -# SEARCH BAR (Filters this list only)
-  = form_with url: search_advanced_path, method: :get, data: { turbo_frame: "#{id_prefix}_frame" }, class: "p-3 border-bottom bg-light" do |f|
-    -# Keep main filters so we don't lose them while searching the list
-    - params.permit(:q, :grid_ids, :borough_fips_codes, :regional_corporation_fips_codes, :senate_district_ids, :house_district_ids).each do |k,v|
-      - unless k.to_s == param_key.to_s # Don't duplicate the current list's param
-        = f.hidden_field k, value: v
-    
-    .input-group.input-group-sm
-      = text_field_tag search_param, params[search_param], class: "form-control", placeholder: "Find...", autocomplete: "off"
-      %button.btn.btn-outline-secondary{ type: "submit" }
-        %i.bi.bi-search
+- id_prefix    = panel[:prefix]
+- frame_id     = "#{id_prefix}_frame"
+- search_param = :"q_#{id_prefix}"
+- alpha_param  = :"alpha_#{id_prefix}"
+- param_key    = panel[:key]
 
-  -# LIST AREA
-  .d-flex.flex-grow-1.overflow-hidden{ style: "min-height: 0;" }
-    
+= turbo_frame_tag frame_id, class: "d-flex flex-column h-100" do
+  .p-3.border-bottom.bg-light
+    = render 'searches/advanced/search_input', 
+              url: search_advanced_path,
+              name: search_param, 
+              frame: frame_id, 
+              placeholder: "Find #{panel[:name]}..."
+
+  .d-flex.flex-grow-1.overflow-hidden.facet-list-container
     -# Scrollable Checkboxes
-    .flex-grow-1.overflow-auto.p-3
-      - if items.any?
+    .flex-grow-1.overflow-auto.p-3{ id: "#{id_prefix}_list_container" }
+      - if panel[:items].any?
         - selected_ids = Array(params[param_key]).map(&:to_s)
         
-        - items.each do |item|
-          - val = value_of.call(item).to_s
-          - lbl = label_of.call(item)
+        - panel[:items].each do |item|
+          - val = panel[:val].call(item).to_s
+          - lbl = panel[:lbl].call(item)
           
           .form-check.mb-2
+            -# Linking to 'filter-form' ensures 'autoSubmit' catches the change
             = check_box_tag "#{param_key}[]", val, selected_ids.include?(val), 
-              id: "#{id_prefix}_#{val}", 
-              class: 'form-check-input', 
-              form: 'filter-form'
-            
+                            id: "#{id_prefix}_#{val}", 
+                            class: 'form-check-input', 
+                            form: 'filter-form'
             = label_tag "#{id_prefix}_#{val}", lbl, class: 'form-check-label small'
 
-        - if pagy.pages > 1
+        - if panel[:pagy].pages > 1
           .mt-3.small.d-flex.justify-content-center
-            != pagy_bootstrap_nav(pagy, link_extra: 'data-turbo-frame="' + "#{id_prefix}_frame" + '"')
+            != pagy_bootstrap_nav(panel[:pagy], link_extra: "data-turbo-frame='#{frame_id}'")
       
       - else
         .text-center.mt-5.small.text-muted No results found.
 
-    -# Alphabet Sidebar
-    .d-flex.flex-column.align-items-center.bg-light.border-start.overflow-auto{ style: "width: 30px;" }
-      = link_to "ALL", search_advanced_path(params.permit!.merge(alpha_param => nil, search_param => nil)), class: "small fw-bold text-decoration-none text-muted py-1", data: { turbo_frame: "#{id_prefix}_frame" }, style: "font-size: 10px;"
+    -# TODO: Broken FIX
+    -# Alphabet Sidebar: Scoped to this frame so it doesn't reload the whole page
+    .d-flex.flex-column.align-items-center.bg-light.border-start.overflow-auto.alphabet-sidebar{ style: "width: 35px;" }
+      = link_to "ALL", search_advanced_path(params.permit!.merge(alpha_param => nil, search_param => nil, expanded: panel[:id])), 
+                class: "fw-bold text-decoration-none text-muted py-1 small", 
+                data: { turbo_frame: frame_id }
+      
       - ('A'..'Z').each do |letter|
-        = link_to letter, search_advanced_path(params.permit!.merge(alpha_param => letter)), class: "small fw-bold text-decoration-none text-muted py-0", data: { turbo_frame: "#{id_prefix}_frame" }, style: "font-size: 10px; line-height: 1.5;"
+        = link_to letter, search_advanced_path(params.permit!.merge(alpha_param => letter, expanded: panel[:id])), 
+                  class: "alphabet-link fw-bold text-decoration-none text-muted py-0 small", 
+                  data: { turbo_frame: frame_id }
 
-  -# Hidden inputs for off-page selections
-  -# This ensures checked items on Page 1 stay checked when you go to Page 2
-  - current_page_ids = items.map { |i| value_of.call(i).to_s }
+  - current_page_ids = panel[:items].map { |i| panel[:val].call(i).to_s }
   - selected_ids = Array(params[param_key]).map(&:to_s)
   - (selected_ids - current_page_ids).each do |hidden_val|
-    = hidden_field_tag "#{param_key}[]", hidden_val, form: 'filter-form'
+    = hidden_field_tag "#{param_key}[]", hidden_val, form: 'filter-form', id: "hidden_#{param_key}_#{hidden_val}"

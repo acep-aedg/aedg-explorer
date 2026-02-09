@@ -17,28 +17,29 @@ class SearchesController < ApplicationController
     @pagy, @communities = pagy(build_scope(extract_filters), page_param: :page)
 
     # --- SIDEBAR FACETS ---
-    @pagy_grids, @current_grids = pagy(
-      Grid.filter_by_params(params, :q_grid, :alpha_grid),
-      page_param: :page_grid
-    )
-    @pagy_boros, @current_boros = pagy(
-      Borough.filter_by_params(params, :q_boro, :alpha_boro),
-      page_param: :page_boro
-    )
-    @pagy_corps, @current_corps = pagy(
-      RegionalCorporation.filter_by_params(params, :q_corp, :alpha_corp),
-      page_param: :page_corp
-    )
-    @pagy_senate, @current_senate = pagy(
-      SenateDistrict.filter_by_params(params, :q_senate, :alpha_senate, :district),
-      page_param: :page_senate
-    )
-    @pagy_house, @current_house = pagy(
-      HouseDistrict.filter_by_params(params, :q_house, :alpha_house, :district),
-      page_param: :page_house
-    )
-  end
+    @pagy_grids, @current_grids = pagy(Grid.filter_by_params(params, :q_grid, :alpha_grid), page_param: :page_grid)
+    @pagy_boros, @current_boros = pagy(Borough.filter_by_params(params, :q_boro, :alpha_boro), page_param: :page_boro)
+    @pagy_corps, @current_corps = pagy(RegionalCorporation.filter_by_params(params, :q_corp, :alpha_corp), page_param: :page_corp)
+    @pagy_senate, @current_senate = pagy(SenateDistrict.filter_by_params(params, :q_senate, :alpha_senate, :district), page_param: :page_senate)
+    @pagy_house, @current_house = pagy(HouseDistrict.filter_by_params(params, :q_house, :alpha_house, :district), page_param: :page_house)
 
+    respond_to do |format|
+      format.html # Full page load
+      format.turbo_stream do
+        render turbo_stream: [
+          # Update Sidebar Badges
+          turbo_stream.replace("active_filters_frame", 
+                              partial: "searches/advanced/active_filters"),
+          
+          # Update Results List
+          turbo_stream.replace("results_frame", 
+                              partial: "searches/advanced/results", 
+                              locals: { communities: @communities, pagy: @pagy })
+        ]
+      end
+    end
+  end
+  
   private
 
   def extract_filters

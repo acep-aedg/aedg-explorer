@@ -1,0 +1,30 @@
+-# TODO: broken FIX
+
+- url ||= request.path
+- frame ||= nil
+- placeholder ||= "Search..."
+- name ||= :q_global
+- value = params[name]
+
+= form_with url: url, method: :get, data: { turbo_frame: frame, turbo: (frame ? true : false) }, class: "mb-3" do |f|
+  -#  Preserve ALL existing filters automatically (Indented 2 spaces)
+  - request.query_parameters.except(name.to_sym, :action, :controller, :utf8).each do |key, val|
+    - if val.is_a?(Array)
+      - val.each { |v| concat hidden_field_tag("#{key}[]", v) }
+    - else
+      = hidden_field_tag key, val
+
+  -#  The Input Group (Indented 2 spaces)
+  .input-group.input-group-sm
+    - unless frame
+      %span.input-group-text.bg-white.text-muted.border-end-0
+        %i.bi.bi-search
+
+    = text_field_tag name, value, class: "form-control #{'border-start-0 ps-0' unless frame}", placeholder: placeholder, autocomplete: "off"
+
+    - if value.present?
+      = link_to request.query_parameters.except(name), class: "btn btn-outline-secondary", data: { turbo_frame: frame } do
+        %i.bi.bi-x-lg
+    - else
+      %button.btn.btn-outline-secondary{ type: "submit" }
+        %i.bi.bi-search

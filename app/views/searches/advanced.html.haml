@@ -1,14 +1,29 @@
-- content_for :title, 'Community Explorer - Search'
-
--# --- WRAPPER FOR CONTROLLER ---
-.container-xxl{ data: { controller: "offcanvas-group", action: "change->offcanvas-group#autoSubmit" } }
+.container-xxl{ data: { controller: "search-panels", action: "change->search-panels#autoSubmit" } }
   = render 'searches/advanced/hidden_form'
 
-  -# MAIN LAYOUT CONTAINER
-  .d-flex.p-4{ style: "min-height: calc(100vh - 70px); overflow-x: hidden;" }
-  
-    -# LEFT COLUMN: Sidebar & Pop-out Panels (Sticky Wrapper)
-    = render 'searches/advanced/sidebar_and_panels'
+  .row.mb-3
+    .col-12
+      = link_to communities_path, class: 'text-decoration-none' do
+        %i.bi.bi-arrow-left.me-2
+        Back
 
-    -# RIGHT COLUMN: Main Results
-    = render 'searches/advanced/results'
+  .row.g-0.flex-nowrap.mb-3.position-relative
+    .col-auto{ style: "width: 360px; z-index: 20;" }
+      .mb-4.position-sticky.top-0.py-3.bg-white
+        %h2.fw-bold.mb-1 Community Explorer
+        %p.text-muted.small Filter communities by specific criteria.
+        = render 'searches/advanced/search_input', name: :q_global, placeholder: "Search filters..."
+        .mt-3
+          = render 'searches/advanced/active_filters'
+          = render 'searches/advanced/sidebar_and_panels'
+
+    -# THE DRAWER AREA: Panels (Hidden during Turbo Frame updates)
+    - unless turbo_frame_request?
+      .col-auto{ style: "z-index: 40;" }
+        = render 'searches/advanced/panels'
+
+    -# RIGHT COLUMN: Results 
+    .col.flex-grow-1.border-start.ps-md-4.bg-light{ style: "min-height: 80vh;" }
+      .mb-3.metadata-results.py-3
+        = turbo_frame_tag "results_frame", data: { turbo_action: "replace" } do
+          = render 'searches/advanced/results'  

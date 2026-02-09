@@ -1,12 +1,23 @@
 .d-flex.flex-column.p-2.gap-1
-  - sections = [ { id: 'Grids', label: 'Electric Grid', icon: 'grid' }, { id: 'Boroughs', label: 'Borough / Census Area', icon: 'map' }, { id: 'Corps', label: 'Native Regional Corporation', icon: 'building' }, { id: 'Senate', label: 'Senate District', icon: 'bank' }, { id: 'House', label: 'House District', icon: 'house' } ]
-  
+  -# TODO: clean maybe refactor not sure its that readable
+  - sections = [ |
+      { id: 'offcanvasGrids',    label: 'Electric Grid',               icon: 'grid' },     |
+      { id: 'offcanvasBoroughs', label: 'Borough / Census Area',       icon: 'map' },      |
+      { id: 'offcanvasCorps',    label: 'Native Regional Corporation', icon: 'building' }, |
+      { id: 'offcanvasSenate',   label: 'Senate District',             icon: 'bank' },     |
+      { id: 'offcanvasHouse',    label: 'House District',              icon: 'house' }     |
+    ] |
+
   - sections.each do |s|
-    %button.d-flex.justify-content-between.align-items-center.w-100.border-0.bg-transparent.text-start.py-2.px-1{ type: "button", 
-      data: { action: "click->offcanvas-group#toggle", offcanvas_group_id_param: s[:id] } }
-      
+    %button.d-flex.justify-content-between.align-items-center.w-100.border-0.bg-transparent.text-start.py-2.px-1{ |
+      type: "button", |
+      data: { |
+        action: "click->search-panels#toggle", |
+        search_panels_id_param: s[:id] |
+      } |
+    }
       %span.text-dark
-        %i.bi.me-3.text-secondary{class: "bi-#{s[:icon]}"}
+        %i.bi.me-3.text-secondary{ class: "bi-#{s[:icon]}" }
         = s[:label]
       
       %i.bi.bi-chevron-right.text-muted{ style: "font-size: 12px;" }

@@ -31,5 +31,5 @@ application.register("tooltip", TooltipController)
 import WidgetFilterController from "./widget_update_controller"
 application.register("widget-update", WidgetFilterController)
 
-import OffcanvasGroupController from "./offcanvas_group_controller"
-application.register("offcanvas-group", OffcanvasGroupController)
+import SearchPanelsController from "./search_panels_controller"
+application.register("search-panels", SearchPanelsController)

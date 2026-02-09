@@ -1,0 +1,108 @@
+/* --- VARIABLES --- */
+$sidebar-width: 360px;
+$panel-width: 600px;
+$border-color: #dee2e6;
+$z-index-panel: 1050; // Bootstrap's standard for fixed/overlays
+
+
+/* 2. PREVENT LAYOUT JUMPS */
+.flex-nowrap {
+  flex-wrap: nowrap !important;
+}
+
+/* Add this to your main container to ensure the absolute panels aren't clipped */
+.position-relative-overflow-visible {
+  position: relative !important;
+  overflow: visible !important; 
+}
+
+/* 4. FACET INTERNAL LAYOUT */
+.facet-list-container {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden; 
+  min-height: 0; 
+}
+
+.alphabet-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30px;
+  font-size: 10px;
+  background-color: #f8f9fa;
+  border-left: 1px solid $border-color;
+  
+  .alphabet-link {
+    line-height: 1.5;
+    text-decoration: none;
+    font-weight: bold;
+    color: #6c757d;
+    
+    &:hover { color: #000; }
+  }
+}
+
+
+/* 1. The Main Explorer Container */
+.row.g-0.flex-nowrap {
+  height: calc(100vh - 70px); /* Lock height to viewport minus header */
+  overflow: hidden;           /* Prevent the whole page from scrolling */
+  position: relative;
+}
+
+/* 2. The Results Column (The only part that should scroll) */
+.col.flex-grow-1 {
+  height: 100%;
+  overflow-y: auto;          /* Scroll happens INSIDE here, above the footer */
+  background: #f8f9fa;
+  position: relative;
+  z-index: 1;
+}
+
+/* app/assets/stylesheets/search_explorer.scss */
+
+/* Ensure the overlay doesn't move when the page scrolls */
+.collapse-horizontal {
+  position: fixed !important; 
+  top: 100px;  /* Adjust based on header height */
+  left: 360px; /* Aligns to the right of the sidebar */
+  width: 600px;
+  height: calc(100vh - 100px); 
+  z-index: 9999 !important; 
+  background: white;
+  box-shadow: 10px 0 15px rgba(0,0,0,0.1);
+  
+  .facet-shelf-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+}
+
+/* Stabilize the Results and Spinner */
+turbo-frame#results_frame {
+  display: block !important;
+  min-height: 80vh;
+  position: relative;
+}
+
+turbo-frame#results_frame[busy] {
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  pointer-events: none; /* Optional: prevents interaction during load */
+}
+
+@keyframes spin {
+  0% { transform: translateX(-50%) rotate(0deg); }
+  100% { transform: translateX(-50%) rotate(360deg); }
+}
+
+/* 4. The Footer */
+#main-footer {
+  position: relative;
+  z-index: 10;
+  background: white;
+  border-top: 1px solid #dee2e6;
+}
