@@ -9,17 +9,19 @@
   ] |
 
 .section-body.m-5.mt-3
-  .row.mb-4.g-4
+  .row.mb-4.g-4.d-flex.align-items-stretch
     -# Map Buttons
-    .col-12.col-md-4
-      = render 'shared/map_buttons', buttons: map_buttons
-    
+    .col-12.col-lg-4.d-flex
+      .flex-fill
+        = render 'shared/map_buttons', buttons: map_buttons
+      
     -# Delivery Summary
-    .col-12.col-md-8
-      = render 'shared/icon_status_grid', 
-        title: "Fuel Delivery Methods",
-        fields: %i(barge_delivery plane_delivery road_delivery),
-        source: @community.bulk_fuel_facilities
+    .col-12.col-lg-8.d-flex
+      .flex-fill
+        = render 'shared/icon_status_grid', 
+          title: "Fuel Delivery Methods",
+          fields: %i(barge_delivery plane_delivery road_delivery),
+          source: @community.bulk_fuel_facilities
 
   .row
     .col-12
@@ -28,14 +30,8 @@
         -# Capacity Chart
         - if @community.show_bulk_fuel_capacity_chart?
           .mb-5
-            .d-flex.align-items-center.mb-3
-              %i.bi.bi-pie-chart.me-2.text-primary
-              %h6.mb-0.fw-bold Storage Capacity Breakdown
             = render "communities/#{parent_tab}/bulk_fuel_facilities/fuel_capacity_chart"
         
         -# Data Table Section
         .pt-4{ class: ("border-top" if @community.show_bulk_fuel_capacity_chart?) }
-          .d-flex.align-items-center.mb-3
-            %i.bi.bi-table.me-2.text-primary
-            %h6.mb-0.fw-bold Bulk Fuel Facility Data
           = render "communities/#{parent_tab}/bulk_fuel_facilities/bulk_fuel_data"

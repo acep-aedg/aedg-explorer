@@ -16,7 +16,8 @@
 
 .section-body.m-5.mt-3
   / Map Buttons
-  = render 'shared/map_buttons', buttons: legislative_buttons
+  .mb-4
+    = render 'shared/map_buttons', buttons: legislative_buttons
   
   / Sub-sections for District Data
   .row.g-4
@@ -25,7 +26,7 @@
         .p-3.border.rounded-3.h-100.shadow-sm
           .d-flex.align-items-center.mb-3.border-bottom.pb-2
             %i.bi.bi-table.me-2.text-primary
-            %h6.mb-0.fw-bold House District Data
+            %h5.mb-0.fw-bold House Districts
           = render "communities/#{parent_tab}/legislative_districts/house_district_data"
 
     - if @community.show_senate_districts?
@@ -33,5 +34,5 @@
         .p-3.border.rounded-3.h-100.shadow-sm
           .d-flex.align-items-center.mb-3.border-bottom.pb-2
             %i.bi.bi-table.me-2.text-primary
-            %h6.mb-0.fw-bold Senate District Data
+            %h5.mb-0.fw-bold Senate Districts
           = render "communities/#{parent_tab}/legislative_districts/senate_district_data"

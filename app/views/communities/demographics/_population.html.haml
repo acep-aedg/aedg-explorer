@@ -11,25 +11,16 @@
     - gender_periods = population_periods.select { |p| p.e_pop_male.present? && p.e_pop_female.present? }
     - gender_selected_period = gender_periods.find { |p| p.end_year == selected_end_year } || gender_periods.first
 
-    -# 1. Population Summary Bar (Updated styling to match your new "shelf" look)
-    .d-flex.justify-content-between.align-items-center.bg-white.border.p-3.rounded-3.mb-4.shadow-sm
-      %div
-        %i.bi.bi-info-circle-fill.me-2.text-primary{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "ACS 5-year estimate (#{population_period.start_year}–#{population_period.end_year})" }
-        %span.text-muted.text-uppercase.small.fw-bold.tracking-wider Estimated Population (#{population_period.end_year}):
-        %span.ms-2.fs-5.fw-bold.text-navy
-          = number_with_delimiter(most_recent_population.e_pop_total)
-        - if most_recent_population.m_pop_total.present?
-          %small.text-muted
-            (±#{number_with_delimiter(most_recent_population.m_pop_total)})
-
+    .mb-4
+      = render "communities/#{parent_tab}/population/estimated_population",
+        population_period: population_period,
+        most_recent_population: most_recent_population
+    
     -# 2. Main Data Card
     .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
       -# Employment Status (Full Width)
       - if @community.show_employment?
         .mb-5
-          .d-flex.align-items-center.mb-3
-            %i.bi.bi-briefcase.me-2.text-primary
-            %h6.mb-0.fw-bold Employment Status
           = render "communities/#{parent_tab}/population/population_employment"
 
       -# Age and Gender (Split Layout inside the Card)
@@ -38,18 +29,15 @@
           .col-12.col-xl-8
             .d-flex.align-items-center.mb-3
               %i.bi.bi-bar-chart-steps.me-2.text-primary
-              %h6.mb-0.fw-bold Age Distribution
+              %h5.mb-0.fw-bold Age Distribution
             = render "communities/#{parent_tab}/population/population_age_chart", population_periods: population_periods, selected_period: population_period
           
           .col-12.col-xl-4.border-start-xl
             .d-flex.align-items-center.mb-3
               %i.bi.bi-gender-ambiguous.me-2.text-primary
-              %h6.mb-0.fw-bold Gender Distribution
+              %h5.mb-0.fw-bold Gender Distribution
             = render "communities/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
 
       -# Data Table Section
       .pt-5.border-top.mt-5
-        .d-flex.align-items-center.mb-3
-          %i.bi.bi-table.me-2.text-primary
-          %h6.mb-0.fw-bold Population Data
         = render "communities/#{parent_tab}/population/population_age_sex_datatable"

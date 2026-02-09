@@ -1,11 +1,11 @@
 .section-body.m-5.mt-3
-  .p-3.border.rounded-3.h-100.shadow-sm
-    .mb-4
-      = render 'shared/icon_status_grid', 
-        fields: Transportation::TRANSPORT_FIELDS,
-        source: @community.transportation
-  
-      %p.text-secondary= @community.transportation.description
+  .mb-4
+    = render 'shared/icon_status_grid', 
+      title: 'Transportation Methods',
+      fields: Transportation::TRANSPORT_FIELDS,
+      source: @community.transportation
+  .p-4.border.rounded-3.h-100.shadow-sm
+    %p.text-secondary= @community.transportation.description
   
     .mt-3.pt-2.d-flex.justify-content-end
       %small.text-muted

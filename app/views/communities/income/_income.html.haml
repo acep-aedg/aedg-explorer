@@ -8,44 +8,34 @@
         -# Charts Section
         - if @community.household_incomes.show_income_distribution_chart?
           .mb-5
-            .d-flex.align-items-center.mb-3
-              %i.bi.bi-bar-chart.me-2.text-primary
-              %h6.mb-0.fw-bold Household Income Distribution
             = render "communities/#{parent_tab}/household_income_distribution_chart"
 
         - if @community.household_incomes.show_median_income_chart? || @community.income_poverties.show_per_capita_income_chart?
           .mb-5{ class: ("pt-4 border-top" if @community.household_incomes.show_income_distribution_chart?) }
-            .d-flex.align-items-center.mb-3
-              %i.bi.bi-graph-up.me-2.text-primary
-              %h6.mb-0.fw-bold Income Trends
             = render "communities/#{parent_tab}/income_chart"
 
         - if @community.income_poverties.show_poverty_chart?
           - needs_border = @community.household_incomes.show_income_distribution_chart? || @community.household_incomes.show_median_income_chart?
           .mb-5{ class: ("pt-4 border-top" if needs_border) }
-            .d-flex.align-items-center.mb-3
-              %i.bi.bi-arrow-down-right-circle.me-2.text-primary
-              %h6.mb-0.fw-bold Poverty Rates
             = render "communities/#{parent_tab}/poverty_rate_chart"
 
         -# Tabbed Data Section
         - if @community.show_household_income? || @community.show_income_poverty?
           .pt-4.border-top
-            .d-flex.align-items-center.mb-3
-              %i.bi.bi-table.me-2.text-primary
-              %h6.mb-0.fw-bold Income Data
             
             %ul.nav.nav-tabs.mb-3{ role: "tablist" }
               - if @community.show_household_income?
                 %li.nav-item
                   = link_to "#household-income-pane", class: "nav-link active", data: { bs_toggle: "tab" } do
-                    Household Income
+                    %i.bi.bi-table.me-2
+                    %span Household Income
                     
               - if @community.show_income_poverty?
                 %li.nav-item
                   - poverty_active = !@community.show_household_income?
                   = link_to "#income-poverty-pane", class: "nav-link #{'active' if poverty_active}", data: { bs_toggle: "tab" } do
-                    Income Poverty
+                    %i.bi.bi-table.me-2
+                    %span Income Poverty
 
             .tab-content
               - if @community.show_household_income?

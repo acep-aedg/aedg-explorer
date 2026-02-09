@@ -1,35 +1,35 @@
 - summary = Sale.latest_summary_for(@community.sales)
 
 - if summary
-  .row.g-3.mb-3
-    -# CARD 1: ENERGY
-    .col-12.col-md-6.col-lg-4
-      .d-flex.h-100
-        .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
-          %i.bi.bi-lightning-fill.text-warning.fs-3.me-3
-          .flex-grow-1
-            .text-muted Total Energy Sold (#{summary.year})
-            %p.fw-semibold.mb-0= number_with_delimiter(summary.total_sales) + " MWh"
-    
-    -# CARD 2: REVENUE
-    .col-12.col-md-6.col-lg-4
-      .d-flex.h-100
-        .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
-          %i.bi.bi-cash-coin.text-success.fs-3.me-3
-          .flex-grow-1
-            .text-muted Total Revenue (#{summary.year})
-            %p.fw-semibold.mb-0= number_to_currency(summary.total_revenue, precision: 0)
-    
-    -# CARD 3: CUSTOMERS
-    .col-12.col-md-6.col-lg-4
-      .d-flex.h-100
-        .d-flex.flex-grow-1.align-items-center.bg-body-secondary.rounded.p-3
-          %i.bi.bi-people-fill.text-info.fs-3.me-3
-          .flex-grow-1
-            .text-muted Total Customers (#{summary.year})
-            %p.fw-semibold.mb-0= number_with_delimiter(summary.total_customers)
-      
-  .mt-3.pt-2.d-flex.justify-content-end
-    %small.text-muted
-      %strong Reported by:
-      %span.ms-1= summary.reporter_names
+  .mb-4.p-3.px-4.bg-light.rounded-3.border.shadow-sm.border-primary-subtle
+    .d-flex.flex-wrap.align-items-center.justify-content-between.gap-3
+      .d-flex.align-items-center.flex-wrap.gap-4.flex-grow-1
+        -# Energy Sold
+        .d-flex.align-items-center
+          .bg-warning.bg-opacity-10.p-2.rounded-circle.me-2.d-flex.align-items-center.justify-content-center
+            %i.bi.bi-lightning-fill.text-warning.fs-5
+          %div
+            %small.text-uppercase.text-secondary.fw-bold.small Energy:
+            %span.fw-bold.text-navy.fs-5= "#{number_with_delimiter(summary.total_sales)} MWh"
+  
+        -# Revenue
+        .d-flex.align-items-center
+          .bg-success.bg-opacity-10.p-2.rounded-circle.me-2.d-flex.align-items-center.justify-content-center
+            %i.bi.bi-cash-coin.text-success.fs-5
+          %div
+            %small.text-uppercase.text-secondary.fw-bold.small Revenue:
+            %span.fw-bold.text-navy.fs-5= number_to_currency(summary.total_revenue, precision: 0)
+  
+        -# Customers
+        .d-flex.align-items-center
+          .bg-info.bg-opacity-10.p-2.rounded-circle.me-2.d-flex.align-items-center.justify-content-center
+            %i.bi.bi-people-fill.text-info.fs-5
+          %div
+            %small.text-uppercase.text-secondary.fw-bold.small Customers:
+            %span.fw-bold.text-navy.fs-5= number_with_delimiter(summary.total_customers)
+  
+      -# Right side: The Meta info
+      .ms-auto.text-md-end
+        %small.text-muted.small
+          %strong Reported by:
+          %span.ms-md-1= "#{summary.reporter_names} (#{summary.year})"

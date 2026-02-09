@@ -1,0 +1,20 @@
+-# locals: (population_period:, most_recent_population:)
+
+.d-flex.justify-content-between.align-items-center.bg-light.border.p-4.rounded-3.mb-4.shadow-sm.border-primary-subtle
+  .d-flex.align-items-center
+    .d-flex.align-items-baseline.flex-wrap
+      -# Label
+      %h6.text-uppercase.text-secondary.ls-wide.small.fw-bold.mb-0.me-1
+        Estimated Population (#{population_period.end_year})
+      
+      -# Tooltip
+      %i.bi.bi-info-circle-fill.me-3.text-navy{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "ACS 5-year estimate (#{population_period.start_year}–#{population_period.end_year})" }
+      
+      -# Value
+      %span.fs-5.fw-bold
+        = number_with_delimiter(most_recent_population.e_pop_total)
+      
+      -# Margin of Error
+      - if most_recent_population.m_pop_total.present?
+        %span.ms-2.text-muted.small.fw-normal
+          (±#{number_with_delimiter(most_recent_population.m_pop_total)})

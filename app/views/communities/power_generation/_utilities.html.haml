@@ -25,66 +25,15 @@
   ] |
 
 .section-body.m-5.mt-3
-  = render 'shared/map_buttons', buttons: map_buttons
+  .mb-4
+    = render 'shared/map_buttons', buttons: map_buttons
 
-  -# Data Content Area
+  - has_peers = @community.show_peers_by_service_area_geoms? && @community.peers_by_service_area_geoms.any?
+
   .row.g-4
-    -# Left Column: Utility & Grid Details
-    .col-12.col-lg-7
-      .p-4.border.rounded-3.bg-white.h-100.shadow-sm
-        .d-flex.align-items-center.mb-3.border-bottom.pb-2
-          %i.bi.bi-info-circle.me-2.text-primary
-          %h6.mb-0.fw-bold Service & Grid Details
-        
-        - if @community.show_service_areas?
-          .mb-3
-            %label.text-muted.small.text-uppercase.fw-bold.d-block Providers
-            %ul.list-unstyled.mt-1
-              - @community.service_areas.each do |sa|
-                %li.d-flex.align-items-center.mb-2
-                  %span.fw-semibold= sa.name
-                  - if sa.certificate_url.present?
-                    = link_to sa.certificate_url, target: "_blank", rel: "noopener", class: "btn btn-sm btn-outline-primary py-0 px-2 ms-2", style: "font-size: 0.75rem;" do
-                      %i.bi.bi-box-arrow-up-right
-                      Cert
-        
-        .row.mt-3
-          .col-md-6.mb-3
-            %label.text-muted.small.text-uppercase.fw-bold.d-block Grid Connection
-            - if @community.grid.nil?
-              %span.text-secondary None
-            - else
-              %i.bi.bi-lightning-charge.text-warning.me-1
-              = link_to @community.grid.name.titleize, grid_path(@community.grid), class: "fw-bold"
+    %div{ class: has_peers ? "col-12 col-lg-8" : "col-12" }
+      = render "communities/#{parent_tab}/utilities/service_area_card", community: @community
 
-          .col-md-6.mb-3
-            %label.text-muted.small.text-uppercase.fw-bold.d-block PCE Status
-            %span.badge{ class: @community.pce_eligible ? "bg-success-subtle text-success border border-success" : "bg-light text-muted border" }
-              = @community.pce_eligible ? "Eligible" : "Ineligible"
-
-    -# Right Column: Power Plants & Peers
-    .col-12.col-lg-5
-      .p-4.border.rounded-3.bg-white.h-100.shadow-sm
-        - if @community.show_plants?
-          .mb-4
-            .d-flex.align-items-center.mb-3.border-bottom.pb-2
-              %i.bi.bi-building.me-2.text-primary
-              %h6.mb-0.fw-bold Power Plants (#{@community.plants.size})
-            %ul.list-unstyled.mb-0
-              - @community.plants.each do |plant|
-                %li.mb-1
-                  %i.bi.bi-dot.text-primary
-                  = plant.name
-
-        - if @community.show_peers_by_service_area_geoms?
-          .mt-2
-            .d-flex.align-items-center.mb-3.border-bottom.pb-2
-              %i.bi.bi-people.me-2.text-primary
-              %h6.mb-0.fw-bold Area Peers
-            %p.small.text-muted.mb-2 Communities in same area:
-            .row
-              - @community.peers_by_service_area_geoms.in_groups(2, false).each do |col|
-                .col-6
-                  %ul.list-unstyled.small.mb-0
-                    - col.each do |peer|
-                      %li.text-truncate= link_to peer.name, community_path(peer), class: "text-decoration-none", data: { turbo: false }
+    - if has_peers
+      .col-12.col-lg-4
+        = render "communities/#{parent_tab}/utilities/nearby_communities_card", peers: @community.peers_by_service_area_geoms

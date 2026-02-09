@@ -11,20 +11,11 @@
 
         - if @community.sales.with_sales.exists?
           .mb-5
-            .d-flex.align-items-center.mb-3
-              %i.bi.bi-lightning-charge.me-2.text-primary
-              %h6.mb-0.fw-bold Annual Energy Sales
             = render "communities/#{parent_tab}/sales/energy_sold"
       
         - if @community.sales.with_any_breakdown_data.exists?
           .mb-5.pt-4.border-top
-            .d-flex.align-items-center.mb-3
-              %i.bi.bi-people.me-2.text-primary
-              %h6.mb-0.fw-bold Customer Class Breakdown
             = render "communities/#{parent_tab}/sales/customer_breakdown"
 
         .pt-4.border-top
-          .d-flex.align-items-center.mb-3
-            %i.bi.bi-table.me-2.text-primary
-            %h6.mb-0.fw-bold Sales & Revenue Data
           = render "communities/#{parent_tab}/sales/data"

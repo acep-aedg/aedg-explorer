@@ -34,8 +34,8 @@
   
             - if @community.grid.present?
               %tr
-                %th.pe-3.text-muted.fw-semibold Grid
-                %td= link_to @community.grid.name.titleize, grid_path(@community.grid), class: "text-info text-decoration-none fw-bold", data: { turbo: false }
+                %th.pe-3.text-muted.fw-semibold Electric Grid
+                %td= link_to @community.grid.name.titleize, grid_path(@community.grid), class: "text-info fw-bold", data: { turbo: false }
   
             %tr
               %th.pe-3.text-muted.fw-semibold Latitude, Longitude

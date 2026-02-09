@@ -9,8 +9,6 @@ export default class extends Controller {
       rootMargin: "-20% 0px -60%", // Adjust based on how close sections are to each other
       threshold: [0.1, 0.5, 1.0], // Adjust based on layout
     });
-    
-    this._setupUrlListener();
   }
 
   refresh() {

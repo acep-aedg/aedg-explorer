@@ -1,0 +1,21 @@
+.p-4.border.rounded-3.bg-white.h-100.shadow-sm
+  .d-flex.align-items-center.mb-3.border-bottom.pb-2
+    %i.bi.bi-people.me-2.text-primary
+    %h5.mb-0.fw-bold Nearby Communities
+  
+  %p.small.text-muted.mb-3 
+    Sharing the same service area:
+    
+  -# Logic: If more than 15, use 2 columns on large screens (col-lg-6)
+  - column_class = peers.size > 15 ? "col-lg-6" : "col-lg-12"
+    
+  .row.g-2
+    - peers.in_groups(2, false).each do |peer_group|
+      -# Always 2 columns on Medium (col-md-6)
+      -# Dynamic on Large based on count
+      %div{ class: "col-12 col-md-6 #{column_class}" }
+        %ul.list-unstyled.small.mb-0
+          - peer_group.each do |peer|
+            %li.text-wrap.mb-2.d-flex.align-items-center
+              %i.bi.bi-dot.text-primary.fs-4.lh-1
+              = link_to peer.name, community_path(peer), class: "text-decoration-none", data: { turbo: false }

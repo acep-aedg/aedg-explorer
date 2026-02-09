@@ -5,7 +5,7 @@
 .section-body.m-5.mt-3
   - if show_monthly_gen && show_yearly_gen
     .mb-4
-      %ul.nav.nav-pills.bg-white.p-1.rounded.border.d-inline-flex
+      %ul.nav.nav-pills.bg-white.p-1.rounded-3.border.d-inline-flex
         %li.nav-item
           = link_to "#yearly-gen-pane", class: "nav-link active px-4", data: { bs_toggle: "tab" } do
             %i.bi.bi-calendar-event.me-1
@@ -26,9 +26,6 @@
                 = render "communities/#{parent_tab}/generation/yearly_chart"
               
               .pt-4.border-top
-                .d-flex.align-items-center.mb-3
-                  %i.bi.bi-table.me-2.text-primary
-                  %h6.mb-0.fw-bold Yearly Production Data
                 = render "communities/#{parent_tab}/generation/yearly_data"
 
     - if show_monthly_gen
@@ -41,7 +38,4 @@
                 = render "communities/#{parent_tab}/generation/monthly"
               
               .pt-4.border-top
-                .d-flex.align-items-center.mb-3
-                  %i.bi.bi-table.me-2.text-primary
-                  %h6.mb-0.fw-bold Monthly Production Data
                 = render "communities/#{parent_tab}/generation/monthly_data"

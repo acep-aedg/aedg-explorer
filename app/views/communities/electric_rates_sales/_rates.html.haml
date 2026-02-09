@@ -8,14 +8,8 @@
       .p-4.border.rounded-3.bg-white.shadow-sm.mb-4        
         -# Historical Chart Section
         .mb-5
-          .d-flex.align-items-center.mb-3
-            %i.bi.bi-graph-up.me-2.text-primary
-            %h6.mb-0.fw-bold Historical Rate Trends
           = render "communities/#{parent_tab}/rates/historical_rate_chart"
         
         -# Data Table Section
         .pt-4.border-top
-          .d-flex.align-items-center.mb-3
-            %i.bi.bi-table.me-2.text-primary
-            %h6.mb-0.fw-bold Rate Data
           = render "communities/#{parent_tab}/rates/data"
