@@ -4,29 +4,88 @@
       / --- Floating controls ---
       .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
         .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
-        
         - if @community.show_service_area_geoms?
-          .form-check.mb-1
-            %input.form-check-input#layer-service-area-local{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: service_area_geoms_community_maps_path(@community), fit: true } }
-            %label.form-check-label.small{ for: "layer-service-area-local" } Service Area
+          .form-check.d-flex.align-items-center.mb-1
+            %input.form-check-input#layer-service-area-local{ 
+              type: "checkbox", 
+              data: { 
+                action: "change->maps#toggleLayer",
+                url: service_area_geoms_community_maps_path(@community), 
+                fit: true
+              }
+            }
+            %label.form-check-label.small.ms-2{ for: "layer-service-area-local" }
+              %span.legend-swatch{ data: { maps_target: "swatch" } }
+              = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
 
-        .form-check.mb-1
-          %input.form-check-input#layer-house{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: house_districts_community_maps_path(@community), fit: true } }
-          %label.form-check-label.small{ for: "layer-house" } House Districts
+          / Map Layer: Full Service Area (if applicable)
+        - if @community.show_full_service_area?
+          .form-check.d-flex.align-items-center.mb-1
+            %input.form-check-input#layer-service-area-full{
+              type: "checkbox",
+              data: {
+                action: "change->maps#toggleLayer",
+                url: service_areas_community_maps_path(@community),
+                fit: true
+              }
+            }
+            %label.form-check-label.small.ms-2{ for: "layer-service-area-full" }
+              %span.legend-swatch{ data: { maps_target: "swatch" } }
+              Full Service Area
+                
+        .form-check.d-flex.align-items-center.mb-1
+          %input.form-check-input#layer-house{ 
+            type: "checkbox", 
+            data: { 
+              action: "change->maps#toggleLayer", 
+              url: house_districts_community_maps_path(@community), 
+              fit: true 
+            } 
+          }
+          %label.form-check-label.small.ms-2{ for: "layer-house" }
+            %span.legend-swatch{ data: { maps_target: "swatch" } }
+            House Districts
 
-        .form-check.mb-1
-          %input.form-check-input#layer-senate{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: senate_districts_community_maps_path(@community), fit: true } }
-          %label.form-check-label.small{ for: "layer-senate" } Senate Districts
+        .form-check.d-flex.align-items-center.mb-1
+          %input.form-check-input#layer-senate{ 
+            type: "checkbox", 
+            data: { 
+              action: "change->maps#toggleLayer", 
+              url: senate_districts_community_maps_path(@community), 
+              fit: true 
+            } 
+          }
+          %label.form-check-label.small.ms-2{ for: "layer-senate" }
+            %span.legend-swatch{ data: { maps_target: "swatch" } }
+            Senate Districts
 
         - if @community.show_plants?
-          .form-check.mb-1
-            %input.form-check-input#layer-plants{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: plants_community_maps_path(@community), fit: true } }
-            %label.form-check-label.small{ for: "layer-plants" } Power Plants
+          .form-check.d-flex.align-items-center.mb-1
+            %input.form-check-input#layer-plants{ 
+              type: "checkbox", 
+              data: { 
+                action: "change->maps#toggleLayer", 
+                url: plants_community_maps_path(@community), 
+                fit: true 
+              } 
+            }
+            %label.form-check-label.small.ms-2{ for: "layer-plants" }
+              %span.legend-swatch{ data: { maps_target: "swatch" } }
+              Power Plants
 
         - if @community.show_bulk_fuel_facilities?
-          .form-check.mb-1
-            %input.form-check-input#layer-bulk-fuel-facilities{ type: "checkbox", data: { action: "change->maps#toggleLayer", url: bulk_fuel_facilities_community_maps_path(@community), fit: true } }
-            %label.form-check-label.small{ for: "layer-bulk-fuel-facilities" } Bulk Fuel Facilities
+          .form-check.d-flex.align-items-center.mb-1
+            %input.form-check-input#layer-bulk-fuel-facilities{ 
+              type: "checkbox", 
+              data: { 
+                action: "change->maps#toggleLayer", 
+                url: bulk_fuel_facilities_community_maps_path(@community), 
+                fit: true 
+              } 
+            }
+            %label.form-check-label.small.ms-2{ for: "layer-bulk-fuel-facilities" }
+              %span.legend-swatch{ data: { maps_target: "swatch" } }
+              Bulk Fuel Facilities
 
     .flex-grow-1.position-relative
       .h-100{ data: { maps_target: "map" } }
