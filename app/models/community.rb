@@ -127,7 +127,40 @@ class Community < ApplicationRecord
     @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == "regional" && fp.price.present? }
   end
 
-  # --- Electricity Section ---
+  # --- General Tab ---
+  def show_general_tab?
+    @show_general_tab ||= show_transportation? || show_legislative_districts? || show_population?
+  end
+
+  def show_geography?
+    @show_geography ||= community_grids.any? || show_school_districts? # Check this 
+  end
+
+  def show_school_districts?
+    @show_school_districts ||= school_districts.exists?
+  end
+
+  def show_transportation?
+    @show_transportation ||= transportation.present?
+  end
+
+  def show_legislative_districts?
+    @show_legislative_districts ||= show_senate_districts? || show_house_districts?
+  end
+
+  def show_senate_districts?
+    @show_senate_districts ||= senate_districts.any?
+  end
+
+  def show_house_districts?
+    @show_house_districts ||= house_districts.any?
+  end
+
+  # --- Power Generation Tab ---
+  def show_power_generation_tab?
+    @show_power_generation_tab ||= show_utilities? || show_generation? || show_capacity?
+  end
+
   def show_utilities?
     @show_utilities ||= show_service_areas? || show_utility_map_layers? || show_peers_by_service_area_geoms?
   end
@@ -170,16 +203,6 @@ class Community < ApplicationRecord
     @show_peers_by_service_area_geoms ||= peers_by_service_area_geoms.any?
   end
 
-  def show_grid_utilities?
-    @show_grid_utilities ||= grid&.reporting_entities&.exists?
-  end
-
-  def show_rates?
-    @show_rates ||= electric_rates&.any? do |rate|
-      rate.residential_rate || rate.commercial_rate || rate.industrial_rate
-    end
-  end
-
   def show_generation?
     @show_generation ||= show_monthly_generation? || show_yearly_generation?
   end
@@ -196,33 +219,57 @@ class Community < ApplicationRecord
     @show_capacity ||= plants&.any? && plants.flat_map(&:capacities)&.any?
   end
 
+  # --- Rates & Sales Tab ---
+  def show_sales_rates_tab?
+    @show_sales_rates_tab ||= show_sales? || show_rates?
+  end
+
+  def show_rates?
+    @show_rates ||= electric_rates&.any? do |rate|
+      rate.residential_rate || rate.commercial_rate || rate.industrial_rate
+    end
+  end
+
   def show_sales?
     @show_sales ||= sales&.exists?
+  end
+
+  # --- Fuel Tab ---
+  def show_fuel_tab?
+    @show_fuel_tab ||= show_fuel_prices? || show_bulk_fuel_facilities? || show_bulk_fuel_capacity_chart?
+  end
+
+  def show_fuel_prices?
+    @show_fuel_prices ||= fuel_prices.exists?
   end
 
   def show_bulk_fuel_facilities?
     @show_bulk_fuel_facilities ||= bulk_fuel_facilities.exists?
   end
 
-  def show_bulk_fuel_capacity_chart?
+  def show_bulk_fuel_capacity_chart? # Check this 
     capacity_fields = %i[gasoline_capacity diesel_capacity jet_fuel_capacity other_fuel_capacity]
     @show_bulk_fuel_capacity_chart ||= bulk_fuel_facilities.any? { |b| capacity_fields.any? { |field| b[field].present? } }
   end
 
-  def show_electricity_section?
-    @show_electricity_section ||= show_utilities? || show_rates? || show_generation? || show_capacity? || show_sales? || show_bulk_fuel_facilities?
+  # --- Demographics Tab ---
+  def show_demographics_tab?
+    @show_demographics_tab ||= show_population? || show_employment?
   end
 
-  # --- Prices Section ---
-  def show_fuel_prices?
-    @show_fuel_prices ||= fuel_prices.exists?
+  def show_population?
+    @show_population ||= population_age_sexes.exists?
   end
 
-  def show_prices_section?
-    @show_prices_section ||= show_fuel_prices?
+  def show_employment?
+    @show_employment ||= employments.exists?
   end
 
-  # --- Income Section ---
+  # --- Income Tab/Section ---
+  def show_income?
+    @show_income ||= show_household_income? || show_income_poverty?
+  end
+
   def show_household_income?
     @show_household_income ||= household_incomes.any?
   end
@@ -231,53 +278,9 @@ class Community < ApplicationRecord
     @show_income_poverty ||= income_poverties.any?
   end
 
-  def show_income?
-    @show_income ||= show_household_income? || show_income_poverty?
-  end
-
-  # --- Background Section ---
-  def show_geography?
-    @show_geography ||= community_grids.any?
-  end
-
-  def show_transportation?
-    @show_transportation ||= transportation.present?
-  end
-
-  def show_legislative_districts?
-    @show_legislative_districts ||= show_senate_districts? || show_house_districts?
-  end
-
-  def show_senate_districts?
-    @show_senate_districts ||= senate_districts.any?
-  end
-
-  def show_house_districts?
-    @show_house_districts ||= house_districts.any?
-  end
-
-  def show_population?
-    @show_population ||= show_population_age_sexes? || show_employment?
-  end
-
-  def show_school_districts?
-    @show_school_districts ||= school_districts.exists?
-  end
-
-  def show_background_section?
-    @show_background_section ||= show_transportation? || show_legislative_districts? || show_population?
-  end
-
+  # --- Others ---
   def show_heating_degree_days?
     @show_heating_degree_days ||= heating_degree_days.present?
-  end
-
-  def show_population_age_sexes?
-    @show_population_age_sexes ||= population_age_sexes.exists?
-  end
-
-  def show_employment?
-    @show_employment ||= employments.exists?
   end
 
   def self.global_search_suggestions(term)

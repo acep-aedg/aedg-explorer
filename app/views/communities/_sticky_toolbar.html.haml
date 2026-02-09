@@ -1,10 +1,10 @@
 - tabs = [ |
-  { label: "General", path: general_community_path(@community), visible: @community.show_background_section? }, |
-  { label: "Power Generation", path: power_generation_community_path(@community), visible: @community.show_electricity_section? }, |
-  { label: "Rates & Sales", path: electric_rates_sales_community_path(@community), visible: true }, |
-  { label: "Fuel", path: fuel_community_path(@community), visible: true }, |
-  { label: "Demographics", path: demographics_community_path(@community), visible: true }, |
-  { label: "Income", path: income_community_path(@community), visible: true } |
+  { label: "General", path: general_community_path(@community), visible: @community.show_general_tab? }, |
+  { label: "Power Generation", path: power_generation_community_path(@community), visible: @community.show_power_generation_tab? }, |
+  { label: "Rates & Sales", path: electric_rates_sales_community_path(@community), visible: @community.show_sales_rates_tab? }, |
+  { label: "Fuel", path: fuel_community_path(@community), visible: @community.show_fuel_tab? }, |
+  { label: "Demographics", path: demographics_community_path(@community), visible: @community.show_demographics_tab? }, |
+  { label: "Income", path: income_community_path(@community), visible: @community.show_income? } |
 ] |
 
 .sticky-top.bg-light.border-bottom.p-2{ style: "z-index: 1020;" }

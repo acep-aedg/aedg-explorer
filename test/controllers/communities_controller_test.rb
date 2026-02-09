@@ -10,8 +10,11 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should show community" do
+  test "should redirect community show to general community path" do
     get community_url(@community)
+    assert_response :see_other
+    assert_redirected_to general_community_path(@community)
+    follow_redirect!
     assert_response :success
   end
 end

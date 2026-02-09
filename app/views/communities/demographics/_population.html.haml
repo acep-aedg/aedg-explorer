@@ -2,7 +2,7 @@
 
 -# --- Section Body ---
 .section-body.m-5.mt-3
-  - if @community.show_population_age_sexes?
+  - if @community.show_population?
     - population_periods = @community.population_age_sexes.order(end_year: :desc)
     - most_recent_population = population_periods.first
     - selected_end_year = most_recent_population.end_year
@@ -16,27 +16,21 @@
         population_period: population_period,
         most_recent_population: most_recent_population
     
-    -# 2. Main Data Card
+    -# Main Data Card
     .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
-      -# Employment Status (Full Width)
-      - if @community.show_employment?
-        .mb-5
-          = render "communities/#{parent_tab}/population/population_employment"
-
-      -# Age and Gender (Split Layout inside the Card)
-      .pt-5.border-top
-        .row.g-4
-          .col-12.col-xl-8
-            .d-flex.align-items-center.mb-3
-              %i.bi.bi-bar-chart-steps.me-2.text-primary
-              %h5.mb-0.fw-bold Age Distribution
-            = render "communities/#{parent_tab}/population/population_age_chart", population_periods: population_periods, selected_period: population_period
-          
-          .col-12.col-xl-4.border-start-xl
-            .d-flex.align-items-center.mb-3
-              %i.bi.bi-gender-ambiguous.me-2.text-primary
-              %h5.mb-0.fw-bold Gender Distribution
-            = render "communities/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
+      - 
+      .row.g-4
+        .col-12.col-xl-8
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-bar-chart-steps.me-2.text-primary
+            %h5.mb-0.fw-bold Age Distribution
+          = render "communities/#{parent_tab}/population/population_age_chart", population_periods: population_periods, selected_period: population_period
+        
+        .col-12.col-xl-4.border-start-xl
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-gender-ambiguous.me-2.text-primary
+            %h5.mb-0.fw-bold Gender Distribution
+          = render "communities/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
 
       -# Data Table Section
       .pt-5.border-top.mt-5
