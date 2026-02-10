@@ -5,6 +5,7 @@ export default class extends Controller {
   static targets = ['select'];
 
   connect() {
+    this.selectTarget.selectedIndex = 0;
   }
 
   update(event) {
