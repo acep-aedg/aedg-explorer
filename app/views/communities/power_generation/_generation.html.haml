@@ -26,6 +26,9 @@
                 = render "communities/#{parent_tab}/generation/yearly_chart"
               
               .pt-4.border-top
+                .d-flex.align-items-center.mb-3
+                  %i.bi.bi-table.me-2.text-primary
+                  %h5.mb-0.fw-bold Yearly Generation Data
                 = render "communities/#{parent_tab}/generation/yearly_data"
 
     - if show_monthly_gen
@@ -38,4 +41,7 @@
                 = render "communities/#{parent_tab}/generation/monthly"
               
               .pt-4.border-top
+                .d-flex.align-items-center.mb-3
+                  %i.bi.bi-table.me-2.text-primary
+                  %h5.mb-0.fw-bold Monthly Generation Data
                 = render "communities/#{parent_tab}/generation/monthly_data"

@@ -27,15 +27,17 @@
               - if @community.show_household_income?
                 %li.nav-item
                   = link_to "#household-income-pane", class: "nav-link active", data: { bs_toggle: "tab" } do
-                    %i.bi.bi-table.me-2
-                    %span Household Income
+                    .d-flex.align-items-center
+                      %i.bi.bi-table.me-2.text-primary
+                      %h6.mb-0.fw-bold Household Income Data
                     
               - if @community.show_income_poverty?
                 %li.nav-item
                   - poverty_active = !@community.show_household_income?
                   = link_to "#income-poverty-pane", class: "nav-link #{'active' if poverty_active}", data: { bs_toggle: "tab" } do
-                    %i.bi.bi-table.me-2
-                    %span Income Poverty
+                    .d-flex.align-items-center
+                      %i.bi.bi-table.me-2.text-primary
+                      %h6.mb-0.fw-bold Income Poverty Data
 
             .tab-content
               - if @community.show_household_income?

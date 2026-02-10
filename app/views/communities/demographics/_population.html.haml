@@ -33,5 +33,8 @@
           = render "communities/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
 
       -# Data Table Section
-      .pt-5.border-top.mt-5
+      .pt-4.border-top.mt-5
+        .d-flex.align-items-center.mb-3
+          %i.bi.bi-table.me-2.text-primary
+          %h5.mb-0.fw-bold Population Data
         = render "communities/#{parent_tab}/population/population_age_sex_datatable"

@@ -34,4 +34,7 @@
         
         -# Data Table Section
         .pt-4{ class: ("border-top" if @community.show_bulk_fuel_capacity_chart?) }
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-table.me-2.text-primary
+            %h5.mb-0.fw-bold Bulk Fuel Facility Data
           = render "communities/#{parent_tab}/bulk_fuel_facilities/bulk_fuel_data"
