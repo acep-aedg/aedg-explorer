@@ -128,14 +128,6 @@ class Community < ApplicationRecord
   end
 
   # --- General Tab ---
-  def show_general_tab?
-    @show_general_tab ||= show_transportation? || show_legislative_districts? || show_population?
-  end
-
-  def show_geography?
-    @show_geography ||= community_grids.any? || show_school_districts? # Check this 
-  end
-
   def show_school_districts?
     @show_school_districts ||= school_districts.exists?
   end
@@ -236,7 +228,7 @@ class Community < ApplicationRecord
 
   # --- Fuel Tab ---
   def show_fuel_tab?
-    @show_fuel_tab ||= show_fuel_prices? || show_bulk_fuel_facilities? || show_bulk_fuel_capacity_chart?
+    @show_fuel_tab ||= show_fuel_prices? || show_bulk_fuel_facilities?
   end
 
   def show_fuel_prices?
@@ -247,7 +239,7 @@ class Community < ApplicationRecord
     @show_bulk_fuel_facilities ||= bulk_fuel_facilities.exists?
   end
 
-  def show_bulk_fuel_capacity_chart? # Check this 
+  def show_bulk_fuel_capacity_chart?
     capacity_fields = %i[gasoline_capacity diesel_capacity jet_fuel_capacity other_fuel_capacity]
     @show_bulk_fuel_capacity_chart ||= bulk_fuel_facilities.any? { |b| capacity_fields.any? { |field| b[field].present? } }
   end
