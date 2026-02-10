@@ -26,3 +26,17 @@ html {
 .collapse-btn[aria-expanded="true"] .arrow-icon {
   transform: rotate(180deg);
 }
+
+#jump_nav.sticky-top {
+
+
+  // Medium (md) and up
+  @include media-breakpoint-up(md) {
+    top: 110px !important;
+  }
+
+  // Large (lg) and up
+  @include media-breakpoint-up(lg) {
+    top: 64px !important;
+  }
+}

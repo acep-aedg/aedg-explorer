@@ -7,37 +7,32 @@
   { label: "Income", path: income_community_path(@community), visible: @community.show_income? } |
 ] |
 
-.sticky-top.bg-light.border-bottom.p-2{ style: "z-index: 1020;" }
-  .row.gy-3.align-items-center
-    -# 1. Title & Metadata
-    -# col-md-auto makes it take only needed space on medium+ 
-    -# me-md-auto pushes the dropdown (the next md-auto col) to the right
-    .col-12.col-md-auto.me-md-auto.order-0
-      .d-flex.align-items-center.text-truncate.align-middle.gap-2.flex-wrap
-        %i.bi.bi-geo-alt-fill.text-primary.fs-4.ms-2
-        %span.fw-bold.fs-3.text-truncate= @community.name
-        
-        .d-flex.align-items-center.gap-2.text-truncate
-          - if @community.borough.present? && !@community.borough.census_area?
-            %span.text-muted.align-middle &bull;
-            %span.fw-semibold.text-secondary= @community.borough.name
-          - if @community.grid.present?
-            %span.text-muted.align-middle &bull;
-            = link_to @community.grid.name, grid_path(@community.grid), class: "text-info text-truncate", data: { turbo: false }
-  
-    -# 2. Dropdown
-    -# col-md-auto allows it to move up to the first row on medium+
-    .col-12.col-md-auto.order-1.order-lg-2
-      .d-flex.align-items-center.justify-content-center
+.sticky-top.bg-light.border-bottom.px-3.py-2{ style: "z-index: 1020;" }
+  .row.align-items-center.gy-2
+    -# Name & Metadata
+    .col.col-md-auto.flex-grow-1.order-0
+      .d-flex.align-items-center.gap-2
+        %i.bi.bi-geo-alt-fill.text-primary.fs-4
+        .d-flex.flex-column
+          %span.fw-bold.fs-4.lh-1= @community.name
+          .d-flex.align-items-center.gap-1.text-muted.mt-1{ style: "font-size: 0.9rem;" }
+            - if @community.borough.present? && !@community.borough.census_area?
+              %span.fw-semibold.text-secondary= @community.borough.name
+              %span.mx-1 &bull;
+            - if @community.grid.present?
+              = link_to @community.grid.name, grid_path(@community.grid), class: "text-info fw-semibold", data: { turbo: false }
+
+    -# Dropdown
+    .col-auto.col-md-auto.order-1.order-lg-2
+      .d-flex.justify-content-end
         = render "shared/dropdown", collection: @communities
 
-    -# 3. Navigation Tabs
-    -# Kept as col-12 on medium so it drops to its own line, then col-lg-auto for large
-    .col-12.col-lg-auto.order-2.order-lg-1
-      %ul.nav.nav-tabs{ data: { controller: "turbo-active-link" }}
+    -# Tabs
+    .col-12.col-md-auto.order-2.order-lg-1
+      %ul.nav.nav-tabs.border-bottom-0.flex-wrap{ data: { controller: "turbo-active-link" } }
         - tabs.each do |tab|
           - if tab[:visible]
-            %li.nav-item.bg-light
-              = link_to tab[:label], tab[:path], 
-                        data: { turbo_active_link_target: "link", turbo_frame: "community_tab_content", turbo_action: "advance"}, 
-                        class: "nav-link bg-light"
+            %li.nav-item
+              = link_to tab[:label], tab[:path],
+                        data: { turbo_active_link_target: "link", turbo_frame: "community_tab_content", turbo_action: "advance" },
+                        class: "nav-link py-2 px-2 px-lg-3 small fw-bold text-wrap bg-light "
