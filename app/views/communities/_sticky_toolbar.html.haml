@@ -18,6 +18,7 @@
           .d-flex.align-items-center.gap-1.text-muted.mt-1{ style: "font-size: 0.9rem;" }
             - if @community.borough.present? && !@community.borough.census_area?
               %span.fw-semibold.text-secondary= @community.borough.name
+            - if @community.borough.present? && !@community.borough.census_area? && @community.grid.present?
               %span.mx-1 &bull;
             - if @community.grid.present?
               = link_to @community.grid.name, grid_path(@community.grid), class: "text-info fw-semibold", data: { turbo: false }
@@ -35,4 +36,4 @@
             %li.nav-item
               = link_to tab[:label], tab[:path],
                         data: { turbo_active_link_target: "link", turbo_frame: "community_tab_content", turbo_action: "advance" },
-                        class: "nav-link py-2 px-2 px-lg-3 small fw-bold text-wrap bg-light "
+                        class: "nav-link py-2 px-2 px-lg-3 fs-6 fw-bold text-wrap bg-light "

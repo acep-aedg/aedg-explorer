@@ -1,7 +1,7 @@
 - parent_tab = 'demographics'
 
 -# --- Section Body ---
-.section-body.m-1.m-md-2.m-lg-3.mt-3
+.section-body.m-1.m-md-2.m-lg-4.mt-3
   - if @community.show_population?
     - population_periods = @community.population_age_sexes.order(end_year: :desc)
     - most_recent_population = population_periods.first
