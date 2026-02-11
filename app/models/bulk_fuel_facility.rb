@@ -4,16 +4,23 @@ class BulkFuelFacility < ApplicationRecord
   validates :location, allowed_geometry_types: %w[Point], allow_nil: true
   belongs_to :community, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :bulk_fuel_facilities, optional: false, touch: true
 
-  def self.capacity_by_fuel_type(scope = all)
-    totals = {
-      "Gasoline" => scope.sum(:gasoline_capacity),
-      "Diesel" => scope.sum(:diesel_capacity),
-      "AvGas" => scope.sum(:av_gas_capacity),
-      "Jet Fuel" => scope.sum(:jet_fuel_capacity),
-      "Other" => scope.sum(:other_fuel_capacity)
-    }
+  scope :with_capacity, -> { where(capacity_fields.values.map { |f| "#{f} IS NOT NULL" }.join(" OR ")) }
 
-    totals.reject { |_, v| v.to_i.zero? }
+  def self.capacity_fields
+    {
+      "Gasoline" => :gasoline_capacity,
+      "Diesel" => :diesel_capacity,
+      "AvGas" => :av_gas_capacity,
+      "Jet Fuel" => :jet_fuel_capacity,
+      "Other" => :other_fuel_capacity
+    }
+  end
+
+  def self.capacity_by_fuel_type
+    capacity_fields.each_with_object({}) do |(label, column), totals|
+      sum = self.sum(column)
+      totals[label] = sum unless sum.to_i.zero?
+    end
   end
 
   def as_geojson

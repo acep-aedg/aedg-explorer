@@ -35,6 +35,8 @@ class Community < ApplicationRecord
   has_many :household_incomes, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :heating_degree_days, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
 
+  has_many :peer_communities, ->(community) { where.not(id: community.id).distinct }, through: :service_area_geoms, source: :communities
+
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
   validates :borough_fips_code, presence: true
@@ -106,12 +108,6 @@ class Community < ApplicationRecord
     }
   end
 
-  def peers_by_service_area_geoms
-    @peers_by_service_area_geoms ||= Community.joins(:communities_service_area_geoms)
-                                              .where(communities_service_area_geoms: { service_area_geom_aedg_id: service_area_geom_ids })
-                                              .where.not(id: id).distinct.to_a
-  end
-
   def available_price_types
     types = []
     types << "Survey" if any_survey_prices?
@@ -127,13 +123,13 @@ class Community < ApplicationRecord
     @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == "regional" && fp.price.present? }
   end
 
-  # --- General Tab ---
+  # --- General Tab: this tab will always be shown ---
   def show_school_districts?
-    @show_school_districts ||= school_districts.exists?
+    @show_school_districts ||= school_districts.exists? # has_many
   end
 
   def show_transportation?
-    @show_transportation ||= transportation.present?
+    @show_transportation ||= transportation.present? # has_one
   end
 
   def show_legislative_districts?
@@ -141,11 +137,11 @@ class Community < ApplicationRecord
   end
 
   def show_senate_districts?
-    @show_senate_districts ||= senate_districts.any?
+    @show_senate_districts ||= senate_districts.exists? # has_many
   end
 
   def show_house_districts?
-    @show_house_districts ||= house_districts.any?
+    @show_house_districts ||= house_districts.exists? # has_many
   end
 
   # --- Power Generation Tab ---
@@ -153,15 +149,15 @@ class Community < ApplicationRecord
     @show_power_generation_tab ||= show_utilities? || show_generation? || show_capacity?
   end
 
-  def show_utilities?
-    @show_utilities ||= show_service_areas? || show_utility_map_layers? || show_peers_by_service_area_geoms?
+  def show_utilities? # check this
+    @show_utilities ||= show_service_areas? || show_utility_map_layers?
   end
 
-  def show_service_areas?
-    @show_service_areas ||= service_areas.any?
+  def show_service_areas? # check this
+    @show_service_areas ||= service_areas.exists?
   end
 
-  def show_full_service_area?
+  def show_full_service_area? # check this
     return @show_full_service_area if instance_variable_defined?(:@show_full_service_area)
 
     ids = Array(service_area_geom_ids).compact.uniq
@@ -179,7 +175,7 @@ class Community < ApplicationRecord
       end
   end
 
-  def show_service_area_geoms?
+  def show_service_area_geoms? # check this
     @show_service_area_geoms ||= service_area_geoms.exists?
   end
 
@@ -187,12 +183,8 @@ class Community < ApplicationRecord
     @show_plants ||= plants.exists?
   end
 
-  def show_utility_map_layers?
+  def show_utility_map_layers? # check this
     @show_utility_map_layers ||= show_full_service_area? || show_service_area_geoms? || show_plants?
-  end
-
-  def show_peers_by_service_area_geoms?
-    @show_peers_by_service_area_geoms ||= peers_by_service_area_geoms.any?
   end
 
   def show_generation?
@@ -200,15 +192,15 @@ class Community < ApplicationRecord
   end
 
   def show_yearly_generation?
-    @show_yearly_generation ||= plants&.any? && plants.flat_map(&:yearly_generations)&.any?
+    @show_yearly_generation ||= yearly_generations.exists?
   end
 
   def show_monthly_generation?
-    @show_monthly_generation ||= plants&.any? && plants.flat_map(&:monthly_generations)&.any?
+    @show_monthly_generation ||= monthly_generations.exists?
   end
 
   def show_capacity?
-    @show_capacity ||= plants&.any? && plants.flat_map(&:capacities)&.any?
+    @show_capacity ||= capacities.exists?
   end
 
   # --- Rates & Sales Tab ---
@@ -217,13 +209,11 @@ class Community < ApplicationRecord
   end
 
   def show_rates?
-    @show_rates ||= electric_rates&.any? do |rate|
-      rate.residential_rate || rate.commercial_rate || rate.industrial_rate
-    end
+    @show_rates ||= electric_rates.with_rates.exists?
   end
 
   def show_sales?
-    @show_sales ||= sales&.exists?
+    @show_sales ||= sales.exists?
   end
 
   # --- Fuel Tab ---
@@ -240,8 +230,7 @@ class Community < ApplicationRecord
   end
 
   def show_bulk_fuel_capacity_chart?
-    capacity_fields = %i[gasoline_capacity diesel_capacity jet_fuel_capacity other_fuel_capacity]
-    @show_bulk_fuel_capacity_chart ||= bulk_fuel_facilities.any? { |b| capacity_fields.any? { |field| b[field].present? } }
+    @show_bulk_fuel_capacity_chart ||= bulk_fuel_facilities.with_capacity.exists?
   end
 
   # --- Demographics Tab ---
@@ -263,16 +252,16 @@ class Community < ApplicationRecord
   end
 
   def show_household_income?
-    @show_household_income ||= household_incomes.any?
+    @show_household_income ||= household_incomes.exists?
   end
 
   def show_income_poverty?
-    @show_income_poverty ||= income_poverties.any?
+    @show_income_poverty ||= income_poverties.exists?
   end
 
   # --- Others ---
   def show_heating_degree_days?
-    @show_heating_degree_days ||= heating_degree_days.present?
+    @show_heating_degree_days ||= heating_degree_days.exists?
   end
 
   def self.global_search_suggestions(term)

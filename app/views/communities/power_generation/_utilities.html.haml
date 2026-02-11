@@ -28,12 +28,12 @@
   .mb-4
     = render 'shared/map_buttons', buttons: map_buttons
 
-  - has_peers = @community.show_peers_by_service_area_geoms? && @community.peers_by_service_area_geoms.any?
+  - has_peers = @community.peer_communities.exists?
 
   .row.g-4
     %div{ class: has_peers ? "col-12 col-lg-8" : "col-12" }
-      = render "communities/#{parent_tab}/utilities/service_area_card", community: @community
+      = render "communities/#{parent_tab}/utilities/service_area_card", community: @community # don't pass in local variable, use instance variable
 
     - if has_peers
       .col-12.col-lg-4
-        = render "communities/#{parent_tab}/utilities/nearby_communities_card", peers: @community.peers_by_service_area_geoms
+        = render "communities/#{parent_tab}/utilities/nearby_communities_card", peers: @community.peer_communities
