@@ -6,7 +6,6 @@ import { application } from "./application"
 
 import ChartController from "./chart_controller"
 application.register("chart", ChartController)
-
 import CopyController from "./copy_controller"
 application.register("copy", CopyController)
 
@@ -25,11 +24,14 @@ application.register("lightbox", LightboxController)
 import MapsController from "./maps_controller"
 application.register("maps", MapsController)
 
+import OffcanvasGroupController from "./offcanvas_group_controller"
+application.register("offcanvas-group", OffcanvasGroupController)
+
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
 
-import WidgetFilterController from "./widget_update_controller"
-application.register("widget-update", WidgetFilterController)
+import WidgetUpdateController from "./widget_update_controller"
+application.register("widget-update", WidgetUpdateController)
 
-import OffcanvasGroupController from "./offcanvas_group_controller"
-application.register("offcanvas-group", OffcanvasGroupController)
+import YearlyGenerationChartController from "./yearly_generation_chart_controller"
+application.register("yearly-generation-chart", YearlyGenerationChartController)
