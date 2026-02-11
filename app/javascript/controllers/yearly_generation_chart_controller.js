@@ -27,11 +27,16 @@ export default class extends Controller {
     const datasets = rawData.map((series) => {
       const baseColor = series.color || "rgba(93, 109, 126, 1)";
 
+      let label = series.name;
+      if (label.includes("Electricity used for Energy Storage (MWH)")) {
+        label = ["Electricity used for", "Energy Storage (MWH)"];
+      }
+
       return {
-        label: series.name,
+        label: label,
         data: Object.values(series.data),
         borderColor: baseColor,
-        backgroundColor: baseColor
+        backgroundColor: baseColor,
       };
     });
 
