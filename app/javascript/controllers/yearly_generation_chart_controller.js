@@ -29,7 +29,7 @@ export default class extends Controller {
 
       let label = series.name;
       if (label.includes("Electricity used for Energy Storage (MWH)")) {
-        label = ["Electricity used for", "Energy Storage (MWH)"];
+        label = "Energy Storage (MWH)";
       }
 
       return {
@@ -70,7 +70,7 @@ export default class extends Controller {
               display: true,
               text: settings.legendTitle,
               font: { weight: "bold" },
-              padding: { bottom: 10 },
+              padding: { top: 20, bottom: 10 },
             },
           },
           tooltip: {
