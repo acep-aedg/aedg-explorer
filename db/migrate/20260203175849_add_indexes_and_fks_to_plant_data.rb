@@ -1,5 +1,7 @@
 class AddIndexesAndFksToPlantData < ActiveRecord::Migration[8.0]
   def up
+    # Delete the duplicated plant 97
+    execute "DELETE FROM plants WHERE pce_reporting_id = '332620'"
     add_index :plants, :aea_plant_id, unique: true
 
     add_index :capacities, :aea_plant_id
