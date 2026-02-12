@@ -42,3 +42,6 @@ application.register("turbo-active-link", TurboActiveLinkController)
 
 import WidgetUpdateController from "./widget_update_controller"
 application.register("widget-update", WidgetUpdateController)
+
+import YearlyGenerationChartController from "./yearly_generation_chart_controller"
+application.register("yearly-generation-chart", YearlyGenerationChartController)

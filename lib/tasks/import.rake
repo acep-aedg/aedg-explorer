@@ -22,7 +22,6 @@ namespace :import do
     Rake::Task["import:community_reporting_entities"].invoke
     Rake::Task["import:income_poverty"].invoke
     Rake::Task["import:household_income"].invoke
-    Rake::Task["import:heating_degree_days"].invoke
     Rake::Task["import:service_areas"].invoke
     Rake::Task["import:service_area_geoms"].invoke
     Rake::Task["import:community_service_area_geoms"].invoke
@@ -37,6 +36,7 @@ namespace :import do
     Rake::Task["import:populations_ages_sexes"].invoke
     Rake::Task["import:employments"].invoke
     Rake::Task["import:fuel_prices"].invoke
+    Rake::Task["import:heating_degree_days"].invoke
     puts "Import complete"
 
     if ENV["PR"].present?
