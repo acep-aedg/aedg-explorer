@@ -6,6 +6,10 @@ class ServiceArea < ApplicationRecord
 
   has_many :service_area_geoms, primary_key: :cpcn_id, foreign_key: :service_area_cpcn_id, dependent: :destroy, inverse_of: :service_area
   has_many :communities, through: :service_area_geoms
+  
+  def boundary_matches_geom_boundary?
+    true
+  end
 
   def as_geojson
     {

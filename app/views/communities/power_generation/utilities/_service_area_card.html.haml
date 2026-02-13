@@ -4,13 +4,13 @@
     %h5.mb-0.fw-bold Service Area Details
   
   / --- Utility Providers ---
-  - if community.show_service_areas?
+  - if @community.show_service_areas?
     .mb-4
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers
         %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Entities providing services in this service area (local)" }
       %ul.list-unstyled.mt-1
-        - community.service_areas.each do |sa|
+        - @community.service_areas.each do |sa|
           %li.d-flex.align-items-center.mb-2
             %i.bi.bi-dot.text-primary.fs-5.lh-1
             %span.fw-semibold= sa.name
@@ -20,14 +20,14 @@
                 Cert
 
   / --- Power Plants ---
-  - if community.show_plants?
+  - if @community.show_plants?
     .mb-4
       .d-flex.align-items-center.mb-1
-        %label.text-muted.small.text-uppercase.fw-bold.mb-0 Power Plants (#{community.plants.size})
+        %label.text-muted.small.text-uppercase.fw-bold.mb-0 Power Plants (#{@community.plants.size})
         %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Generation facilities located within or serving this community" }
       
       .row.g-2.mt-1
-        - community.plants.in_groups(2, false).each do |plant_group|
+        - @community.plants.in_groups(2, false).each do |plant_group|
           .col-6
             %ul.list-unstyled.mb-0
               - plant_group.each do |plant|
@@ -41,15 +41,15 @@
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 Grid Connection
         %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "The electrical grid the community is physically tied to" }
-      - if community.grid.nil?
+      - if @community.grid.nil?
         %span.text-secondary None
       - else
         %i.bi.bi-diagram-3.text-primary.me-1
-        = link_to community.grid.name.titleize, grid_path(community.grid), class: "fw-bold"
+        = link_to @community.grid.name.titleize, grid_path(@community.grid), class: "fw-bold"
 
     .col-md-6.mb-3
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 PCE Status
         %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Indicates if the community qualifies for Power Cost Equalization program" }
-      %span.badge{ class: community.pce_eligible ? "bg-success-subtle text-success border border-success" : "bg-light text-muted border" }
-        = community.pce_eligible ? "Eligible" : "Ineligible"
+      %span.badge{ class: @community.pce_eligible ? "bg-success-subtle text-success border border-success" : "bg-light text-muted border" }
+        = @community.pce_eligible ? "Eligible" : "Ineligible"

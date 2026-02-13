@@ -4,7 +4,7 @@
       / --- Floating controls ---
       .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
         .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
-        - if @community.show_service_area_geoms?
+        - if @community.show_service_areas?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-service-area-local{ 
               type: "checkbox", 

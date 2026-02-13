@@ -125,11 +125,11 @@ class Community < ApplicationRecord
 
   # --- General Tab: this tab will always be shown ---
   def show_school_districts?
-    @show_school_districts ||= school_districts.exists? # has_many
+    @show_school_districts ||= school_districts.exists?
   end
 
   def show_transportation?
-    @show_transportation ||= transportation.present? # has_one
+    @show_transportation ||= transportation.present?
   end
 
   def show_legislative_districts?
@@ -137,11 +137,11 @@ class Community < ApplicationRecord
   end
 
   def show_senate_districts?
-    @show_senate_districts ||= senate_districts.exists? # has_many
+    @show_senate_districts ||= senate_districts.exists?
   end
 
   def show_house_districts?
-    @show_house_districts ||= house_districts.exists? # has_many
+    @show_house_districts ||= house_districts.exists?
   end
 
   # --- Power Generation Tab ---
@@ -149,42 +149,24 @@ class Community < ApplicationRecord
     @show_power_generation_tab ||= show_utilities? || show_generation? || show_capacity?
   end
 
-  def show_utilities? # check this
-    @show_utilities ||= show_service_areas? || show_utility_map_layers?
+  def show_utilities?
+    @show_utilities ||= show_service_areas? || show_plants?
   end
 
-  def show_service_areas? # check this
+  def show_service_areas?
     @show_service_areas ||= service_areas.exists?
   end
 
-  def show_full_service_area? # check this
-    return @show_full_service_area if instance_variable_defined?(:@show_full_service_area)
-
-    ids = Array(service_area_geom_ids).compact.uniq
-    @show_full_service_area =
-      if ids.empty?
-        false
-      else
-        ServiceArea
-          .joins(:service_area_geoms)
-          .where(service_area_geoms: { aedg_id: ids })
-          .where.not(service_areas: { boundary: nil })
-          .where.not(service_area_geoms: { boundary: nil })
-          .where(Arel.sql("NOT ST_Equals(service_areas.boundary, service_area_geoms.boundary)"))
-          .exists?
-      end
-  end
-
-  def show_service_area_geoms? # check this
-    @show_service_area_geoms ||= service_area_geoms.exists?
+  def show_full_service_area?
+    @show_full_service_area ||= service_area_geoms.with_full_service_area.exists?
   end
 
   def show_plants?
     @show_plants ||= plants.exists?
   end
 
-  def show_utility_map_layers? # check this
-    @show_utility_map_layers ||= show_full_service_area? || show_service_area_geoms? || show_plants?
+  def show_utility_map_layers?
+    @show_utility_map_layers ||= show_service_areas? || show_plants?
   end
 
   def show_generation?

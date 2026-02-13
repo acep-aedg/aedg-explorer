@@ -6,7 +6,7 @@
       url: service_area_geoms_community_maps_path(@community), |
       icon: 'bounding-box', |
       id: 'layer-service-area-local', |
-      visible: @community.show_service_area_geoms? |
+      visible: @community.show_service_areas? |
     }, |
     { |
       label: "Full Service Area", |
@@ -32,7 +32,7 @@
 
   .row.g-4
     %div{ class: has_peers ? "col-12 col-lg-8" : "col-12" }
-      = render "communities/#{parent_tab}/utilities/service_area_card", community: @community # don't pass in local variable, use instance variable
+      = render "communities/#{parent_tab}/utilities/service_area_card"
 
     - if has_peers
       .col-12.col-lg-4
