@@ -83,6 +83,16 @@ class Community < ApplicationRecord
     [:name, %i[name fips_code]]
   end
 
+  def self.advanced_search_facets
+    [
+      { id: 'offcanvasGrids',    param: :grid_ids,                        model: Grid,                lookup: :id,        prefix: 'grid',   label_method: :name,               title: 'Electric Grid' },
+      { id: 'offcanvasBoroughs', param: :borough_fips_codes,              model: Borough,             lookup: :fips_code, prefix: 'boro',   label_method: :name,               title: 'Borough / Census Area' },
+      { id: 'offcanvasCorps',    param: :regional_corporation_fips_codes, model: RegionalCorporation, lookup: :fips_code, prefix: 'corp',   label_method: :name,               title: 'Native Regional Corp' },
+      { id: 'offcanvasSenate',   param: :senate_district_ids,             model: SenateDistrict,      lookup: :id,        prefix: 'senate', label_method: ->(i){ "#{i.district}" }, title: 'Senate District' },
+      { id: 'offcanvasHouse',    param: :house_district_ids,              model: HouseDistrict,       lookup: :id,        prefix: 'house',  label_method: :name,    title: 'House District' }
+    ]
+  end
+
   def grid
     community_grids.find_by(termination_year: 9999)&.grid
   end

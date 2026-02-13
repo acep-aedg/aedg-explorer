@@ -1,17 +1,11 @@
--# TODO: clean or refactor not sure its that readable
-- panels = []
-- panels << { id: 'offcanvasGrids',    title: 'Electric Grid',             name: 'Grids',    prefix: 'grid',   items: @current_grids,  pagy: @pagy_grids,  key: :grid_ids,                        val: ->(i){ i.id },        lbl: ->(i){ i.name } }
-- panels << { id: 'offcanvasBoroughs', title: 'Borough / Census Area',     name: 'Boroughs', prefix: 'boro',   items: @current_boros,  pagy: @pagy_boros,  key: :borough_fips_codes,              val: ->(i){ i.fips_code }, lbl: ->(i){ i.name } }
-- panels << { id: 'offcanvasCorps',    title: 'Native Regional Corp',      name: 'Corps',    prefix: 'corp',   items: @current_corps,  pagy: @pagy_corps,  key: :regional_corporation_fips_codes, val: ->(i){ i.fips_code }, lbl: ->(i){ i.name } }
-- panels << { id: 'offcanvasSenate',   title: 'Senate District',           name: 'Senate',   prefix: 'senate', items: @current_senate, pagy: @pagy_senate, key: :senate_district_ids,             val: ->(i){ i.id },        lbl: ->(i){ "#{i.district}" } }
-- panels << { id: 'offcanvasHouse',    title: 'House District',            name: 'House',    prefix: 'house',  items: @current_house,  pagy: @pagy_house,  key: :house_district_ids,              val: ->(i){ i.id },        lbl: ->(i){ "#{i.name}" } }
-
-- panels.each do |p|
-  - is_open = params[p[:key]].present? || params[:expanded] == p[:name]
-  .collapse.collapse-horizontal{ id: p[:id], class: (is_open ? 'show' : '') }
-    .facet-shelf-content{ style: "width: 500px;" }
-      .p-3.border-bottom.bg-white.d-flex.justify-content-between.align-items-center
-        %h5.mb-0.fw-bold= p[:title]
-        %button.btn-close{ type: "button", data: { action: "click->search-panels#close" } }
-      .bg-white.overflow-auto{ style: "height: calc(85vh - 60px);" }
+%div#search_panels_content
+  - @facet_panels.each do |p|
+    - is_open = params[p[:param]].present? || params[:expanded] == p[:id]
+    
+    .facet-panel{ id: p[:id], class: (is_open ? 'panel-visible' : '') }
+      .facet-shelf-content.bg-white
+        .p-2.d-flex.justify-content-between.align-items-center
+          %h5.mb-0.fw-bold= p[:title]
+          %button.btn-close{ type: "button", data: { action: "click->search-panels#close" } }
+        
         = render 'searches/advanced/facet', panel: p

@@ -1,55 +1,40 @@
-- id_prefix    = panel[:prefix]
-- frame_id     = "#{id_prefix}_frame"
-- search_param = :"q_#{id_prefix}"
-- alpha_param  = :"alpha_#{id_prefix}"
-- param_key    = panel[:key]
+- id_prefix = panel[:prefix]
+- frame_id  = "#{id_prefix}_frame"
+- param_key = panel[:param]
 
-= turbo_frame_tag frame_id, class: "d-flex flex-column h-100" do
-  .p-3.border-bottom.bg-light
-    = render 'searches/advanced/search_input', 
-              url: search_advanced_path,
-              name: search_param, 
-              frame: frame_id, 
-              placeholder: "Find #{panel[:name]}..."
+= turbo_frame_tag frame_id, class: "d-flex flex-column" do
+  .p-2
+    = render 'searches/advanced/search_input',
+      url: search_advanced_path,
+      name: :"q_#{id_prefix}",
+      frame: frame_id,
+      placeholder: "Find #{panel[:title]}..."
 
-  .d-flex.flex-grow-1.overflow-hidden.facet-list-container
-    -# Scrollable Checkboxes
-    .flex-grow-1.overflow-auto.p-3{ id: "#{id_prefix}_list_container" }
+  .d-flex.ps-4
+    .flex-grow-1
       - if panel[:items].any?
         - selected_ids = Array(params[param_key]).map(&:to_s)
-        
+
         - panel[:items].each do |item|
-          - val = panel[:val].call(item).to_s
-          - lbl = panel[:lbl].call(item)
-          
-          .form-check.mb-2
-            -# Linking to 'filter-form' ensures 'autoSubmit' catches the change
-            = check_box_tag "#{param_key}[]", val, selected_ids.include?(val), 
-                            id: "#{id_prefix}_#{val}", 
-                            class: 'form-check-input', 
-                            form: 'filter-form'
+          - val = item.send(panel[:lookup]).to_s
+          - lbl = panel[:label_method].is_a?(Proc) ? panel[:label_method].call(item) : (item.respond_to?(panel[:label_method]) ? item.send(panel[:label_method]) : "District #{item.try(:district)}")
+
+          .form-check.mb-1
+            = check_box_tag "#{param_key}[]", val, selected_ids.include?(val),
+              id: "#{id_prefix}_#{val}",
+              class: 'form-check-input',
+              form: 'filter-form'
             = label_tag "#{id_prefix}_#{val}", lbl, class: 'form-check-label small'
 
         - if panel[:pagy].pages > 1
-          .mt-3.small.d-flex.justify-content-center
+          .py-2.d-flex.justify-content-center.small-pagy
             != pagy_bootstrap_nav(panel[:pagy], link_extra: "data-turbo-frame='#{frame_id}'")
-      
+
       - else
-        .text-center.mt-5.small.text-muted No results found.
+        .text-center.py-4.small.text-muted No results found.
 
-    -# TODO: Broken FIX
-    -# Alphabet Sidebar: Scoped to this frame so it doesn't reload the whole page
-    .d-flex.flex-column.align-items-center.bg-light.border-start.overflow-auto.alphabet-sidebar{ style: "width: 35px;" }
-      = link_to "ALL", search_advanced_path(params.permit!.merge(alpha_param => nil, search_param => nil, expanded: panel[:id])), 
-                class: "fw-bold text-decoration-none text-muted py-1 small", 
-                data: { turbo_frame: frame_id }
-      
+    .facet-alphabet-nav.d-flex.flex-column.align-items-center.bg-light.border-start
       - ('A'..'Z').each do |letter|
-        = link_to letter, search_advanced_path(params.permit!.merge(alpha_param => letter, expanded: panel[:id])), 
-                  class: "alphabet-link fw-bold text-decoration-none text-muted py-0 small", 
-                  data: { turbo_frame: frame_id }
-
-  - current_page_ids = panel[:items].map { |i| panel[:val].call(i).to_s }
-  - selected_ids = Array(params[param_key]).map(&:to_s)
-  - (selected_ids - current_page_ids).each do |hidden_val|
-    = hidden_field_tag "#{param_key}[]", hidden_val, form: 'filter-form', id: "hidden_#{param_key}_#{hidden_val}"
+        = link_to letter, search_advanced_path(params.permit!.merge(:"alpha_#{id_prefix}" => letter, expanded: panel[:id])),
+          class: "alphabet-link fw-bold text-decoration-none text-muted",
+          data: { turbo_frame: frame_id }

@@ -1,5 +1,4 @@
-.d-flex.flex-column.p-2.gap-1
-  -# TODO: clean maybe refactor not sure its that readable
+.d-flex.flex-column.gap-1
   - sections = [ |
       { id: 'offcanvasGrids',    label: 'Electric Grid',               icon: 'grid' },     |
       { id: 'offcanvasBoroughs', label: 'Borough / Census Area',       icon: 'map' },      |
@@ -9,15 +8,15 @@
     ] |
 
   - sections.each do |s|
-    %button.d-flex.justify-content-between.align-items-center.w-100.border-0.bg-transparent.text-start.py-2.px-1{ |
+    %button.nav-facet-btn.d-flex.justify-content-between.align-items-center.w-100.border-0.bg-transparent.text-start.py-2.px-2.rounded{ |
       type: "button", |
       data: { |
         action: "click->search-panels#toggle", |
         search_panels_id_param: s[:id] |
       } |
     }
-      %span.text-dark
-        %i.bi.me-3.text-secondary{ class: "bi-#{s[:icon]}" }
+      %span.text-dark.d-flex.align-items-center
+        %i.bi.me-3.text-secondary{ class: "bi-#{s[:icon]}", style: "width: 20px;" }
         = s[:label]
       
       %i.bi.bi-chevron-right.text-muted{ style: "font-size: 12px;" }

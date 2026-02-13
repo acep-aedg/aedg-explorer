@@ -1,35 +1,32 @@
 %div#active_filters_frame
   - base_params = request.query_parameters.except(:expanded)
   - badge_style = "badge text-dark border text-decoration-none d-flex align-items-center p-2"
+  
   .d-flex.flex-wrap.gap-2
-    -# --- DYNAMIC DATABASE FILTERS --- TODO: clean
-    - filters = []
-    - filters << { model: Grid,                param: :grid_ids,                        lookup: :id,        color: 'info',      label: ->(x) { x.name } }
-    - filters << { model: Borough,             param: :borough_fips_codes,              lookup: :fips_code, color: 'warning',   label: ->(x) { x.name } }
-    - filters << { model: RegionalCorporation, param: :regional_corporation_fips_codes, lookup: :fips_code, color: 'success',   label: ->(x) { x.name } }
-    - filters << { model: SenateDistrict,      param: :senate_district_ids,             lookup: :id,        color: 'secondary', label: ->(x) { "Senate #{x.district}" } }
-    - filters << { model: HouseDistrict,       param: :house_district_ids,              lookup: :id,        color: 'secondary', label: ->(x) { "House #{x.name}" } }
-
     - if params[:q].present?
-      = link_to search_advanced_path(base_params.except(:q)), class: "#{badge_style} bg-light", data: { turbo_frame: "results_frame" } do
+      = link_to search_advanced_path(base_params.except(:q)), 
+                class: "#{badge_style} bg-light", 
+                data: { turbo_frame: "results_frame" } do
         %span.me-2
           %span.text-muted Search:
           = params[:q]
         %i.bi.bi-x-lg.text-muted{ style: "font-size: 10px;" }
 
-    - filters.each do |f|
-      - if params[f[:param]].present?
-        - f[:model].where(f[:lookup] => params[f[:param]]).each do |item|
-          - remaining_ids = Array(params[f[:param]]) - [item.send(f[:lookup]).to_s]
-          - bg_class = "bg-#{f[:color]} bg-opacity-10 border-#{f[:color]} border-opacity-25"
-          
-          = link_to search_advanced_path(base_params.merge(f[:param] => remaining_ids)), class: "#{badge_style} #{bg_class}", data: { turbo_stream: true, action: "click->search-panels#hideBadge" } do
-            %span.me-2= f[:label].call(item)
-            %i.bi.bi-x-lg{ style: "font-size: 10px;" }
-
-    -# TODO: speed up, too slow or add spiner or visual
-    -# --- CLEAR ALL BUTTON --- 
-    - if params.values.any? { |v| v.is_a?(Array) && v.present? } || params[:q].present?
-      = link_to search_advanced_path(base_params.slice()), class: 'btn btn-outline-danger btn-sm w-100 mt-3 d-flex align-items-center justify-content-between', data: { action: "click->search-panels#closeall" } do
+    - @active_badges&.each do |badge|
+      = link_to badge[:url], 
+                class: badge_style, 
+                data: { turbo_frame: "results_frame", 
+                        action: "click->search-panels#uncheckSpecific", 
+                        search_panels_id_param: badge[:checkbox_id] } do
+        %span.me-2= badge[:label]
+        %i.bi.bi-x-lg
+            
+    -# Clear All Button
+    -# Appears only if there is an active text search OR active facet filters
+    - if @active_badges&.any? || params[:q].present?
+      %button.btn.btn-outline-danger.btn-sm.w-100.mt-3.d-flex.align-items-center.justify-content-between{ |
+        type: "button", |
+        data: { action: "click->search-panels#clearAllFilters" } |
+      }
         %span Clear all filters
         %i.bi.bi-trash

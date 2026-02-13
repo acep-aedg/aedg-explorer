@@ -1,11 +1,15 @@
+.mb-4.mt-0
+  -# TODO: move active filters here 
+  -# = render 'searches/advanced/active_filters'
+  
 - if params[:q_global].present?
-  -# SHOW SEARCH RESULTS
   .list-group.list-group-flush
     - if @global_search_results&.any?
       .p-2.small.text-muted.fw-bold Found #{@global_search_results.count} matches:
       - @global_search_results.each do |res|
-
-        = link_to request.query_parameters.merge(res[:param_key] => (params[res[:param_key]] || []) + [res[:value].to_s]).except(:q_global), class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3" do
+        = link_to request.query_parameters.merge(res[:param_key] => (Array(params[res[:param_key]]) + [res[:value].to_s]).uniq, expanded: nil).except(:q_global),
+            class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3",
+            data: { turbo_frame: "_top" } do
           %div
             .fw-bold.text-dark= res[:label]
             .small.text-muted= res[:category]
@@ -14,7 +18,5 @@
       .p-4.text-center.text-muted
         %i.bi.bi-search.display-6.mb-3
         %p No filters found matching "#{params[:q_global]}"
-        
 - else
   = render 'searches/advanced/nav_buttons'
-  

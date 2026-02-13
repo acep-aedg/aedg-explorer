@@ -12,35 +12,56 @@ class SearchesController < ApplicationController
     @communities = Community.search(@query) if @query.present?
   end
 
-  def advanced
-    # --- MAIN COMMUNITY SEARCH ---
+def advanced
     @pagy, @communities = pagy(build_scope(extract_filters), page_param: :page)
 
-    # --- SIDEBAR FACETS ---
-    @pagy_grids, @current_grids = pagy(Grid.filter_by_params(params, :q_grid, :alpha_grid), page_param: :page_grid)
-    @pagy_boros, @current_boros = pagy(Borough.filter_by_params(params, :q_boro, :alpha_boro), page_param: :page_boro)
-    @pagy_corps, @current_corps = pagy(RegionalCorporation.filter_by_params(params, :q_corp, :alpha_corp), page_param: :page_corp)
-    @pagy_senate, @current_senate = pagy(SenateDistrict.filter_by_params(params, :q_senate, :alpha_senate, :district), page_param: :page_senate)
-    @pagy_house, @current_house = pagy(HouseDistrict.filter_by_params(params, :q_house, :alpha_house, :district), page_param: :page_house)
+    @facet_panels = Community.advanced_search_facets.map do |facet|
+      col = (facet[:prefix] == 'senate' || facet[:prefix] == 'house') ? :district : :name
+      scope = facet[:model].filter_by_params(params, "q_#{facet[:prefix]}", "alpha_#{facet[:prefix]}", col)
+      pagy_item, items = pagy(scope, page_param: "page_#{facet[:prefix]}")
+      facet.merge(items: items, pagy: pagy_item)
+    end
+
+    prepare_active_filters
 
     respond_to do |format|
-      format.html # Full page load
+      format.html
       format.turbo_stream do
         render turbo_stream: [
-          # Update Sidebar Badges
-          turbo_stream.replace("active_filters_frame",
-                               partial: "searches/advanced/active_filters"),
-
-          # Update Results List
-          turbo_stream.replace("results_frame",
-                               partial: "searches/advanced/results",
-                               locals: { communities: @communities, pagy: @pagy })
+          turbo_stream.replace("results_frame", partial: "searches/advanced/results"),
+          turbo_stream.replace("search_panels_content", partial: "searches/advanced/panels"),
+          # TODO look into moveing active filters
+          turbo_stream.replace("active_filters", partial: "searches/advanced/sidebar_nav")
         ]
       end
     end
   end
 
   private
+
+  def prepare_active_filters
+    @active_badges = []
+    base_params = request.query_parameters.except(:expanded)
+
+    Community.advanced_search_facets.each do |facet|
+      next unless params[facet[:param]].present?
+
+      facet[:model].where(facet[:lookup] => params[facet[:param]]).each do |item|
+        val = item.send(facet[:lookup]).to_s
+        lbl = if facet[:label_method].is_a?(Proc)
+                facet[:label_method].call(item)
+              else
+                item.send(facet[:label_method])
+              end
+
+        @active_badges << {
+          label: lbl,
+          checkbox_id: "#{facet[:prefix]}_#{val}",
+          url: search_advanced_path(base_params.merge(facet[:param] => Array(params[facet[:param]]) - [val]))
+        }
+      end
+    end
+  end
 
   def extract_filters
     {
