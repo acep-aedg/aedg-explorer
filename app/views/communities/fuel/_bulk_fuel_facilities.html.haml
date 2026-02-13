@@ -1,0 +1,40 @@
+- parent_tab = 'fuel'
+- map_buttons = [ |
+    { |
+      label: "Bulk Fuel Facilities", |
+      url: bulk_fuel_facilities_community_maps_path(@community), |
+      icon: 'building', |
+      id: 'layer-bulk-fuel-facilities' |
+    } |
+  ] |
+
+.section-body.m-1.m-md-2.m-lg-4.mt-3
+  .row.mb-4.g-4.d-flex.align-items-stretch
+    -# Map Buttons
+    .col-12.col-lg-4.d-flex
+      .flex-fill
+        = render 'shared/map_buttons', buttons: map_buttons
+      
+    -# Delivery Summary
+    .col-12.col-lg-8.d-flex
+      .flex-fill
+        = render 'shared/icon_status_grid', 
+          title: "Fuel Delivery Methods",
+          fields: %i(barge_delivery plane_delivery road_delivery),
+          source: @community.bulk_fuel_facilities
+
+  .row
+    .col-12
+      -# Main Data Card
+      .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
+        -# Capacity Chart
+        - if @community.show_bulk_fuel_capacity_chart?
+          .mb-5
+            = render "communities/#{parent_tab}/bulk_fuel_facilities/fuel_capacity_chart"
+        
+        -# Data Table Section
+        .pt-4{ class: ("border-top" if @community.show_bulk_fuel_capacity_chart?) }
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-table.me-2.text-primary
+            %h5.mb-0.fw-bold Bulk Fuel Facility Data
+          = render "communities/#{parent_tab}/bulk_fuel_facilities/bulk_fuel_data"

@@ -1,0 +1,39 @@
+- parent_tab = 'power_generation'
+- service_area_label = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
+- map_buttons = [ |
+    { |
+      label: service_area_label, |
+      url: service_area_geoms_community_maps_path(@community), |
+      icon: 'bounding-box', |
+      id: 'layer-service-area-local', |
+      visible: @community.show_service_areas? |
+    }, |
+    { |
+      label: "Full Service Area", |
+      url: service_areas_community_maps_path(@community), |
+      icon: 'bounding-box', |
+      id: 'layer-service-area-full', |
+      visible: @community.show_full_service_area? |
+    }, |
+    { |
+      label: "Power Plants", |
+      url: plants_community_maps_path(@community), |
+      icon: 'building', |
+      id: 'layer-plants', |
+      visible: @community.show_plants? |
+    } |
+  ] |
+
+.section-body.m-1.m-md-2.m-lg-4.mt-3
+  .mb-4
+    = render 'shared/map_buttons', buttons: map_buttons
+
+  - has_peers = @community.peer_communities.exists?
+
+  .row.g-4
+    %div{ class: has_peers ? "col-12 col-lg-8" : "col-12" }
+      = render "communities/#{parent_tab}/utilities/service_area_card", service_area_label: service_area_label
+
+    - if has_peers
+      .col-12.col-lg-4
+        = render "communities/#{parent_tab}/utilities/nearby_communities_card", peers: @community.peer_communities, service_area_label: service_area_label

@@ -1,0 +1,17 @@
+- parent_tab = "fuel"
+
+.section-body.m-1.m-md-2.m-lg-4.mt-3
+  .row
+    .col-12
+      -# Main Price Card
+      .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
+        -# Chart Section
+        .mb-5
+          = render "communities/#{parent_tab}/fuel_prices/chart"
+        
+        -# Data Table Section
+        .pt-4.border-top
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-table.me-2.text-primary
+            %h5.mb-0.fw-bold Fuel Price Data
+          = render "communities/#{parent_tab}/fuel_prices/datatable"

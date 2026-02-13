@@ -1,0 +1,59 @@
+.section-body.m-1.m-md-2.m-lg-4.mt-3
+  .p-3.border.rounded-3.h-100.shadow-sm
+    .row
+      .col-12
+        %table.table.table-sm.table-hover.align-middle.mb-0
+          %tbody
+            - if @community.name.present?
+              %tr
+                %th.pe-3.text-muted.fw-semibold{style: "width: 30%;"} Community
+                %td.fw-bold= @community.name
+  
+            - if @community.borough.present?
+              - if @community.borough.census_area?
+                %tr
+                  %th.pe-3.text-muted.fw-semibold Borough
+                  %td.text-secondary None (in the Unorganized Borough)
+                %tr
+                  %th.pe-3.text-muted.fw-semibold Census Area
+                  %td= @community.borough.name
+              - else
+                %tr
+                  %th.pe-3.text-muted.fw-semibold Borough
+                  %td= @community.borough.name
+  
+            - if @community.regional_corporation.present?
+              %tr
+                %th.pe-3.text-muted.fw-semibold Regional Corporation
+                %td= @community.regional_corporation.name
+  
+            - if @community.village_corporation.present?
+              %tr
+                %th.pe-3.text-muted.fw-semibold Village Corporation
+                %td= @community.village_corporation
+  
+            - if @community.grid.present?
+              %tr
+                %th.pe-3.text-muted.fw-semibold Electric Grid
+                %td= link_to @community.grid.name.titleize, grid_path(@community.grid), class: "text-info fw-bold", data: { turbo: false }
+  
+            %tr
+              %th.pe-3.text-muted.fw-semibold Latitude, Longitude
+              %td.font-monospace
+                = "#{@community.latitude}, #{@community.longitude}"
+  
+            - if @community.show_school_districts?
+              %tr
+                %th.pe-3.text-muted.fw-semibold School District(s)
+                %td
+                  %ul.list-unstyled.mb-0
+                    - @community.school_districts.each do |d|
+                      %li.mb-2.d-flex.flex-wrap.align-items-center
+                        %span.fw-bold= d.name
+                        - if d.district_type.present?
+                          %small.text-muted.ms-2= "(#{d.formatted_type})"
+                        - unless d.is_active
+                          %span.badge.bg-warning.text-dark.ms-2.small Inactive
+                        - if d.notes&.strip.present?
+                          .w-100
+                          %small.text-muted.ms-2.fst-italic= "Notes: #{d.notes}"

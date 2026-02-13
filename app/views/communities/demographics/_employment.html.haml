@@ -1,0 +1,16 @@
+- parent_tab = 'demographics'
+
+-# --- Section Body ---
+.section-body.m-1.m-md-2.m-lg-4.mt-3
+  .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
+    -# Employment Status (Full Width)
+    - if @community.show_employment?
+      .mb-5
+        = render "communities/#{parent_tab}/employment/employment_chart"
+
+    -# Data Table Section
+    .pt-4.border-top.mt-5
+      .d-flex.align-items-center.mb-3
+        %i.bi.bi-table.me-2.text-primary
+        %h5.mb-0.fw-bold Employment Data
+      = render "communities/#{parent_tab}/employment/employment_data"

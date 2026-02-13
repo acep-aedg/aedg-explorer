@@ -35,6 +35,8 @@ class Community < ApplicationRecord
   has_many :household_incomes, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :heating_degree_days, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
 
+  has_many :peer_communities, ->(community) { where.not(id: community.id).distinct }, through: :service_area_geoms, source: :communities
+
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
   validates :borough_fips_code, presence: true
@@ -106,12 +108,6 @@ class Community < ApplicationRecord
     }
   end
 
-  def peers_by_service_area_geoms
-    @peers_by_service_area_geoms ||= Community.joins(:communities_service_area_geoms)
-                                              .where(communities_service_area_geoms: { service_area_geom_aedg_id: service_area_geom_ids })
-                                              .where.not(id: id).distinct.to_a
-  end
-
   def available_price_types
     types = []
     types << "Survey" if any_survey_prices?
@@ -127,117 +123,9 @@ class Community < ApplicationRecord
     @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == "regional" && fp.price.present? }
   end
 
-  # --- Electricity Section ---
-  def show_utilities?
-    @show_utilities ||= show_service_areas? || show_utility_map_layers? || show_peers_by_service_area_geoms?
-  end
-
-  def show_service_areas?
-    @show_service_areas ||= service_areas.any?
-  end
-
-  def show_full_service_area?
-    return @show_full_service_area if instance_variable_defined?(:@show_full_service_area)
-
-    ids = Array(service_area_geom_ids).compact.uniq
-    @show_full_service_area =
-      if ids.empty?
-        false
-      else
-        ServiceArea
-          .joins(:service_area_geoms)
-          .where(service_area_geoms: { aedg_id: ids })
-          .where.not(service_areas: { boundary: nil })
-          .where.not(service_area_geoms: { boundary: nil })
-          .where(Arel.sql("NOT ST_Equals(service_areas.boundary, service_area_geoms.boundary)"))
-          .exists?
-      end
-  end
-
-  def show_service_area_geoms?
-    @show_service_area_geoms ||= service_area_geoms.exists?
-  end
-
-  def show_plants?
-    @show_plants ||= plants.exists?
-  end
-
-  def show_utility_map_layers?
-    @show_utility_map_layers ||= show_full_service_area? || show_service_area_geoms? || show_plants?
-  end
-
-  def show_peers_by_service_area_geoms?
-    @show_peers_by_service_area_geoms ||= peers_by_service_area_geoms.any?
-  end
-
-  def show_grid_utilities?
-    @show_grid_utilities ||= grid&.reporting_entities&.exists?
-  end
-
-  def show_rates?
-    @show_rates ||= electric_rates&.any? do |rate|
-      rate.residential_rate || rate.commercial_rate || rate.industrial_rate
-    end
-  end
-
-  def show_generation?
-    @show_generation ||= show_monthly_generation? || show_yearly_generation?
-  end
-
-  def show_yearly_generation?
-    @show_yearly_generation ||= plants&.any? && plants.flat_map(&:yearly_generations)&.any?
-  end
-
-  def show_monthly_generation?
-    @show_monthly_generation ||= plants&.any? && plants.flat_map(&:monthly_generations)&.any?
-  end
-
-  def show_capacity?
-    @show_capacity ||= plants&.any? && plants.flat_map(&:capacities)&.any?
-  end
-
-  def show_sales?
-    @show_sales ||= sales&.exists?
-  end
-
-  def show_bulk_fuel_facilities?
-    @show_bulk_fuel_facilities ||= bulk_fuel_facilities.exists?
-  end
-
-  def show_bulk_fuel_capacity_chart?
-    capacity_fields = %i[gasoline_capacity diesel_capacity jet_fuel_capacity other_fuel_capacity]
-    @show_bulk_fuel_capacity_chart ||= bulk_fuel_facilities.any? { |b| capacity_fields.any? { |field| b[field].present? } }
-  end
-
-  def show_electricity_section?
-    @show_electricity_section ||= show_utilities? || show_rates? || show_generation? || show_capacity? || show_sales? || show_bulk_fuel_facilities?
-  end
-
-  # --- Prices Section ---
-  def show_fuel_prices?
-    @show_fuel_prices ||= fuel_prices.exists?
-  end
-
-  def show_prices_section?
-    @show_prices_section ||= show_fuel_prices?
-  end
-
-  # --- Income Section ---
-  def show_household_income?
-    @show_household_income ||= household_incomes.any?
-  end
-
-  def show_income_poverty?
-    @show_income_poverty ||= income_poverties.any?
-  end
-
-  def show_income?
-    @show_income ||= show_household_income? || show_income_poverty?
-  end
-
-  # --- Background Section ---
-  def show_geography?
-    @show_geography ||= community_grids.any?
+  # --- General Tab: this tab will always be shown ---
+  def show_school_districts?
+    @show_school_districts ||= school_districts.exists?
   end
 
   def show_transportation?
@@ -249,35 +137,113 @@ class Community < ApplicationRecord
   end
 
   def show_senate_districts?
-    @show_senate_districts ||= senate_districts.any?
+    @show_senate_districts ||= senate_districts.exists?
   end
 
   def show_house_districts?
-    @show_house_districts ||= house_districts.any?
+    @show_house_districts ||= house_districts.exists?
+  end
+
+  # --- Power Generation Tab ---
+  def show_power_generation_tab?
+    @show_power_generation_tab ||= show_utilities? || show_generation? || show_capacity?
+  end
+
+  def show_utilities?
+    @show_utilities ||= show_service_areas? || show_plants?
+  end
+
+  def show_service_areas?
+    @show_service_areas ||= service_areas.exists?
+  end
+
+  def show_full_service_area?
+    @show_full_service_area ||= service_area_geoms.with_full_service_area.exists?
+  end
+
+  def show_plants?
+    @show_plants ||= plants.exists?
+  end
+
+  def show_utility_map_layers?
+    @show_utility_map_layers ||= show_service_areas? || show_plants?
+  end
+
+  def show_generation?
+    @show_generation ||= show_monthly_generation? || show_yearly_generation?
+  end
+
+  def show_yearly_generation?
+    @show_yearly_generation ||= yearly_generations.exists?
+  end
+
+  def show_monthly_generation?
+    @show_monthly_generation ||= monthly_generations.exists?
+  end
+
+  def show_capacity?
+    @show_capacity ||= capacities.exists?
+  end
+
+  # --- Rates & Sales Tab ---
+  def show_sales_rates_tab?
+    @show_sales_rates_tab ||= show_sales? || show_rates?
+  end
+
+  def show_rates?
+    @show_rates ||= electric_rates.with_rates.exists?
+  end
+
+  def show_sales?
+    @show_sales ||= sales.exists?
+  end
+
+  # --- Fuel Tab ---
+  def show_fuel_tab?
+    @show_fuel_tab ||= show_fuel_prices? || show_bulk_fuel_facilities?
+  end
+
+  def show_fuel_prices?
+    @show_fuel_prices ||= fuel_prices.exists?
+  end
+
+  def show_bulk_fuel_facilities?
+    @show_bulk_fuel_facilities ||= bulk_fuel_facilities.exists?
+  end
+
+  def show_bulk_fuel_capacity_chart?
+    @show_bulk_fuel_capacity_chart ||= bulk_fuel_facilities.with_capacity.exists?
+  end
+
+  # --- Demographics Tab ---
+  def show_demographics_tab?
+    @show_demographics_tab ||= show_population? || show_employment?
   end
 
   def show_population?
-    @show_population ||= show_population_age_sexes? || show_employment?
-  end
-
-  def show_school_districts?
-    @show_school_districts ||= school_districts.exists?
-  end
-
-  def show_background_section?
-    @show_background_section ||= show_transportation? || show_legislative_districts? || show_population?
-  end
-
-  def show_heating_degree_days?
-    @show_heating_degree_days ||= heating_degree_days.present?
-  end
-
-  def show_population_age_sexes?
-    @show_population_age_sexes ||= population_age_sexes.exists?
+    @show_population ||= population_age_sexes.exists?
   end
 
   def show_employment?
     @show_employment ||= employments.exists?
+  end
+
+  # --- Income Tab/Section ---
+  def show_income?
+    @show_income ||= show_household_income? || show_income_poverty?
+  end
+
+  def show_household_income?
+    @show_household_income ||= household_incomes.exists?
+  end
+
+  def show_income_poverty?
+    @show_income_poverty ||= income_poverties.exists?
+  end
+
+  # --- Others ---
+  def show_heating_degree_days?
+    @show_heating_degree_days ||= heating_degree_days.exists?
   end
 
   def self.global_search_suggestions(term)

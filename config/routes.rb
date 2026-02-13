@@ -16,6 +16,14 @@ Rails.application.routes.draw do
     end
 
     resources :communities, only: %i[index show] do
+      member do
+        get :general
+        get :power_generation, path: "power-generation"
+        get :electric_rates_sales, path: "electric-rates-sales"
+        get :fuel
+        get :demographics
+        get :income
+      end
       resources :charts, only: [], controller: "communities/charts", defaults: { format: :json } do
         collection do
           get :generation_monthly

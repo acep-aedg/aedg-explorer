@@ -1,0 +1,40 @@
+- parent_tab = 'demographics'
+
+-# --- Section Body ---
+.section-body.m-1.m-md-2.m-lg-4.mt-3
+  - if @community.show_population?
+    - population_periods = @community.population_age_sexes.order(end_year: :desc)
+    - most_recent_population = population_periods.first
+    - selected_end_year = most_recent_population.end_year
+    - population_period = population_periods.find { |p| p.end_year == selected_end_year } || most_recent_population
+    
+    - gender_periods = population_periods.select { |p| p.e_pop_male.present? && p.e_pop_female.present? }
+    - gender_selected_period = gender_periods.find { |p| p.end_year == selected_end_year } || gender_periods.first
+
+    .mb-4
+      = render "communities/#{parent_tab}/population/estimated_population",
+        population_period: population_period,
+        most_recent_population: most_recent_population
+    
+    -# Main Data Card
+    .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
+      - 
+      .row.g-4
+        .col-12.col-xl-8
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-bar-chart-steps.me-2.text-primary
+            %h5.mb-0.fw-bold Age Distribution
+          = render "communities/#{parent_tab}/population/population_age_chart", population_periods: population_periods, selected_period: population_period
+        
+        .col-12.col-xl-4.border-start-xl
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-gender-ambiguous.me-2.text-primary
+            %h5.mb-0.fw-bold Gender Distribution
+          = render "communities/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
+
+      -# Data Table Section
+      .pt-4.border-top.mt-5
+        .d-flex.align-items-center.mb-3
+          %i.bi.bi-table.me-2.text-primary
+          %h5.mb-0.fw-bold Population Data
+        = render "communities/#{parent_tab}/population/population_age_sex_datatable"

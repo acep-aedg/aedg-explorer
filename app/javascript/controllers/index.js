@@ -6,6 +6,7 @@ import { application } from "./application"
 
 import ChartController from "./chart_controller"
 application.register("chart", ChartController)
+
 import CopyController from "./copy_controller"
 application.register("copy", CopyController)
 
@@ -27,8 +28,17 @@ application.register("maps", MapsController)
 import OffcanvasGroupController from "./offcanvas_group_controller"
 application.register("offcanvas-group", OffcanvasGroupController)
 
+import ScrollController from "./scroll_controller"
+application.register("scroll", ScrollController)
+
+import ScrollspyController from "./scrollspy_controller"
+application.register("scrollspy", ScrollspyController)
+
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
+
+import TurboActiveLinkController from "./turbo_active_link_controller"
+application.register("turbo-active-link", TurboActiveLinkController)
 
 import WidgetUpdateController from "./widget_update_controller"
 application.register("widget-update", WidgetUpdateController)

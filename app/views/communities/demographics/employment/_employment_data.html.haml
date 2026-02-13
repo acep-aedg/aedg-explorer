@@ -1,0 +1,15 @@
+%div{ data: { controller: 'datatables', datatables: { order_value: [0, 'desc']} } }
+  %table.table.table-sm.table-stripped.border
+    %thead
+      %tr
+        %th Year
+        %th Residents Employed
+        %th Unemployment Insurance Claimants
+        
+    %tbody
+      - @community.employments.each do |row|
+        %tr
+          %td= row.measurement_year
+          %td= row.residents_employed
+          %td= row.unemployment_insurance_claimants
+          

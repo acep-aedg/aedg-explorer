@@ -2,14 +2,13 @@
 require "net/http"
 require "uri"
 namespace :communities do
-  desc "Check community show pages render without error"
+  desc "Check community show pages render or redirect without error"
   task test_show_view: :environment do
     include Rails.application.routes.url_helpers
 
     Rails.application.routes.default_url_options[:host] = "localhost:3000"
 
     failed = []
-
     puts "Checking community show pages..."
 
     Community.find_each do |community|
@@ -18,12 +17,13 @@ namespace :communities do
       begin
         response = Net::HTTP.get_response(url)
 
-        if response.code != "200"
-          puts "Failed: #{community.name} (#{community.fips_code}): HTTP #{response.code}, Message: #{response.message}"
+        # Updated: Accept 200 (Success) or 303 (Redirect)
+        unless %w[200 303].include?(response.code)
+          puts "Failed: #{community.name} (#{community.fips_code}): HTTP #{response.code}"
           failed << { name: community.name, fips: community.fips_code, code: response.code }
         end
       rescue StandardError => e
-        puts "#{community.name} (#{community.fips_code}): #{e.message}"
+        puts "Error: #{community.name} (#{community.fips_code}): #{e.message}"
         failed << { name: community.name, fips: community.fips_code, error: e.message }
       end
     end
