@@ -1,3 +1,4 @@
+-# locals: service_area_label
 .p-4.border.rounded-3.bg-white.h-100.shadow-sm
   .d-flex.align-items-center.mb-3.border-bottom.pb-2
     %i.bi.bi-info-circle.me-2.text-primary
@@ -8,7 +9,7 @@
     .mb-4
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers
-        %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Entities providing services in this service area (local)" }
+        %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Entities providing services in this #{service_area_label.downcase}" }
       %ul.list-unstyled.mt-1
         - @community.service_areas.each do |sa|
           %li.d-flex.align-items-center.mb-2

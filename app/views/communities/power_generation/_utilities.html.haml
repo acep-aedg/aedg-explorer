@@ -1,8 +1,8 @@
 - parent_tab = 'power_generation'
-
+- service_area_label = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
 - map_buttons = [ |
     { |
-      label: (@community.show_full_service_area? ? "Local Service Area" : "Service Area"), |
+      label: service_area_label, |
       url: service_area_geoms_community_maps_path(@community), |
       icon: 'bounding-box', |
       id: 'layer-service-area-local', |
@@ -32,8 +32,8 @@
 
   .row.g-4
     %div{ class: has_peers ? "col-12 col-lg-8" : "col-12" }
-      = render "communities/#{parent_tab}/utilities/service_area_card"
+      = render "communities/#{parent_tab}/utilities/service_area_card", service_area_label: service_area_label
 
     - if has_peers
       .col-12.col-lg-4
-        = render "communities/#{parent_tab}/utilities/nearby_communities_card", peers: @community.peer_communities
+        = render "communities/#{parent_tab}/utilities/nearby_communities_card", peers: @community.peer_communities, service_area_label: service_area_label

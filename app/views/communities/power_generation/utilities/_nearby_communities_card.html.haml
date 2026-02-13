@@ -4,7 +4,7 @@
     %h5.mb-0.fw-bold Nearby Communities
   
   %p.small.text-muted.mb-3 
-    Sharing the same service area:
+    Sharing the same #{service_area_label.downcase}:
     
   -# Logic: If more than 15, use 2 columns on large screens (col-lg-6)
   - column_class = peers.size > 15 ? "col-lg-6" : "col-lg-12"
