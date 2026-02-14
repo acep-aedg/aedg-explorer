@@ -13,10 +13,8 @@
       .col-auto.main_nav_sidebar.p-3
         %h2.fw-bold.mb-1 Community Explorer
         %p.text-muted Filter communities by specific criteria.
-        .p-0
-          = render 'searches/advanced/search_input', name: :q_global
-          .mt-3
-            = render 'searches/advanced/sidebar_nav'
+        .mt-3
+          = render 'searches/advanced/sidebar_nav'
 
       .col.main_results_area.ps-3
         .panel-container

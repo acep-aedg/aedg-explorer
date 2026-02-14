@@ -97,3 +97,13 @@
 .results-view {
   position: relative;
 }
+
+#sidebar_content_frame {
+  display: block;
+  min-height: 200px; /* Prevents the layout from jumping when results load */
+}
+
+.list-group-item-action:hover {
+  background-color: #f8f9fa;
+  color: #002D56; /* Brand Blue */
+}

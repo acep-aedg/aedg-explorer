@@ -21,18 +21,47 @@ def advanced
       pagy_item, items = pagy(scope, page_param: "page_#{facet[:prefix]}")
       facet.merge(items: items, pagy: pagy_item)
     end
+    # NEW: Global Filter Search Logic
+    @global_search_results = []
+    if params[:q_global].present?
+      query = params[:q_global].downcase
+      
+      Community.advanced_search_facets.each do |facet|
+        model = facet[:model]
+        # Determine the correct column to search (name or district)
+        search_col = model.column_names.include?('name') ? 'name' : 'district'
+        
+        # Run the query safely using the correct column
+        matches = model.where("LOWER(CAST(#{search_col} AS TEXT)) LIKE ?", "%#{query}%").limit(5)
+
+        matches.each do |match|
+          @global_search_results << {
+            label: match.respond_to?(:name) ? match.name : "District #{match.district}",
+            category: facet[:title],
+            param_key: facet[:param],
+            value: match.send(facet[:lookup])
+          }
+      end
+    end
+  end
+
+
 
     prepare_active_filters
 
     respond_to do |format|
       format.html
       format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.replace("results_frame", partial: "searches/advanced/results"),
-          turbo_stream.replace("search_panels_content", partial: "searches/advanced/panels"),
-          # TODO look into moveing active filters
-          turbo_stream.replace("active_filters", partial: "searches/advanced/sidebar_nav")
-        ]
+      render turbo_stream: [
+        # Updates the map and community cards
+        turbo_stream.replace("results_frame", partial: "searches/advanced/results"),
+        
+        # Updates the WHOLE sidebar (badges + resets buttons)
+        turbo_stream.replace("sidebar_nav", partial: "searches/advanced/sidebar_nav"),
+        
+        # Updates the off-canvas panels
+        turbo_stream.replace("search_panels_content", partial: "searches/advanced/panels")
+      ]
       end
     end
   end
@@ -66,6 +95,7 @@ def advanced
   def extract_filters
     {
       q: params[:q],
+      # Using Array() ensures that even a single ID is treated as a list
       grid_ids: Array(params[:grid_ids]).compact_blank,
       borough_fips_codes: Array(params[:borough_fips_codes]).compact_blank,
       regional_corporation_fips_codes: Array(params[:regional_corporation_fips_codes]).compact_blank,

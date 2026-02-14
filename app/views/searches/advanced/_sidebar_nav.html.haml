@@ -1,22 +1,40 @@
-.mb-4.mt-0
-  -# TODO: move active filters here 
-  -# = render 'searches/advanced/active_filters'
-  
-- if params[:q_global].present?
-  .list-group.list-group-flush
-    - if @global_search_results&.any?
-      .p-2.small.text-muted.fw-bold Found #{@global_search_results.count} matches:
-      - @global_search_results.each do |res|
-        = link_to request.query_parameters.merge(res[:param_key] => (Array(params[res[:param_key]]) + [res[:value].to_s]).uniq, expanded: nil).except(:q_global),
-            class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3",
-            data: { turbo_frame: "_top" } do
-          %div
-            .fw-bold.text-dark= res[:label]
-            .small.text-muted= res[:category]
-          %i.bi.bi-plus-circle.text-primary
-    - else
-      .p-4.text-center.text-muted
-        %i.bi.bi-search.display-6.mb-3
-        %p No filters found matching "#{params[:q_global]}"
-- else
-  = render 'searches/advanced/nav_buttons'
+#sidebar_nav
+  -# 1. SEARCH INPUT
+  .mb-3
+    = render 'searches/advanced/search_input',
+      url: search_advanced_path,
+      name: :q_global,
+      placeholder: "Search all filters...",
+      frame: "sidebar_nav_content"
+
+  -# 2. DYNAMIC FRAME
+  = turbo_frame_tag "sidebar_nav_content" do
+    - if params[:q_global].present?
+      -# Compact Results Container
+      .global-results-list.mb-3.border-bottom.pb-2
+        %p.text-uppercase.fw-bold.text-muted.mb-2{style: "font-size: 0.7rem; letter-spacing: 0.05rem;"} 
+          Matches for "#{params[:q_global]}"
+        
+        - if @global_search_results&.any?
+          - @global_search_results.each do |res|
+            - param_key = res[:param_key]
+            - val = res[:value].to_s
+            - selected_ids = Array(params[param_key]).map(&:to_s)
+            - checkbox_id = "global_#{res[:category].parameterize}_#{val}"
+
+            .form-check.d-flex.align-items-start.mb-1.py-1
+              = check_box_tag "#{param_key}[]", val, selected_ids.include?(val),
+                  id: checkbox_id,
+                  class: 'form-check-input flex-shrink-0 mt-1',
+                  form: 'filter-form',
+                  data: { action: "change->search-panels#autoSubmit" }
+              
+              = label_tag checkbox_id, class: 'form-check-label ms-2 lh-sm' do
+                .fw-semibold.text-dark{style: "font-size: 0.85rem;"}= res[:label]
+                .text-muted{style: "font-size: 0.75rem;"}= res[:category]
+        - else
+          .py-2.small.text-muted No matching filters.
+
+    -# 3. NAVIGATION BUTTONS (Always visible below)
+    .nav-buttons-list
+      = render 'searches/advanced/nav_buttons'
