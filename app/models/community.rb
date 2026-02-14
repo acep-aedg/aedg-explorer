@@ -93,6 +93,27 @@ class Community < ApplicationRecord
     ]
   end
 
+  def self.search_facets_globally(query)
+    return [] if query.blank?
+    
+    results = []
+    advanced_search_facets.each do |facet|
+      model = facet[:model]
+      search_col = model.column_names.include?('name') ? 'name' : 'district'
+      matches = model.where("#{model.table_name}.#{search_col} ILIKE ?", "%#{query}%").limit(5)
+
+      matches.each do |match|
+        results << {
+          label: facet[:label_method].is_a?(Proc) ? facet[:label_method].call(match) : match.send(facet[:label_method]),
+          category: facet[:title],
+          param_key: facet[:param],
+          value: match.send(facet[:lookup])
+        }
+      end
+    end
+    results
+  end
+
   def grid
     community_grids.find_by(termination_year: 9999)&.grid
   end
@@ -288,22 +309,5 @@ class Community < ApplicationRecord
 
   def show_employment?
     @show_employment ||= employments.exists?
-  end
-
-  def self.global_search_suggestions(term)
-    return [] if term.blank?
-
-    results = []
-    sql_term = "%#{term}%"
-    results += Grid.where("name ILIKE ?", sql_term).limit(5).map { |r| { label: r.name, category: "Electric Grid", param_key: :grid_ids, value: r.id } }
-    results += Borough.where("name ILIKE ?", sql_term).limit(5).map { |r| { label: r.name, category: "Borough", param_key: :borough_fips_codes, value: r.fips_code } }
-    results += RegionalCorporation.where("name ILIKE ?", sql_term).limit(5).map do |r|
-      { label: r.name, category: "Regional Corp", param_key: :regional_corporation_fips_codes, value: r.fips_code }
-    end
-    results += SenateDistrict.where("district ILIKE ?", sql_term).limit(5).map do |r|
-      { label: "District #{r.district}", category: "Senate District", param_key: :senate_district_ids, value: r.id }
-    end
-    results += HouseDistrict.where("name ILIKE ?", sql_term).limit(5).map { |r| { label: "District #{r.name}", category: "House District", param_key: :house_district_ids, value: r.id } }
-    results
   end
 end
