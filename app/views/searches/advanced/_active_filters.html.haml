@@ -1,32 +1,23 @@
-%div#active_filters_frame
+%div#active_filters_frame.d-flex.flex-wrap.align-items-center.justify-content-left.gap-1
   - base_params = request.query_parameters.except(:expanded)
-  - badge_style = "badge text-dark border text-decoration-none d-flex align-items-center p-2"
   
-  .d-flex.flex-wrap.gap-2
-    - if params[:q].present?
-      = link_to search_advanced_path(base_params.except(:q)), 
-                class: "#{badge_style} bg-light", 
-                data: { turbo_frame: "results_frame" } do
+  -# TRASH 
+  - if @active_badges&.any? || params[:q].present?
+    = link_to search_advanced_path, class: "btn btn-outline-danger btn-sm border-0 px-2 py-1", title: "Clear all filters", data: { turbo_frame: "results_frame", action: "click->search-panels#clearAllFilters" } do
+      %i.bi.bi-trash3-fill
+
+  -# SEARCH Results 
+  - if params[:q].present?
+    .badge-wrapper
+      = link_to search_advanced_path(base_params.except(:q)), data: { turbo_frame: "results_frame" } do
         %span.me-2
           %span.text-muted Search:
           = params[:q]
-        %i.bi.bi-x-lg.text-muted{ style: "font-size: 10px;" }
-
-    - @active_badges&.each do |badge|
-      = link_to badge[:url], 
-                class: badge_style, 
-                data: { turbo_frame: "results_frame", 
-                        action: "click->search-panels#uncheckSpecific", 
-                        search_panels_id_param: badge[:checkbox_id] } do
-        %span.me-2= badge[:label]
         %i.bi.bi-x-lg
-            
-    -# Clear All Button
-    -# Appears only if there is an active text search OR active facet filters
-    - if @active_badges&.any? || params[:q].present?
-      %button.btn.btn-outline-danger.btn-sm.w-100.mt-3.d-flex.align-items-center.justify-content-between{ |
-        type: "button", |
-        data: { action: "click->search-panels#clearAllFilters" } |
-      }
-        %span Clear all filters
-        %i.bi.bi-trash
+
+  -# FACET BADGES (Boroughs, etc.)
+  - @active_badges&.each do |badge|
+    .badge-wrapper
+      = link_to badge[:url], data: { turbo_frame: "results_frame", action: "click->search-panels#uncheckSpecific", search_panels_id_param: badge[:checkbox_id] } do
+        %span.me-1= badge[:label]
+        %i.bi.bi-x-lg

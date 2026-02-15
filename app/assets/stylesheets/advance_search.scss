@@ -104,6 +104,66 @@
 }
 
 .list-group-item-action:hover {
-  background-color: #f8f9fa;
   color: #002D56; /* Brand Blue */
+}
+
+/* The container stays still */
+.active-filters-shelf.full-width-shelf {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: -85px;
+  margin-bottom: 1vh;
+  padding-bottom: 1vh;
+  padding-left: 1vh;
+  background-color: white;
+  border: 2px solid rgba($aedg-navy, 0.1);
+  border-radius: 12px;
+}
+
+.badge-wrapper {
+  background-color: $aedg-navy;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid darken($aedg-navy, 5%);
+  border-radius: 6px;
+  padding: 4px 10px;
+  transform-origin: center;
+  transition: all 0.2s ease;
+  animation: badgePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+  a {
+    text-decoration: none;
+    color: $aedg-yellow;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+
+    .text-muted {
+      // Make the "Search:" label a lighter gold so it doesn't compete
+      color: rgba($aedg-yellow, 0.7) !important;
+    }
+  }
+
+  i.bi-x-lg {
+    color: $aedg-yellow;
+  }
+
+  &:hover {
+    i.bi-x-lg {
+      transform: scale(1.5);
+      font-weight: 900 !important; 
+      /* The "Secret Sauce" for extra thickness */
+      -webkit-text-stroke: 1px $aedg-yellow; 
+      /* Optional: smoothing for the stroke */
+      -webkit-font-smoothing: antialiased;
+    }
+
+  }
+}
+
+/* Ensure the title doesn't move when row wraps */
+.w-100.text-center {
+  flex: 0 0 100%; /* Force title to take up its own row */
 }
