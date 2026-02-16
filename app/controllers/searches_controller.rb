@@ -14,33 +14,33 @@ class SearchesController < ApplicationController
 
   def advanced
     # --- MAIN COMMUNITY SEARCH ---
-    @pagy, @communities = pagy(:offset, build_scope(extract_filters), page_key: 'page')
+    @pagy, @communities = pagy(:offset, build_scope(extract_filters), page_key: "page")
 
     # --- SIDEBAR FACETS ---
     @pagy_grids, @current_grids = pagy(
-      :offset, 
-      Grid.filter_by_params(params, :q_grid, :alpha_grid), 
-      page_key: 'page_grid' 
+      :offset,
+      Grid.filter_by_params(params, :q_grid, :alpha_grid),
+      page_key: "page_grid"
     )
     @pagy_boros, @current_boros = pagy(
       :offset,
       Borough.filter_by_params(params, :q_boro, :alpha_boro),
-      page_key: 'page_boro'
+      page_key: "page_boro"
     )
     @pagy_corps, @current_corps = pagy(
       :offset,
       RegionalCorporation.filter_by_params(params, :q_corp, :alpha_corp),
-      page_key: 'page_corp'
+      page_key: "page_corp"
     )
     @pagy_senate, @current_senate = pagy(
       :offset,
       SenateDistrict.filter_by_params(params, :q_senate, :alpha_senate, :district),
-      page_key: 'page_senate'
+      page_key: "page_senate"
     )
     @pagy_house, @current_house = pagy(
       :offset,
       HouseDistrict.filter_by_params(params, :q_house, :alpha_house, :district),
-      page_key: 'page_house'
+      page_key: "page_house"
     )
   end
 
