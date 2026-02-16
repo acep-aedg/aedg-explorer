@@ -76,9 +76,26 @@
   color: #0d6efd !important;
 }
 
-.small-pagy .pagination {
-  transform: scale(0.9);
-  margin-bottom: 0;
+.small-pagy {
+  .pagination {
+    margin-bottom: 0;
+    
+    .page-item.active .page-link {
+      background-color: $aedg-navy !important;
+      border-color: $aedg-navy !important;
+      color: $aedg-yellow !important;
+    }
+    
+    .page-link {
+      color: $aedg-navy;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      
+      &:hover {
+        background-color: rgba($aedg-navy, 0.1);
+      }
+    }
+  }
 }
 
 .facet-panel.panel-visible {
