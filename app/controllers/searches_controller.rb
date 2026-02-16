@@ -16,24 +16,24 @@ class SearchesController < ApplicationController
     @pagy, @communities = pagy(build_scope(extract_filters), page_param: :page)
 
     @facet_panels = Community.advanced_search_facets.map do |facet|
-      col = (facet[:prefix] =~ /senate|house/) ? :district : :name
+      col = facet[:prefix] =~ /senate|house/ ? :district : :name
       scope = facet[:model].filter_by_params(params, "q_#{facet[:prefix]}", "alpha_#{facet[:prefix]}", col)
       pagy_item, items = pagy(scope, page_param: "page_#{facet[:prefix]}")
       facet.merge(items: items, pagy: pagy_item)
     end
 
     @global_search_results = Community.search_facets_globally(params[:q_global])
-    
+
     prepare_active_filters
 
     respond_to do |format|
       format.html
       format.turbo_stream do
-      render turbo_stream: [
-        turbo_stream.replace("results_frame", partial: "searches/advanced/results"),
-        turbo_stream.replace("sidebar_nav", partial: "searches/advanced/sidebar_nav"),
-        turbo_stream.replace("search_panels_content", partial: "searches/advanced/panels")
-      ]
+        render turbo_stream: [
+          turbo_stream.replace("results_frame", partial: "searches/advanced/results"),
+          turbo_stream.replace("sidebar_nav", partial: "searches/advanced/sidebar_nav"),
+          turbo_stream.replace("search_panels_content", partial: "searches/advanced/panels")
+        ]
       end
     end
   end
@@ -45,32 +45,43 @@ class SearchesController < ApplicationController
     base_params = request.query_parameters.except(:expanded)
 
     Community.advanced_search_facets.each do |facet|
-      next unless params[facet[:param]].present?
+      param_values = Array(params[facet[:param]]).compact_blank
+      next if param_values.empty?
 
-      facet[:model].where(facet[:lookup] => params[facet[:param]]).each do |item|
-        val = item.send(facet[:lookup]).to_s
-        lbl = if facet[:label_method].is_a?(Proc)
-                facet[:label_method].call(item)
-              else
-                item.send(facet[:label_method])
-              end
-
-        @active_badges << {
-          label: lbl,
-          checkbox_id: "#{facet[:prefix]}_#{val}",
-          url: search_advanced_path(base_params.merge(facet[:param] => Array(params[facet[:param]]) - [val]))
-        }
+      facet[:model].where(facet[:lookup] => param_values).find_each do |item|
+        @active_badges << badge_for(item, facet, base_params)
       end
+    end
+  end
+
+  def badge_for(item, facet, base_params)
+    val = item.public_send(facet[:lookup]).to_s
+
+    {
+      label: badge_label(item, facet),
+      checkbox_id: "#{facet[:prefix]}_#{val}",
+      url: search_advanced_path(base_params.merge(
+        # Added .map(&:to_s) to ensure the subtraction works!
+        facet[:param] => Array(params[facet[:param]]).map(&:to_s) - [val]
+      ))
+    }
+  end
+
+  def badge_label(item, facet)
+    if facet[:label_method].is_a?(Proc)
+      facet[:label_method].call(item)
+    else
+      item.public_send(facet[:label_method])
     end
   end
 
   def extract_filters
     filters = { q: params[:q] }
-    
+
     Community.advanced_search_facets.each do |facet|
       filters[facet[:param]] = Array(params[facet[:param]]).compact_blank
     end
-    
+
     filters
   end
 
@@ -78,9 +89,7 @@ class SearchesController < ApplicationController
     # base scope
     base = Community.preload(:borough, :regional_corporation, :grids, :senate_districts, :house_districts)
     # Text search (pg_search_scope)
-    if filters[:q].present?
-      base = base.search_full_text(filters[:q]).reorder("communities.name ASC")
-    end
+    base = base.search_full_text(filters[:q]).reorder("communities.name ASC") if filters[:q].present?
     # Apply filters
     base = base.in_boroughs(filters[:borough_fips_codes])           if filters[:borough_fips_codes].present?
     base = base.in_corps(filters[:regional_corporation_fips_codes]) if filters[:regional_corporation_fips_codes].present?

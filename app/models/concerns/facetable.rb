@@ -2,18 +2,16 @@ module Facetable
   extend ActiveSupport::Concern
 
   class_methods do
-    def filter_by_params(params, search_key, alpha_key, sort_col = :name)
-      results = reorder(sort_col => :asc)
-      
-      if params[search_key].present?
-        results = results.where("#{table_name}.#{sort_col} ILIKE ?", "%#{params[search_key]}%")
-      end
+    def filter_by_params(params, search_key, alpha_key, sort_col)
+      # arel_table works on the class level to safely reference columns
+      column = arel_table[sort_col]
+      query = reorder(sort_col => :asc)
 
-      if params[alpha_key].present?
-        results = results.where("#{table_name}.#{sort_col} ILIKE ?", "#{params[alpha_key]}%")
-      end
+      query = query.where(column.matches("%#{params[search_key]}%")) if params[search_key].present?
 
-      results
+      query = query.where(column.matches("#{params[alpha_key]}%")) if params[alpha_key].present?
+
+      query
     end
   end
 end

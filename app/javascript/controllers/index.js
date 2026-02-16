@@ -25,9 +25,6 @@ application.register("lightbox", LightboxController)
 import MapsController from "./maps_controller"
 application.register("maps", MapsController)
 
-import OffcanvasGroupController from "./offcanvas_group_controller"
-application.register("offcanvas-group", OffcanvasGroupController)
-
 import ScrollController from "./scroll_controller"
 application.register("scroll", ScrollController)
 
