@@ -34,7 +34,16 @@
         .text-center.py-4.small.text-muted No results found.
 
     .facet-alphabet-nav.d-flex.flex-column.align-items-center.bg-light.border-start
+      -# RESET BUTTON: Clears the alphabetical filter for this specific panel
+      = link_to search_advanced_path(params.permit!.merge(:"alpha_#{id_prefix}" => nil, expanded: panel[:id])),
+        class: "alphabet-link fw-bold text-decoration-none text-aedg-navy mb-2",
+        title: "Reset to All",
+        data: { turbo_frame: frame_id } do
+        %i.bi.bi-arrow-clockwise{ style: "font-size: 1.1rem; -webkit-text-stroke: 0.5px;" }
+
+      -# A-Z LINKS
       - ('A'..'Z').each do |letter|
+        - is_active = params[:"alpha_#{id_prefix}"] == letter
         = link_to letter, search_advanced_path(params.permit!.merge(:"alpha_#{id_prefix}" => letter, expanded: panel[:id])),
-          class: "alphabet-link fw-bold text-decoration-none text-muted",
+          class: "alphabet-link fw-bold text-decoration-none #{is_active ? 'text-aedg-navy' : 'text-muted'}",
           data: { turbo_frame: frame_id }
