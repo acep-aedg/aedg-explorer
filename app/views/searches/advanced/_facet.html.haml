@@ -45,5 +45,5 @@
       - ('A'..'Z').each do |letter|
         - is_active = params[:"alpha_#{id_prefix}"] == letter
         = link_to letter, search_advanced_path(params.permit!.merge(:"alpha_#{id_prefix}" => letter, expanded: panel[:id])),
-          class: "alphabet-link fw-bold text-decoration-none #{is_active ? 'text-aedg-navy' : 'text-muted'}",
+          class: "alphabet-link fw-bold text-decoration-none #{'active' if is_active}",
           data: { turbo_frame: frame_id }

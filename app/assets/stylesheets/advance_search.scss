@@ -66,20 +66,23 @@
 
 .alphabet-link {
   transition: color 0.2s ease;
+  color: #6c757d; 
+  cursor: pointer;
 
   i.bi-arrow-clockwise {
     display: inline-block;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
-    color: $aedg-navy;
-    -webkit-text-stroke: 0.5px $aedg-navy;
+    color: #6c757d; 
+    -webkit-text-stroke: 0.5px #6c757d;
   }
 
-  &:hover {
+  // Hover and Active both use Gold
+  &:hover, &.active {
     color: $aedg-yellow !important;
-
+    
     i.bi-arrow-clockwise {
       transform: rotate(-180deg);
-      color: $aedg-yellow; 
+      color: $aedg-yellow !important; 
       -webkit-text-stroke: 0.5px $aedg-yellow;
     }
   }
