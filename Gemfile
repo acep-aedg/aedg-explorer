@@ -96,6 +96,6 @@ gem "rubocop-rails", require: false
 gem "brakeman", "~> 8.0"
 gem "kramdown"
 gem "kramdown-parser-gfm"
-gem "pagy", "~> 6.4"
+gem 'pagy', '43.2.9'
 gem "rubyzip", ">= 2.3.0"
 gem "simplecov", require: false, group: :test
