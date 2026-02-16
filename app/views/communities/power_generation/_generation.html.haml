@@ -1,0 +1,47 @@
+- parent_tab = 'power_generation'
+- show_monthly_gen = @community.show_monthly_generation?
+- show_yearly_gen = @community.show_yearly_generation?
+
+.section-body.m-1.m-md-2.m-lg-4.mt-3
+  - if show_monthly_gen && show_yearly_gen
+    .mb-4
+      %ul.nav.nav-pills.bg-white.p-1.rounded-3.border.d-inline-flex
+        %li.nav-item
+          = link_to "#yearly-gen-pane", class: "nav-link active px-4", data: { bs_toggle: "tab" } do
+            %i.bi.bi-calendar-event.me-1
+            Yearly
+        
+        %li.nav-item
+          = link_to "#monthly-gen-pane", class: "nav-link px-4", data: { bs_toggle: "tab" } do
+            %i.bi.bi-calendar3.me-1
+            Monthly
+
+  .tab-content
+    - if show_yearly_gen
+      #yearly-gen-pane.tab-pane.fade.show.active
+        .row
+          .col-12
+            .p-4.border.rounded-3.bg-white.shadow-sm
+              .mb-4
+                = render "communities/#{parent_tab}/generation/yearly_chart"
+              
+              .pt-4.border-top
+                .d-flex.align-items-center.mb-3
+                  %i.bi.bi-table.me-2.text-primary
+                  %h5.mb-0.fw-bold Yearly Generation Data
+                = render "communities/#{parent_tab}/generation/yearly_data"
+
+    - if show_monthly_gen
+      - monthly_active = !show_yearly_gen
+      #monthly-gen-pane.tab-pane.fade{ class: ("show active" if monthly_active) }
+        .row
+          .col-12
+            .p-4.border.rounded-3.bg-white.shadow-sm
+              .mb-4
+                = render "communities/#{parent_tab}/generation/monthly"
+              
+              .pt-4.border-top
+                .d-flex.align-items-center.mb-3
+                  %i.bi.bi-table.me-2.text-primary
+                  %h5.mb-0.fw-bold Monthly Generation Data
+                = render "communities/#{parent_tab}/generation/monthly_data"

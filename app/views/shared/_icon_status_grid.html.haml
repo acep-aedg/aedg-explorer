@@ -1,21 +1,21 @@
 -#
 -# Locals:
--#   title:   String
--#   fields:  Array<Symbol>
--#   source:  ActiveRecord source or Enumerable
+-#    title:   String
+-#    fields:  Array<Symbol>
+-#    source:  ActiveRecord source or Enumerable
 
-.container-fluid.bg-body-secondary.rounded.p-3.mb-3
-  .d-flex.flex-column.flex-md-row.align-items-center.justify-content-between.flex-wrap.gap-3
-    / --- Title Block ---
-    .d-flex.flex-column.text-center.text-md-start.me-md-4.pe-md-3.border-md-end.border-secondary-subtle
-      %h6.text-muted.mb-0.text-wrap
-        = title
+.p-4.bg-light.rounded-3.border.shadow-sm.border-primary-subtle.h-100
+  / --- Title ---
+  - if local_assigns[:title]
+    %h6.text-uppercase.text-secondary.ls-wide.small.fw-bold.mb-3
+      = title
 
-    / --- Icons and Fields ---
-    .d-flex.flex-wrap.justify-content-evenly.flex-grow-1.gap-3
-      - fields.each do |field_name|
-        - has_any  = source.is_a?(Enumerable) && source.any? { |o| o.respond_to?(field_name) && o.public_send(field_name) }
-        - value    = has_any || (source && source.respond_to?(field_name) && source.public_send(field_name))
-        .d-flex.flex-column.align-items-center.text-center.flex-fill
-          %i{ class: "bi #{value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'}" }
-          %small.mt-1= field_name.to_s.titleize
+  / --- Icons and Fields ---
+  .d-flex.flex-wrap.gap-2
+    - fields.each do |field_name|
+      - has_any = source.is_a?(Enumerable) && source.any? { |o| o.respond_to?(field_name) && o.public_send(field_name) }
+      - value   = has_any || (source && source.respond_to?(field_name) && source.public_send(field_name))
+      
+      .d-inline-flex.align-items-center.gap-2.px-3.py-2.rounded-3.border.bg-white{ class: value ? 'border-success-subtle' : 'border-danger-subtle' }
+        %i{ class: "bi #{value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'}" }
+        %span.fw-semibold.small= field_name.to_s.titleize

@@ -1,0 +1,39 @@
+- tabs = [ |
+  { label: "General", path: general_community_path(@community), visible: true }, |
+  { label: "Power Generation", path: power_generation_community_path(@community), visible: @community.show_power_generation_tab? }, |
+  { label: "Rates & Sales", path: electric_rates_sales_community_path(@community), visible: @community.show_sales_rates_tab? }, |
+  { label: "Fuel", path: fuel_community_path(@community), visible: @community.show_fuel_tab? }, |
+  { label: "Demographics", path: demographics_community_path(@community), visible: @community.show_demographics_tab? }, |
+  { label: "Income", path: income_community_path(@community), visible: @community.show_income? } |
+] |
+
+.sticky-top.bg-light.border-bottom.px-3.py-2{ style: "z-index: 1020;" }
+  .row.align-items-center.gy-2
+    -# Name & Metadata
+    .col.col-md-auto.flex-grow-1.order-0
+      .d-flex.align-items-center.gap-2
+        %i.bi.bi-geo-alt-fill.text-primary.fs-4
+        .d-flex.flex-column
+          %span.fw-bold.fs-4.lh-1= @community.name
+          .d-flex.align-items-center.gap-1.text-muted.mt-1{ style: "font-size: 0.9rem;" }
+            - if @community.borough.present? && !@community.borough.census_area?
+              %span.fw-semibold.text-secondary= @community.borough.name
+            - if @community.borough.present? && !@community.borough.census_area? && @community.grid.present?
+              %span.mx-1 &bull;
+            - if @community.grid.present?
+              = link_to @community.grid.name, grid_path(@community.grid), class: "text-info fw-semibold", data: { turbo: false }
+
+    -# Dropdown
+    .col-auto.col-md-auto.order-1.order-lg-2
+      .d-flex.justify-content-end
+        = render "shared/dropdown", collection: @communities
+
+    -# Tabs
+    .col-12.col-md-auto.order-2.order-lg-1
+      %ul.nav.nav-tabs.border-bottom-0.flex-wrap{ data: { controller: "turbo-active-link" } }
+        - tabs.each do |tab|
+          - if tab[:visible]
+            %li.nav-item
+              = link_to tab[:label], tab[:path],
+                        data: { turbo_active_link_target: "link", turbo_frame: "community_tab_content", turbo_action: "advance" },
+                        class: "nav-link py-2 px-2 px-lg-3 fs-6 fw-bold text-wrap bg-light "

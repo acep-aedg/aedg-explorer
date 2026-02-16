@@ -25,11 +25,26 @@ application.register("lightbox", LightboxController)
 import MapsController from "./maps_controller"
 application.register("maps", MapsController)
 
+import OffcanvasGroupController from "./offcanvas_group_controller"
+application.register("offcanvas-group", OffcanvasGroupController)
+
+import ScrollController from "./scroll_controller"
+application.register("scroll", ScrollController)
+
+import ScrollspyController from "./scrollspy_controller"
+application.register("scrollspy", ScrollspyController)
+
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
 
-import WidgetFilterController from "./widget_update_controller"
-application.register("widget-update", WidgetFilterController)
+import TurboActiveLinkController from "./turbo_active_link_controller"
+application.register("turbo-active-link", TurboActiveLinkController)
 
 import SearchPanelsController from "./search_panels_controller"
 application.register("search-panels", SearchPanelsController)
+
+import WidgetUpdateController from "./widget_update_controller"
+application.register("widget-update", WidgetUpdateController)
+
+import YearlyGenerationChartController from "./yearly_generation_chart_controller"
+application.register("yearly-generation-chart", YearlyGenerationChartController)

@@ -1,0 +1,21 @@
+%div{ data: { controller: 'datatables', datatables: { order_value: [5, 'asc'], scroll_x: true }}}
+  %table.table.table-sm.table-striped.border
+    %thead
+      %tr
+        %th FIPS
+        %th Fuel Type
+        %th Price Type
+        %th Source
+        %th Season
+        %th Year
+        %th Price (USD)
+    %tbody
+      - @community.fuel_prices.order(:reporting_year, :reporting_season).each do |fp|
+        %tr
+          %td= fp.community_fips_code
+          %td= fp.fuel_type.humanize
+          %td= fp.price_type.humanize
+          %td= fp.source
+          %td= fp.reporting_season
+          %td= fp.reporting_year
+          %td= number_to_currency(fp.price, unit: "$", precision: 2)

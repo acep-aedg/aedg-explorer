@@ -6,16 +6,20 @@ namespace :import do
     latest_str = DataPondVersion.latest&.current_version
     desired_str = Import::Versioning::DATA_POND_TAG
 
+    force_reimport = ENV["FORCE"] == "true"
+
     latest = Import::Versioning.to_gem_version(latest_str) if latest_str
     target = Import::Versioning.to_gem_version(desired_str)
 
-    if latest && latest == target
+    if !force_reimport && (latest == target)
       puts "✅ Data is current (DB=#{latest_str}, desired=#{desired_str}). Nothing to do."
       exit 0
     end
 
     if latest.nil?
       puts "🆕 Initial import to #{desired_str}."
+    elsif force_reimport
+      puts "🚀 FORCING re-import of #{desired_str} (current DB=#{latest_str || 'nil'})."
     elsif target > latest
       puts "⬆️  Upgrade: #{latest_str} → #{desired_str}."
     else

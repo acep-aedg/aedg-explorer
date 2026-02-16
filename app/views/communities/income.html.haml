@@ -1,0 +1,10 @@
+= turbo_frame_tag "community_tab_content" do
+  -if @community.show_income?
+    #income.mb-5
+      = render 'shared/section_header',
+        icon: 'cash-coin',
+        title: 'Income',
+        description: 'Household income distribution, median earnings, and poverty metrics',
+        anchor: '#income'
+      
+      = render "communities/income/income"

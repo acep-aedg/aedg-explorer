@@ -1,0 +1,17 @@
+- parent_tab = 'power_generation'
+
+-# --- Section Body ---
+.section-body.m-1.m-md-2.m-lg-4.mt-3
+  .row
+    .col-12
+      -# Main Chart Card
+      .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
+        .mb-4
+          = render "communities/#{parent_tab}/capacity/capacity_chart"
+        
+        -# Data Table Section
+        .pt-4.border-top
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-table.me-2.text-primary
+            %h5.mb-0.fw-bold Capacity Data
+          = render "communities/#{parent_tab}/capacity/capacity_data"

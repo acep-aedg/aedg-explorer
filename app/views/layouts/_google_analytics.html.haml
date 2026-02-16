@@ -1,13 +1,13 @@
-/ === Google Analytics (GA4) ===
-- if Rails.env.production?
-  %script{ async: true, src: "https://www.googletagmanager.com/gtag/js?id=G-6GQPN5BN10" }
+- if google_analytics_id.present?
+  / === Google Analytics (GA4) ===
+  %script{ async: true, src: "https://www.googletagmanager.com/gtag/js?id=#{google_analytics_id}" }
   %script
     :plain
       // Boot Google Analytics
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-6GQPN5BN10');
+      gtag('config', #{google_analytics_id});
 
       // Track page views with Turbolinks navigation
       document.addEventListener('turbolinks:load', function(event) {

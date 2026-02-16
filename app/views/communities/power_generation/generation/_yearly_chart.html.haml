@@ -1,0 +1,12 @@
+- base_title = "#{@community.name} - Generation by Energy Source"
+
+.chart-wrapper{ style: "height: 500px; width: 100%;" }
+  %canvas{ 
+    data: { 
+      controller: "yearly-generation-chart",
+      yearly_generation: {
+        chart_url_value: generation_yearly_community_charts_path(@community),
+        chart_title_value: base_title 
+      }
+    } 
+  }   

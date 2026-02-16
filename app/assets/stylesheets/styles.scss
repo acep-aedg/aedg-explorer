@@ -100,15 +100,32 @@
 .bg-aedg-navy {
   background-color: $aedg-navy;
 }
+
 .bg-aedg-yellow {
   background-color: $aedg-yellow;
+}
+
+.bg-aedg-navy-subtle {
+  background-color: rgba($aedg-navy, 0.15);
+}
+
+.bg-aedg-yellow-subtle {
+  background-color: rgba($aedg-yellow, 0.15);
 }
 
 .text-aedg-navy {
   color: $aedg-navy;
 }
+
 .text-aedg-yellow {
   color: $aedg-yellow;
+}
+
+.border-aedg-navy {
+  border-color: $aedg-navy;
+}
+.border-aedg-yellow {
+  border-color: $aedg-yellow;
 }
 
 .card {
@@ -205,7 +222,7 @@
 }
 
 // Target links coming from yml static content (markdown)
-.text-muted a {
+#data-creation-process .text-muted a {
   text-decoration: none;
   font-weight: 500;
 }

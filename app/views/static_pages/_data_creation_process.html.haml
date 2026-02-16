@@ -10,9 +10,10 @@
         Here’s a look at how the datasets were built, so you can feel confident in the source and quality of the data you’re working with.
 
     .col-lg-6.pt-5
-      %ul.timeline
-        - data_creation_steps.each do |item|
-          %li.timeline-item.mb-5
-            %h5.mb-2.fw-bold= item[:title]
-            .text-muted
-              = markdownify(item[:description])
+      #data-creation-process
+        %ul.timeline
+          - data_creation_steps.each do |item|
+            %li.timeline-item.mb-5
+              %h5.mb-2.fw-bold= item[:title]
+              .text-muted
+                = markdownify(item[:description])

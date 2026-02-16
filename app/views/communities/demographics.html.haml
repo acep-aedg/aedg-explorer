@@ -1,0 +1,30 @@
+- tab = 'demographics'
+- links = [ |
+    { title: 'Population', anchor: '#population', icon: 'people-fill', show: @community.show_population? }, |
+    { title: 'Employment', anchor: '#employment', icon: 'briefcase-fill', show: @community.show_employment? }, |
+  ] |
+
+= turbo_frame_tag "community_tab_content" do
+  = render 'shared/tab_nav', links: links
+  
+  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump_nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+    - if @community.show_population?
+      #population.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'people-fill',
+          title: 'Population',
+          description: 'Population estimates including age and sex',
+          anchor: '#population'
+        
+        = render "communities/#{tab}/population"
+        
+    - if @community.show_employment?
+      #employment.scroll-sectionmb-5
+        = render 'shared/section_header',
+          icon: 'briefcase-fill',
+          title: 'Employment',
+          description: 'Employment status',
+          anchor: '#employment'
+        
+        = render "communities/#{tab}/employment"
+    
