@@ -1,7 +1,8 @@
 = line_chart population_employment_community_charts_path(@community),
-    title: "Employment and Unemployment Insurance Claimants Over Time",
+    title: "Employment and Unemployment Insurance Claimants",
     xtitle: "Year",
     ytitle: "Residents",
     colors: [color(:blue), color(:orange)],
+    discrete: true,
     download: {filename: "#{@community.name}_monthly_generation_chart"}
 
