@@ -1,0 +1,24 @@
+- url ||= request.path
+- frame ||= nil
+- placeholder ||= "Search..."
+- name ||= :q_global
+- value = params[name]
+
+= form_with url: url, method: :get, data: { turbo_frame: frame, turbo: (frame ? true : false) }, class: "mb-3" do |f|
+  -# Preserve existing filters
+  - request.query_parameters.except(name.to_sym, :action, :controller, :utf8).each do |key, val|
+    - if val.is_a?(Array)
+      - val.each { |v| concat hidden_field_tag("#{key}[]", v) }
+    - else
+      = hidden_field_tag key, val
+
+  .input-group
+    = text_field_tag name, value, class: "form-control", placeholder: placeholder, autocomplete: "off"
+
+    - if value.present?
+      -# Clear button
+      = link_to request.query_parameters.except(name), class: "btn btn-outline-secondary", data: { turbo_frame: frame } do
+        Clear
+    - else
+      %button.btn.btn-aedg-primary{ type: "submit" }
+        Search

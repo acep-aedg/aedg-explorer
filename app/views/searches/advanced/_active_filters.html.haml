@@ -1,37 +1,23 @@
-- base_params = request.query_parameters.except(:expanded)
-- badge_style = "badge text-dark border text-decoration-none d-flex align-items-center p-2"
+%div#active_filters_frame.d-flex.flex-wrap.align-items-center.justify-content-left.gap-1
+  - base_params = request.query_parameters.except(:expanded)
+  
+  -# TRASH 
+  - if @active_badges&.any? || params[:q].present?
+    = link_to search_advanced_path, class: "btn btn-outline-danger btn-sm border-0 px-2 py-1", title: "Clear all filters", data: { turbo_frame: "results_frame", action: "click->search-panels#clearAllFilters" } do
+      %i.bi.bi-trash3-fill
 
-.d-flex.flex-wrap.gap-2
-  -# --- KEYWORD SEARCH (Special Case) ---
+  -# SEARCH Results 
   - if params[:q].present?
-    = link_to search_advanced_path(base_params.except(:q)), class: "#{badge_style} bg-light", data: { turbo: false } do
-      %span.me-2
-        %span.text-muted Search:
-        = params[:q]
-      %i.bi.bi-x-lg.text-muted{ style: "font-size: 10px;" }
+    .badge-wrapper
+      = link_to search_advanced_path(base_params.except(:q)), data: { turbo_frame: "results_frame" } do
+        %span.me-2
+          %span.text-muted Search:
+          = params[:q]
+        %i.bi.bi-x-lg
 
-  -# --- DYNAMIC DATABASE FILTERS ---
-  -# Define the rules for each filter type
-  - filters = []
-  - filters << { model: Grid,                param: :grid_ids,                        lookup: :id,        color: 'info',      label: ->(x) { x.name } }
-  - filters << { model: Borough,             param: :borough_fips_codes,              lookup: :fips_code, color: 'warning',   label: ->(x) { x.name } }
-  - filters << { model: RegionalCorporation, param: :regional_corporation_fips_codes, lookup: :fips_code, color: 'success',   label: ->(x) { x.name } }
-  - filters << { model: SenateDistrict,      param: :senate_district_ids,             lookup: :id,        color: 'secondary', label: ->(x) { "Senate #{x.district}" } }
-  - filters << { model: HouseDistrict,       param: :house_district_ids,              lookup: :id,        color: 'secondary', label: ->(x) { "House #{x.name}" } }
-
-  -# Loop through the definitions and render badges
-  - filters.each do |f|
-    - if params[f[:param]].present?
-      - f[:model].where(f[:lookup] => params[f[:param]]).each do |item|
-        - remaining_ids = params[f[:param]] - [item.send(f[:lookup]).to_s]
-        - bg_class      = "bg-#{f[:color]} bg-opacity-10 border-#{f[:color]} border-opacity-25"
-        
-        = link_to search_advanced_path(base_params.merge(f[:param] => remaining_ids)), class: "#{badge_style} #{bg_class}", data: { turbo: false } do
-          %span.me-2= f[:label].call(item)
-          %i.bi.bi-x-lg{ style: "font-size: 10px;" }
-
-  -# --- CLEAR ALL BUTTON ---
-  - if params.values.any? { |v| v.is_a?(Array) } || params[:q].present?
-    = link_to search_advanced_path(base_params.slice()), class: 'btn btn-outline-danger btn-sm w-100 mt-3 d-flex align-items-center justify-content-between', data: { action: "click->offcanvas-group#confirmClear", turbo: false } do
-      %span Clear all filters
-      %i.bi.bi-trash
+  -# FACET BADGES (Boroughs, etc.)
+  - @active_badges&.each do |badge|
+    .badge-wrapper
+      = link_to badge[:url], data: { turbo_frame: "results_frame", action: "click->search-panels#uncheckSpecific", search_panels_id_param: badge[:checkbox_id] } do
+        %span.me-1= badge[:label]
+        %i.bi.bi-x-lg

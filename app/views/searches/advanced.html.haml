@@ -1,14 +1,25 @@
-- content_for :title, 'Community Explorer - Search'
-
--# --- WRAPPER FOR CONTROLLER ---
-.container-xxl{ data: { controller: "offcanvas-group", action: "change->offcanvas-group#autoSubmit" } }
+.explorer-wrapper{ data: { controller: "search-panels", action: "change->search-panels#autoSubmit" } }
   = render 'searches/advanced/hidden_form'
 
-  -# MAIN LAYOUT CONTAINER
-  .d-flex.p-4{ style: "min-height: calc(100vh - 70px); overflow-x: hidden;" }
-  
-    -# LEFT COLUMN: Sidebar & Pop-out Panels (Sticky Wrapper)
-    = render 'searches/advanced/sidebar_and_panels'
+  .container-xxl.mt-3
+    .row.mb-3
+      .col-12
+        = link_to communities_path, class: 'text-decoration-none' do
+          %i.bi.bi-arrow-left.me-2
+          Back
 
-    -# RIGHT COLUMN: Main Results
-    = render 'searches/advanced/results'
+  .container-xxl.mt-4
+    .row.flex-nowrap.g-0
+      .col-auto.main_nav_sidebar.p-3
+        %h2.fw-bold.mb-1 Community Explorer
+        %p.text-muted Filter communities by specific criteria.
+        .mt-3
+          = render 'searches/advanced/sidebar_nav'
+
+      .col.main_results_area.ps-3
+        .panel-container
+          = render 'searches/advanced/panels'
+
+        .results-view
+          = turbo_frame_tag "results_frame" do
+            = render 'searches/advanced/results'

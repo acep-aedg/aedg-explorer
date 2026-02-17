@@ -14,57 +14,83 @@ class SearchesController < ApplicationController
 
   def advanced
     # --- MAIN COMMUNITY SEARCH ---
-    @pagy, @communities = pagy(:offset, build_scope(extract_filters), page_key: "page")
+    @pagy, @communities = pagy(:offset, build_scope(extract_filters), page_key: "page", limit: 25)
+    # --- FACET FILTER SEARCH
+    @facet_panels = Community.advanced_search_facets.map do |facet|
+      col = facet[:prefix] =~ /senate|house/ ? :district : :name
+      scope = facet[:model].filter_by_params(params, "q_#{facet[:prefix]}", "alpha_#{facet[:prefix]}", col)
+      pagy_item, items = pagy(:offset, scope, page_key: "page_#{facet[:prefix]}", limit: 20)
+      facet.merge(items: items, pagy: pagy_item)
+    end
+    # --- ALL FACET FILTER SERACH
+    @global_search_results = Community.search_facets_globally(params[:q_global])
 
-    # --- SIDEBAR FACETS ---
-    @pagy_grids, @current_grids = pagy(
-      :offset,
-      Grid.filter_by_params(params, :q_grid, :alpha_grid),
-      page_key: "page_grid"
-    )
-    @pagy_boros, @current_boros = pagy(
-      :offset,
-      Borough.filter_by_params(params, :q_boro, :alpha_boro),
-      page_key: "page_boro"
-    )
-    @pagy_corps, @current_corps = pagy(
-      :offset,
-      RegionalCorporation.filter_by_params(params, :q_corp, :alpha_corp),
-      page_key: "page_corp"
-    )
-    @pagy_senate, @current_senate = pagy(
-      :offset,
-      SenateDistrict.filter_by_params(params, :q_senate, :alpha_senate, :district),
-      page_key: "page_senate"
-    )
-    @pagy_house, @current_house = pagy(
-      :offset,
-      HouseDistrict.filter_by_params(params, :q_house, :alpha_house, :district),
-      page_key: "page_house"
-    )
+    prepare_active_filters
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace("results_frame", partial: "searches/advanced/results"),
+          turbo_stream.replace("sidebar_nav", partial: "searches/advanced/sidebar_nav"),
+          turbo_stream.replace("search_panels_content", partial: "searches/advanced/panels")
+        ]
+      end
+    end
   end
 
   private
 
-  def extract_filters
+  def prepare_active_filters
+    @active_badges = []
+    base_params = request.query_parameters.except(:expanded)
+
+    Community.advanced_search_facets.each do |facet|
+      param_values = Array(params[facet[:param]]).compact_blank
+      next if param_values.empty?
+
+      facet[:model].where(facet[:lookup] => param_values).find_each do |item|
+        @active_badges << badge_for(item, facet, base_params)
+      end
+    end
+  end
+
+  def badge_for(item, facet, base_params)
+    val = item.public_send(facet[:lookup]).to_s
+
     {
-      q: params[:q],
-      grid_ids: Array(params[:grid_ids]).compact_blank,
-      borough_fips_codes: Array(params[:borough_fips_codes]).compact_blank,
-      regional_corporation_fips_codes: Array(params[:regional_corporation_fips_codes]).compact_blank,
-      senate_district_ids: Array(params[:senate_district_ids]).compact_blank,
-      house_district_ids: Array(params[:house_district_ids]).compact_blank
+      label: badge_label(item, facet),
+      checkbox_id: "#{facet[:prefix]}_#{val}",
+      url: search_advanced_path(base_params.merge(
+        # Added .map(&:to_s) to ensure the subtraction works!
+        facet[:param] => Array(params[facet[:param]]).map(&:to_s) - [val]
+      ))
     }
+  end
+
+  def badge_label(item, facet)
+    if facet[:label_method].is_a?(Proc)
+      facet[:label_method].call(item)
+    else
+      item.public_send(facet[:label_method])
+    end
+  end
+
+  def extract_filters
+    filters = { q: params[:q] }
+
+    Community.advanced_search_facets.each do |facet|
+      filters[facet[:param]] = Array(params[facet[:param]]).compact_blank
+    end
+
+    filters
   end
 
   def build_scope(filters)
     # base scope
     base = Community.preload(:borough, :regional_corporation, :grids, :senate_districts, :house_districts)
     # Text search (pg_search_scope)
-    if filters[:q].present?
-      base = base.search_full_text(filters[:q])
-                 .reorder("communities.name ASC")
-    end
+    base = base.search_full_text(filters[:q]).reorder("communities.name ASC") if filters[:q].present?
     # Apply filters
     base = base.in_boroughs(filters[:borough_fips_codes])           if filters[:borough_fips_codes].present?
     base = base.in_corps(filters[:regional_corporation_fips_codes]) if filters[:regional_corporation_fips_codes].present?

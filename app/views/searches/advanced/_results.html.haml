@@ -1,23 +1,35 @@
-.flex-grow-1.p-4.bg-white.overflow-auto{ style: "height: calc(100vh - 70px);" }
-  
-  .input-group.input-group-lg.mb-4
-    %span.input-group-text.bg-white.border-end-0
-      %i.bi.bi-search.text-muted
-    = text_field_tag :q_dummy, params[:q], class: 'form-control border-start-0 shadow-none', placeholder: 'Search communities by name...', form: 'filter-form', name: 'q'
+= turbo_frame_tag "results_frame" do
+  - if @active_badges&.any? || params[:q].present?
+    .active-filters-shelf.full-width-shelf
+      .w-100.text-center
+        %small.text-muted.text-uppercase.fw-bold{ style: "font-size: 0.65rem; letter-spacing: 0.05em;" } 
+          Active Filters
+      = render 'searches/advanced/active_filters'
+
+  .input-group.mb-4
+    = text_field_tag :q, params[:q], 
+      class: 'form-control shadow-none', 
+      placeholder: 'Search communities by name...', 
+      form: 'filter-form', 
+      autocomplete: "off"
+    
+    %button.btn.btn-aedg-primary{ type: "submit", form: 'filter-form' }
+      Search
 
   .d-flex.justify-content-between.align-items-center.mb-3
     %span.text-muted.fs-5
-      - has_filters = params.values.any? { |v| v.is_a?(Array) } || params[:q].present?
+      - has_filters = params.values.any? { |v| v.is_a?(Array) && v.present? } || params[:q].present?
       = has_filters ? 'Search Results' : 'All Communities'
       %small.ms-2.text-secondary= "#{pluralize(@pagy.count, 'Community')} found"
 
-  - if @pagy.count > 0
+  - if @communities.any?
     .vstack.gap-3
       - @communities.each do |community|
         = render 'searches/advanced/community_card', community: community
 
-    .mt-5.d-flex.justify-content-center
-      = raw(@pagy.series_nav(:bootstrap))
+    .mt-5.pb-5.d-flex.justify-content-center
+      != @pagy.series_nav(:bootstrap)
   - else
-    .text-center.mt-5.text-muted
-      %p No communities found.
+    .text-center.py-5.text-muted
+      %i.bi.bi-geo-alt.display-1.mb-3
+      %p.fs-4 No communities found matching your filters.

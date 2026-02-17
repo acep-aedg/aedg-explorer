@@ -85,6 +85,42 @@ class Community < ApplicationRecord
     [:name, %i[name fips_code]]
   end
 
+  def self.advanced_search_facets
+    [
+      { id: "offcanvasGrids",    param: :grid_ids,                        model: Grid,                lookup: :id,        prefix: "grid",   label_method: :name,
+        title: "Electric Grid" },
+      { id: "offcanvasBoroughs", param: :borough_fips_codes,              model: Borough,             lookup: :fips_code, prefix: "boro",   label_method: :name,
+        title: "Borough / Census Area" },
+      { id: "offcanvasCorps",    param: :regional_corporation_fips_codes, model: RegionalCorporation, lookup: :fips_code, prefix: "corp",   label_method: :name,
+        title: "Native Regional Corp" },
+      { id: "offcanvasSenate",   param: :senate_district_ids,             model: SenateDistrict,      lookup: :id,        prefix: "senate", label_method: lambda { |i|
+        i.district.to_s
+      }, title: "Senate District" },
+      { id: "offcanvasHouse", param: :house_district_ids, model: HouseDistrict, lookup: :id, prefix: "house", label_method: :name, title: "House District" }
+    ]
+  end
+
+  def self.search_facets_globally(query)
+    return [] if query.blank?
+
+    results = []
+    advanced_search_facets.each do |facet|
+      model = facet[:model]
+      search_col = model.column_names.include?("name") ? "name" : "district"
+      matches = model.where("#{model.table_name}.#{search_col} ILIKE ?", "%#{query}%").limit(5)
+
+      matches.each do |match|
+        results << {
+          label: facet[:label_method].is_a?(Proc) ? facet[:label_method].call(match) : match.send(facet[:label_method]),
+          category: facet[:title],
+          param_key: facet[:param],
+          value: match.send(facet[:lookup])
+        }
+      end
+    end
+    results
+  end
+
   def grid
     community_grids.find_by(termination_year: 9999)&.grid
   end
@@ -224,10 +260,6 @@ class Community < ApplicationRecord
     @show_population ||= population_age_sexes.exists?
   end
 
-  def show_employment?
-    @show_employment ||= employments.exists?
-  end
-
   # --- Income Tab/Section ---
   def show_income?
     @show_income ||= show_household_income? || show_income_poverty?
@@ -243,23 +275,14 @@ class Community < ApplicationRecord
 
   # --- Others ---
   def show_heating_degree_days?
-    @show_heating_degree_days ||= heating_degree_days.exists?
+    @show_heating_degree_days ||= heating_degree_days.present?
   end
 
-  def self.global_search_suggestions(term)
-    return [] if term.blank?
+  def show_population_age_sexes?
+    @show_population_age_sexes ||= population_age_sexes.exists?
+  end
 
-    results = []
-    sql_term = "%#{term}%"
-    results += Grid.where("name ILIKE ?", sql_term).limit(5).map { |r| { label: r.name, category: "Electric Grid", param_key: :grid_ids, value: r.id } }
-    results += Borough.where("name ILIKE ?", sql_term).limit(5).map { |r| { label: r.name, category: "Borough", param_key: :borough_fips_codes, value: r.fips_code } }
-    results += RegionalCorporation.where("name ILIKE ?", sql_term).limit(5).map do |r|
-      { label: r.name, category: "Regional Corp", param_key: :regional_corporation_fips_codes, value: r.fips_code }
-    end
-    results += SenateDistrict.where("district ILIKE ?", sql_term).limit(5).map do |r|
-      { label: "District #{r.district}", category: "Senate District", param_key: :senate_district_ids, value: r.id }
-    end
-    results += HouseDistrict.where("name ILIKE ?", sql_term).limit(5).map { |r| { label: "District #{r.name}", category: "House District", param_key: :house_district_ids, value: r.id } }
-    results
+  def show_employment?
+    @show_employment ||= employments.exists?
   end
 end

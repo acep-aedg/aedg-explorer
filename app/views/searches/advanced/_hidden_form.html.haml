@@ -1,3 +1,3 @@
-= form_tag search_advanced_path, method: :get, id: 'filter-form', class: 'd-none', data: { turbo_action: "advance" } do
+= form_tag search_advanced_path, method: :get, id: 'filter-form', class: 'd-none', data: { turbo_frame: "results_frame", turbo_action: "replace" } do
   = hidden_field_tag :q, params[:q]
-  = hidden_field_tag :expanded, params[:expanded], data: { offcanvas_group_target: "tracker" }
+  = hidden_field_tag :expanded, params[:expanded], data: { search_panels_target: "tracker" }
