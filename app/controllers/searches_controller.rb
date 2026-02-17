@@ -1,5 +1,5 @@
 class SearchesController < ApplicationController
-  include Pagy::Backend
+  include Pagy::Method
 
   def index
     @query = params[:q]
@@ -13,15 +13,16 @@ class SearchesController < ApplicationController
   end
 
   def advanced
-    @pagy, @communities = pagy(build_scope(extract_filters), page_param: :page)
-
+    # --- MAIN COMMUNITY SEARCH ---
+    @pagy, @communities = pagy(:offset, build_scope(extract_filters), page_key: "page", limit: 25)
+    # --- FACET FILTER SEARCH
     @facet_panels = Community.advanced_search_facets.map do |facet|
       col = facet[:prefix] =~ /senate|house/ ? :district : :name
       scope = facet[:model].filter_by_params(params, "q_#{facet[:prefix]}", "alpha_#{facet[:prefix]}", col)
-      pagy_item, items = pagy(scope, page_param: "page_#{facet[:prefix]}")
+      pagy_item, items = pagy(:offset, scope, page_key: "page_#{facet[:prefix]}", limit: 20)
       facet.merge(items: items, pagy: pagy_item)
     end
-
+    # --- ALL FACET FILTER SERACH
     @global_search_results = Community.search_facets_globally(params[:q_global])
 
     prepare_active_filters

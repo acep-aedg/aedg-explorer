@@ -26,9 +26,10 @@
               form: 'filter-form'
             = label_tag "#{id_prefix}_#{val}", lbl, class: 'form-check-label small'
 
-        - if panel[:pagy].pages > 1
+        - if local_assigns[:pagy] && pagy.pages > 1
           .py-2.d-flex.justify-content-center.small-pagy
-            != pagy_bootstrap_nav(panel[:pagy], link_extra: "data-turbo-frame='#{frame_id}'")
+            != pagy.series_nav(:bootstrap, link_extra: "data-turbo-frame='#{frame_id}'")
+            
 
       - else
         .text-center.py-4.small.text-muted No results found.

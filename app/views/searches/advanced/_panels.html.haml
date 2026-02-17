@@ -8,4 +8,5 @@
           %h5.mb-0.fw-bold= p[:title]
           %button.btn-close{ type: "button", data: { action: "click->search-panels#close" } }
         
-        = render 'searches/advanced/facet', panel: p
+        -# FIX: Pass the pagy object as a local variable
+        = render 'searches/advanced/facet', panel: p, pagy: p[:pagy]
