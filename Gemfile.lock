@@ -390,7 +390,7 @@ DEPENDENCIES
   kramdown-parser-gfm
   minitest (~> 5.1)
   mocha
-  pagy (= 43.2.9)
+  pagy (~> 43.2.9)
   pg (~> 1.1)
   pg_search (~> 2.3)
   puma (>= 5.0)
