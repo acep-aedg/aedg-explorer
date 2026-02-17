@@ -5,12 +5,13 @@ class PopulationAgeSex < ApplicationRecord
 
   # Scope to order by start year if needed
   scope :ordered, -> { order(start_year: :desc) }
-  
+
   scope :with_age_estimates, -> { where(age_estimate_fields.map { |f| "#{f} > 0" }.join(" OR ")) }
   scope :with_moe_age_estimates, -> { where(moe_age_estimate_fields.map { |f| "#{f} > 0" }.join(" OR ")) }
   scope :with_gender_estimates, -> { where(gender_estimate_fields.map { |f| "#{f} > 0" }.join(" OR ")) }
   scope :with_moe_gender_estimates, -> { where(moe_gender_estimate_fields.map { |f| "#{f} > 0" }.join(" OR ")) }
 
+  # rubocop:disable Naming/VariableNumber
   def self.age_estimate_fields
     %i[
       e_pop_age_under_5
@@ -60,5 +61,5 @@ class PopulationAgeSex < ApplicationRecord
       m_pop_female
     ]
   end
-
+  # rubocop:enable Naming/VariableNumber
 end
