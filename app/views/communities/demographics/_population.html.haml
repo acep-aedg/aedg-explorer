@@ -1,6 +1,7 @@
 - parent_tab = 'demographics'
 - has_age_distribution = @community.population_age_sexes.with_age_estimates&.with_moe_age_estimates.exists?
 - has_gender_distribution = @community.population_age_sexes.with_gender_estimates&.with_moe_gender_estimates.exists?
+- has_one_chart = has_age_distribution || has_gender_distribution
 
 -# --- Section Body ---
 .section-body.m-1.m-md-2.m-lg-4.mt-3
@@ -19,8 +20,8 @@
         most_recent_population: most_recent_population
     
     -# Main Data Card
-    .p-4.border.rounded-3.bg-white.shadow-sm
-      - if has_age_distribution || has_gender_distribution
+    .p-4.border.rounded-3.bg-white.shadow-sm.border-top.mb-5
+      - if has_one_chart
         .row.g-4
           - if has_age_distribution
             .col-12.col-xl-8
@@ -37,7 +38,7 @@
               = render "communities/#{parent_tab}/population/population_gender_pie", population_periods: gender_periods, selected_period: gender_selected_period
 
       -# Data Table Section
-      .pt-4.border-top.mt-5
+      .pt-4{ class: [("border-top mt-5" if has_one_chart) ] }
         .d-flex.align-items-center.mb-3
           %i.bi.bi-table.me-2.text-primary
           %h5.mb-0.fw-bold Population Data
