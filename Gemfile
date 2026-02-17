@@ -4,7 +4,7 @@ ruby "3.3.4"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "minitest", "~> 5.1"
-gem "rails", "~> 8.0.4"
+gem "rails", "~> 8.1.2"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
@@ -81,14 +81,14 @@ gem "haml-rails", "~> 2.1"
 
 gem "html2haml", "~> 2.3", group: :dev
 
-gem "activerecord-postgis-adapter", "~> 11.0.0"
+gem "activerecord-postgis-adapter", "~> 11.1.1"
 gem "chartkick"
 gem "csv"
 gem "friendly_id", "~> 5.5.0"
 gem "rgeo"
 gem "rgeo-geojson"
 
-gem "acts-as-taggable-on", "~> 12.0"
+gem "acts-as-taggable-on", "~> 13.0"
 gem "pg_search", "~> 2.3"
 gem "rubocop", require: false
 gem "rubocop-rails", require: false
