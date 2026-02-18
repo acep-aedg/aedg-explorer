@@ -3,7 +3,9 @@ require "rgeo"
 
 class SenateDistrictAttributesTest < ActiveSupport::TestCase
   def setup
-    @geom_factory = RGeo::Geographic.simple_mercator_factory
+    column_type = HouseDistrict.type_for_attribute(:boundary)
+    @geom_factory = column_type.spatial_factory
+
     polygon = @geom_factory.polygon(
       @geom_factory.linear_ring([
                                   @geom_factory.point(0, 0),
@@ -28,7 +30,7 @@ class SenateDistrictAttributesTest < ActiveSupport::TestCase
     end
     assert_equal @valid_props[:district], senate_district.district
     assert_equal Date.parse(@valid_props[:as_of_date]), senate_district.as_of_date
-    assert_equal @polygon_geom, senate_district.boundary
+    assert_equal @polygon_geom.as_text, senate_district.boundary.as_text
   end
 
   test "is invalid with incorrect geometry type" do
