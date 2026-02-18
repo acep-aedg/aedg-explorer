@@ -28,7 +28,7 @@ class SenateDistrictAttributesTest < ActiveSupport::TestCase
     end
     assert_equal @valid_props[:district], senate_district.district
     assert_equal Date.parse(@valid_props[:as_of_date]), senate_district.as_of_date
-    assert_equal @polygon_geom.as_text, senate_district.boundary.as_text
+    assert_equal @polygon_geom, senate_district.boundary
   end
 
   test "is invalid with incorrect geometry type" do

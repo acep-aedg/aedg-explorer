@@ -34,7 +34,7 @@ class HouseDistrictAttributesTest < ActiveSupport::TestCase
     assert_equal @valid_props[:name], house_district.name
     assert_equal @valid_props[:district], house_district.district
     assert_equal Date.parse(@valid_props[:as_of_date]), house_district.as_of_date
-    assert_equal @polygon_geom.as_text, house_district.boundary.as_text
+    assert_equal @polygon_geom, house_district.boundary
   end
 
   test "is invalid with incorrect geometry type" do
