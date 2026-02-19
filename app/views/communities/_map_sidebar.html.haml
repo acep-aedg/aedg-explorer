@@ -16,12 +16,12 @@
             }
             %label.form-check-label.small.ms-2{ for: "layer-service-area-local" }
               %span.legend-swatch{ data: { maps_target: "swatch" } }
-              = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
+              = @community.show_utility_service_area? ? "Local Service Area" : "Utility Service Area"
 
-          / Map Layer: Full Service Area (if applicable)
-        - if @community.show_full_service_area?
+          / Map Layer: Utility Service Area (if applicable)
+        - if @community.show_utility_service_area?
           .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-service-area-full{
+            %input.form-check-input#layer-service-area-utility{
               type: "checkbox",
               data: {
                 action: "change->maps#toggleLayer",
@@ -29,9 +29,9 @@
                 fit: true
               }
             }
-            %label.form-check-label.small.ms-2{ for: "layer-service-area-full" }
+            %label.form-check-label.small.ms-2{ for: "layer-service-area-utility" }
               %span.legend-swatch{ data: { maps_target: "swatch" } }
-              Full Service Area
+              Utility Service Area
                 
         .form-check.d-flex.align-items-center.mb-1
           %input.form-check-input#layer-house{ 

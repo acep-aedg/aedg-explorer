@@ -20,6 +20,6 @@ export const LAYER_COLORS = {
   "layer-senate":                COLORS.purple,
   "layer-house":                 COLORS.light_red,
   "layer-service-area-local":    COLORS.dark_blue,
-  "layer-service-area-full":     COLORS.medium_yellow,
+  "layer-service-area-utility":  COLORS.medium_yellow,
   "layer-bulk-fuel-facilities":  COLORS.dark_green,
 };

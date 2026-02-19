@@ -40,7 +40,7 @@
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Communities
 
-          / Map Layer: Local Service Area
+          / Map Layer: Utility Service Areas
           - if @grid.show_service_area_geoms?
             .form-check.d-flex.align-items-center.mb-1
               %input.form-check-input#layer-service-area-local{ 
@@ -54,7 +54,7 @@
               }
               %label.form-check-label.small.ms-2{ for: "layer-service-area-local" }
                 %span.legend-swatch{ data: { maps_target: "swatch" } }
-                Service Areas
+                Utility Service Areas
 
           / Map Layer: Plants
           - if @grid.show_plants?
