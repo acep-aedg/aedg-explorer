@@ -193,8 +193,8 @@ class Community < ApplicationRecord
     @show_service_areas ||= service_areas.exists?
   end
 
-  def show_full_service_area?
-    @show_full_service_area ||= service_area_geoms.with_full_service_area.exists?
+  def show_utility_service_area?
+    @show_utility_service_area ||= service_area_geoms.with_utility_service_area.exists?
   end
 
   def show_plants?
