@@ -5,9 +5,7 @@ require_relative "versioning"
 
 namespace :import do
   desc "Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)"
-  task all: [:environment] do
-    Rake::Task["import:download_data"].invoke
-
+  task all: %i[environment download_data] do
     puts "Importing data files..."
     Rake::Task["import:boroughs"].invoke
     Rake::Task["import:regional_corporations"].invoke
@@ -39,6 +37,11 @@ namespace :import do
     Rake::Task["import:heating_degree_days"].invoke
     puts "Import complete"
 
+    Rake::Task["import:handle_version"].invoke
+
+  end
+
+  task handle_version: :environment do
     if ENV["PR"].present?
       puts "Skipping version tag update because this is a PR test."
     elsif DataPondVersion.latest&.current_version == Import::Versioning::DATA_POND_TAG
