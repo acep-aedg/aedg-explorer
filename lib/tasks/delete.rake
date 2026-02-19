@@ -6,6 +6,11 @@ namespace :delete do
     DeleteHelpers.delete_records(MonthlyGeneration)
   end
 
+  desc "Clear yearly generations data"
+  task yearly_generations: :environment do
+    DeleteHelpers.delete_records(YearlyGeneration)
+  end
+
   desc "Clear employments data"
   task employments: :environment do
     DeleteHelpers.delete_records(Employment)
