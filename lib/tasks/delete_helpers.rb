@@ -1,10 +1,10 @@
 module DeleteHelpers
   def self.delete_records(model)
-    Rails.logger.info "Deleting all records from the #{model.name} table..."
+    puts "Deleting all records from the #{model.name} table..."
 
     deleted = model.destroy_all.size
-    Rails.logger.info "Deleted #{deleted} records from #{model.name}"
+    puts "Deleted #{deleted} records from #{model.name}"
   rescue StandardError => e
-    Rails.logger.info "ERROR: Deletion failed - #{e.message}"
+    puts "ERROR: Deletion failed - #{e.message}"
   end
 end
