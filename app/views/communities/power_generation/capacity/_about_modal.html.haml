@@ -1,19 +1,3 @@
--# 1. The Trigger Button
-%button.btn.btn-sm.btn-aedg-secondary.ms-2{ type: "button", data: { bs_toggle: "modal", bs_target: "#capacityInfoModal" } }
-  %i.bi.bi-info-circle.me-1
-  About this Data
-
--# 2. The Modal
-#capacityInfoModal.modal.fade{ tabindex: "-1", aria: { labelledby: "capacityInfoModalLabel" } }
-  .modal-dialog.modal-dialog-centered
-    .modal-content
-      .modal-header
-        %h5#capacityInfoModalLabel.modal-title About Capacity Data
-        %button.btn-close{ type: "button", data: { bs_dismiss: "modal" }, aria: { label: "Close" } }
-      .modal-body
-        .d-flex
-          = render 'shared/modal/community_service_area'
-      
-      .modal-footer
-        %button.btn.btn-secondary{ type: "button", data: { bs_dismiss: "modal" } } Close
-          
+= render 'shared/about_this_data_modal', id: 'capacityInfoModal', title: 'About Capacity Data' do
+  .d-flex
+    = render 'shared/modal/community_service_area'
