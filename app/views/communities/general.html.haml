@@ -16,7 +16,8 @@
         icon: 'globe', 
         title: 'Geography', 
         description: 'Location and regional associations',
-        anchor: '#geography'
+        anchor: '#geography',
+        related_datasets: ["public_communities"]
 
       = render "communities/#{tab}/geography"
   
@@ -26,7 +27,8 @@
             icon: 'car-front', 
             title: 'Transportation', 
             description: 'Transit infrastructure and community mobility',
-            anchor: '#transportation'
+            anchor: '#transportation',
+            related_datasets: ["public_transportation"]
 
         = render "communities/#{tab}/transportation"
   

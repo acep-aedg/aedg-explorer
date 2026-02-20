@@ -1,4 +1,4 @@
--# locals: (icon:, title:, description:, anchor: nil)
+-# locals: (icon:, title:, description:, anchor: nil, related_datasets:[])
 
 .section-title-bar.bg-body-secondary.border-start.border-primary.border-5.p-3.mb-1.mb-md-3.mb-lg-4
   .d-flex.align-items-center
@@ -23,12 +23,33 @@
             copy_original_class: "text-muted" } }
   
             %i.bi.bi-link-45deg.fs-4{ data: { copy_target: "icon" } }
-
       -# Description
       - if description.present?
         %small.text-muted= description
 
-    -# Yield Modal
-    - if block_given?
-      .ms-auto.me-3
-        = yield
+    -# Buttons Container
+    .ms-auto.d-flex.flex-column.align-items-end.gap-2
+      -# About Modal
+      - if block_given?
+        %div
+          = yield
+          
+      -# View Datasets Button
+      - if related_datasets.any?
+        .d-block
+          - if related_datasets.one?
+            = link_to metadatum_path(related_datasets.first), data: { turbo_frame: "_top" }, class: "btn btn-sm btn-primary" do
+              %i.bi.bi-database.me-1
+              View Full Dataset
+          - else
+            .dropdown
+              %button.btn.btn-sm.btn-primary.dropdown-toggle{ data: { bs_toggle: "dropdown" }, type: "button" }
+                %i.bi.bi-database.me-1
+                View Full Datasets
+              %ul.dropdown-menu.dropdown-menu-end
+                - related_datasets.each do |dataset|
+                  %li
+                    = link_to metadatum_path(dataset), data: { turbo_frame: "_top" }, class: "dropdown-item small" do
+                      %i.bi.bi-file-earmark.me-2
+                      #{dataset.titleize}
+      
