@@ -14,7 +14,8 @@
           icon: 'people-fill',
           title: 'Population',
           description: 'Population estimates including age and sex',
-          anchor: '#population'
+          anchor: '#population',
+          related_datasets: ["public_populations_ages_sexes"]
         
         = render "communities/#{tab}/population"
         
@@ -24,7 +25,8 @@
           icon: 'briefcase-fill',
           title: 'Employment',
           description: 'Employment status',
-          anchor: '#employment'
+          anchor: '#employment',
+          related_datasets: ["public_employment"]
         
         = render "communities/#{tab}/employment"
     

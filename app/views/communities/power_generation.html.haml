@@ -12,20 +12,21 @@
     - if @community.show_utilities?
       #utilities.scroll-section.mb-5
         = render 'shared/section_header', 
-            icon: 'buildings', 
-            title: 'Utilities', 
-            description: 'Electrical providers, service areas, and grid infrastructure',
-            anchor: '#utilities'
-      
+          icon: 'buildings', 
+          title: 'Utilities', 
+          description: 'Electrical providers, service areas, and grid infrastructure',
+          anchor: '#utilities'
+
         = render "communities/#{tab}/utilities"
-        
+
     - if @community.show_generation?
       #generation.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'building-gear',
           title: 'Generation',
           description: 'Energy generation trends and fuel source mix',
-          anchor: '#generation' do
+          anchor: '#generation',
+          related_datasets: ["public_monthly_generation", "public_yearly_generation"] do
           = render "communities/#{tab}/generation/about_modal"
         
         = render "communities/#{tab}/generation"
@@ -36,7 +37,8 @@
           icon: 'lightning-fill',
           title: 'Capacity',
           description: 'Installed infrastructure and maximum power output',
-          anchor: '#capacity' do
+          anchor: '#capacity',
+          related_datasets: ["public_capacity"] do
           = render "communities/#{tab}/capacity/about_modal"
           
         = render "communities/#{tab}/capacity"
