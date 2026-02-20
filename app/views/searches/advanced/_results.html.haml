@@ -1,4 +1,4 @@
-= turbo_frame_tag "results_frame" do
+= turbo_frame_tag "results_frame", target: "_top" do
   - if @active_badges&.any? || params[:q].present?
     .active-filters-shelf.full-width-shelf
       .w-100.text-center

@@ -1566,7 +1566,7 @@ ALTER SEQUENCE public.transportations_id_seq OWNED BY public.transportations.id;
 
 CREATE TABLE public.yearly_generations (
     id bigint NOT NULL,
-    generation_mwh integer,
+    generation_mwh numeric,
     year integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
@@ -3052,6 +3052,7 @@ ALTER TABLE ONLY public.monthly_generations
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260218182006'),
 ('20260203175849'),
 ('20260203175626'),
 ('20260127184326'),

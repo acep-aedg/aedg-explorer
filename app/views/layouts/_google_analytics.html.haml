@@ -7,14 +7,13 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', #{google_analytics_id});
+      gtag('config', '#{google_analytics_id}');
 
       // Track page views with Turbolinks navigation
-      document.addEventListener('turbolinks:load', function(event) {
-        if (typeof gtag === 'function') {
-          gtag('event', 'page_view', {
-            page_path: event.data.url,
-            page_title: document.title
-          });
-        }
+      let isInitialLoad = true;
+      document.addEventListener('turbolinks:load', () => {
+        if (isInitialLoad){isInitialLoad = false; return;}
+        gtag('config', '#{google_analytics_id}', {
+          page_path: window.location.pathname,
+        });
       });

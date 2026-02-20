@@ -5,6 +5,6 @@ module DeleteHelpers
     deleted = model.destroy_all.size
     Rails.logger.info "Deleted #{deleted} records from #{model.name}"
   rescue StandardError => e
-    Rails.logger.info "ERROR: Deletion failed - #{e.message}"
+    Rails.logger.error "ERROR: Deletion failed - #{e.message}"
   end
 end
