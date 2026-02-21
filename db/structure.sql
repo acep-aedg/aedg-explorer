@@ -779,6 +779,75 @@ ALTER SEQUENCE public.fuel_prices_id_seq OWNED BY public.fuel_prices.id;
 
 
 --
+-- Name: generators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.generators (
+    id bigint NOT NULL,
+    aea_plant_id integer NOT NULL,
+    eia_plant_id integer,
+    plant_generator_id character varying,
+    status character varying,
+    data_source_year integer,
+    engine_make character varying,
+    engine_model character varying,
+    technology character varying,
+    prime_mover character varying,
+    name_of_water_source character varying,
+    ownership character varying,
+    nameplate_capacity_mw numeric,
+    storage_capacity_mw numeric,
+    nameplate_power_factor numeric,
+    summer_capacity_mw numeric,
+    winter_capacity_mw numeric,
+    minimum_load_mw numeric,
+    uprate_or_derate_completed boolean,
+    month_uprate_or_derate_completed integer,
+    year_uprate_or_derate_completed integer,
+    syncronized_to_transmission_grid boolean,
+    operating_month integer,
+    operating_year integer,
+    planned_or_actual_retirement_month integer,
+    planned_or_actual_retirement_year integer,
+    associated_with_combined_heat_and_power_system boolean,
+    sector_name character varying,
+    sector integer,
+    energy_source_1 character varying,
+    energy_source_2 character varying,
+    startup_source_1 character varying,
+    startup_source_2 character varying,
+    turbines_or_hydrokinetic_bouys integer,
+    startup_time_minutes integer,
+    multiple_fuels boolean,
+    cofire_fuels boolean,
+    switch_between_oil_and_natural_gas boolean,
+    notes text,
+    source character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: generators_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.generators_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: generators_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.generators_id_seq OWNED BY public.generators.id;
+
+
+--
 -- Name: grids; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1742,6 +1811,13 @@ ALTER TABLE ONLY public.fuel_prices ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: generators id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.generators ALTER COLUMN id SET DEFAULT nextval('public.generators_id_seq'::regclass);
+
+
+--
 -- Name: grids id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2054,6 +2130,14 @@ ALTER TABLE ONLY public.friendly_id_slugs
 
 ALTER TABLE ONLY public.fuel_prices
     ADD CONSTRAINT fuel_prices_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: generators generators_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.generators
+    ADD CONSTRAINT generators_pkey PRIMARY KEY (id);
 
 
 --
@@ -3006,6 +3090,14 @@ ALTER TABLE ONLY public.communities_service_area_geoms
 
 
 --
+-- Name: generators fk_rails_c94915181c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.generators
+    ADD CONSTRAINT fk_rails_c94915181c FOREIGN KEY (aea_plant_id) REFERENCES public.plants(aea_plant_id);
+
+
+--
 -- Name: capacities fk_rails_ce150acde9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3052,6 +3144,7 @@ ALTER TABLE ONLY public.monthly_generations
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260221003649'),
 ('20260218182006'),
 ('20260203175849'),
 ('20260203175626'),

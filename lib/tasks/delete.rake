@@ -65,4 +65,9 @@ namespace :delete do
   task heating_degree_days: :environment do
     DeleteHelpers.delete_records(HeatingDegreeDay)
   end
+
+  desc "Clear generator data"
+  task generators: :environment do
+    DeleteHelpers.delete_records(Generator)
+  end
 end
