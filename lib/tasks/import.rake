@@ -20,13 +20,14 @@ namespace :import do
     Rake::Task["import:school_districts"].invoke
     Rake::Task["import:communities"].invoke
     Rake::Task["import:community_reporting_entities"].invoke
-    Rake::Task["import:income_poverty"].invoke
-    Rake::Task["import:household_income"].invoke
     Rake::Task["import:service_areas"].invoke
     Rake::Task["import:service_area_geoms"].invoke
     Rake::Task["import:community_service_area_geoms"].invoke
     Rake::Task["import:plants"].invoke
+    Rake::Task["import:generators"].invoke
     Rake::Task["import:capacities"].invoke
+    Rake::Task["import:income_poverty"].invoke
+    Rake::Task["import:household_income"].invoke
     Rake::Task["import:bulk_fuel_facilities"].invoke
     Rake::Task["import:yearly_generations"].invoke
     Rake::Task["import:monthly_generations"].invoke
@@ -334,5 +335,22 @@ namespace :import do
 
     filepath = Rails.root.join("db/imports/household_income/household_income.csv")
     ImportHelpers.import_csv(filepath, HouseholdIncome)
+  end
+
+  desc "Import Generator Data from .csv file"
+  task generators: :environment do
+    if Generator.any?
+      raise <<~ERROR
+        ❌ ERROR: Generator table was not empty before starting import!
+        To clear it, run:
+  
+            rails delete:generators
+  
+        Then, try running this import task again.
+      ERROR
+    end
+  
+    filepath = Rails.root.join("db/imports/generators/generators.csv")
+    ImportHelpers.import_csv(filepath, Generator)
   end
 end
