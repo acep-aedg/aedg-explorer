@@ -13,6 +13,7 @@ module GeneratorAttributes
   end
 
   included do
+    # rubocop:disable Naming/VariableNumber, Metrics/AbcSize, Metrics/MethodLength
     def assign_aedg_attributes(params)
       assign_attributes(
         aea_plant_id: params[:aea_plant_id],
@@ -56,5 +57,6 @@ module GeneratorAttributes
         source: params[:source]
       )
     end
+    # rubocop:enable Naming/VariableNumber, Metrics/AbcSize, Metrics/MethodLength
   end
 end
