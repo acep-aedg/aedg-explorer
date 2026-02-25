@@ -32,18 +32,18 @@
     .ms-auto.d-flex.flex-column.align-items-end.gap-2
       -# About Modal Button
       - if about_modal_id.present?
-        %button.btn.btn-sm.btn-aedg-secondary.w-100{ type: "button", data: { bs_toggle: "modal", bs_target: "##{about_modal_id}" } }
+        %button.btn.btn-sm.btn-aedg-secondary.w-100.text-nowrap{ type: "button", data: { bs_toggle: "modal", bs_target: "##{about_modal_id}" } }
           %i.bi.bi-info-circle.me-1{ aria: { hidden: "true" } }
           About this Data
 
       -# View Datasets Button
       - if metadata_records.any?
         - if metadata_records.one?
-          = link_to metadatum_path(metadata_records.first), data: { turbo_frame: "_top" }, class: "btn btn-sm btn-aedg-primary w-100" do
+          = link_to metadatum_path(metadata_records.first), data: { turbo_frame: "_top" }, class: "btn btn-sm btn-aedg-primary w-100 text-nowrap" do
             %i.bi.bi-database.me-1{ aria: { hidden: "true" } }
             View Dataset
         - else
-          .dropdown.w-100
+          .dropdown.w-100.text-nowrap
             %button.btn.btn-sm.btn-aedg-primary.dropdown-toggle{ data: { bs_toggle: "dropdown" }, type: "button", aria: { expanded: "false", haspopup: "true" }}
               %i.bi.bi-database.me-1{ aria: { hidden: "true" } }
               View Datasets
