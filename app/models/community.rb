@@ -147,7 +147,6 @@ class Community < ApplicationRecord
       }.compact
     }
   end
-  
 
   def available_price_types
     types = []

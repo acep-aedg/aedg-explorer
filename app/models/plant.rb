@@ -19,7 +19,7 @@ class Plant < ApplicationRecord
         id: id,
         category: "Power Plant",
         title: name,
-        content: content 
+        content: content
       }.compact
     }
   end

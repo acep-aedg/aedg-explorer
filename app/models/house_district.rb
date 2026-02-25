@@ -20,7 +20,7 @@ class HouseDistrict < ApplicationRecord
         district: district,     # The number/code (e.g., "36")
         name: name,             # The name (e.g., "Copper River Basin")
         category: "House District Area", # Static label for the popup header
-        as_of: as_of_date       # Metadata to show later
+        as_of: as_of_date # Metadata to show later
       }
     }
   end

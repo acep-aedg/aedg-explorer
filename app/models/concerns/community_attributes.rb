@@ -45,11 +45,15 @@ module CommunityAttributes
     def content
       {
         "_bro_census" => borough&.name,
-        "_Region"      => economic_region,
-        "_Corp"        => regional_corporation&.name,
+        "_Region" => economic_region,
+        "_Corp" => regional_corporation&.name,
         "_Village Corp" => village_corporation,
-        "Population"  => population&.total_population,
-        "PCE Status"  => pce_active ? "Active" : (pce_eligible ? "Eligible" : nil),
+        "Population" => population&.total_population,
+        "PCE Status" => if pce_active
+                          "Active"
+                        else
+                          (pce_eligible ? "Eligible" : nil)
+                        end,
         "Subsistence" => subsistence ? "Yes" : nil
       }.compact
     end
