@@ -1,34 +1,27 @@
-import mapboxgl from "mapbox-gl";
+import mapboxgl from 'mapbox-gl';
 
-export function upsertDomMarker(marker, map, {
-  lng, lat, title,
-  iconClass = "bi bi-geo-alt-fill",
-  color = "#3387d6ff",
-  size = 28
-}) {
-  const L = Number(lng), A = Number(lat);
+/**
+ * A persistent visual pin. 
+ * No popups just moves the icon to the current coords.
+ */
+export function upsertDomMarker(marker, map, data) {
+  const coords = [Number(data.lng), Number(data.lat)];
 
   if (!marker) {
     const el = document.createElement("i");
-    el.className = iconClass;     // needs bootstrap-icons CSS loaded
-    el.style.fontSize = `${size}px`;
-    el.style.color = color;
-    el.style.textShadow = "0 0 2px white";
+    el.className = "bi bi-geo-alt-fill dom-marker-icon";
+    el.style.cssText = `font-size: 32px; color: #3387d6; text-shadow: 0 0 3px white; pointer-events: none;`;
 
-    marker = new mapboxgl.Marker({ element: el, anchor: "bottom" })
-      .setLngLat([L, A])                                            // <-- set position FIRST
-      .setPopup(new mapboxgl.Popup({ offset: 24 }).setHTML(markerHtml(title, L, A)))
-      .addTo(map);                                                  // <-- then add to map
-  } else {
-    marker
-      .setLngLat([L, A])
-      .setPopup(new mapboxgl.Popup({ offset: 24 }).setHTML(markerHtml(title, L, A)));
+    marker = new mapboxgl.Marker({ 
+      element: el, 
+      anchor: "bottom" 
+    })
+    .setLngLat(coords)
+    .addTo(map);
   }
 
-  return marker;
-}
+  // Just move the pin
+  marker.setLngLat(coords);
 
-export function markerHtml(title, lng, lat) {
-  const t = title || "Location";
-  return `<div><strong>${t}</strong><br/>${Number(lat).toFixed(4)}, ${Number(lng).toFixed(4)}</div>`;
+  return marker;
 }

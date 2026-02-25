@@ -41,5 +41,21 @@ module CommunityAttributes
         village_corporation: params[:village_corporation]
       )
     end
+
+    def content
+      {
+        "_bro_census" => borough&.name,
+        "_Region"      => economic_region,
+        "_Corp"        => regional_corporation&.name,
+        "_Village Corp" => village_corporation,
+        "Population"  => population&.total_population,
+        "PCE Status"  => pce_active ? "Active" : (pce_eligible ? "Eligible" : nil),
+        "Subsistence" => subsistence ? "Yes" : nil
+      }.compact
+    end
+
+    def community_path_link
+      "/explore/communities/#{slug}"
+    end
   end
 end

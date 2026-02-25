@@ -134,7 +134,11 @@ class Community < ApplicationRecord
       type: "Feature",
       geometry: RGeo::GeoJSON.encode(location),
       properties: {
+        id: fips_code,
+        category: "Community Location",
         title: name,
+        content: content,
+        path: community_path_link,
         (borough&.census_area? ? :census_area : :borough) => borough&.name,
         regional_corporation: regional_corporation&.name,
         village_corporation: village_corporation,
@@ -143,6 +147,7 @@ class Community < ApplicationRecord
       }.compact
     }
   end
+  
 
   def available_price_types
     types = []
