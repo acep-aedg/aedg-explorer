@@ -26,9 +26,10 @@
           title: 'Generation',
           description: 'Energy generation trends and fuel source mix',
           anchor: '#generation',
-          related_metadata: ["public_monthly_generation", "public_yearly_generation"] do
-          = render "communities/#{tab}/generation/about_modal"
+          related_metadata: ["public_monthly_generation", "public_yearly_generation"],
+          about_modal_id: 'generationInfoModal' # this id must match the id in the sections about_modal partial
         
+        = render "communities/#{tab}/generation/about_modal"
         = render "communities/#{tab}/generation"
         
     - if @community.show_capacity?
@@ -38,7 +39,8 @@
           title: 'Capacity',
           description: 'Installed infrastructure and maximum power output',
           anchor: '#capacity',
-          related_metadata: ["public_capacity"] do
-          = render "communities/#{tab}/capacity/about_modal"
-          
+          related_metadata: ["public_capacity"],
+          about_modal_id: 'capacityInfoModal' # this id must match the id in the sections about_modal partial
+        
+        = render "communities/#{tab}/capacity/about_modal"
         = render "communities/#{tab}/capacity"
