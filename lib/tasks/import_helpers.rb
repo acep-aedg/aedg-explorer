@@ -6,7 +6,7 @@ module ImportHelpers
       puts "⚠️  SKIPPING #{model.name}: File not found at #{filepath}"
       return
     end
-
+    start_time = Time.current
     puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
     data = File.read(filepath)
     feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
@@ -19,7 +19,8 @@ module ImportHelpers
     rescue StandardError => e
       puts "Error processing #{model.name} at index #{index}, Error: #{e.message}"
     end
-    puts "#{model.name.pluralize} import complete"
+    duration = (Time.current - start_time).round(2)
+    puts "#{model.name.pluralize} complete: #{duration}s"
   end
 
   # Imports tabular data from a CSV file and processes it into the given model.
@@ -29,7 +30,7 @@ module ImportHelpers
       puts "⚠️  SKIPPING #{model.name}: File not found at #{filepath}"
       return
     end
-
+    start_time = Time.current
     puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
     csv = CSV.read(filepath, headers: true)
 
@@ -38,7 +39,8 @@ module ImportHelpers
     rescue StandardError => e
       puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
     end
-    puts "#{model.name.pluralize} import complete"
+    duration = (Time.current - start_time).round(2)
+    puts "#{model.name.pluralize} complete: #{duration}s"
   end
 
   def self.download_data(remote_path, local_path)

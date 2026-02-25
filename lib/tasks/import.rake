@@ -3,42 +3,51 @@ require "rgeo/geo_json"
 require_relative "import_helpers"
 require_relative "versioning"
 
+# This rubocop offence is fixed in a seperate PR
+# rubocop:disable Metrics/BlockLength
 namespace :import do
   desc "Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)"
   task all: %i[environment download_data] do
-    puts "Importing data files..."
-    Rake::Task["import:boroughs"].invoke
-    Rake::Task["import:regional_corporations"].invoke
-    Rake::Task["import:grids"].invoke
-    Rake::Task["import:reporting_entities"].invoke
-    Rake::Task["import:electric_rates"].invoke
-    Rake::Task["import:sales"].invoke
-    Rake::Task["import:senate_districts"].invoke
-    Rake::Task["import:house_districts"].invoke
-    Rake::Task["import:school_districts"].invoke
-    Rake::Task["import:communities"].invoke
+    start_time = Time.current
+    puts "Starting full parallel import at #{start_time.strftime('%H:%M:%S')}..."
+    Rake::Task["import:layer_one"].invoke
+    Rake::Task["import:layer_two"].invoke
+    Rake::Task["import:plants"].invoke
+    Rake::Task["import:layer_three"].invoke
+    Rake::Task["import:handle_version"].invoke
+
+    duration_seconds = (Time.current - start_time).to_i
+    minutes, seconds = duration_seconds.divmod(60)
+
+    puts "Total time elapsed: #{minutes}m #{seconds}s"
+  end
+
+  # Imports with no dependencies
+  multitask layer_one: %i[boroughs regional_corporations grids service_areas]
+
+  # Imports that depend on layer one
+  multitask layer_two: %i[communities reporting_entities service_area_geoms]
+
+  # Imports that depend on plants & layer two and take longer time
+  multitask layer_three: %i[monthly_generations yearly_generations heating_degree_days fuel_prices everything_else]
+
+  task everything_else: :environment do
     Rake::Task["import:community_reporting_entities"].invoke
     Rake::Task["import:income_poverty"].invoke
     Rake::Task["import:household_income"].invoke
-    Rake::Task["import:service_areas"].invoke
-    Rake::Task["import:service_area_geoms"].invoke
-    Rake::Task["import:community_service_area_geoms"].invoke
-    Rake::Task["import:plants"].invoke
-    Rake::Task["import:capacities"].invoke
-    Rake::Task["import:bulk_fuel_facilities"].invoke
-    Rake::Task["import:yearly_generations"].invoke
-    Rake::Task["import:monthly_generations"].invoke
     Rake::Task["import:community_grids"].invoke
     Rake::Task["import:populations"].invoke
     Rake::Task["import:transportation"].invoke
     Rake::Task["import:populations_ages_sexes"].invoke
+    Rake::Task["import:senate_districts"].invoke
+    Rake::Task["import:house_districts"].invoke
+    Rake::Task["import:school_districts"].invoke
+    Rake::Task["import:capacities"].invoke
     Rake::Task["import:employments"].invoke
-    Rake::Task["import:fuel_prices"].invoke
-    Rake::Task["import:heating_degree_days"].invoke
-    puts "Import complete"
-
-    Rake::Task["import:handle_version"].invoke
-
+    Rake::Task["import:bulk_fuel_facilities"].invoke
+    Rake::Task["import:sales"].invoke
+    Rake::Task["import:electric_rates"].invoke
+    Rake::Task["import:community_service_area_geoms"].invoke
   end
 
   task handle_version: :environment do
@@ -339,3 +348,4 @@ namespace :import do
     ImportHelpers.import_csv(filepath, HouseholdIncome)
   end
 end
+# rubocop:enable Metrics/BlockLength
