@@ -14,7 +14,7 @@
 
         -# Share Button
         - if anchor.present?
-          %button.btn.btn-link.p-0.ms-2{ data: { controller: "copy",
+          %button.btn.btn-link.p-0.ms-2{ aria: { label: "Copy link to #{title}" }, data: { controller: "copy",
             action: "copy#copy",
             copy_url_value: "#{request.base_url}#{request.path}#{anchor}",
             copy_target: "button",
@@ -23,7 +23,7 @@
             copy_active_class: "text-success",
             copy_original_class: "text-muted" } }
 
-            %i.bi.bi-link-45deg.fs-4{ data: { copy_target: "icon" } }
+            %i.bi.bi-link-45deg.fs-4{ data: { copy_target: "icon" }, aria: { hidden: "true" } }
       -# Description
       - if description.present?
         %small.text-muted= description
@@ -40,16 +40,16 @@
         .d-block
           - if metadata_records.one?
             = link_to metadatum_path(metadata_records.first), data: { turbo_frame: "_top" }, class: "btn btn-sm btn-aedg-primary" do
-              %i.bi.bi-database.me-1
+              %i.bi.bi-database.me-1{ aria: { hidden: "true" } }
               View Dataset
           - else
             .dropdown
-              %button.btn.btn-sm.btn-aedg-primary.dropdown-toggle{ data: { bs_toggle: "dropdown" }, type: "button" }
-                %i.bi.bi-database.me-1
+              %button.btn.btn-sm.btn-aedg-primary.dropdown-toggle{ data: { bs_toggle: "dropdown" }, type: "button", aria: { expanded: "false", haspopup: "true" }}
+                %i.bi.bi-database.me-1{ aria: { hidden: "true" } }
                 View Datasets
-              %ul.dropdown-menu.dropdown-menu-end
+              %ul.dropdown-menu.dropdown-menu-end{ aria: { labelledby: "dropdown-#{title.parameterize}" } }
                 - metadata_records.each do |m|
                   %li
                     = link_to metadatum_path(m), data: { turbo_frame: "_top" }, class: "dropdown-item small" do
-                      %i.bi.bi-file-earmark.me-2
+                      %i.bi.bi-file-earmark.me-2{ aria: { hidden: "true" } }
                       = m.title
