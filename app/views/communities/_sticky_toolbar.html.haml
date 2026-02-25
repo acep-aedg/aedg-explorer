@@ -21,7 +21,7 @@
             - if @community.borough.present? && !@community.borough.census_area? && @community.grid.present?
               %span.mx-1 &bull;
             - if @community.grid.present?
-              = link_to @community.grid.name, grid_path(@community.grid), class: "text-info fw-semibold", data: { turbo: false }
+              = link_to @community.grid.name, grid_path(@community.grid), class: "text-info fw-semibold", data: { turbo_frame: "_top" }
 
     -# Dropdown
     .col-auto.col-md-auto.order-1.order-lg-2

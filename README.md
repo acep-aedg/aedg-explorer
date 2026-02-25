@@ -29,7 +29,7 @@ TODO: Add ruby install instructions
 
 Ensure you have the following dependencies installed:
 
-- **Ruby**: 3.2.3+
+- **Ruby**: 3.4.5
 - **Yarn**: 1.22.21
 - **Node.js**: v21.6.1
 - **asdf**: https://asdf-vm.com/
@@ -37,6 +37,13 @@ Ensure you have the following dependencies installed:
 
 ---
 ### Running the Application
+
+1. Install asdf ruby
+    ```bash
+    asdf plugin add ruby
+    asdf install ruby 3.4.5
+    ```
+    **Note**: If you need to update the list of ruby versions, run `asdf plugin update ruby` and then `asdf install ruby 3.4.5`.
 
 1. Install asdf nodejs/yarn dependencies - https://asdf-vm.com/
     ```bash
@@ -230,4 +237,3 @@ No. This process only updates the collation metadata and rebuilds indexes. Your 
 - For fresh setups or newly initialized databases, this issue typically won’t occur.
 
 ---
-

@@ -3,7 +3,9 @@ require "rgeo"
 
 class SenateDistrictAttributesTest < ActiveSupport::TestCase
   def setup
-    @geom_factory = RGeo::Geographic.simple_mercator_factory
+    column_type = HouseDistrict.type_for_attribute(:boundary)
+    @geom_factory = column_type.spatial_factory
+
     polygon = @geom_factory.polygon(
       @geom_factory.linear_ring([
                                   @geom_factory.point(0, 0),

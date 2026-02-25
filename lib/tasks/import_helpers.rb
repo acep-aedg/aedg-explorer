@@ -103,4 +103,19 @@ module ImportHelpers
 
     puts "✅ Download complete! #{source_name} files copied to #{local_path}."
   end
+
+  def self.ensure_empty!(model, delete_tasks)
+    return unless model.any?
+
+    human_name = model.name.titleize
+    tasks = Array(delete_tasks)
+    command_chain = tasks.map { |t| "rails delete:#{t}" }.join(" && ")
+
+    raise <<~ERROR
+      \n ERROR: #{human_name} table is not empty!
+      To clear it safely, run:
+          #{command_chain}
+      Then try the import again.\n
+    ERROR
+  end
 end
