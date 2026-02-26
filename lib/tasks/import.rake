@@ -10,8 +10,9 @@ namespace :import do
     puts "Starting full parallel import at #{start_time.strftime('%H:%M:%S')}..."
     Rake::Task["import:layer_one"].invoke
     Rake::Task["import:layer_two"].invoke
-    Rake::Task["import:plants"].invoke
     Rake::Task["import:layer_three"].invoke
+    Rake::Task["import:layer_four"].invoke
+    Rake::Task["import:layer_five"].invoke
     Rake::Task["import:handle_version"].invoke
 
     duration_seconds = (Time.current - start_time).to_i
@@ -24,10 +25,16 @@ namespace :import do
   multitask layer_one: %i[boroughs regional_corporations grids service_areas]
 
   # Imports that depend on layer one
-  multitask layer_two: %i[communities reporting_entities service_area_geoms]
+  multitask layer_two: %i[senate_districts house_districts school_districts]
 
-  # Imports that depend on plants & layer two and take longer time
-  multitask layer_three: %i[monthly_generations yearly_generations heating_degree_days fuel_prices everything_else]
+  # Imports that depend on layer two
+  multitask layer_three: %i[communities reporting_entities service_area_geoms]
+
+  # Imports that depend on layer three
+  multitask layer_four: %i[plants]
+
+  # Imports that depend on layer four & earlier
+  multitask layer_five: %i[monthly_generations yearly_generations heating_degree_days fuel_prices everything_else]
 
   task everything_else: :environment do
     Rake::Task["import:community_reporting_entities"].invoke
@@ -38,9 +45,6 @@ namespace :import do
     Rake::Task["import:populations"].invoke
     Rake::Task["import:transportation"].invoke
     Rake::Task["import:populations_ages_sexes"].invoke
-    Rake::Task["import:senate_districts"].invoke
-    Rake::Task["import:house_districts"].invoke
-    Rake::Task["import:school_districts"].invoke
     Rake::Task["import:capacities"].invoke
     Rake::Task["import:employments"].invoke
     Rake::Task["import:bulk_fuel_facilities"].invoke
