@@ -22,27 +22,9 @@ module ImportHelpers
       puts "#{model.name.pluralize} complete: #{duration}s"
     end
 
-    # Imports tabular data from a CSV file and processes it into the given model.
-    # It assumes there is an `import_aedg!` method for the given model to store the data.
-    def import_csv(filepath, model)
-      return unless file_exists?(filepath, model)
-
-      start_time = Time.current
-      puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
-      csv = CSV.read(filepath, headers: true)
-
-      csv.each_with_index do |row, index|
-        model.import_aedg!(row.to_hash)
-      rescue StandardError => e
-        puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
-      end
-      duration = (Time.current - start_time).round(2)
-      puts "#{model.name.pluralize} complete: #{duration}s"
-    end
-
     # Imports tabular data from a CSV file and processes it into the given model in batches.
     # It assumes there is an `build_from_aedg` method for the given model to store the data.
-    def import_csv_batch(filepath, model)
+    def import_csv(filepath, model)
       return unless file_exists?(filepath, model)
 
       start_time = Time.current
@@ -55,7 +37,7 @@ module ImportHelpers
 
       result = model.import records,
                             batch_size: 2000,
-                            batch_progress: progress_reporter,
+                            recursive: true,
                             track_validation_failures: true
 
       failed_instances = result.failed_instances
@@ -147,13 +129,6 @@ module ImportHelpers
 
       puts "⚠️  SKIPPING #{model.name}: File not found at #{filepath}"
       false
-    end
-
-    def progress_reporter
-      lambda { |_size, num_batches, current, duration|
-        percent = ((current.to_f / num_batches) * 100).round(1)
-        puts "Batch #{current}/#{num_batches} (#{percent}%) - #{duration}s"
-      }
     end
 
     def print_summary(model, total, failed, duration)

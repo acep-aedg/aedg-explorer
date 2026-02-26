@@ -2,12 +2,10 @@ module CapacityAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      Capacity.new.tap do |capacity|
+      new.tap do |capacity|
         capacity.assign_aedg_attributes(properties)
-        capacity.save!
       end
     end
   end

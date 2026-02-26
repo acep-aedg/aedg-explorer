@@ -3,12 +3,10 @@ module HouseholdIncomeAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      HouseholdIncome.new.tap do |income|
+      new.tap do |income|
         income.assign_aedg_attributes(properties)
-        income.save!
       end
     end
   end

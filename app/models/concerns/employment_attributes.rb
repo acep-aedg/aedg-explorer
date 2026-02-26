@@ -2,12 +2,10 @@ module EmploymentAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      Employment.new.tap do |employment|
+      new.tap do |employment|
         employment.assign_aedg_attributes(properties)
-        employment.save!
       end
     end
   end

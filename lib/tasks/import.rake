@@ -31,7 +31,7 @@ namespace :import do
   multitask layer_three: %i[communities reporting_entities service_area_geoms]
 
   # Imports that depend on layer three
-  multitask layer_four: %i[plants]
+  multitask layer_four: %i[plants community_service_area_geoms]
 
   # Imports that depend on layer four & earlier
   multitask layer_five: %i[monthly_generations yearly_generations heating_degree_days fuel_prices miscellaneous]
@@ -50,7 +50,6 @@ namespace :import do
     Rake::Task["import:bulk_fuel_facilities"].invoke
     Rake::Task["import:sales"].invoke
     Rake::Task["import:electric_rates"].invoke
-    Rake::Task["import:community_service_area_geoms"].invoke
   end
 
   task handle_version: :environment do

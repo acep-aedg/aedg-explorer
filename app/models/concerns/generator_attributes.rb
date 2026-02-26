@@ -2,12 +2,10 @@ module GeneratorAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      Generator.new.tap do |infra|
-        infra.assign_aedg_attributes(properties)
-        infra.save!
+      new.tap do |generator|
+        generator.assign_aedg_attributes(properties)
       end
     end
   end
