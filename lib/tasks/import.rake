@@ -34,9 +34,9 @@ namespace :import do
   multitask layer_four: %i[plants]
 
   # Imports that depend on layer four & earlier
-  multitask layer_five: %i[monthly_generations yearly_generations heating_degree_days fuel_prices everything_else]
+  multitask layer_five: %i[monthly_generations yearly_generations heating_degree_days fuel_prices miscellaneous]
 
-  task everything_else: :environment do
+  task miscellaneous: :environment do
     Rake::Task["import:community_reporting_entities"].invoke
     Rake::Task["import:income_poverty"].invoke
     Rake::Task["import:household_income"].invoke
