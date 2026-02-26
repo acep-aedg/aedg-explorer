@@ -15,8 +15,10 @@
           icon: 'buildings', 
           title: 'Utilities', 
           description: 'Electrical providers, service areas, and grid infrastructure',
-          anchor: '#utilities'
-
+          anchor: '#utilities',
+          about_modal_id: 'utilitiesAboutModal' # this id must match the id in the sections about_modal partial
+        
+        = render "communities/#{tab}/utilities/about_modal"
         = render "communities/#{tab}/utilities"
 
     - if @community.show_generation?
@@ -27,7 +29,7 @@
           description: 'Energy generation trends and fuel source mix',
           anchor: '#generation',
           related_metadata: ["public_monthly_generation", "public_yearly_generation"],
-          about_modal_id: 'generationInfoModal' # this id must match the id in the sections about_modal partial
+          about_modal_id: 'generationAboutModal' # this id must match the id in the sections about_modal partial
         
         = render "communities/#{tab}/generation/about_modal"
         = render "communities/#{tab}/generation"
@@ -40,7 +42,7 @@
           description: 'Installed infrastructure and maximum power output',
           anchor: '#capacity',
           related_metadata: ["public_capacity"],
-          about_modal_id: 'capacityInfoModal' # this id must match the id in the sections about_modal partial
+          about_modal_id: 'capacityAboutModal' # this id must match the id in the sections about_modal partial
         
         = render "communities/#{tab}/capacity/about_modal"
         = render "communities/#{tab}/capacity"

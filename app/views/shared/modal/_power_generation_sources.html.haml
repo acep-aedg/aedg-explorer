@@ -1,9 +1,9 @@
 %i.bi.bi-geo-alt.text-primary.fs-4
 .flex-grow-1.ms-3
-  %h6.fw-bold.mb-1 Service Area
+  %h6.fw-bold.mb-1 Power Generation Sources
   %p.text-muted.mb-1
     This section displays data from power plants within this community’s
-    = @community.show_utility_service_area? ? 'local service area.' : ' utility service area.'
+    %strong= @community.show_utility_service_area? ? 'local service area.' : ' utility service area.'
     
   - if @community.grid
     = link_to grid_path(@community.grid, anchor: 'capacity'),
