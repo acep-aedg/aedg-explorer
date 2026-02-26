@@ -28,12 +28,10 @@ class BulkFuelFacility < ApplicationRecord
       type: "Feature",
       geometry: RGeo::GeoJSON.encode(location),
       properties: {
-        name: name,
-        inspected_by_uscg: inspected_by_uscg,
-        fuel_supplier: fuel_supplier,
-        barge_delivery: barge_delivery,
-        plane_delivery: plane_delivery,
-        road_delivery: road_delivery
+        id: id,
+        category: "Bulk Fuel Facility Location",
+        title: name,
+        content: content
       }
     }
   end

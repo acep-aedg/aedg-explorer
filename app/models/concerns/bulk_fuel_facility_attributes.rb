@@ -42,5 +42,46 @@ module BulkFuelFacilityAttributes
         location: params[:location]
       )
     end
+
+    def content
+      {}.merge(delivery_bullets)
+        .merge(capacity_rows)
+        .merge(infrastructure_rows)
+        .compact
+    end
+
+    private
+
+    def delivery_bullets
+      {
+        "_road" => road_delivery ? "Road Delivery" : nil,
+        "_barge" => barge_delivery ? "Barge Delivery" : nil,
+        "_plane" => plane_delivery ? "Plane Delivery" : nil
+      }
+    end
+
+    def capacity_rows
+      {
+        "Diesel" => format_fuel(diesel_capacity),
+        "Gasoline" => format_fuel(gasoline_capacity),
+        "Jet Fuel" => format_fuel(jet_fuel_capacity),
+        "Total Capacity" => format_fuel(total_capacity)
+      }
+    end
+
+    def infrastructure_rows
+      {
+        "Tanks" => number_of_tanks.to_i.positive? ? number_of_tanks : nil,
+        "Supplier" => fuel_supplier.presence,
+        "USCG Inspected" => inspected_by_uscg ? "Yes" : "No",
+        "Mooring Dist." => distance_to_barge_mooring.present? ? "#{distance_to_barge_mooring} miles" : nil
+      }
+    end
+
+    def format_fuel(amount)
+      return unless amount.to_i.positive?
+
+      "#{ActiveSupport::NumberHelper.number_to_delimited(amount)} gal"
+    end
   end
 end

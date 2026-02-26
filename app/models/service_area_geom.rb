@@ -17,7 +17,9 @@ class ServiceAreaGeom < ApplicationRecord
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
         id: id,
-        tooltip: service_area&.name
+        category: "Service Area",
+        title: service_area&.name,
+        aedg_id: aedg_id
       }
     }
   end

@@ -32,5 +32,14 @@ module PlantAttributes
         location: params[:location]
       )
     end
+
+    def content
+      {
+        "Grid" => grid&.name,
+        "Voltage" => grid_primary_voltage_kv ? "#{grid_primary_voltage_kv} kV" : nil,
+        "Combined Heat & Power" => (combined_heat_power == true ? "Yes" : nil),
+        "Notes" => notes
+      }.compact
+    end
   end
 end

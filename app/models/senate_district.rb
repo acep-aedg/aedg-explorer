@@ -20,8 +20,10 @@ class SenateDistrict < ApplicationRecord
       type: "Feature",
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
-        id: district,
-        tooltip: "Senate District: #{district}"
+        id: id,
+        category: "Senate District Area",
+        title: "District #{district}",
+        district_code: district
       }
     }
   end
