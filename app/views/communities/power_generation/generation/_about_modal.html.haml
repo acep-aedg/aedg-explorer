@@ -1,9 +1,12 @@
-= render 'shared/about_modal', id: 'generationInfoModal', title: 'About Generation Data' do
+= render 'shared/about_modal', id: 'generationAboutModal', title: 'About Generation Data' do
   .d-flex.mb-4
-    = render 'shared/modal/generation_sources', entity: @community
+    = render 'shared/modal/power_generation_sources'
+  .d-flex.mb-4
+    = render 'shared/modal/service_areas'
+  .d-flex.mb-4
+    = render 'shared/modal/data_reporting', entity: @community
   .d-flex.mb-4
     = render 'shared/modal/net_vs_gross_generation'
   .d-flex.mb-4
-    = render 'shared/modal/community_service_area'
-  .d-flex
     = render 'shared/modal/ipp_generation'
+    
