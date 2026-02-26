@@ -17,7 +17,9 @@ class ServiceArea < ApplicationRecord
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
         id: cpcn_id,
-        tooltip: name
+        category: "Full Service Area",
+        title: name,
+        cpcn_id: cpcn_id
       }
     }
   end

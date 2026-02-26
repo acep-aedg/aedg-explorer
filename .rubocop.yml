@@ -3,7 +3,7 @@ inherit_from: .rubocop_todo.yml
 plugins: rubocop-rails
 
 AllCops:
-  TargetRubyVersion: 3.3
+  TargetRubyVersion: 3.4
   NewCops: enable
   Exclude:
     - 'db/migrate/**/*'

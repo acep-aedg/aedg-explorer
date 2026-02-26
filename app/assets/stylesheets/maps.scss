@@ -1,4 +1,4 @@
-//TODO:  keeping this file incase we need styles for maps with new refactor 
+// Legend Styles for Sidebar
 .legend-swatch {
   display: inline-block;
   width: 12px;
@@ -11,7 +11,129 @@
   vertical-align: middle;
   flex-shrink: 0;
 }
+
 .form-check-input:not(:checked) ~ .form-check-label .legend-swatch {
   opacity: 0.3;
   filter: grayscale(50%);
+}
+
+// --- Custom Popups ---
+
+.map-hover-peek {
+  pointer-events: none; /* Prevents the popup from "stealing" the hover from the icon */
+}
+
+.mapboxgl-popup {
+  width: 220px !important; 
+  max-width: 280px !important;
+}
+
+.mapboxgl-popup-content {
+  display: inline-block; 
+  width: fit-content;
+  padding: 0 !important;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
+  overflow: hidden; // Ensures the accent bar doesn't bleed past the corners
+}
+
+.modern-click-popup {
+  z-index: 10;
+  .mapboxgl-popup-close-button {
+    color: #002147;
+    padding: 4px 8px;
+    font-size: 1.1rem;
+    &:hover { background: transparent; color: #cc0000; }
+  }
+}
+
+.popup-inner {
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px 14px 10px;
+  position: relative;
+
+  .popup-header {
+    padding-bottom: 6px;
+    
+    .popup-category {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      opacity: 0.5;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+
+    p {
+      white-space: normal;
+      word-break: break-word;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      line-height: 1.1;
+      color: #002147;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+.popup-body {
+  list-style: none; 
+  margin: 0;
+  padding: 0;
+
+  .location-item {
+    display: block;
+    position: relative;
+    padding-left: 12px;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4a5568;
+    letter-spacing: 0.01em; 
+
+    &:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #3387d6;
+      font-weight: 900;
+    }
+  }
+
+  .data-row {
+    font-size: 0.75rem;
+    margin-top: 4px;
+    color: #4a5568;
+    
+    strong { 
+      color: #002147;
+      text-transform: uppercase;
+      font-size: 0.7rem; 
+    }
+  }
+}
+
+.popup-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #0056b3;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.popup-accent-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #002147;
 }

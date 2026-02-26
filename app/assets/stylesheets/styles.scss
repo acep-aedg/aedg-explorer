@@ -1,6 +1,6 @@
-
 .navbar {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15),
+  box-shadow:
+    0 0.5rem 1rem rgba(0, 0, 0, 0.15),
     inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 
   .nav-link {
@@ -46,7 +46,9 @@
         padding: 1rem 2rem;
         font-size: 1rem;
         font-weight: 500;
-        transition: background-color 0.3s ease, color 0.3s ease;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
 
         &:hover {
           background-color: lighten($aedg-yellow, 15%);
@@ -73,7 +75,6 @@
   }
 }
 
-
 // Reusable button styles
 .btn-aedg-primary {
   background-color: $aedg-yellow;
@@ -83,16 +84,32 @@
   &:hover {
     background-color: darken($aedg-yellow, 10%);
   }
+
+  &:active,
+  &.active,
+  &.show,
+  .show > &.dropdown-toggle {
+    background-color: darken($aedg-yellow, 10%) !important;
+    color: $aedg-navy !important;
+  }
 }
 
 .btn-aedg-secondary {
   background-color: $aedg-navy;
   color: $white;
-  border-color: darken($aedg-navy, 10%);
+  border-width: 0px;
 
   &:hover {
     background-color: darken($aedg-navy, 10%);
     color: $aedg-yellow;
+  }
+
+  &:active,
+  &.active,
+  &.show,
+  .show > &.dropdown-toggle {
+    background-color: darken($aedg-navy, 10%) !important;
+    color: $aedg-yellow !important;
   }
 }
 
@@ -156,10 +173,8 @@
   border-radius: 50%;
   height: 14px;
   width: 14px;
-  content: '';
+  content: "";
 }
-
-
 
 #faq {
   .nav-pills .nav-link {
@@ -235,7 +250,9 @@
     font-weight: 500;
     font-size: 0.9rem;
     padding: 0.4rem 0.75rem;
-    transition: border-color 0.2s ease, color 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      color 0.2s ease;
 
     &:hover {
       color: $tabs-text-hover;
@@ -255,7 +272,8 @@
   color: $aedg-navy;
   transition: all 0.2s ease;
 
-  i, .text-dark {
+  i,
+  .text-dark {
     color: $aedg-navy !important;
   }
 
@@ -287,21 +305,27 @@
 
 #explore-data-hero {
   @extend .hero-section;
-  background-image: linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)), url('landscape_pc-gwen-holdmann.jpg');
+  background-image:
+    linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)),
+    url("landscape_pc-gwen-holdmann.jpg");
 }
 
 #community-data-hero {
   @extend .hero-section;
-  background-image: linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)), url('landscape_pc-gwen-holdmann.jpg');
-  }
+  background-image:
+    linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)),
+    url("landscape_pc-gwen-holdmann.jpg");
+}
 
- #grids-hero {
+#grids-hero {
   @extend .hero-section;
-  background-image: linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)), url('landscape_pc-gwen-holdmann.jpg');
+  background-image:
+    linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)),
+    url("landscape_pc-gwen-holdmann.jpg");
 }
 
 #quick-nav .nav-link:hover {
-  background-color: $gray-200; 
+  background-color: $gray-200;
   color: darken($primary, 25%);
   border-radius: 0.25rem;
 }
