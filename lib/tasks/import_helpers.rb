@@ -30,17 +30,48 @@ module ImportHelpers
       puts "⚠️  SKIPPING #{model.name}: File not found at #{filepath}"
       return
     end
-    start_time = Time.current
-    puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
-    csv = CSV.read(filepath, headers: true)
 
-    csv.each_with_index do |row, index|
-      model.import_aedg!(row.to_hash)
-    rescue StandardError => e
-      puts "Error processing #{model.name || 'Unknown'} at index #{index}: #{e.message}"
+    start_time = Time.current
+    puts "Importing #{model.name.pluralize}..."
+
+    # Define the progress reporter
+    progress_reporter = lambda { |_rows_size, num_batches, current_batch_number, batch_duration|
+      percent = ((current_batch_number.to_f / num_batches) * 100).round(1)
+      puts "Batch #{current_batch_number}/#{num_batches} (#{percent}%) - #{batch_duration}s"
+    }
+
+    records = []
+    CSV.foreach(filepath, headers: true) do |row|
+      records << model.build_from_aedg(row.to_hash)
     end
+
+    result = model.import records,
+                          batch_size: 2000,
+                          batch_progress: progress_reporter,
+                          track_validation_failures: true
+
+    failed_instances = result.failed_instances
+
     duration = (Time.current - start_time).round(2)
-    puts "#{model.name.pluralize} complete: #{duration}s"
+
+    puts "--------------------------------------------------"
+    puts "✅ #{model.name.pluralize} complete!"
+    puts "Total Records: #{records.size}"
+    puts "Failed Records: #{failed_instances.size}"
+    puts "Total Time: #{duration}s"
+
+    return unless failed_instances.any?
+
+    puts "\nERROR REPORT:"
+
+    failed_instances.each do |failure_data|
+      index_in_array, instance = failure_data
+      csv_row_number = index_in_array + 2
+      puts "CSV Row #: #{csv_row_number}"
+      puts "Row Data: #{instance.attributes.compact}"
+      puts "Validation Errors: #{instance.errors.full_messages.join(', ')}"
+      puts "---"
+    end
   end
 
   def self.download_data(remote_path, local_path)
