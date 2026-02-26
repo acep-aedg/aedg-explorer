@@ -14,13 +14,15 @@ class SearchesController < ApplicationController
 
   def advanced
     # --- MAIN COMMUNITY SEARCH ---
-    @pagy, @communities = pagy(:offset, build_scope(extract_filters), page_key: "page", limit: 25)
+    @pagy, @communities = pagy(:offset, build_scope(extract_filters), page_key: "page", limit: 25, params: ->(p) { p.permit!.to_h })
     # --- FACET FILTER SEARCH
     @facet_panels = Community.advanced_search_facets.map do |facet|
       col = facet[:prefix] =~ /senate|house/ ? :district : :name
       scope = facet[:model].filter_by_params(params, "q_#{facet[:prefix]}", "alpha_#{facet[:prefix]}", col)
-      pagy_item, items = pagy(:offset, scope, page_key: "page_#{facet[:prefix]}", limit: 20)
-      facet.merge(items: items, pagy: pagy_item)
+      pagy_item, items = pagy(:offset, scope, page_key: "page_#{facet[:prefix]}", limit: 20, params: ->(p) { p.permit!.to_h })
+      available = facet[:model].available_letters_for(col)
+
+      facet.merge(items: items, pagy: pagy_item, available_letters: available)
     end
     # --- ALL FACET FILTER SERACH
     @global_search_results = Community.search_facets_globally(params[:q_global])

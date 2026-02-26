@@ -36,15 +36,25 @@
 
     .facet-alphabet-nav.d-flex.flex-column.align-items-center.bg-light.border-start
       -# RESET BUTTON: Clears the alphabetical filter for this specific panel
-      = link_to search_advanced_path(params.permit!.merge(:"alpha_#{id_prefix}" => nil, expanded: panel[:id])),
-        class: "alphabet-link fw-bold text-decoration-none text-aedg-navy mb-2",
-        title: "Reset to All",
-        data: { turbo_frame: frame_id } do
-        %i.bi.bi-arrow-clockwise{ style: "font-size: 1.1rem; -webkit-text-stroke: 0.5px;" }
+      - reset_params = params.permit!.to_h.merge(:"alpha_#{id_prefix}" => nil,  :"q_#{id_prefix}" => nil, :"page_#{id_prefix}" => 1, expanded: panel[:id])
+      = link_to search_advanced_path(reset_params),
+          class: "alphabet-link fw-bold text-decoration-none text-aedg-navy mb-2",
+          title: "Reset to All",
+          data: { turbo_frame: frame_id } do
+        .icon-wrapper
+          %i.bi.bi-list
 
       -# A-Z LINKS
       - ('A'..'Z').each do |letter|
+        - current_selections = params[param_key] # Get the array of checked IDs
+        - available = panel[:available_letters] || []
+        - is_available = available.include?(letter)
         - is_active = params[:"alpha_#{id_prefix}"] == letter
-        = link_to letter, search_advanced_path(params.permit!.merge(:"alpha_#{id_prefix}" => letter, expanded: panel[:id])),
-          class: "alphabet-link fw-bold text-decoration-none #{'active' if is_active}",
-          data: { turbo_frame: frame_id }
+        
+        - if is_available
+          - letter_params = params.permit!.to_h.merge(:"alpha_#{id_prefix}" => letter, :"page_#{id_prefix}" => 1, expanded: panel[:id])
+          = link_to letter, search_advanced_path(letter_params),
+              class: "alphabet-link fw-bold text-decoration-none #{'active' if is_active}",
+              data: { turbo_frame: frame_id }
+        - else
+          %span.alphabet-link.text-muted.small{ style: "opacity: 0.3; cursor: default;" }= letter
