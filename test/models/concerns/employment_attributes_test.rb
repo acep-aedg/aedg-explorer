@@ -15,11 +15,12 @@ class EmploymentAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "import_aedg! creates an employment record with valid props" do
-    employment = nil
-    assert_difference -> { Employment.count }, +1 do
-      employment = Employment.import_aedg!(@valid_props)
-    end
+  test "build_from_aedg builds an employment record in memory with valid props" do
+    employment = Employment.build_from_aedg(@valid_props)
+
+    assert_instance_of Employment, employment
+    assert employment.new_record?
+    assert employment.valid?, "Employment should be valid: #{employment.errors.full_messages}"
 
     assert_equal @community, employment.community
     assert_equal @valid_props[:residents_employed], employment.residents_employed
@@ -27,24 +28,19 @@ class EmploymentAttributesTest < ActiveSupport::TestCase
     assert_equal @valid_props[:measurement_year], employment.measurement_year
   end
 
-  test "import_aedg! raises RecordInvalid for duplicate population for a community and year" do
-    Employment.import_aedg!(@valid_props)
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Employment.import_aedg!(@valid_props)
-    end
-  end
-
-  test "import_aedg! raises RecordInvalid when community fips code does not match an existing community" do
+  test "build_from_aedg results in an invalid record when community does not exist" do
     invalid_props = @valid_props.merge(community_fips_code: INVALID_FIPS_CODE)
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Employment.import_aedg!(invalid_props)
-    end
+    employment = Employment.build_from_aedg(invalid_props)
+
+    assert_not employment.valid?
+    assert_includes employment.errors[:community], "must exist"
   end
 
-  test "import_aedg! raises RecordInvalid when community fips code is nil" do
+  test "build_from_aedg is invalid when community fips code is nil" do
     invalid_props = @valid_props.merge(community_fips_code: nil)
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Employment.import_aedg!(invalid_props)
-    end
+    employment = Employment.build_from_aedg(invalid_props)
+
+    assert_not employment.valid?
+    assert_includes employment.errors[:community], "must exist"
   end
 end

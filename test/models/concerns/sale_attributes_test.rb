@@ -15,24 +15,34 @@ class SaleAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "import_aedg! creates sale record with valid props" do
-    sale = nil
-    assert_difference -> { Sale.count }, 1 do
-      sale = Sale.import_aedg!(@valid_props)
-    end
+  test "build_from_aedg builds a sale record in memory with valid props" do
+    sale = Sale.build_from_aedg(@valid_props)
+
+    assert_instance_of Sale, sale
+    assert sale.new_record?
+    assert sale.valid?, "Sale should be valid: #{sale.errors.full_messages}"
 
     assert_equal @reporting_entity, sale.reporting_entity
+
     assert_equal @valid_props[:year], sale.year
     assert_equal @valid_props[:residential_revenue], sale.residential_revenue
     assert_equal @valid_props[:commercial_sales], sale.commercial_sales
     assert_equal @valid_props[:total_customers], sale.total_customers
   end
 
-  test "import_aedg! raises RecordInvalid if reporting_entity is not found" do
-    invalid_props = @valid_props.merge(reporting_entity_id: INVALID_AEDG_ID)
+  test "is invalid when year is missing" do
+    invalid_props = @valid_props.except(:year)
+    sale = Sale.build_from_aedg(invalid_props)
 
-    assert_raises ActiveRecord::RecordInvalid do
-      Sale.import_aedg!(invalid_props)
-    end
+    assert_not sale.valid?
+    assert_includes sale.errors[:year], "can't be blank"
+  end
+
+  test "build_from_aedg results in an invalid record if reporting_entity is not found" do
+    invalid_props = @valid_props.merge(reporting_entity_id: INVALID_AEDG_ID)
+    sale = Sale.build_from_aedg(invalid_props)
+
+    assert_not sale.valid?
+    assert_includes sale.errors[:reporting_entity], "must exist"
   end
 end

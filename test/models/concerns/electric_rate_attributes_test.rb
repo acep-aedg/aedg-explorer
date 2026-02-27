@@ -12,21 +12,24 @@ class ElectricRateAttributesTest < ActiveSupport::TestCase
       residential_rate: 0.2
     }
   end
-  test "import_aedg! creates electric rate with valid props" do
-    electric_rate = nil
-    assert_difference -> { ElectricRate.count }, +1 do
-      electric_rate = ElectricRate.import_aedg!(@valid_props)
-    end
+
+  test "build_from_aedg prepares an electric rate in memory with valid props" do
+    electric_rate = ElectricRate.build_from_aedg(@valid_props)
+
+    assert_instance_of ElectricRate, electric_rate
+    assert electric_rate.new_record?
+    assert electric_rate.valid?, "Should be valid: #{electric_rate.errors.full_messages}"
 
     assert_equal @valid_props[:year], electric_rate.year
     assert_equal @valid_props[:residential_rate], electric_rate.residential_rate
     assert_equal @reporting_entity, electric_rate.reporting_entity
   end
 
-  test "import_aedg! raises NotNullViolation when associated grid does not exist" do
+  test "is invalid when associated reporting entity does not exist" do
     invalid_props = @valid_props.merge(reporting_entity_id: INVALID_AEDG_ID)
-    assert_raises(ActiveRecord::NotNullViolation) do
-      ElectricRate.import_aedg!(invalid_props)
-    end
+    electric_rate = ElectricRate.build_from_aedg(invalid_props)
+
+    assert_not electric_rate.valid?
+    assert_includes electric_rate.errors[:reporting_entity], "must exist"
   end
 end

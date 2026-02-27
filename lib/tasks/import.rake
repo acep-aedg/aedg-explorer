@@ -5,7 +5,7 @@ require_relative "versioning"
 
 namespace :import do
   desc "Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)"
-  task all: %i[environment download_data] do
+  task all: %i[environment] do
     start_time = Time.current
     puts "Starting full parallel import at #{start_time.strftime('%H:%M:%S')}..."
     Rake::Task["import:layer_one"].invoke

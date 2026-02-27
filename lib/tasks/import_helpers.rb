@@ -27,21 +27,31 @@ module ImportHelpers
 
       start_time = Time.current
       puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
-      data = File.read(filepath)
-      feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
 
-      records = feature_collection.map do |feature|
-        model.build_from_aedg_geojson(feature.properties, feature.geometry)
+      begin
+        data = File.read(filepath)
+        feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
+
+        records = feature_collection.map do |feature|
+          model.build_from_aedg_geojson(feature.properties, feature.geometry)
+        rescue StandardError => e
+          puts "  ⚠️ Skipping a row in #{model.name}: #{e.message}"
+          nil
+        end.compact
+
+        result = model.import records,
+                              batch_size: 1000,
+                              track_validation_failures: true
+
+        failed_instances = result.failed_instances
+        duration = (Time.current - start_time).round(2)
+        print_summary(model, records.size, failed_instances.size, duration)
+        report_errors(failed_instances) if failed_instances.any?
+      rescue StandardError => e
+        # This catches "Generic" errors for the whole file process
+        puts "❌ Critical Error importing #{model.name}: #{e.class} - #{e.message}"
+        puts e.backtrace.first(3).join("\n") # Shows exactly where it broke
       end
-
-      result = model.import records,
-                            batch_size: 1000,
-                            track_validation_failures: true
-
-      failed_instances = result.failed_instances
-      duration = (Time.current - start_time).round(2)
-      print_summary(model, records.size, failed_instances.size, duration)
-      report_errors(failed_instances) if failed_instances.any?
     end
 
     # Imports tabular data from a CSV file and processes it into the given model in batches.

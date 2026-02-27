@@ -14,31 +14,39 @@ class CommunityGridAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "import_aedg! creates a community grid with valid props" do
-    cg = nil
-    assert_difference -> { CommunityGrid.count }, 1 do
-      cg = CommunityGrid.import_aedg!(@valid_props)
-    end
+  test "build_from_aedg builds a community grid in memory with valid props" do
+    cg = CommunityGrid.build_from_aedg(@valid_props)
+    assert_instance_of CommunityGrid, cg
+    assert cg.new_record?
+    assert cg.valid?, "CommunityGrid should be valid: #{cg.errors.full_messages}"
+
     assert_equal @community, cg.community
+    assert_equal @grid, cg.grid
     assert_equal @valid_props[:connection_year], cg.connection_year
     assert_equal @valid_props[:termination_year], cg.termination_year
   end
 
-  test "import_aedg! raises RecordInvalid when community fips code is nil" do
-    invalid_props = @valid_props.merge(community_fips_code: nil)
-    assert_no_difference -> { CommunityGrid.count } do
-      assert_raises(ActiveRecord::RecordInvalid) do
-        CommunityGrid.import_aedg!(invalid_props)
-      end
-    end
+  test "build_from_aedg is invalid when community fips code does not exist" do
+    invalid_props = @valid_props.merge(community_fips_code: INVALID_FIPS_CODE)
+    cg = CommunityGrid.build_from_aedg(invalid_props)
+
+    assert_not cg.valid?
+    assert_includes cg.errors[:community], "must exist"
   end
 
-  test "import_aedg! raises RecordInvalid when community fips code does not match an existing community" do
-    invalid_props = @valid_props.merge(community_fips_code: INVALID_FIPS_CODE)
-    assert_no_difference -> { CommunityGrid.count } do
-      assert_raises(ActiveRecord::RecordInvalid) do
-        CommunityGrid.import_aedg!(invalid_props)
-      end
-    end
+  test "build_from_aedg is invalid when grid does not exist" do
+    invalid_props = @valid_props.merge(grid_id: INVALID_AEDG_ID)
+    cg = CommunityGrid.build_from_aedg(invalid_props)
+
+    assert_not cg.valid?
+    assert_includes cg.errors[:grid], "must exist"
+  end
+
+  test "build_from_aedg is invalid when fips code is nil" do
+    invalid_props = @valid_props.merge(community_fips_code: nil)
+    cg = CommunityGrid.build_from_aedg(invalid_props)
+
+    assert_not cg.valid?
+    assert_includes cg.errors[:community_fips_code], "can't be blank"
   end
 end

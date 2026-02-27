@@ -14,12 +14,12 @@ class YearlyGenerationAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "import_aedg! creates a yearly generation record with valid props" do
-    yg = nil
+  test "build_from_aedg builds a yearly generation record in memory with valid props" do
+    yg = YearlyGeneration.build_from_aedg(@valid_props)
 
-    assert_difference -> { YearlyGeneration.count }, +1 do
-      yg = YearlyGeneration.import_aedg!(@valid_props)
-    end
+    assert_instance_of YearlyGeneration, yg
+    assert yg.new_record?
+    assert yg.valid?, "YearlyGeneration should be valid: #{yg.errors.full_messages}"
 
     assert_equal @plant, yg.plant
     assert_equal @valid_props[:generation_mwh], yg.generation_mwh
@@ -28,10 +28,19 @@ class YearlyGenerationAttributesTest < ActiveSupport::TestCase
     assert_equal @valid_props[:year], yg.year
   end
 
-  test "import_aedg! raises RecordInvalid when associated plant cannot be found" do
+  test "build_from_aedg results in an invalid record when plant cannot be found" do
     invalid_props = @valid_props.merge(aea_plant_id: INVALID_AEDG_ID)
-    assert_raises(ActiveRecord::RecordInvalid) do
-      YearlyGeneration.import_aedg!(invalid_props)
-    end
+    yg = YearlyGeneration.build_from_aedg(invalid_props)
+
+    assert_not yg.valid?
+    assert_includes yg.errors[:plant], "must exist"
+  end
+
+  test "build_from_aedg is invalid when aea_plant_id is missing" do
+    invalid_props = @valid_props.except(:aea_plant_id)
+    yg = YearlyGeneration.build_from_aedg(invalid_props)
+
+    assert_not yg.valid?
+    assert_includes yg.errors[:plant], "must exist"
   end
 end
