@@ -16,21 +16,32 @@ json.cache! [@community.cache_key_with_version, @population_distribution.end_yea
     { label: "85+",   key: "85_plus" }
   ]
 
-  estimate_data = {}
-  moe_data = {}
+  labels = []
+  formatted_data = age_groups.map do |group|
+    val = @population_distribution[:"e_pop_age_#{group[:key]}"].to_i
+    moe = @population_distribution[:"m_pop_age_#{group[:key]}"].to_i
 
-  age_groups.each do |group|
-    estimate = @population_distribution[:"e_pop_age_#{group[:key]}"].to_i
-    moe      = @population_distribution[:"m_pop_age_#{group[:key]}"].to_i
+    labels << group[:label]
+    {
+      x: group[:label],
+      y: val,
+      yMin: [0, (val - moe).to_i].max,
+      yMax: (val + moe).to_i
+    }
+  end.compact
 
-    if estimate.positive?
-      estimate_data[group[:label]] = estimate
-      moe_data[group[:label]]      = moe
-    end
-  end
+  json.labels labels
 
-  json.array! [
-    { name: "Estimated Population", data: estimate_data },
-    { name: "Margin of Error",      data: moe_data }
+  json.datasets [
+    {
+      label: "Estimated Population",
+      data: formatted_data,
+      backgroundColor: "rgba(54, 162, 235, 0.5)",
+      borderColor: "rgb(54, 162, 235)",
+      borderWidth: 1,
+      errorBarColor: "rgb(255, 159, 64)",
+      errorBarWhiskerLineWidth: 2,
+      errorBarWhiskerSize: 10
+    }
   ]
 end

@@ -264,6 +264,10 @@ class Community < ApplicationRecord
     @show_population ||= population_age_sexes.exists?
   end
 
+  def show_age_distribution_chart?
+    @show_age_distribution_chart ||= population_age_sexes.with_age_estimates.exists?
+  end
+
   # --- Income Tab/Section ---
   def show_income?
     @show_income ||= show_household_income? || show_income_poverty?

@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import AgeDistributionChartController from "./age_distribution_chart_controller"
+application.register("age-distribution-chart", AgeDistributionChartController)
+
 import ChartController from "./chart_controller"
 application.register("chart", ChartController)
 
