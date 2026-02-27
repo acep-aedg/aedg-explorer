@@ -2,13 +2,12 @@ module PlantAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg_with_geom!(properties, geom)
+    def build_from_aedg_geojson(properties, geom)
       properties["location"] = geom
       properties.symbolize_keys!
 
-      Plant.new.tap do |plant|
+      new.tap do |plant|
         plant.assign_aedg_attributes(properties)
-        plant.save!
       end
     end
   end

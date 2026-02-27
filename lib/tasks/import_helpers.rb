@@ -2,7 +2,7 @@ module ImportHelpers
   class << self
     # Imports geographic data from a GeoJSON file and processes it into the given model.
     # It assumes there is an `import_aedg_with_geom!` method for the given model to store the data.
-    def import_geojson(filepath, model)
+    def import_communities(filepath, model)
       return unless file_exists?(filepath, model)
 
       start_time = Time.current
@@ -20,6 +20,28 @@ module ImportHelpers
       end
       duration = (Time.current - start_time).round(2)
       puts "#{model.name.pluralize} complete: #{duration}s"
+    end
+
+    def import_geojson(filepath, model)
+      return unless file_exists?(filepath, model)
+
+      start_time = Time.current
+      puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
+      data = File.read(filepath)
+      feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
+
+      records = feature_collection.map do |feature|
+        model.build_from_aedg_geojson(feature.properties, feature.geometry)
+      end
+
+      result = model.import records,
+                            batch_size: 1000,
+                            track_validation_failures: true
+
+      failed_instances = result.failed_instances
+      duration = (Time.current - start_time).round(2)
+      print_summary(model, records.size, failed_instances.size, duration)
+      report_errors(failed_instances) if failed_instances.any?
     end
 
     # Imports tabular data from a CSV file and processes it into the given model in batches.

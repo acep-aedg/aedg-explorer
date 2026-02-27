@@ -13,6 +13,7 @@ namespace :import do
     Rake::Task["import:layer_three"].invoke
     Rake::Task["import:layer_four"].invoke
     Rake::Task["import:layer_five"].invoke
+    Rake::Task["import:layer_six"].invoke
     Rake::Task["import:handle_version"].invoke
 
     duration_seconds = (Time.current - start_time).to_i
@@ -34,12 +35,11 @@ namespace :import do
   multitask layer_four: %i[plants community_service_area_geoms]
 
   # Imports that depend on layer four & earlier
-  multitask layer_five: %i[monthly_generations yearly_generations heating_degree_days fuel_prices miscellaneous]
+  multitask layer_five: %i[monthly_generations yearly_generations heating_degree_days fuel_prices community_reporting_entities]
+
+  multitask layer_six: %i[income_poverty household_income electric_rates sales miscellaneous]
 
   task miscellaneous: :environment do
-    Rake::Task["import:community_reporting_entities"].invoke
-    Rake::Task["import:income_poverty"].invoke
-    Rake::Task["import:household_income"].invoke
     Rake::Task["import:community_grids"].invoke
     Rake::Task["import:generators"].invoke
     Rake::Task["import:populations"].invoke
@@ -48,8 +48,6 @@ namespace :import do
     Rake::Task["import:capacities"].invoke
     Rake::Task["import:employments"].invoke
     Rake::Task["import:bulk_fuel_facilities"].invoke
-    Rake::Task["import:sales"].invoke
-    Rake::Task["import:electric_rates"].invoke
   end
 
   task handle_version: :environment do
@@ -115,7 +113,7 @@ namespace :import do
   desc "Import Community Data from .geojson file"
   task communities: :environment do
     filepath = Rails.root.join("db/imports/communities/communities.geojson")
-    ImportHelpers.import_geojson(filepath, Community)
+    ImportHelpers.import_communities(filepath, Community)
   end
 
   desc "Import Service Area Data from .geojson file"

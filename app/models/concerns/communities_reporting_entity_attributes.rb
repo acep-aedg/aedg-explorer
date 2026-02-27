@@ -1,7 +1,7 @@
 module CommunitiesReportingEntityAttributes
   extend ActiveSupport::Concern
 
-  class_methods do    
+  class_methods do
     def build_from_aedg(properties)
       properties.symbolize_keys!
       new.tap do |communities_reporting_entity|

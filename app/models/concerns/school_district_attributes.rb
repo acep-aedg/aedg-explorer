@@ -2,13 +2,12 @@ module SchoolDistrictAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg_with_geom!(properties, geom)
+    def build_from_aedg_geojson(properties, geom)
       properties["boundary"] = geom
       properties.symbolize_keys!
 
-      SchoolDistrict.new.tap do |school|
+      new.tap do |school|
         school.assign_aedg_attributes(properties)
-        school.save!
       end
     end
   end
