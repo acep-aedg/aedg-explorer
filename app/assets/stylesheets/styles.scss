@@ -358,3 +358,21 @@
     }
   }
 }
+
+.dotted-underline {
+  color: var(--bs-primary);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+  cursor: help;
+
+  display: inline-block;
+  line-height: 1;
+
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: var(--bs-primary-border-subtle);
+    text-decoration-style: solid;
+  }
+}

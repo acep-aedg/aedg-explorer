@@ -13,6 +13,10 @@
           .d-flex.align-items-center.mb-3
             %i.bi.bi-bar-chart-steps.me-2.text-primary
             %h5.mb-0.fw-bold Age Distribution
+          %p.small.text-muted.mb-3
+            = "Estimated population counts by age cohort - based on American Community Survey (ACS) "
+            %span.dotted-underline{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "ACS 5-year estimates are collected over a 60-month period. This reflects the average characteristics of the population over the entire timeframe rather than a single point in time." } 5-year estimates
+            = " for the selected period."
         
           = render "communities/#{parent_tab}/population/population_age_chart"
           
@@ -21,6 +25,10 @@
           .d-flex.align-items-center.mb-3
             %i.bi.bi-gender-ambiguous.me-2.text-primary
             %h5.mb-0.fw-bold Sex Distribution
+          %p.small.text-muted.mb-3
+            = "Estimated population counts by sex - based on American Community Survey (ACS) "
+            %span.dotted-underline{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "ACS 5-year estimates are collected over a 60-month period. This reflects the average characteristics of the population over the entire timeframe rather than a single point in time." } 5-year estimates
+            = " across all available periods."
         
           = render "communities/#{parent_tab}/population/population_sex_chart"
 

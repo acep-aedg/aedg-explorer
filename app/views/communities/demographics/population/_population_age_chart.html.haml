@@ -17,11 +17,7 @@
                   }
 
   .d-flex.align-items-center.gap-2.mb-3
-    %i.bi.bi-info-circle-fill.text-aedg-navy{
-      data: { controller: 'tooltip', bs_toggle: 'tooltip' },
-      title: "American Community Survey (ACS) 5-year estimates is data collected over a 60-month period. The data reflects the average characteristics of the population between the start and end dates."
-    }
-    %label.form-label.me-2.mb-0.fw-bold{ for: "population-period" } ACS 5-year period:
+    %label.form-label.me-2.mb-0.fw-bold{ for: "population-period" } Survey Period:
   
     - if population_periods.size > 1
       = select_tag "population-period", 
