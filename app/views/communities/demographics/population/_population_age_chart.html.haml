@@ -1,17 +1,15 @@
-- population_periods ||= []
+- population_periods = @community.population_age_sexes.with_age_estimates
 - selected_period    ||= population_periods.first
-- chart_id            = "age-distribution-chart"
-- selected_end_year   = selected_period&.end_year
 - base_title          = "Age Distribution"
 
 .age-chart-wrapper{ data: { 
                       controller: "age-distribution-chart",
                       age_distribution_chart: {
                         base_title_value: base_title,
-                        title_value: "#{base_title} (#{selected_end_year})",
+                        title_value: "#{base_title} (#{selected_period&.period_label})",
                         base_url_value: age_distribution_community_charts_path(@community),
                         param_value: "end_year",
-                        url_value: age_distribution_community_charts_path(@community, end_year: selected_end_year),
+                        url_value: age_distribution_community_charts_path(@community, end_year: selected_period&.end_year),
                         bar_color_value: color(:blue),
                         error_bar_color_value: color(:orange)
                       }
@@ -21,18 +19,17 @@
   .d-flex.align-items-center.gap-2.mb-3
     %i.bi.bi-info-circle-fill.text-aedg-navy{
       data: { controller: 'tooltip', bs_toggle: 'tooltip' },
-      title: "American Community Survey (ACS)"
+      title: "American Community Survey (ACS) 5-year estimates is data collected over a 60-month period. The data reflects the average characteristics of the population between the start and end dates."
     }
     %label.form-label.me-2.mb-0.fw-bold{ for: "population-period" } ACS 5-year period:
   
     - if population_periods.size > 1
-      %select#population-period.form-select.form-select-sm.w-auto{ data: { action: "change->age-distribution-chart#update" } }
-        - population_periods.each do |p|
-          %option{ value: p.end_year, selected: p.end_year == selected_end_year }= "#{p.start_year}–#{p.end_year}"
+      = select_tag "population-period", 
+                        options_from_collection_for_select(population_periods, :end_year, :period_label, selected_period&.end_year),
+                        class: "form-select form-select-sm w-auto",
+                        data: { action: "change->age-distribution-chart#update" }
     - else
-      - p = population_periods.first
-      %span.fs-5.fw-bold.text-muted
-        = "#{p.start_year}–#{p.end_year}"
+      %span.fs-5.fw-bold.text-muted= selected_period&.period_label
 
   .chart-container.mt-4{ style: "min-height: 500px;" }
-    %canvas{ id: chart_id, data: { "age-distribution-chart-target": "canvas" } }
+    %canvas{ data: { "age-distribution-chart-target": "canvas" } }

@@ -17,7 +17,6 @@ export default class extends Controller {
     baseTitle: String,
     barColor: String,
     errorBarColor: String,
-    
   };
 
   async urlValueChanged() {
@@ -27,45 +26,39 @@ export default class extends Controller {
       const response = await fetch(this.urlValue);
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
-      this.renderChart(data);
+      const chartData = this.prepareData(data);
+      this.renderChart(chartData);
     } catch (error) {
       console.error("Chart load failed:", error);
     }
   }
 
-  titleValueChanged() {
-    if (this.chart) {
-      this.chart.options.plugins.title.text = this.titleValue;
-      this.chart.update();
-    }
+  prepareData(rawData) {
+    return {
+      labels: rawData.map((d) => d.label),
+      datasets: [
+        {
+          label: "Estimated Population",
+          backgroundColor: this.barColorValue || "#1f77b4",
+          errorBarColor: this.errorBarColorValue || "#ff7f0e",
+          errorBarWhiskerColor: this.errorBarColorValue || "#ff7f0e",
+          data: rawData.map((d) => ({
+            y: d.estimate,
+            yMin: Math.max(0, d.estimate - d.moe),
+            yMax: d.estimate + d.moe,
+          })),
+        },
+      ],
+    };
   }
 
-  update(event) {
-    const selectedValue = event.target.value;
-    this.titleValue = `${this.baseTitleValue} (${selectedValue})`;
-    const newUrl = new URL(this.baseUrlValue, window.location.origin);
-    newUrl.searchParams.set(this.paramValue, selectedValue);
-    this.urlValue = newUrl.toString();
-  }
-
-  renderChart(data) {
+  renderChart(chartData) {
     if (this.chart) this.chart.destroy();
     const fontColor = "#404040";
 
-    const styledData = {
-      ...data,
-      datasets: data.datasets.map((dataset) => ({
-        ...dataset,
-        backgroundColor: this.barColorValue || "1f77b4",
-        backgroundColor: this.barColorValue || "1f77b4",
-        errorBarColor: this.errorBarColorValue || "ff7f0e",
-        errorBarWhiskerColor: this.errorBarColorValue || "ff7f0e",
-      })),
-    };
-
     this.chart = new Chart(this.canvasTarget, {
       type: BarWithErrorBarsController.id,
-      data: styledData,
+      data: chartData,
       options: {
         indexAxis: "x",
         responsive: true,
@@ -119,6 +112,18 @@ export default class extends Controller {
         },
       },
     });
+  }
+
+  update(event) {
+    const select = event.target;
+    const selectedValue = select.value;
+    const selectedLabel = select.options[select.selectedIndex].text;
+
+    this.titleValue = `${this.baseTitleValue} (${selectedLabel})`;
+
+    const newUrl = new URL(this.baseUrlValue, window.location.origin);
+    newUrl.searchParams.set(this.paramValue, selectedValue);
+    this.urlValue = newUrl.toString();
   }
 
   disconnect() {
