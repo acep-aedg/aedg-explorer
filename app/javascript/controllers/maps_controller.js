@@ -1,9 +1,11 @@
 import { Controller } from '@hotwired/stimulus'
 import mapboxgl from 'mapbox-gl'
 import { MAP_STYLE, DEFAULT_ZOOM, LAYER_COLORS } from '../maps/config.js'
-import { loadLayer, loadMarkerLayer, removeSourceLayers } from '../maps/layers/index.js'
-import { boundsFrom, featureCollectionFromLngLats } from '../maps/geo.js'
+import { loadLayer, removeSourceLayers } from '../maps/layers/index.js'
+import { boundsFrom } from '../maps/geo.js'
 import { upsertDomMarker } from '../maps/dom_marker.js'
+import { defaultPopupTemplate } from '../maps/popup.js'
+import { attachPopup } from '../maps/popup.js'
 
 export default class extends Controller {
   static targets = ['map', 'loading', 'swatch']
@@ -11,8 +13,8 @@ export default class extends Controller {
     token: String,
     mapCenter: { type: Array, default: [-154.49, 63.58] },
     defaultLayerId: String,
-    markers: Array,                   // [[lng,lat], ...] initial coords from view
-    markerTooltipTitle: { type: String, default: 'Location' },
+    markers: Array,
+    markerTooltipTitle: { type: String, default: '' },
   }
 
   connect() {
@@ -20,7 +22,7 @@ export default class extends Controller {
     this.layerIds = []
     this.sourceIds = []
     this.layersBySource = new Map()
-    this._domMarker = null            // persistent DOM marker (not a Mapbox layer)
+    this._domMarker = null
 
     this.map = new mapboxgl.Map({
       container: this.mapTarget,
@@ -30,22 +32,15 @@ export default class extends Controller {
     })
 
     this.initSwatches()
-
-    // expose for global cleanup (turbo:before-render / before-cache)
     this.mapTarget._mapbox = this.map
-
-    this.map.on('load', async () => {
-      // place static DOM marker from server-provided coords (no hard-coding)
-      
-      if (this.hasMarkersValue) {
-        const [lng0, lat0] = (this.hasMarkersValue && this.markersValue[0])
-        const L0 = Number(lng0), A0 = Number(lat0);
-        this._domMarker = upsertDomMarker(this._domMarker, this.map, {
-          lng: L0, lat: A0, title: this.markerTooltipTitleValue
-        })
+    this.map.on('load', () => {
+      // Initial Marker setup
+      if (this.hasMarkersValue && this.markersValue.length > 0) {
+        const [lng, lat] = this.markersValue[0]
+        // Pass the default title value as extraData
+        this._updateMarker(Number(lng), Number(lat), { title: this.markerTooltipTitleValue })
       }
 
-      // Trigger default layer event
       if (this.hasDefaultLayerIdValue) {
         const checkbox = document.getElementById(this.defaultLayerIdValue)
         if (checkbox) {
@@ -56,166 +51,93 @@ export default class extends Controller {
     })
   }
 
-  // ---- PUBLIC ACTIONS ----
+  // --- PUBLIC ACTIONS ---
 
   initSwatches() {
     this.swatchTargets.forEach((swatch) => {
-      const checkbox = swatch.closest('.form-check').querySelector('input');
-      const color = LAYER_COLORS[checkbox.id];
-    
-      if (color) {
-        swatch.style.backgroundColor = color;
-      }
+      const checkbox = swatch.closest('.form-check').querySelector('input')
+      const color = LAYER_COLORS[checkbox.id]
+      if (color) swatch.style.backgroundColor = color
+    })
+  }
+
+  focusSection(event) {
+    const { lng, lat } = event.params;
+
+    this._updateMarker(lng, lat);
+
+    this.map.flyTo({
+      center: [Number(lng), Number(lat)],
+      zoom: 10
     });
   }
 
- // Move the persistent DOM marker to a section’s coords and center the map
-  focusSection(event) {
-    const { lng, lat, title } = event.params
-    const L = Number(lng), A = Number(lat)
-
-    this._domMarker = upsertDomMarker(this._domMarker, this.map, {
-      lng: L, lat: A, title: title || this.markerTooltipTitleValue
-    })
-    this.map.flyTo({ center: [L, A], essential: true })
-  }
-
-  // Checkbox: add/remove a *layer-based* marker set (simple circles) from markersValue
-  async toggleMarker(event) {
-    const el = event.currentTarget
-    const sourceId = this._markerSourceId()
-
-    if (el.checked) {
-      const fc = this._markerFC() // convert [[lng,lat],...] -> FeatureCollection
-      const { layerIds } =
-        await loadMarkerLayer(this.map, sourceId, fc, { iconSize: 1.2 })
-      this._remember(sourceId, layerIds)
-
-      // optional fit when enabling
-      const fit = el.dataset.fit ? el.dataset.fit !== 'false' : true
-      if (fit) {
-        const b = boundsFrom(fc)
-        if (!b.isEmpty()) this.map.fitBounds(b, { padding: 40, maxZoom: 10, duration: 0 })
-      }
-    } else {
-      // remove the marker layer+source and forget ids
-      this._forget(sourceId)
-      removeSourceLayers(this.map, sourceId)
-    }
-  }
-
-  // Checkbox: add/remove generic GeoJSON layers from map legend (districts, service areas, etc.)
   async toggleLayer(event) {
     const el = event.currentTarget
     const url = el.dataset.url || el.dataset.layerUrl || el.dataset.mapLayerUrl
     if (!url) return
-    let color = el.dataset.color || LAYER_COLORS[el.id];
-    let outlineColor = el.dataset.outlineColor || color ? this._computeOutlineColor(color) : undefined;
-    if (el.checked) {
-      // load the layer (polygon or point) with optional colors
-      const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color: color, outlineColor: outlineColor })
-      this._remember(sourceId, layerIds)
+    const color = el.dataset.color || LAYER_COLORS[el.id]
 
-      // optional fit when enabling
-      const fit = el.dataset.fit ? el.dataset.fit !== 'false' : true
-      if (fit) {
-        const b = boundsFrom(fc)
-        if (!b.isEmpty()) this.map.fitBounds(b, { padding: 40, maxZoom: 10, duration: 0 })
-      }
+    if (el.checked) {
+      await this._loadAndAttachLayer(url, color, el.dataset.fit !== 'false')
     } else {
-      // derive id from URL and remove that source+layers
       const sourceId = this._sourceIdFromUrl(url)
       this._forget(sourceId)
       removeSourceLayers(this.map, sourceId)
     }
   }
 
-  // // (UNUSED) Button: uncheck all layer toggles and remove all remembered layers/sources
-  // clearLayers() {
-  //   this.element
-  //     .querySelectorAll('input.form-check-input[type="checkbox"]')
-  //     .forEach(cb => { cb.checked = false })
-  //   this._removeAllLayersAndSources() // DOM marker persists
-  // }
-
-  // // (UNUSED) Button: reset camera to initial center/zoom and ensure DOM marker at community
-  // resetView() {
-  //   this._removeAllLayersAndSources()
-  //   this.map.flyTo({ center: this.mapCenterValue, zoom: DEFAULT_ZOOM, essential: true })
-
-  //   // ensure static DOM marker exists at the community coords
-  //   const [lng0, lat0] =
-  //     (this.hasMarkersValue && this.markersValue[0]) || this.mapCenterValue
-  //   const L0 = Number(lng0), A0 = Number(lat0)
-
-  //   this._domMarker = upsertDomMarker(this._domMarker, this.map, {
-  //     lng: L0, lat: A0, title: this.markerTooltipTitleValue
-  //   })
-  // }
-
-  // Click from outside the map panel: load a layer and sync the map panel checkbox
   async showLayer(event) {
-    const el = event.currentTarget;
-    const url = el.dataset.url || el.dataset.layerUrl || el.dataset.mapLayerUrl;
-    if (!url) return;
+    const el = event.currentTarget
+    const url = el.dataset.url || el.dataset.layerUrl || el.dataset.mapLayerUrl
+    if (!url) return
+    const color = el.dataset.color || LAYER_COLORS[el.dataset.checkboxId]
+    await this._ensureMapReady()
+    await this._loadAndAttachLayer(url, color, el.dataset.fit !== 'false')
+    const cb = this._findCheckboxForUrl(url, el.dataset.checkboxId)
+    if (cb && !cb.checked) cb.checked = true
+  }
 
-    let color = el.dataset.color || LAYER_COLORS[el.dataset.checkboxId];
-    let outlineColor = el.dataset.outlineColor || color ? this._computeOutlineColor(color) : undefined;
-    const fit = el.dataset.fit ? el.dataset.fit !== 'false' : true;
-    await this._ensureMapReady();
+  // --- PRIVATE HELPERS ---
 
-    // Load (idempotent: addSource updates existing; addLayer guards by id)
-    const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color:color, outlineColor:outlineColor });
-    this._remember(sourceId, layerIds);
+  _updateMarker(lng, lat) {
+    this._domMarker = upsertDomMarker(this._domMarker, this.map, {
+      lng: Number(lng),
+      lat: Number(lat)
+    });
+  }
 
-    if (fit) {
-      const b = boundsFrom(fc);
-      if (!b.isEmpty()) this.map.fitBounds(b, { padding: 40, maxZoom: 10, duration: 0 });
+  async _loadAndAttachLayer(url, color, fit = true) {
+    const outlineColor = color ? this._computeOutlineColor(color) : undefined
+    const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color, outlineColor })
+    this._remember(sourceId, layerIds)
+
+    // Attach popup logic to the newly loaded layers (reads GeoJSON properties automatically)
+    layerIds.forEach(id => attachPopup(this.map, id))
+
+    if (fit && fc.features.length > 0) {
+      const b = boundsFrom(fc)
+      if (!b.isEmpty()) this.map.fitBounds(b, { padding: 40, maxZoom: 10, duration: 800 })
     }
-
-    // Sync the matching checkbox so UI reflects the map state
-    const cb = this._findCheckboxForUrl(url, el.dataset.checkboxId);
-    if (cb && !cb.checked) cb.checked = true;
   }
 
-  // ---- helpers  ----
-
-  // --- helpers for showLayer ---
   async _ensureMapReady() {
-    if (!this.map) throw new Error('Map not initialized');
-    if (!this.map.isStyleLoaded()) await new Promise((r) => this.map.once('load', r));
+    if (!this.map) throw new Error('Map not initialized')
+    if (!this.map.isStyleLoaded()) await new Promise((r) => this.map.once('load', r))
   }
-    // Prefer an explicit checkbox id; otherwise match by data-url
+
   _findCheckboxForUrl(url, checkboxId) {
-    if (checkboxId) return document.getElementById(checkboxId);
-    // Try inside this controller’s element first, then anywhere on the page as a fallback
-    const sel = `input.form-check-input[data-url="${this._cssEscape(url)}"]`;
-    return this.element.querySelector(sel) || document.querySelector(sel);
+    if (checkboxId) return document.getElementById(checkboxId)
+    const sel = `input.form-check-input[data-url="${this._cssEscape(url)}"]`
+    return this.element.querySelector(sel) || document.querySelector(sel)
   }
 
-  // Minimal CSS escaper for attribute selectors
-  _cssEscape(s = '') { return String(s).replace(/["\\]/g, '\\$&'); }
+  _cssEscape(s = '') { return String(s).replace(/["\\]/g, '\\$&') }
 
-  /// ------------------------------------------
-
-  // Stable source id for the marker layer namespace (per-controller element)
-  _markerSourceId() {
-    return `marker:${this.element.id || 'map'}`
-  }
-
-  // Build a FeatureCollection from `markersValue` for layer-based markers
-  _markerFC() {
-    return featureCollectionFromLngLats(this.hasMarkersValue ? this.markersValue : [], {
-      title: this.markerTooltipTitleValue
-    })
-  }
-
-  // Convert a URL path into a safe, deterministic source id
   _sourceIdFromUrl(url) {
     return new URL(url, window.location.origin).pathname.replace(/[^\w-]/g, ':')
   }
 
-  // Track added layer/source ids for later cleanup
   _remember(sourceId, layerIds) {
     if (!this.sourceIds.includes(sourceId)) this.sourceIds.push(sourceId)
     for (const id of layerIds) if (!this.layerIds.includes(id)) this.layerIds.push(id)
@@ -224,7 +146,6 @@ export default class extends Controller {
     this.layersBySource.set(sourceId, set)
   }
 
-  // Forget a specific source and its layer ids in our bookkeeping
   _forget(sourceId) {
     const set = this.layersBySource.get(sourceId)
     if (set) {
@@ -234,36 +155,13 @@ export default class extends Controller {
     this.sourceIds = this.sourceIds.filter((x) => x !== sourceId)
   }
 
-  // Remove all remembered layers/sources from the map and clear bookkeeping
-  _removeAllLayersAndSources() {
-    this.layerIds.splice(0).forEach((id) => { if (this.map?.getLayer(id)) this.map.removeLayer(id) })
-    this.sourceIds.splice(0).forEach((id) => { if (this.map?.getSource(id)) this.map.removeSource(id) })
-    this.layersBySource.clear()
-  }
-  
   _computeOutlineColor(color) {
     let hex = color.replace('#', '')
-
-    // Expand shorthand "#abc" → "#aabbcc"
-    if (hex.length === 3) {
-      hex = hex.split('').map(c => c + c).join('')
-    }
-  
-    // Convert to RGB
-    let r = parseInt(hex.substring(0, 2), 16)
-    let g = parseInt(hex.substring(2, 4), 16)
-    let b = parseInt(hex.substring(4, 6), 16)
-  
-    // Darken by 25%
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('')
+    let r = parseInt(hex.substring(0, 2), 16), g = parseInt(hex.substring(2, 4), 16), b = parseInt(hex.substring(4, 6), 16)
     const factor = 0.75
-  
-    r = Math.floor(r * factor)
-    g = Math.floor(g * factor)
-    b = Math.floor(b * factor)
-  
-    // Convert back to hex
+    r = Math.floor(r * factor); g = Math.floor(g * factor); b = Math.floor(b * factor)
     const toHex = (v) => v.toString(16).padStart(2, '0')
-
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`
   }
 }

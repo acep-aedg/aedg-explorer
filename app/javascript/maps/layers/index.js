@@ -3,31 +3,6 @@ import { addPolygonLayers } from './polygon.js'
 import { addPointLayer } from './points.js'
 import { attachPopup } from '../popup.js'
 
-// Remove all non-"marker:" layers/sources and prune layerIds/sourceIds in place
-// export function clearAll(map, layerIds, sourceIds) {
-//   const keepLayerIds = []
-//   layerIds.forEach(id => {
-//     const layer = map.getLayer(id)
-//     const srcId = layer?.source
-//     if (srcId && srcId.startsWith('marker:')) {
-//       keepLayerIds.push(id)
-//       return
-//     }
-//     if (layer) map.removeLayer(id)
-//   })
-//   layerIds.splice(0, layerIds.length, ...keepLayerIds)
-
-//   const keepSourceIds = []
-//   sourceIds.forEach(id => {
-//     if (id.startsWith('marker:')) {
-//       keepSourceIds.push(id)
-//       return
-//     }
-//     if (map.getSource(id)) map.removeSource(id)
-//   })
-//   sourceIds.splice(0, sourceIds.length, ...keepSourceIds)
-// }
-
 // Add a GeoJSON source or update its data if the source already exists
 export function addSource(map, id, data) {
   const src = map.getSource(id)
@@ -89,18 +64,22 @@ export async function loadMarkerLayer(
 }
 
 // Internal helper to add polygon or point layers based on first feature’s geometry type
+// maps/layers/index.js snippet
+// Internal helper to add polygon or point layers
 function addLayersForFC(map, sourceId, fc, { color, outlineColor } = {}) {
   const type = fc?.features?.[0]?.geometry?.type || ''
   let layerIds = []
+
   if (/Polygon/i.test(type)) {
     layerIds = addPolygonLayers(map, sourceId, { color, outlineColor })
   } else {
     const id = addPointLayer(map, sourceId, { color, outlineColor })
-    if (id) {
-      layerIds.push(id)
-      attachPopup(map, id)
-    }
+    if (id) layerIds.push(id)
   }
+
+  // Attach the simple hover popup
+  layerIds.forEach(id => attachPopup(map, id))
+
   return { fc, sourceId, layerIds }
 }
 

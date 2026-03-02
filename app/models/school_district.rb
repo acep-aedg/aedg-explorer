@@ -12,8 +12,10 @@ class SchoolDistrict < ApplicationRecord
       type: "Feature",
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
-        id: district,
-        tooltip: "School District: #{district}"
+        id: id,
+        category: "School District Area",
+        title: name || "District #{district}",
+        content: formatted_type # e.g., "City And Borough"
       }
     }
   end

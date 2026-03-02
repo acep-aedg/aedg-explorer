@@ -134,7 +134,11 @@ class Community < ApplicationRecord
       type: "Feature",
       geometry: RGeo::GeoJSON.encode(location),
       properties: {
+        id: fips_code,
+        category: "Community Location",
         title: name,
+        content: content,
+        path: community_path_link,
         (borough&.census_area? ? :census_area : :borough) => borough&.name,
         regional_corporation: regional_corporation&.name,
         village_corporation: village_corporation,
@@ -193,8 +197,8 @@ class Community < ApplicationRecord
     @show_service_areas ||= service_areas.exists?
   end
 
-  def show_full_service_area?
-    @show_full_service_area ||= service_area_geoms.with_full_service_area.exists?
+  def show_utility_service_area?
+    @show_utility_service_area ||= service_area_geoms.with_utility_service_area.exists?
   end
 
   def show_plants?

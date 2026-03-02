@@ -77,14 +77,14 @@ gem "dotenv-rails", "~> 3.1"
 
 gem "bootstrap_form", "~> 5.4"
 
-gem "haml-rails", "~> 2.1"
+gem "haml-rails", "~> 3.0"
 
 gem "html2haml", "~> 2.3", group: :dev
 
 gem "activerecord-postgis-adapter", "~> 11.0.0"
 gem "chartkick"
 gem "csv"
-gem "friendly_id", "~> 5.5.0"
+gem "friendly_id", "~> 5.6.0"
 gem "rgeo"
 gem "rgeo-geojson"
 

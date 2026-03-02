@@ -61,12 +61,9 @@ export default class extends Controller {
         // This 'id' matches the 'search_panels_id_param' from the HAML
         const checkboxId = event.params.id;
 
-        console.log("Looking for checkbox with ID:", checkboxId);
-
         const checkbox = document.getElementById(checkboxId);
         if (checkbox) {
             checkbox.checked = false;
-            console.log("Checkbox found and unchecked!");
         } else {
             console.error("Could not find checkbox. Check if the ID in HAML matches the ID in the panel.");
         }

@@ -1,5 +1,5 @@
 - parent_tab = 'power_generation'
-- service_area_label = @community.show_full_service_area? ? "Local Service Area" : "Service Area"
+- service_area_label = @community.show_utility_service_area? ? "Local Service Area" : "Utility Service Area"
 - map_buttons = [ |
     { |
       label: service_area_label, |
@@ -9,11 +9,11 @@
       visible: @community.show_service_areas? |
     }, |
     { |
-      label: "Full Service Area", |
+      label: "Utility Service Area", |
       url: service_areas_community_maps_path(@community), |
       icon: 'bounding-box', |
-      id: 'layer-service-area-full', |
-      visible: @community.show_full_service_area? |
+      id: 'layer-service-area-utility', |
+      visible: @community.show_utility_service_area? |
     }, |
     { |
       label: "Power Plants", |

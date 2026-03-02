@@ -17,8 +17,11 @@ class Plant < ApplicationRecord
       type: "Feature",
       geometry: RGeo::GeoJSON.encode(location),
       properties: {
-        title: name
-      }
+        id: id,
+        category: "Power Plant",
+        title: name,
+        content: content
+      }.compact
     }
   end
 end
