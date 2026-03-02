@@ -43,6 +43,9 @@ export default class extends Controller {
           backgroundColor: this.barColorValue || "#1f77b4",
           errorBarColor: this.errorBarColorValue || "#ff7f0e",
           errorBarWhiskerColor: this.errorBarColorValue || "#ff7f0e",
+          errorBarLineWidth: 1,
+          errorBarWhiskerLineWidth: 2,
+          errorBarWhiskerRatio: 0.3,
           data: rawData.map((d) => ({
             y: d.estimate,
             yMin: Math.max(0, d.estimate - d.moe),

@@ -36,6 +36,9 @@ export default class extends Controller {
       datasets: [
         {
           label: "Male",
+          errorBarLineWidth: 1,
+          errorBarWhiskerLineWidth: 2,
+          errorBarWhiskerRatio: 0.3,
           backgroundColor: this.maleBarColor || "#1f77b4",
           data: rawData.map((d) => ({
             y: d.male_estimate,
@@ -45,6 +48,9 @@ export default class extends Controller {
         },
         {
           label: "Female",
+          errorBarLineWidth: 1,
+          errorBarWhiskerLineWidth: 2,
+          errorBarWhiskerRatio: 0.3,
           backgroundColor: this.femaleBarColor || "#ff7f0e",
           data: rawData.map((d) => ({
             y: d.female_estimate,
