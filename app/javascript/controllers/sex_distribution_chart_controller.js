@@ -7,17 +7,14 @@ import {
 
 Chart.register(...registerables, BarWithErrorBarsController, BarWithErrorBar);
 
+// Connects to data-controller="sex-distribution-chart"
 export default class extends Controller {
   static targets = ["canvas"];
   static values = {
     url: String,
-    baseUrl: String,
-    param: { type: String, default: "end_year" },
     title: String,
-    baseTitle: String,
-    barColor: String,
-    errorBarColor: String,
-    
+    femaleBarColor: String,
+    maleBarColor: String,
   };
 
   async urlValueChanged() {
@@ -33,39 +30,40 @@ export default class extends Controller {
     }
   }
 
-  titleValueChanged() {
-    if (this.chart) {
-      this.chart.options.plugins.title.text = this.titleValue;
-      this.chart.update();
-    }
-  }
-
-  update(event) {
-    const selectedValue = event.target.value;
-    this.titleValue = `${this.baseTitleValue} (${selectedValue})`;
-    const newUrl = new URL(this.baseUrlValue, window.location.origin);
-    newUrl.searchParams.set(this.paramValue, selectedValue);
-    this.urlValue = newUrl.toString();
-  }
-
-  renderChart(data) {
-    if (this.chart) this.chart.destroy();
-    const fontColor = "#404040";
-
-    const styledData = {
-      ...data,
-      datasets: data.datasets.map((dataset) => ({
-        ...dataset,
-        backgroundColor: this.barColorValue || "1f77b4",
-        backgroundColor: this.barColorValue || "1f77b4",
-        errorBarColor: this.errorBarColorValue || "ff7f0e",
-        errorBarWhiskerColor: this.errorBarColorValue || "ff7f0e",
-      })),
+  prepareChartData(rawData) {
+    return {
+      labels: rawData.map((d) => d.period),
+      datasets: [
+        {
+          label: "Male",
+          backgroundColor: this.maleBarColor || "#1f77b4",
+          data: rawData.map((d) => ({
+            y: d.male_estimate,
+            yMin: Math.max(0, d.male_estimate - d.male_moe),
+            yMax: d.male_estimate + d.male_moe,
+          })),
+        },
+        {
+          label: "Female",
+          backgroundColor: this.femaleBarColor || "#ff7f0e",
+          data: rawData.map((d) => ({
+            y: d.female_estimate,
+            yMin: Math.max(0, d.female_estimate - d.female_moe),
+            yMax: d.female_estimate + d.female_moe,
+          })),
+        },
+      ],
     };
+  }
+
+  renderChart(rawData) {
+    if (this.chart) this.chart.destroy();
+    const chartData = this.prepareChartData(rawData);
+    const fontColor = "#404040";
 
     this.chart = new Chart(this.canvasTarget, {
       type: BarWithErrorBarsController.id,
-      data: styledData,
+      data: chartData,
       options: {
         indexAxis: "x",
         responsive: true,
@@ -97,15 +95,16 @@ export default class extends Controller {
             },
           },
           tooltip: {
+            mode: "index",
             callbacks: {
               title: (context) => {
-                return `Estimated Population`;
+                return "Estimated Population";
               },
               label: (context) => {
                 const v = context.raw;
                 const moe = Math.round(v.yMax - v.y);
-                const ageGroup = context.label;
-                return `${ageGroup} Years: ${context.formattedValue} (±${moe})`;
+                const label = context.dataset.label;
+                return `${label}: ${context.formattedValue} (±${moe})`;
               },
             },
           },
@@ -115,7 +114,7 @@ export default class extends Controller {
             beginAtZero: true,
             title: { display: true, text: "Population Count" },
           },
-          x: { title: { display: true, text: "Age Group" } },
+          x: { title: { display: true, text: "Survey Period" } },
         },
       },
     });

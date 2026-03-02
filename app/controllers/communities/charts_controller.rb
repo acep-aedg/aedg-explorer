@@ -3,7 +3,7 @@ class Communities::ChartsController < ApplicationController
   before_action :set_year,
                 only: %i[capacity_yearly generation_monthly customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
   before_action :set_sales, only: %i[customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
-  before_action :set_population_distribution, only: %i[age_distribution gender_distribution]
+  before_action :set_population_distribution, only: %i[age_distribution sex_distribution]
 
   def generation_monthly; end
   def generation_yearly; end
@@ -13,7 +13,7 @@ class Communities::ChartsController < ApplicationController
   def customer_breakdown_customers; end
   def customer_breakdown_sales; end
   def bulk_fuel_capacity_mix; end
-  def gender_distribution; end
+  def sex_distribution; end
   def age_distribution; end
   def poverty_rate; end
   def household_income_brackets; end

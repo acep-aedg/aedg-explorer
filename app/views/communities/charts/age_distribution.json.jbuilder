@@ -32,7 +32,7 @@ json.cache! [@community.cache_key_with_version, @population_distribution.end_yea
 
   json.labels labels
 
-  json.datasets [
+  json.datasets [ # fix this
     {
       label: "Estimated Population",
       data: formatted_data,
