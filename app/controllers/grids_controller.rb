@@ -1,6 +1,6 @@
 class GridsController < ApplicationController
   before_action :set_grid, only: %i[show]
-  before_action :set_search_params, only: :index 
+  before_action :set_search_params, only: :index
 
   # GET /grids
   def index
@@ -27,7 +27,7 @@ class GridsController < ApplicationController
   end
 
   def set_search_params
-    allowed = %i[q letter page per_page] 
+    allowed = %i[q letter page per_page]
     @search_params = params.permit(*allowed).to_h.symbolize_keys
   end
 end

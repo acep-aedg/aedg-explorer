@@ -20,7 +20,7 @@ class Grid < ApplicationRecord
   default_scope { order(name: :asc) }
   scope :active, -> { joins(:community_grids).merge(CommunityGrid.active).distinct }
   scope :starts_with, ->(letter) { where("name ILIKE ?", "#{letter}%") if letter.present? }
-  
+
   def slug_candidates
     [
       :name
