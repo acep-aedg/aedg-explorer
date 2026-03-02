@@ -58,6 +58,11 @@ export default class extends Controller {
 
   renderChart(rawData) {
     if (this.chart) this.chart.destroy();
+    const allValues = rawData.flatMap((d) => [
+      (d.male_estimate || 0) + (d.male_moe || 0),
+      (d.female_estimate || 0) + (d.female_moe || 0),
+    ]);
+    const maxWhisker = Math.max(...allValues, 0);
     const chartData = this.prepareChartData(rawData);
     const fontColor = "#404040";
 
@@ -112,6 +117,7 @@ export default class extends Controller {
         scales: {
           y: {
             beginAtZero: true,
+            suggestedMax: maxWhisker * 1.15,
             title: { display: true, text: "Population Count" },
           },
           x: { title: { display: true, text: "Survey Period" } },

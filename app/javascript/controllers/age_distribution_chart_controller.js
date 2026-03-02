@@ -34,6 +34,7 @@ export default class extends Controller {
   }
 
   prepareData(rawData) {
+    this.maxWhisker = Math.max(...rawData.map(d => (d.estimate || 0) + (d.moe || 0)), 0);
     return {
       labels: rawData.map((d) => d.label),
       datasets: [
@@ -105,6 +106,7 @@ export default class extends Controller {
         },
         scales: {
           y: {
+            suggestedMax: this.maxWhisker * 1.15,
             beginAtZero: true,
             title: { display: true, text: "Population Count" },
           },
