@@ -1,9 +1,17 @@
 class GridsController < ApplicationController
   before_action :set_grid, only: %i[show]
+  before_action :set_search_params, only: :index 
 
   # GET /grids
   def index
+    @query = @search_params[:q]
     @grids = Grid.active.order(:name)
+
+    @grids = @grids.search_related(@query) if @query.present?
+    @active_letters = @grids.pluck(:name).map { |n| n[0].upcase }.uniq.sort
+    @grids = @grids.starts_with(@search_params[:letter]) if @search_params[:letter].present?
+
+    @grids = @grids.all
   end
 
   # GET /grids/:slug
@@ -16,5 +24,10 @@ class GridsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_grid
     @grid = Grid.friendly.find(params[:id])
+  end
+
+  def set_search_params
+    allowed = %i[q letter page per_page] 
+    @search_params = params.permit(*allowed).to_h.symbolize_keys
   end
 end
