@@ -8,7 +8,7 @@
       
       -# Label
       %h6.text-uppercase.text-secondary.ls-wide.small.fw-bold.mb-0.me-1
-        Estimated Population (#{most_recent_population.start_year}–#{most_recent_population.end_year})
+        Estimated Population (#{most_recent_population&.period_label})
       
       -# Value
       - if most_recent_population.e_pop_total.present?
