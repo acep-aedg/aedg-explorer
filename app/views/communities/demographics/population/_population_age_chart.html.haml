@@ -25,7 +25,7 @@
                         class: "form-select form-select-sm w-auto",
                         data: { action: "change->age-distribution-chart#update" }
     - else
-      %span.fs-5.fw-bold.text-muted= selected_period&.period_label
+      %span.fw-bold.text-muted= selected_period&.period_label
 
   .chart-container.mt-4{ style: "min-height: 500px;" }
     %canvas{ data: { "age-distribution-chart-target": "canvas" } }
