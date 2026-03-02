@@ -64,7 +64,7 @@ class PopulationAgeSex < ApplicationRecord
       { label: "15-19", key: "15_19" },
       { label: "20-24", key: "20_24" },
       { label: "25-34", key: "25_34" },
-      { label: "35-44", key: "45_44" },
+      { label: "35-44", key: "35_44" },
       { label: "45-54", key: "45_54" },
       { label: "55-59", key: "55_59" },
       { label: "60-64", key: "60_64" },
