@@ -78,67 +78,6 @@ module ImportHelpers
       report_errors(failed_instances) if failed_instances.any?
     end
 
-    def download_data(remote_path, local_path)
-      repo_url = ENV.fetch("GH_DATA_REPO_URL", "https://github.com/acep-aedg/aedg-data-pond")
-
-      # --- 1. Determine Source (PR, Branch, Tag) ---
-      if ENV["PR"].present?
-        pr_number = ENV["PR"]
-        puts "⚠️  PR detected! Preparing to fetch Pull Request ##{pr_number}..."
-
-        fetch_cmd    = "git fetch origin pull/#{pr_number}/head:pr-#{pr_number}"
-        checkout_cmd = "git checkout pr-#{pr_number}"
-        source_name  = "PR ##{pr_number}"
-
-      elsif ENV["BRANCH"].present?
-        branch = ENV["BRANCH"]
-        puts "⚠️  Branch detected! Preparing to fetch Branch '#{branch}'..."
-
-        fetch_cmd    = "git fetch origin #{branch}"
-        checkout_cmd = "git checkout -B #{branch} origin/#{branch}"
-        source_name  = "Branch '#{branch}'"
-      else
-        tag = Import::Versioning::DATA_POND_TAG
-        # Quick check to ensure tag exists
-        tag_exists = system("git ls-remote --tags #{repo_url} refs/tags/#{tag} | grep #{tag}")
-        raise "Error: Tag '#{tag}' not found in repo #{repo_url}" unless tag_exists
-
-        fetch_cmd    = "git fetch --tags"
-        checkout_cmd = "git checkout tags/#{tag} -b temp-tag-branch"
-        source_name  = "Tag #{tag}"
-      end
-
-      # --- 2. Setup Local Directory ---
-      FileUtils.mkdir_p(local_path)
-      # Create .keep file to ensure git keeps the folder
-      FileUtils.touch(File.join(local_path, ".keep"))
-
-      # --- 3. Execute Git Operations ---
-      Dir.mktmpdir do |temp_dir|
-        puts "⬇️  Cloning repository..."
-        # Clone without checking out files yet (faster)
-        system("git clone --no-checkout #{repo_url} #{temp_dir}") or raise "Failed to clone #{repo_url}"
-
-        Dir.chdir(temp_dir) do
-          puts "🔄 Fetching ref..."
-          system(fetch_cmd) or raise "Failed to fetch #{source_name}"
-
-          puts "Checking out #{source_name}..."
-          system(checkout_cmd) or raise "Failed to checkout #{source_name}"
-
-          # Enable sparse-checkout (Optimization: only download specific folder)
-          system("git sparse-checkout init --cone")
-          system("git sparse-checkout set #{remote_path}")
-
-          # Sync files
-          puts "📂 Syncing #{remote_path} to #{local_path}..."
-          system("rsync -av --delete --exclude='metadata' --exclude='.keep' #{remote_path}/ #{local_path}/")
-        end
-      end
-
-      puts "✅ Download complete! #{source_name} files copied to #{local_path}."
-    end
-
     def ensure_empty!(model, delete_tasks)
       return unless model.any?
 

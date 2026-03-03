@@ -1,4 +1,4 @@
-require_relative "import_helpers"
+require_relative "data_download"
 
 namespace :metadata do
   desc "Download and Import metadata (Pass PR=123 to test a PR)"
@@ -18,7 +18,7 @@ namespace :metadata do
 
   desc "Download data files (Defaults to DATA_POND_TAG, pass PR=123 for testing)"
   task download_data: [:environment] do
-    ImportHelpers.download_data("data/public", Rails.root.join("db/imports/metadata").to_s)
+    DataDownload.download("data/public", Rails.root.join("db/imports/metadata").to_s)
   end
 
   desc "Clear metadata records"

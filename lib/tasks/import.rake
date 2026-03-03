@@ -1,11 +1,12 @@
 require "csv"
 require "rgeo/geo_json"
 require_relative "import_helpers"
+require_relative "data_download"
 require_relative "versioning"
 
 namespace :import do
   desc "Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)"
-  task all: %i[environment] do
+  task all: %i[environment download_data] do
     start_time = Time.current
     puts "Starting full parallel import at #{start_time.strftime('%H:%M:%S')}..."
     Rake::Task["import:layer_one"].invoke
@@ -64,7 +65,7 @@ namespace :import do
 
   desc "Download data files (Defaults to DATA_POND_TAG, or pass PR=123 to test a PR)"
   task download_data: :environment do
-    ImportHelpers.download_data("data/final", Rails.root.join("db/imports").to_s)
+    DataDownload.download("data/final", Rails.root.join("db/imports").to_s)
   end
 
   desc "Import Heating Degree Days Data from .csv file"
