@@ -26,7 +26,6 @@ module ImportHelpers
     # It assumes there is an `build_from_aedg_geojson` method for the given model to store the data.
     def batch_import_geojson(filepath, model)
       return unless file_exists?(filepath, model)
-      return unless ensure_empty!(model)
 
       start_time = Time.current
       puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
