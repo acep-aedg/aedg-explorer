@@ -5,7 +5,7 @@ module GridAttributes
   class_methods do
     def build_from_aedg(properties)
       properties.symbolize_keys!
-      
+
       raise "id is required" if properties[:id].nil?
 
       new.tap do |grid|

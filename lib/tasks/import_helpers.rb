@@ -2,7 +2,7 @@ module ImportHelpers
   class << self
     # Imports geographic data from a GeoJSON file and processes it into the given model.
     # It assumes there is an `import_aedg_with_geom!` method for the given model to store the data.
-    def import_communities(filepath, model)
+    def import_geojson(filepath, model)
       return unless file_exists?(filepath, model)
 
       start_time = Time.current
@@ -22,7 +22,9 @@ module ImportHelpers
       puts "#{model.name.pluralize} complete: #{duration}s"
     end
 
-    def import_geojson(filepath, model)
+    # Batch imports geographic data from a GeoJSON file and processes it into the given model.
+    # It assumes there is an `build_from_aedg_geojson` method for the given model to store the data.
+    def batch_import_geojson(filepath, model)
       return unless file_exists?(filepath, model)
 
       start_time = Time.current
@@ -48,15 +50,13 @@ module ImportHelpers
         print_summary(model, records.size, failed_instances.size, duration)
         report_errors(failed_instances) if failed_instances.any?
       rescue StandardError => e
-        # This catches "Generic" errors for the whole file process
-        puts "❌ Critical Error importing #{model.name}: #{e.class} - #{e.message}"
-        puts e.backtrace.first(3).join("\n") # Shows exactly where it broke
+        puts "Error processing #{model.name}: #{e.class} - #{e.message}"
       end
     end
 
-    # Imports tabular data from a CSV file and processes it into the given model in batches.
+    # Batch imports tabular data from a CSV file and processes it into the given model.
     # It assumes there is an `build_from_aedg` method for the given model to store the data.
-    def import_csv(filepath, model)
+    def batch_import_csv(filepath, model)
       return unless file_exists?(filepath, model)
 
       start_time = Time.current
