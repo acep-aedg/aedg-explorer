@@ -7,8 +7,7 @@ require_relative "versioning"
 namespace :import do
   desc "Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)"
   task all: %i[environment download_data] do
-    start_time = Time.current
-    puts "Starting full parallel import at #{start_time.strftime('%H:%M:%S')}..."
+    puts "🚀 Starting full import..."
     Rake::Task["import:layer_one"].invoke
     Rake::Task["import:layer_two"].invoke
     Rake::Task["import:layer_three"].invoke
@@ -16,11 +15,7 @@ namespace :import do
     Rake::Task["import:layer_five"].invoke
     Rake::Task["import:layer_six"].invoke
     Rake::Task["import:handle_version"].invoke
-
-    duration_seconds = (Time.current - start_time).to_i
-    minutes, seconds = duration_seconds.divmod(60)
-
-    puts "Total time elapsed: #{minutes}m #{seconds}s"
+    puts "✅ Full import complete..."
   end
 
   # Imports with no dependencies

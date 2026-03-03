@@ -6,7 +6,7 @@ module ImportHelpers
       return unless file_exists?(filepath, model)
 
       start_time = Time.current
-      puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
+      puts "📂 Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
       data = File.read(filepath)
       feature_collection = RGeo::GeoJSON.decode(data, json_parser: :json)
 
@@ -16,10 +16,10 @@ module ImportHelpers
 
         model.import_aedg_with_geom!(properties, geo_object)
       rescue StandardError => e
-        puts "Error processing #{model.name} at index #{index}, Error: #{e.message}"
+        puts "❗Error processing #{model.name} at row #{index + 2}: #{e.class} - #{e.message}"
       end
       duration = (Time.current - start_time).round(2)
-      puts "#{model.name.pluralize} complete: #{duration}s"
+      puts "✅ #{model.name.pluralize} complete: #{duration}s"
     end
 
     # Batch imports geographic data from a GeoJSON file and processes it into the given model.
@@ -28,7 +28,7 @@ module ImportHelpers
       return unless file_exists?(filepath, model)
 
       start_time = Time.current
-      puts "Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
+      puts "📂 Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
 
       begin
         data = File.read(filepath)
@@ -36,10 +36,7 @@ module ImportHelpers
 
         records = feature_collection.map do |feature|
           model.build_from_aedg_geojson(feature.properties, feature.geometry)
-        rescue StandardError => e
-          puts "  ⚠️ Skipping a row in #{model.name}: #{e.message}"
-          nil
-        end.compact
+        end
 
         result = model.import records,
                               batch_size: 1000,
@@ -48,9 +45,9 @@ module ImportHelpers
         failed_instances = result.failed_instances
         duration = (Time.current - start_time).round(2)
         print_summary(model, records.size, failed_instances.size, duration)
-        report_errors(failed_instances) if failed_instances.any?
+        print_errors(failed_instances) if failed_instances.any?
       rescue StandardError => e
-        puts "Error processing #{model.name}: #{e.class} - #{e.message}"
+        puts "❗ Error processing #{model.name}: #{e.class} - #{e.message}"
       end
     end
 
@@ -60,22 +57,26 @@ module ImportHelpers
       return unless file_exists?(filepath, model)
 
       start_time = Time.current
-      puts "Importing #{model.name.pluralize}..."
+      puts "📂 Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
 
-      records = []
-      CSV.foreach(filepath, headers: true) do |row|
-        records << model.build_from_aedg(row.to_hash)
+      begin
+        records = []
+        CSV.foreach(filepath, headers: true) do |row|
+          records << model.build_from_aedg(row.to_hash)
+        end
+
+        result = model.import records,
+                              batch_size: 2000,
+                              recursive: true,
+                              track_validation_failures: true
+
+        failed_instances = result.failed_instances
+        duration = (Time.current - start_time).round(2)
+        print_summary(model, records.size, failed_instances.size, duration)
+        print_errors(failed_instances) if failed_instances.any?
+      rescue StandardError => e
+        puts "❗ Error processing #{model.name}: #{e.class} - #{e.message}"
       end
-
-      result = model.import records,
-                            batch_size: 2000,
-                            recursive: true,
-                            track_validation_failures: true
-
-      failed_instances = result.failed_instances
-      duration = (Time.current - start_time).round(2)
-      print_summary(model, records.size, failed_instances.size, duration)
-      report_errors(failed_instances) if failed_instances.any?
     end
 
     def ensure_empty!(model, delete_tasks)
@@ -86,7 +87,7 @@ module ImportHelpers
       command_chain = tasks.map { |t| "rails delete:#{t}" }.join(" && ")
 
       raise <<~ERROR
-        \n ERROR: #{human_name} table is not empty!
+        \n ❗ERROR: #{human_name} table is not empty!
         To clear it safely, run:
             #{command_chain}
         Then try the import again.\n
@@ -98,25 +99,21 @@ module ImportHelpers
     def file_exists?(filepath, model)
       return true if File.exist?(filepath)
 
-      puts "⚠️  SKIPPING #{model.name}: File not found at #{filepath}"
+      puts "⚠️ SKIPPING #{model.name}: File not found at #{filepath}"
       false
     end
 
     def print_summary(model, total, failed, duration)
-      puts "--------------------------------------------------"
-      puts "✅ #{model.name.pluralize} complete!"
-      puts "Total Records: #{total} | Failed Records: #{failed} | Time: #{duration}s"
+      puts "✅ #{model.name.pluralize} complete! | Total Records: #{total} | Failed Records: #{failed} | Time: #{duration}s"
     end
 
-    def report_errors(failed_instances)
-      return if failed_instances.empty?
-
-      puts "\nERROR REPORT:"
+    def print_errors(failed_instances)
+      puts "\n❗ERROR REPORT:"
       failed_instances.each do |index_in_array, instance|
         puts "CSV Row #: #{index_in_array + 2}"
         puts "Row Data: #{instance.attributes.compact}"
         puts "Validation Errors: #{instance.errors.full_messages.join(', ')}"
-        puts "---"
+        puts "--------------------------------------------------"
       end
     end
   end
