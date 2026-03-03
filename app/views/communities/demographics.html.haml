@@ -15,7 +15,10 @@
           title: 'Population',
           description: 'Population estimates including age and sex',
           anchor: '#population',
-          related_metadata: ["public_populations_ages_sexes"]
+          related_metadata: ["public_populations_ages_sexes"],
+          about_modal_id: 'populationAboutModal' # this id must match the id in the sections about_modal partial
+        
+        = render "communities/#{tab}/population/about_modal"
         
         = render "communities/#{tab}/population"
         
