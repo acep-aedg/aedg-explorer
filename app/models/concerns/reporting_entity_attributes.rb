@@ -3,16 +3,24 @@ module ReportingEntityAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
 
       raise "id is required" if properties[:id].nil?
 
-      ReportingEntity.create!(
-        aedg_id: properties[:id],
-        most_recent_year: properties[:most_recent_year],
-        name: properties[:name],
-        grid: Grid.from_aedg_id(properties[:grid_id]).first
+      new.tap do |entity|
+        entity.assign_aedg_attributes(properties)
+      end
+    end
+  end
+
+  included do
+    def assign_aedg_attributes(params)
+      assign_attributes(
+        name: params[:name],
+        most_recent_year: params[:most_recent_year],
+        aedg_import_attributes: { aedg_id: params[:id] },
+        grid: Grid.from_aedg_id(params[:grid_id]).first
       )
     end
   end

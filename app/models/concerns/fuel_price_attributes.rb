@@ -2,12 +2,10 @@ module FuelPriceAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      FuelPrice.new.tap do |fuel_price|
+      new.tap do |fuel_price|
         fuel_price.assign_aedg_attributes(properties)
-        fuel_price.save!
       end
     end
   end

@@ -15,11 +15,12 @@ class MonthlyGenerationAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "import_aedg! creates a Monthly Generation Record" do
-    mg = nil
-    assert_difference -> { MonthlyGeneration.count }, +1 do
-      mg = MonthlyGeneration.import_aedg!(@valid_props)
-    end
+  test "build_from_aedg builds a monthly generation record in memory with valid props" do
+    mg = MonthlyGeneration.build_from_aedg(@valid_props)
+
+    assert_instance_of MonthlyGeneration, mg
+    assert mg.new_record?
+    assert mg.valid?, "MonthlyGeneration should be valid: #{mg.errors.full_messages}"
 
     assert_equal @plant, mg.plant
     assert_equal @valid_props[:generation_mwh], mg.generation_mwh
@@ -29,11 +30,19 @@ class MonthlyGenerationAttributesTest < ActiveSupport::TestCase
     assert_equal @valid_props[:month], mg.month
   end
 
-  test "fails when aea_plant_id does not resolve to a plant" do
-    props = @valid_props.merge(aea_plant_id: INVALID_AEDG_ID)
+  test "build_from_aedg results in an invalid record when aea_plant_id cannot be resolved" do
+    invalid_props = @valid_props.merge(aea_plant_id: INVALID_AEDG_ID)
+    mg = MonthlyGeneration.build_from_aedg(invalid_props)
 
-    assert_raises(ActiveRecord::RecordInvalid) do
-      MonthlyGeneration.import_aedg!(props)
-    end
+    assert_not mg.valid?
+    assert_includes mg.errors[:plant], "must exist"
+  end
+
+  test "build_from_aedg is invalid when month is missing" do
+    invalid_props = @valid_props.except(:month)
+    mg = MonthlyGeneration.build_from_aedg(invalid_props)
+
+    assert_not mg.valid?
+    assert_includes mg.errors[:month], "can't be blank"
   end
 end

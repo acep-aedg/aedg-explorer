@@ -2,7 +2,7 @@ class ElectricRate < ApplicationRecord
   include ElectricRateAttributes
 
   validates :year, presence: true
-  belongs_to :reporting_entity, optional: true
+  belongs_to :reporting_entity
 
   scope :with_rates, -> { where(rate_fields.map { |f| "#{f} IS NOT NULL" }.join(" OR ")) }
 

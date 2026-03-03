@@ -3,12 +3,10 @@ module MonthlyGenerationAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      MonthlyGeneration.new.tap do |monthly_generation|
-        monthly_generation.assign_aedg_attributes(properties)
-        monthly_generation.save!
+      new.tap do |monthly_gen|
+        monthly_gen.assign_aedg_attributes(properties)
       end
     end
   end

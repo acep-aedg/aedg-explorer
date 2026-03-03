@@ -3,12 +3,10 @@ module ElectricRateAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      ElectricRate.new.tap do |electric_rate|
+      new.tap do |electric_rate|
         electric_rate.assign_aedg_attributes(properties)
-        electric_rate.save!
       end
     end
   end

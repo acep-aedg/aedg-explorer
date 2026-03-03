@@ -3,12 +3,10 @@ module TransportationAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      Transportation.find_or_initialize_by(community_fips_code: properties[:community_fips_code]).tap do |transportation|
+      new.tap do |transportation|
         transportation.assign_aedg_attributes(properties)
-        transportation.save!
       end
     end
   end

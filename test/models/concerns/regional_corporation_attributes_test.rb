@@ -25,33 +25,39 @@ class RegionalCorporationAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "import_aedg_with_geom! creates a regional corporation record with vaild props and geom" do
-    reg_corp = nil
-    assert_difference -> { RegionalCorporation.count }, +1 do
-      reg_corp = RegionalCorporation.import_aedg_with_geom!(@valid_props, @polygon_geom)
-    end
+  test "build_from_aedg_geojson builds a record in memory with valid props and geom" do
+    reg_corp = RegionalCorporation.build_from_aedg_geojson(@valid_props, @polygon_geom)
+
+    assert_instance_of RegionalCorporation, reg_corp
+    assert reg_corp.new_record?
+    assert reg_corp.valid?, "Should be valid: #{reg_corp.errors.full_messages}"
+
     assert_equal @valid_props[:fips_code], reg_corp.fips_code
     assert_equal @valid_props[:name], reg_corp.name
-    assert_equal @valid_props[:land_area], reg_corp.land_area
-    assert_equal @valid_props[:water_area], reg_corp.water_area
-    assert_equal @polygon_geom.as_text, reg_corp.boundary.as_text
+    assert_equal @polygon_geom, reg_corp.boundary
   end
 
-  test "import_aedg_with_geom! raises RecordInvalid when fips_code is missing" do
-    invalid_props = @valid_props.merge(fips_code: nil)
+  test "is invalid when boundary is missing" do
+    # Matches validates :boundary, presence: true
+    reg_corp = RegionalCorporation.build_from_aedg_geojson(@valid_props, nil)
 
-    assert_no_difference -> { RegionalCorporation.count } do
-      assert_raises ActiveRecord::RecordInvalid do
-        RegionalCorporation.import_aedg_with_geom!(invalid_props, @polygon_geom)
-      end
-    end
+    assert_not reg_corp.valid?
+    assert_includes reg_corp.errors[:boundary], "can't be blank"
   end
 
-  test "import_aedg_with_geom! raises ArgumentError when geometry is not provided" do
-    assert_no_difference -> { RegionalCorporation.count } do
-      assert_raises ArgumentError do
-        RegionalCorporation.import_aedg_with_geom!(@valid_props)
-      end
-    end
+  test "is invalid when geometry type is not a polygon" do
+    point_geom = @geom_factory.point(0, 0)
+    reg_corp = RegionalCorporation.build_from_aedg_geojson(@valid_props, point_geom)
+
+    assert_not reg_corp.valid?
+    assert_includes reg_corp.errors[:boundary], "must be one of Polygon, MultiPolygon"
+  end
+
+  test "is invalid if the fips_code already exists" do
+    RegionalCorporation.create!(@valid_props.merge(boundary: @polygon_geom))
+    duplicate = RegionalCorporation.build_from_aedg_geojson(@valid_props, @polygon_geom)
+
+    assert_not duplicate.valid?
+    assert_includes duplicate.errors[:fips_code], "has already been taken"
   end
 end

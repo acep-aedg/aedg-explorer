@@ -14,35 +14,34 @@ class BoroughAttributesTest < ActiveSupport::TestCase
                                 ])
     )
     @valid_props = {
-      fips_code: "123",
+      fips_code: "000001",
       name: "Test Borough"
     }
   end
 
-  test "import_aedg_with_geom! creates borough with valid props and geometry" do
-    borough = nil
-    assert_difference -> { Borough.count }, +1 do
-      borough = Borough.import_aedg_with_geom!(@valid_props, @polygon_geom)
-    end
-    assert_equal @valid_props[:name], borough.name
-    assert_equal @valid_props[:fips_code], borough.fips_code
-    assert_equal @polygon_geom.as_text, borough.boundary.as_text
+  test "build_from_aedg_geojson builds a borough object in memory" do
+    borough = Borough.build_from_aedg_geojson(@valid_props, @polygon_geom)
+
+    assert_instance_of Borough, borough
+    assert_equal "000001", borough.fips_code
+    assert_equal "Test Borough", borough.name
+    assert_equal @polygon_geom, borough.boundary
+    assert borough.new_record?
   end
 
-  test "import_aedg_with_geom! raises error with incorrect geometry type" do
+  test "build_from_aedg_geojson results in an invalid borough with incorrect geometry type" do
     line = @geom_factory.line_string([
                                        @geom_factory.point(0, 0),
                                        @geom_factory.point(1, 1)
                                      ])
-
-    assert_raises ActiveRecord::RecordInvalid do
-      Borough.import_aedg_with_geom!(@valid_props, line)
-    end
+    borough = Borough.build_from_aedg_geojson(@valid_props, line)
+    assert_not borough.valid?, "Borough should be invalid with a LineString boundary"
+    assert_includes borough.errors[:boundary], "must be one of Polygon, MultiPolygon"
   end
 
-  test "import_aedg_with_geom! raises ArgumentError with missing geometry" do
+  test "build_from_aedg_geojson raises ArgumentError with missing geometry argument" do
     assert_raises(ArgumentError) do
-      Borough.import_aedg_with_geom!(@valid_props)
+      Borough.build_from_aedg_geojson(@valid_props)
     end
   end
 end

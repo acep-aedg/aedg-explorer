@@ -2,14 +2,12 @@ module CommunitiesServiceAreaGeomAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
       raise "Skipped: missing service_area_geom_id" if properties[:service_area_geom_id].blank?
 
-      CommunitiesServiceAreaGeom.new.tap do |service_area_geom|
+      new.tap do |service_area_geom|
         service_area_geom.assign_aedg_attributes(properties)
-        service_area_geom.save!
       end
     end
   end

@@ -3,12 +3,10 @@ module YearlyGenerationAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      YearlyGeneration.new.tap do |yearly_generation|
-        yearly_generation.assign_aedg_attributes(properties)
-        yearly_generation.save!
+      new.tap do |yearly_gen|
+        yearly_gen.assign_aedg_attributes(properties)
       end
     end
   end

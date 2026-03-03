@@ -10,26 +10,20 @@ class GridAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "import_aedg! creates a grid with valid props" do
-    grid = nil
-    assert_difference -> { Grid.count }, +1 do
-      grid = Grid.import_aedg!(@valid_props)
-    end
+  test "build_from_aedg builds a grid in memory with valid props" do
+    grid = Grid.build_from_aedg(@valid_props)
+
+    assert_instance_of Grid, grid
+    assert grid.new_record?
     assert_equal @valid_props[:name], grid.name
-    assert_equal @valid_props[:id], grid.aedg_id
+    assert_equal @valid_props[:id], grid.aedg_import.aedg_id
   end
 
-  test "import_aedg! raises error if id is missing" do
+  test "build_from_aedg raises error if id is missing" do
     invalid_props = @valid_props.except(:id)
-    assert_raises(RuntimeError, "id is required") do
-      Grid.import_aedg!(invalid_props)
-    end
-  end
-  test "import_aedg! raises error if grid already exists" do
-    Grid.create!(aedg_id: VALID_AEDG_ID, name: "Existing Grid")
 
-    assert_raises ActiveRecord::RecordInvalid do
-      Grid.import_aedg!(@valid_props)
+    assert_raises(RuntimeError, "id is required") do
+      Grid.build_from_aedg(invalid_props)
     end
   end
 end
