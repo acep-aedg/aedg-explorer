@@ -4,7 +4,7 @@ module DataDownload
       repo_url = ENV.fetch("GH_DATA_REPO_URL", "https://github.com/acep-aedg/aedg-data-pond")
 
       # --- 1. Determine Source ---
-      ref_info = determine_git_ref(repo_url)
+      ref_info = determine_git_ref
 
       # --- 2. Setup Local Directory ---
       FileUtils.mkdir_p(local_path)
@@ -12,26 +12,26 @@ module DataDownload
 
       # --- 3. Execute Git Operations ---
       Dir.mktmpdir do |temp_dir|
-        puts "⬇️  Cloning repository..."
+        Rails.logger.info "⬇️  Cloning repository..."
         system("git clone --no-checkout #{repo_url} #{temp_dir}") or raise "Failed to clone"
 
         Dir.chdir(temp_dir) do
-          puts "🔄 Fetching and Checking out #{ref_info[:name]}..."
+          Rails.logger.info { "🔄 Fetching and Checking out #{ref_info[:name]}..." }
           system(ref_info[:fetch_cmd]) or raise "Fetch failed"
           system(ref_info[:checkout_cmd]) or raise "Checkout failed"
 
-          puts "📂 Syncing #{remote_path} to #{local_path}..."
+          Rails.logger.info { "📂 Syncing #{remote_path} to #{local_path}..." }
           system("git sparse-checkout init --cone")
           system("git sparse-checkout set #{remote_path}")
           system("rsync -av --delete --exclude='metadata' --exclude='.keep' #{remote_path}/ #{local_path}/")
         end
       end
-      puts "✅ Download complete! Source: #{ref_info[:name]}"
+      Rails.logger.info { "✅ Download complete! Source: #{ref_info[:name]}" }
     end
 
     private
 
-    def determine_git_ref(repo_url)
+    def determine_git_ref
       if ENV["PR"].present?
         {
           name: "PR ##{ENV['PR']}",
