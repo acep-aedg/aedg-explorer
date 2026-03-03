@@ -100,12 +100,4 @@ class SearchesController < ApplicationController
 
     base.distinct.all
   end
-
-  def preload_choices
-    @all_grids = Grid.order(:name).select(:id, :name)
-    @all_boros = Borough.order(:name).select(:fips_code, :name)
-    @all_corps = RegionalCorporation.order(:name).select(:fips_code, :name)
-    @all_senate = SenateDistrict.order(:district).select(:id, :district)
-    @all_house  = HouseDistrict.order(:district).select(:id, :name)
-  end
 end
