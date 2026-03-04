@@ -88,7 +88,7 @@ gem "friendly_id", "~> 5.6.0"
 gem "rgeo"
 gem "rgeo-geojson"
 
-gem "acts-as-taggable-on", "~> 12.0"
+gem "acts-as-taggable-on", "~> 13.0"
 gem "pg_search", "~> 2.3"
 gem "rubocop", require: false
 gem "rubocop-rails", require: false
