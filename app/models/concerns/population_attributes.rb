@@ -3,12 +3,10 @@ module PopulationAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      Population.new.tap do |population|
+      new.tap do |population|
         population.assign_aedg_attributes(properties)
-        population.save!
       end
     end
   end

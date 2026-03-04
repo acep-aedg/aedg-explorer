@@ -46,8 +46,8 @@
         %span.text-secondary None
       - else
         %i.bi.bi-diagram-3.text-primary.me-1
-        = link_to @community.grid.name.titleize, grid_path(@community.grid), class: "fw-bold"
-
+        = link_to @community.grid.name.titleize, grid_path(@community.grid), class: "fw-bold", target: "_blank", rel: "noopener", data: { turbo_frame: "_top" }
+    
     .col-md-6.mb-3
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 PCE Status

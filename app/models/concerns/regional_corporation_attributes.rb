@@ -3,13 +3,12 @@ module RegionalCorporationAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg_with_geom!(properties, geom)
+    def build_from_aedg_geojson(properties, geom)
       properties["boundary"] = geom
       properties.symbolize_keys!
 
-      RegionalCorporation.find_or_initialize_by(fips_code: properties[:fips_code]).tap do |reg_corp|
+      new.tap do |reg_corp|
         reg_corp.assign_aedg_attributes(properties)
-        reg_corp.save!
       end
     end
   end

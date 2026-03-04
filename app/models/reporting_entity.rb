@@ -2,6 +2,7 @@ class ReportingEntity < ApplicationRecord
   include ReportingEntityAttributes
   include ImportFinders
 
+  accepts_nested_attributes_for :aedg_import
   has_one :aedg_import, as: :importable, dependent: :destroy
   belongs_to :grid, touch: true
   has_many :communities_reporting_entities, dependent: :destroy

@@ -47,9 +47,9 @@ categories:
 
           Looking forward the team hopes to establish a **Developers, Data Providers, and Users Group (DDPUG)** to guide development of the gateway over time and ensure it meets a broad base of needs for energy and economic data for the state of Alaska.
 
-  - name: 'Data'
+  - name: 'General Data Information'
     questions:
-      - question: "How can I find data the AEDG?"
+      - question: "How can I find data on the AEDG?"
         answer: |
           The [Data Explorer](https://aedg-dev.camio.acep.uaf.edu/explore/data) provides access to all available datasets and their metadata. Each dataset has a dedicated page with data, metadata, and data dictionary, along with descriptions, context, and download options. 
 
@@ -62,15 +62,36 @@ categories:
           The energy landscape in Alaska is very complex, with approximately 106 utilities providing power to approximately 186 grids. Some utilities report data to federal entities such as the [Energy Information Administration (EIA)](https://www.eia.gov/), while others report to state entities like [Alaska Energy Authority (AEA)](https://www.akenergyauthority.org/). Some communities don’t have a requirement to report their data at all. These factors make it difficult to gather comprehensive energy data for the entire state. Many of the data sources used by AEDG have been verified and validated by subject matter experts, which takes time and effort.
           
           Currently our flagship data product, statewide electricity capacity and generation, is available through 2021. Updating this dataset is a high-priority, high-effort situation. We are pleased to offer up the best available data for the state of Alaska, and look forward to providing more up-to-date data in the near future.
-          
       - question: "How often is the data updated?"
         answer: |
           The data sourced by AEDG is updated monthly to yearly, depending on the source that the data comes from. For information about a specific dataset, please consult the corresponding metadata, which provides essential details regarding the data structure, fields, units, and date.
-          
+      - question: "How should I interpret the Population Data (ACS 5-Year Estimates)?"
+        answer: |
+          Data in this section represents a **60-month average** of survey responses from the American Community Survey. This multi-year approach reflects the average characteristics of the population during that timeframe rather than a single point-in-time snapshot.
+
+  - name: 'Capacity & Generation'
+    questions:
       - question: "Why does my community summary display a generation source I know doesn’t exist in my community?"
         answer: |
           Due to the interconnected nature of electrical grids, electricity to a community is sometimes provided by a generation source far distant from the community. We associated generation sources to communities using utility service areas, the most granular aggregation available. However utility service areas may be very large, so a community such as Delta Junction is served by generation sources as far distant as Healy.
+      - question: "Why is there a discrepancy between Gross and Net Generation data?"
+        answer: |
+          Data originating from the **PCE program** reflects **Gross Generation** (total power produced), while data from the **EIA (including EIA923)** reflects **Net Generation** (power available for the grid). This variation is due to differences in reporting requirements required by each program.
+      - question: "How is Independent Power Producer (IPP) data reported?"
+        answer: |
+          Information about power generation and type from IPPs is dependent on utilities' power purchase reporting.
 
+  - name: 'Utility & Grid Structure'
+    questions:
+      - question: "What is the difference between Utility and Local Service Areas?"
+        answer: |
+          **Utility Service Areas** represent the broader operational territory managed by a retail utility, which often encompasses multiple communities and interconnected regional infrastructure. **Local Service Areas** represent the geographic boundaries of a retail utility's service area within an integrated electrical grid.
+      - question: "How are different grid types categorized in Alaska?"
+        answer: |
+          In Alaska, multiple combinations exist:
+          * **Integrated Grid:** Multiple retail utilities physically connected via a shared transmission grid (e.g., Railbelt).
+          * **Regional Utilities:** Physically isolated Service Areas that are administratively grouped under a single retail utility provider (e.g., AVEC).
+          * **Isolated Microgrid:** A single, self-contained grid managed by a dedicated local retail utility (e.g., Kotzebue).  
   - name: 'Metadata'
     questions: 
       - question: 'How are variables defined in the AEDG?  Where is the data dictionary?'

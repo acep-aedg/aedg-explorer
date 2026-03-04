@@ -1,0 +1,15 @@
+- chart_id           = "sex-distribution-chart"
+
+.sex-chart-wrapper{ data: {
+                      controller: "sex-distribution-chart",
+                      sex_distribution_chart: {
+                        title_value: "Sex Distribution",
+                        url_value: sex_distribution_community_charts_path(@community),
+                        male_bar_color_value: color(:blue),
+                        female_bar_color_value: color(:orange)
+                      }
+                    }
+                  }
+
+  .chart-container.mt-4{ style: "min-height: 500px;" }
+    %canvas{ id: chart_id, data: { "sex-distribution-chart-target": "canvas" } }

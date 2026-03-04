@@ -26,17 +26,17 @@ class HouseDistrictAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "creates a new house district with geometry and attributes" do
-    house_district = nil
+  test "build_from_aedg_geojson prepares a new record in memory" do
+    house_district = HouseDistrict.build_from_aedg_geojson(@valid_props, @polygon_geom)
 
-    assert_difference -> { HouseDistrict.count }, +1 do
-      house_district = HouseDistrict.import_aedg_with_geom!(@valid_props, @polygon_geom)
-    end
+    assert_instance_of HouseDistrict, house_district
+    assert house_district.new_record?
+    assert house_district.valid?, "Should be valid: #{house_district.errors.full_messages}"
 
     assert_equal @valid_props[:name], house_district.name
     assert_equal @valid_props[:district], house_district.district
     assert_equal Date.parse(@valid_props[:as_of_date]), house_district.as_of_date
-    assert_equal @polygon_geom.as_text, house_district.boundary.as_text
+    assert_equal @polygon_geom, house_district.boundary
   end
 
   test "is invalid with incorrect geometry type" do
@@ -45,8 +45,16 @@ class HouseDistrictAttributesTest < ActiveSupport::TestCase
                                        @geom_factory.point(1, 1)
                                      ])
 
-    assert_raises ActiveRecord::RecordInvalid do
-      HouseDistrict.import_aedg_with_geom!(@valid_props, line)
-    end
+    house_district = HouseDistrict.build_from_aedg_geojson(@valid_props, line)
+
+    assert_not house_district.valid?
+    assert_includes house_district.errors[:boundary], "must be one of Polygon, MultiPolygon"
+  end
+
+  test "is invalid when boundary is missing" do
+    house_district = HouseDistrict.build_from_aedg_geojson(@valid_props, nil)
+
+    assert_not house_district.valid?
+    assert_includes house_district.errors[:boundary], "can't be blank"
   end
 end

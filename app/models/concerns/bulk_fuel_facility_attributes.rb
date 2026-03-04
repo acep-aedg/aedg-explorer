@@ -2,13 +2,12 @@ module BulkFuelFacilityAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg_with_geom!(properties, geom)
+    def build_from_aedg_geojson(properties, geom)
       properties["location"] = geom
       properties.symbolize_keys!
 
-      BulkFuelFacility.new.tap do |facility|
+      new.tap do |facility|
         facility.assign_aedg_attributes(properties)
-        facility.save!
       end
     end
   end

@@ -9,8 +9,10 @@ pin "bootstrap" # @5.3.5
 pin "datatables.net" # @2.2.2
 pin "jquery" # @3.7.1
 pin "datatables.net-bs5" # @2.2.2
-pin "chart.js", to: "https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.js"
-pin "@kurkle/color", to: "https://cdn.jsdelivr.net/npm/@kurkle/color@0.3.4/dist/color.esm.js"
+pin "chart.js", to: "https://ga.jspm.io/npm:chart.js@4.4.1/dist/chart.js"
+pin "chart.js/helpers", to: "https://ga.jspm.io/npm:chart.js@4.4.1/helpers/helpers.js"
+pin "@kurkle/color", to: "https://ga.jspm.io/npm:@kurkle/color@0.3.2/dist/color.esm.js"
+pin "chartjs-chart-error-bars", to: "https://ga.jspm.io/npm:chartjs-chart-error-bars@4.4.3/build/index.js"
 pin "chartkick", to: "chartkick.js"
 pin "Chart.bundle", to: "Chart.bundle.js"
 pin "mapbox-gl" # @3.11.0

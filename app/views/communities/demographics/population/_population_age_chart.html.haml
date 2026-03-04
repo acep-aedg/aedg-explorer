@@ -1,52 +1,31 @@
-- population_periods ||= []
+- population_periods = @community.population_age_sexes.with_age_estimates
 - selected_period    ||= population_periods.first
-- chart_id           = "age-distribution-chart"
-- selected_end_year  = selected_period&.end_year
-- base_title         = "Age Distribution"
+- base_title          = "Age Distribution"
 
--# Wrapper: Holds the Controller and Configuration
-%div{
-  data: {
-    controller: "widget-update",
-    widget_update: {
-      charts_value: [
-        { 
-          id: chart_id, 
-          url: age_distribution_community_charts_path(@community),
-          baseTitle: base_title,
-          param: "end_year"
-        }
-      ].to_json
-    }
-  }
-}
-  %p This chart shows estimated population with the margin of error stacked on top to indicate uncertainty.
+.age-chart-wrapper{ data: { 
+                      controller: "age-distribution-chart",
+                      age_distribution_chart: {
+                        base_title_value: base_title,
+                        title_value: "#{base_title} (#{selected_period&.period_label})",
+                        base_url_value: age_distribution_community_charts_path(@community),
+                        param_value: "end_year",
+                        url_value: age_distribution_community_charts_path(@community, end_year: selected_period&.end_year),
+                        bar_color_value: color(:blue),
+                        error_bar_color_value: color(:orange)
+                      }
+                    }
+                  }
 
   .d-flex.align-items-center.gap-2.mb-3
-    %i.bi.bi-info-circle-fill.text-aedg-navy{
-      data: { controller: 'tooltip', bs_toggle: 'tooltip' },
-      title: "American Community Survey (ACS)"
-    }
-    %label.form-label.me-2.mb-0.fw-bold{ for: "population-period" } ACS 5-year period:
+    %label.form-label.me-2.mb-0.fw-bold{ for: "population-period" } Survey Period:
+  
+    - if population_periods.size > 1
+      = select_tag "population-period", 
+                        options_from_collection_for_select(population_periods, :end_year, :period_label, selected_period&.end_year),
+                        class: "form-select form-select-sm w-auto",
+                        data: { action: "change->age-distribution-chart#update" }
+    - else
+      %span.fw-bold.text-muted= selected_period&.period_label
 
-    - disable_select = population_periods.size <= 1
-
-    %select#population-period.form-select.form-select-sm.w-auto{
-      disabled: disable_select,
-      data: { action: ("change->widget-update#update" unless disable_select) }
-    }
-      - population_periods.each do |p|
-        - label = "#{p.start_year}–#{p.end_year}"
-        %option{
-          value: p.end_year,
-          selected: p.end_year == selected_end_year
-        }= label
-
-  = bar_chart age_distribution_community_charts_path(@community, end_year: selected_period.end_year),
-    id:       chart_id,
-    title:    "#{base_title} (#{selected_end_year})",
-    stacked:  true,
-    xtitle:   "Population Count",
-    ytitle:   "Age Group",
-    colors:   [color(:blue), color(:orange)],
-    download: { filename: "#{@community.name}age_distribution" }
+  .chart-container.mt-4{ style: "min-height: 500px;" }
+    %canvas{ data: { "age-distribution-chart-target": "canvas" } }

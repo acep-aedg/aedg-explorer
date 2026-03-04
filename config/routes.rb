@@ -36,7 +36,7 @@ Rails.application.routes.draw do
           get :customer_breakdown_customers
           get :customer_breakdown_sales
           get :bulk_fuel_capacity_mix
-          get :gender_distribution
+          get :sex_distribution
           get :age_distribution
           get :poverty_rate
           get :household_income_brackets

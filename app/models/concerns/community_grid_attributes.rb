@@ -3,12 +3,10 @@ module CommunityGridAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      CommunityGrid.new.tap do |cg|
+      new.tap do |cg|
         cg.assign_aedg_attributes(properties)
-        cg.save!
       end
     end
   end

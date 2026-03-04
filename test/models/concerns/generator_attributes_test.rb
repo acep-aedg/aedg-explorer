@@ -10,18 +10,23 @@ class GeneratorAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "import_aedg! creates generator with valid props" do
-    generator = nil
-    assert_difference -> { Generator.count }, +1 do
-      generator = Generator.import_aedg!(@valid_props)
-    end
+  test "build_from_aedg builds generator with valid props in memory" do
+    generator = Generator.build_from_aedg(@valid_props)
+
+    assert_instance_of Generator, generator
+    assert generator.new_record?
+    assert generator.valid?, "Generator should be valid: #{generator.errors.full_messages}"
+
     assert_equal @plant, generator.plant
+    assert_equal VALID_AEDG_ID, generator.aea_plant_id
   end
 
-  test "import_aedg! raises RecordInvalid when associated plant does not exist" do
+  test "build_from_aedg results in an invalid record when associated plant does not exist" do
     invalid_props = @valid_props.merge(aea_plant_id: INVALID_AEDG_ID)
-    assert_raises(ActiveRecord::RecordInvalid) do
-      Generator.import_aedg!(invalid_props)
-    end
+
+    generator = Generator.build_from_aedg(invalid_props)
+
+    assert_not generator.valid?
+    assert_includes generator.errors[:plant], "must exist"
   end
 end

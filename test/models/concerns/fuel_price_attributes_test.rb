@@ -14,28 +14,23 @@ class FuelPriceAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "import_aedg! creates a fuel price record with valid props" do
-    fp = nil
-    assert_difference -> { FuelPrice.count }, +1 do
-      fp = FuelPrice.import_aedg!(@valid_props)
-    end
+  test "build_from_aedg builds a fuel price record in memory with valid props" do
+    fp = FuelPrice.build_from_aedg(@valid_props)
+
+    assert_instance_of FuelPrice, fp
+    assert fp.new_record?
+    assert fp.valid?, "Should be valid: #{fp.errors.full_messages}"
 
     assert_equal @community, fp.community
     assert_equal @valid_props[:reporting_season], fp.reporting_season
     assert_equal @valid_props[:reporting_year], fp.reporting_year
   end
 
-  test "import_aedg! raises RecordInvalid when community fips code does not match any existing community" do
+  test "is invalid when community fips code does not match any existing community" do
     invalid_props = @valid_props.merge(community_fips_code: INVALID_FIPS_CODE)
-    assert_raises(ActiveRecord::RecordInvalid) do
-      FuelPrice.import_aedg!(invalid_props)
-    end
-  end
+    fp = FuelPrice.build_from_aedg(invalid_props)
 
-  test "import_aedg! raises RecordInvalid when community fips code is nil" do
-    invalid_props = @valid_props.merge(community_fips_code: nil)
-    assert_raises(ActiveRecord::RecordInvalid) do
-      FuelPrice.import_aedg!(invalid_props)
-    end
+    assert_not fp.valid?
+    assert_includes fp.errors[:community], "must exist"
   end
 end

@@ -3,12 +3,10 @@ module IncomePovertyAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      IncomePoverty.new.tap do |income_poverty|
+      new.tap do |income_poverty|
         income_poverty.assign_aedg_attributes(properties)
-        income_poverty.save!
       end
     end
   end

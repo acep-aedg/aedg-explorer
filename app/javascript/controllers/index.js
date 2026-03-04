@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import AgeDistributionChartController from "./age_distribution_chart_controller"
+application.register("age-distribution-chart", AgeDistributionChartController)
+
 import ChartController from "./chart_controller"
 application.register("chart", ChartController)
 
@@ -31,14 +34,17 @@ application.register("scroll", ScrollController)
 import ScrollspyController from "./scrollspy_controller"
 application.register("scrollspy", ScrollspyController)
 
+import SearchPanelsController from "./search_panels_controller"
+application.register("search-panels", SearchPanelsController)
+
+import SexDistributionChartController from "./sex_distribution_chart_controller"
+application.register("sex-distribution-chart", SexDistributionChartController)
+
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
 
 import TurboActiveLinkController from "./turbo_active_link_controller"
 application.register("turbo-active-link", TurboActiveLinkController)
-
-import SearchPanelsController from "./search_panels_controller"
-application.register("search-panels", SearchPanelsController)
 
 import WidgetUpdateController from "./widget_update_controller"
 application.register("widget-update", WidgetUpdateController)

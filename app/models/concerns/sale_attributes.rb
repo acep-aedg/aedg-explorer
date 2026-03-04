@@ -2,12 +2,10 @@ module SaleAttributes
   extend ActiveSupport::Concern
 
   class_methods do
-    def import_aedg!(properties)
+    def build_from_aedg(properties)
       properties.symbolize_keys!
-
-      Sale.new.tap do |sale|
+      new.tap do |sale|
         sale.assign_aedg_attributes(properties)
-        sale.save!
       end
     end
   end

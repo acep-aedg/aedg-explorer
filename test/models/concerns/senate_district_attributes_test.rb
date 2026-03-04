@@ -23,14 +23,16 @@ class SenateDistrictAttributesTest < ActiveSupport::TestCase
     }
   end
 
-  test "creates a new senate district with geometry and attributes" do
-    senate_district = nil
-    assert_difference -> { SenateDistrict.count }, +1 do
-      senate_district = SenateDistrict.import_aedg_with_geom!(@valid_props, @polygon_geom)
-    end
+  test "build_from_aedg_geojson builds a new record in memory with geometry and attributes" do
+    senate_district = SenateDistrict.build_from_aedg_geojson(@valid_props, @polygon_geom)
+
+    assert_instance_of SenateDistrict, senate_district
+    assert senate_district.new_record?
+    assert senate_district.valid?, "Should be valid: #{senate_district.errors.full_messages}"
+
     assert_equal @valid_props[:district], senate_district.district
     assert_equal Date.parse(@valid_props[:as_of_date]), senate_district.as_of_date
-    assert_equal @polygon_geom.as_text, senate_district.boundary.as_text
+    assert_equal @polygon_geom, senate_district.boundary
   end
 
   test "is invalid with incorrect geometry type" do
@@ -39,8 +41,16 @@ class SenateDistrictAttributesTest < ActiveSupport::TestCase
                                        @geom_factory.point(1, 1)
                                      ])
 
-    assert_raises ActiveRecord::RecordInvalid do
-      SenateDistrict.import_aedg_with_geom!(@valid_props, line)
-    end
+    senate_district = SenateDistrict.build_from_aedg_geojson(@valid_props, line)
+
+    assert_not senate_district.valid?
+    assert_includes senate_district.errors[:boundary], "must be one of Polygon, MultiPolygon"
+  end
+
+  test "is invalid when boundary is missing" do
+    senate_district = SenateDistrict.build_from_aedg_geojson(@valid_props, nil)
+
+    assert_not senate_district.valid?
+    assert_includes senate_district.errors[:boundary], "can't be blank"
   end
 end
