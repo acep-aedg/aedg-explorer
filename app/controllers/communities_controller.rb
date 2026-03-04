@@ -5,7 +5,7 @@ class CommunitiesController < ApplicationController
   layout :determine_layout
 
   def index
-    @search_params = search_params 
+    @search_params = search_params
     @query = @search_params[:q]
     @communities = Community.order(:name)
     @communities = @communities.search_related(@query) if @query.present?
