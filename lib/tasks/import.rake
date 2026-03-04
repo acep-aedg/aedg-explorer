@@ -33,7 +33,7 @@ namespace :import do
   # Imports that depend on layer four & earlier
   multitask layer_five: %i[monthly_generations yearly_generations heating_degree_days fuel_prices community_reporting_entities]
 
-  multitask layer_six: %i[income_poverty household_income electric_rates sales miscellaneous]
+  multitask layer_six: %i[income_poverty household_income electric_rates monthly_sales miscellaneous]
 
   task miscellaneous: :environment do
     Rake::Task["import:community_grids"].invoke
@@ -100,10 +100,10 @@ namespace :import do
     ImportHelpers.batch_import_csv(filepath, ElectricRate)
   end
 
-  desc "Import Sales Data from .csv file"
-  task sales: :environment do
-    filepath = Rails.root.join("db/imports/sales/sales.csv")
-    ImportHelpers.batch_import_csv(filepath, Sale)
+  desc "Import Monthly Sales Data from .csv file"
+  task monthly_sales: :environment do
+    filepath = Rails.root.join("db/imports/monthly_sales/monthly_sales.csv")
+    ImportHelpers.batch_import_csv(filepath, MonthlySale)
   end
 
   desc "Import Community Data from .geojson file"
