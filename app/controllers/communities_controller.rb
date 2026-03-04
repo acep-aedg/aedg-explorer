@@ -2,17 +2,17 @@ class CommunitiesController < ApplicationController
   require "ostruct"
   before_action :set_community, except: %i[index]
   before_action :set_communities
-  before_action :set_search_params, only: :index
   layout :determine_layout
 
   def index
+    @search_params = search_params 
     @query = @search_params[:q]
     @communities = Community.order(:name)
     @communities = @communities.search_related(@query) if @query.present?
 
     @active_letters = @communities.pluck(:name).map(&:first).uniq.sort
 
-    @communities = @communities.starts_with(params[:letter]) if params[:letter].present?
+    @communities = @communities.starts_with(@search_params[:letter]) if @search_params[:letter].present?
     @communities = @communities.all
   end
 
@@ -42,11 +42,6 @@ class CommunitiesController < ApplicationController
     @communities = Community.order(:name)
   end
 
-  def set_search_params
-    allowed = %i[q letter borough_fips_code regional_corporation_fips_code page per_page]
-    @search_params = params.permit(*allowed).to_h.symbolize_keys
-  end
-
   def determine_layout
     action_name == "index" ? "application" : "communities"
   end
@@ -56,4 +51,8 @@ class CommunitiesController < ApplicationController
     @related_metadata[slug] ||= Metadatum.find_by(slug: slug)
   end
   helper_method :get_related_metadata
+
+  def search_params
+    params.permit(:q, :letter, :borough_fips_code, :regional_corporation_fips_code, :page, :per_page)
+  end
 end
