@@ -64,6 +64,10 @@ Rails.application.routes.draw do
       end
     end
     resources :grids, only: %i[index show] do
+      member do
+        get :general
+        get :power_generation, path: "power-generation"
+      end
       resources :charts, only: [], controller: "grids/charts", defaults: { format: :json } do
         collection do
           get :generation_monthly

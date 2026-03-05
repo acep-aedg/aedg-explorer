@@ -1,5 +1,7 @@
 class CommunitiesController < ApplicationController
   require "ostruct"
+  include MetadataLookup
+
   before_action :set_community, except: %i[index]
   before_action :set_communities
   before_action :set_search_params, only: :index
@@ -50,10 +52,4 @@ class CommunitiesController < ApplicationController
   def determine_layout
     action_name == "index" ? "application" : "communities"
   end
-
-  def get_related_metadata(slug)
-    @related_metadata ||= {}
-    @related_metadata[slug] ||= Metadatum.find_by(slug: slug)
-  end
-  helper_method :get_related_metadata
 end

@@ -11,7 +11,7 @@
       // Electricity Section
       - if @grid.communities.exists?
         %li= nav_link "Communities", "#communities", parent_section: true
-      - if @grid.show_electricity_section?
+      - if @grid.show_power_generation_tab?
         %li= nav_link "Electricity", "#electricity", parent_section: true
       - if @grid.show_utilities?
         %li= nav_link "Utilities", "#utilities"
