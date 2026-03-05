@@ -51,3 +51,6 @@ application.register("widget-update", WidgetUpdateController)
 
 import YearlyGenerationChartController from "./yearly_generation_chart_controller"
 application.register("yearly-generation-chart", YearlyGenerationChartController)
+
+import YearlySalesChartController from "./yearly_sales_chart_controller"
+application.register("yearly-sales-chart", YearlySalesChartController)

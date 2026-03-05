@@ -237,7 +237,7 @@ class Community < ApplicationRecord
   end
 
   def show_sales?
-    @show_sales ||= sales.exists?
+    @show_sales ||= yearly_sales.exists?
   end
 
   # --- Fuel Tab ---

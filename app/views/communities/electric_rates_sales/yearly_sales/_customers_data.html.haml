@@ -1,0 +1,19 @@
+%div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc'] } }}
+  %table.table.table-sm.table-striped.border#customers_table
+    %thead
+      %tr
+        %th Reporting Entity
+        %th Year
+        %th Total Customers
+        - YearlySale.sectors.each do |sector|
+          %th= "#{sector.to_s.titleize} Customers"
+    %tbody
+      - @community.yearly_sales.each do |sale|
+        %tr
+          %td= sale.reporting_entity&.name
+          %td= sale.year
+          %td
+            = number_with_delimiter(sale&.total_customers.to_i)
+          - YearlySale.sectors.each do |sector|
+            - val = sale.try("#{sector}_customers")
+            %td= number_with_delimiter(val&.to_i)
