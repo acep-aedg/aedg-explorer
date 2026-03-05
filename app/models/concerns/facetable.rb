@@ -13,5 +13,16 @@ module Facetable
 
       query
     end
+
+    # find available starting characters
+    def available_letters_for(column_name)
+      # Security: quote_column_name makes the column name safe from injection
+      safe_col = connection.quote_column_name(column_name.to_s)
+      
+      where.not(column_name => nil)
+        .reorder(nil)
+        .pluck(Arel.sql("DISTINCT UPPER(LEFT(#{safe_col}::text, 1))"))
+        .sort
+    end
   end
 end
