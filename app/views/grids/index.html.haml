@@ -15,6 +15,9 @@
             .d-flex.flex-column.flex-sm-row.justify-content-center.align-items-center.gap-3.mb-4
               = link_to "View Data Explorer", search_metadata_path, class: "btn btn-lg btn-aedg-primary"
               = link_to "Advanced Community Search", search_advanced_path, class: "btn btn-lg btn-aedg-secondary"
+            .row.justify-content-center
+              .col.col-lg-10
+                = render 'simple_search'
       -# Photo Credit
       .text-end.text-small.text-muted.mt-2
         Photo Credit: Gwen Holdmann
@@ -23,4 +26,5 @@
 .row.justify-content-center.g-5.mb-5.mx-0
   .col-xl-8.mt-0
     = turbo_frame_tag 'grids' do
-      = render 'grids_list', grids: @grids
+      = render 'results_pagination', letters: @active_letters
+      = render 'results_list', grids: @grids
