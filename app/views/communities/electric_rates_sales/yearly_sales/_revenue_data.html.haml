@@ -1,19 +1,18 @@
+- revenue_data = @community.yearly_sales.with_revenue
+- active_fields = revenue_data.active_fields_for(:revenue)
+
 %div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc'] } }}
   %table.table.table-sm.table-striped.border#revenue_table
     %thead
       %tr
         %th Reporting Entity
         %th Year
-        %th Total Revenue
-        - YearlySale.sectors.each do |sector|
-          %th= "#{sector.to_s.titleize} Revenue"
+        - active_fields.each do |field|
+          %th= "#{field.to_s.titleize}"
     %tbody
-      - @community.yearly_sales.each do |sale|
+      - revenue_data.each do |sale|
         %tr
           %td= sale.reporting_entity&.name
           %td= sale.year
-          %td
-            = number_to_currency(sale.total_revenue, precision: 0)
-          - YearlySale.sectors.each do |sector|
-            - val = sale.try("#{sector}_revenue")
-            %td= number_to_currency(val, precision: 0)
+          - active_fields.each do |field|
+            %td= "#{number_to_currency(sale.public_send(field))}"
