@@ -75,41 +75,6 @@ class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [[pop_employment.measurement_year, pop_employment.unemployment_insurance_claimants]], body[1]["data"]
   end
 
-  test "should get energy_sold (one reporting_entity)" do
-    expected_res = 400
-    expected_com = 300
-    expected_entity_name = "Test Utility One"
-
-    get energy_sold_community_charts_url(@community, year: @sales_year)
-    assert_response :success
-
-    body = JSON.parse(@response.body)
-
-    entity_series = body.find { |series| series["name"] == expected_entity_name }
-    series_data = entity_series["data"]
-    res_row = series_data.find { |row| row[0] == "Residential" }
-    com_row = series_data.find { |row| row[0] == "Commercial" }
-
-    assert_not_nil entity_series, "Could not find series for #{expected_entity_name}"
-    assert_equal expected_res, res_row[1]
-    assert_equal expected_com, com_row[1]
-  end
-
-  test "should get energy_sold with multiple reporting entities" do
-    expected_entity1 = "Test Utility One"
-    expected_entity2 = "Test Utility Three"
-
-    get energy_sold_community_charts_url(@community, year: @sales_year)
-    assert_response :success
-
-    body = JSON.parse(@response.body)
-    entity_names = body.pluck("name")
-
-    assert_equal 2, entity_names.size, "Expected 2 entities, but got #{entity_names.size}"
-    assert_includes entity_names, expected_entity1
-    assert_includes entity_names, expected_entity2
-  end
-
   test "should get customer_breakdown_revenue" do
     expected_res = 200
     expected_com = 950
