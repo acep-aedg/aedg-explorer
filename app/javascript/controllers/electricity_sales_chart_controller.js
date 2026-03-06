@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="yearly-generation-chart"
+// Connects to data-controller="electricity-sales-chart"
 export default class extends Controller {
   static values = { url: String, title: String };
 

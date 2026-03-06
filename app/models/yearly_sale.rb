@@ -16,6 +16,7 @@ class YearlySale < ApplicationRecord
   scope :with_totals, -> { where(total_fields.map { |f| "#{f} IS NOT NULL" }.join(" OR ")) }
   scope :with_revenue, -> { where(revenue_fields.map { |f| "#{f} IS NOT NULL" }.join(" OR ")) }
   scope :with_customers, -> { where(customer_fields.map { |f| "#{f} IS NOT NULL" }.join(" OR ")) }
+  scope :valid_for_usage_per_customer, -> { with_sales.with_customers }
 
   def self.sectors
     %i[residential commercial industrial transportation community government unbilled other]
@@ -45,34 +46,22 @@ class YearlySale < ApplicationRecord
     for_owner(owner).where.not(year: nil).distinct.order(year: :desc).pluck(:year)
   end
 
-  def self.latest_summary_for(sales_relation)
-    # 1. Find the max year within the passed list
-    latest_year = sales_relation.maximum(:year)
-    return nil unless latest_year
+  def self.usage_per_customer_rates
+    records_by_year = valid_for_usage_per_customer.reorder(year: :asc).group_by(&:year)
 
-    # 2. Filter the list to just that year
-    records = sales_relation.where(year: latest_year).includes(:reporting_entity)
-
-    # 3. Return the calculated summary
-    OpenStruct.new( # rubocop:disable Style/OpenStructUse
-      year: latest_year,
-      total_sales: records.sum(:total_sales),
-      total_revenue: records.sum(:total_revenue),
-      total_customers: records.sum(:total_customers),
-      reporter_names: records.map { |s| s.reporting_entity.name }.uniq.to_sentence
-    )
+    records_by_year.map do |year, records|
+      sectors.each_with_object({ year: year }) do |sector, year_data|
+        year_data[sector] = usage_per_customer(records, sector)
+      end
+    end
   end
 
-  def format_yearly_value(value, category)
-    return "-" if value.blank? || value.zero?
+  def self.usage_per_customer(records, sector)
+    sales     = records.sum { |r| r.send("#{sector}_sales").to_f }
+    customers = records.sum { |r| r.send("#{sector}_customers").to_f }
 
-    case category.to_sym
-    when :revenue
-      number_to_currency(value, precision: 0)
-    when :customers
-      number_with_delimiter(value.to_i)
-    else # :sales
-      "#{number_with_delimiter(value)} MWh"
-    end
+    return nil unless customers.positive? && sales.positive?
+
+    (sales / customers).round(2)
   end
 end

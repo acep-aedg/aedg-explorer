@@ -8,6 +8,7 @@
         - if @community.yearly_sales.with_sales.exists?
           .mb-5
             = render "#{partial_path}/electricity_sold_by_sector"
+            = render "#{partial_path}/electricity_consumption_per_customer"
 
         %ul#yearlySalesTabs.nav.nav-tabs{ role: "tablist" }
           %li.nav-item

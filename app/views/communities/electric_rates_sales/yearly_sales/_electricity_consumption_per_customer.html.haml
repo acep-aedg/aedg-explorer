@@ -1,0 +1,12 @@
+- base_title = "#{@community.name.titleize} - Electricity Consumption per Customer"
+
+.chart-wrapper{ style: "height: 500px; width: 100%;" }
+  %canvas{ 
+    data: { 
+      controller: "electricity-consumption-chart",
+      electricity_consumption_chart: {
+        url_value: electricity_consumption_per_customer_community_charts_path(@community),
+        title_value: base_title 
+      }
+    } 
+  }   
