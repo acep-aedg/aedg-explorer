@@ -39,7 +39,7 @@ module ImportHelpers
         end
 
         result = model.import records,
-                              batch_size: 1000,
+                              batch_size: 2000,
                               track_validation_failures: true
 
         failed_instances = result.failed_instances

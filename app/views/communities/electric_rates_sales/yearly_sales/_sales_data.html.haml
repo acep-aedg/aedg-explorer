@@ -13,7 +13,7 @@
           %td= sale.reporting_entity&.name
           %td= sale.year
           %td
-            = "#{number_with_delimiter(sale&.total_sales)}"
+            = "#{number_with_delimiter(sale&.total_sales_mwh)}"
           - YearlySale.sectors.each do |sector|
-            - val = sale.try("#{sector}_sales")
+            - val = sale.try("#{sector}_sales_mwh")
             %td= "#{number_with_delimiter(val)}"
