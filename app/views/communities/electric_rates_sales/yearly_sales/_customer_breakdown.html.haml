@@ -1,5 +1,5 @@
 -# SETUP: Define Variables and Check Data Availability
-- years         = Sale.available_years_for(@community)
+- years         = YearlySale.available_years_for(@community)
 - selected_year = years.first
 - revenue_chart_id = "revenue-chart"
 - revenue_base_title = "#{@community.name.titleize} - Revenue"
@@ -9,9 +9,9 @@
 - customer_base_title = "#{@community.name.titleize} - Customers"
 
 -# Check availability to decide layout stability
-- show_revenue   = @community.sales.with_revenue_breakdown.exists?
-- show_sales     = @community.sales.with_sales_breakdown.exists?
-- show_customers = @community.sales.with_customers_breakdown.exists?
+- show_revenue   = @community.yearly_sales.with_revenue_breakdown.exists?
+- show_sales     = @community.yearly_sales.with_sales_breakdown.exists?
+- show_customers = @community.yearly_sales.with_customers_breakdown.exists?
 
 -# CONFIG: Build the JSON for the Stimulus Controller dynamically
 - active_charts_config = []

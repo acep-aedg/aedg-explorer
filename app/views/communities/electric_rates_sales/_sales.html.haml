@@ -1,24 +1,43 @@
-- parent_tab = 'electric_rates_sales'
+- partial_path = 'communities/electric_rates_sales/yearly_sales'
 
 -# --- Section Body ---
 .section-body.m-1.m-md-2.m-lg-4.mt-3
-  .mb-4
-    = render "communities/#{parent_tab}/sales/summary"
-
   .row
     .col-12
       .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
-
-        - if @community.sales.with_sales.exists?
+        - if @community.yearly_sales.with_sales.exists?
           .mb-5
-            = render "communities/#{parent_tab}/sales/energy_sold"
-      
-        - if @community.sales.with_any_breakdown_data.exists?
-          .mb-5.pt-4.border-top
-            = render "communities/#{parent_tab}/sales/customer_breakdown"
+            = render "#{partial_path}/electricity_sold_by_sector"
+            = render "#{partial_path}/electricity_consumption_per_customer"
 
-        .pt-4.border-top
-          .d-flex.align-items-center.mb-3
-            %i.bi.bi-table.me-2.text-primary
-            %h5.mb-0.fw-bold Sales Data
-          = render "communities/#{parent_tab}/sales/data"
+        %ul#yearlySalesTabs.nav.nav-tabs{ role: "tablist" }
+          %li.nav-item
+            = link_to "#sales-data", class: "nav-link active", data: { bs_toggle: "tab"} do
+              .d-flex.align-items-center
+                %i.bi.bi-table.me-2
+                %h6.mb-0.fw-bold Sales
+
+          %li.nav-item
+            = link_to "#revenue-data", class: "nav-link", data: { bs_toggle: "tab"} do
+              .d-flex.align-items-center
+                %i.bi.bi-table.me-2
+                %h6.mb-0.fw-bold Revenue
+
+          %li.nav-item
+            = link_to "#customers-data", class: "nav-link", data: { bs_toggle: "tab"} do
+              .d-flex.align-items-center
+                %i.bi.bi-table.me-2
+                %h6.mb-0.fw-bold Customers
+
+        .tab-content.mt-3
+          -# sales table
+          #sales-data.tab-pane.fade.show.active{ role: "tabpanel" }
+            = render "#{partial_path}/sales_data"
+
+          -# revenue table
+          #revenue-data.tab-pane.fade{ role: "tabpanel" }
+            = render "#{partial_path}/revenue_data"
+
+          -# customer table
+          #customers-data.tab-pane.fade{ role: "tabpanel" }
+            = render "#{partial_path}/customers_data"

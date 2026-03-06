@@ -1,8 +1,8 @@
 class Communities::ChartsController < ApplicationController
   before_action :set_community
   before_action :set_year,
-                only: %i[capacity_yearly generation_monthly customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
-  before_action :set_sales, only: %i[customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
+                only: %i[capacity_yearly generation_monthly customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales]
+  before_action :set_sales, only: %i[customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales]
 
   def generation_monthly; end
   def generation_yearly; end
@@ -16,8 +16,8 @@ class Communities::ChartsController < ApplicationController
   def poverty_rate; end
   def household_income_brackets; end
   def income; end
-  def energy_sold; end
-  def energy_sold_stacked; end
+  def electricity_sales_by_sector; end
+  def electricity_consumption_per_customer; end
   def electric_rates; end
 
   def age_distribution
@@ -38,7 +38,7 @@ class Communities::ChartsController < ApplicationController
   end
 
   def set_sales
-    @sales = @community.sales.where(year: @year)
+    @sales = @community.yearly_sales.where(year: @year)
   end
 
   def set_year

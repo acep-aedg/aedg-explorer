@@ -1111,6 +1111,65 @@ ALTER SEQUENCE public.monthly_generations_id_seq OWNED BY public.monthly_generat
 
 
 --
+-- Name: monthly_sales; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.monthly_sales (
+    id bigint NOT NULL,
+    reporting_entity_id bigint NOT NULL,
+    year integer,
+    month integer,
+    residential_revenue integer,
+    residential_sales_mwh numeric,
+    residential_customers integer,
+    commercial_revenue integer,
+    commercial_sales_mwh numeric,
+    commercial_customers integer,
+    industrial_revenue integer,
+    industrial_sales_mwh numeric,
+    industrial_customers integer,
+    transportation_revenue integer,
+    transportation_sales_mwh numeric,
+    transportation_customers integer,
+    community_revenue integer,
+    community_sales_mwh numeric,
+    community_customers integer,
+    government_sales_mwh numeric,
+    government_customers integer,
+    unbilled_sales_mwh numeric,
+    unbilled_customers integer,
+    other_revenue integer,
+    other_sales_mwh numeric,
+    other_customers integer,
+    total_revenue integer,
+    total_sales_mwh numeric,
+    total_customers integer,
+    source character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: monthly_sales_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.monthly_sales_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: monthly_sales_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.monthly_sales_id_seq OWNED BY public.monthly_sales.id;
+
+
+--
 -- Name: plants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1671,6 +1730,64 @@ ALTER SEQUENCE public.yearly_generations_id_seq OWNED BY public.yearly_generatio
 
 
 --
+-- Name: yearly_sales; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.yearly_sales (
+    id bigint NOT NULL,
+    reporting_entity_id bigint NOT NULL,
+    year integer,
+    residential_revenue integer,
+    residential_sales_mwh numeric,
+    residential_customers integer,
+    commercial_revenue integer,
+    commercial_sales_mwh numeric,
+    commercial_customers integer,
+    industrial_revenue integer,
+    industrial_sales_mwh numeric,
+    industrial_customers integer,
+    transportation_revenue integer,
+    transportation_sales_mwh numeric,
+    transportation_customers integer,
+    community_revenue integer,
+    community_sales_mwh numeric,
+    community_customers integer,
+    government_sales_mwh numeric,
+    government_customers integer,
+    unbilled_sales_mwh numeric,
+    unbilled_customers integer,
+    other_revenue integer,
+    other_sales_mwh numeric,
+    other_customers integer,
+    total_revenue integer,
+    total_sales_mwh numeric,
+    total_customers integer,
+    source character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: yearly_sales_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.yearly_sales_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: yearly_sales_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.yearly_sales_id_seq OWNED BY public.yearly_sales.id;
+
+
+--
 -- Name: active_storage_attachments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1867,6 +1984,13 @@ ALTER TABLE ONLY public.monthly_generations ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: monthly_sales id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.monthly_sales ALTER COLUMN id SET DEFAULT nextval('public.monthly_sales_id_seq'::regclass);
+
+
+--
 -- Name: plants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1962,6 +2086,13 @@ ALTER TABLE ONLY public.transportations ALTER COLUMN id SET DEFAULT nextval('pub
 --
 
 ALTER TABLE ONLY public.yearly_generations ALTER COLUMN id SET DEFAULT nextval('public.yearly_generations_id_seq'::regclass);
+
+
+--
+-- Name: yearly_sales id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yearly_sales ALTER COLUMN id SET DEFAULT nextval('public.yearly_sales_id_seq'::regclass);
 
 
 --
@@ -2197,6 +2328,14 @@ ALTER TABLE ONLY public.monthly_generations
 
 
 --
+-- Name: monthly_sales monthly_sales_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.monthly_sales
+    ADD CONSTRAINT monthly_sales_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: plants plants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2314,6 +2453,14 @@ ALTER TABLE ONLY public.transportations
 
 ALTER TABLE ONLY public.yearly_generations
     ADD CONSTRAINT yearly_generations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: yearly_sales yearly_sales_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yearly_sales
+    ADD CONSTRAINT yearly_sales_pkey PRIMARY KEY (id);
 
 
 --
@@ -2611,6 +2758,13 @@ CREATE INDEX index_monthly_generations_on_aea_plant_id ON public.monthly_generat
 
 
 --
+-- Name: index_monthly_sales_on_reporting_entity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_monthly_sales_on_reporting_entity_id ON public.monthly_sales USING btree (reporting_entity_id);
+
+
+--
 -- Name: index_plants_on_aea_plant_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2821,6 +2975,13 @@ CREATE INDEX index_yearly_generations_on_year ON public.yearly_generations USING
 
 
 --
+-- Name: index_yearly_sales_on_reporting_entity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_yearly_sales_on_reporting_entity_id ON public.yearly_sales USING btree (reporting_entity_id);
+
+
+--
 -- Name: taggings_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2879,6 +3040,14 @@ ALTER TABLE ONLY public.bulk_fuel_facilities
 
 ALTER TABLE ONLY public.communities_service_area_geoms
     ADD CONSTRAINT fk_rails_20f8ef8e44 FOREIGN KEY (service_area_geom_aedg_id) REFERENCES public.service_area_geoms(aedg_id);
+
+
+--
+-- Name: monthly_sales fk_rails_214bdedf50; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.monthly_sales
+    ADD CONSTRAINT fk_rails_214bdedf50 FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
 
 
 --
@@ -2975,6 +3144,14 @@ ALTER TABLE ONLY public.heating_degree_days
 
 ALTER TABLE ONLY public.fuel_prices
     ADD CONSTRAINT fk_rails_5a86c9fa5a FOREIGN KEY (community_fips_code) REFERENCES public.communities(fips_code);
+
+
+--
+-- Name: yearly_sales fk_rails_74134ff752; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yearly_sales
+    ADD CONSTRAINT fk_rails_74134ff752 FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
 
 
 --
@@ -3144,6 +3321,8 @@ ALTER TABLE ONLY public.monthly_generations
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260304001556'),
+('20260303194455'),
 ('20260221003649'),
 ('20260218182006'),
 ('20260203175849'),

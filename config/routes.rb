@@ -42,8 +42,8 @@ Rails.application.routes.draw do
           get :household_income_brackets
           get :income
           get :fuel_prices
-          get :energy_sold
-          get :energy_sold_stacked
+          get :electricity_sales_by_sector
+          get :electricity_consumption_per_customer
           get :electric_rates
         end
       end
