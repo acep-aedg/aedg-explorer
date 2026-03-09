@@ -1,16 +1,12 @@
 class Communities::ChartsController < ApplicationController
   before_action :set_community
   before_action :set_year,
-                only: %i[capacity_yearly generation_monthly customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales]
-  before_action :set_sales, only: %i[customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales]
+                only: %i[capacity_yearly generation_monthly]
 
   def generation_monthly; end
   def generation_yearly; end
   def capacity_yearly; end
   def population_employment; end
-  def customer_breakdown_revenue; end
-  def customer_breakdown_customers; end
-  def customer_breakdown_sales; end
   def bulk_fuel_capacity_mix; end
   def sex_distribution; end
   def poverty_rate; end
@@ -50,10 +46,6 @@ class Communities::ChartsController < ApplicationController
 
   def set_community
     @community = Community.friendly.find(params[:community_id])
-  end
-
-  def set_sales
-    @sales = @community.yearly_sales.where(year: @year)
   end
 
   def set_year
