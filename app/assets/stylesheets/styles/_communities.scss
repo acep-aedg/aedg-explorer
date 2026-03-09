@@ -27,8 +27,7 @@ html {
   transform: rotate(180deg);
 }
 
-#jump_nav.sticky-top {
-
+#jump-nav {
 
   // Medium (md) and up
   @include media-breakpoint-up(md) {
