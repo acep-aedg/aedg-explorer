@@ -1,15 +1,20 @@
-# app/views/communities/charts/energy_sold.json.jbuilder
-json.array! YearlySale.sales_fields do |field|
-  sales = @community.yearly_sales.order(:year)
-
-  data_hash = sales.each_with_object({}) do |sale, hash|
-    val = sale.public_send(field)
-    hash[sale.year.to_s] = val&.to_s
+sector_fields = YearlySale.sales_fields - YearlySale.total_fields
+json.labels @grouped.keys.map(&:to_s)
+json.datasets sector_fields do |field|
+  data = @grouped.map do |_year, records|
+    records.sum { |r| r.public_send(field).to_f }
   end
 
-  # Skip this sector if there is no data for any year
-  next if data_hash.values.all?(&:nil?)
+  # Skip this sector if there is no data (all zeros)
+  next if data.all?(&:zero?)
 
-  json.name "#{field.to_s.gsub('_sales', '').humanize} MWh Sold"
-  json.data data_hash
+  # Determine Color
+  base_color = ChartsHelper.sector_color(field)
+
+  # Dataset structure
+  json.label           "#{field.to_s.gsub('_sales_mwh', '').titleize} MWh Sold"
+  json.data            data
+  json.backgroundColor base_color.to_opaque(0.4)
+  json.borderColor     base_color
+  json.borderWidth     2
 end

@@ -1,12 +1,10 @@
-- base_title = "#{@community.name.titleize} - Electricity Sales by Sector"
-
 .chart-wrapper{ style: "height: 500px; width: 100%;" }
   %canvas{ 
     data: { 
       controller: "electricity-sales-chart",
       electricity_sales_chart: {
         url_value: electricity_sales_by_sector_community_charts_path(@community),
-        title_value: base_title 
+        title_value: "#{@community.name.titleize} - Electricity Sold by Sector" 
       }
     } 
   }   

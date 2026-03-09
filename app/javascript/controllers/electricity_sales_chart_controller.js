@@ -20,22 +20,13 @@ export default class extends Controller {
     };
   }
 
-  renderChart(rawData) {
+  renderChart(chartData) {
     const fontColor = "#404040"; // Match Chartkick default color
     const settings = this.responsiveSettings;
-    const labels = Object.keys(rawData[0].data);
-    const datasets = rawData.map((series) => {
-      let label = series.name;
-
-      return {
-        label: label,
-        data: Object.values(series.data)
-      };
-    });
 
     this.chart = new Chart(this.element, {
       type: "line",
-      data: { labels: labels, datasets: datasets },
+      data: chartData,
       options: {
         datasets: {
           line: {

@@ -16,7 +16,11 @@ class Communities::ChartsController < ApplicationController
   def poverty_rate; end
   def household_income_brackets; end
   def income; end
-  def electricity_sales_by_sector; end
+
+  def electricity_sales_by_sector
+    @grouped = @community.yearly_sales.reorder(year: :asc).group_by(&:year)
+  end
+
   def electricity_consumption_per_customer; end
   def electric_rates; end
 
