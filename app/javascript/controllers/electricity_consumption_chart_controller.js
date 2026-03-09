@@ -32,6 +32,7 @@ export default class extends Controller {
           line: {
             tension: 0.3,
             pointRadius: 2,
+            borderWidth: 2,
           },
         },
         responsive: true,
@@ -81,7 +82,7 @@ export default class extends Controller {
             stacked: true,
             title: {
               display: true,
-              text: "Energy Sold (MWh)",
+              text: "Electricity Sold (MWh)",
               color: fontColor,
               font: { size: 16 },
             },

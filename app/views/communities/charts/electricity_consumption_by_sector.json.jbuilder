@@ -16,5 +16,4 @@ json.datasets sector_fields do |field|
   json.data            data
   json.backgroundColor base_color.to_opaque(0.4)
   json.borderColor     base_color
-  json.borderWidth     2
 end

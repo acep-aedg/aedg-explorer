@@ -1,10 +1,10 @@
 .chart-wrapper{ style: "height: 500px; width: 100%;" }
   %canvas{ 
     data: { 
-      controller: "electricity-sales-chart",
-      electricity_sales_chart: {
-        url_value: electricity_sales_by_sector_community_charts_path(@community),
-        title_value: "#{@community.name.titleize} - Electricity Sold by Sector" 
+      controller: "electricity-consumption-by-sector-chart",
+      electricity_consumption_by_sector_chart: {
+        url_value: electricity_consumption_by_sector_community_charts_path(@community),
+        title_value: "#{@community.name.titleize} - Electricity Consumption by Sector" 
       }
     } 
   }   

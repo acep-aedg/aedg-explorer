@@ -16,7 +16,7 @@ class YearlySale < ApplicationRecord
   scope :with_totals, -> { where(total_fields.map { |f| "#{f} IS NOT NULL" }.join(" OR ")) }
   scope :with_revenue, -> { where(revenue_fields.map { |f| "#{f} IS NOT NULL" }.join(" OR ")) }
   scope :with_customers, -> { where(customer_fields.map { |f| "#{f} IS NOT NULL" }.join(" OR ")) }
-  scope :valid_for_usage_per_customer, -> { with_sales.with_customers }
+  scope :valid_for_consumption_per_customer, -> { with_sales.with_customers }
 
   def self.sectors
     %i[residential commercial industrial transportation community government unbilled other]
@@ -54,17 +54,7 @@ class YearlySale < ApplicationRecord
     active.sort_by { |f| f.to_s.include?("total") ? 0 : 1 }
   end
 
-  def self.usage_per_customer_rates
-    records_by_year = valid_for_usage_per_customer.reorder(year: :asc).group_by(&:year)
-
-    records_by_year.map do |year, records|
-      sectors.each_with_object({ year: year }) do |sector, year_data|
-        year_data[sector] = usage_per_customer(records, sector)
-      end
-    end
-  end
-
-  def self.usage_per_customer(records, sector)
+  def self.consumption_per_customer(records, sector)
     sales     = records.sum { |r| r.send("#{sector}_sales_mwh").to_f }
     customers = records.sum { |r| r.send("#{sector}_customers").to_f }
 
