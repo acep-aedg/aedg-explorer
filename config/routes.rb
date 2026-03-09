@@ -44,6 +44,7 @@ Rails.application.routes.draw do
           get :fuel_prices
           get :electricity_consumption_by_sector
           get :electricity_consumption_per_customer
+          get :electricity_revenue
           get :electric_rates
         end
       end

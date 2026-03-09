@@ -1,9 +1,10 @@
 - tab = 'electric_rates_sales'
 - links = [ |
     { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.show_rates? }, |
-    { title: 'Sales', anchor: '#sales', icon: 'cash-coin', show: @community.show_sales? }, |
+    { title: 'Consumption', anchor: '#consumption', icon: 'lightning-charge', show: @community.show_sales? }, |
+    { title: 'Revenue', anchor: '#revenue', icon: 'cash-coin', show: @community.show_revenue? } |
   ] |
-        
+
 = turbo_frame_tag "community_tab_content" do
   = render 'shared/tab_nav', links: links
   
@@ -21,11 +22,21 @@
         = render "communities/#{tab}/rates"
 
     - if @community.show_sales?
-      #sales.scroll-section.mb-5
+      #consumption.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'lightning-charge',
+          title: 'Consumption',
+          description: 'Total energy sales and consumption rates',
+          anchor: '#consumption'
+          
+        = render "communities/#{tab}/consumption"
+        
+    - if @community.show_revenue?
+      #revenue.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'cash-coin',
-          title: 'Sales',
-          description: 'Total energy sales and revenue analysis',
-          anchor: '#sales'
+          title: 'Revenue',
+          description: 'Revenue analysis',
+          anchor: '#revenue'
           
-        = render "communities/#{tab}/sales"
+        = render "communities/#{tab}/revenue"

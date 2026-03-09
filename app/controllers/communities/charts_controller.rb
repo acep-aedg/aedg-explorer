@@ -18,11 +18,15 @@ class Communities::ChartsController < ApplicationController
   def income; end
 
   def electricity_consumption_by_sector
-    @grouped = @community.yearly_sales.reorder(year: :asc).group_by(&:year)
+    @grouped = @community.yearly_sales.with_sales.reorder(year: :asc).group_by(&:year)
   end
 
   def electricity_consumption_per_customer
     @grouped = @community.yearly_sales.valid_for_consumption_per_customer.reorder(year: :asc).group_by(&:year)
+  end
+
+  def electricity_revenue
+    @grouped = @community.yearly_sales.with_revenue.reorder(year: :asc).group_by(&:year)
   end
 
   def electric_rates; end

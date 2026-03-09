@@ -8,6 +8,7 @@
         - if @community.yearly_sales.with_sales.exists?
           .mb-5
             = render "#{partial_path}/electricity_sold_by_sector"
+          .mb-5
             = render "#{partial_path}/electricity_consumption_per_customer"
 
         %ul#yearlySalesTabs.nav.nav-tabs{ role: "tablist" }
@@ -16,12 +17,6 @@
               .d-flex.align-items-center
                 %i.bi.bi-table.me-2
                 %h6.mb-0.fw-bold Sales
-
-          %li.nav-item
-            = link_to "#revenue-data", class: "nav-link", data: { bs_toggle: "tab"} do
-              .d-flex.align-items-center
-                %i.bi.bi-table.me-2
-                %h6.mb-0.fw-bold Revenue
 
           %li.nav-item
             = link_to "#customers-data", class: "nav-link", data: { bs_toggle: "tab"} do
@@ -33,10 +28,6 @@
           -# sales table
           #sales-data.tab-pane.fade.show.active{ role: "tabpanel" }
             = render "#{partial_path}/sales_data"
-
-          -# revenue table
-          #revenue-data.tab-pane.fade{ role: "tabpanel" }
-            = render "#{partial_path}/revenue_data"
 
           -# customer table
           #customers-data.tab-pane.fade{ role: "tabpanel" }

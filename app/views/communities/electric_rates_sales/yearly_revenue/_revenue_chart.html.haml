@@ -1,0 +1,10 @@
+.chart-wrapper{ style: "height: 500px; width: 100%;" }
+  %canvas{ 
+    data: { 
+      controller: "electricity-revenue-chart",
+      electricity_revenue_chart: {
+        url_value: electricity_revenue_community_charts_path(@community),
+        title_value: "#{@community.name.titleize} - Electricity Revenue"
+      }
+    } 
+  }   
