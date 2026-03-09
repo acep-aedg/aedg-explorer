@@ -2,7 +2,8 @@
 - links = [ |
     { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.show_rates? }, |
     { title: 'Consumption', anchor: '#consumption', icon: 'lightning-charge', show: @community.show_sales? }, |
-    { title: 'Revenue', anchor: '#revenue', icon: 'cash-coin', show: @community.show_revenue? } |
+    { title: 'Revenue', anchor: '#revenue', icon: 'cash-coin', show: @community.show_revenue? }, |
+    { title: 'Customers', anchor: '#customers', icon: 'people', show: @community.show_customers? } |
   ] |
 
 = turbo_frame_tag "community_tab_content" do
@@ -40,3 +41,13 @@
           anchor: '#revenue'
           
         = render "communities/#{tab}/revenue"
+
+    - if @community.show_customers?
+      #customers.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'people',
+          title: 'Customers',
+          description: 'Customer analysis',
+          anchor: '#customers'
+          
+        = render "communities/#{tab}/customers"

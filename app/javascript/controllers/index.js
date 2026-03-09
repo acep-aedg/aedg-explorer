@@ -25,6 +25,9 @@ application.register("electricity-consumption-by-sector-chart", ElectricityConsu
 import ElectricityConsumptionChartController from "./electricity_consumption_chart_controller"
 application.register("electricity-consumption-chart", ElectricityConsumptionChartController)
 
+import ElectricityCustomersChartController from "./electricity_customers_chart_controller"
+application.register("electricity-customers-chart", ElectricityCustomersChartController)
+
 import ElectricityRevenueChartController from "./electricity_revenue_chart_controller"
 application.register("electricity-revenue-chart", ElectricityRevenueChartController)
 

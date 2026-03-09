@@ -10,25 +10,10 @@
             = render "#{partial_path}/electricity_sold_by_sector"
           .mb-5
             = render "#{partial_path}/electricity_consumption_per_customer"
-
-        %ul#yearlySalesTabs.nav.nav-tabs{ role: "tablist" }
-          %li.nav-item
-            = link_to "#sales-data", class: "nav-link active", data: { bs_toggle: "tab"} do
-              .d-flex.align-items-center
-                %i.bi.bi-table.me-2
-                %h6.mb-0.fw-bold Sales
-
-          %li.nav-item
-            = link_to "#customers-data", class: "nav-link", data: { bs_toggle: "tab"} do
-              .d-flex.align-items-center
-                %i.bi.bi-table.me-2
-                %h6.mb-0.fw-bold Customers
-
-        .tab-content.mt-3
-          -# sales table
-          #sales-data.tab-pane.fade.show.active{ role: "tabpanel" }
-            = render "#{partial_path}/sales_data"
-
-          -# customer table
-          #customers-data.tab-pane.fade{ role: "tabpanel" }
-            = render "#{partial_path}/customers_data"
+          
+        -# Data Table Section
+        .pt-4.border-top
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-table.me-2.text-primary
+            %h5.mb-0.fw-bold Electricity Sales Data
+          = render "#{partial_path}/sales_data"

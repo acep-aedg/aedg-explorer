@@ -229,7 +229,7 @@ class Community < ApplicationRecord
 
   # --- Rates & Sales Tab ---
   def show_sales_rates_tab?
-    @show_sales_rates_tab ||= show_sales? || show_rates? || show_revenue?
+    @show_sales_rates_tab ||= show_sales? || show_rates? || show_revenue? || show_customers?
   end
 
   def show_rates?
@@ -242,6 +242,10 @@ class Community < ApplicationRecord
 
   def show_revenue?
     @show_revenue ||= yearly_sales.with_revenue.exists?
+  end
+
+  def show_customers?
+    @show_customers ||= yearly_sales.with_customers.exists?
   end
 
   # --- Fuel Tab ---

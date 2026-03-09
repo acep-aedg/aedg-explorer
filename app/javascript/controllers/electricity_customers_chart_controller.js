@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="revenue-chart"
+// Connects to data-controller="electricity-customers-chart"
 export default class extends Controller {
   static values = { url: String, title: String };
 
@@ -56,14 +56,14 @@ export default class extends Controller {
             reverse: true,
             callbacks: {
               label: (context) => {
-                return `${context.dataset.label}: $${context.formattedValue}`;
+                return `${context.dataset.label}: ${context.formattedValue}`;
               },
               footer: (tooltipItems) => {
                 let total = 0;
                 tooltipItems.forEach((item) => {
                   total += item.parsed.y;
                 });
-                return `Total: $${new Intl.NumberFormat().format(total)}`;
+                return `Total: ${new Intl.NumberFormat().format(total)}`;
               },
             },
           },
@@ -82,14 +82,14 @@ export default class extends Controller {
             stacked: true,
             title: {
               display: true,
-              text: "Revenue",
+              text: "Customers",
               color: fontColor,
               font: { size: 16 },
             },
             ticks: {
               maxTicksLimit: 10,
               callback: (value) => {
-                return `$${new Intl.NumberFormat().format(value)}`;
+                return `${new Intl.NumberFormat().format(value)}`;
               },
             },
           },

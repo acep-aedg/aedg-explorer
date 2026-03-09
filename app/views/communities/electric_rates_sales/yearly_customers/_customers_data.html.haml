@@ -15,4 +15,4 @@
           %td= sale.reporting_entity&.name
           %td= sale.year
           - active_fields.each do |field|
-            %td= "#{number_to_currency(sale.public_send(field))}"
+            %td= "#{number_with_delimiter(sale.public_send(field))}"

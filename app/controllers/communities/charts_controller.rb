@@ -29,6 +29,10 @@ class Communities::ChartsController < ApplicationController
     @grouped = @community.yearly_sales.with_revenue.reorder(year: :asc).group_by(&:year)
   end
 
+  def electricity_customers
+    @grouped = @community.yearly_sales.with_customers.reorder(year: :asc).group_by(&:year)
+  end
+
   def electric_rates; end
 
   def age_distribution
