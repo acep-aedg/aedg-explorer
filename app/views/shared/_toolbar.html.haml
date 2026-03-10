@@ -1,10 +1,11 @@
-#summary-toolbar.sticky-top.bg-light.border-bottom.px-3.py-2
+%nav#summary-toolbar.sticky-top.bg-light.border-bottom.px-3.py-2{ aria: { label: "Entity Navigation" } }
   .row.align-items-center.gy-2{ style: "min-height: 3.5rem;" } 
     .col.col-md-auto.flex-grow-1.order-0
       .d-flex.align-items-center.gap-2
-        %i.bi.bi-geo-alt-fill.text-primary.fs-3
+        %i.bi.bi-geo-alt-fill.text-primary.fs-3{ aria: { hidden: "true" } }
+        
         .d-flex.flex-column
-          %span.fw-bold.fs-4.lh-sm= entity.name
+          %h1.fw-bold.fs-4.lh-sm.mb-0= entity.name
           
           - if entity.is_a?(Community)
             .d-flex.align-items-center.flex-wrap.gap-1.text-muted.small
@@ -12,22 +13,25 @@
                 %span.fw-semibold.text-secondary= entity.borough.name
                 
                 - if entity.grid.present?
-                  %span.opacity-50 &bull;
+                  %span.opacity-50{ aria: { hidden: "true" } } &bull;
               
               - if entity.grid.present?
                 = link_to entity.grid.name, grid_path(entity.grid), 
                   class: "text-info fw-semibold", 
                   target: "_blank", rel: "noopener", 
-                  data: { turbo_frame: "_top" }
+                  data: { turbo_frame: "_top" },
+                  aria: { label: "Grid: #{entity.grid.name} (opens in new window)" }
 
     .col-auto.col-md-auto.order-1.order-lg-2
       .d-flex.justify-content-end
         = render "shared/dropdown", collection: collection
 
     .col-12.col-md-auto.order-2.order-lg-1
-      %ul.nav.nav-tabs.border-bottom-0.flex-wrap{ data: { controller: "turbo-active-link" } }
+      %ul.nav.nav-tabs.border-bottom-0.flex-wrap{ role: "tablist", data: { controller: "turbo-active-link" } }
         - tabs.each do |tab|
-          %li.nav-item
+          %li.nav-item{ role: "presentation" }
             = link_to tab[:label], tab[:path],
               class: "nav-link py-2 px-2 px-lg-3 fs-6 fw-bold text-wrap bg-light",
+              role: "tab",
+              aria: { selected: "false" },
               data: { turbo_active_link_target: "link", turbo_frame: target_frame, turbo_action: "advance" }
