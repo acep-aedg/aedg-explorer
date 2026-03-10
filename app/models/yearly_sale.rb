@@ -73,7 +73,12 @@ class YearlySale < ApplicationRecord
 
     return nil unless summary_scope.exists?
 
-    stats = summary_scope.pick(*total_fields.map { |f| Arel.sql("SUM(COALESCE(#{f}, 0))") })
+    select_columns = total_fields.map do |f|
+      safe_col = connection.quote_column_name(f)
+      Arel.sql("SUM(COALESCE(#{safe_col}, 0))")
+    end
+
+    stats = summary_scope.pick(*select_columns)
     reporter_names = summary_scope.joins(:reporting_entity)
                                   .distinct
                                   .pluck("reporting_entities.name")
