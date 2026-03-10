@@ -12,7 +12,7 @@ json.datasets sector_fields do |field|
   base_color = ChartsHelper.sector_color(field)
 
   # Dataset structure
-  json.label           "#{field.to_s.gsub('_sales_mwh', '').titleize}"
+  json.label           field.to_s.gsub('_sales_mwh', '').titleize
   json.data            data
   json.backgroundColor base_color.to_opaque(0.7)
   json.borderColor     base_color

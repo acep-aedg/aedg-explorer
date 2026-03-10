@@ -3,7 +3,6 @@ require "test_helper"
 class Communities::ChartsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @community = communities(:one)
-    @sales_year = @community.sales.maximum(:year)
   end
 
   test "should get generation_monthly" do
