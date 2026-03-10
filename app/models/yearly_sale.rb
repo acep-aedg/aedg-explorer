@@ -9,7 +9,6 @@ class YearlySale < ApplicationRecord
                           message: "combination of reporting_entity_id & year" }
   default_scope { order(year: :desc) }
 
-  scope :latest, -> { where(year: select(:year).order(year: :desc).limit(1)) }
   scope :for_owner, ->(owner) { owner ? joins(:reporting_entity).merge(owner.reporting_entities) : all }
 
   scope :with_sales, -> { where(sales_fields.map { |f| "#{f} IS NOT NULL" }.join(" OR ")) }
@@ -38,6 +37,10 @@ class YearlySale < ApplicationRecord
     %i[total_revenue total_sales_mwh total_customers]
   end
 
+  def self.latest_year
+    maximum(:year)
+  end
+
   def self.available_years_for(owner)
     for_owner(owner).where.not(year: nil).distinct.order(year: :desc).pluck(:year)
   end
@@ -61,5 +64,24 @@ class YearlySale < ApplicationRecord
     return nil unless customers.positive? && sales.positive?
 
     (sales / customers).round(2)
+  end
+
+  def self.annual_summary(year = latest_year)
+    return nil unless year
+
+    summary_scope = where(year: year).with_totals.unscope(:order)
+
+    return nil unless summary_scope.exists?
+
+    stats = summary_scope.pick(*total_fields.map { |f| Arel.sql("SUM(COALESCE(#{f}, 0))") })
+    reporter_names = summary_scope.joins(:reporting_entity)
+                                  .distinct
+                                  .pluck("reporting_entities.name")
+                                  .to_sentence
+
+    {
+      year: year,
+      reporter_names: reporter_names
+    }.merge(total_fields.zip(stats).to_h)
   end
 end

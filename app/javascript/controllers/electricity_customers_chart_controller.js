@@ -25,9 +25,17 @@ export default class extends Controller {
     const settings = this.responsiveSettings;
 
     this.chart = new Chart(this.element, {
-      type: "bar",
+      type: "line",
       data: chartData,
       options: {
+        datasets: {
+          line: {
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2,
+            borderWidth: 2,
+          },
+        },
         responsive: true,
         maintainAspectRatio: false,
         plugins: {

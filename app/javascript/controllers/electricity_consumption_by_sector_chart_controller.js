@@ -90,7 +90,7 @@ export default class extends Controller {
             stacked: true,
             title: {
               display: true,
-              text: "Electricity Sold (MWh)",
+              text: "Electricity Consumed",
               color: fontColor,
               font: { size: 16 },
             },

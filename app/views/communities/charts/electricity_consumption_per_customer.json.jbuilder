@@ -14,6 +14,6 @@ json.datasets YearlySale.sectors do |sector|
 
   json.label           sector.to_s.titleize
   json.data            data_values
-  json.backgroundColor base_color.to_opaque(0.4)
+  json.backgroundColor base_color.to_opaque(0.7)
   json.borderColor     base_color
 end

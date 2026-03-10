@@ -14,5 +14,6 @@ json.datasets sector_fields do |field|
   # Dataset structure
   json.label           field.to_s.gsub("_customers", "").titleize
   json.data            data
-  json.backgroundColor base_color
+  json.backgroundColor base_color.to_opaque(0.7)
+  json.borderColor     base_color
 end
