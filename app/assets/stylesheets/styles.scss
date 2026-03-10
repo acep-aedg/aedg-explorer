@@ -1,3 +1,13 @@
+:root {
+  --main-toolbar-height: 64px; // This gets dynamically updated by JavaScript
+}
+
+#jump-nav {
+  position: sticky;
+  z-index: 1010;
+  top: var(--main-toolbar-height);
+}
+
 .navbar {
   box-shadow:
     0 0.5rem 1rem rgba(0, 0, 0, 0.15),
@@ -328,11 +338,6 @@
   background-color: $gray-200;
   color: darken($primary, 25%);
   border-radius: 0.25rem;
-}
-
-// This moves the selection name below the tool bar when clicking on secion links in dropdown on right
-.anchor-offset {
-  scroll-margin-top: 8vh; /* position anchor below nav  */
 }
 
 .pagy-bootstrap-nav {
