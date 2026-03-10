@@ -1,8 +1,13 @@
 - content_for :title, "Electric Grid - #{@grid&.name}"
 - content_for :content do
-  -# Sticky Toolbar
-  = render 'grids/sticky_toolbar'
+  -# Main Toolbar
+  = render "shared/toolbar", 
+    entity: @grid,
+    collection: @grids,
+    tabs: grid_navigation_tabs(@grid),
+    target_frame: "grid_tab_content"
 
+  -# Wrap Entire Page with Mapbox API data
   .row.gx-0{ data: mapbox_api_data({maps_default_layer_id_value: "layer-communities"})
   }
     -# Sidebar with Map
