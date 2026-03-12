@@ -1,27 +1,25 @@
 - tab = 'power_generation'
 - links = [ |
-  { title: 'Utilities', anchor: '#utilities', icon: 'buildings', show: @community.show_utilities? }, |
-  { title: 'Generation', anchor: '#generation', icon: 'building-gear', show: @community.show_generation? }, |
-  { title: 'Capacity', anchor: '#capacity', icon: 'lightning-fill', show: @community.show_capacity? } |
+  { title: 'Utilities', anchor: '#utilities', icon: 'buildings', show: @grid.show_utilities? }, |
+  { title: 'Generation', anchor: '#generation', icon: 'building-gear', show: @grid.show_generation? }, |
+  { title: 'Capacity', anchor: '#capacity', icon: 'lightning-fill', show: @grid.show_capacity? } |
 ] |
 
-= turbo_frame_tag "community_tab_content" do  
+= turbo_frame_tag "grid_tab_content" do  
   = render 'shared/tab_nav', links: links
   
   .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
-    - if @community.show_utilities?
+    - if @grid.show_utilities?
       #utilities.scroll-section.mb-5
         = render 'shared/section_header', 
           icon: 'buildings', 
           title: 'Utilities', 
           description: 'Electrical providers, service areas, and grid infrastructure',
-          anchor: '#utilities',
-          about_modal_id: 'utilitiesAboutModal' # this id must match the id in the sections about_modal partial
-        
-        = render "communities/#{tab}/utilities/about_modal"
-        = render "communities/#{tab}/utilities"
+          anchor: '#utilities'
+  
+        = render "grids/#{tab}/utilities"
 
-    - if @community.show_generation?
+    - if @grid.show_generation?
       #generation.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'building-gear',
@@ -31,10 +29,10 @@
           related_metadata: ["public_monthly_generation", "public_yearly_generation"],
           about_modal_id: 'generationAboutModal' # this id must match the id in the sections about_modal partial
         
-        = render "communities/#{tab}/generation/about_modal"
-        = render "communities/#{tab}/generation"
+        = render "grids/#{tab}/generation/about_modal"
+        = render "grids/#{tab}/generation"
         
-    - if @community.show_capacity?
+    - if @grid.show_capacity?
       #capacity.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'lightning-fill',
@@ -44,5 +42,5 @@
           related_metadata: ["public_capacity"],
           about_modal_id: 'capacityAboutModal' # this id must match the id in the sections about_modal partial
         
-        = render "communities/#{tab}/capacity/about_modal"
-        = render "communities/#{tab}/capacity"
+        = render "grids/#{tab}/capacity/about_modal"
+        = render "grids/#{tab}/capacity"

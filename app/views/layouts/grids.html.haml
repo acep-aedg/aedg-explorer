@@ -1,0 +1,23 @@
+- content_for :title, "Electric Grid - #{@grid&.name}"
+- content_for :content do
+  -# Main Toolbar
+  = render "shared/toolbar", 
+    entity: @grid,
+    collection: @grids,
+    tabs: grid_navigation_tabs(@grid),
+    target_frame: "grid_tab_content"
+
+  -# Wrap Entire Page with Mapbox API data
+  .row.gx-0{ data: mapbox_api_data({maps_default_layer_id_value: "layer-communities"})
+  }
+    -# Sidebar with Map
+    .col-md-4.d-none.d-lg-block
+      = render 'grids/map_sidebar'
+
+    -# Main Content Area
+    .col-md-12.col-lg-8
+      = turbo_frame_tag "grid_tab_content", data: { controller: "scroll", 
+                                  action: "turbo:frame-render->scroll#scrollToTop" } do
+        = yield
+
+= render template: "layouts/application"

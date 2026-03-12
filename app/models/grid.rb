@@ -32,14 +32,19 @@ class Grid < ApplicationRecord
     where("name ILIKE ?", "%#{query}%")
   end
 
+  # --- General Tab ---
+  def show_general_tab?
+    @show_general_tab ||= communities&.exists?
+  end
+
   # --- Communities Section ---
   def show_communities_section?
     @show_communities_section ||= communities&.exists?
   end
 
   # --- Electricity Section ---
-  def show_electricity_section?
-    @show_electricity_section ||= show_generation? || show_capacity? || show_utilities?
+  def show_power_generation_tab?
+    @show_power_generation_tab ||= show_generation? || show_capacity? || show_utilities?
   end
 
   def show_utilities?
@@ -47,7 +52,11 @@ class Grid < ApplicationRecord
   end
 
   def show_utility_map_layers?
-    @show_utility_map_layers ||= show_service_area_geoms?
+    @show_utility_map_layers ||= show_service_area_geoms? || show_service_areas?
+  end
+
+  def show_service_areas?
+    @show_service_areas ||= service_areas&.exists?
   end
 
   def show_service_area_geoms?
@@ -78,5 +87,11 @@ class Grid < ApplicationRecord
     query = reporting_entities
     query = query.where.not(name: exclude) if exclude.present?
     query.distinct.pluck(:name)
+  end
+
+  def pce_eligible_communities?
+    return @pce_eligible_communities if defined?(@pce_eligible_communities)
+
+    @pce_eligible_communities = communities.exists?(pce_eligible: true)
   end
 end

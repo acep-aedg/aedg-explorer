@@ -1,3 +1,5 @@
+- is_pce_eligible = @community.pce_eligible?
+
 %div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }
   %table.table.table-sm.table-striped.border
     %thead
@@ -6,7 +8,7 @@
       %th Month
       %th Generation (MWh)
       %th Fuel Type Name (Code)
-      - if @community.pce_eligible?
+      - if is_pce_eligible
         %th PCE Fuel Price ($/MWh)
       %th Quantity Consumed for Electricity (MMBtu)
       %th Quantity Consumed for Electric Generation (Physical Unit)
@@ -19,7 +21,7 @@
           %td= generation.month
           %td= generation.generation_mwh
           %td= "#{generation.fuel_type_name} (#{generation.fuel_type_code})"
-          - if @community.pce_eligible?
+          - if is_pce_eligible
             %td= generation.pce_fuel_price
           %td= generation.quantity_consumed_for_electricity_mmbtu
           %td= "#{generation.quantity_consumed_in_physical_units_for_electric_generation} #{generation.physical_unit_label}"
