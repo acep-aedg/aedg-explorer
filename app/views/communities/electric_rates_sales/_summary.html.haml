@@ -9,7 +9,7 @@
           .bg-warning.bg-opacity-10.p-2.rounded-circle.me-2.d-flex.align-items-center.justify-content-center
             %i.bi.bi-lightning-fill.text-warning.fs-5
           %div
-            %small.text-uppercase.text-secondary.fw-bold.small Electriciy Sold:
+            %small.text-uppercase.text-secondary.fw-bold.small Electricity Sold:
             %span.fw-bold.text-navy.fs-5= "#{number_with_delimiter(summary[:total_sales_mwh])} MWh"
   
         -# Revenue
@@ -17,7 +17,7 @@
           .bg-success.bg-opacity-10.p-2.rounded-circle.me-2.d-flex.align-items-center.justify-content-center
             %i.bi.bi-cash-coin.text-success.fs-5
           %div
-            %small.text-uppercase.text-secondary.fw-bold.small Electriciy Revenue:
+            %small.text-uppercase.text-secondary.fw-bold.small Electricity Revenue:
             %span.fw-bold.text-navy.fs-5= number_to_currency(summary[:total_revenue], precision: 0)
   
         -# Customers
@@ -25,7 +25,7 @@
           .bg-info.bg-opacity-10.p-2.rounded-circle.me-2.d-flex.align-items-center.justify-content-center
             %i.bi.bi-people-fill.text-info.fs-5
           %div
-            %small.text-uppercase.text-secondary.fw-bold.small Electriciy Customers:
+            %small.text-uppercase.text-secondary.fw-bold.small Electricity Customers:
             %span.fw-bold.text-navy.fs-5= number_with_delimiter(summary[:total_customers])
   
       -# Right side: The Meta info
