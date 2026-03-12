@@ -1,0 +1,18 @@
+- customer_data = @community.yearly_sales.with_customers
+- active_fields = customer_data.active_fields_for(:customers)
+
+%div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc'] } }}
+  %table.table.table-sm.table-striped.border#customers_table
+    %thead
+      %tr
+        %th Reporting Entity
+        %th Year
+        - active_fields.each do |field|
+          %th= "#{field.to_s.titleize}"
+    %tbody
+      - customer_data.each do |sale|
+        %tr
+          %td= sale.reporting_entity&.name
+          %td= sale.year
+          - active_fields.each do |field|
+            %td= "#{number_with_delimiter(sale.public_send(field))}"

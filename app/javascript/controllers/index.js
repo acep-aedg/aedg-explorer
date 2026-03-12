@@ -19,6 +19,18 @@ application.register("datatables", DatatablesController)
 import DropdownController from "./dropdown_controller"
 application.register("dropdown", DropdownController)
 
+import ElectricityConsumptionBySectorChartController from "./electricity_consumption_by_sector_chart_controller"
+application.register("electricity-consumption-by-sector-chart", ElectricityConsumptionBySectorChartController)
+
+import ElectricityConsumptionChartController from "./electricity_consumption_chart_controller"
+application.register("electricity-consumption-chart", ElectricityConsumptionChartController)
+
+import ElectricityCustomersChartController from "./electricity_customers_chart_controller"
+application.register("electricity-customers-chart", ElectricityCustomersChartController)
+
+import ElectricityRevenueChartController from "./electricity_revenue_chart_controller"
+application.register("electricity-revenue-chart", ElectricityRevenueChartController)
+
 import FuelChartController from "./fuel_chart_controller"
 application.register("fuel-chart", FuelChartController)
 
