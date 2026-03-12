@@ -17,7 +17,7 @@ class SearchesController < ApplicationController
     @pagy, @communities = pagy(:offset, build_scope(extract_filters), page_key: "page", limit: 25)
     # --- FACET FILTER SEARCH
     @facet_panels = Community.advanced_search_facets.map do |facet|
-      col = facet[:prefix] =~ /senate|house/ ? :district : :name
+      col = facet[:prefix] =~ /senate/ ? :district : :name
       scope = facet[:model].filter_by_params(params, "q_#{facet[:prefix]}", "alpha_#{facet[:prefix]}", col)
       pagy_item, items = pagy(:offset, scope, page_key: "page_#{facet[:prefix]}", limit: 20)
       facet.merge(items: items, pagy: pagy_item)
@@ -99,13 +99,5 @@ class SearchesController < ApplicationController
     base = base.in_house(filters[:house_district_ids])              if filters[:house_district_ids].present?
 
     base.distinct.all
-  end
-
-  def preload_choices
-    @all_grids = Grid.order(:name).select(:id, :name)
-    @all_boros = Borough.order(:name).select(:fips_code, :name)
-    @all_corps = RegionalCorporation.order(:name).select(:fips_code, :name)
-    @all_senate = SenateDistrict.order(:district).select(:id, :district)
-    @all_house  = HouseDistrict.order(:district).select(:id, :district, :name)
   end
 end
