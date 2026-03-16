@@ -3,7 +3,7 @@ class SenateDistrict < ApplicationRecord
 
   include Facetable
 
-  has_many :communities_senate_districts, dependent: :destroy
+  has_many :communities_senate_districts, foreign_key: :senate_district_district, dependent: :destroy, inverse_of: :senate_district
   has_many :communities, through: :communities_senate_districts
 
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]

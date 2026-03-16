@@ -47,8 +47,8 @@ class MonthlyGeneration < ApplicationRecord
   def self.data_by_year(owner, year)
     grouped = for_owner_and_year(owner, year).group(:month).sum(:generation_mwh)
 
-    (1..12).each_with_object({}) do |m, h|
-      h[Date::ABBR_MONTHNAMES[m]] = grouped.fetch(m, 0)
+    (1..12).to_h do |m|
+      [Date::ABBR_MONTHNAMES[m], grouped.fetch(m, 0)]
     end
   end
 end

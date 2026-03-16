@@ -4,6 +4,7 @@ require_relative "import_helpers"
 require_relative "data_download"
 require_relative "versioning"
 
+# These individual import model tasks should be named according the Model's table name
 namespace :import do
   desc "Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)"
   task all: %i[environment download_data] do
@@ -28,19 +29,19 @@ namespace :import do
   multitask layer_three: %i[communities reporting_entities service_area_geoms]
 
   # Imports that depend on layer three
-  multitask layer_four: %i[plants community_service_area_geoms community_reporting_entities]
+  multitask layer_four: %i[plants communities_service_area_geoms communities_reporting_entities]
 
   # Imports that depend on layer four & earlier
   multitask layer_five: %i[monthly_generations yearly_generations heating_degree_days fuel_prices monthly_sales]
 
-  multitask layer_six: %i[income_poverty household_income electric_rates yearly_sales miscellaneous]
+  multitask layer_six: %i[income_poverties household_incomes electric_rates yearly_sales miscellaneous]
 
   task miscellaneous: :environment do
     Rake::Task["import:community_grids"].invoke
     Rake::Task["import:generators"].invoke
     Rake::Task["import:populations"].invoke
-    Rake::Task["import:transportation"].invoke
-    Rake::Task["import:populations_ages_sexes"].invoke
+    Rake::Task["import:transportations"].invoke
+    Rake::Task["import:population_age_sexes"].invoke
     Rake::Task["import:capacities"].invoke
     Rake::Task["import:employments"].invoke
     Rake::Task["import:bulk_fuel_facilities"].invoke
@@ -66,7 +67,6 @@ namespace :import do
   desc "Import Heating Degree Days Data from .csv file"
   task heating_degree_days: :environment do
     filepath = Rails.root.join("db/imports/heating_degree_days/heating_degree_days.csv")
-    ImportHelpers.ensure_empty!(HeatingDegreeDay, "heating_degree_days")
     ImportHelpers.batch_import_csv(filepath, HeatingDegreeDay)
   end
 
@@ -131,18 +131,18 @@ namespace :import do
   end
 
   desc "Import Community Service Area Geom Data from .csv file"
-  task community_service_area_geoms: :environment do
+  task communities_service_area_geoms: :environment do
     filepath = Rails.root.join("db/imports/communities_service_area_geoms/communities_service_area_geoms.csv")
     ImportHelpers.batch_import_csv(filepath, CommunitiesServiceAreaGeom)
   end
 
   desc "Import Community Reporting Entity Data from .csv file"
-  task community_reporting_entities: :environment do
+  task communities_reporting_entities: :environment do
     filepath = Rails.root.join("db/imports/communities_reporting_entities/communities_reporting_entities.csv")
     ImportHelpers.batch_import_csv(filepath, CommunitiesReportingEntity)
   end
 
-  desc "Import Plant  Data from .geojson file"
+  desc "Import Plant Data from .geojson file"
   task plants: :environment do
     filepath = Rails.root.join("db/imports/plants/plants.geojson")
     ImportHelpers.batch_import_geojson(filepath, Plant)
@@ -161,7 +161,7 @@ namespace :import do
   end
 
   desc "Import Transportation Data from .csv file"
-  task transportation: :environment do
+  task transportations: :environment do
     filepath = Rails.root.join("db/imports/transportation/transportation.csv")
     ImportHelpers.batch_import_csv(filepath, Transportation)
   end
@@ -169,19 +169,17 @@ namespace :import do
   desc "Import Yearly Generation Data from .csv file"
   task yearly_generations: :environment do
     filepath = Rails.root.join("db/imports/yearly_generation/yearly_generation.csv")
-    ImportHelpers.ensure_empty!(YearlyGeneration, "yearly_generations")
     ImportHelpers.batch_import_csv(filepath, YearlyGeneration)
   end
 
   desc "Import Monthly Generation Data from .csv file"
   task monthly_generations: :environment do
     filepath = Rails.root.join("db/imports/monthly_generation/monthly_generation.csv")
-    ImportHelpers.ensure_empty!(MonthlyGeneration, "monthly_generations")
     ImportHelpers.batch_import_csv(filepath, MonthlyGeneration)
   end
 
   desc "Import Population, Ages, Sexes Data from .csv file"
-  task populations_ages_sexes: :environment do
+  task population_age_sexes: :environment do
     filepath = Rails.root.join("db/imports/populations_ages_sexes/populations_ages_sexes.csv")
     ImportHelpers.batch_import_csv(filepath, PopulationAgeSex)
   end
@@ -189,70 +187,60 @@ namespace :import do
   desc "Import Employment Data from .csv file"
   task employments: :environment do
     filepath = Rails.root.join("db/imports/employment/employment.csv")
-    ImportHelpers.ensure_empty!(Employment, "employments")
     ImportHelpers.batch_import_csv(filepath, Employment)
   end
 
   desc "Import Capacity Data from .csv file"
   task capacities: :environment do
     filepath = Rails.root.join("db/imports/capacity/capacity.csv")
-    ImportHelpers.ensure_empty!(Capacity, "capacities")
     ImportHelpers.batch_import_csv(filepath, Capacity)
   end
 
   desc "Import House Districts Data from .geojson file"
   task house_districts: :environment do
     filepath = Rails.root.join("db/imports/house_districts/house_districts.geojson")
-    ImportHelpers.ensure_empty!(HouseDistrict, "districts")
     ImportHelpers.batch_import_geojson(filepath, HouseDistrict)
   end
 
   desc "Import Senate Districts Data from .geojson file"
   task senate_districts: :environment do
     filepath = Rails.root.join("db/imports/senate_districts/senate_districts.geojson")
-    ImportHelpers.ensure_empty!(SenateDistrict, "districts")
     ImportHelpers.batch_import_geojson(filepath, SenateDistrict)
   end
 
   desc "Import School Districts Data from .geojson file"
   task school_districts: :environment do
     filepath = Rails.root.join("db/imports/school_districts/school_districts.geojson")
-    ImportHelpers.ensure_empty!(SchoolDistrict, "districts")
     ImportHelpers.batch_import_geojson(filepath, SchoolDistrict)
   end
 
   desc "Import Fuel Prices Data from .csv file"
   task fuel_prices: :environment do
     filepath = Rails.root.join("db/imports/fuel_prices/fuel_prices.csv")
-    ImportHelpers.ensure_empty!(FuelPrice, "fuel_prices")
     ImportHelpers.batch_import_csv(filepath, FuelPrice)
   end
 
   desc "Import Bulk Fuel Facilities Data from .geojson file"
   task bulk_fuel_facilities: :environment do
     filepath = Rails.root.join("db/imports/bulk_fuel/bulk_fuel.geojson")
-    ImportHelpers.ensure_empty!(BulkFuelFacility, "bulk_fuel_facilities")
     ImportHelpers.batch_import_geojson(filepath, BulkFuelFacility)
   end
 
   desc "Import Income Poverty Data from .csv file"
-  task income_poverty: :environment do
+  task income_poverties: :environment do
     filepath = Rails.root.join("db/imports/income_poverty/income_poverty.csv")
-    ImportHelpers.ensure_empty!(IncomePoverty, "income_poverty")
     ImportHelpers.batch_import_csv(filepath, IncomePoverty)
   end
 
   desc "Import Household Income Data from .csv file"
-  task household_income: :environment do
+  task household_incomes: :environment do
     filepath = Rails.root.join("db/imports/household_income/household_income.csv")
-    ImportHelpers.ensure_empty!(HouseholdIncome, "household_income")
     ImportHelpers.batch_import_csv(filepath, HouseholdIncome)
   end
 
   desc "Import Generator Data from .csv file"
   task generators: :environment do
     filepath = Rails.root.join("db/imports/generators/generators.csv")
-    ImportHelpers.ensure_empty!(Generator, "generators")
     ImportHelpers.batch_import_csv(filepath, Generator)
   end
 end
