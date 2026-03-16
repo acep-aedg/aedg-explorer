@@ -4,6 +4,7 @@ require_relative "import_helpers"
 require_relative "data_download"
 require_relative "versioning"
 
+# These individual import model tasks should be named according the Model's table name
 namespace :import do
   desc "Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)"
   task all: %i[environment download_data] do

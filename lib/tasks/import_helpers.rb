@@ -85,27 +85,14 @@ module ImportHelpers
     def ensure_empty!(model)
       return unless model.any?
 
-      human_name = model.name.titleize
-      table_task = "delete:#{model.table_name}"
+      task = "delete:#{model.table_name}"
+      msg = if Rake::Task.task_defined?(task)
+              "Run: rails #{task}\nThen try again."
+            else
+              "No delete task found. Run: rails import:prepare FORCE=true"
+            end
 
-      instruction = if Rake::Task.task_defined?(table_task)
-                      <<~INSTRUCTION
-                        To clear it safely, run:
-                          rails #{table_task}\n
-                        Then try the import again.
-                      INSTRUCTION
-                    else
-                      <<~INSTRUCTION
-                        No specific delete task found (tried: rails #{table_task}).
-                        To clear all tables and force a full reimport, run:
-                            rails import:prepare FORCE=true
-                      INSTRUCTION
-                    end
-
-      raise <<~ERROR
-        \n ❗ ERROR: #{human_name} table is not empty!
-        #{instruction}\n
-      ERROR
+      raise "\n ❗ ERROR: #{model.name.titleize} table is not empty!\n#{msg}\n\n"
     end
 
     private
