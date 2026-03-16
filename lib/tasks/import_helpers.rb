@@ -5,6 +5,7 @@ module ImportHelpers
     def import_geojson(filepath, model)
       return unless file_exists?(filepath, model)
 
+      ensure_empty!(model)
       start_time = Time.current
       puts "📂 Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
       data = File.read(filepath)
@@ -27,6 +28,7 @@ module ImportHelpers
     def batch_import_geojson(filepath, model)
       return unless file_exists?(filepath, model)
 
+      ensure_empty!(model)
       start_time = Time.current
       puts "📂 Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
 
@@ -56,6 +58,7 @@ module ImportHelpers
     def batch_import_csv(filepath, model)
       return unless file_exists?(filepath, model)
 
+      ensure_empty!(model)
       start_time = Time.current
       puts "📂 Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
 
@@ -79,18 +82,29 @@ module ImportHelpers
       end
     end
 
-    def ensure_empty!(model, delete_tasks)
+    def ensure_empty!(model)
       return unless model.any?
 
       human_name = model.name.titleize
-      tasks = Array(delete_tasks)
-      command_chain = tasks.map { |t| "rails delete:#{t}" }.join(" && ")
+      table_task = "delete:#{model.table_name}"
+
+      instruction = if Rake::Task.task_defined?(table_task)
+                      <<~INSTRUCTION
+                        To clear it safely, run:
+                          rails #{table_task}\n
+                        Then try the import again.
+                      INSTRUCTION
+                    else
+                      <<~INSTRUCTION
+                        No specific delete task found (tried: rails #{table_task}).
+                        To clear all tables and force a full reimport, run:
+                            rails import:prepare FORCE=true
+                      INSTRUCTION
+                    end
 
       raise <<~ERROR
-        \n ❗ERROR: #{human_name} table is not empty!
-        To clear it safely, run:
-            #{command_chain}
-        Then try the import again.\n
+        \n ❗ ERROR: #{human_name} table is not empty!
+        #{instruction}\n
       ERROR
     end
 

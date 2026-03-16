@@ -1,5 +1,6 @@
 require_relative "delete_helpers"
 
+# These tasks should be named according the Model's table name
 namespace :delete do
   desc "Clear monthly_generations data"
   task monthly_generations: :environment do
@@ -77,7 +78,17 @@ namespace :delete do
   end
 
   desc "Clear populations_ages_sexes data"
-  task populations_ages_sexes: :environment do
+  task population_age_sexes: :environment do
     DeleteHelpers.delete_records(PopulationAgeSex)
+  end
+
+  desc "Clear community_grids data"
+  task community_grids: :environment do
+    DeleteHelpers.delete_records(CommunityGrid)
+  end
+
+  desc "Clear communities_reporting_entities data"
+  task communities_reporting_entities: :environment do
+    DeleteHelpers.delete_records(CommunitiesReportingEntity)
   end
 end
