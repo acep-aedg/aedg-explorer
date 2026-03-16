@@ -63,6 +63,17 @@ module ChartsHelper
     "kwh_purchased" => :purple
   }.freeze
 
+  SALES_SECTOR_COLOR_MAPPING = {
+    "residential" => :blue,
+    "commercial" => :light_red,
+    "industrial" => :orange,
+    "transportation" => :light_brown,
+    "community" => :medium_yellow,
+    "government" => :light_green,
+    "unbilled" => :charcoal,
+    "other" => :light_grey
+  }.freeze
+
   class HexColor < String
     def to_opaque(opacity = 1)
       return self unless match(/^#(..)(..)(..)$/)
@@ -85,5 +96,11 @@ module ChartsHelper
     hex = CHART_COLORS[color_name] || CHART_COLORS[:medium_grey]
 
     HexColor.new(hex)
+  end
+
+  def sector_color(label_or_field)
+    str = label_or_field.to_s.downcase
+    matched_key = SALES_SECTOR_COLOR_MAPPING.keys.find { |key| str.include?(key) }
+    color(SALES_SECTOR_COLOR_MAPPING[matched_key] || :light_grey)
   end
 end

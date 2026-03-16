@@ -32,9 +32,6 @@ Rails.application.routes.draw do
           get :population_detail
           get :generation_yearly
           get :fuel_prices
-          get :customer_breakdown_revenue
-          get :customer_breakdown_customers
-          get :customer_breakdown_sales
           get :bulk_fuel_capacity_mix
           get :sex_distribution
           get :age_distribution
@@ -42,8 +39,10 @@ Rails.application.routes.draw do
           get :household_income_brackets
           get :income
           get :fuel_prices
-          get :energy_sold
-          get :energy_sold_stacked
+          get :electricity_consumption_by_sector
+          get :electricity_consumption_per_customer
+          get :electricity_revenue
+          get :electricity_customers
           get :electric_rates
         end
       end
@@ -64,6 +63,10 @@ Rails.application.routes.draw do
       end
     end
     resources :grids, only: %i[index show] do
+      member do
+        get :general
+        get :power_generation, path: "power-generation"
+      end
       resources :charts, only: [], controller: "grids/charts", defaults: { format: :json } do
         collection do
           get :generation_monthly

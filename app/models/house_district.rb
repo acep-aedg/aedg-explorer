@@ -2,7 +2,7 @@ class HouseDistrict < ApplicationRecord
   include HouseDistrictAttributes
   include Facetable
 
-  has_many :communities_house_districts, dependent: :destroy
+  has_many :communities_house_districts, foreign_key: :house_district_district, dependent: :destroy, inverse_of: :house_district
   has_many :communities, through: :communities_house_districts
 
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]

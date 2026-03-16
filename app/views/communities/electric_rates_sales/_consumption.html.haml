@@ -1,0 +1,19 @@
+- partial_path = 'communities/electric_rates_sales/yearly_sales'
+
+-# --- Section Body ---
+.section-body.m-1.m-md-2.m-lg-4.mt-3
+  .row
+    .col-12
+      .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
+        - if @community.yearly_sales.with_sales.exists?
+          .mb-5
+            = render "#{partial_path}/electricity_sold_by_sector"
+          .mb-5
+            = render "#{partial_path}/electricity_consumption_per_customer"
+          
+        -# Data Table Section
+        .pt-4.border-top
+          .d-flex.align-items-center.mb-3
+            %i.bi.bi-table.me-2.text-primary
+            %h5.mb-0.fw-bold Electricity Sales Data
+          = render "#{partial_path}/sales_data"
