@@ -97,32 +97,31 @@ class SearchesController < ApplicationController
     end
   end
 
-  # Handles updating just one sidebar panel (like when clicking 'A' in the Grids panel)
   def render_facet_update
-    # 1. Identify which facet is active based on your model's definition
-    active_facet = Community.advanced_search_facets.find do |facet|
-      # Does the request have a param matching this facet's prefix?
-      params.keys.any? { |k| k.start_with?("q_#{facet[:prefix]}", "alpha_#{facet[:prefix]}") }
-    end
+    prefix = determine_active_prefix
+    facet  = @facet_panels.find { |f| f[:prefix] == prefix }
 
-    # 2. Get the prefix from the facet found, OR fallback to the 'expanded' param
-    prefix = if active_facet
-               active_facet[:prefix]
-             elsif params[:expanded].present?
-               # Find by ID if we're just expanding/clearing a panel
-               Community.advanced_search_facets.find { |f| f[:id] == params[:expanded] }&.dig(:prefix)
-             end
+    # Exit early if we can't find the right panel
+    return render turbo_stream: [] if prefix.blank? || !facet
 
-    # Exit early if we can't figure out which panel to talk to
-    return turbo_stream.append("results_frame", "") if prefix.blank?
-
-    facet = @facet_panels.find { |f| f[:prefix] == prefix }
-    return turbo_stream.append("results_frame", "") unless facet
-
-    # Send back the HTML to swap out the frame inside the open sidebar panel
+    # Send back the HTML to swap out the frame
     turbo_stream.update("#{prefix}_frame",
                         partial: "searches/advanced/facet",
                         locals: { panel: facet })
+  end
+
+  def determine_active_prefix
+    # Look for a facet matching a param key (q_ or alpha_)
+    active_facet = Community.advanced_search_facets.find do |facet|
+      params.keys.any? { |k| k.start_with?("q_#{facet[:prefix]}", "alpha_#{facet[:prefix]}") }
+    end
+
+    return active_facet[:prefix] if active_facet
+
+    # Fallback to finding by the 'expanded' ID
+    return if params[:expanded].blank?
+
+    Community.advanced_search_facets.find { |f| f[:id] == params[:expanded] }&.dig(:prefix)
   end
 
   # Converts selected IDs into objects so we can show labels on the blue badges
