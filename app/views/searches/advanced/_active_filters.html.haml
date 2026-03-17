@@ -1,23 +1,28 @@
-%div#active_filters_frame.d-flex.flex-wrap.align-items-center.justify-content-left.gap-1
-  - base_params = request.query_parameters.except(:expanded)
+.d-flex.flex-wrap.align-items-center.justify-content-left.gap-1.mb-3
+  - base_params = request.query_parameters.except(:expanded, :only_facet)
   
-  -# TRASH 
+  -# TRASH (Clear All)
   - if @active_badges&.any? || params[:q].present?
-    = link_to search_advanced_path, class: "btn btn-outline-danger btn-sm border-0 px-2 py-1", title: "Clear all filters", data: { turbo_frame: "results_frame", action: "click->search-panels#clearAllFilters" } do
+    -# Note: Removed turbo_frame: "results_frame" to allow a full state reset
+    = link_to search_advanced_path, 
+              class: "btn btn-outline-danger btn-sm border-0 px-2 py-1", 
+              title: "Clear all filters", 
+              data: { action: "click->search-panels#clearAllFilters" } do
       %i.bi.bi-trash3-fill
 
   -# SEARCH Results 
   - if params[:q].present?
     .badge-wrapper
-      = link_to search_advanced_path(base_params.except(:q)), data: { turbo_frame: "results_frame" } do
+      = link_to search_advanced_path(base_params.except(:q)), data: { turbo_action: "advance" } do
         %span.me-2
           %span.text-muted Search:
           = params[:q]
         %i.bi.bi-x-lg
 
-  -# FACET BADGES (Boroughs, etc.)
+  -# FACET BADGES
   - @active_badges&.each do |badge|
     .badge-wrapper
-      = link_to badge[:url], data: { turbo_frame: "results_frame", action: "click->search-panels#uncheckSpecific", search_panels_id_param: badge[:checkbox_id] } do
+      -# Crucial: Use turbo_action: "advance" to update the URL and the "Brain" form
+      = link_to badge[:url], data: { turbo_action: "advance", action: "click->search-panels#uncheckSpecific", search_panels_id_param: badge[:checkbox_id] } do
         %span.me-1= badge[:label]
         %i.bi.bi-x-lg

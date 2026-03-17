@@ -2,19 +2,16 @@
 - frame_id  = "#{id_prefix}_frame"
 - param_key = panel[:param]
 
-= turbo_frame_tag frame_id, class: "d-flex flex-column" do
-  .p-2
-    = render 'searches/advanced/search_input',
-      url: search_advanced_path,
-      name: :"q_#{id_prefix}",
-      frame: frame_id,
-      placeholder: "Find #{panel[:title]}..."
+= turbo_frame_tag frame_id, class: "d-flex flex-column h-100" do
+  -# 1. Ensure hidden alpha field is synced with @state_params
+  = hidden_field_tag "alpha_#{id_prefix}", @state_params["alpha_#{id_prefix}"], id: "alpha_#{id_prefix}_input", form: 'filter-form'
 
-  .d-flex.ps-4
-    .flex-grow-1
+  .d-flex.ps-4.flex-grow-1.overflow-hidden
+    .flex-grow-1.overflow-auto
       - if panel[:items].any?
-        - selected_ids = Array(params[param_key]).map(&:to_s)
-
+        -# 2. selected_ids should look at our comprehensive @state_params
+        - selected_ids = Array(@state_params[param_key.to_s] || @state_params[param_key.to_sym]).map(&:to_s)
+        
         - panel[:items].each do |item|
           - val = item.send(panel[:lookup]).to_s
           - lbl = panel[:label_method].is_a?(Proc) ? panel[:label_method].call(item) : (item.respond_to?(panel[:label_method]) ? item.send(panel[:label_method]) : "District #{item.try(:district)}")
@@ -23,38 +20,37 @@
             = check_box_tag "#{param_key}[]", val, selected_ids.include?(val),
               id: "#{id_prefix}_#{val}",
               class: 'form-check-input',
-              form: 'filter-form'
+              form: 'filter-form',
+              data: { action: "change->search-panels#autoSubmit" }
             = label_tag "#{id_prefix}_#{val}", lbl, class: 'form-check-label small'
 
-        - if local_assigns[:pagy] && pagy.pages > 1
+        - if panel[:pagy] && panel[:pagy].pages > 1
           .py-2.d-flex.justify-content-center.small-pagy
-            != pagy.series_nav(:bootstrap, link_extra: "data-turbo-frame='#{frame_id}'")
-            
+            -# Pagy helper now uses @state_params internally because we passed them in the controller
+            != panel[:pagy].series_nav(:bootstrap, link_extra: "data-turbo-frame='#{frame_id}' data-turbo-action='advance'")
 
       - else
         .text-center.py-4.small.text-muted No results found.
 
-    .facet-alphabet-nav.d-flex.flex-column.align-items-center.bg-light.border-start
-      -# RESET BUTTON: Clears the alphabetical filter for this specific panel
-      - reset_params = params.permit!.to_h.merge(:"alpha_#{id_prefix}" => nil,  :"q_#{id_prefix}" => nil, :"page_#{id_prefix}" => 1, expanded: panel[:id])
-      = link_to search_advanced_path(reset_params),
-          class: "alphabet-link fw-bold text-decoration-none text-aedg-navy mb-2",
-          title: "Reset to All",
-          data: { turbo_frame: frame_id } do
-        .icon-wrapper
-          %i.bi.bi-list
+    -# ALPHABET NAV
+    .facet-alphabet-nav.d-flex.flex-column.align-items-center.bg-light.border-start.ms-2{ style: "min-width: 30px;" }
+      -# 3. Clear link: Strip current facet alpha/query but keep other checkboxes from @state_params
+      - clear_params = (@state_params || {}).merge("alpha_#{id_prefix}" => nil, "q_#{id_prefix}" => nil, only_facet: true)
+      = link_to search_advanced_path(clear_params), 
+                class: "alphabet-link btn btn-link p-0 mb-2", 
+                data: { turbo_stream: true, turbo_action: "advance" } do
+        %i.bi.bi-list
 
-      -# A-Z LINKS
       - ('A'..'Z').each do |letter|
-        - current_selections = params[param_key] # Get the array of checked IDs
         - available = panel[:available_letters] || []
-        - is_available = available.include?(letter)
-        - is_active = params[:"alpha_#{id_prefix}"] == letter
-        
-        - if is_available
-          - letter_params = params.permit!.to_h.merge(:"alpha_#{id_prefix}" => letter, :"page_#{id_prefix}" => 1, expanded: panel[:id])
-          = link_to letter, search_advanced_path(letter_params),
-              class: "alphabet-link fw-bold text-decoration-none #{'active' if is_active}",
-              data: { turbo_frame: frame_id }
+        - is_active = @state_params["alpha_#{id_prefix}"] == letter
+
+        - if available.include?(letter)
+          -# 4. Merge letter into @state_params to ensure checkboxes persist in the link
+          - link_params = (@state_params || {}).merge("alpha_#{id_prefix}" => letter, only_facet: true, expanded: panel[:id])
+          
+          = link_to letter, search_advanced_path(link_params),
+            class: "alphabet-link #{is_active ? 'active' : ''}",
+            data: { turbo_stream: true, turbo_action: "advance" }
         - else
-          %span.alphabet-link.text-muted.small{ style: "opacity: 0.3; cursor: default;" }= letter
+          %span.alphabet-link.text-muted.small.p-0{ style: "opacity: 0.3;" }= letter

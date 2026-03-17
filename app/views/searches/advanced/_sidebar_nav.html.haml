@@ -1,16 +1,29 @@
 #sidebar_nav
-  -# 1. SEARCH INPUT
   .mb-3
-    = render 'searches/advanced/search_input',
-      url: search_advanced_path,
-      name: :q_global,
-      placeholder: "Search all filters...",
-      frame: "sidebar_nav_content"
+    -# Search
+    %div.text-center
+      = form_with url: search_advanced_path, method: :get, data: { turbo_frame: "results_frame", turbo_action: "advance" }, class: "mb-3"  do |f|
+        
+        / This dynamic loop carries over all your checkbox arrays (ids, borough_ids, etc.)
+        - params.to_unsafe_h.each do |key, value|
+          - if value.is_a?(Array)
+            - value.each do |val|
+              = hidden_field_tag "#{key}[]", val
 
-  -# 2. DYNAMIC FRAME
+        .input-group
+          = f.text_field :q, value: params[:q], class: "form-control", placeholder: "Search for a community...", autocomplete: "off", data: { action: "input->search-panels#autoSubmitSearch" }
+          
+          - if params[:q].present?
+            / Clear button: removes :q but keeps the other filters
+            = link_to search_advanced_path(params.permit!.to_h.except(:q)),class: 'btn btn-outline-secondary', data: { turbo_frame: "results_frame" } do
+              Clear
+              
+          = f.button name: nil, class: 'btn btn-aedg-primary' do
+            Search
+
+
   = turbo_frame_tag "sidebar_nav_content" do
     - if params[:q_global].present?
-      -# Compact Results Container
       .global-results-list.mb-3.border-bottom.pb-2
         %p.text-uppercase.fw-bold.text-muted.mb-2{style: "font-size: 0.7rem; letter-spacing: 0.05rem;"} 
           Matches for "#{params[:q_global]}"
@@ -24,10 +37,10 @@
 
             .form-check.d-flex.align-items-start.mb-1.py-1
               = check_box_tag "#{param_key}[]", val, selected_ids.include?(val),
-                  id: checkbox_id,
-                  class: 'form-check-input flex-shrink-0 mt-1',
-                  form: 'filter-form',
-                  data: { action: "change->search-panels#autoSubmit" }
+                id: checkbox_id,
+                class: 'form-check-input flex-shrink-0 mt-1',
+                form: 'filter-form',
+                data: { action: "change->search-panels#autoSubmit", turbo_frame: "_top", turbo_stream: true }
               
               = label_tag checkbox_id, class: 'form-check-label ms-2 lh-sm' do
                 .fw-semibold.text-dark{style: "font-size: 0.85rem;"}= res[:label]
@@ -35,6 +48,5 @@
         - else
           .py-2.small.text-muted No matching filters.
 
-    -# 3. NAVIGATION BUTTONS (Always visible below)
     .nav-buttons-list
       = render 'searches/advanced/nav_buttons'
