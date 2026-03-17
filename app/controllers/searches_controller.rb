@@ -14,22 +14,20 @@ class SearchesController < ApplicationController
 
   def advanced
     @communities = Community.all
-    
+
     #  Apply Keyword Search
-    if params[:q].present?
-      @communities = @communities.search_related(params[:q])
-    end
-    
+    @communities = @communities.search_related(params[:q]) if params[:q].present?
+
     # Gather search terms and UI state (like which panel is open)
     @filters      = extract_filters
     @state_params = state_params
     @facet_panels = build_facet_panels
-    
+
     # Paginate main results; passing @state_params ensures "Next" links keep your checkboxes checked
-    @pagy, @communities = pagy(:offset, build_scope(@filters), 
-                               page_key: "page", 
-                               limit: 25, 
-                               params: @state_params) 
+    @pagy, @communities = pagy(:offset, build_scope(@filters),
+                               page_key: "page",
+                               limit: 25,
+                               params: @state_params)
 
     # Generate the active filter badges for the sidebar
     prepare_active_filters
@@ -44,9 +42,7 @@ class SearchesController < ApplicationController
         ]
 
         # If "Clear All" is clicked, we reset the hidden form so the checkboxes visually uncheck
-        if params[:clear_all] == "true"
-          streams << turbo_stream.update("filter-form-container", partial: "searches/advanced/form")
-        end
+        streams << turbo_stream.update("filter-form-container", partial: "searches/advanced/form") if params[:clear_all] == "true"
 
         # If user is just searching or paginating INSIDE a specific panel, we only update that panel
         streams << render_facet_update if params[:only_facet] == "true"
@@ -63,20 +59,20 @@ class SearchesController < ApplicationController
     Community.advanced_search_facets.map do |facet|
       prefix = facet[:prefix]
       # Some models use :name, others use :district; this picks the right sorting column
-      col = (prefix == "senate") ? :district : :name
-      
+      col = prefix == "senate" ? :district : :name
+
       # Filter the sidebar list based on the small search box or alphabet buttons
       scope = facet[:model].filter_by_params(params, "q_#{prefix}", "alpha_#{prefix}", col)
-      
+
       # Paginate the sidebar list (e.g., first 20 grids)
-      pagy_item, items = pagy(:offset, scope, 
-                              page_key: "page_#{prefix}", 
-                              limit: 20, 
+      pagy_item, items = pagy(:offset, scope,
+                              page_key: "page_#{prefix}",
+                              limit: 20,
                               params: state_params.merge(only_facet: "true", expanded: facet[:id]))
 
       facet.merge(
-        items: items, 
-        pagy: pagy_item, 
+        items: items,
+        pagy: pagy_item,
         available_letters: facet[:model].available_letters_for(col)
       )
     end
@@ -86,18 +82,18 @@ class SearchesController < ApplicationController
   def state_params
     @state_params ||= begin
       facets = Community.advanced_search_facets
-      
+
       # Scalar keys are simple strings/numbers
       scalar_keys = %w[q expanded page clear_all only_facet]
       scalar_keys += facets.map { |f| "alpha_#{f[:prefix]}" }
       scalar_keys += facets.map { |f| "q_#{f[:prefix]}" }
       scalar_keys += facets.map { |f| "page_#{f[:prefix]}" }
-      
+
       # Array keys allow multiple checkboxes to be saved (e.g., grid_ids: [1, 2, 3])
       array_keys = facets.map { |f| f[:param].to_sym }.index_with { |_| [] }
-      
+
       # permit ensures Rails doesn't block these parameters for security
-      params.permit(*scalar_keys, **array_keys).to_h.select { |_, v| v.present? }
+      params.permit(*scalar_keys, **array_keys).to_h.compact_blank
     end
   end
 
@@ -111,22 +107,22 @@ class SearchesController < ApplicationController
 
     # 2. Get the prefix from the facet found, OR fallback to the 'expanded' param
     prefix = if active_facet
-              active_facet[:prefix]
-            elsif params[:expanded].present?
-              # Find by ID if we're just expanding/clearing a panel
-              Community.advanced_search_facets.find { |f| f[:id] == params[:expanded] }&.dig(:prefix)
-            end
+               active_facet[:prefix]
+             elsif params[:expanded].present?
+               # Find by ID if we're just expanding/clearing a panel
+               Community.advanced_search_facets.find { |f| f[:id] == params[:expanded] }&.dig(:prefix)
+             end
 
     # Exit early if we can't figure out which panel to talk to
     return turbo_stream.append("results_frame", "") if prefix.blank?
 
     facet = @facet_panels.find { |f| f[:prefix] == prefix }
     return turbo_stream.append("results_frame", "") unless facet
-    
+
     # Send back the HTML to swap out the frame inside the open sidebar panel
-    turbo_stream.update("#{prefix}_frame", 
-      partial: "searches/advanced/facet", 
-      locals: { panel: facet })
+    turbo_stream.update("#{prefix}_frame",
+                        partial: "searches/advanced/facet",
+                        locals: { panel: facet })
   end
 
   # Converts selected IDs into objects so we can show labels on the blue badges
@@ -152,8 +148,8 @@ class SearchesController < ApplicationController
       label: badge_label(item, facet),
       checkbox_id: "#{facet[:prefix]}_#{val}",
       url: search_advanced_path(base_params.merge(
-        facet[:param] => Array(params[facet[:param]]).map(&:to_s) - [val]
-      ))
+                                  facet[:param] => Array(params[facet[:param]]).map(&:to_s) - [val]
+                                ))
     }
   end
 
@@ -178,15 +174,15 @@ class SearchesController < ApplicationController
   # The main database query; uses preload to fix the "82 queries" speed issue (N+1)
   def build_scope(filters)
     base = Community.preload(:borough, :regional_corporation, :grids, :senate_districts, :house_districts, :population)
-    
+
     # Chain filters together based on what is present in the URL
     base = base.search_full_text(filters[:q]).reorder("communities.name ASC") if filters[:q].present?
     base = base.in_boroughs(filters[:borough_fips_codes])           if filters[:borough_fips_codes].present?
     base = base.in_corps(filters[:regional_corporation_fips_codes]) if filters[:regional_corporation_fips_codes].present?
     base = base.in_grids(filters[:grid_ids])                        if filters[:grid_ids].present?
-    base = base.in_senate(filters[:senate_district_ids])           if filters[:senate_district_ids].present?
-    base = base.in_house(filters[:house_district_ids])            if filters[:house_district_ids].present?
-    
+    base = base.in_senate(filters[:senate_district_ids]) if filters[:senate_district_ids].present?
+    base = base.in_house(filters[:house_district_ids]) if filters[:house_district_ids].present?
+
     base.distinct.all
   end
 end

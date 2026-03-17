@@ -64,7 +64,7 @@ class Community < ApplicationRecord
                       prefix: true,
                       tsvector_column: "tsvector_data"
                     },
-                   trigram: {
+                    trigram: {
                       word_similarity: true
                     }
                   }
