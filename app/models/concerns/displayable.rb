@@ -5,6 +5,10 @@ module Displayable
     communities&.any?
   end
 
+  def pce_eligible_communities?
+    communities? && communities.pce_eligible.any?
+  end
+
   def school_districts?
     school_districts&.any?
   end
@@ -37,12 +41,18 @@ module Displayable
     plants&.any?
   end
 
-  def service_areas?
-    service_areas&.any?
+  def service_area_collection
+    if respond_to?(:service_areas)
+      service_areas.to_a
+    elsif respond_to?(:service_area)
+      [service_area].compact
+    else
+      []
+    end
   end
 
-  def service_area_geoms?
-    service_area_geoms&.any?
+  def service_areas?
+    service_area_collection.any?
   end
 
   def fuel_prices?

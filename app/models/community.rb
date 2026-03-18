@@ -25,10 +25,10 @@ class Community < ApplicationRecord
   has_many :house_districts, through: :communities_house_districts
   has_many :communities_school_districts, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :school_districts, through: :communities_school_districts
-  has_many :communities_service_area_geoms, foreign_key: :community_fips_code, primary_key: :fips_code
-  has_many :service_area_geoms, through: :communities_service_area_geoms
-  has_many :service_areas, through: :service_area_geoms
-  has_many :plants, through: :service_area_geoms
+  has_one :communities_service_area_geom, foreign_key: :community_fips_code, primary_key: :fips_code
+  has_one :service_area_geom, through: :communities_service_area_geom
+  has_one :service_area, through: :service_area_geom
+  has_many :plants, through: :service_area_geom
   has_many :capacities, through: :plants
   has_many :yearly_generations, through: :plants
   has_many :monthly_generations, through: :plants
@@ -37,7 +37,7 @@ class Community < ApplicationRecord
   has_many :household_incomes, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :heating_degree_days, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
 
-  has_many :peer_communities, ->(community) { where.not(id: community.id).distinct }, through: :service_area_geoms, source: :communities
+  has_many :peer_communities, ->(community) { where.not(id: community.id).distinct }, through: :service_area_geom, source: :communities
 
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
@@ -55,6 +55,7 @@ class Community < ApplicationRecord
   scope :in_house,      ->(ids)   { joins(:house_districts).where(house_districts: { id: ids }) }
   # uses the pg_search_scope defined in SearchableByNameAndTags concern
   scope :starts_with,   ->(ch)    { where("name ilike ?", "#{ch}%") }
+  scope :pce_eligible, -> { where(pce_eligible: true) }
 
   include PgSearch::Model
 
@@ -165,7 +166,8 @@ class Community < ApplicationRecord
     @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == "regional" && fp.price.present? }
   end
 
-  def show_utility_service_area?
-    @show_utility_service_area ||= service_area_geoms.with_utility_service_area.exists?
+  # Specific to Community
+  def local_service_area?
+    service_area&.service_area_geoms&.many?
   end
 end

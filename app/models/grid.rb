@@ -38,10 +38,4 @@ class Grid < ApplicationRecord
     query = query.where.not(name: exclude) if exclude.present?
     query.distinct.pluck(:name)
   end
-
-  def pce_eligible_communities?
-    return @pce_eligible_communities if defined?(@pce_eligible_communities)
-
-    @pce_eligible_communities = communities.exists?(pce_eligible: true)
-  end
 end

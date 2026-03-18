@@ -2,10 +2,10 @@
 - map_buttons = [ |
     { |
       label: "Utility Service Areas", |
-      url: service_area_geoms_grid_maps_path(@grid), |
+      url: service_areas_grid_maps_path(@grid), |
       icon: 'bounding-box', |
       id: 'layer-service-area-utility', |
-      visible: @grid.service_area_geoms? |
+      visible: @grid.service_areas? |
     }, |
     { |
       label: "Power Plants", |
