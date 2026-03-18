@@ -4,7 +4,7 @@
       / --- Floating controls ---
       .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
         .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
-        - if @community.show_service_areas?
+        - if @community.service_areas?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-service-area-local{ 
               type: "checkbox", 
@@ -59,7 +59,7 @@
             %span.legend-swatch{ data: { maps_target: "swatch" } }
             Senate Districts
 
-        - if @community.show_plants?
+        - if @community.plants?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-plants{ 
               type: "checkbox", 
@@ -73,7 +73,7 @@
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Power Plants
 
-        - if @community.show_bulk_fuel_facilities?
+        - if @community.bulk_fuel_facilities?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-bulk-fuel-facilities{ 
               type: "checkbox", 

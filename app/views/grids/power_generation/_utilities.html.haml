@@ -5,21 +5,19 @@
       url: service_area_geoms_grid_maps_path(@grid), |
       icon: 'bounding-box', |
       id: 'layer-service-area-utility', |
-      visible: @grid.show_service_area_geoms? |
+      visible: @grid.service_area_geoms? |
     }, |
     { |
       label: "Power Plants", |
       url: plants_grid_maps_path(@grid), |
       icon: 'building', |
       id: 'layer-plants', |
-      visible: @grid.show_plants? |
+      visible: @grid.plants? |
     } |
   ] |
 
 .section-body.m-1.m-md-2.m-lg-4.mt-3
-  - if @grid.show_utility_map_layers?
-    .mb-4
-      = render 'shared/map_buttons', buttons: map_buttons
+  = render 'shared/map_buttons', buttons: map_buttons
 
   .row.g-4
     .col
@@ -29,7 +27,7 @@
           %h5.mb-0.fw-bold Service Area Details
         
         / --- Utility Providers ---
-        - if @grid.show_service_areas?
+        - if @grid.service_areas?
           .mb-4
             .d-flex.align-items-center.mb-1
               %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers
@@ -45,7 +43,7 @@
                       Cert
       
         / --- Power Plants ---
-        - if @grid.show_plants?
+        - if @grid.plants?
           .mb-4
             .d-flex.align-items-center.mb-1
               %label.text-muted.small.text-uppercase.fw-bold.mb-0 Power Plants (#{@grid.plants.size})

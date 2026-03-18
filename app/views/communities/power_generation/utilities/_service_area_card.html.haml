@@ -5,7 +5,7 @@
     %h5.mb-0.fw-bold Service Area Details
   
   / --- Utility Providers ---
-  - if @community.show_service_areas?
+  - if @community.service_areas?
     .mb-4
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers
@@ -21,7 +21,7 @@
                 Cert
 
   / --- Power Plants ---
-  - if @community.show_plants?
+  - if @community.plants?
     .mb-4
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 Power Plants (#{@community.plants.size})

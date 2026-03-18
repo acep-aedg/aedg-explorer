@@ -6,7 +6,7 @@
       url: service_area_geoms_community_maps_path(@community), |
       icon: 'bounding-box', |
       id: 'layer-service-area-local', |
-      visible: @community.show_service_areas? |
+      visible: @community.service_area_geoms? |
     }, |
     { |
       label: "Utility Service Area", |
@@ -20,13 +20,12 @@
       url: plants_community_maps_path(@community), |
       icon: 'building', |
       id: 'layer-plants', |
-      visible: @community.show_plants? |
+      visible: @community.plants? |
     } |
   ] |
 
 .section-body.m-1.m-md-2.m-lg-4.mt-3
-  .mb-4
-    = render 'shared/map_buttons', buttons: map_buttons
+  = render 'shared/map_buttons', buttons: map_buttons
 
   - has_peers = @community.peer_communities.exists?
 

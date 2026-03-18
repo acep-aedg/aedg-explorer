@@ -21,7 +21,7 @@
   
   / Sub-sections for District Data
   .row.g-4
-    - if @community.show_house_districts?
+    - if @community.house_districts?
       .col-12.col-lg-6
         .p-3.border.rounded-3.h-100.shadow-sm
           .d-flex.align-items-center.mb-3.border-bottom.pb-2
@@ -29,7 +29,7 @@
             %h5.mb-0.fw-bold House Districts
           = render "communities/#{parent_tab}/legislative_districts/house_district_data"
 
-    - if @community.show_senate_districts?
+    - if @community.senate_districts?
       .col-12.col-lg-6
         .p-3.border.rounded-3.h-100.shadow-sm
           .d-flex.align-items-center.mb-3.border-bottom.pb-2
