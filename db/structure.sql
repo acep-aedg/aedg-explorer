@@ -1,6 +1,7 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -1689,6 +1690,47 @@ ALTER SEQUENCE public.transportations_id_seq OWNED BY public.transportations.id;
 
 
 --
+-- Name: yearly_electric_rates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.yearly_electric_rates (
+    id bigint NOT NULL,
+    reporting_entity_id bigint NOT NULL,
+    year integer,
+    residential_rate numeric,
+    residential_rate_subsidized numeric,
+    commercial_rate numeric,
+    industrial_rate numeric,
+    transportation_rate numeric,
+    community_rate numeric,
+    other_rate numeric,
+    total_rate numeric,
+    source character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: yearly_electric_rates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.yearly_electric_rates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: yearly_electric_rates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.yearly_electric_rates_id_seq OWNED BY public.yearly_electric_rates.id;
+
+
+--
 -- Name: yearly_generations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2082,6 +2124,13 @@ ALTER TABLE ONLY public.transportations ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: yearly_electric_rates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yearly_electric_rates ALTER COLUMN id SET DEFAULT nextval('public.yearly_electric_rates_id_seq'::regclass);
+
+
+--
 -- Name: yearly_generations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2445,6 +2494,14 @@ ALTER TABLE ONLY public.tags
 
 ALTER TABLE ONLY public.transportations
     ADD CONSTRAINT transportations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: yearly_electric_rates yearly_electric_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yearly_electric_rates
+    ADD CONSTRAINT yearly_electric_rates_pkey PRIMARY KEY (id);
 
 
 --
@@ -2961,6 +3018,13 @@ CREATE INDEX index_transportations_on_community_fips_code ON public.transportati
 
 
 --
+-- Name: index_yearly_electric_rates_on_reporting_entity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_yearly_electric_rates_on_reporting_entity_id ON public.yearly_electric_rates USING btree (reporting_entity_id);
+
+
+--
 -- Name: index_yearly_generations_on_aea_plant_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3275,6 +3339,14 @@ ALTER TABLE ONLY public.generators
 
 
 --
+-- Name: yearly_electric_rates fk_rails_ccadb42f59; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yearly_electric_rates
+    ADD CONSTRAINT fk_rails_ccadb42f59 FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
+
+
+--
 -- Name: capacities fk_rails_ce150acde9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3321,6 +3393,7 @@ ALTER TABLE ONLY public.monthly_generations
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260323204950'),
 ('20260304001556'),
 ('20260303194455'),
 ('20260221003649'),

@@ -23,7 +23,11 @@ class CommunitiesController < ApplicationController
 
   def general; end
   def power_generation; end
-  def electric_rates_sales; end
+
+  def electric_rates_sales
+    @yearly_rates = @community.yearly_electric_rates.with_rates
+    @active_yearly_rate_fields = @yearly_rates.active_fields
+  end
 
   def fuel
     @available_price_types = @community.available_price_types

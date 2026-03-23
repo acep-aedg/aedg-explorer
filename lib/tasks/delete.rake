@@ -27,9 +27,9 @@ namespace :delete do
     DeleteHelpers.delete_records(FuelPrice)
   end
 
-  desc "Clear electric_rates data"
-  task electric_rates: :environment do
-    DeleteHelpers.delete_records(ElectricRate)
+  desc "Clear yearly_electric_rates data"
+  task yearly_electric_rates: :environment do
+    DeleteHelpers.delete_records(YearlyElectricRate)
   end
 
   desc "Clear monthly_sales Data"

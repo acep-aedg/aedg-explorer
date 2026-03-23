@@ -43,7 +43,7 @@ Rails.application.routes.draw do
           get :electricity_consumption_per_customer
           get :electricity_revenue
           get :electricity_customers
-          get :electric_rates
+          get :yearly_electric_rates
         end
       end
 

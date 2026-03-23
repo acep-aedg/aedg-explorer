@@ -7,7 +7,7 @@ class ReportingEntity < ApplicationRecord
   belongs_to :grid, touch: true
   has_many :communities_reporting_entities, dependent: :destroy
   has_many :communities, through: :communities_reporting_entities
-  has_many :electric_rates, dependent: :nullify
+  has_many :yearly_electric_rates, dependent: :nullify
   has_many :yearly_sales, dependent: :nullify
   has_many :monthly_sales, dependent: :nullify
 
