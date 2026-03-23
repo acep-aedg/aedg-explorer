@@ -87,6 +87,9 @@ GEM
       dumb_delegator
       ostruct
       virtus
+    axe-core-capybara (4.11.1)
+      axe-core-api (= 4.11.1)
+      dumb_delegator
     axe-core-rspec (4.11.1)
       axe-core-api (= 4.11.1)
       dumb_delegator
@@ -418,6 +421,7 @@ DEPENDENCIES
   activerecord-import (~> 2.0)
   activerecord-postgis-adapter (~> 11.0.0)
   acts-as-taggable-on (~> 12.0)
+  axe-core-capybara
   axe-core-rspec
   bootsnap
   bootstrap_form (~> 5.4)
