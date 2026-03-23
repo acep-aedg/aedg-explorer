@@ -54,6 +54,14 @@ jobs:
 
       - name: Run Accessibility Tests
         run: bundle exec rspec spec/system/accessibility
+      
+      - name: Upload Accessibility JSON Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-reports
+          path: ${{ github.workspace }}/tmp/axe-results/
+          if-no-files-found: warn
 
       - name: Upload screenshots on failure
         uses: actions/upload-artifact@v4
