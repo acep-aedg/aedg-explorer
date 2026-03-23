@@ -6,7 +6,7 @@ export default class extends Controller {
     this.spy = ScrollSpy.getOrCreateInstance(this.element, {
       target: this.element.dataset.bsTarget,
       smoothScroll: true,
-      rootMargin: "-20% 0px -60%", // Adjust based on how close sections are to each other
+      rootMargin: "-20% 0px -50%", // Adjust based on how close sections are to each other
       threshold: [0.1, 0.5, 1.0], // Adjust based on layout
     });
   }

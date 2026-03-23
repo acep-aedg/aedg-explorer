@@ -1,14 +1,47 @@
 - tab = 'electric_rates_sales'
 - links = [ |
-    { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.show_rates? }, |
-    { title: 'Sales', anchor: '#sales', icon: 'cash-coin', show: @community.show_sales? }, |
+    { title: 'Consumption', anchor: '#consumption', icon: 'lightning-charge', show: @community.show_sales? }, |
+    { title: 'Revenue', anchor: '#revenue', icon: 'cash-coin', show: @community.show_revenue? }, |
+    { title: 'Customers', anchor: '#customers', icon: 'people', show: @community.show_customers? }, |
+    { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.show_rates? } |
   ] |
-        
+
 = turbo_frame_tag "community_tab_content" do
   = render 'shared/tab_nav', links: links
   
   .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump_nav", bs_smooth_scroll: "true" }, tabindex: "0" }
-    
+    = render "communities/#{tab}/summary"
+
+    - if @community.show_sales?
+      #consumption.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'lightning-charge',
+          title: 'Electricity Consumption',
+          description: 'Total electricity sales and consumption rates by reporting entity',
+          anchor: '#consumption'
+          
+        = render "communities/#{tab}/consumption"
+        
+    - if @community.show_revenue?
+      #revenue.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'cash-coin',
+          title: 'Electricity Revenue',
+          description: 'Electricity revenue by reporting entity',
+          anchor: '#revenue'
+          
+        = render "communities/#{tab}/revenue"
+
+    - if @community.show_customers?
+      #customers.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'people',
+          title: 'Electricity Customers',
+          description: 'Electricity customers by reporting entity',
+          anchor: '#customers'
+          
+        = render "communities/#{tab}/customers"
+
     - if @community.show_rates?
       #rates.scroll-section.mb-5
         = render 'shared/section_header',
@@ -19,13 +52,3 @@
           related_metadata: ["public_rates"]
 
         = render "communities/#{tab}/rates"
-
-    - if @community.show_sales?
-      #sales.scroll-section.mb-5
-        = render 'shared/section_header',
-          icon: 'cash-coin',
-          title: 'Sales',
-          description: 'Total energy sales and revenue analysis',
-          anchor: '#sales'
-          
-        = render "communities/#{tab}/sales"

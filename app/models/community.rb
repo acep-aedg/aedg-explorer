@@ -15,7 +15,8 @@ class Community < ApplicationRecord
   has_many :fuel_prices, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :communities_reporting_entities, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :reporting_entities, through: :communities_reporting_entities
-  has_many :sales, through: :reporting_entities
+  has_many :yearly_sales, through: :reporting_entities
+  has_many :monthly_sales, through: :reporting_entities
   has_many :electric_rates, through: :reporting_entities
   has_many :communities_senate_districts, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :senate_districts, through: :communities_senate_districts
@@ -230,7 +231,7 @@ class Community < ApplicationRecord
 
   # --- Rates & Sales Tab ---
   def show_sales_rates_tab?
-    @show_sales_rates_tab ||= show_sales? || show_rates?
+    @show_sales_rates_tab ||= show_sales? || show_rates? || show_revenue? || show_customers?
   end
 
   def show_rates?
@@ -238,7 +239,15 @@ class Community < ApplicationRecord
   end
 
   def show_sales?
-    @show_sales ||= sales.exists?
+    @show_sales ||= yearly_sales.with_sales.exists?
+  end
+
+  def show_revenue?
+    @show_revenue ||= yearly_sales.with_revenue.exists?
+  end
+
+  def show_customers?
+    @show_customers ||= yearly_sales.with_customers.exists?
   end
 
   # --- Fuel Tab ---
