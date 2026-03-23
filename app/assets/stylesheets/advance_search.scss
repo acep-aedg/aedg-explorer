@@ -51,13 +51,31 @@
   width: 35px;
   background-color: #f8f9fa;
   border-left: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   .alphabet-link {
+    // RESET BUTTON DEFAULTS
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    
+    // SIZE & ALIGNMENT
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;       // Take up full 35px width
+    height: 24px;      // Fixed height for vertical consistency
+    
+    // TYPOGRAPHY
     color: $aedg-navy;
     font-size: 0.85rem;
     font-weight: 700;
     text-decoration: none;
     transition: all 0.2s ease;
+    cursor: pointer;
     
     &:hover, &.active {
       color: $aedg-yellow !important;
@@ -67,6 +85,12 @@
     &.text-muted {
       opacity: 0.3;
       pointer-events: none;
+      cursor: default;
+    }
+
+    // Specific fix for the Bootstrap Icon in the list button
+    i.bi-list {
+      font-size: 1rem;
     }
   }
 }
@@ -74,9 +98,8 @@
 //  Active Filters & Badges
 #active_filters_list {
   display: flex;
-  flex-direction: row; 
   flex-wrap: wrap;     
-  gap: 5px;            
+  gap: 3px;            
   padding: 8px 0;
 
   .badge-wrapper {
@@ -94,7 +117,6 @@
     font-size: 0.72rem;    
     font-weight: 700;      /* Heavy weight for maximum readability */
     line-height: 1.2;
-    white-space: nowrap;
     opacity: 1 !important; /* Force full visibility */
     
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);

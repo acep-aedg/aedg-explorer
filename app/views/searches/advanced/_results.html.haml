@@ -10,7 +10,7 @@
       = render 'searches/advanced/community_card', community: community
 
   .mt-5.pb-5.d-flex.justify-content-center
-    != @pagy.series_nav(:bootstrap)
+    != @pagy.series_nav(:bootstrap, link_extra: 'data-turbo-action="advance" data-turbo-frame="results_frame"')
 - else
   .text-center.py-5.text-muted
     %i.bi.bi-geo-alt.display-1.mb-3

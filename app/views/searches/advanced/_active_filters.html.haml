@@ -3,7 +3,6 @@
   
   -# TRASH (Clear All)
   - if @active_badges&.any? || params[:q].present?
-    -# Note: Removed turbo_frame: "results_frame" to allow a full state reset
     = link_to search_advanced_path, 
               class: "btn btn-outline-danger btn-sm border-0 px-2 py-1", 
               title: "Clear all filters", 
@@ -13,7 +12,9 @@
   -# SEARCH Results 
   - if params[:q].present?
     .badge-wrapper
-      = link_to search_advanced_path(base_params.except(:q)), data: { turbo_action: "advance" } do
+      -# Clicking the 'X' on search should clear the 'q' input in the form
+      = link_to search_advanced_path(base_params.except(:q)), 
+                data: { turbo_action: "advance" } do
         %span.me-2
           %span.text-muted Search:
           = params[:q]
@@ -22,7 +23,10 @@
   -# FACET BADGES
   - @active_badges&.each do |badge|
     .badge-wrapper
-      -# Crucial: Use turbo_action: "advance" to update the URL and the "Brain" form
-      = link_to badge[:url], data: { turbo_action: "advance", action: "click->search-panels#uncheckSpecific", search_panels_id_param: badge[:checkbox_id] } do
+      -# Action: uncheckSpecific ensures the physical checkbox is unchecked
+      = link_to badge[:url], 
+                data: { turbo_action: "advance", 
+                        action: "click->search-panels#uncheckSpecific", 
+                        search_panels_id_param: badge[:checkbox_id] } do
         %span.me-1= badge[:label]
         %i.bi.bi-x-lg

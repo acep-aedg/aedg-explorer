@@ -7,7 +7,7 @@
         .facet-shelf-content.bg-white.shadow-sm.rounded
           .p-2.d-flex.justify-content-between.align-items-center.border-bottom
             %h5.mb-0.fw-bold{style: "font-size: 1rem;"}= p[:title]
-            %button.btn-close{ type: "button", data: { action: "click->search-panels#close" } }
+            %button.btn-close{ type: "button", data: { action: "click->search-panels#closeAll" } }
           
           .panel-body.p-2
             = render 'searches/advanced/facet', panel: p 

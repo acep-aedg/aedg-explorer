@@ -1,26 +1,28 @@
 #sidebar_nav
   .mb-3
-    -# Search
-    %div.text-center
-      = form_with url: search_advanced_path, method: :get, data: { turbo_frame: "results_frame", turbo_action: "advance" }, class: "mb-3"  do |f|
+    -# Search Bar
+    .text-center
+      -# We use form_with, but we'll let Stimulus handle the 'Brain' sync
+      = form_with url: search_advanced_path, method: :get, data: { turbo_frame: "results_frame", turbo_action: "advance" }, class: "mb-3" do |f|
         
-        / This dynamic loop carries over all your checkbox arrays (ids, borough_ids, etc.)
-        - params.to_unsafe_h.each do |key, value|
-          - if value.is_a?(Array)
-            - value.each do |val|
-              = hidden_field_tag "#{key}[]", val
+        -# Note: We removed the manual params loop here. 
+        -# Stimulus autoSubmitSearch will sync 'q' to the 'filter-form' automatically.
 
         .input-group
-          = f.text_field :q, value: params[:q], class: "form-control", placeholder: "Search for a community...", autocomplete: "off", data: { action: "input->search-panels#autoSubmitSearch" }
+          = f.text_field :q, value: params[:q], 
+              class: "form-control", 
+              placeholder: "Search results...", 
+              autocomplete: "off", 
+              data: { action: "input->search-panels#autoSubmitSearch" }
           
           - if params[:q].present?
-            / Clear button: removes :q but keeps the other filters
-            = link_to search_advanced_path(params.permit!.to_h.except(:q)),class: 'btn btn-outline-secondary', data: { turbo_frame: "results_frame" } do
+            = link_to search_advanced_path(params.permit!.to_h.except(:q, :page)), 
+                class: 'btn btn-outline-secondary', 
+                data: { turbo_frame: "results_frame", turbo_action: "advance" } do
               Clear
-              
+          
           = f.button name: nil, class: 'btn btn-aedg-primary' do
-            Search
-
+            %i.bi.bi-search
 
   = turbo_frame_tag "sidebar_nav_content" do
     - if params[:q_global].present?
@@ -32,15 +34,14 @@
           - @global_search_results.each do |res|
             - param_key = res[:param_key]
             - val = res[:value].to_s
-            - selected_ids = Array(params[param_key]).map(&:to_s)
+            - selected_ids = Array(@state_params[param_key]).map(&:to_s)
             - checkbox_id = "global_#{res[:category].parameterize}_#{val}"
 
             .form-check.d-flex.align-items-start.mb-1.py-1
               = check_box_tag "#{param_key}[]", val, selected_ids.include?(val),
-                id: checkbox_id,
-                class: 'form-check-input flex-shrink-0 mt-1',
-                form: 'filter-form',
-                data: { action: "change->search-panels#autoSubmit", turbo_frame: "_top", turbo_stream: true }
+                  id: checkbox_id,
+                  class: 'form-check-input flex-shrink-0 mt-1',
+                  data: { action: "change->search-panels#autoSubmit" }
               
               = label_tag checkbox_id, class: 'form-check-label ms-2 lh-sm' do
                 .fw-semibold.text-dark{style: "font-size: 0.85rem;"}= res[:label]

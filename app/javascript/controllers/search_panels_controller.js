@@ -55,38 +55,75 @@ export default class extends Controller {
         // Visual feedback: dim the results so the user knows a request is in flight
         if (resultsFrame) resultsFrame.style.opacity = '0.5'
         if (activeFilters) activeFilters.style.opacity = '0.5'
-
         // Cancel any older requests that haven't finished yet
         if (this.abortController) {
             this.abortController.abort()
         }
         this.abortController = new AbortController()
+        const form = document.getElementById('filter-form');
+        const checkbox = event.currentTarget;
+        const name = checkbox.name; // e.g., "grid_ids[]"
+        const value = checkbox.value;
 
-        this.updateTracker()
-
-        const form = document.getElementById('filter-form')
-        if (form) {
-            // Send the request immediately
-            form.requestSubmit()
+        // Sync the checkbox state to the Hidden Form
+        if (checkbox.checked) {
+            // Add hidden input if it doesn't exist
+            if (!form.querySelector(`input[name="${name}"][value="${value}"]`)) {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = name;
+                input.value = value;
+                form.appendChild(input);
+            }
+        } else {
+            // Remove hidden input if unchecked
+            const existing = form.querySelector(`input[name="${name}"][value="${value}"]`);
+            if (existing) existing.remove();
         }
+
+        // Sync Pagination/Alpha from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        document.querySelectorAll('[id^="hidden_alpha_"], [id^="hidden_page_"]').forEach(el => {
+            if (urlParams.has(el.name)) el.value = urlParams.get(el.name);
+        });
+
+        // Reset main results page
+        const mainPage = form.querySelector('input[name="page"]');
+        if (mainPage) mainPage.value = "";
+
+        form.requestSubmit();
     }
 
     // Add this to your search-panels controller
     autoSubmitSearch(event) {
-        // Clear the old timer if the user is still typing
+        // Clear the old timer
         clearTimeout(this.searchTimeout)
 
-        //  Set a new timer (300ms)
         this.searchTimeout = setTimeout(() => {
-            const form = event.target.closest('form')
-            const resultsFrame = document.getElementById('results_frame')
+            const queryValue = event.target.value;
+            const brainForm = document.getElementById('filter-form');
+            const resultsFrame = document.getElementById('results_frame');
 
-            // Visual feedback that it's working
-            if (resultsFrame) resultsFrame.style.opacity = '0.5'
+            if (!brainForm) {
+                console.error("The 'filter-form' (Brain) was not found in the DOM.");
+                return;
+            }
 
-            // Submit the form
-            form.requestSubmit()
-        }, 500)
+            //  Sync the search value into the Brain Form's hidden 'q' field
+            const hiddenQ = brainForm.querySelector('input[name="q"]');
+            if (hiddenQ) {
+                hiddenQ.value = queryValue;
+            }
+
+            // Reset the main results page to 1
+            const mainPage = brainForm.querySelector('input[name="page"]');
+            if (mainPage) mainPage.value = "";
+
+            // Visual feedback
+            if (resultsFrame) resultsFrame.style.opacity = '0.5';
+            brainForm.requestSubmit();
+
+        }, 600);
     }
 
     // Synchronizes the current UI state with a hidden input field
@@ -120,30 +157,48 @@ export default class extends Controller {
         this.updateTracker()
     }
 
-    // Used by the blue badges to uncheck a specific box remotely
+    clearAllFilters(event) {
+        event.preventDefault();
+
+        // Dim the results for feedback
+        const resultsFrame = document.getElementById('results_frame');
+        if (resultsFrame) resultsFrame.style.opacity = '0.5';
+
+        // This bypasses the form entirely and just resets the browser state
+        Turbo.visit("/search/advanced", { action: "advance" });
+    }
+
     uncheckSpecific(event) {
-        const checkboxId = event.params.id;
-        const checkbox = document.getElementById(checkboxId);
+        // We don't preventDefault here because we want the link_to URL to load,
+        // but we use this to keep our hidden form in sync immediately.
+        const { id } = event.currentTarget.dataset;
+        const checkbox = document.getElementById(id);
+
         if (checkbox) {
             checkbox.checked = false;
-            // Refresh the results immediately after unchecking
-            this.autoSubmit()
+            // If you want it to submit immediately upon clicking the 'X' on a badge:
+            // document.getElementById('filter-form').requestSubmit();
         }
     }
 
-    // Resets every filter on the page to its default state
-    clearAllFilters(event) {
-        if (event) event.preventDefault()
 
-        // Uncheck every box linked to our search form
-        const checkboxes = document.querySelectorAll('input[type="checkbox"][form="filter-form"]');
-        checkboxes.forEach(cb => cb.checked = false);
+    setAlpha(event) {
+        const letter = event.params.letter;
+        const prefix = event.params.prefix;
+        const form = document.getElementById('filter-form');
 
-        // Clear the main text search input
-        const qInput = document.querySelector('input[name="q"]')
-        if (qInput) qInput.value = ""
+        // Update the Alphabet filter
+        const alphaInput = form.querySelector(`#hidden_alpha_${prefix}`);
+        if (alphaInput) alphaInput.value = letter;
 
-        // Refresh the results to show all communities
-        this.autoSubmit()
+        // Reset the Facet's Page to 1
+        const pageInput = form.querySelector(`#hidden_page_${prefix}`);
+        if (pageInput) pageInput.value = "";
+
+        // Reset the Main results page
+        const mainPage = form.querySelector('input[name="page"]');
+        if (mainPage) mainPage.value = "";
+
+        form.requestSubmit();
     }
 }

@@ -1,21 +1,16 @@
+-# searches/advanced/_form.html.haml
 = form_with url: search_advanced_path, method: :get, id: 'filter-form', class: 'd-none', 
-    data: { turbo_action: "advance" } do |f|
+    data: { turbo_frame: "results_frame", turbo_action: "advance" } do |f|
   
-  -# Dedicated trackers for high-level state
   = hidden_field_tag :q, params[:q]
+  = hidden_field_tag :page, params[:page]
   = hidden_field_tag :expanded, params[:expanded], data: { search_panels_target: "tracker" }
-  
-  -# Only loop through params that AREN'T handled by the facet checkboxes
-  - facet_params = Community.advanced_search_facets.map { |f| f[:param].to_s }
-  
-  - params.each do |key, val|
-    - next if %w[q expanded controller action only_facet utf8 page].include?(key)
-    -# Don't duplicate facet arrays that are already handled by checkboxes
-    - next if facet_params.include?(key.to_s.delete_suffix('[]')) 
-    - next if val.blank?
 
-    - if val.is_a?(Array)
-      - val.each do |v|
-        = hidden_field_tag "#{key.to_s.delete_suffix('[]')}[]", v
-    - else
-      = hidden_field_tag key, val
+  -# Facet Pagination/Alpha State
+  - Community.advanced_search_facets.each do |facet|
+    = hidden_field_tag "alpha_#{facet[:prefix]}", params["alpha_#{facet[:prefix]}"], id: "hidden_alpha_#{facet[:prefix]}"
+    = hidden_field_tag "page_#{facet[:prefix]}", params["page_#{facet[:prefix]}"], id: "hidden_page_#{facet[:prefix]}"
+    
+    -# NEW: This creates hidden inputs for every selected checkbox currently in the URL
+    - Array(params[facet[:param]]).each do |val|
+      = hidden_field_tag "#{facet[:param]}[]", val, data: { facet_tag: facet[:prefix] }
