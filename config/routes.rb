@@ -24,6 +24,7 @@ Rails.application.routes.draw do
         get :demographics
         get :income
       end
+
       resources :charts, only: [], controller: "communities/charts", defaults: { format: :json } do
         collection do
           get :generation_monthly
@@ -57,16 +58,14 @@ Rails.application.routes.draw do
           get :bulk_fuel_facilities
         end
       end
-
-      resource :summary, only: [], controller: "communities/summaries" do
-        get :monthly_generation
-      end
     end
+
     resources :grids, only: %i[index show] do
       member do
         get :general
         get :power_generation, path: "power-generation"
       end
+
       resources :charts, only: [], controller: "grids/charts", defaults: { format: :json } do
         collection do
           get :generation_monthly
@@ -82,12 +81,9 @@ Rails.application.routes.draw do
           get :plants
         end
       end
-
-      resource :summary, only: [], controller: "grids/summaries" do
-        get :monthly_generation
-      end
     end
   end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
