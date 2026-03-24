@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ModuleLength
 module Displayable
   extend ActiveSupport::Concern
 
@@ -145,3 +146,4 @@ module Displayable
     yearly_electricity_sales? || electric_rates? || yearly_electricity_revenues? || yearly_electricity_customers?
   end
 end
+# rubocop:enable Metrics/ModuleLength
