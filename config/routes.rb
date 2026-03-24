@@ -60,13 +60,13 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :grids, only: %i[index show] do
+    concern :summarizable do |options|
       member do
         get :general
         get :power_generation, path: "power-generation"
       end
 
-      resources :charts, only: [], controller: "grids/charts", defaults: { format: :json } do
+      resources :charts, only: [], module: options[:resource_name], defaults: { format: :json } do
         collection do
           get :generation_monthly
           get :capacity_yearly
@@ -74,13 +74,17 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :maps, only: [], controller: "grids/maps", defaults: { format: :json } do
+      resources :maps, only: [], module: options[:resource_name], defaults: { format: :json } do
         collection do
           get :community_locations
           get :service_area_geoms
           get :plants
         end
       end
+    end
+
+    resources :grids, only: %i[index show] do
+      concerns :summarizable, resource_name: "grids"
     end
   end
 
