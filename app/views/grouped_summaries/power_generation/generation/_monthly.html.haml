@@ -11,7 +11,7 @@
       charts_value: [
         { 
           id: chart_id, 
-          url: generation_monthly_grid_charts_path(@parent),
+          url: polymorphic_path([:generation_monthly, @parent, :charts]),
           baseTitle: base_title,
           param: "year"
         }
@@ -30,7 +30,7 @@
         - years.each do |y|
           %option{ value: y, selected: y == selected_year }= y
 
-  = column_chart generation_monthly_grid_charts_path(@parent, year: selected_year), 
+  = column_chart polymorphic_path([:generation_monthly, @parent, :charts], year: selected_year), 
     id: chart_id,
     ytitle: 'Generation (MWh)', 
     suffix: ' MWh',
