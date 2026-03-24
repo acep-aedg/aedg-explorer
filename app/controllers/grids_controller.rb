@@ -43,23 +43,4 @@ class GridsController < GroupedSummariesController
   def search_params
     params.permit(:q, :letter, :page, :per_page)
   end
-
-  def power_generation_map_buttons
-    [
-      {
-        label: "Utility Service Areas",
-        url: service_area_geoms_grid_maps_path(@parent),
-        icon: "bounding-box",
-        id: "layer-service-area-utility",
-        visible: @parent.show_service_area_geoms?
-      },
-      {
-        label: "Power Plants",
-        url: plants_grid_maps_path(@parent),
-        icon: "building",
-        id: "layer-plants",
-        visible: @parent.show_plants?
-      }
-    ]
-  end
 end
