@@ -1,11 +1,11 @@
-- base_title = "#{@grid.name} - Generation by Energy Source"
+- base_title = "#{@parent.name} - Generation by Energy Source"
 
 .chart-wrapper{ style: "height: 500px; width: 100%;" }
   %canvas{ 
     data: { 
       controller: "yearly-generation-chart",
       yearly_generation: {
-        chart_url_value: generation_yearly_grid_charts_path(@grid),
+        chart_url_value: generation_yearly_grid_charts_path(@parent),
         chart_title_value: base_title 
       }
     } 

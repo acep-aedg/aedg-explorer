@@ -1,25 +1,7 @@
-- parent_tab = 'power_generation'
-- map_buttons = [ |
-    { |
-      label: "Utility Service Areas", |
-      url: service_area_geoms_grid_maps_path(@grid), |
-      icon: 'bounding-box', |
-      id: 'layer-service-area-utility', |
-      visible: @grid.show_service_area_geoms? |
-    }, |
-    { |
-      label: "Power Plants", |
-      url: plants_grid_maps_path(@grid), |
-      icon: 'building', |
-      id: 'layer-plants', |
-      visible: @grid.show_plants? |
-    } |
-  ] |
-
 .section-body.m-1.m-md-2.m-lg-4.mt-3
-  - if @grid.show_utility_map_layers?
+  - if @parent.show_utility_map_layers?
     .mb-4
-      = render 'shared/map_buttons', buttons: map_buttons
+      = render 'shared/map_buttons', buttons: @map_buttons
 
   .row.g-4
     .col
@@ -29,13 +11,13 @@
           %h5.mb-0.fw-bold Service Area Details
         
         / --- Utility Providers ---
-        - if @grid.show_service_areas?
+        - if @parent.show_service_areas?
           .mb-4
             .d-flex.align-items-center.mb-1
               %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers
               %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Entities providing services within this grid's service area" }
             %ul.list-unstyled.mt-1
-              - @grid.service_areas.distinct.each do |sa|
+              - @parent.service_areas.distinct.each do |sa|
                 %li.d-flex.align-items-center.mb-2
                   %i.bi.bi-dot.text-primary.fs-5.lh-1
                   %span.fw-semibold= sa.name
@@ -45,14 +27,14 @@
                       Cert
       
         / --- Power Plants ---
-        - if @grid.show_plants?
+        - if @parent.show_plants?
           .mb-4
             .d-flex.align-items-center.mb-1
-              %label.text-muted.small.text-uppercase.fw-bold.mb-0 Power Plants (#{@grid.plants.size})
+              %label.text-muted.small.text-uppercase.fw-bold.mb-0 Power Plants (#{@parent.plants.size})
               %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Generation facilities serving this electric grid" }
             
             .row.g-2.mt-1
-              - @grid.plants.in_groups(2, false).each do |plant_group|
+              - @parent.plants.in_groups(2, false).each do |plant_group|
                 .col-6
                   %ul.list-unstyled.mb-0
                     - plant_group.each do |plant|

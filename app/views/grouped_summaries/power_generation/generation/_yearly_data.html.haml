@@ -1,5 +1,5 @@
-- cache cache_key = [@grid, @grid.yearly_generations.maximum(:updated_at), "grid_yearly_gen_table_v1"] do
-  - show_pce_price = @grid.pce_eligible_communities?
+- cache cache_key = [@parent, @parent.yearly_generations.maximum(:updated_at), "#{@parent.class.name.underscore}_yearly_gen_table_v1"] do
+  - show_pce_price = @parent.pce_eligible_communities?
 
   %div{ data: { controller: 'datatables', datatables: { order_value: [1, 'asc']} } }
     %table.table.table-sm.table-stripped.border
@@ -14,7 +14,7 @@
         %th Quantity Consumed for Electric Generation (Physical Unit)
         %th Source
       %tbody
-        - @grid.yearly_generations.includes(:plant).each do |generation|
+        - @parent.yearly_generations.includes(:plant).each do |generation|
           %tr
             %td= generation.plant.name
             %td= generation.year

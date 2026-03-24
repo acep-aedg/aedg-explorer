@@ -1,6 +1,6 @@
-- partial_path = 'grids/power_generation/generation'
-- show_monthly_gen = @grid.show_monthly_generation?
-- show_yearly_gen = @grid.show_yearly_generation?
+- partial_path = 'grouped_summaries/power_generation/generation'
+- show_monthly_gen = @parent.show_monthly_generation?
+- show_yearly_gen = @parent.show_yearly_generation?
 
 .section-body.m-1.m-md-2.m-lg-4.mt-3
   - if show_monthly_gen && show_yearly_gen
