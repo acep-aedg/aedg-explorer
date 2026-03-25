@@ -41,7 +41,7 @@
               %td.font-monospace
                 = "#{@community.latitude}, #{@community.longitude}"
   
-            - if @community.show_school_districts?
+            - if @community.school_districts?
               %tr
                 %th.pe-3.text-muted.fw-semibold School District(s)
                 %td

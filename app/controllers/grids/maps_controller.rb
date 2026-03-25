@@ -3,7 +3,7 @@ module Grids
     before_action :set_grid
 
     def community_locations; end
-    def service_area_geoms; end
+    def service_areas; end
 
     def plants; end
 
