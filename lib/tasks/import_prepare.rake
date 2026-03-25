@@ -46,7 +46,7 @@ namespace :import do
     Rake::Task["import:all"].invoke
     Rake::Task["metadata:import"].reenable
     Rake::Task["metadata:import"].invoke
-    
+
     if pr_number.present?
       puts "✅ Import finished for PR ##{pr_number}."
     else

@@ -78,6 +78,7 @@ export default class extends Controller {
             },
           },
           y: {
+            beginAtZero: true,
             title: {
               display: true,
               text: "Revenue per kWh",
