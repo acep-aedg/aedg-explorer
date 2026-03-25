@@ -1,8 +1,9 @@
-class CreateYearlyElectricRates < ActiveRecord::Migration[8.0]
+class CreateMonthlyElectricRates < ActiveRecord::Migration[8.0]
   def change
-    create_table :yearly_electric_rates do |t|
+    create_table :monthly_electric_rates do |t|
       t.references :reporting_entity, null: false, foreign_key: true
       t.integer :year, null: false
+      t.integer :month, null: false
       t.decimal :residential_rate
       t.decimal :residential_rate_subsidized
       t.decimal :commercial_rate

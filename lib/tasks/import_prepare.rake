@@ -5,8 +5,8 @@ namespace :import do
   task prepare: :environment do
     latest_str = DataPondVersion.latest&.current_version
     desired_str = Import::Versioning::DATA_POND_TAG
-
     force_reimport = ENV["FORCE"] == "true"
+    pr_number = ENV.fetch("PR", nil)
 
     latest = Import::Versioning.to_gem_version(latest_str) if latest_str
     target = Import::Versioning.to_gem_version(desired_str)
@@ -16,7 +16,9 @@ namespace :import do
       exit 0
     end
 
-    if latest.nil?
+    if pr_number.present?
+      puts "🧪 PR detected. Running import of PR ##{pr_number}."
+    elsif latest.nil?
       puts "🆕 Initial import to #{desired_str}."
     elsif force_reimport
       puts "🚀 FORCING re-import of #{desired_str} (current DB=#{latest_str || 'nil'})."
@@ -44,6 +46,11 @@ namespace :import do
     Rake::Task["import:all"].invoke
     Rake::Task["metadata:import"].reenable
     Rake::Task["metadata:import"].invoke
-    puts "✅ Import finished for #{desired_str}."
+    
+    if pr_number.present?
+      puts "✅ Import finished for PR ##{pr_number}."
+    else
+      puts "✅ Import finished for #{desired_str}."
+    end
   end
 end

@@ -1,4 +1,4 @@
-#json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
+# json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
 json.labels @grouped.keys.map(&:to_s)
 
 json.datasets @active_fields do |field|
@@ -15,6 +15,5 @@ json.datasets @active_fields do |field|
   json.data            data
   json.borderColor     base_color
   json.backgroundColor base_color.to_opaque(0.7)
-
 end
-  #end
+# end
