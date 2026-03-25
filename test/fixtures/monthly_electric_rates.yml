@@ -4,8 +4,18 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-# column: value
+one:
+  reporting_entity: one
+  year: 2020
+  month: 1
+  residential_rate: 0.12
+  commercial_rate: 0.15
+  industrial_rate: 0.10
+
+two: 
+  reporting_entity: two
+  year: 2021
+  month: 1
+  residential_rate: 0.20
+  commercial_rate: 0.25
+  industrial_rate: 0.15
