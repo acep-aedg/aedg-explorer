@@ -20,7 +20,7 @@ class GridsController < ApplicationController
 
   # GET /grids/:slug
   def show
-    redirect_to general_grid_path(@grid), status: :see_other
+    redirect_to power_generation_grid_path(@grid), status: :see_other
   end
 
   def general; end
