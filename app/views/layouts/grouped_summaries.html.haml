@@ -1,10 +1,10 @@
-- content_for :title, "Electric Grid - #{@grid&.name}"
+- content_for :title, @page_title
 - content_for :content do
   -# Main Toolbar
   = render "shared/toolbar", 
-    entity: @grid,
-    collection: @grids,
-    tabs: grid_navigation_tabs(@grid),
+    entity: @parent,
+    collection: @parents,
+    tabs: @nav_tab_links,
     target_frame: "tab_content"
 
   -# Wrap Entire Page with Mapbox API data
@@ -12,7 +12,7 @@
   }
     -# Sidebar with Map
     .col-md-4.d-none.d-lg-block
-      = render 'grids/map_sidebar'
+      = render 'grouped_summaries/map_sidebar'
 
     -# Main Content Area
     .col-md-12.col-lg-8

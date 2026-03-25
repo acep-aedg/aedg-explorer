@@ -1,7 +1,7 @@
 - partial_path = 'grouped_summaries/power_generation'
 
 = turbo_frame_tag "tab_content" do  
-  = render 'shared/tab_nav', links: @tab_links
+  = render 'shared/tab_nav', links: @jump_to_links
   
   .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
     - if @parent.show_utilities?

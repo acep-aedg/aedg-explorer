@@ -1,9 +1,6 @@
 class GridsController < GroupedSummariesController
   include MetadataLookup
 
-  before_action :set_grids
-  layout :determine_layout
-
   # GET /grids
   def index
     @search_params = search_params
@@ -32,12 +29,13 @@ class GridsController < GroupedSummariesController
     @parent = @grid
   end
 
-  def set_grids
+  def set_parents
     @grids = Grid.active.order(:name)
+    @parents = @grids
   end
 
-  def determine_layout
-    action_name == "index" ? "application" : "grids"
+  def set_page_title
+    @page_title = "Electric Grids - #{@parent&.name}"
   end
 
   def search_params

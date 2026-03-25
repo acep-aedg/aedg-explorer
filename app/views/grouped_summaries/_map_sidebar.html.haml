@@ -10,7 +10,7 @@
             type: "checkbox",
             data: {
               action: "change->maps#toggleLayer",
-              url: community_locations_grid_maps_path(@grid),
+              url: polymorphic_path([:community_locations, @parent, :maps]),
               fit: true
             }
           }
@@ -19,13 +19,13 @@
             Communities
 
         / Map Layer: Utility Service Area
-        - if @grid.show_service_areas?
+        - if @parent.show_service_areas?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-service-area-utility{
               type: "checkbox",
               data: {
                 action: "change->maps#toggleLayer",
-                url: service_area_geoms_grid_maps_path(@grid),
+                url: polymorphic_path([:service_area_geoms, @parent, :maps]),
                 fit: true
               }
             }
@@ -33,13 +33,13 @@
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Utility Service Area(s)
 
-        - if @grid.show_plants?
+        - if @parent.show_plants?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-plants{ 
               type: "checkbox", 
               data: { 
                 action: "change->maps#toggleLayer", 
-                url: plants_grid_maps_path(@grid), 
+                url: polymorphic_path([:plants, @parent, :maps]), 
                 fit: true 
               } 
             }
@@ -47,13 +47,13 @@
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Power Plants
 
-        -# - if @grid.show_bulk_fuel_facilities?
+        -# - if @parent.show_bulk_fuel_facilities?
         -#   .form-check.d-flex.align-items-center.mb-1
         -#     %input.form-check-input#layer-bulk-fuel-facilities{ 
         -#       type: "checkbox", 
         -#       data: { 
         -#         action: "change->maps#toggleLayer", 
-        -#         url: bulk_fuel_facilities_grid_maps_path(@grid), 
+        -#         url: polymorphic_path([:bulk_fuel_facilities, @parent, :maps]), 
         -#         fit: true 
         -#       } 
         -#     }
