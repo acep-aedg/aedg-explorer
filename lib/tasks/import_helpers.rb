@@ -1,16 +1,27 @@
 module ImportHelpers
   class << self
     def with_import_banner
-      # Use Kredis to set the global "Loading" status
       status = Kredis.string "aedg:import_status"
-      status.value = "Loading Data..."
+      msg = "Loading Data..."
+      status.value = msg
+      
+      # Tell all browsers to show the banner
+      Turbo::StreamsChannel.broadcast_update_to(
+        "import_status",
+        target: "import-banner-container",
+        partial: "shared/import_banner",
+        locals: { msg: msg }
+      )
 
-      puts "📢 Banner Activated: UI will now show loading status."
       yield
     ensure
-      # It guarantees the banner turns off even if the script crashes hard
       status.del
-      puts "🏁 Banner Deactivated: UI is now back to normal."
+      # Tell all browsers to hide the banner (send empty content to the container)
+      Turbo::StreamsChannel.broadcast_update_to(
+        "import_status",
+        target: "import-banner-container",
+        html: ""
+      )
     end
 
     # Imports geographic data from a GeoJSON file and processes it into the given model.
