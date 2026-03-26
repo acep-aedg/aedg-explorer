@@ -48,6 +48,8 @@
           %h4.fs-6.mb-3.text-dark Contributors
           .row.row-cols-1.g-3.align-items-start
             - @dataset.contributors.each_with_index do |c, i|
+              - presenter = ContributorPresenter.new(c)
+              - obj = presenter.object
               .col
                 .p-3.bg-white.border.rounded.h-100
                   / Header
@@ -62,7 +64,7 @@
                             %i.bi.bi-link-45deg
                         - else
                           = title_org
-                  
+
                     / Right: Metadata
                     .text-end.flex-shrink-0
                       .d-flex.align-items-center.justify-content-end.flex-wrap
@@ -70,22 +72,25 @@
                           = c['date']
                           - if c['roles']&.any?
                             %span.mx-1 &bull;
-                        
+
                         .d-inline-flex.gap-1
                           - c['roles']&.each do |role|
                             %span.badge.bg-info.text-dark= role.titleize
-      
+
                   / Comment Section
                   - if c['comment'].present?
                     .text-muted.small.mt-1
                       = simple_format(c['comment'])
 
-                  - if c['object'].present?
-                    .mt-2.pt-2.border-top
-                      %span.text-muted.x-small.d-inline-flex.align-items-center
-                        %i.bi.bi-github.me-2
-                        %span Data via
-                        = link_to c['object'].split('via ').last, c['object'].split('via ').last, class: 'ms-1 text-decoration-none text-primary fw-medium', target: '_blank'
+                  - if obj
+                    .mt-2.mb-1.p-2.bg-light.rounded-1.border-start.border-primary.border-3.small
+                      %i{ class: obj[:icon] }
+                      %strong.text-dark= "#{obj[:label]}:"
+                      
+                      - if obj[:type] == :link
+                        = link_to obj[:value], obj[:url], class: 'ms-1 text-decoration-none', target: '_blank'
+                      - else
+                        %span.text-muted.ms-1= obj[:value]
       / Sources
       - if @dataset.sources.present?
         .col
@@ -101,5 +106,5 @@
                         %i.bi.bi-link-45deg
                     - else
                       = source['title']
-                  
+
                   .text-muted.small= source['description']
