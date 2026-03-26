@@ -2,7 +2,6 @@
   %h3.mb-4.fs-4 What's in this Dataset?
   .p-4.bg-light-subtle.border.rounded
     .row.row-cols-1.g-4
-
       / Description
       .col
         %h4.fs-6.mb-2 Description
@@ -16,16 +15,16 @@
       / Topics
       - if @dataset.topic_list.any?
         .col
-          %h4.fs-6.mb-2 Topic(s)
+          %h4.fs-6.mb-2 Topics
           - @dataset.topic_list.each do |topic|
-            %span.badge.bg-success.me-2.mb-1= topic
+            %span.badge.bg-success.me-2.mb-1= topic.titleize
 
       / Keywords
       - if @dataset.keywords.any?
         .col
-          %h4.fs-6.mb-2 Keyword(s)
+          %h4.fs-6.mb-2 Keywords
           - @dataset.keywords.each do |tag|
-            %span.badge.bg-secondary.me-2.mb-1= tag
+            %span.badge.bg-secondary.me-2.mb-1= tag.name.titleize
 
       / Format
       .col
@@ -38,11 +37,48 @@
           %h4.fs-6.mb-2.text-dark Licenses
           - @dataset.licenses.each do |license|
             %div
-              %span.text-muted This work is licensed under 
-              = link_to license['path'], class: 'fw-semibold ms-1 text-decoration-none', target: '_blank' do 
+              %span.text-muted This work is licensed under
+              = link_to license['path'], class: 'fw-semibold ms-1 text-decoration-none icon-link icon-link-hover align-items-baseline', target: '_blank' do
                 = license['name']
                 %i.bi.bi-link-45deg
 
+      / Contributors
+      - if @dataset.contributors.any?
+        .col
+          %h4.fs-6.mb-3.text-dark Contributors
+          .row.row-cols-1.g-3.align-items-start
+            - @dataset.contributors.each_with_index do |c, i|
+              .col
+                .p-3.bg-white.border.rounded.h-100
+                  / Header
+                  .d-flex.justify-content-between.align-items-start
+                    / Left: Name/Org
+                    .mb-1.pe-3
+                      %span.fs-6.fw-semibold
+                        - title_org = [c['title'], c['organization']].select(&:present?).join(" - ")
+                        - if c['path'].present?
+                          = link_to c['path'], class: 'text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline', target: '_blank' do
+                            %span= title_org
+                            %i.bi.bi-link-45deg
+                        - else
+                          = title_org
+                  
+                    / Right: Metadata
+                    .text-end.flex-shrink-0
+                      .d-flex.align-items-center.justify-content-end.flex-wrap
+                        %span.text-muted.small.me-1
+                          = c['date']
+                          - if c['roles']&.any?
+                            %span.mx-1 &bull;
+                        
+                        .d-inline-flex.gap-1
+                          - c['roles']&.each do |role|
+                            %span.badge.bg-info.text-dark= role.titleize
+      
+                  / Comment Section
+                  - if c['comment'].present?
+                    .text-muted.small.mt-1
+                      = simple_format(c['comment'])
       / Sources
       - if @dataset.sources.present?
         .col
@@ -51,12 +87,12 @@
             - @dataset.sources.each do |source|
               .col
                 .p-3.bg-white.border.rounded.h-100
-                  .fs-6.fw-semibold.mb-1= source['title']
-                  .text-muted.mb-2= source['description']
-                  - if source['path'].present?
-                    .fs-6
-                    = link_to source['path'], class: 'text-decoration-none icon-link icon-link-hover align-items-baseline', target: '_blank' do
-                      %span
-                        Visit Source
+                  .fs-6.fw-semibold.mb-1
+                    - if source['path'].present?
+                      = link_to source['path'], class: 'text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline', target: '_blank' do
+                        %span= source['title']
                         %i.bi.bi-link-45deg
-                      %i.bi.bi-arrow-right
+                    - else
+                      = source['title']
+                  
+                  .text-muted.small= source['description']

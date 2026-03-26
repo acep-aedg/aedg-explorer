@@ -14,7 +14,7 @@ class Dataset < ApplicationRecord
 
   store_accessor :data, :title, :description, :resources,
                  :path, :publicationDate, :spatial,
-                 :format, :schema, :sources, :licenses
+                 :format, :schema, :sources, :licenses, :contributors
 
   has_one_attached :archive
 
