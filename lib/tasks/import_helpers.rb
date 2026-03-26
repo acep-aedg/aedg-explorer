@@ -4,8 +4,6 @@ module ImportHelpers
       status = Kredis.string "aedg:import_status"
       msg = "Loading Data..."
       status.value = msg
-      
-      # Tell all browsers to show the banner
       Turbo::StreamsChannel.broadcast_update_to(
         "import_status",
         target: "import-banner-container",
@@ -16,7 +14,6 @@ module ImportHelpers
       yield
     ensure
       status.del
-      # Tell all browsers to hide the banner (send empty content to the container)
       Turbo::StreamsChannel.broadcast_update_to(
         "import_status",
         target: "import-banner-container",

@@ -38,6 +38,9 @@ Metrics/CyclomaticComplexity:
 Metrics/MethodLength:
   Max: 38
 
+Metrics/ModuleLength:
+  Max: 120
+
 # Offense count: 1
 Rails/Exit:
   Exclude:
