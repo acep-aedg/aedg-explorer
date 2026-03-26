@@ -8,10 +8,8 @@ require_relative "versioning"
 namespace :import do
   desc "Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)"
   task all: %i[environment download_data] do
-    # set loading data feature when importing on UI
-    import_status = Kredis.string "aedg:import_status"
-    begin
-      import_status.value = "Loading Data...
+    # set loading data feature on the UI when importing
+    ImportHelpers.with_import_banner do
       puts "🚀 Starting full import..."
       Rake::Task["import:layer_one"].invoke
       Rake::Task["import:layer_two"].invoke
@@ -21,14 +19,6 @@ namespace :import do
       Rake::Task["import:layer_six"].invoke
       Rake::Task["import:handle_version"].invoke
       puts "✅ Full import complete..."
-    rescue => e
-      puts "❌ CRITICAL ERROR DURING IMPORT: #{e.message}"
-      # Log to error tracker 
-      raise e 
-    ensure
-      # This ensures the banner vanishes even if a layer explodes
-      import_status.del 
-      puts "🏁 Redis Status Cleared."
     end
   end
 

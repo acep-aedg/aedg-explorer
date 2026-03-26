@@ -1,5 +1,18 @@
 module ImportHelpers
   class << self
+    def with_import_banner
+      # Use Kredis to set the global "Loading" status
+      status = Kredis.string "aedg:import_status"
+      status.value = "Loading Data..."
+
+      puts "📢 Banner Activated: UI will now show loading status."
+      yield
+    ensure
+      # It guarantees the banner turns off even if the script crashes hard
+      status.del
+      puts "🏁 Banner Deactivated: UI is now back to normal."
+    end
+
     # Imports geographic data from a GeoJSON file and processes it into the given model.
     # It assumes there is an `import_aedg_with_geom!` method for the given model to store the data.
     def import_geojson(filepath, model)
