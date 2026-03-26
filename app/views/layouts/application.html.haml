@@ -16,6 +16,12 @@
     %link{rel: 'stylesheet', href: 'https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css' }
   %body.d-flex.flex-column.min-vh-100
     = render 'shared/header'
+    - if (msg = import_status_message).present?
+      .import-status-banner
+        .banner-content
+          %span= msg
+        .progress-track
+          .progress-bar
     .flex-grow-1
       = content_for?(:content) ? yield(:content) : yield
     = render 'shared/footer'
