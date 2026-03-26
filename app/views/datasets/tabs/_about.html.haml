@@ -79,6 +79,13 @@
                   - if c['comment'].present?
                     .text-muted.small.mt-1
                       = simple_format(c['comment'])
+
+                  - if c['object'].present?
+                    .mt-2.pt-2.border-top
+                      %span.text-muted.x-small.d-inline-flex.align-items-center
+                        %i.bi.bi-github.me-2
+                        %span Data via
+                        = link_to c['object'].split('via ').last, c['object'].split('via ').last, class: 'ms-1 text-decoration-none text-primary fw-medium', target: '_blank'
       / Sources
       - if @dataset.sources.present?
         .col
