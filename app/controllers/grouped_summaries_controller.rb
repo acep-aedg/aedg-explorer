@@ -3,7 +3,7 @@ class GroupedSummariesController < ApplicationController
   before_action :set_parent, except: %i[index]
   before_action :set_parents
   before_action :set_jump_to_links, :set_map_buttons, only: %i[power_generation]
-  before_action :set_nav_tab_links
+  before_action :set_nav_tab_links, only: %i[general power_generation]
   before_action :set_page_title
 
   def index; end
@@ -49,7 +49,7 @@ class GroupedSummariesController < ApplicationController
       {
         label: "Power Generation",
         path: polymorphic_path([:power_generation, @parent]),
-        visible: @parent.show_power_generation_tab?
+        visible: @parent.generation?
       }
     ].select { |tab| tab[:visible] }
   end
@@ -58,26 +58,26 @@ class GroupedSummariesController < ApplicationController
     [
       {
         label: "Utility Service Areas",
-        url: polymorphic_path([:service_area_geoms, @parent, :maps]),
+        url: polymorphic_path([:service_areas, @parent, :maps]),
         icon: "bounding-box",
         id: "layer-service-area-utility",
-        visible: @parent.show_service_area_geoms?
+        visible: @parent.service_areas?
       },
       {
         label: "Power Plants",
         url: polymorphic_path([:plants, @parent, :maps]),
         icon: "building",
         id: "layer-plants",
-        visible: @parent.show_plants?
+        visible: @parent.plants?
       }
     ]
   end
 
   def power_generation_jump_to_links
     [
-      { title: "Utilities", anchor: "#utilities", icon: "buildings", show: @parent.show_utilities? },
-      { title: "Generation", anchor: "#generation", icon: "building-gear", show: @parent.show_generation? },
-      { title: "Capacity", anchor: "#capacity", icon: "lightning-fill", show: @parent.show_capacity? }
+      { title: "Utilities", anchor: "#utilities", icon: "buildings", show: @parent.utilities? },
+      { title: "Generation", anchor: "#generation", icon: "building-gear", show: @parent.generation? },
+      { title: "Capacity", anchor: "#capacity", icon: "lightning-fill", show: @parent.capacities? }
     ]
   end
 end

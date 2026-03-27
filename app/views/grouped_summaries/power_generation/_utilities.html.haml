@@ -1,5 +1,5 @@
 .section-body.m-1.m-md-2.m-lg-4.mt-3
-  - if @parent.show_utility_map_layers?
+  - if @parent.service_areas?
     .mb-4
       = render 'shared/map_buttons', buttons: @map_buttons
 
