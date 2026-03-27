@@ -28,12 +28,12 @@
       -# Main Data Card
       .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
         -# Capacity Chart
-        - if @community.show_bulk_fuel_capacity_chart?
+        - if @community.bulk_fuel_facility_capacities?
           .mb-5
             = render "communities/#{parent_tab}/bulk_fuel_facilities/fuel_capacity_chart"
         
         -# Data Table Section
-        .pt-4{ class: ("border-top" if @community.show_bulk_fuel_capacity_chart?) }
+        .pt-4{ class: ("border-top" if @community.bulk_fuel_facility_capacities?) }
           .d-flex.align-items-center.mb-3
             %i.bi.bi-table.me-2.text-primary
             %h5.mb-0.fw-bold Bulk Fuel Facility Data

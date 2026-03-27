@@ -4,7 +4,7 @@
   = render 'shared/tab_nav', links: @jump_to_links
   
   .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
-    - if @parent.show_utilities?
+    - if @parent.utilities?
       #utilities.scroll-section.mb-5
         = render 'shared/section_header', 
           icon: 'buildings', 
@@ -14,7 +14,7 @@
   
         = render "#{partial_path}/utilities"
 
-    - if @parent.show_generation?
+    - if @parent.generation?
       #generation.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'building-gear',
@@ -27,7 +27,7 @@
         = render "#{partial_path}/generation/about_modal"
         = render "#{partial_path}/generation"
         
-    - if @parent.show_capacity?
+    - if @parent.capacities?
       #capacity.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'lightning-fill',

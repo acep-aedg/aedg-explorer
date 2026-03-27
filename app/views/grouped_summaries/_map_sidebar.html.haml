@@ -19,7 +19,7 @@
             Communities
 
         / Map Layer: Utility Service Area
-        - if @parent.show_service_areas?
+        - if @parent.service_areas?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-service-area-utility{
               type: "checkbox",
@@ -33,7 +33,7 @@
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Utility Service Area(s)
 
-        - if @parent.show_plants?
+        - if @parent.plants?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-plants{ 
               type: "checkbox", 
@@ -47,7 +47,7 @@
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Power Plants
 
-        -# - if @parent.show_bulk_fuel_facilities?
+        -# - if @parent.bulk_fuel_facilities?
         -#   .form-check.d-flex.align-items-center.mb-1
         -#     %input.form-check-input#layer-bulk-fuel-facilities{ 
         -#       type: "checkbox", 

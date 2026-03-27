@@ -52,8 +52,8 @@ Rails.application.routes.draw do
         collection do
           get :house_districts
           get :senate_districts
-          get :service_area_geoms
-          get :service_areas
+          get :service_area_geom
+          get :service_area
           get :plants
           get :bulk_fuel_facilities
         end
@@ -77,7 +77,7 @@ Rails.application.routes.draw do
       resources :maps, only: [], module: options[:resource_name], defaults: { format: :json } do
         collection do
           get :community_locations
-          get :service_area_geoms
+          get :service_areas
           get :plants
         end
       end

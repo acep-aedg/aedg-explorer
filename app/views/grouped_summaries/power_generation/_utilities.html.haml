@@ -11,7 +11,7 @@
           %h5.mb-0.fw-bold Service Area Details
         
         / --- Utility Providers ---
-        - if @parent.show_service_areas?
+        - if @parent.service_areas?
           .mb-4
             .d-flex.align-items-center.mb-1
               %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers
@@ -27,7 +27,7 @@
                       Cert
       
         / --- Power Plants ---
-        - if @parent.show_plants?
+        - if @parent.plants?
           .mb-4
             .d-flex.align-items-center.mb-1
               %label.text-muted.small.text-uppercase.fw-bold.mb-0 Power Plants (#{@parent.plants.size})

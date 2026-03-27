@@ -1,32 +1,31 @@
 - parent_tab = 'power_generation'
-- service_area_label = @community.show_utility_service_area? ? "Local Service Area" : "Utility Service Area"
+- service_area_label = @community.local_service_area? ? "Local Service Area" : "Utility Service Area"
 - map_buttons = [ |
     { |
       label: service_area_label, |
-      url: service_area_geoms_community_maps_path(@community), |
+      url: service_area_geom_community_maps_path(@community), |
       icon: 'bounding-box', |
       id: 'layer-service-area-local', |
-      visible: @community.show_service_areas? |
+      visible: @community.local_service_area? |
     }, |
     { |
       label: "Utility Service Area", |
-      url: service_areas_community_maps_path(@community), |
+      url: service_area_community_maps_path(@community), |
       icon: 'bounding-box', |
       id: 'layer-service-area-utility', |
-      visible: @community.show_utility_service_area? |
+      visible: @community.service_areas? |
     }, |
     { |
       label: "Power Plants", |
       url: plants_community_maps_path(@community), |
       icon: 'building', |
       id: 'layer-plants', |
-      visible: @community.show_plants? |
+      visible: @community.plants? |
     } |
   ] |
 
 .section-body.m-1.m-md-2.m-lg-4.mt-3
-  .mb-4
-    = render 'shared/map_buttons', buttons: map_buttons
+  = render 'shared/map_buttons', buttons: map_buttons
 
   - has_peers = @community.peer_communities.exists?
 
