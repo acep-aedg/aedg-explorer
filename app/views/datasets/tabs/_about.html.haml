@@ -53,13 +53,15 @@
             - @dataset.contributors.each_with_index do |c, i|
               - presenter = ContributorPresenter.new(c)
               - obj = presenter.object
+              - has_details = c['comment'].present? || obj.present?
+      
               .col
                 .p-3.bg-white.border.rounded.h-100
-                  / Header
+                  / Header Row
                   .d-flex.justify-content-between.align-items-start
-                    / Left: Name/Org
+                    / Left: Name/Org & Toggle
                     .mb-1.pe-3
-                      %span.fs-6.fw-semibold
+                      .fs-6.fw-semibold
                         - title_org = [c['title'], c['organization']].select(&:present?).join(" - ")
                         - if c['path'].present?
                           = link_to c['path'], class: 'text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline', target: '_blank' do
@@ -67,33 +69,41 @@
                             %i.bi.bi-link-45deg
                         - else
                           = title_org
-
-                    / Right: Metadata
+                      
+                      / Toggle Button
+                      - if has_details
+                        %button.btn.btn-link.btn-sm.text-decoration-none.p-0.mt-1.d-inline-flex.align-items-baseline{ type: "button", "data-bs-toggle": "collapse", "data-bs-target": "#details-#{i}", "aria-expanded": "false" }
+                          %span.me-1 View Details
+                          %i.bi.bi-plus-circle
+      
+                    / Right: Metadata (Roles/Date)
                     .text-end.flex-shrink-0
                       .d-flex.align-items-center.justify-content-end.flex-wrap
                         %span.text-muted
                           - if c['date']&.present?
                             = c['date']
-                          - if c['roles']&.any?
+                          - if c['date']&.present? && c['roles']&.any?
                             %span.mx-1 &bull;
-                          .d-inline-flex.gap-1
+                          - if c['roles']&.present?
                             - c['roles']&.compact&.each do |role|
-                              %span.badge.bg-info.text-dark= role.titleize
-
-                  / Comment Section
-                  - if c['comment'].present?
-                    .text-muted.small.mt-1
-                      = simple_format(c['comment'])
-
-                  - if obj
-                    .mt-2.mb-1.p-2.bg-light.rounded-1.border-start.border-primary.border-3.small
-                      %i{ class: obj[:icon] }
-                      %strong.text-dark= "#{obj[:label]}:"
-                      
-                      - if obj[:type] == :link
-                        = link_to obj[:value], obj[:url], class: 'ms-1 text-decoration-none', target: '_blank'
-                      - else
-                        %span.text-muted.ms-1= obj[:value]
+                              %span.badge.bg-info.text-dark.ms-1= role.titleize
+      
+                  / Collapsible Section
+                  - if has_details
+                    .collapse{ id: "details-#{i}" }
+                      .mt-2.pt-2.border-top
+                        - if c['comment'].present?
+                          .text-muted.small.mb-2
+                            = simple_format(c['comment'], class: 'mb-0')
+      
+                        - if obj
+                          .p-2.bg-light.rounded-1.border-start.border-primary.border-3.small
+                            %i{ class: obj[:icon] }
+                            %strong.text-dark= "#{obj[:label]}:"
+                            - if obj[:type] == :link
+                              = link_to obj[:value], obj[:url], class: 'ms-1 text-decoration-none', target: '_blank'
+                            - else
+                              %span.text-muted.ms-1= obj[:value]
       / Sources
       - if @dataset.sources?
         .col
@@ -109,5 +119,5 @@
                         %i.bi.bi-link-45deg
                     - elsif source['title'].present?
                       = source['title']
-                    - if source['description'].present?
-                      .text-muted.small= source['description']
+                  - if source['description'].present?
+                    .text-muted.small= source['description']
