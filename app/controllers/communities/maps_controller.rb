@@ -4,8 +4,8 @@ module Communities
 
     def house_districts; end
     def senate_districts; end
-    def service_area_geoms; end
-    def service_areas; end
+    def service_area_geom; end
+    def service_area; end
     def plants; end
     def bulk_fuel_facilities; end
 

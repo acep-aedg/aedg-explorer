@@ -1,9 +1,9 @@
 - tab = 'electric_rates_sales'
 - links = [ |
-    { title: 'Consumption', anchor: '#consumption', icon: 'lightning-charge', show: @community.show_sales? }, |
-    { title: 'Revenue', anchor: '#revenue', icon: 'cash-coin', show: @community.show_revenue? }, |
-    { title: 'Customers', anchor: '#customers', icon: 'people', show: @community.show_customers? }, |
-    { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.show_rates? } |
+    { title: 'Consumption', anchor: '#consumption', icon: 'lightning-charge', show: @community.yearly_electricity_sales? }, |
+    { title: 'Revenue', anchor: '#revenue', icon: 'cash-coin', show: @community.yearly_electricity_revenues? }, |
+    { title: 'Customers', anchor: '#customers', icon: 'people', show: @community.yearly_electricity_customers? }, |
+    { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.electric_rates? } |
   ] |
 
 = turbo_frame_tag "community_tab_content" do
@@ -12,7 +12,7 @@
   .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump_nav", bs_smooth_scroll: "true" }, tabindex: "0" }
     = render "communities/#{tab}/summary"
 
-    - if @community.show_sales?
+    - if @community.yearly_electricity_sales?
       #consumption.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'lightning-charge',
@@ -22,7 +22,7 @@
           
         = render "communities/#{tab}/consumption"
         
-    - if @community.show_revenue?
+    - if @community.yearly_electricity_revenues?
       #revenue.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'cash-coin',
@@ -32,7 +32,7 @@
           
         = render "communities/#{tab}/revenue"
 
-    - if @community.show_customers?
+    - if @community.yearly_electricity_customers?
       #customers.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'people',
@@ -42,7 +42,7 @@
           
         = render "communities/#{tab}/customers"
 
-    - if @community.show_rates?
+    - if @community.electric_rates?
       #rates.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'coin',

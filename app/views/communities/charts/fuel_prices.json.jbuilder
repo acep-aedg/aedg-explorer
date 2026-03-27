@@ -57,7 +57,7 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
     end
 
     # --- Line series for Heating Degree Days -> right axis "y1" ---
-    hdd_series = if @community.show_heating_degree_days?
+    hdd_series = if @community.heating_degree_days?
                    hdd_by_year = @heating_degree_days
                                  .group_by(&:year)
                                  .transform_values { |rows| rows.sum { |r| r.heating_degree_days.to_f } }
@@ -73,7 +73,7 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
                    }
                  end
 
-    # Merge and remove nil if show_heating_degree_days? was false
+    # Merge and remove nil if heating_degree_days? is false
     json.array!((series + [hdd_series]).compact) do |s|
       json.name    s[:name]
       json.data    s[:data]

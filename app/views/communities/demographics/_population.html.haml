@@ -8,7 +8,7 @@
   -# Main Data Card
   .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
     .row.g-4
-      - if @community.show_age_distribution_chart?
+      - if @community.age_distribution?
         .col.col-xl-8
           .d-flex.align-items-center.mb-3
             %i.bi.bi-bar-chart-steps.me-2.text-primary
@@ -20,7 +20,7 @@
         
           = render "communities/#{parent_tab}/population/population_age_chart"
           
-      - if @community.show_sex_distribution_chart?
+      - if @community.sex_distribution?
         .col.col-xl-4
           .d-flex.align-items-center.mb-3
             %i.bi.bi-gender-ambiguous.me-2.text-primary
