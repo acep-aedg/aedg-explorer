@@ -1,6 +1,7 @@
 require "zip"
 class Dataset < ApplicationRecord
   extend FriendlyId
+  include MetadataDisplayable
 
   friendly_id :name, use: :slugged
 

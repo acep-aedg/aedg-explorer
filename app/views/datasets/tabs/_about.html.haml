@@ -3,47 +3,50 @@
   .p-4.bg-light-subtle.border.rounded
     .row.row-cols-1.g-4
       / Description
-      .col
-        %h4.fs-6.mb-2 Description
-        %p.text-muted.mb-0= @dataset.description
+      - if @dataset.description?
+        .col
+          %h4.fs-6.mb-2 Description
+          %p.text-muted.mb-0= @dataset.description
 
       / Published
-      .col
-        %h4.fs-6.mb-2 Published
-        %p.mb-0= @dataset.publicationDate
+      - if @dataset.publication_date?
+        .col
+          %h4.fs-6.mb-2 Published
+          %p.mb-0= @dataset.publicationDate
 
       / Topics
-      - if @dataset.topic_list.any?
+      - if @dataset.topic_list?
         .col
           %h4.fs-6.mb-2 Topics
           - @dataset.topic_list.each do |topic|
             %span.badge.bg-success.me-2.mb-1= topic.titleize
 
       / Keywords
-      - if @dataset.keywords.any?
+      - if @dataset.keywords?
         .col
           %h4.fs-6.mb-2 Keywords
           - @dataset.keywords.each do |tag|
             %span.badge.bg-secondary.me-2.mb-1= tag.name.titleize
 
       / Format
-      .col
-        %h4.fs-6.mb-2 Format
-        %span.badge.bg-primary.me-2.mb-1= @dataset.format
+      - if @dataset.format?
+        .col
+          %h4.fs-6.mb-2 Format
+          %span.badge.bg-primary.me-2.mb-1= @dataset.format
 
       / Licenses
-      - if @dataset.licenses.present?
+      - if @dataset.licenses?
         .col
           %h4.fs-6.mb-2.text-dark Licenses
           - @dataset.licenses.each do |license|
-            %div
+            - if license['path'] && license['name']
               %span.text-muted This work is licensed under
               = link_to license['path'], class: 'fw-semibold ms-1 text-decoration-none icon-link icon-link-hover align-items-baseline', target: '_blank' do
                 = license['name']
                 %i.bi.bi-link-45deg
 
       / Contributors
-      - if @dataset.contributors.any?
+      - if @dataset.contributors?
         .col
           %h4.fs-6.mb-3.text-dark Contributors
           .row.row-cols-1.g-3.align-items-start
@@ -68,14 +71,14 @@
                     / Right: Metadata
                     .text-end.flex-shrink-0
                       .d-flex.align-items-center.justify-content-end.flex-wrap
-                        %span.text-muted.small.me-1
-                          = c['date']
+                        %span.text-muted
+                          - if c['date']&.present?
+                            = c['date']
                           - if c['roles']&.any?
                             %span.mx-1 &bull;
-
-                        .d-inline-flex.gap-1
-                          - c['roles']&.each do |role|
-                            %span.badge.bg-info.text-dark= role.titleize
+                          .d-inline-flex.gap-1
+                            - c['roles']&.compact&.each do |role|
+                              %span.badge.bg-info.text-dark= role.titleize
 
                   / Comment Section
                   - if c['comment'].present?
@@ -92,7 +95,7 @@
                       - else
                         %span.text-muted.ms-1= obj[:value]
       / Sources
-      - if @dataset.sources.present?
+      - if @dataset.sources?
         .col
           %h4.fs-6.mb-3.text-dark Sources
           .row.row-cols-1.g-3
@@ -100,11 +103,11 @@
               .col
                 .p-3.bg-white.border.rounded.h-100
                   .fs-6.fw-semibold.mb-1
-                    - if source['path'].present?
+                    - if source['path'].present? && source['title'].present?
                       = link_to source['path'], class: 'text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline', target: '_blank' do
                         %span= source['title']
                         %i.bi.bi-link-45deg
-                    - else
+                    - elsif source['title'].present?
                       = source['title']
-
-                  .text-muted.small= source['description']
+                    - if source['description'].present?
+                      .text-muted.small= source['description']
