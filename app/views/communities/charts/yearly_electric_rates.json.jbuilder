@@ -11,7 +11,7 @@ json.datasets @active_fields do |field|
     when 1
       values.first.nonzero?
     else
-      # Only runs if there are 2 or more records
+      # Only runs if there are 2 or more records for a given year
       (values.sum / values.size.to_f).nonzero?
     end
   end
@@ -28,8 +28,6 @@ json.datasets @active_fields do |field|
   json.borderColor     base_color
   json.backgroundColor base_color.to_opaque(0.7)
 
-  if is_average
-    json.borderDash [5, 5]
-  end
+  json.borderDash [5, 5] if is_average
 end
 # end

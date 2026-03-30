@@ -102,7 +102,6 @@ module ChartsHelper
 
   def sector_color(label_or_field)
     str = label_or_field.to_s.downcase
-    puts "DEBUG: sector_color called with: #{str.inspect}"
     matched_key = SALES_SECTOR_COLOR_MAPPING.keys.find { |key| str.include?(key) }
     color(SALES_SECTOR_COLOR_MAPPING[matched_key] || :light_grey)
   end

@@ -88,7 +88,7 @@ module Displayable
     household_incomes&.exists?
   end
 
-  def electric_rates?
+  def yearly_electric_rates?
     yearly_electric_rates&.with_rates&.exists?
   end
 
@@ -143,7 +143,7 @@ module Displayable
   end
 
   def electricity_sales_rates?
-    yearly_electricity_sales? || electric_rates? || yearly_electricity_revenues? || yearly_electricity_customers?
+    yearly_electricity_sales? || yearly_electric_rates? || yearly_electricity_revenues? || yearly_electricity_customers?
   end
 end
 # rubocop:enable Metrics/ModuleLength

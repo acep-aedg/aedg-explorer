@@ -1,0 +1,23 @@
+= render 'shared/about_modal', id: 'yearlyElectricRatesAboutModal', title: 'About Yearly Electric Rates Data' do
+  .d-flex.mb-4
+    = render 'shared/modal/about_this_calculation' do
+      %p.mb-3
+        %strong When multiple reporting entities serve a single area in a given year 
+        (such as Anchorage), we average their rates to provide a clear and readable trend. 
+        
+      %p.mb-3
+        This approach prevents graph clutter while maintaining an accurate representation of the local energy landscape.
+    
+      .bg-light.p-3.border.rounded.small.mb-0
+        %span.text-dark.fw-bold For Example (2019 Anchorage Residential Rates):
+        %ul.list-unstyled.mb-0.mt-2
+          %li 
+            Chugach Electric Assn Inc: 
+            %strong $0.21
+          %li 
+            Anchorage Municipal Light and Power: 
+            %strong $0.23
+          %li.mt-2.pt-2.border-top
+            %strong Result: 
+            (0.21 + 0.23) / 2 = 
+            %span.text-success.fw-bold $0.22 per kWh
