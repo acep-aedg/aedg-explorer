@@ -84,7 +84,7 @@ Rails.application.routes.draw do
     end
 
     resources :grids, only: %i[index show] do
-      concerns :summarizable, resource_name: :grids
+      concerns :summarizable, resource_name: :grouped_summaries
     end
   end
 

@@ -7,6 +7,7 @@ class GroupedSummariesController < ApplicationController
   before_action :set_page_title
 
   def index; end
+  def general; end
   def power_generation; end
 
   private

@@ -23,13 +23,13 @@
           .col-12
             .p-4.border.rounded-3.bg-white.shadow-sm
               .mb-4
-                = render "#{partial_path}/yearly_chart"
+                = render "#{partial_path}/yearly/chart"
               
               .pt-4.border-top
                 .d-flex.align-items-center.mb-3
                   %i.bi.bi-table.me-2.text-primary
                   %h5.mb-0.fw-bold Yearly Generation Data
-                = render "#{partial_path}/yearly_data"
+                = render "#{partial_path}/yearly/data"
 
     - if show_monthly_gen
       - monthly_active = !show_yearly_gen
@@ -38,10 +38,10 @@
           .col-12
             .p-4.border.rounded-3.bg-white.shadow-sm
               .mb-4
-                = render "#{partial_path}/monthly"
+                = render "#{partial_path}/monthly/chart"
               
               .pt-4.border-top
                 .d-flex.align-items-center.mb-3
                   %i.bi.bi-table.me-2.text-primary
                   %h5.mb-0.fw-bold Monthly Generation Data
-                = render "#{partial_path}/monthly_data"
+                = render "#{partial_path}/monthly/data"
