@@ -6,7 +6,14 @@ class GroupedSummariesController < ApplicationController
   before_action :set_nav_tab_links, only: %i[general power_generation]
   before_action :set_page_title
 
-  def index; end
+  def index
+    @search_params = search_params
+    @query = @search_params[:q]
+    @parents = @parents.search_related(@query) if @query.present?
+    @active_letters = @parents.pluck(:name).map { |n| n[0].upcase }.uniq.sort
+    @parents = @parents.starts_with(@search_params[:letter]) if @search_params[:letter].present?
+  end
+
   def general; end
   def power_generation; end
 
@@ -22,8 +29,12 @@ class GroupedSummariesController < ApplicationController
     action_name == "index" ? "application" : "grouped_summaries"
   end
 
+  def search_params
+    params.permit(:q, :letter, :page, :per_page)
+  end
+
   def set_page_title
-    @page_title = "#{controller_name.humanize} - #{@parent&.name}"
+    @page_title = "#{@parents.model_name.human.titleize} - #{@parent&.name}"
   end
 
   def set_map_buttons
