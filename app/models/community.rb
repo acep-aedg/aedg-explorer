@@ -1,5 +1,6 @@
 class Community < ApplicationRecord
   include CommunityAttributes
+  include Displayable
   # include SearchableByNameAndTags
   extend FriendlyId
 
@@ -24,10 +25,10 @@ class Community < ApplicationRecord
   has_many :house_districts, through: :communities_house_districts
   has_many :communities_school_districts, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :school_districts, through: :communities_school_districts
-  has_many :communities_service_area_geoms, foreign_key: :community_fips_code, primary_key: :fips_code
-  has_many :service_area_geoms, through: :communities_service_area_geoms
-  has_many :service_areas, through: :service_area_geoms
-  has_many :plants, through: :service_area_geoms
+  has_one :communities_service_area_geom, foreign_key: :community_fips_code, primary_key: :fips_code
+  has_one :service_area_geom, through: :communities_service_area_geom
+  has_one :service_area, through: :service_area_geom
+  has_many :plants, through: :service_area_geom
   has_many :capacities, through: :plants
   has_many :yearly_generations, through: :plants
   has_many :monthly_generations, through: :plants
@@ -36,7 +37,7 @@ class Community < ApplicationRecord
   has_many :household_incomes, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :heating_degree_days, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
 
-  has_many :peer_communities, ->(community) { where.not(id: community.id).distinct }, through: :service_area_geoms, source: :communities
+  has_many :peer_communities, ->(community) { where.not(id: community.id).distinct }, through: :service_area_geom, source: :communities
 
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
@@ -54,6 +55,7 @@ class Community < ApplicationRecord
   scope :in_house,      ->(ids)   { joins(:house_districts).where(house_districts: { id: ids }) }
   # uses the pg_search_scope defined in SearchableByNameAndTags concern
   scope :starts_with,   ->(ch)    { where("name ilike ?", "#{ch}%") }
+  scope :pce_eligible, -> { where(pce_eligible: true) }
 
   include PgSearch::Model
 
@@ -167,146 +169,8 @@ class Community < ApplicationRecord
     @any_regional_prices ||= fuel_prices.any? { |fp| fp.price_type.to_s.downcase == "regional" && fp.price.present? }
   end
 
-  # --- General Tab: this tab will always be shown ---
-  def show_school_districts?
-    @show_school_districts ||= school_districts.exists?
-  end
-
-  def show_transportation?
-    @show_transportation ||= transportation.present?
-  end
-
-  def show_legislative_districts?
-    @show_legislative_districts ||= show_senate_districts? || show_house_districts?
-  end
-
-  def show_senate_districts?
-    @show_senate_districts ||= senate_districts.exists?
-  end
-
-  def show_house_districts?
-    @show_house_districts ||= house_districts.exists?
-  end
-
-  # --- Power Generation Tab ---
-  def show_power_generation_tab?
-    @show_power_generation_tab ||= show_utilities? || show_generation? || show_capacity?
-  end
-
-  def show_utilities?
-    @show_utilities ||= show_service_areas? || show_plants?
-  end
-
-  def show_service_areas?
-    @show_service_areas ||= service_areas.exists?
-  end
-
-  def show_utility_service_area?
-    @show_utility_service_area ||= service_area_geoms.with_utility_service_area.exists?
-  end
-
-  def show_plants?
-    @show_plants ||= plants.exists?
-  end
-
-  def show_utility_map_layers?
-    @show_utility_map_layers ||= show_service_areas? || show_plants?
-  end
-
-  def show_generation?
-    @show_generation ||= show_monthly_generation? || show_yearly_generation?
-  end
-
-  def show_yearly_generation?
-    @show_yearly_generation ||= yearly_generations.exists?
-  end
-
-  def show_monthly_generation?
-    @show_monthly_generation ||= monthly_generations.exists?
-  end
-
-  def show_capacity?
-    @show_capacity ||= capacities.exists?
-  end
-
-  # --- Rates & Sales Tab ---
-  def show_sales_rates_tab?
-    @show_sales_rates_tab ||= show_sales? || show_rates? || show_revenue? || show_customers?
-  end
-
-  def show_rates?
-    @show_rates ||= electric_rates.with_rates.exists?
-  end
-
-  def show_sales?
-    @show_sales ||= yearly_sales.with_sales.exists?
-  end
-
-  def show_revenue?
-    @show_revenue ||= yearly_sales.with_revenue.exists?
-  end
-
-  def show_customers?
-    @show_customers ||= yearly_sales.with_customers.exists?
-  end
-
-  # --- Fuel Tab ---
-  def show_fuel_tab?
-    @show_fuel_tab ||= show_fuel_prices? || show_bulk_fuel_facilities?
-  end
-
-  def show_fuel_prices?
-    @show_fuel_prices ||= fuel_prices.exists?
-  end
-
-  def show_bulk_fuel_facilities?
-    @show_bulk_fuel_facilities ||= bulk_fuel_facilities.exists?
-  end
-
-  def show_bulk_fuel_capacity_chart?
-    @show_bulk_fuel_capacity_chart ||= bulk_fuel_facilities.with_capacity.exists?
-  end
-
-  # --- Demographics Tab ---
-  def show_demographics_tab?
-    @show_demographics_tab ||= show_population? || show_employment?
-  end
-
-  def show_population?
-    @show_population ||= population_age_sexes.exists?
-  end
-
-  def show_age_distribution_chart?
-    @show_age_distribution_chart ||= population_age_sexes.with_age_estimates.exists?
-  end
-
-  def show_sex_distribution_chart?
-    @show_sex_distribution_chart ||= population_age_sexes.with_sex_estimates.exists?
-  end
-
-  # --- Income Tab/Section ---
-  def show_income?
-    @show_income ||= show_household_income? || show_income_poverty?
-  end
-
-  def show_household_income?
-    @show_household_income ||= household_incomes.exists?
-  end
-
-  def show_income_poverty?
-    @show_income_poverty ||= income_poverties.exists?
-  end
-
-  # --- Others ---
-  def show_heating_degree_days?
-    @show_heating_degree_days ||= heating_degree_days.present?
-  end
-
-  def show_population_age_sexes?
-    @show_population_age_sexes ||= population_age_sexes.exists?
-  end
-
-  def show_employment?
-    @show_employment ||= employments.exists?
+  # Specific to Community
+  def local_service_area?
+    service_area&.service_area_geoms&.many?
   end
 end

@@ -4,7 +4,7 @@
 .section-body.m-1.m-md-2.m-lg-4.mt-3
   .p-4.border.rounded-3.bg-white.shadow-sm.mb-4
     -# Employment Status (Full Width)
-    - if @community.show_employment?
+    - if @community.employment?
       .mb-5
         = render "communities/#{parent_tab}/employment/employment_chart"
 

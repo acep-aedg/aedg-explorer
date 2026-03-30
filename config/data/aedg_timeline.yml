@@ -11,6 +11,10 @@ aedg_timeline:
     date: '2017'
     description: "AEDG was redesigned & extended by ACEP and ISER in collaboration with Lawrence Berkeley National Laboratory (LBNL)."
 
+  - title: 'AEDG Version 1.2'
+    date: '2013-2014'
+    description: "Phase II of DOE EPSCoR project continuing to automate the data processing to provide accessibility to public and private stakeholders, agency partners, and researchers."
+
   - title: 'AEDG Version 1.0'
-    date: '2013'
-    description: "The Alaska Energy Data Gateway (AEDG) was orignally developed by UAA’s Institute of Social and Economic Research (ISER) to showcase energy and socioeconomic data for Alaska."
+    date: '2010-2013'
+    description:  "Developed during ACEP’s first DOE EPSCoR project with strong leadership from ISER, the initial AEDG consisted of a remotely deployable data collection system and an integrated access portal."
