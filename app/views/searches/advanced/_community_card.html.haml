@@ -13,7 +13,7 @@
     -# BODY
     .mb-3.text-muted.small
       -# -# UTILITIES
-      -# - if community.respond_to?(:show_service_areas?) && community.show_service_areas?
+      -# - if community.respond_to?(:service_areas?) && community.service_areas?
       -#   .mb-2
       -#     %i.bi.bi-lightning-charge-fill.me-1
       -#     %strong Utilities:
@@ -25,7 +25,7 @@
       -#           %li.mb-1= sa.name
 
       -# -# POWER PLANTS 
-      -# - if community.respond_to?(:show_plants?) && community.show_plants?
+      -# - if community.respond_to?(:plants?) && community.plants?
       -#   .mb-2
       -#     %i.bi.bi-ev-station-fill.me-1
       -#     %strong Power Plants:
@@ -67,7 +67,7 @@
             = dists.join(", ")
 
       -# -# SCHOOL
-      -# - if community.respond_to?(:show_school_districts?) && community.show_school_districts?
+      -# - if community.respond_to?(:school_districts?) && community.school_districts?
       -#   .mb-2
       -#     %i.bi.bi-book.me-1
       -#     %strong School:

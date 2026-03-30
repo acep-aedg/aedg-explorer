@@ -1,15 +1,15 @@
 - tab = 'power_generation'
 - links = [ |
-  { title: 'Utilities', anchor: '#utilities', icon: 'buildings', show: @grid.show_utilities? }, |
-  { title: 'Generation', anchor: '#generation', icon: 'building-gear', show: @grid.show_generation? }, |
-  { title: 'Capacity', anchor: '#capacity', icon: 'lightning-fill', show: @grid.show_capacity? } |
+  { title: 'Utilities', anchor: '#utilities', icon: 'buildings', show: @grid.utilities? }, |
+  { title: 'Generation', anchor: '#generation', icon: 'building-gear', show: @grid.generation? }, |
+  { title: 'Capacity', anchor: '#capacity', icon: 'lightning-fill', show: @grid.capacities? } |
 ] |
 
 = turbo_frame_tag "grid_tab_content" do  
   = render 'shared/tab_nav', links: links
   
   .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
-    - if @grid.show_utilities?
+    - if @grid.utilities?
       #utilities.scroll-section.mb-5
         = render 'shared/section_header', 
           icon: 'buildings', 
@@ -19,7 +19,7 @@
   
         = render "grids/#{tab}/utilities"
 
-    - if @grid.show_generation?
+    - if @grid.generation?
       #generation.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'building-gear',
@@ -32,7 +32,7 @@
         = render "grids/#{tab}/generation/about_modal"
         = render "grids/#{tab}/generation"
         
-    - if @grid.show_capacity?
+    - if @grid.capacities?
       #capacity.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'lightning-fill',
