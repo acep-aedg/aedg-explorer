@@ -24,27 +24,35 @@ class ElectricRateWeightedAverage
   def calculate
     return fallback_average if @sales_field.nil?
 
+    weighted_sum, total_sales = calculate_totals
+
+    return fallback_average if total_sales.zero?
+
+    (weighted_sum / total_sales).round(4).nonzero?
+  end
+
+  private
+
+  def calculate_totals
     weighted_sum = 0.0
     total_weight = 0.0
 
     @records.each do |rate_record|
+      weight = sales_weight_for(rate_record)
+      next unless weight.positive?
+
       rate_val = rate_record.public_send(@rate_field).to_f
-
-      # Find sales for the matching year
-      sales_rec = rate_record.reporting_entity&.yearly_sales&.find { |s| s.year == @year }
-      weight = sales_rec&.public_send(@sales_field).to_f
-
-      if weight.positive?
-        weighted_sum += (rate_val * weight)
-        total_weight += weight
-      end
+      weighted_sum += (rate_val * weight)
+      total_weight += weight
     end
-    return fallback_average if total_weight.zero?
 
-    (weighted_sum / total_weight).round(4).nonzero?
+    [weighted_sum, total_weight]
   end
 
-  private
+  def sales_weight_for(rate_record)
+    sales_rec = rate_record.reporting_entity&.yearly_sales&.find { |s| s.year == @year }
+    sales_rec&.public_send(@sales_field).to_f
+  end
 
   def fallback_average
     values = @records.map { |r| r.public_send(@rate_field)&.to_f }.compact
