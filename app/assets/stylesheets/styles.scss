@@ -381,3 +381,11 @@
     text-decoration-style: solid;
   }
 }
+
+.btn[aria-expanded="false"] .bi-plus-circle::before {
+  content: "\F4FA";
+}
+
+.btn[aria-expanded="true"] .bi-plus-circle::before {
+  content: "\F2E6";
+}
