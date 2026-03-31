@@ -2,6 +2,7 @@ class Grid < ApplicationRecord
   include GridAttributes
   include Facetable
   include ImportFinders
+  include Displayable
   extend FriendlyId
 
   accepts_nested_attributes_for :aedg_import
@@ -32,66 +33,9 @@ class Grid < ApplicationRecord
     where("name ILIKE ?", "%#{query}%")
   end
 
-  # --- General Tab ---
-  def show_general_tab?
-    @show_general_tab ||= communities&.exists?
-  end
-
-  # --- Communities Section ---
-  def show_communities_section?
-    @show_communities_section ||= communities&.exists?
-  end
-
-  # --- Electricity Section ---
-  def show_power_generation_tab?
-    @show_power_generation_tab ||= show_generation? || show_capacity? || show_utilities?
-  end
-
-  def show_utilities?
-    @show_utilities ||= show_service_area_geoms?
-  end
-
-  def show_utility_map_layers?
-    @show_utility_map_layers ||= show_service_area_geoms? || show_service_areas?
-  end
-
-  def show_service_areas?
-    @show_service_areas ||= service_areas&.exists?
-  end
-
-  def show_service_area_geoms?
-    @show_service_area_geoms ||= service_area_geoms&.exists?
-  end
-
-  def show_capacity?
-    @show_capacity ||= capacities&.exists?
-  end
-
-  def show_generation?
-    @show_generation ||= show_monthly_generation? || show_yearly_generation?
-  end
-
-  def show_yearly_generation?
-    @show_yearly_generation ||= yearly_generations&.exists?
-  end
-
-  def show_monthly_generation?
-    @show_monthly_generation ||= monthly_generations&.exists?
-  end
-
-  def show_plants?
-    @show_plants ||= plants&.exists?
-  end
-
   def utility_names(exclude: nil)
     query = reporting_entities
     query = query.where.not(name: exclude) if exclude.present?
     query.distinct.pluck(:name)
-  end
-
-  def pce_eligible_communities?
-    return @pce_eligible_communities if defined?(@pce_eligible_communities)
-
-    @pce_eligible_communities = communities.exists?(pce_eligible: true)
   end
 end

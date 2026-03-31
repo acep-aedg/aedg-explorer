@@ -4,62 +4,64 @@
       / --- Floating controls ---
       .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
         .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
-        - if @community.show_service_areas?
+        - if @community.local_service_area?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-service-area-local{ 
               type: "checkbox", 
               data: { 
                 action: "change->maps#toggleLayer",
-                url: service_area_geoms_community_maps_path(@community), 
+                url: service_area_geom_community_maps_path(@community), 
                 fit: true
               }
             }
             %label.form-check-label.small.ms-2{ for: "layer-service-area-local" }
               %span.legend-swatch{ data: { maps_target: "swatch" } }
-              = @community.show_utility_service_area? ? "Local Service Area" : "Utility Service Area"
+              Local Service Area
 
           / Map Layer: Utility Service Area (if applicable)
-        - if @community.show_utility_service_area?
+        - if @community.service_areas?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-service-area-utility{
               type: "checkbox",
               data: {
                 action: "change->maps#toggleLayer",
-                url: service_areas_community_maps_path(@community),
+                url: service_area_community_maps_path(@community),
                 fit: true
               }
             }
             %label.form-check-label.small.ms-2{ for: "layer-service-area-utility" }
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Utility Service Area
-                
-        .form-check.d-flex.align-items-center.mb-1
-          %input.form-check-input#layer-house{ 
-            type: "checkbox", 
-            data: { 
-              action: "change->maps#toggleLayer", 
-              url: house_districts_community_maps_path(@community), 
-              fit: true 
-            } 
-          }
-          %label.form-check-label.small.ms-2{ for: "layer-house" }
-            %span.legend-swatch{ data: { maps_target: "swatch" } }
-            House Districts
+        
+        - if @community.house_districts?  
+          .form-check.d-flex.align-items-center.mb-1
+            %input.form-check-input#layer-house{ 
+              type: "checkbox", 
+              data: { 
+                action: "change->maps#toggleLayer", 
+                url: house_districts_community_maps_path(@community), 
+                fit: true 
+              } 
+            }
+            %label.form-check-label.small.ms-2{ for: "layer-house" }
+              %span.legend-swatch{ data: { maps_target: "swatch" } }
+              House Districts
 
-        .form-check.d-flex.align-items-center.mb-1
-          %input.form-check-input#layer-senate{ 
-            type: "checkbox", 
-            data: { 
-              action: "change->maps#toggleLayer", 
-              url: senate_districts_community_maps_path(@community), 
-              fit: true 
-            } 
-          }
-          %label.form-check-label.small.ms-2{ for: "layer-senate" }
-            %span.legend-swatch{ data: { maps_target: "swatch" } }
-            Senate Districts
+        - if @community.senate_districts?
+          .form-check.d-flex.align-items-center.mb-1
+            %input.form-check-input#layer-senate{ 
+              type: "checkbox", 
+              data: { 
+                action: "change->maps#toggleLayer", 
+                url: senate_districts_community_maps_path(@community), 
+                fit: true 
+              } 
+            }
+            %label.form-check-label.small.ms-2{ for: "layer-senate" }
+              %span.legend-swatch{ data: { maps_target: "swatch" } }
+              Senate Districts
 
-        - if @community.show_plants?
+        - if @community.plants?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-plants{ 
               type: "checkbox", 
@@ -73,7 +75,7 @@
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Power Plants
 
-        - if @community.show_bulk_fuel_facilities?
+        - if @community.bulk_fuel_facilities?
           .form-check.d-flex.align-items-center.mb-1
             %input.form-check-input#layer-bulk-fuel-facilities{ 
               type: "checkbox", 

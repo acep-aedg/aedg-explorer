@@ -9,7 +9,7 @@ module GridsHelper
       {
         label: "Power Generation",
         path: power_generation_grid_path(grid),
-        visible: grid.show_power_generation_tab?
+        visible: grid.power_generation?
       }
     ].select { |tab| tab[:visible] }
   end
