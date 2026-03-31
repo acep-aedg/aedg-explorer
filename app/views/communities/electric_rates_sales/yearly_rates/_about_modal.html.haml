@@ -2,22 +2,29 @@
   .d-flex.mb-4
     = render 'shared/modal/about_this_calculation' do
       %p.mb-3
-        %strong When multiple reporting entities serve a single area in a given year 
-        (such as Anchorage), we average their rates to provide a clear and readable trend. 
-        
+        %strong When multiple reporting entities serve a single area in a given year
+        (such as Anchorage), we calculate a 
+        %span.text-primary.fw-bold sales-weighted average
+        to provide a more accurate representation of the cost for most residents.
+    
       %p.mb-3
-        This approach prevents graph clutter while maintaining an accurate representation of the local energy landscape.
+        Instead of a simple midpoint, this approach weights each utility's rate by their actual sales volume (MWh). This ensures that a utility serving ~&nbsp80% of residents has an ~&nbsp80% impact on the trend line.
     
       .bg-light.p-3.border.rounded.small.mb-0
-        %span.text-dark.fw-bold For Example (2019 Anchorage Residential Rates):
+        %span.text-dark.fw-bold For Example (2017 Anchorage Residential Rates):
         %ul.list-unstyled.mb-0.mt-2
           %li 
-            Chugach Electric Assn Inc: 
-            %strong $0.21
+            Chugach Electric (505,275 MWh sold): 
+            %strong $0.20
           %li 
-            Anchorage Municipal Light and Power: 
-            %strong $0.23
+            Municipal Light & Power (127,375 MWh sold): 
+            %strong $0.21
           %li.mt-2.pt-2.border-top
-            %strong Result: 
-            (0.21 + 0.23) / 2 = 
-            %span.text-success.fw-bold $0.22 per kWh
+            %strong The Weighted Math:
+            .mt-1.text-muted
+              ((0.20 × 505,275) + (0.21 × 127,375)) / 632,650 Total MWh =
+            .mt-1
+              /%strong Result: 
+              %span.text-success.fw-bold $0.202 per kWh
+            %p.mt-1.mb-0.extra-small.text-muted
+              * A simple average would have been $0.205.
