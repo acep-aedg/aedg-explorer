@@ -1,16 +1,31 @@
 #sidebar_nav
-  -# 1. SEARCH INPUT
   .mb-3
-    = render 'searches/advanced/search_input',
-      url: search_advanced_path,
-      name: :q_global,
-      placeholder: "Search all filters...",
-      frame: "sidebar_nav_content"
+    -# Search Bar
+    .text-center
+      -# We use form_with, but we'll let Stimulus handle the 'Brain' sync
+      = form_with url: search_advanced_path, method: :get, data: { turbo_frame: "results_frame", turbo_action: "advance" }, class: "mb-3" do |f|
+        
+        -# Note: We removed the manual params loop here. 
+        -# Stimulus autoSubmitSearch will sync 'q' to the 'filter-form' automatically.
 
-  -# 2. DYNAMIC FRAME
+        .input-group
+          = f.text_field :q, value: params[:q], 
+              class: "form-control", 
+              placeholder: "Search results...", 
+              autocomplete: "off", 
+              data: { action: "input->search-panels#autoSubmitSearch" }
+          
+          - if params[:q].present?
+            = link_to search_advanced_path(params.permit!.to_h.except(:q, :page)), 
+                class: 'btn btn-outline-secondary', 
+                data: { turbo_frame: "results_frame", turbo_action: "advance" } do
+              Clear
+          
+          = f.button name: nil, class: 'btn btn-aedg-primary' do
+            %i.bi.bi-search
+
   = turbo_frame_tag "sidebar_nav_content" do
     - if params[:q_global].present?
-      -# Compact Results Container
       .global-results-list.mb-3.border-bottom.pb-2
         %p.text-uppercase.fw-bold.text-muted.mb-2{style: "font-size: 0.7rem; letter-spacing: 0.05rem;"} 
           Matches for "#{params[:q_global]}"
@@ -19,14 +34,13 @@
           - @global_search_results.each do |res|
             - param_key = res[:param_key]
             - val = res[:value].to_s
-            - selected_ids = Array(params[param_key]).map(&:to_s)
+            - selected_ids = Array(@state_params[param_key]).map(&:to_s)
             - checkbox_id = "global_#{res[:category].parameterize}_#{val}"
 
             .form-check.d-flex.align-items-start.mb-1.py-1
               = check_box_tag "#{param_key}[]", val, selected_ids.include?(val),
                   id: checkbox_id,
                   class: 'form-check-input flex-shrink-0 mt-1',
-                  form: 'filter-form',
                   data: { action: "change->search-panels#autoSubmit" }
               
               = label_tag checkbox_id, class: 'form-check-label ms-2 lh-sm' do
@@ -35,6 +49,5 @@
         - else
           .py-2.small.text-muted No matching filters.
 
-    -# 3. NAVIGATION BUTTONS (Always visible below)
     .nav-buttons-list
       = render 'searches/advanced/nav_buttons'

@@ -66,8 +66,10 @@ class Community < ApplicationRecord
                     tsearch: {
                       prefix: true,
                       tsvector_column: "tsvector_data"
+                    },
+                    trigram: {
+                      word_similarity: true
                     }
-                    # trigram: {}
                   }
 
   pg_search_scope :search_related,
@@ -83,6 +85,7 @@ class Community < ApplicationRecord
                     }
                     # trigram: {}
                   }
+
   # Handle the case where the name is not unique
   def slug_candidates
     [:name, %i[name fips_code]]
