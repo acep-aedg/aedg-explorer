@@ -49,7 +49,6 @@ export default class extends Controller {
           legend: {
             position: settings.legendPosition,
             align: "center",
-            reverse: true,
             title: {
               display: true,
               text: settings.legendTitle,
@@ -60,7 +59,7 @@ export default class extends Controller {
           tooltip: {
             mode: "index",
             intersect: false,
-            reverse: true,
+            usePointStyle: true,
             callbacks: {
               label: (context) => {
                 return `${context.dataset.label}: $${context.formattedValue}/kWh`;

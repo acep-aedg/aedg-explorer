@@ -30,9 +30,10 @@ class Communities::ChartsController < ApplicationController
   end
 
   def yearly_electric_rates
-    relation = @community.yearly_electric_rates.with_rates
-    @active_fields = relation.active_fields
-    @grouped = relation.reorder(year: :asc).group_by(&:year)
+    rates = @community.yearly_electric_rates.with_rates.reorder(year: :asc)
+    @active_sectors = rates.active_fields
+    @chart_years = rates.map(&:year).uniq.sort
+    @rates_by_rep_entity = rates.group_by(&:reporting_entity_id)
   end
 
   def age_distribution
