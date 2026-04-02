@@ -1,25 +1,35 @@
-.explorer-wrapper{ data: { controller: "search-panels", action: "change->search-panels#autoSubmit" } }
-  = render 'searches/advanced/hidden_form'
+.container
+  / Back Button
+  .row.mb-3
+    .col-12
+      = link_to communities_path, class: 'text-decoration-none ms-1 icon-link icon-link-hover d-inline-flex align-items-baseline' do
+        %i.bi.bi-arrow-left.me-1
+        Back
 
-  .container-xxl.mt-3
-    .row.mb-3
-      .col-12
-        = link_to communities_path, class: 'text-decoration-none' do
-          %i.bi.bi-arrow-left.me-2
-          Back
-
-  .container-xxl.mt-4
-    .row.flex-nowrap.g-0
-      .col-auto.main_nav_sidebar.p-3
+  -# ONE controller at the top level to coordinate sidebar, panels, and form
+  .row.flex-nowrap.position-relative{ data: { controller: "search-panels" }, style: "overflow: visible !important;" }
+    
+    -# COLUMN 1: Sidebar (Updated via Turbo Stream)
+    .col-md-4.main_nav_sidebar#sidebar_column
+      #sidebar_nav_area
         %h2.fw-bold.mb-1 Community Explorer
         %p.text-muted Filter communities by specific criteria.
-        .mt-3
+        - if @active_badges&.any?
+          #active_filters_list
+            = render 'searches/advanced/active_filters'
+        #sidebar_nav   
           = render 'searches/advanced/sidebar_nav'
 
-      .col.main_results_area.ps-3
-        .panel-container
+    -# COLUMN 2: THE STAGE (Panels + Hidden Form)
+    .panel-stage
+      #search_panels_content
+        .search-container
           = render 'searches/advanced/panels'
+          -# Putting the form here ensures the controller can find the 'tracker' target
+          = render 'searches/advanced/form' 
 
-        .results-view
-          = turbo_frame_tag "results_frame" do
-            = render 'searches/advanced/results'
+    -# COLUMN 3: Results (Updated via Turbo Stream)
+    .col-md-8.main_results_area#main_content_column
+      .results-view.mt-4
+        #results_frame
+          = render 'searches/advanced/results'

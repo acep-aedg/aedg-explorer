@@ -13,5 +13,5 @@ one:
     title: 'Test Monthly Generation Dataset'
     description: 'Test Monthly Generation Dataset'
     topics:
-      - 'Test Topic'
+     - 'Test Topic'
     format: 'CSV'

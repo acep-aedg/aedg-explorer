@@ -2,61 +2,122 @@
   %h3.mb-4.fs-4 What's in this Dataset?
   .p-4.bg-light-subtle.border.rounded
     .row.row-cols-1.g-4
-
       / Description
-      .col
-        %h4.fs-6.mb-2 Description
-        %p.text-muted.mb-0= @dataset.description
+      - if @dataset.description?
+        .col
+          %h4.fs-6.mb-2 Description
+          %p.text-muted.mb-0= @dataset.description
 
       / Published
-      .col
-        %h4.fs-6.mb-2 Published
-        %p.mb-0= @dataset.publicationDate
+      - if @dataset.publication_date?
+        .col
+          %h4.fs-6.mb-2 Published
+          %p.mb-0= @dataset.publicationDate
 
       / Topics
-      - if @dataset.topic_list.any?
+      - if @dataset.topic_list?
         .col
-          %h4.fs-6.mb-2 Topic(s)
+          %h4.fs-6.mb-2 Topics
           - @dataset.topic_list.each do |topic|
-            %span.badge.bg-success.me-2.mb-1= topic
+            %span.badge.bg-success.me-2.mb-1= topic.titleize
 
       / Keywords
-      - if @dataset.keywords.any?
+      - if @dataset.keywords?
         .col
-          %h4.fs-6.mb-2 Keyword(s)
+          %h4.fs-6.mb-2 Keywords
           - @dataset.keywords.each do |tag|
-            %span.badge.bg-secondary.me-2.mb-1= tag
+            %span.badge.bg-secondary.me-2.mb-1= tag.name.titleize
 
       / Format
-      .col
-        %h4.fs-6.mb-2 Format
-        %span.badge.bg-primary.me-2.mb-1= @dataset.format
+      - if @dataset.format?
+        .col
+          %h4.fs-6.mb-2 Format
+          %span.badge.bg-primary.me-2.mb-1= @dataset.format
 
       / Licenses
-      - if @dataset.licenses.present?
+      - if @dataset.licenses?
         .col
           %h4.fs-6.mb-2.text-dark Licenses
           - @dataset.licenses.each do |license|
-            %div
-              %span.text-muted This work is licensed under 
-              = link_to license['path'], class: 'fw-semibold ms-1 text-decoration-none', target: '_blank' do 
+            - if license['path'] && license['name']
+              %span.text-muted This work is licensed under
+              = link_to license['path'], class: 'fw-semibold ms-1 text-decoration-none icon-link icon-link-hover align-items-baseline', target: '_blank' do
                 = license['name']
                 %i.bi.bi-link-45deg
 
+      / Contributors
+      - if @dataset.contributors?
+        .col
+          %h4.fs-6.mb-3.text-dark Contributors
+          .row.row-cols-1.g-3.align-items-start
+            - @dataset.contributors.each_with_index do |c, i|
+              - presenter = ContributorPresenter.new(c)
+              - obj = presenter.object
+              - has_details = c['comment'].present? || obj.present?
+      
+              .col
+                .p-3.bg-white.border.rounded.h-100
+                  / Header Row
+                  .d-flex.justify-content-between.align-items-start
+                    / Left: Name/Org & Toggle
+                    .mb-1.pe-3
+                      .fs-6.fw-semibold
+                        - title_org = [c['title'], c['organization']].select(&:present?).join(" - ")
+                        - if c['path'].present?
+                          = link_to c['path'], class: 'text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline', target: '_blank' do
+                            %span= title_org
+                            %i.bi.bi-link-45deg
+                        - else
+                          = title_org
+                      
+                      / Toggle Button
+                      - if has_details
+                        %button.btn.btn-link.btn-sm.text-decoration-none.p-0.mt-1.d-inline-flex.align-items-baseline{ type: "button", "data-bs-toggle": "collapse", "data-bs-target": "#details-#{i}", "aria-expanded": "false" }
+                          %span.me-1 View Details
+                          %i.bi.bi-plus-circle
+      
+                    / Right: Metadata (Roles/Date)
+                    .text-end.flex-shrink-0
+                      .d-flex.align-items-center.justify-content-end.flex-wrap
+                        %span.text-muted
+                          - if c['date']&.present?
+                            = c['date']
+                          - if c['date']&.present? && c['roles']&.any?
+                            %span.mx-1 &bull;
+                          - if c['roles']&.present?
+                            - c['roles']&.compact&.each do |role|
+                              %span.badge.bg-info.text-dark.ms-1= role.titleize
+      
+                  / Collapsible Section
+                  - if has_details
+                    .collapse{ id: "details-#{i}" }
+                      .mt-2.pt-2.border-top
+                        - if c['comment'].present?
+                          .text-muted.small.mb-2
+                            = simple_format(c['comment'], class: 'mb-0')
+      
+                        - if obj
+                          .p-2.bg-light.rounded-1.border-start.border-primary.border-3.small
+                            %i{ class: obj[:icon] }
+                            %strong.text-dark= "#{obj[:label]}:"
+                            - if obj[:type] == :link
+                              = link_to obj[:value], obj[:url], class: 'ms-1 text-decoration-none', target: '_blank'
+                            - else
+                              %span.text-muted.ms-1= obj[:value]
       / Sources
-      - if @dataset.sources.present?
+      - if @dataset.sources?
         .col
           %h4.fs-6.mb-3.text-dark Sources
           .row.row-cols-1.g-3
             - @dataset.sources.each do |source|
               .col
                 .p-3.bg-white.border.rounded.h-100
-                  .fs-6.fw-semibold.mb-1= source['title']
-                  .text-muted.mb-2= source['description']
-                  - if source['path'].present?
-                    .fs-6
-                    = link_to source['path'], class: 'text-decoration-none icon-link icon-link-hover align-items-baseline', target: '_blank' do
-                      %span
-                        Visit Source
+                  .fs-6.fw-semibold.mb-1
+                    - if source['path'].present? && source['title'].present?
+                      = link_to source['path'], class: 'text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline', target: '_blank' do
+                        %span= source['title']
                         %i.bi.bi-link-45deg
-                      %i.bi.bi-arrow-right
+                    - elsif source['title'].present?
+                      = source['title']
+                  - if source['description'].present?
+                    .text-muted.small= source['description']

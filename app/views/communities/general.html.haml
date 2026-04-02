@@ -1,8 +1,8 @@
 - tab = 'general'
 - links = [ |
     { title: 'Geography', anchor: '#geography', icon: 'map' }, |
-    { title: 'Transportation', anchor: '#transportation', icon: 'truck', show: @community.show_transportation? }, |
-    { title: 'Legislative Districts', anchor: '#legislative-districts', icon: 'bank', show: @community.show_legislative_districts? } |
+    { title: 'Transportation', anchor: '#transportation', icon: 'truck', show: @community.transportation? }, |
+    { title: 'Legislative Districts', anchor: '#legislative-districts', icon: 'bank', show: @community.legislative_districts? } |
   ] |
 
 = turbo_frame_tag "community_tab_content" do
@@ -21,7 +21,7 @@
 
       = render "communities/#{tab}/geography"
   
-    - if @community.show_transportation?
+    - if @community.transportation?
       #transportation.scroll-section.mb-5
         = render 'shared/section_header', 
             icon: 'car-front', 
@@ -32,7 +32,7 @@
 
         = render "communities/#{tab}/transportation"
   
-    - if @community.show_legislative_districts?
+    - if @community.legislative_districts?
       #legislative-districts.scroll-section.mb-5
         = render 'shared/section_header', 
             icon: 'map', 
