@@ -57,6 +57,8 @@ export default class extends Controller {
             },
           },
           tooltip: {
+            bodyFont: { size: 14 },
+            titleFont: { size: 14 },
             mode: "index",
             intersect: false,
             usePointStyle: true,
