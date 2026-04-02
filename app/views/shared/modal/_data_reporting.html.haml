@@ -1,6 +1,5 @@
 -# Expects variable: 'entity'
 - sources = entity.monthly_generations.pluck(:source).uniq.compact
-- entity_type = entity.model_name.element
 
 .d-flex.align-items-start
   %i.bi.bi-clipboard-data.text-warning.fs-4
@@ -12,7 +11,7 @@
         %span.badge.bg-warning.text-dark Mixed Reporting Sources
         
       %p.text-muted.mb-0
-        This #{entity_type} includes data from both 
+        Data in this section originates from both 
         %strong= sources.to_sentence
         programs, resulting in a combination of 
         %em Gross (PCE) 
@@ -22,6 +21,6 @@
         
     - else
       %p.text-muted.mb-0
-        This #{entity_type} includes data from the
+        Data in this section originates from both
         %strong= sources.first
         program.
