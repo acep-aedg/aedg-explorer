@@ -10,7 +10,7 @@ module ApplicationHelper
         children: [
           { name: "Communities", path: communities_path },
           { name: "Data Explorer", path: metadata_path },
-          { name: "Electric Grids", path: grids_path }
+          { name: "Electric Grids", path: grids_path },
         ] },
       { name: "User Guide", path: user_guide_path }
     ]

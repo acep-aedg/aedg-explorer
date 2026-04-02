@@ -3,7 +3,7 @@ module GroupedSummaries
     before_action :set_parent
     before_action :set_year, only: %i[generation_monthly capacity_yearly]
 
-    ALLOWED_GROUPS = { house_district_id: HouseDistrict, grid_id: Grid }.freeze
+    ALLOWED_GROUPS = { grid_id: Grid }.freeze
 
     def generation_monthly; end
     def generation_yearly; end
