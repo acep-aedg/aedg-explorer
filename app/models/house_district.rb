@@ -3,9 +3,6 @@ class HouseDistrict < ApplicationRecord
   include Facetable
   include Displayable
   include Searchable
-  extend FriendlyId
-
-  friendly_id :district, use: :slugged
 
   has_many :communities_house_districts, foreign_key: :house_district_district, dependent: :destroy, inverse_of: :house_district
   has_many :communities, through: :communities_house_districts
