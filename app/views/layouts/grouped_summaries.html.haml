@@ -1,4 +1,4 @@
-- content_for :title, @page_title
+- content_for :title, page_title(@parents, @parent)
 - content_for :content do
   -# Main Toolbar
   = render "shared/toolbar", 
