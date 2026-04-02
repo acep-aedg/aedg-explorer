@@ -3,7 +3,7 @@
     %h5.mb-3
       The
       %strong= @parent.name
-      = " serves #{pluralize(@parent.communities.count, 'community')}:"
+      = " includes #{pluralize(@parent.communities.count, 'community')}:"
       
   .row.g-3
     - @parent.communities.each do |c|

@@ -4,7 +4,6 @@ class GroupedSummariesController < ApplicationController
   before_action :set_parents
   before_action :set_jump_to_links, :set_map_buttons, only: %i[power_generation]
   before_action :set_nav_tab_links, only: %i[general power_generation]
-  before_action :set_page_title
 
   def index
     @search_params = search_params
@@ -31,10 +30,6 @@ class GroupedSummariesController < ApplicationController
 
   def search_params
     params.permit(:q, :letter, :page, :per_page)
-  end
-
-  def set_page_title
-    @page_title = "#{@parents.model_name.human.titleize} - #{@parent&.name}"
   end
 
   def set_map_buttons

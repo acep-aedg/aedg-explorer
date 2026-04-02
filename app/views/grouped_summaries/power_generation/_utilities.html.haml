@@ -15,7 +15,7 @@
           .mb-4
             .d-flex.align-items-center.mb-1
               %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers
-              %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Entities providing services within this grid's service area" }
+              %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Certified entities providing utility services within this region" }
             %ul.list-unstyled.mt-1
               - @parent.service_areas.distinct.each do |sa|
                 %li.d-flex.align-items-center.mb-2
@@ -30,8 +30,8 @@
         - if @parent.plants?
           .mb-4
             .d-flex.align-items-center.mb-1
-              %label.text-muted.small.text-uppercase.fw-bold.mb-0 Power Plants (#{@parent.plants.size})
-              %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Generation facilities serving this electric grid" }
+              %label.text-muted.small.text-uppercase.fw-bold.mb-0 Energy Assets (#{@parent.plants.size})
+              %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Energy assests within this region" }
             
             .row.g-2.mt-1
               - @parent.plants.in_groups(2, false).each do |plant_group|
