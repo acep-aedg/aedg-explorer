@@ -32,6 +32,11 @@ namespace :delete do
     DeleteHelpers.delete_records(YearlyElectricRate)
   end
 
+  desc "Clear monthly_electric_rates data"
+  task monthly_electric_rates: :environment do
+    DeleteHelpers.delete_records(MonthlyElectricRate)
+  end
+
   desc "Clear monthly_sales Data"
   task monthly_sales: :environment do
     DeleteHelpers.delete_records(MonthlySale)
