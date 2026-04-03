@@ -10,6 +10,14 @@ csv_dataset:
     format: 'CSV'
     topics:
       - 'Test Topic'
+    contributors:
+      - title: 'John Doe'
+        organization: 'Org 1'
+        path: 'https://example.edu/'
+        date: '2024-01-01'
+        roles:
+          - 'DataCollector'
+        comment: 'Lead investigator for this dataset.'
     schema:
       fields:
         - name: 'name'

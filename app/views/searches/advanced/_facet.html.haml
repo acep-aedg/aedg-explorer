@@ -2,49 +2,53 @@
 - frame_id  = "#{id_prefix}_frame"
 - param_key = panel[:param]
 
-= turbo_frame_tag frame_id, class: "d-flex flex-column" do
-  .p-2
-    = render 'searches/advanced/search_input',
-      url: search_advanced_path,
-      name: :"q_#{id_prefix}",
-      frame: frame_id,
-      placeholder: "Find #{panel[:title]}..."
-
-  .d-flex.ps-4
-    .flex-grow-1
+= turbo_frame_tag frame_id, class: "d-flex flex-column h-100", data: { turbo_action: "advance" }  do
+  .d-flex.ps-4.flex-grow-1.overflow-hidden
+    .flex-grow-1.overflow-auto
       - if panel[:items].any?
-        - selected_ids = Array(params[param_key]).map(&:to_s)
-
+        - selected_ids = Array(@state_params[param_key.to_s] || @state_params[param_key.to_sym]).map(&:to_s)
+        
         - panel[:items].each do |item|
           - val = item.send(panel[:lookup]).to_s
           - lbl = panel[:label_method].is_a?(Proc) ? panel[:label_method].call(item) : (item.respond_to?(panel[:label_method]) ? item.send(panel[:label_method]) : "District #{item.try(:district)}")
 
           .form-check.mb-1
-            = check_box_tag "#{param_key}[]", val, selected_ids.include?(val),
-              id: "#{id_prefix}_#{val}",
-              class: 'form-check-input',
-              form: 'filter-form'
+            = check_box_tag "#{param_key}[]", 
+                val, 
+                selected_ids.include?(val),
+                id: "#{id_prefix}_#{val}",
+                class: 'form-check-input',
+                form: 'filter-form',
+                data: { action: "change->search-panels#autoSubmit" }
             = label_tag "#{id_prefix}_#{val}", lbl, class: 'form-check-label small'
 
-        - if local_assigns[:pagy] && pagy.pages > 1
+        - if panel[:pagy] && panel[:pagy].pages > 1
           .py-2.d-flex.justify-content-center.small-pagy
-            != pagy.series_nav(:bootstrap, link_extra: "data-turbo-frame='#{frame_id}'")
-            
+            -# Pagy 43: Calling the series_nav member method
+            != panel[:pagy].series_nav(:bootstrap, link_extra: "data-turbo-frame='#{frame_id}' data-turbo-action='advance'")
 
       - else
         .text-center.py-4.small.text-muted No results found.
 
-    .facet-alphabet-nav.d-flex.flex-column.align-items-center.bg-light.border-start
-      -# RESET BUTTON: Clears the alphabetical filter for this specific panel
-      = link_to search_advanced_path(params.permit!.merge(:"alpha_#{id_prefix}" => nil, expanded: panel[:id])),
-        class: "alphabet-link fw-bold text-decoration-none text-aedg-navy mb-2",
-        title: "Reset to All",
-        data: { turbo_frame: frame_id } do
-        %i.bi.bi-arrow-clockwise{ style: "font-size: 1.1rem; -webkit-text-stroke: 0.5px;" }
+    -# ALPHABET NAV
+    .facet-alphabet-nav.d-flex.flex-column.align-items-center.bg-light.border-start.ms-2{ style: "min-width: 30px;" }
+      = button_tag type: 'button', 
+                  class: "alphabet-link btn btn-link",
+                  data: { action: "click->search-panels#setAlpha", 
+                          search_panels_letter_param: "", 
+                          search_panels_prefix_param: id_prefix } do
+        %i.bi.bi-list
 
-      -# A-Z LINKS
       - ('A'..'Z').each do |letter|
-        - is_active = params[:"alpha_#{id_prefix}"] == letter
-        = link_to letter, search_advanced_path(params.permit!.merge(:"alpha_#{id_prefix}" => letter, expanded: panel[:id])),
-          class: "alphabet-link fw-bold text-decoration-none #{'active' if is_active}",
-          data: { turbo_frame: frame_id }
+        - available = panel[:available_letters] || []
+        - is_active = @state_params["alpha_#{id_prefix}"] == letter
+
+        - if available.include?(letter)
+          = button_tag letter,
+              type: 'button',
+              class: "alphabet-link #{is_active ? 'active' : ''}",
+              data: { action: "click->search-panels#setAlpha", 
+                      search_panels_letter_param: letter,
+                      search_panels_prefix_param: id_prefix }
+        - else
+          %span.alphabet-link.text-muted= letter

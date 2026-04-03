@@ -1,5 +1,5 @@
 = turbo_frame_tag "community_tab_content" do
-  -if @community.show_income?
+  -if @community.income?
     #income.mb-5
       = render 'shared/section_header',
         icon: 'cash-coin',

@@ -7,12 +7,8 @@ export default class extends Controller {
       target: this.element.dataset.bsTarget,
       smoothScroll: true,
       rootMargin: "-20% 0px -50%", // Adjust based on how close sections are to each other
-      threshold: [0.1, 0.5, 1.0], // Adjust based on layout
+      threshold: [0, 0.1]
     });
-  }
-
-  refresh() {
-    if (this.spy) this.spy.refresh();
   }
 
   disconnect() {
