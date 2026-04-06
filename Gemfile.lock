@@ -180,7 +180,7 @@ GEM
     jbuilder (2.14.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (2.19.2)
+    json (2.19.3)
     kramdown (2.5.2)
       rexml (>= 3.4.4)
     kramdown-parser-gfm (1.1.0)
@@ -224,8 +224,9 @@ GEM
     nokogiri (1.19.2-x86_64-linux-gnu)
       racc (~> 1.4)
     ostruct (0.6.3)
-    pagy (43.2.9)
+    pagy (43.4.4)
       json
+      uri
       yaml
     parallel (1.27.0)
     parser (3.3.10.1)
@@ -442,7 +443,7 @@ DEPENDENCIES
   kramdown-parser-gfm
   minitest (~> 5.1)
   mocha
-  pagy (~> 43.2.9)
+  pagy (~> 43.4.4)
   pg (~> 1.1)
   pg_search (~> 2.3)
   puma (>= 5.0)
