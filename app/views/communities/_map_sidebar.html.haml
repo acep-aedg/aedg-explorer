@@ -4,90 +4,24 @@
       / --- Floating controls ---
       .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
         .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
-        - if @community.local_service_area?
-          .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-service-area-local{ 
-              type: "checkbox", 
-              data: { 
-                action: "change->maps#toggleLayer",
-                url: service_area_geom_community_maps_path(@community), 
-                fit: true
-              }
-            }
-            %label.form-check-label.small.ms-2{ for: "layer-service-area-local" }
-              %span.legend-swatch{ data: { maps_target: "swatch" } }
-              Local Service Area
-
-          / Map Layer: Utility Service Area (if applicable)
-        - if @community.service_areas?
-          .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-service-area-utility{
-              type: "checkbox",
-              data: {
-                action: "change->maps#toggleLayer",
-                url: service_area_community_maps_path(@community),
-                fit: true
-              }
-            }
-            %label.form-check-label.small.ms-2{ for: "layer-service-area-utility" }
-              %span.legend-swatch{ data: { maps_target: "swatch" } }
-              Utility Service Area
         
-        - if @community.house_districts?  
-          .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-house{ 
-              type: "checkbox", 
-              data: { 
-                action: "change->maps#toggleLayer", 
-                url: house_districts_community_maps_path(@community), 
-                fit: true 
-              } 
-            }
-            %label.form-check-label.small.ms-2{ for: "layer-house" }
-              %span.legend-swatch{ data: { maps_target: "swatch" } }
-              House Districts
-
-        - if @community.senate_districts?
-          .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-senate{ 
-              type: "checkbox", 
-              data: { 
-                action: "change->maps#toggleLayer", 
-                url: senate_districts_community_maps_path(@community), 
-                fit: true 
-              } 
-            }
-            %label.form-check-label.small.ms-2{ for: "layer-senate" }
-              %span.legend-swatch{ data: { maps_target: "swatch" } }
-              Senate Districts
-
-        - if @community.plants?
-          .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-plants{ 
-              type: "checkbox", 
-              data: { 
-                action: "change->maps#toggleLayer", 
-                url: plants_community_maps_path(@community), 
-                fit: true 
-              } 
-            }
-            %label.form-check-label.small.ms-2{ for: "layer-plants" }
-              %span.legend-swatch{ data: { maps_target: "swatch" } }
-              Power Plants
-
-        - if @community.bulk_fuel_facilities?
-          .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-bulk-fuel-facilities{ 
-              type: "checkbox", 
-              data: { 
-                action: "change->maps#toggleLayer", 
-                url: bulk_fuel_facilities_community_maps_path(@community), 
-                fit: true 
-              } 
-            }
-            %label.form-check-label.small.ms-2{ for: "layer-bulk-fuel-facilities" }
-              %span.legend-swatch{ data: { maps_target: "swatch" } }
-              Bulk Fuel Facilities
+        / Map Layer: Local Service Area
+        = map_layer_checkbox(id: 'service-area-local', label: 'Local Service Area', path_args: [:service_area_geom, @community, :maps]) if @community.local_service_area?
+        
+        / Map Layer: Utility Service Area
+        = map_layer_checkbox(id: 'service-area-utility', label: 'Utility Service Area', path_args: [:service_area, @community, :maps]) if @community.service_areas?
+        
+        / Map Layer: House Districts
+        = map_layer_checkbox(id: 'house', label: 'House Districts', path_args: [:house_districts, @community, :maps]) if @community.house_districts? 
+        
+        / Map Layer: Senate Districts
+        = map_layer_checkbox(id: 'senate', label: 'Senate Districts', path_args: [:senate_districts, @community, :maps]) if @community.senate_districts?
+        
+        / Map Layer: Plants
+        = map_layer_checkbox(id: 'plants', label: 'Power Plants', path_args: [:plants, @community, :maps]) if @community.plants?
+        
+        / Map Layer: Bulk Fuel Facilites
+        = map_layer_checkbox(id: 'bulk-fuel-facilities', label: 'Bulk Fuel Facilities', path_args: [:bulk_fuel_facilities, @community, :maps]) if @community.bulk_fuel_facilities?
 
     .flex-grow-1.position-relative
       .h-100{ data: { maps_target: "map" } }

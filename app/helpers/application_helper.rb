@@ -42,4 +42,15 @@ module ApplicationHelper
 
     sanitize(html, scrubber: scrubber)
   end
+
+  def map_layer_checkbox(id:, label:, path_args:)
+    content_tag(:div, class: "form-check d-flex align-items-center mb-1") do
+      concat check_box_tag("layer-#{id}", nil, false,
+                           class: "form-check-input",
+                           data: { action: "change->maps#toggleLayer", url: polymorphic_path(path_args), fit: true })
+
+      label_content = content_tag(:span, nil, class: "legend-swatch me-2", data: { maps_target: "swatch" }) + label
+      concat label_tag("layer-#{id}", label_content, class: "form-check-label small ms-2")
+    end
+  end
 end

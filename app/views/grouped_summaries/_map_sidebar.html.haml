@@ -5,47 +5,16 @@
       .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
         .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
         
-        .form-check.d-flex.align-items-center.mb-1
-          %input.form-check-input#layer-communities{
-            type: "checkbox",
-            data: {
-              action: "change->maps#toggleLayer",
-              url: polymorphic_path([:community_locations, @parent, :maps]),
-              fit: true
-            }
-          }
-          %label.form-check-label.small.ms-2{ for: "layer-communities" }
-            %span.legend-swatch{ data: { maps_target: "swatch" } }
-            Communities
-
+        / Map Layer: Communities
+        = map_layer_checkbox(id: 'communities', label: 'Communities', path_args: [:community_locations, @parent, :maps])
         / Map Layer: Utility Service Area
-        - if @parent.service_areas?
-          .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-service-area-utility{
-              type: "checkbox",
-              data: {
-                action: "change->maps#toggleLayer",
-                url: polymorphic_path([:service_areas, @parent, :maps]),
-                fit: true
-              }
-            }
-            %label.form-check-label.small.ms-2{ for: "layer-service-area-utility" }
-              %span.legend-swatch{ data: { maps_target: "swatch" } }
-              Utility Service Area(s)
-
-        - if @parent.plants?
-          .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-plants{ 
-              type: "checkbox", 
-              data: { 
-                action: "change->maps#toggleLayer", 
-                url: polymorphic_path([:plants, @parent, :maps]), 
-                fit: true 
-              } 
-            }
-            %label.form-check-label.small.ms-2{ for: "layer-plants" }
-              %span.legend-swatch{ data: { maps_target: "swatch" } }
-              Power Plants
+        = map_layer_checkbox(id: 'service-area-utility', label: 'Utility Service Area(s)', path_args: [:service_areas, @parent, :maps]) if @parent.service_areas?
+        
+        / Map Layer: Plants
+        = map_layer_checkbox(id: 'plants', label: 'Power Plants', path_args: [:plants, @parent, :maps]) if @parent.plants?
+        
+        / Map Layer: Bulk Fuel Facilities
+        /= map_layer_checkbox(id: 'bulk-fuel-facilities', label: 'Bulk Fuel Facilities', path_args: [:bulk_fuel_facilities, @parent, :maps]) if @parent.bulk_fuel_facilities?
 
         -# - if @parent.bulk_fuel_facilities?
         -#   .form-check.d-flex.align-items-center.mb-1
