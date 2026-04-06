@@ -1,0 +1,73 @@
+name: RSpec Accessibility Tests
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  rspec-accessibility:
+    continue-on-error: true
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgis://postgres:postgres@localhost:5432
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      REDIS_URL: redis://localhost:6379/0
+      
+    steps:
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config google-chrome-stable
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Install JS Dependencies & Build CSS
+        run: |
+          yarn install
+          yarn build:css
+      
+      - name: Prepare Database
+        run: bin/rails db:prepare
+
+      - name: Run Accessibility Tests
+        run: bundle exec rspec spec/system/accessibility
+      
+      - name: Upload Accessibility JSON Reports
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: accessibility-reports
+          path: ${{ github.workspace }}/tmp/axe-results/
+          if-no-files-found: warn
+
+      - name: Upload screenshots on failure
+        uses: actions/upload-artifact@v6
+        if: failure()
+        with:
+          name: rspec-accessibility-screenshots
+          path: ${{ github.workspace }}/tmp/capybara/
+          if-no-files-found: ignore
