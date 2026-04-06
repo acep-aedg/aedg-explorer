@@ -924,7 +924,8 @@ CREATE TABLE public.house_districts (
     as_of_date date,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    boundary public.geometry(Geometry,4326)
+    boundary public.geometry(Geometry,4326),
+    slug character varying
 );
 
 
@@ -1490,7 +1491,8 @@ CREATE TABLE public.senate_districts (
     as_of_date date,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    boundary public.geometry(Geometry,4326)
+    boundary public.geometry(Geometry,4326),
+    slug character varying
 );
 
 
@@ -2737,6 +2739,13 @@ CREATE UNIQUE INDEX index_house_districts_on_district ON public.house_districts 
 
 
 --
+-- Name: index_house_districts_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_house_districts_on_slug ON public.house_districts USING btree (slug);
+
+
+--
 -- Name: index_household_incomes_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2853,6 +2862,13 @@ CREATE INDEX index_senate_districts_on_boundary ON public.senate_districts USING
 --
 
 CREATE UNIQUE INDEX index_senate_districts_on_district ON public.senate_districts USING btree (district);
+
+
+--
+-- Name: index_senate_districts_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_senate_districts_on_slug ON public.senate_districts USING btree (slug);
 
 
 --
@@ -3321,6 +3337,7 @@ ALTER TABLE ONLY public.monthly_generations
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260406191044'),
 ('20260304001556'),
 ('20260303194455'),
 ('20260221003649'),

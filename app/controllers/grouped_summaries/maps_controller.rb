@@ -2,7 +2,7 @@ module GroupedSummaries
   class MapsController < ApplicationController
     before_action :set_parent
 
-    ALLOWED_GROUPS = { grid_id: Grid }.freeze
+    ALLOWED_GROUPS = { grid_id: Grid, house_district_id: HouseDistrict }.freeze
 
     def community_locations; end
     def service_areas; end

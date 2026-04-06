@@ -86,6 +86,10 @@ Rails.application.routes.draw do
     resources :grids, only: %i[index show] do
       concerns :summarizable, resource_name: :grouped_summaries
     end
+
+    resources :house_districts, only: %i[index show] do
+      concerns :summarizable, resource_name: :grouped_summaries
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -3,10 +3,12 @@ class HouseDistrict < ApplicationRecord
   include Facetable
   include Displayable
   include Searchable
+  extend FriendlyId
 
-  has_many :communities_house_districts, foreign_key: :house_district_district, dependent: :destroy, inverse_of: :house_district
+  friendly_id :district, use: :slugged
+
+  has_many :communities_house_districts, foreign_key: :house_district_district, primary_key: :district, dependent: :destroy, inverse_of: :house_district
   has_many :communities, through: :communities_house_districts
-
   has_many :reporting_entities, through: :communities
   has_many :plants, through: :communities
   has_many :service_area_geoms, through: :plants

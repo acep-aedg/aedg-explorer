@@ -13,6 +13,10 @@ class GroupedSummariesController < ApplicationController
     @parents = @parents.starts_with(@search_params[:letter]) if @search_params[:letter].present?
   end
 
+  def show
+    redirect_to polymorphic_path([:general, @parent]), status: :see_other
+  end
+
   def general; end
   def power_generation; end
 
