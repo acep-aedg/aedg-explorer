@@ -112,6 +112,10 @@ module Displayable
     yearly_sales&.with_customers&.exists?
   end
 
+  def boundary?
+    self.class.column_names.include?("boundary") && boundary.present?
+  end
+
   # --- Grouped ---
 
   def generation?

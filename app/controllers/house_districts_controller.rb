@@ -10,4 +10,8 @@ class HouseDistrictsController < GroupedSummariesController
   def set_parents
     @parents = HouseDistrict.order(:name)
   end
+  
+  def default_map_layer
+    "layer-boundary"
+  end
 end

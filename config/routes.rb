@@ -89,10 +89,18 @@ Rails.application.routes.draw do
 
     resources :house_districts, path: "house-districts", only: %i[index show] do
       concerns :summarizable, resource_name: :grouped_summaries
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
     end
 
     resources :senate_districts, path: "senate-districts", only: %i[index show] do
       concerns :summarizable, resource_name: :grouped_summaries
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
     end
   end
 

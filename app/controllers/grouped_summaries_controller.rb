@@ -32,6 +32,10 @@ class GroupedSummariesController < ApplicationController
     action_name == "index" ? "application" : "grouped_summaries"
   end
 
+  def default_map_layer
+    "layer-communities"
+  end
+
   def search_params
     params.permit(:q, :letter, :page, :per_page)
   end
@@ -48,6 +52,12 @@ class GroupedSummariesController < ApplicationController
                      when "power_generation"
                        power_generation_jump_to_links
                      end
+  end
+  
+  helper_method :default_map_layer
+  
+  def default_map_layer
+    "layer-communities"
   end
 
   def set_nav_tab_links

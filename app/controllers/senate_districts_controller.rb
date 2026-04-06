@@ -10,4 +10,8 @@ class SenateDistrictsController < GroupedSummariesController
   def set_parents
     @parents = SenateDistrict.order(:district)
   end
+
+  def default_map_layer
+    "layer-boundary"
+  end
 end
