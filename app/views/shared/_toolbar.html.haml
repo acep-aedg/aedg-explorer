@@ -5,7 +5,7 @@
         %i.bi.bi-geo-alt-fill.text-primary.fs-3{ aria: { hidden: "true" } }
         
         .d-flex.flex-column
-          %h1.fw-bold.fs-4.lh-sm.mb-0= entity.name
+          %h1.fw-bold.fs-4.lh-sm.mb-0= entity.to_s
           
           - if entity.is_a?(Community)
             .d-flex.align-items-center.flex-wrap.gap-1.text-muted.small

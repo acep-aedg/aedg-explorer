@@ -1,4 +1,4 @@
-- base_title = "#{@parent.name.titleize} Energy Profile"
+- base_title = "#{@parent.to_s.titleize} Energy Profile"
 - years          = MonthlyGeneration.available_years_for(@parent)
 - selected_year  = params[:year].presence&.to_i || years.first
 - chart_id = "monthly-prod-chart"

@@ -9,7 +9,7 @@ class GroupedSummariesController < ApplicationController
     @search_params = search_params
     @query = @search_params[:q]
     @parents = @parents.search_related(@query) if @query.present?
-    @active_letters = @parents.pluck(:name).map { |n| n[0].upcase }.uniq.sort
+    @active_letters = @parents.pluck(@parents.searchable_column).map { |n| n[0].upcase }.uniq.sort
     @parents = @parents.starts_with(@search_params[:letter]) if @search_params[:letter].present?
   end
 

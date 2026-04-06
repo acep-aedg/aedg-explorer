@@ -87,7 +87,11 @@ Rails.application.routes.draw do
       concerns :summarizable, resource_name: :grouped_summaries
     end
 
-    resources :house_districts, only: %i[index show] do
+    resources :house_districts, path: "house-districts", only: %i[index show] do
+      concerns :summarizable, resource_name: :grouped_summaries
+    end
+
+    resources :senate_districts, path: "senate-districts", only: %i[index show] do
       concerns :summarizable, resource_name: :grouped_summaries
     end
   end

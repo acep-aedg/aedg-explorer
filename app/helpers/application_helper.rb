@@ -11,7 +11,8 @@ module ApplicationHelper
           { name: "Communities", path: communities_path },
           { name: "Data Explorer", path: metadata_path },
           { name: "Electric Grids", path: grids_path },
-          { name: "House Districts", path: house_districts_path }
+          { name: "House Districts", path: house_districts_path },
+          { name: "Senate Districts", path: senate_districts_path}
         ] },
       { name: "User Guide", path: user_guide_path }
     ]
@@ -19,7 +20,7 @@ module ApplicationHelper
 
   def page_title(parents, parent = nil)
     if parent.present?
-      [parents.model_name.human.titleize, parent&.name].compact.join(" - ")
+      [parents.model_name.human.titleize, parent.to_s ].compact.join(" - ")
     else
       "#{parents.model_name.human.titleize} Explorer"
     end
