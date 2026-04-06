@@ -25,7 +25,7 @@ module GroupedSummaries
     def set_year
       @year = chart_params[:year].presence&.to_i
     end
-    
+
     def chart_params
       @chart_params ||= params.permit(
         :year,
