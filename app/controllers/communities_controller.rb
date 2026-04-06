@@ -14,7 +14,6 @@ class CommunitiesController < ApplicationController
     @active_letters = @communities.pluck(:name).map(&:first).uniq.sort
 
     @communities = @communities.starts_with(@search_params[:letter]) if @search_params[:letter].present?
-    @communities = @communities.all
   end
 
   def show
