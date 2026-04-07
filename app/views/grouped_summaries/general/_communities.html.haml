@@ -1,8 +1,10 @@
 .section-body.m-1.m-md-2.m-lg-4.mt-3
+  .mb-4
+    = render 'shared/map_buttons', buttons: @map_buttons
+
   .d-flex.align-items-start.mb-3.border-bottom.pb-2
     %h5.mb-3
-      The
-      %strong= @parent
+      %strong= "#{@parent.model_name.human.titleize} #{@parent}"
       = " includes #{pluralize(@parent.communities.count, 'community')}:"
       
   .row.g-3

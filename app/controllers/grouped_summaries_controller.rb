@@ -2,7 +2,7 @@ class GroupedSummariesController < ApplicationController
   layout :determine_layout
   before_action :set_parent, except: %i[index]
   before_action :set_parents
-  before_action :set_jump_to_links, :set_map_buttons, only: %i[power_generation]
+  before_action :set_jump_to_links, :set_map_buttons, only: %i[general power_generation]
   before_action :set_nav_tab_links, only: %i[general power_generation]
 
   def index
@@ -32,16 +32,14 @@ class GroupedSummariesController < ApplicationController
     action_name == "index" ? "application" : "grouped_summaries"
   end
 
-  def default_map_layer
-    "layer-communities"
-  end
-
   def search_params
     params.permit(:q, :letter, :page, :per_page)
   end
 
   def set_map_buttons
     @map_buttons = case action_name
+                   when "general"
+                     general_map_buttons
                    when "power_generation"
                      power_generation_map_buttons
                    end
@@ -49,13 +47,15 @@ class GroupedSummariesController < ApplicationController
 
   def set_jump_to_links
     @jump_to_links = case action_name
+                     when "general"
+                       general_jump_to_links
                      when "power_generation"
                        power_generation_jump_to_links
                      end
   end
-  
+
   helper_method :default_map_layer
-  
+
   def default_map_layer
     "layer-communities"
   end
@@ -91,6 +91,24 @@ class GroupedSummariesController < ApplicationController
         id: "layer-plants",
         visible: @parent.plants?
       }
+    ]
+  end
+
+  def general_map_buttons
+    [
+      {
+        label: "Communities",
+        url: polymorphic_path([:community_locations, @parent, :maps]),
+        icon: "people",
+        id: "layer-communities",
+        visible: @parent.communities?
+      }
+    ]
+  end
+
+  def general_jump_to_links
+    [
+      { title: "Overview", anchor: "#overview", icon: "globe", show: true }
     ]
   end
 
