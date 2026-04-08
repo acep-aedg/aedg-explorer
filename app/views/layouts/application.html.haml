@@ -4,7 +4,7 @@
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %title= content_for?(:title) ? "AEDG - #{yield(:title)}" : "AEDG - Alaska Energy Data Gateway"
     = favicon_link_tag 'favicon/favicon-light-mode.png', media: '(prefers-color-scheme: light)'
-    = favicon_link_tag 'favicon/favicon-dark-mode.png', media: '(prefers-color-scheme: dark)'   
+    = favicon_link_tag 'favicon/favicon-dark-mode.png', media: '(prefers-color-scheme: dark)'
     %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}/
     - unless Rails.env.production?
       %meta{name: "robots", content: "noindex, nofollow"}
@@ -18,8 +18,7 @@
     = render 'shared/header'
     = turbo_stream_from "import_status"
     #import-banner-container
-      - if (msg = import_status_message).present?
-        = render partial: "shared/import_banner", locals: { msg: msg }
+      = render partial: "shared/import_banner"
 
     .flex-grow-1
       = content_for?(:content) ? yield(:content) : yield

@@ -8,8 +8,9 @@ require_relative "versioning"
 namespace :import do
   desc "Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)"
   task all: %i[environment download_data] do
-    # set loading data feature on the UI when importing
-    ImportHelpers.with_import_banner do
+    msg = "Loading Data..."
+    # set loading data feature on the UI when
+    ImportHelpers.with_import_banner(msg) do
       puts "🚀 Starting full import..."
       Rake::Task["import:layer_one"].invoke
       Rake::Task["import:layer_two"].invoke

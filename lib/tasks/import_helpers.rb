@@ -1,23 +1,24 @@
 module ImportHelpers
   class << self
-    def with_import_banner
+    def with_import_banner(msg)
       status = Kredis.string "aedg:import_status"
-      msg = "Loading Data..."
+      msg = msg
       status.value = msg
-      Turbo::StreamsChannel.broadcast_update_to(
+
+      Turbo::StreamsChannel.broadcast_replace_to(
         "import_status",
         target: "import-banner-container",
-        partial: "shared/import_banner",
-        locals: { msg: msg }
+        partial: "shared/import_banner"
       )
 
       yield
     ensure
       status.del
-      Turbo::StreamsChannel.broadcast_update_to(
+      sleep 1
+      Turbo::StreamsChannel.broadcast_replace_to(
         "import_status",
         target: "import-banner-container",
-        html: ""
+        partial: "shared/import_banner"
       )
     end
 

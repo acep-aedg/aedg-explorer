@@ -37,6 +37,6 @@ module ApplicationHelper
   def import_status_message
     return nil unless defined?(Kredis)
 
-    Kredis.string("aedg:import_status").value
+    ::Kredis.string("aedg:import_status").value.presence
   end
 end

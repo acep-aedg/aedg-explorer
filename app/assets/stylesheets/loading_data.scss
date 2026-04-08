@@ -1,38 +1,56 @@
-.import-status-banner {
-  color: $aedg-navy;
-  width: 100%;
-  position: sticky;
-  top: 0;
-  display: flex;
-  flex-direction: column; // Stack text and bar
-  align-items: center;
-  overflow: hidden;
-
-  .banner-content {
-    padding: 5px;
-    font-size: 1rem;
-    display: flex;
-    gap: 8px;
-  }
-
-  .progress-track {
+// The container is what stays at the top
+#import-banner-container {
+    position: sticky;
+    top: 0;
+    z-index: 1070;
     width: 100%;
-    height: 3px;
-    position: relative;
-    overflow: hidden;
-  }
+    background-color: white; // Ensures it doesn't look messy over text
+}
 
-  .progress-bar {
-    width: 30%;
-    height: 100%;
-    background-color: $aedg-navy;
-    position: absolute;
-    left: -30%;
-    animation: slide-progress 2s infinite ease-in-out;
-  }
+.import-status-banner {
+    color: $aedg-navy;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid rgba($aedg-navy, 0.1);
+
+    .banner-content {
+        padding: 5px;
+        font-size: 1rem;
+        display: flex;
+        gap: 8px;
+    }
+
+    .progress-track {
+        width: 100%;
+        height: 3px;
+        position: relative;
+        overflow: hidden;
+        background-color: rgba($aedg-navy, 0.05);
+    }
+
+    .progress-bar {
+        width: 30%;
+        height: 100%;
+        background-color: $aedg-navy;
+        position: absolute;
+        left: -30%;
+        animation: slide-progress 2s infinite ease-in-out;
+    }
 }
 
 @keyframes slide-progress {
-  from { left: -30%; }
-  to { left: 110%; }
+    from {
+        left: -30%;
+    }
+    to {
+        left: 110%;
+    }
+}
+
+#summary-toolbar.sticky-top {
+    top: var(--banner-height, 0px) !important;
+    transition: top 0.2s ease-in-out;
 }
