@@ -13,6 +13,7 @@ export default class extends Controller {
   get responsiveSettings() {
     const isLarge = window.innerWidth >= 1024;
     return {
+      legendMaxWidth: isLarge ? "300" : "auto",
       legendPosition: isLarge ? "right" : "bottom",
       legendTitle: isLarge
         ? ["Click on a source", "to hide/show"]
@@ -47,6 +48,7 @@ export default class extends Controller {
             padding: { bottom: 10 },
           },
           legend: {
+            maxWidth: settings.legendMaxWidth,
             position: settings.legendPosition,
             align: "center",
             title: {
@@ -54,6 +56,23 @@ export default class extends Controller {
               text: settings.legendTitle,
               font: { weight: "bold" },
               padding: { top: 20, bottom: 10 },
+            },
+            labels: {
+              textAlign: "left",
+              padding: 10,
+              generateLabels: (chart) => {
+                const originalLabels = chart.constructor.defaults.plugins.legend.labels.generateLabels(chart);
+                const isSidebar = chart.options.plugins.legend.position === "right";
+
+                return originalLabels.map((label) => {
+                  if (isSidebar && label.text.includes(" - ")) {
+                    label.text = label.text
+                      .split(" - ")
+                      .map((str) => str.trim());
+                  }
+                  return label;
+                });
+              },
             },
           },
           tooltip: {
@@ -105,6 +124,7 @@ export default class extends Controller {
           ) {
             chart.options.plugins.legend.position = updated.legendPosition;
             chart.options.plugins.legend.title.text = updated.legendTitle;
+            chart.options.plugins.legend.maxWidth = updated.legendMaxWidth;
             chart.update();
           }
         },

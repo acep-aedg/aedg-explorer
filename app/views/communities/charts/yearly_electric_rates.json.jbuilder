@@ -9,6 +9,7 @@ json.cache! [@community, @rates_by_rep_entity, "v1"], expires_in: 12.hours do
     @active_sectors.each do |field|
       base_color = ChartsHelper.sector_color(field)
       display_name = field.to_s.gsub("_rate", "").titleize
+      display_name = "Blended" if display_name == "Total"
 
       @rates_by_rep_entity.each_with_index do |(_entity_id, rates), index|
         rates_by_year = rates.index_by(&:year)

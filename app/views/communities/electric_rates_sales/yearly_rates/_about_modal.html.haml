@@ -1,30 +1,29 @@
 = render 'shared/about_modal', id: 'yearlyElectricRatesAboutModal', title: 'About Yearly Electric Rates Data' do
   .d-flex.mb-4
-    = render 'shared/modal/about_this_calculation' do
+    = render 'shared/modal/about_this_calculation', title: "What is the Blended Rate?" do
       %p.mb-3
-        %strong When multiple reporting entities serve a single area in a given year
-        (such as Anchorage), we calculate a 
-        %span.text-primary.fw-bold sales-weighted average
-        to provide a more accurate representation of the cost for most residents.
-    
+        The 
+        %strong Blended Rate 
+        represents the average cost per kWh across 
+        %span.text-primary.fw-bold all consumer sectors 
+        (Residential, Commercial, Industrial, etc.). 
+      
       %p.mb-3
-        Instead of a simple midpoint, this approach weights each utility's rate by their actual sales volume (MWh). This ensures that a utility serving ~&nbsp80% of residents has an ~&nbsp80% impact on the trend line.
-    
+        This is calculated for 
+        %strong each reporting entity 
+        by dividing their total annual revenue by their total kWh sold. This provides a high-level view of the overall electric rate, regardless of individual sector rates.
+
       .bg-light.p-3.border.rounded.small.mb-0
-        %span.text-dark.fw-bold For Example (2017 Anchorage Residential Rates):
-        %ul.list-unstyled.mb-0.mt-2
-          %li 
-            Chugach Electric (505,275 MWh sold): 
-            %strong $0.20
-          %li 
-            Municipal Light & Power (127,375 MWh sold): 
-            %strong $0.21
-          %li.mt-2.pt-2.border-top
-            %strong The Weighted Math:
+        %ul.list-unstyled.mb-0
+          %li
+            .text-muted.mb-1 (Total Revenue from All Sectors) ÷ (Total kWh Sold to All Sectors) =
+            %strong Result: 
+            %span.text-primary.fw-bold Blended Rate per kWh
+          
+          %li.mt-3.pt-2.border-top
+            %span.text-dark.fw-bold Example:
             .mt-1.text-muted
-              ((0.20 × 505,275) + (0.21 × 127,375)) / 632,650 Total MWh =
+              $1,850,000 Total Revenue ÷ 10,000,000 Total kWh Sold =
             .mt-1
-              /%strong Result: 
-              %span.text-success.fw-bold $0.202 per kWh
-            %p.mt-1.mb-0.extra-small.text-muted
-              * A simple average would have been $0.205.
+              %strong Result: 
+              %span.text-primary.fw-bold $0.185 per kWh
