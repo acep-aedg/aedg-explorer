@@ -1,6 +1,7 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -367,7 +368,7 @@ CREATE TABLE public.communities (
 CREATE TABLE public.communities_house_districts (
     id bigint NOT NULL,
     community_fips_code character varying,
-    house_district_district character varying,
+    house_district_district integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -919,7 +920,7 @@ ALTER SEQUENCE public.heating_degree_days_id_seq OWNED BY public.heating_degree_
 
 CREATE TABLE public.house_districts (
     id bigint NOT NULL,
-    district character varying NOT NULL,
+    district integer NOT NULL,
     name character varying,
     as_of_date date,
     created_at timestamp(6) without time zone NOT NULL,
@@ -3311,7 +3312,7 @@ ALTER TABLE ONLY public.communities
 --
 
 ALTER TABLE ONLY public.communities_house_districts
-    ADD CONSTRAINT fk_rails_e19cffa2ca FOREIGN KEY (house_district_district) REFERENCES public.house_districts(district) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_e19cffa2ca FOREIGN KEY (house_district_district) REFERENCES public.house_districts(district);
 
 
 --
@@ -3337,6 +3338,7 @@ ALTER TABLE ONLY public.monthly_generations
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260408230311'),
 ('20260406191044'),
 ('20260304001556'),
 ('20260303194455'),

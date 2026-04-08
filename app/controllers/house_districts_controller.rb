@@ -8,7 +8,7 @@ class HouseDistrictsController < GroupedSummariesController
   end
 
   def set_parents
-    @parents = HouseDistrict.order(:name)
+    @parents = HouseDistrict.order(:district)
   end
 
   def general_map_buttons
