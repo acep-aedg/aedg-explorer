@@ -1,4 +1,4 @@
-- content_for :title, "Community - #{@community&.name}"
+- content_for :title, page_title(@communities, @community)
 - content_for :content do
   -# Main Toolbar
   = render "shared/toolbar",

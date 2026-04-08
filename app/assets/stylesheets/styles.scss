@@ -327,7 +327,7 @@
     url("landscape_pc-gwen-holdmann.jpg");
 }
 
-#grids-hero {
+#grouped-summaries-hero {
   @extend .hero-section;
   background-image:
     linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)),
@@ -380,4 +380,12 @@
     color: var(--bs-primary-border-subtle);
     text-decoration-style: solid;
   }
+}
+
+.btn[aria-expanded="false"] .bi-plus-circle::before {
+  content: "\F4FA";
+}
+
+.btn[aria-expanded="true"] .bi-plus-circle::before {
+  content: "\F2E6";
 }

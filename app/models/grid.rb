@@ -3,6 +3,7 @@ class Grid < ApplicationRecord
   include Facetable
   include ImportFinders
   include Displayable
+  include Searchable
   extend FriendlyId
 
   accepts_nested_attributes_for :aedg_import
@@ -21,16 +22,11 @@ class Grid < ApplicationRecord
 
   default_scope { order(name: :asc) }
   scope :active, -> { joins(:community_grids).merge(CommunityGrid.active).distinct }
-  scope :starts_with, ->(letter) { where("name ILIKE ?", "#{letter}%") if letter.present? }
 
   def slug_candidates
     [
       :name
     ]
-  end
-
-  def self.search_related(query)
-    where("name ILIKE ?", "%#{query}%")
   end
 
   def utility_names(exclude: nil)

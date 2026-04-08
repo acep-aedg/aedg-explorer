@@ -1,0 +1,12 @@
+- base_title = "#{@parent.name} - Generation by Energy Source"
+
+.chart-wrapper{ style: "height: 500px; width: 100%;" }
+  %canvas{ 
+    data: { 
+      controller: "yearly-generation-chart",
+      yearly_generation: {
+        chart_url_value: polymorphic_path([:generation_yearly, @parent, :charts]),
+        chart_title_value: base_title 
+      }
+    } 
+  }   
