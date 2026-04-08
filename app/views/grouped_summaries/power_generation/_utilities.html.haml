@@ -14,7 +14,7 @@
         - if @parent.service_areas?
           .mb-4
             .d-flex.align-items-center.mb-1
-              %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers
+              %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers (#{@parent.service_areas.distinct.size})
               %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Certified entities providing utility services within this region" }
             %ul.list-unstyled.mt-1
               - @parent.service_areas.distinct.each do |sa|
@@ -30,11 +30,11 @@
         - if @parent.plants?
           .mb-4
             .d-flex.align-items-center.mb-1
-              %label.text-muted.small.text-uppercase.fw-bold.mb-0 Energy Assets (#{@parent.plants.size})
+              %label.text-muted.small.text-uppercase.fw-bold.mb-0 Energy Assets (#{@parent.plants.distinct.size})
               %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Energy assests within this region" }
             
             .row.g-2.mt-1
-              - @parent.plants.in_groups(2, false).each do |plant_group|
+              - @parent.plants.distinct.in_groups(2, false).each do |plant_group|
                 .col-6
                   %ul.list-unstyled.mb-0
                     - plant_group.each do |plant|
