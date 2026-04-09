@@ -32,7 +32,7 @@
     height: 0;
     pointer-events: none;
 
-    & > * {
+    &>* {
         pointer-events: auto;
     }
 }
@@ -40,7 +40,8 @@
 .panel-stage {
     position: absolute;
     top: 0;
-    left: 33.3%; /* Aligned for col-md-4 sidebar */
+    left: 33.3%;
+    /* Aligned for col-md-4 sidebar */
     width: 0;
     height: 100%;
     overflow: visible !important;
@@ -57,9 +58,7 @@
     visibility: hidden;
     opacity: 0;
     transform: translateX(-420px);
-    transition:
-        transform 0.4s ease,
-        opacity 0.3s ease;
+    transition: transform 0.4s ease, opacity 0.3s ease;
     pointer-events: auto;
 }
 
@@ -133,15 +132,18 @@
         background-color: #ffffff;
         /* Use a very deep navy (almost black) to ensure it's bold */
         color: #001f3f !important;
-        border: 1px solid #adb5bd; /* Slightly darker border for definition */
+        border: 1px solid #adb5bd;
+        /* Slightly darker border for definition */
 
         border-radius: 50px;
         padding: 1px 9px;
 
         font-size: 0.72rem;
-        font-weight: 700; /* Heavy weight for maximum readability */
+        font-weight: 700;
+        /* Heavy weight for maximum readability */
         line-height: 1.2;
-        opacity: 1 !important; /* Force full visibility */
+        opacity: 1 !important;
+        /* Force full visibility */
 
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
         transition: all 0.1s ease;
@@ -149,7 +151,8 @@
         a {
             /* The X should also be dark navy so it doesn't look washed out */
             color: #001f3f !important;
-            opacity: 0.6; /* X is slightly softer than the text */
+            opacity: 0.6;
+            /* X is slightly softer than the text */
             text-decoration: none;
             margin-left: 6px;
             font-size: 0.9rem;
@@ -158,7 +161,8 @@
             line-height: 1;
 
             &:hover {
-                color: #dc3545 !important; /* Solid Red on hover */
+                color: #dc3545 !important;
+                /* Solid Red on hover */
                 opacity: 1;
             }
         }
@@ -173,7 +177,8 @@
 /* Polished Loading State */
 #active_filters_list[busy] {
     opacity: 0.4;
-    filter: grayscale(50%); /* Extra visual cue it's loading */
+    filter: grayscale(50%);
+    /* Extra visual cue it's loading */
 }
 
 // Results Area
@@ -210,9 +215,11 @@ turbo-frame {
     0% {
         opacity: 0.6;
     }
+
     50% {
         opacity: 0.3;
     }
+
     100% {
         opacity: 0.6;
     }
