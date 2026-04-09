@@ -1,11 +1,8 @@
 // Structural Fixes
 .row.flex-nowrap {
     display: flex;
-}
-
-.container-xxl.mt-4 > .row {
-    align-items: flex-start; /* Crucial for sticky: prevents child from stretching to parent height */
-    min-height: 100vh; /* Gives the sidebar room to stay stuck */
+    overflow: visible !important;
+    position: relative;
 }
 
 .main_nav_sidebar {
@@ -40,169 +37,183 @@
     }
 }
 
-.facet-panel {
-    display: block;
+.panel-stage {
     position: absolute;
     top: 0;
-    left: -1rem;
+    left: 33.3%; /* Aligned for col-md-4 sidebar */
+    width: 0;
+    height: 100%;
+    overflow: visible !important;
+    pointer-events: none;
+    z-index: 1050;
+}
 
-    width: 100%;
-    min-width: 250px;
-    max-width: 400px;
-
-    z-index: 2080;
-    background: white;
-    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
-    border-radius: 8px;
-
-    height: auto !important;
-    max-height: 85vh;
-    overflow-y: hidden;
-
-    opacity: 0;
+.facet-panel {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 400px;
+    display: block !important;
     visibility: hidden;
-    transform: translateX(-300px);
+    opacity: 0;
+    transform: translateX(-420px);
     transition:
-        transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
-        opacity 0.5s ease !important;
-}
-
-.facet-alphabet-nav {
-    width: 35px;
-}
-
-.alphabet-link {
-    transition: color 0.2s ease;
-    color: #6c757d;
-    cursor: pointer;
-
-    i.bi-arrow-clockwise {
-        display: inline-block;
-        transition:
-            transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-            color 0.2s ease;
-        color: #6c757d;
-        -webkit-text-stroke: 0.5px #6c757d;
-    }
-
-    // Hover and Active both use Gold
-    &:hover,
-    &.active {
-        color: $aedg-yellow !important;
-
-        i.bi-arrow-clockwise {
-            transform: rotate(-180deg);
-            color: $aedg-yellow !important;
-            -webkit-text-stroke: 0.5px $aedg-yellow;
-        }
-    }
-}
-
-.small-pagy {
-    .pagination {
-        margin-bottom: 0;
-
-        .page-item.active .page-link {
-            background-color: $aedg-navy !important;
-            border-color: $aedg-navy !important;
-            color: $aedg-yellow !important;
-        }
-
-        .page-link {
-            color: $aedg-navy;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-
-            &:hover {
-                background-color: rgba($aedg-navy, 0.1);
-            }
-        }
-    }
+        transform 0.4s ease,
+        opacity 0.3s ease;
+    pointer-events: auto;
 }
 
 .facet-panel.panel-visible {
-    visibility: visible;
-    opacity: 1;
-    transform: translateX(0);
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+}
+
+// Alphabet Navigation
+.facet-alphabet-nav {
+    width: 35px;
+    background-color: #f8f9fa;
+    border-left: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .alphabet-link {
+        // RESET BUTTON DEFAULTS
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+
+        // SIZE & ALIGNMENT
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%; // Take up full 35px width
+        height: 24px; // Fixed height for vertical consistency
+
+        // TYPOGRAPHY
+        color: $aedg-navy;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+
+        &:hover,
+        &.active {
+            color: $aedg-yellow !important;
+            transform: scale(1.2);
+        }
+
+        &.text-muted {
+            opacity: 0.3;
+            pointer-events: none;
+            cursor: default;
+        }
+
+        // Specific fix for the Bootstrap Icon in the list button
+        i.bi-list {
+            font-size: 1rem;
+        }
+    }
+}
+
+//  Active Filters & Badges
+#active_filters_list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    padding: 8px 0;
+
+    .badge-wrapper {
+        display: inline-flex;
+        align-items: center;
+
+        background-color: #ffffff;
+        /* Use a very deep navy (almost black) to ensure it's bold */
+        color: #001f3f !important;
+        border: 1px solid #adb5bd; /* Slightly darker border for definition */
+
+        border-radius: 50px;
+        padding: 1px 9px;
+
+        font-size: 0.72rem;
+        font-weight: 700; /* Heavy weight for maximum readability */
+        line-height: 1.2;
+        opacity: 1 !important; /* Force full visibility */
+
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+        transition: all 0.1s ease;
+
+        a {
+            /* The X should also be dark navy so it doesn't look washed out */
+            color: #001f3f !important;
+            opacity: 0.6; /* X is slightly softer than the text */
+            text-decoration: none;
+            margin-left: 6px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            line-height: 1;
+
+            &:hover {
+                color: #dc3545 !important; /* Solid Red on hover */
+                opacity: 1;
+            }
+        }
+
+        &:hover {
+            border-color: #001f3f;
+            background-color: #f8f9fa;
+        }
+    }
+}
+
+/* Polished Loading State */
+#active_filters_list[busy] {
+    opacity: 0.4;
+    filter: grayscale(50%); /* Extra visual cue it's loading */
 }
 
 // Results Area
 .main_results_area {
     flex: 1;
     min-width: 0;
+    padding: 2rem;
 }
 
-.results-view {
-    position: relative;
+#results_frame {
+    min-height: 800px;
+    transition: opacity 0.2s ease-in-out;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: opacity;
+
+    &[busy] {
+        animation: pulse 1.5s infinite ease-in-out;
+    }
 }
 
-#sidebar_content_frame {
+/* Prevents the 'flash of white' */
+turbo-frame {
     display: block;
-    min-height: 200px; /* Prevents the layout from jumping when results load */
+    min-height: 1px;
 }
 
-.list-group-item-action:hover {
-    color: #002d56; /* Brand Blue */
+/* Cursor loading state */
+.main_nav_sidebar:has(~ .main_results_area turbo-frame[busy]) {
+    cursor: wait;
 }
 
-/* The container stays still */
-.active-filters-shelf.full-width-shelf {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: -85px;
-    margin-bottom: 1vh;
-    padding-bottom: 1vh;
-    padding-left: 1vh;
-    background-color: white;
-    border: 2px solid rgba($aedg-navy, 0.1);
-    border-radius: 12px;
-}
-
-.badge-wrapper {
-    background-color: $aedg-navy;
-    display: inline-flex;
-    align-items: center;
-    border: 1px solid darken($aedg-navy, 5%);
-    border-radius: 6px;
-    padding: 4px 10px;
-    transform-origin: center;
-    transition: all 0.2s ease;
-    animation: badgePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-
-    a {
-        text-decoration: none;
-        color: $aedg-yellow;
-        font-size: 0.85rem;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-
-        .text-muted {
-            // Make the "Search:" label a lighter gold so it doesn't compete
-            color: rgba($aedg-yellow, 0.7) !important;
-        }
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
     }
-
-    i.bi-x-lg {
-        color: $aedg-yellow;
+    50% {
+        opacity: 0.3;
     }
-
-    &:hover {
-        i.bi-x-lg {
-            transform: scale(1.5);
-            font-weight: 900 !important;
-            /* The "Secret Sauce" for extra thickness */
-            -webkit-text-stroke: 1px $aedg-yellow;
-            /* Optional: smoothing for the stroke */
-            -webkit-font-smoothing: antialiased;
-        }
+    100% {
+        opacity: 0.6;
     }
-}
-
-/* Ensure the title doesn't move when row wraps */
-.w-100.text-center {
-    flex: 0 0 100%; /* Force title to take up its own row */
 }
