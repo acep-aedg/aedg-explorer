@@ -2,7 +2,7 @@
 .row.flex-nowrap {
     display: flex;
     overflow: visible !important;
-    position: relative;
+    position: relative; 
 }
 
 .main_nav_sidebar {
@@ -10,43 +10,23 @@
     min-width: 260px;
     max-width: 500px;
     flex: 0 0 auto;
-
-    // Update this to use the variable
     position: sticky;
     top: var(--banner-height, 0px);
-
-    // This ensures it sits behind the banner but stays sticky
     z-index: 1000;
-
     max-height: 100vh;
     align-self: flex-start;
     border-right: 1px solid #dee2e6;
 }
 
-/* The Panel Stage */
-.panel-container {
+.panel-stage {
     position: sticky;
     top: var(--banner-height, 0px);
-    z-index: 2100;
-    overflow: visible !important;
-    height: 0;
-    pointer-events: none;
-
-    &>* {
-        pointer-events: auto;
-    }
-}
-
-.panel-stage {
-    position: absolute;
-    top: 0;
-    left: 33.3%;
-    /* Aligned for col-md-4 sidebar */
+    left: 33.3%; /* Aligned for col-md-4 sidebar */
     width: 0;
     height: 100%;
     overflow: visible !important;
     pointer-events: none;
-    z-index: 1050;
+    z-index: 1000;
 }
 
 .facet-panel {
@@ -83,14 +63,14 @@
         border: none;
         padding: 0;
         margin: 0;
-
+        
         // SIZE & ALIGNMENT
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 100%; // Take up full 35px width
-        height: 24px; // Fixed height for vertical consistency
-
+        width: 100%;       // Take up full 35px width
+        height: 24px;      // Fixed height for vertical consistency
+        
         // TYPOGRAPHY
         color: $aedg-navy;
         font-size: 0.85rem;
@@ -98,22 +78,21 @@
         text-decoration: none;
         transition: all 0.2s ease;
         cursor: pointer;
-
-        &:hover,
-        &.active {
-            color: $aedg-yellow !important;
-            transform: scale(1.2);
+        
+        &:hover, &.active {
+        color: $aedg-yellow !important;
+        transform: scale(1.2);
         }
-
+        
         &.text-muted {
-            opacity: 0.3;
-            pointer-events: none;
-            cursor: default;
+        opacity: 0.3;
+        pointer-events: none;
+        cursor: default;
         }
 
         // Specific fix for the Bootstrap Icon in the list button
         i.bi-list {
-            font-size: 1rem;
+        font-size: 1rem;
         }
     }
 }
@@ -121,64 +100,58 @@
 //  Active Filters & Badges
 #active_filters_list {
     display: flex;
-    flex-wrap: wrap;
-    gap: 3px;
+    flex-wrap: wrap;     
+    gap: 3px;            
     padding: 8px 0;
 
     .badge-wrapper {
         display: inline-flex;
-        align-items: center;
-
+        align-items: center; 
+        
         background-color: #ffffff;
         /* Use a very deep navy (almost black) to ensure it's bold */
-        color: #001f3f !important;
-        border: 1px solid #adb5bd;
-        /* Slightly darker border for definition */
-
-        border-radius: 50px;
-        padding: 1px 9px;
-
-        font-size: 0.72rem;
-        font-weight: 700;
-        /* Heavy weight for maximum readability */
+        color: #001f3f !important; 
+        border: 1px solid #adb5bd; /* Slightly darker border for definition */
+        
+        border-radius: 50px; 
+        padding: 1px 9px;      
+        
+        font-size: 0.72rem;    
+        font-weight: 700;      /* Heavy weight for maximum readability */
         line-height: 1.2;
-        opacity: 1 !important;
-        /* Force full visibility */
-
+        opacity: 1 !important; /* Force full visibility */
+        
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
         transition: all 0.1s ease;
 
         a {
-            /* The X should also be dark navy so it doesn't look washed out */
-            color: #001f3f !important;
-            opacity: 0.6;
-            /* X is slightly softer than the text */
-            text-decoration: none;
-            margin-left: 6px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            line-height: 1;
-
-            &:hover {
-                color: #dc3545 !important;
-                /* Solid Red on hover */
-                opacity: 1;
-            }
+        /* The X should also be dark navy so it doesn't look washed out */
+        color: #001f3f !important;
+        opacity: 0.6;  /* X is slightly softer than the text */
+        text-decoration: none;
+        margin-left: 6px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        line-height: 1;
+        
+        &:hover {
+            color: #dc3545 !important; /* Solid Red on hover */
+            opacity: 1;
+        }
         }
 
         &:hover {
-            border-color: #001f3f;
-            background-color: #f8f9fa;
+        border-color: #001f3f;
+        background-color: #f8f9fa;
         }
     }
 }
 
 /* Polished Loading State */
-#active_filters_list[busy] {
+#active_filters_list[busy] { 
     opacity: 0.4;
-    filter: grayscale(50%);
-    /* Extra visual cue it's loading */
+    filter: grayscale(50%);  /* Extra visual cue it's loading */
 }
 
 // Results Area
@@ -192,7 +165,7 @@
     min-height: 800px;
     transition: opacity 0.2s ease-in-out;
     backface-visibility: hidden;
-    transform: translateZ(0);
+    transform: translateZ(0); 
     will-change: opacity;
 
     &[busy] {

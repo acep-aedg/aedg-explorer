@@ -13,7 +13,6 @@ module ImportHelpers
       yield
     ensure
       status.del
-      sleep 1
       Turbo::StreamsChannel.broadcast_replace_to(
         "import_status",
         target: "import-banner-container",
