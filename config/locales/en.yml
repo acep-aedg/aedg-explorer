@@ -29,3 +29,6 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    models:
+      grid: "Electric Grid"

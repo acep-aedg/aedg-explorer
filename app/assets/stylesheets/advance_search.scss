@@ -1,3 +1,4 @@
+// Structural Fixes
 .row.flex-nowrap {
     display: flex;
 }
@@ -39,7 +40,6 @@
     }
 }
 
-/* The Sliding Panel */
 .facet-panel {
     display: block;
     position: absolute;
@@ -128,6 +128,7 @@
     border-bottom-left-radius: 0;
 }
 
+// Results Area
 .main_results_area {
     flex: 1;
     min-width: 0;

@@ -1,0 +1,23 @@
+- content_for :title, page_title(@parents, @parent)
+- content_for :content do
+  -# Main Toolbar
+  = render "shared/toolbar", 
+    entity: @parent,
+    collection: @parents,
+    tabs: @nav_tab_links,
+    target_frame: "tab_content"
+
+  -# Wrap Entire Page with Mapbox API data
+  .row.gx-0{ data: mapbox_api_data({maps_default_layer_id_value: "layer-communities"})
+  }
+    -# Sidebar with Map
+    .col-md-4.d-none.d-lg-block
+      = render 'grouped_summaries/map_sidebar'
+
+    -# Main Content Area
+    .col-md-12.col-lg-8
+      = turbo_frame_tag "tab_content", data: { controller: "scroll", 
+                                  action: "turbo:frame-render->scroll#scrollToTop" } do
+        = yield
+
+= render template: "layouts/application"

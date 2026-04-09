@@ -16,6 +16,14 @@ module ApplicationHelper
     ]
   end
 
+  def page_title(parents, parent = nil)
+    if parent.present?
+      [parents.model_name.human.titleize, parent&.name].compact.join(" - ")
+    else
+      "#{parents.model_name.human.titleize} Explorer"
+    end
+  end
+
   def mapbox_api_data(data)
     data["controller"] ||= "maps"
     data["maps_token_value"] ||= Rails.application.credentials.mapbox_api_token

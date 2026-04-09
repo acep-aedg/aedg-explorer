@@ -1,0 +1,65 @@
+.d-flex.flex-column.position-sticky{ style: "top: 60px; height: calc(100vh - 60px);" }
+  .flex-grow-1.d-flex.flex-column#mapbox-area
+    .d-flex.align-items-center
+      / --- Floating controls ---
+      .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
+        .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
+        
+        .form-check.d-flex.align-items-center.mb-1
+          %input.form-check-input#layer-communities{
+            type: "checkbox",
+            data: {
+              action: "change->maps#toggleLayer",
+              url: polymorphic_path([:community_locations, @parent, :maps]),
+              fit: true
+            }
+          }
+          %label.form-check-label.small.ms-2{ for: "layer-communities" }
+            %span.legend-swatch{ data: { maps_target: "swatch" } }
+            Communities
+
+        / Map Layer: Utility Service Area
+        - if @parent.service_areas?
+          .form-check.d-flex.align-items-center.mb-1
+            %input.form-check-input#layer-service-area-utility{
+              type: "checkbox",
+              data: {
+                action: "change->maps#toggleLayer",
+                url: polymorphic_path([:service_areas, @parent, :maps]),
+                fit: true
+              }
+            }
+            %label.form-check-label.small.ms-2{ for: "layer-service-area-utility" }
+              %span.legend-swatch{ data: { maps_target: "swatch" } }
+              Utility Service Area(s)
+
+        - if @parent.plants?
+          .form-check.d-flex.align-items-center.mb-1
+            %input.form-check-input#layer-plants{ 
+              type: "checkbox", 
+              data: { 
+                action: "change->maps#toggleLayer", 
+                url: polymorphic_path([:plants, @parent, :maps]), 
+                fit: true 
+              } 
+            }
+            %label.form-check-label.small.ms-2{ for: "layer-plants" }
+              %span.legend-swatch{ data: { maps_target: "swatch" } }
+              Power Plants
+
+        -# - if @parent.bulk_fuel_facilities?
+        -#   .form-check.d-flex.align-items-center.mb-1
+        -#     %input.form-check-input#layer-bulk-fuel-facilities{ 
+        -#       type: "checkbox", 
+        -#       data: { 
+        -#         action: "change->maps#toggleLayer", 
+        -#         url: polymorphic_path([:bulk_fuel_facilities, @parent, :maps]), 
+        -#         fit: true 
+        -#       } 
+        -#     }
+        -#     %label.form-check-label.small.ms-2{ for: "layer-bulk-fuel-facilities" }
+        -#       %span.legend-swatch{ data: { maps_target: "swatch" } }
+        -#       Bulk Fuel Facilities
+
+    .flex-grow-1.position-relative
+      .h-100{ data: { maps_target: "map" } }
