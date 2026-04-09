@@ -2,7 +2,6 @@ module ImportHelpers
   class << self
     def with_import_banner(msg)
       status = Kredis.string "aedg:import_status"
-      msg = msg
       status.value = msg
 
       Turbo::StreamsChannel.broadcast_replace_to(
