@@ -5,21 +5,21 @@
       label: service_area_label, |
       url: service_area_geom_community_maps_path(@community), |
       icon: 'bounding-box', |
-      id: 'layer-service-area-local', |
+      id: 'service-area-geom', |
       visible: @community.local_service_area? |
     }, |
     { |
       label: "Utility Service Area", |
       url: service_area_community_maps_path(@community), |
       icon: 'bounding-box', |
-      id: 'layer-service-area-utility', |
+      id: 'service-area', |
       visible: @community.service_areas? |
     }, |
     { |
       label: "Power Plants", |
       url: plants_community_maps_path(@community), |
       icon: 'building', |
-      id: 'layer-plants', |
+      id: 'plants-points', |
       visible: @community.plants? |
     } |
   ] |

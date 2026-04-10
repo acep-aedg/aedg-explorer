@@ -58,13 +58,13 @@ Add this to where the map is being initialized (ex. `show.html.haml`) to add a d
 
 ### Configure Map Layer Colors
 
-Add the map `layer-id` and `color` to the `LAYER_COLORS` object in `javascript/maps/config.js`, this will ensure that any layer with the `layer-id` regardless of where it is added to the map will be displayed with consistent colors.
+Add the map `layer-id` (which is the slug url name) and `color` to the `LAYER_COLORS` object in `javascript/maps/config.js`, this will ensure that any layer with the `layer-id` regardless of where it is added to the map will be displayed with consistent colors.
 
 ```js
 export const LAYER_COLORS = {
   "layer-communities": "#75ba75",
-  "layer-plants": "#088",
-  "layer-senate": "#fec76f",
+  "plants-points": "#088",
+  "senate-districts": "#fec76f",
   "layer-id": "#newcolor"
 };
 
@@ -78,7 +78,7 @@ To override or pass in custom colors pass in the `color` and or `outline_color`,
     action: "click->maps#showLayer",
     url: plants_community_maps_path(@community),
     fit: true,
-    checkbox_id: "layer-plants", # toggles checkbox in map panel, ensure checkbox exists
+    checkbox_id: "plants-points", # toggles checkbox in map panel, ensure checkbox exists
     color: "#FF0000",
     outline_color: "#ffffff"
   }
@@ -90,7 +90,7 @@ If no `outline_color` is passed in, the outline color will be a darkened version
 ```haml
 %button.btn.btn-sm.btn-outline-secondary.d-inline-flex.align-items-center.gap-1{
   data: {
-    action: "click->maps#showLayer",
+    action: "click->maps#toggleLayer",
     url: plants_community_maps_path(@community),
     fit: true,
     checkbox_id: "layer-id", # toggles checkbox in map panel, ensure checkbox exists

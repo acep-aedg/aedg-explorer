@@ -10,14 +10,13 @@
     .d-flex.flex-wrap.gap-2
       - visible_buttons.each do |btn|
         %button.btn.btn-outline-primary.rounded-3.d-inline-flex.align-items-center.gap-2{
+          id: "btn-#{btn[:id]}", # Unique ID for the button itself
           data: { 
-            action: "click->maps#showLayer",
+            action: "click->maps#toggleLayer",
             url: btn[:url],
             fit: true,
-            checkbox_id: btn[:id],
-            turbo: btn[:turbo] || false
+            checkbox_id: btn[:id] 
           }
         }
           %i{ class: "bi bi-#{btn[:icon]}" }
           %span.fw-semibold= btn[:label]
-          
