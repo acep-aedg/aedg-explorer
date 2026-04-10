@@ -1,9 +1,11 @@
 import { fetchGeoJSON } from '../fetch.js'
 import { addPolygonLayers } from './polygon.js'
 import { addPointLayer } from './points.js'
-import { attachPopup } from '../popup.js'
+import { attachPopup, detachPopup } from '../popup.js'
 
-// Add a GeoJSON source or update its data if the source already exists
+/**
+ * Add a GeoJSON source or update its data if the source already exists.
+ */
 export function addSource(map, id, data) {
   const src = map.getSource(id)
   if (src) {
@@ -14,19 +16,33 @@ export function addSource(map, id, data) {
   return true
 }
 
-// Remove all layers that use a source, then remove the source (skip "marker:")
+/**
+ * Remove all layers that use a specific source, then remove the source itself.
+ * This now properly detaches popup listeners to prevent errors when clicking.
+ */
 export function removeSourceLayers(map, sourceId) {
   if (sourceId.startsWith('marker:')) return
+  
   const style = map.getStyle?.()
   if (style?.layers) {
     for (const layer of [...style.layers]) {
-      if (layer.source === sourceId && map.getLayer(layer.id)) map.removeLayer(layer.id)
+      if (layer.source === sourceId && map.getLayer(layer.id)) {
+        // Unregister the layer from our popup management system
+        detachPopup(layer.id)
+        // Remove the layer from the map
+        map.removeLayer(layer.id)
+      }
     }
   }
-  if (map.getSource(sourceId)) map.removeSource(sourceId)
+  
+  if (map.getSource(sourceId)) {
+    map.removeSource(sourceId)
+  }
 }
 
-// Fetch GeoJSON by URL, add as a source, then add polygon/point layers accordingly
+/**
+ * Main entry point to fetch and load a layer from a URL.
+ */
 export async function loadLayer(map, url, { color, outlineColor } = {}) {
   if (!map.isStyleLoaded()) await new Promise((r) => map.once('load', r))
   const fc = await fetchGeoJSON(url)
@@ -35,7 +51,9 @@ export async function loadLayer(map, url, { color, outlineColor } = {}) {
   return addLayersForFC(map, sourceId, fc, { color, outlineColor })
 }
 
-// Add a simple circle layer for point features from an inline FeatureCollection
+/**
+ * Specifically adds a circle layer for marker-style point features.
+ */
 export async function loadMarkerLayer(
   map,
   sourceId,
@@ -60,30 +78,43 @@ export async function loadMarkerLayer(
       }
     })
   }
+  
+  // Attach popup to markers too
+  attachPopup(map, layerId)
+  
   return { fc, sourceId, layerIds: [layerId] }
 }
 
-// Internal helper to add polygon or point layers based on first feature’s geometry type
-// maps/layers/index.js snippet
-// Internal helper to add polygon or point layers
+/**
+ * Internal helper to add polygon or point layers based on geometry.
+ * Uses 'polygon-anchor' (defined in Stimulus controller) to maintain stacking.
+ */
 function addLayersForFC(map, sourceId, fc, { color, outlineColor } = {}) {
   const type = fc?.features?.[0]?.geometry?.type || ''
   let layerIds = []
 
   if (/Polygon/i.test(type)) {
-    layerIds = addPolygonLayers(map, sourceId, { color, outlineColor })
+    /**
+     * Mapbox Way: We insert polygons BEFORE the anchor layer.
+     * This ensures points (added without a beforeId) stay on top.
+     */
+    const beforeId = map.getLayer('polygon-anchor') ? 'polygon-anchor' : undefined
+    layerIds = addPolygonLayers(map, sourceId, { color, outlineColor, beforeId })
   } else {
+    // Points are added to the very top by default
     const id = addPointLayer(map, sourceId, { color, outlineColor })
     if (id) layerIds.push(id)
   }
 
-  // Attach the simple hover popup
+  // Register these layers with our global click handler
   layerIds.forEach(id => attachPopup(map, id))
 
   return { fc, sourceId, layerIds }
 }
 
-// Build a deterministic source id from a URL path (replace non-word chars with ':')
+/**
+ * Generates a clean source ID from a URL.
+ */
 export function sourceIdFrom(url) {
   return new URL(url, window.location.origin).pathname.replace(/[^\w-]/g, ':')
 }
