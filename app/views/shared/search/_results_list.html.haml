@@ -4,9 +4,9 @@
     %p.lead.text-secondary= "No #{collection.model_name.human.titleize.pluralize} found matching your search."
 
 - else
-  .row.g-2
+  .row.g-3
     - collection.each do |i|
       .col-6.col-sm-4.col-lg-2
         = link_to i.to_s, polymorphic_path(i),
-          class: "btn btn-light border w-100 h-100 shadow-sm d-flex align-items-center justify-content-center text-wrap",
+          class: "btn btn-light border w-100 h-100 shadow-sm d-flex align-items-center justify-content-center text-wrap p-2 text-break",
           data: { turbo_frame: '_top' }
