@@ -11,8 +11,7 @@ module ApplicationHelper
           { name: "Communities", path: communities_path },
           { name: "Data Explorer", path: metadata_path },
           { name: "Electric Grids", path: grids_path },
-          { name: "House Districts", path: house_districts_path },
-          { name: "Senate Districts", path: senate_districts_path }
+          { name: "View More", path: explore_all_path }
         ] },
       { name: "User Guide", path: user_guide_path }
     ]

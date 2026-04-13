@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "/robots.txt", to: "robots#index", defaults: { format: :text }
 
   scope path: "/explore" do
+    get "all", to: "static_pages#explore_all", as: :explore_all
     resources :metadata, only: %i[index show], path: "data" do
       resources :datasets, only: [] do
         get :show, on: :member, defaults: { format: :json }
