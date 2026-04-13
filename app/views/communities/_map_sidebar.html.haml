@@ -89,5 +89,22 @@
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Bulk Fuel Facilities
 
+        - if @community.borough.present?
+          .form-check.d-flex.align-items-center.mb-1
+            %input.form-check-input#boroughs{ 
+              type: "checkbox", 
+              data: { 
+                action: "change->maps#toggleLayer", 
+                url: boroughs_community_maps_path(@community), 
+                fit: true 
+              } 
+            }
+            %label.form-check-label.small.ms-2{ for: "boroughs" }
+              %span.legend-swatch{ data: { maps_target: "swatch" } }
+              - if @community.borough.is_census_area?
+                Census Area
+              - else
+                Borough
+
     .flex-grow-1.position-relative
       .h-100{ data: { maps_target: "map" } }

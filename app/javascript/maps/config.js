@@ -17,11 +17,12 @@ export const COLORS = {
 };
 
 export const LAYER_COLORS = {
-  "layer-communities":           COLORS.dark_blue,
+  "community_locations":           COLORS.dark_blue,
   "plants-points":                COLORS.orange,
   "senate-districts":                COLORS.purple,
   "house-districts":                 COLORS.light_red,
   "service-area-geom":    COLORS.dark_blue,
   "service-area":  COLORS.medium_yellow,
   "bulk-fuel-facilities-points":  COLORS.dark_green,
+  "boroughs": COLORS.dark_brown,
 };
