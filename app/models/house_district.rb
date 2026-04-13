@@ -19,7 +19,9 @@ class HouseDistrict < ApplicationRecord
                  )",
                district.id
              )
-           }
+           },
+           dependent: :nullify,
+           inverse_of: false
   has_many :plants, through: :service_area_geoms
   has_many :service_areas, through: :service_area_geoms
   has_many :capacities, through: :plants
