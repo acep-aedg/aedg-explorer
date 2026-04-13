@@ -26,9 +26,9 @@ function getLegendColorForFeature(map, feature) {
     return LAYER_COLORS[slug];
   }
 
-  // Fallback: Match "layer-communities" for the base layer
-  if (slug === "communities" || slug === "layer-communities") {
-    return LAYER_COLORS["layer-communities"];
+  // Fallback: Match "community_locations" for the base layer
+  if (slug === "communities" || slug === "community_locations") {
+    return LAYER_COLORS["community_locations"];
   }
 
   return '#333333'; 

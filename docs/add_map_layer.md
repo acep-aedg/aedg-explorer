@@ -38,7 +38,7 @@ Add this to where the map is being initialized (ex. `show.html.haml`) to add a d
 ```haml
 .row.gx-0{
   data: mapbox_api_data({
-    maps_default_layer_id_value: "layer-communities" # must match %input.form-check-input#layer-id from map legend
+    maps_default_layer_id_value: "community_locations" # must match %input.form-check-input#layer-id from map legend
   })
 }
 ```
@@ -62,7 +62,7 @@ Add the map `layer-id` (which is the slug url name) and `color` to the `LAYER_CO
 
 ```js
 export const LAYER_COLORS = {
-  "layer-communities": "#75ba75",
+  "community_locations": "#75ba75",
   "plants-points": "#088",
   "senate-districts": "#fec76f",
   "layer-id": "#newcolor"

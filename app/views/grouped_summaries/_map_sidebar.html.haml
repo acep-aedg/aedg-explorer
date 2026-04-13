@@ -6,7 +6,7 @@
         .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
         
         .form-check.d-flex.align-items-center.mb-1
-          %input.form-check-input#layer-communities{
+          %input.form-check-input#community_locations{
             type: "checkbox",
             data: {
               action: "change->maps#toggleLayer",
@@ -14,7 +14,7 @@
               fit: true
             }
           }
-          %label.form-check-label.small.ms-2{ for: "layer-communities" }
+          %label.form-check-label.small.ms-2{ for: "community_locations" }
             %span.legend-swatch{ data: { maps_target: "swatch" } }
             Communities
 
