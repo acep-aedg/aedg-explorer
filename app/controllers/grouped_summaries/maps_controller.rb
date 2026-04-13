@@ -6,6 +6,7 @@ module GroupedSummaries
 
     def community_locations; end
     def service_areas; end
+    def service_area_geoms; end
     def plants; end
 
     def boundary

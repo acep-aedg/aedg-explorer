@@ -6,22 +6,22 @@
         .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
         
         / Map Layer: Local Service Area
-        = map_layer_checkbox(id: 'service-area-local', label: 'Local Service Area', path_args: [:service_area_geom, @community, :maps]) if @community.local_service_area?
+        = map_layer_checkbox(id: 'layer-service-area-local', label: 'Local Service Area', path_args: [:service_area_geom, @community, :maps]) if @community.local_service_area?
         
         / Map Layer: Utility Service Area
-        = map_layer_checkbox(id: 'service-area-utility', label: 'Utility Service Area', path_args: [:service_area, @community, :maps]) if @community.service_areas?
+        = map_layer_checkbox(id: 'layer-service-area-utility', label: 'Utility Service Area', path_args: [:service_area, @community, :maps]) if @community.service_areas?
         
         / Map Layer: House Districts
-        = map_layer_checkbox(id: 'house', label: 'House Districts', path_args: [:house_districts, @community, :maps]) if @community.house_districts? 
+        = map_layer_checkbox(id: 'layer-house', label: 'House Districts', path_args: [:house_districts, @community, :maps]) if @community.house_districts? 
         
         / Map Layer: Senate Districts
-        = map_layer_checkbox(id: 'senate', label: 'Senate Districts', path_args: [:senate_districts, @community, :maps]) if @community.senate_districts?
+        = map_layer_checkbox(id: 'layer-senate', label: 'Senate Districts', path_args: [:senate_districts, @community, :maps]) if @community.senate_districts?
         
         / Map Layer: Plants
-        = map_layer_checkbox(id: 'plants', label: 'Power Plants', path_args: [:plants, @community, :maps]) if @community.plants?
+        = map_layer_checkbox(id: 'layer-plants', label: 'Power Plants', path_args: [:plants, @community, :maps]) if @community.plants?
         
         / Map Layer: Bulk Fuel Facilites
-        = map_layer_checkbox(id: 'bulk-fuel-facilities', label: 'Bulk Fuel Facilities', path_args: [:bulk_fuel_facilities, @community, :maps]) if @community.bulk_fuel_facilities?
+        = map_layer_checkbox(id: 'layer-bulk-fuel-facilities', label: 'Bulk Fuel Facilities', path_args: [:bulk_fuel_facilities, @community, :maps]) if @community.bulk_fuel_facilities?
 
     .flex-grow-1.position-relative
       .h-100{ data: { maps_target: "map" } }

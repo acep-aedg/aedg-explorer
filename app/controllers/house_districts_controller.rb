@@ -11,20 +11,7 @@ class HouseDistrictsController < GroupedSummariesController
     @parents = HouseDistrict.order(:district)
   end
 
-  def general_map_buttons
-    buttons = super
-    buttons + [
-      {
-        label: "District Boundary",
-        url: polymorphic_path([:boundary, @parent, :maps]),
-        icon: "bounding-box",
-        id: "layer-boundary",
-        visible: @parent.boundary?
-      }
-    ]
-  end
-
   def default_map_layer
-    "layer-boundary"
+    @parent.boundary_map_layer
   end
 end

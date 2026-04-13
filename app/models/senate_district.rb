@@ -36,6 +36,10 @@ class SenateDistrict < ApplicationRecord
     district
   end
 
+  def boundary_map_layer
+    "layer-senate"
+  end
+
   def as_geojson
     {
       type: "Feature",

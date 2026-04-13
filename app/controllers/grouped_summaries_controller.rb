@@ -103,7 +103,21 @@ class GroupedSummariesController < ApplicationController
         id: "layer-communities",
         visible: @parent.communities?
       }
-    ]
+    ] + (
+      if @parent.boundary?
+        [
+          {
+            label: "District Boundary",
+            url: polymorphic_path([:boundary, @parent, :maps]),
+            icon: "bounding-box",
+            id: @parent.boundary_map_layer,
+            visible: true
+          }
+        ]
+      else
+        []
+      end
+    )
   end
 
   def general_jump_to_links

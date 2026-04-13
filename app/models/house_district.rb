@@ -32,6 +32,10 @@ class HouseDistrict < ApplicationRecord
     "#{district} - #{name}"
   end
 
+  def boundary_map_layer
+    "layer-house"
+  end
+
   def as_geojson
     {
       type: "Feature",
