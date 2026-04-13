@@ -10,8 +10,17 @@ class HouseDistrict < ApplicationRecord
   has_many :communities_house_districts, foreign_key: :house_district_district, primary_key: :district, dependent: :destroy, inverse_of: :house_district
   has_many :communities, through: :communities_house_districts
   has_many :reporting_entities, through: :communities
-  has_many :plants, through: :communities
-  has_many :service_area_geoms, through: :plants
+  has_many :service_area_geoms,
+           lambda { |district|
+             unscope(:where).where(
+               "ST_Intersects(
+                   service_area_geoms.boundary,
+                   (SELECT boundary FROM house_districts WHERE id = ?)
+                 )",
+               district.id
+             )
+           }
+  has_many :plants, through: :service_area_geoms
   has_many :service_areas, through: :service_area_geoms
   has_many :capacities, through: :plants
   has_many :yearly_generations, through: :plants
