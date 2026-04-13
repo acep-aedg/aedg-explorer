@@ -36,6 +36,10 @@ class HouseDistrict < ApplicationRecord
     "layer-house"
   end
 
+  def long_name
+    "#{self.class.model_name.human.titleize} #{self}"
+  end
+
   def as_geojson
     {
       type: "Feature",

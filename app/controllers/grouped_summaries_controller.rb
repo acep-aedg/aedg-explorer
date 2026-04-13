@@ -89,7 +89,7 @@ class GroupedSummariesController < ApplicationController
         url: polymorphic_path([:service_area_geoms, @parent, :maps]),
         icon: "bounding-box",
         id: "layer-service-area-local",
-        visible: @parent.local_service_areas?
+        visible: @parent.local_service_area?
       },
       {
         label: "Power Plants",

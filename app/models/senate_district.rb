@@ -36,6 +36,10 @@ class SenateDistrict < ApplicationRecord
     district
   end
 
+  def long_name
+    "#{self.class.model_name.human.titleize} #{self}"
+  end
+
   def boundary_map_layer
     "layer-senate"
   end

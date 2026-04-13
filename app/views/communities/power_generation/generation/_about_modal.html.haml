@@ -1,6 +1,6 @@
 = render 'shared/about_modal', id: 'generationAboutModal', title: 'About Generation Data' do
   .d-flex.mb-4
-    = render 'shared/modal/power_generation_sources'
+    = render 'shared/modal/power_generation_sources', entity: @community
   .d-flex.mb-4
     = render 'shared/modal/service_areas'
   .d-flex.mb-4

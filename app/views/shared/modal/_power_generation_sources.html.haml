@@ -1,13 +1,20 @@
+- entity = local_assigns[:entity]
+- sa_count = entity.respond_to?(:service_areas) ? entity.service_areas.distinct.count(:cpcn_id) : 1
+- label = entity.local_service_area? ? 'local service area' : 'utility service area'
 %i.bi.bi-geo-alt.text-primary.fs-4
 .flex-grow-1.ms-3
   %h6.fw-bold.mb-1 Power Generation Sources
   %p.text-muted.mb-1
-    This section displays data from power plants within this community’s
-    %strong= @community.local_service_area? ? 'local service area.' : ' utility service area.'
+    This section displays data from energy assets within the 
+    %strong= label.pluralize(sa_count)
+    -# If count is 1, use 'serves'; otherwise use 'serve'
+    = "that #{sa_count == 1 ? 'serves' : 'serve'} this #{entity.class.model_name.human.downcase}."
     
-  - if @community.grid
-    = link_to grid_path(@community.grid, anchor: 'capacity'),
+  - if entity.respond_to?(:grid) && entity.grid
+    = link_to grid_path(entity.grid, anchor: 'capacity'),
       class: "small text-decoration-none icon-link icon-link-hover d-inline-flex align-items-baseline gap-1",
-      data: { turbo: false } do
+      target: "_blank",
+      rel: "noopener",
+      data: { turbo_frame: "_top" } do
       %span Explore Grid Data
       %i.bi.bi-arrow-right

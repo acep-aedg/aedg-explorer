@@ -116,8 +116,8 @@ module Displayable
     self.class.column_names.include?("boundary") && boundary.present?
   end
 
-  def local_service_areas?
-    @local_service_areas ||= begin
+  def local_service_area?
+    @local_service_area ||= begin
       local_ids = service_area_geoms.ids
       ServiceAreaGeom.where(service_area_cpcn_id: service_areas.select(:cpcn_id))
                      .where.not(id: local_ids)

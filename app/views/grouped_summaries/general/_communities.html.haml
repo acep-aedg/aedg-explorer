@@ -4,7 +4,7 @@
 
   .d-flex.align-items-start.mb-3.border-bottom.pb-2
     %h5.mb-3
-      %strong= "#{@parent.model_name.human.titleize} #{@parent}"
+      %strong= @parent.try(:long_name) || @parent
       = " includes #{pluralize(@parent.communities.count, 'community')}:"
       
   .row.g-3
