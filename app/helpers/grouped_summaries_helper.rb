@@ -12,4 +12,8 @@ module GroupedSummariesHelper
     name = model_collection.model_name.human.pluralize.titleize
     grouped_summaries_registry.dig(name, :icon) || "bi-grid-fill"
   end
+
+  def show_search_tools?(collection)
+    collection.size > 20 || params[:q].present?
+  end
 end
