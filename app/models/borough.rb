@@ -15,7 +15,7 @@ class Borough < ApplicationRecord
     name&.match?(/\bcensus\b/i)
   end
 
-    def as_geojson
+  def as_geojson
     {
       type: "Feature",
       geometry: RGeo::GeoJSON.encode(boundary),
