@@ -1,0 +1,10 @@
+.chart-wrapper{ style: "height: 500px; width: 100%;" }
+  %canvas{
+    data: {
+      controller: "yearly-electric-rates-chart",
+      yearly_electric_rates_chart: {
+        url_value: yearly_electric_rates_community_charts_path(@community),
+        title_value: "#{@community.name.titleize} - Average Electric Rates"
+      }
+    }
+  }

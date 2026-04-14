@@ -4,14 +4,14 @@
       %tr
         %th Report Entity
         %th Year
-        %th Residential Rate
-        %th Commercial Rate
-        %th Industrial Rate
+        - @active_yearly_rate_fields.each do |column|
+          %th= column.to_s.titleize
+        %th Source
     %tbody
-      - @community.electric_rates.each do |rate|
+      - @yearly_rates.each do |rate|
         %tr
           %td= rate.reporting_entity.name
           %td= rate.year
-          %td= rate.residential_rate
-          %td= rate.commercial_rate
-          %td= rate.industrial_rate
+          - @active_yearly_rate_fields.each do |column|
+            %td= rate.public_send(column)
+          %td= rate.source

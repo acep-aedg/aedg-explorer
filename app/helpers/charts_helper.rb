@@ -64,6 +64,7 @@ module ChartsHelper
   }.freeze
 
   SALES_SECTOR_COLOR_MAPPING = {
+    "subsidized" => :dark_purple, # This has to be before "residential"
     "residential" => :blue,
     "commercial" => :light_red,
     "industrial" => :orange,
@@ -71,7 +72,8 @@ module ChartsHelper
     "community" => :medium_yellow,
     "government" => :light_green,
     "unbilled" => :charcoal,
-    "other" => :light_grey
+    "total" => :dark_green,
+    "other" => :cyan
   }.freeze
 
   class HexColor < String
