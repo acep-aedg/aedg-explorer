@@ -27,3 +27,10 @@
             .mt-1
               %strong Result: 
               %span.text-primary.fw-bold $0.185 per kWh
+  
+  .d-flex.mb-4
+    = render 'shared/modal/about_this_calculation', title: "PCE Communities" do
+      %p.mb-3
+        = "Residential rates in PCE communities are displayed as rates paid by residential customers"
+        %strong after
+        = "PCE subsidy. PCE subsidies are capped at 750kWh per residential meter per month, over which customers are charged unsubsidized rates. Qualified community facilities (streetlights, water/sewer utilities, etc) are also eligible for PCE subsidy. While individual facilities do not have a cap, the community as whole is limited to 70 kWh per resident. For example, the community facilities in a community of 100 residents could receive the PCE subsidy for up to 7,000 kWhs each month. Other non-residential sectors, such as commercial and government (including public schools), are not covered by PCE subsidies and pay full unsubsidized rates."
