@@ -18,8 +18,10 @@
           icon: 'lightning-charge',
           title: 'Electricity Consumption',
           description: 'Total electricity sales and consumption rates by reporting entity',
-          anchor: '#consumption'
-          
+          anchor: '#consumption',
+          about_modal_id: 'salesConsumptionAboutModal' # this id must match the id in the sections about_modal partial
+        
+        = render "communities/#{tab}/yearly_sales/about_modal"
         = render "communities/#{tab}/consumption"
         
     - if @community.yearly_electricity_revenues?
@@ -28,8 +30,10 @@
           icon: 'cash-coin',
           title: 'Electricity Revenue',
           description: 'Electricity revenue by reporting entity',
-          anchor: '#revenue'
-          
+          anchor: '#revenue',
+          about_modal_id: 'salesRevenueAboutModal' # this id must match the id in the sections about_modal partial
+        
+        = render "communities/#{tab}/yearly_revenue/about_modal"
         = render "communities/#{tab}/revenue"
 
     - if @community.yearly_electricity_customers?
