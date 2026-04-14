@@ -3,7 +3,7 @@
     { title: 'Consumption', anchor: '#consumption', icon: 'lightning-charge', show: @community.yearly_electricity_sales? }, |
     { title: 'Revenue', anchor: '#revenue', icon: 'cash-coin', show: @community.yearly_electricity_revenues? }, |
     { title: 'Customers', anchor: '#customers', icon: 'people', show: @community.yearly_electricity_customers? }, |
-    { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.electric_rates? } |
+    { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.yearly_electric_rates? } |
   ] |
 
 = turbo_frame_tag "community_tab_content" do
@@ -42,13 +42,15 @@
           
         = render "communities/#{tab}/customers"
 
-    - if @community.electric_rates?
+    - if @community.yearly_electric_rates?
       #rates.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'coin',
           title: 'Rates',
           description: 'Residential, commercial, and industrial electric rate trends',
           anchor: '#rates',
-          related_metadata: ["public_rates"]
-
+          related_metadata: ["public_yearly_electric_rates", "public_monthly_electric_rates"],
+          about_modal_id: 'yearlyElectricRatesAboutModal'
+        
+        = render "communities/#{tab}/yearly_rates/about_modal"
         = render "communities/#{tab}/rates"

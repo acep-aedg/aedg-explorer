@@ -1,18 +1,19 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="electricity-consumption-chart"
+// Connects to data-controller="yearly-electric-rates-chart"
 export default class extends Controller {
   static values = { url: String, title: String };
 
   async connect() {
     const response = await fetch(this.urlValue);
-    const chartData = await response.json();
-    this.renderChart(chartData);
+    const data = await response.json();
+    this.renderChart(data);
   }
 
   get responsiveSettings() {
     const isLarge = window.innerWidth >= 1024;
     return {
+      legendMaxWidth: isLarge ? "300" : "auto",
       legendPosition: isLarge ? "right" : "bottom",
       legendTitle: isLarge
         ? ["Click on a source", "to hide/show"]
@@ -47,30 +48,48 @@ export default class extends Controller {
             padding: { bottom: 10 },
           },
           legend: {
+            maxWidth: settings.legendMaxWidth,
             position: settings.legendPosition,
             align: "center",
-            reverse: true,
             title: {
               display: true,
               text: settings.legendTitle,
               font: { weight: "bold" },
               padding: { top: 20, bottom: 10 },
             },
+            labels: {
+              textAlign: "left",
+              padding: 10,
+              generateLabels: (chart) => {
+                const originalLabels = chart.constructor.defaults.plugins.legend.labels.generateLabels(chart);
+                const isSidebar = chart.options.plugins.legend.position === "right";
+
+                return originalLabels.map((label) => {
+                  if (isSidebar && label.text.includes(" - ")) {
+                    label.text = label.text
+                      .split(" - ")
+                      .map((str) => str.trim());
+                  }
+                  return label;
+                });
+              },
+            },
           },
           tooltip: {
+            bodyFont: { size: 14 },
+            titleFont: { size: 14 },
             mode: "index",
             intersect: false,
-            reverse: true,
+            usePointStyle: true,
             callbacks: {
               label: (context) => {
-                return `${context.dataset.label}: ${context.formattedValue} MWh/Customer`;
+                return `${context.dataset.label}: $${context.formattedValue}/kWh`;
               },
             },
           },
         },
         scales: {
           x: {
-            stacked: true,
             title: {
               display: true,
               text: "Year",
@@ -80,17 +99,20 @@ export default class extends Controller {
           },
           y: {
             beginAtZero: true,
-            stacked: true,
             title: {
               display: true,
-              text: "Electricity Consumed Per Customer",
+              text: "Revenue per kWh",
               color: fontColor,
               font: { size: 16 },
             },
             ticks: {
               maxTicksLimit: 10,
               callback: (value) => {
-                return `${new Intl.NumberFormat().format(value)} MWh`;
+                const formatter = new Intl.NumberFormat("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                });
+                return `$${formatter.format(value)}`;
               },
             },
           },
@@ -102,6 +124,7 @@ export default class extends Controller {
           ) {
             chart.options.plugins.legend.position = updated.legendPosition;
             chart.options.plugins.legend.title.text = updated.legendTitle;
+            chart.options.plugins.legend.maxWidth = updated.legendMaxWidth;
             chart.update();
           }
         },

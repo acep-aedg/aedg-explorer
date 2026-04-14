@@ -639,41 +639,6 @@ ALTER SEQUENCE public.datasets_id_seq OWNED BY public.datasets.id;
 
 
 --
--- Name: electric_rates; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.electric_rates (
-    id bigint NOT NULL,
-    reporting_entity_id bigint NOT NULL,
-    year integer,
-    residential_rate numeric,
-    commercial_rate numeric,
-    industrial_rate numeric,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: electric_rates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.electric_rates_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: electric_rates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.electric_rates_id_seq OWNED BY public.electric_rates.id;
-
-
---
 -- Name: employments; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1067,6 +1032,48 @@ CREATE SEQUENCE public.metadata_id_seq
 --
 
 ALTER SEQUENCE public.metadata_id_seq OWNED BY public.metadata.id;
+
+
+--
+-- Name: monthly_electric_rates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.monthly_electric_rates (
+    id bigint NOT NULL,
+    reporting_entity_id bigint NOT NULL,
+    year integer NOT NULL,
+    month integer NOT NULL,
+    residential_rate numeric,
+    residential_rate_subsidized numeric,
+    commercial_rate numeric,
+    industrial_rate numeric,
+    transportation_rate numeric,
+    community_rate numeric,
+    other_rate numeric,
+    total_rate numeric,
+    source character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: monthly_electric_rates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.monthly_electric_rates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: monthly_electric_rates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.monthly_electric_rates_id_seq OWNED BY public.monthly_electric_rates.id;
 
 
 --
@@ -1691,6 +1698,47 @@ ALTER SEQUENCE public.transportations_id_seq OWNED BY public.transportations.id;
 
 
 --
+-- Name: yearly_electric_rates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.yearly_electric_rates (
+    id bigint NOT NULL,
+    reporting_entity_id bigint NOT NULL,
+    year integer NOT NULL,
+    residential_rate numeric,
+    residential_rate_subsidized numeric,
+    commercial_rate numeric,
+    industrial_rate numeric,
+    transportation_rate numeric,
+    community_rate numeric,
+    other_rate numeric,
+    total_rate numeric,
+    source character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: yearly_electric_rates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.yearly_electric_rates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: yearly_electric_rates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.yearly_electric_rates_id_seq OWNED BY public.yearly_electric_rates.id;
+
+
+--
 -- Name: yearly_generations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1902,13 +1950,6 @@ ALTER TABLE ONLY public.datasets ALTER COLUMN id SET DEFAULT nextval('public.dat
 
 
 --
--- Name: electric_rates id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.electric_rates ALTER COLUMN id SET DEFAULT nextval('public.electric_rates_id_seq'::regclass);
-
-
---
 -- Name: employments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1976,6 +2017,13 @@ ALTER TABLE ONLY public.income_poverties ALTER COLUMN id SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.metadata ALTER COLUMN id SET DEFAULT nextval('public.metadata_id_seq'::regclass);
+
+
+--
+-- Name: monthly_electric_rates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.monthly_electric_rates ALTER COLUMN id SET DEFAULT nextval('public.monthly_electric_rates_id_seq'::regclass);
 
 
 --
@@ -2081,6 +2129,13 @@ ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id
 --
 
 ALTER TABLE ONLY public.transportations ALTER COLUMN id SET DEFAULT nextval('public.transportations_id_seq'::regclass);
+
+
+--
+-- Name: yearly_electric_rates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yearly_electric_rates ALTER COLUMN id SET DEFAULT nextval('public.yearly_electric_rates_id_seq'::regclass);
 
 
 --
@@ -2234,14 +2289,6 @@ ALTER TABLE ONLY public.datasets
 
 
 --
--- Name: electric_rates electric_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.electric_rates
-    ADD CONSTRAINT electric_rates_pkey PRIMARY KEY (id);
-
-
---
 -- Name: employments employments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2319,6 +2366,14 @@ ALTER TABLE ONLY public.income_poverties
 
 ALTER TABLE ONLY public.metadata
     ADD CONSTRAINT metadata_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: monthly_electric_rates monthly_electric_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.monthly_electric_rates
+    ADD CONSTRAINT monthly_electric_rates_pkey PRIMARY KEY (id);
 
 
 --
@@ -2447,6 +2502,14 @@ ALTER TABLE ONLY public.tags
 
 ALTER TABLE ONLY public.transportations
     ADD CONSTRAINT transportations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: yearly_electric_rates yearly_electric_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yearly_electric_rates
+    ADD CONSTRAINT yearly_electric_rates_pkey PRIMARY KEY (id);
 
 
 --
@@ -2669,13 +2732,6 @@ CREATE INDEX index_datasets_on_metadatum_id ON public.datasets USING btree (meta
 
 
 --
--- Name: index_electric_rates_on_reporting_entity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_electric_rates_on_reporting_entity_id ON public.electric_rates USING btree (reporting_entity_id);
-
-
---
 -- Name: index_employments_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2757,6 +2813,13 @@ CREATE INDEX index_household_incomes_on_community_fips_code ON public.household_
 --
 
 CREATE INDEX index_income_poverties_on_community_fips_code ON public.income_poverties USING btree (community_fips_code);
+
+
+--
+-- Name: index_monthly_electric_rates_on_reporting_entity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_monthly_electric_rates_on_reporting_entity_id ON public.monthly_electric_rates USING btree (reporting_entity_id);
 
 
 --
@@ -2998,6 +3061,13 @@ CREATE INDEX index_transportations_on_community_fips_code ON public.transportati
 
 
 --
+-- Name: index_yearly_electric_rates_on_reporting_entity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_yearly_electric_rates_on_reporting_entity_id ON public.yearly_electric_rates USING btree (reporting_entity_id);
+
+
+--
 -- Name: index_yearly_generations_on_aea_plant_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3133,14 +3203,6 @@ ALTER TABLE ONLY public.populations
 
 ALTER TABLE ONLY public.communities_school_districts
     ADD CONSTRAINT fk_rails_437791b944 FOREIGN KEY (school_district_district) REFERENCES public.school_districts(district) ON DELETE CASCADE;
-
-
---
--- Name: electric_rates fk_rails_45b5e43dbc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.electric_rates
-    ADD CONSTRAINT fk_rails_45b5e43dbc FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
 
 
 --
@@ -3312,6 +3374,14 @@ ALTER TABLE ONLY public.generators
 
 
 --
+-- Name: yearly_electric_rates fk_rails_ccadb42f59; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yearly_electric_rates
+    ADD CONSTRAINT fk_rails_ccadb42f59 FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
+
+
+--
 -- Name: capacities fk_rails_ce150acde9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3333,6 +3403,14 @@ ALTER TABLE ONLY public.communities
 
 ALTER TABLE ONLY public.communities_house_districts
     ADD CONSTRAINT fk_rails_e19cffa2ca FOREIGN KEY (house_district_district) REFERENCES public.house_districts(district);
+
+
+--
+-- Name: monthly_electric_rates fk_rails_e8aca853c1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.monthly_electric_rates
+    ADD CONSTRAINT fk_rails_e8aca853c1 FOREIGN KEY (reporting_entity_id) REFERENCES public.reporting_entities(id);
 
 
 --
@@ -3361,6 +3439,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20260410175545'),
 ('20260408230311'),
 ('20260406191044'),
+('20260403214428'),
+('20260325171748'),
+('20260323204950'),
 ('20260304001556'),
 ('20260303194455'),
 ('20260221003649'),

@@ -11,7 +11,7 @@ one:
   commercial_rate: 0.15
   industrial_rate: 0.10
 
-two:
+two: 
   reporting_entity: two
   year: 2021
   residential_rate: 0.20

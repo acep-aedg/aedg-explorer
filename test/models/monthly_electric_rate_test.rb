@@ -1,6 +1,6 @@
 require "test_helper"
 
-class ElectricRateTest < ActiveSupport::TestCase
+class MonthlyElectricRateTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
