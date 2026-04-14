@@ -29,8 +29,38 @@
               %span.text-primary.fw-bold $0.185 per kWh
   
   .d-flex.mb-4
-    = render 'shared/modal/about_this_calculation', title: "PCE Communities" do
+    = render 'shared/modal/about_this_calculation', title: "Power Cost Equalization (PCE) Communities" do
       %p.mb-3
-        = "Residential rates in PCE communities are displayed as rates paid by residential customers"
-        %strong after
-        = "PCE subsidy. PCE subsidies are capped at 750kWh per residential meter per month, over which customers are charged unsubsidized rates. Qualified community facilities (streetlights, water/sewer utilities, etc) are also eligible for PCE subsidy. While individual facilities do not have a cap, the community as whole is limited to 70 kWh per resident. For example, the community facilities in a community of 100 residents could receive the PCE subsidy for up to 7,000 kWhs each month. Other non-residential sectors, such as commercial and government (including public schools), are not covered by PCE subsidies and pay full unsubsidized rates."
+        Residential rates in PCE communities are displayed as rates paid by residential customers 
+        %strong after 
+        PCE subsidy. 
+        
+        %p.mb-3
+          The PCE program reduces the cost of electricity in rural Alaska by subsidizing a portion of the rate for residential and qualified community facility use (streetlights, water/sewer utilities, etc.).
+    
+        .bg-light.p-3.border.rounded.small.mb-0
+          %ul.list-unstyled.mb-0
+            %li
+              %strong.text-dark Residential Cap:
+              .text-muted.mt-1
+                Subsidies apply to the first 
+                %span.text-primary.fw-bold 750 kWh 
+                per residential meter per month. Use above this cap is charged at the full unsubsidized rate.
+              
+            %li.mt-3.pt-2.border-top
+              %strong.text-dark Community Facility Cap:
+              .text-muted.mt-1
+                Total community facility subsidy is limited to 
+                %span.text-primary.fw-bold 70 kWh per resident.
+              .mt-2
+                %span.text-dark.fw-bold Example:
+                %div.mt-1
+                  100 residents × 70 kWh = 
+                  %span.text-primary.fw-bold 7,000 kWh
+                  subsidized
+    
+        %p.mt-3.mb-0.small.text-muted
+          %i.bi.bi-info-circle.me-1
+          Note: Other non-residential sectors, such as commercial and government (including public schools), are
+          %span.fw-bold not covered 
+          by PCE subsidies and pay full unsubsidized rates.
