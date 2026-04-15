@@ -1,13 +1,6 @@
 #import-banner-container
-  - if import_status_message.present?
-    :css
-      :root { --banner-height: 35px; }
-
-    .import-status-banner
-      .banner-content
-        %span= import_status_message
-      .progress-track
-        .progress-bar
-  - else
-    :css
-      :root { --banner-height: 0px; }
+  .import-status-banner
+    .banner-content
+      %span= import_status_message
+    .progress-track
+      .progress-bar

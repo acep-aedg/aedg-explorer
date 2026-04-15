@@ -1,10 +1,17 @@
-// The container is what stays at the top
 #import-banner-container {
     position: sticky;
-    top: 0;
-    z-index: 1070;
+    top: 0; // Stick to the very top of the viewport
     width: 100%;
-    background-color: white; // Ensures it doesn't look messy over text
+    z-index: 1100; // Higher than the header/toolbar (usually > 1070)
+    background: white;
+    display: block;
+
+    // The magic variable for the toolbar below it
+    --banner-height: 38px;
+}
+
+#summary-toolbar.sticky-top {
+    top: var(--banner-height, 0px) !important;
 }
 
 .import-status-banner {
@@ -45,11 +52,8 @@
     from {
         left: -30%;
     }
+
     to {
         left: 110%;
     }
-}
-
-#summary-toolbar.sticky-top {
-    top: var(--banner-height, 0px) !important;
 }

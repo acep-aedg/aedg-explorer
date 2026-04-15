@@ -17,7 +17,7 @@
   %body.d-flex.flex-column.min-vh-100
     = render 'shared/header'
     = turbo_stream_from "import_status"
-    #import-banner-container
+    - if import_status_message.present?
       = render partial: "shared/import_banner"
 
     .flex-grow-1
