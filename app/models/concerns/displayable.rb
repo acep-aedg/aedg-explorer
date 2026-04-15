@@ -27,29 +27,39 @@ module Displayable
   end
 
   def yearly_generations?
-    yearly_generations&.any?
+    return @yearly_generations if defined?(@yearly_generations)
+
+    @yearly_generations = yearly_generations&.any?
   end
 
   def monthly_generations?
-    monthly_generations&.any?
+    return @monthly_generations if defined?(@monthly_generations)
+
+    @monthly_generations = monthly_generations&.any?
   end
 
   def capacities?
-    capacities&.any?
+    return @capacities if defined?(@capacities)
+
+    @capacities = capacities.any?
   end
 
   def plants?
-    plants&.any?
+    return @plants if defined?(@plants)
+
+    @plants = plants&.any?
   end
 
   def service_area_collection
-    if respond_to?(:service_areas)
-      service_areas.to_a
-    elsif respond_to?(:service_area)
-      [service_area].compact
-    else
-      []
-    end
+    return @service_area_collection if defined?(@service_area_collection)
+
+    @service_area_collection = if respond_to?(:service_areas)
+                                 service_areas.to_a
+                               elsif respond_to?(:service_area)
+                                 [service_area].compact
+                               else
+                                 []
+                               end
   end
 
   def service_areas?

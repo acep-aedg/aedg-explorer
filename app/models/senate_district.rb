@@ -24,7 +24,7 @@ class SenateDistrict < ApplicationRecord
            dependent: :nullify,
            inverse_of: false
   has_many :plants, through: :service_area_geoms
-  has_many :service_areas, through: :service_area_geoms
+  has_many :service_areas, -> { distinct }, through: :service_area_geoms
   has_many :capacities, through: :plants
   has_many :yearly_generations, through: :plants
   has_many :monthly_generations, through: :plants

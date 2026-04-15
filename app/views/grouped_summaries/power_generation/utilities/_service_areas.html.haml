@@ -1,4 +1,3 @@
-- service_area_label = "service area"
 .p-4.border.rounded-3.bg-white.h-100.shadow-sm
   .d-flex.align-items-center.mb-3.border-bottom.pb-2
     %i.bi.bi-info-circle.me-2.text-primary
@@ -8,10 +7,10 @@
   - if @parent.service_areas?
     .mb-4
       .d-flex.align-items-center.mb-1
-        %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers (#{@parent.service_areas.distinct.size})
+        %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Providers (#{@parent.service_areas.size})
         %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Certified entities providing utility services within this region" }
       %ul.list-unstyled.mt-1
-        - @parent.service_areas.distinct.each do |sa|
+        - @parent.service_areas.each do |sa|
           %li.d-flex.align-items-center.mb-2
             %i.bi.bi-dot.text-primary.fs-5.lh-1
             %span.fw-semibold= sa.name

@@ -10,9 +10,9 @@
         / Map Layer: Communities
         = map_layer_checkbox(id: 'layer-communities', label: 'Communities', path_args: [:community_locations, @parent, :maps])
         / Map Layer: Utility Service Area
-        = map_layer_checkbox(id: 'layer-service-area-utility', label: "Utility Service Area".pluralize(@parent.service_areas.distinct.count), path_args: [:service_areas, @parent, :maps]) if @parent.service_areas?
+        = map_layer_checkbox(id: 'layer-service-area-utility', label: 'Utility Service Area(s)', path_args: [:service_areas, @parent, :maps]) if @parent.service_areas?
         / Map Layer: Local Service Area
-        = map_layer_checkbox(id: 'layer-service-area-local', label: 'Local Service Area'.pluralize(@parent.service_areas.distinct.count), path_args: [:service_area_geoms, @parent, :maps]) if @parent.local_service_area?
+        = map_layer_checkbox(id: 'layer-service-area-local', label: 'Local Service Area(s)', path_args: [:service_area_geoms, @parent, :maps]) if @parent.local_service_area?
         / Map Layer: Plants
         = map_layer_checkbox(id: 'layer-plants', label: 'Power Plants', path_args: [:plants, @parent, :maps]) if @parent.plants?
         

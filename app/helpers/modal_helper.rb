@@ -32,11 +32,13 @@ module ModalHelper
   end
 
   def service_area_text(entity)
-    count = entity.respond_to?(:service_areas) ? entity.service_areas.distinct.count(:cpcn_id) : 1
+    service_areas = entity.respond_to?(:service_areas) ? entity.service_areas.to_a.uniq(&:cpcn_id) : []
+    count = service_areas.any? ? service_areas.size : 1
+    label_base = entity.local_service_area? ? "local service area" : "utility service area"
 
-    label = entity.local_service_area? ? "local service area" : "utility service area"
-    verb = count == 1 ? "serves" : "serve"
-
-    "#{label.pluralize(count)} that #{verb} this #{entity.class.model_name.human.downcase}"
+    {
+      label: label_base.pluralize(count),
+      count: count
+    }
   end
 end

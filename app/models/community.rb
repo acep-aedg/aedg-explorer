@@ -168,6 +168,8 @@ class Community < ApplicationRecord
 
   # Specific to Community
   def local_service_area?
-    service_area&.service_area_geoms&.many?
+    return @local_service_area if defined?(@local_service_area)
+
+    @local_service_area = !!service_area&.service_area_geoms&.many?
   end
 end

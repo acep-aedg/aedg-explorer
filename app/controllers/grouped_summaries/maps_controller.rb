@@ -8,17 +8,7 @@ module GroupedSummaries
     def service_areas; end
     def service_area_geoms; end
     def plants; end
-
-    def boundary
-      if @parent.respond_to?(:as_geojson)
-        render json: {
-          type: "FeatureCollection",
-          features: [@parent.as_geojson].compact
-        }
-      else
-        render json: { type: "FeatureCollection", features: [] }, status: :not_found
-      end
-    end
+    def boundary; end
 
     private
 
