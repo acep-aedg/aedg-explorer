@@ -1,4 +1,4 @@
-export function addPolygonLayers(map, sourceId, { color = '#088', outlineColor = '#05505e', beforeId } = {}) {
+export function addPolygonLayers(map, sourceId, { color = '#088', outlineColor = '#05505e', beforeId, visibility = 'visible' } = {}) {
   const fillId = `${sourceId}-fill`;
   const lineId = `${sourceId}-outline`;
 
@@ -7,6 +7,9 @@ export function addPolygonLayers(map, sourceId, { color = '#088', outlineColor =
       id: fillId, 
       type: 'fill', 
       source: sourceId,
+      layout: {
+        'visibility': visibility // Added this
+      },
       paint: { 'fill-color': color, 'fill-opacity': 0.4 } 
     }, beforeId); 
   }
@@ -16,6 +19,9 @@ export function addPolygonLayers(map, sourceId, { color = '#088', outlineColor =
       id: lineId, 
       type: 'line', 
       source: sourceId,
+      layout: {
+        'visibility': visibility // Added this
+      },
       paint: { 'line-color': outlineColor, 'line-width': 2, 'line-opacity': 0.8 } 
     }, beforeId); 
   }

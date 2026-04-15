@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import mapboxgl from 'mapbox-gl'
 import { MAP_STYLE, DEFAULT_ZOOM, LAYER_COLORS } from '../maps/config.js'
-import { loadLayer, removeSourceLayers } from '../maps/layers/index.js'
+import { loadLayer } from '../maps/layers/index.js'
 import { boundsFrom } from '../maps/geo.js'
 import { upsertDomMarker } from '../maps/dom_marker.js'
 import { attachPopup } from '../maps/popup.js'
@@ -21,6 +21,8 @@ export default class extends Controller {
     this.layerIds = []
     this.sourceIds = []
     this.layersBySource = new Map()
+    this.layersByCheckbox = new Map()
+    this.featureCollections = new Map()
     this._domMarker = null
 
     this.map = new mapboxgl.Map({
@@ -34,63 +36,10 @@ export default class extends Controller {
     this.mapTarget._mapbox = this.map
 
     this.map.on('load', () => {
-      // Polygon Anchor
-      this.map.addLayer({
-        id: 'polygon-anchor',
-        type: 'background',
-        layout: { visibility: 'none' }
-      });
-
-      // HIGHLIGHT SOURCES
-      this.map.addSource('feature-highlight', {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features: [] }
-      });
-
-      // POLYGON HIGHLIGHT (Only for Lines/Polygons)
-      this.map.addLayer({
-        id: 'feature-highlight',
-        type: 'line',
-        source: 'feature-highlight',
-        filter: ['any', ['==', ['geometry-type'], 'Polygon'], ['==', ['geometry-type'], 'LineString']],
-        paint: {
-          'line-color': ['coalesce', ['get', 'stroke'], '#FF00FF'],
-          'line-width': 4,
-          'line-opacity': 0.8
-        }
-      });
-
-      // POINT HIGHLIGHT (The Halo)
-      this.map.addLayer({
-        id: 'point-highlight',
-        type: 'circle',
-        source: 'feature-highlight',
-        filter: ['==', ['geometry-type'], 'Point'], // ONLY show for points
-        paint: {
-          'circle-radius': 12,
-          'circle-color': 'rgba(255, 255, 255, 0)',
-          'circle-stroke-width': 3,
-          'circle-stroke-color': ['coalesce', ['get', 'stroke'], '#FF00FF'],
-          'circle-stroke-opacity': 0.8
-        }
-      });
-
-      // Sync UI for existing layers 
-      this._syncActiveStates();
-
-      if (this.hasMarkersValue && this.markersValue.length > 0) {
-        const [lng, lat] = this.markersValue[0]
-        // Pass the default title value as extraData
-        this._updateMarker(Number(lng), Number(lat), { title: this.markerTooltipTitleValue })
-      }
-
-      if (this.hasDefaultLayerIdValue) {
-        const checkbox = document.getElementById(this.defaultLayerIdValue)
-        if (checkbox) {
-          checkbox.checked = true
-          checkbox.dispatchEvent(new Event('change', { bubbles: true }))
-        }
-      }
+      this._setupAnchorsAndHighlights()
+      
+      // LAZY LOADING: We only handle the markers and the default starting layer.
+      this._handleInitialState()
     })
   }
 
@@ -104,82 +53,158 @@ export default class extends Controller {
     })
   }
 
-  async toggleLayer(event) {
-    const el = event.currentTarget;
-    const targetId = el.dataset.checkboxId || el.id;
-    const isCheckbox = el.type === 'checkbox';
+  toggleLayer(event) {
+    const el = event.currentTarget
+    const targetId = el.dataset.checkboxId || el.id
+    const isCheckbox = el.type === 'checkbox'
+    const url = el.dataset.url
 
-    if (!targetId) return;
+    if (!targetId) return
 
-    // SYNC: Button -> Checkbox
+    // Ensure we are working with the actual checkbox element
     if (!isCheckbox) {
-      const sidebarCheckbox = document.getElementById(targetId);
+      const sidebarCheckbox = document.getElementById(targetId)
       if (sidebarCheckbox) {
-        sidebarCheckbox.checked = !sidebarCheckbox.checked;
-        sidebarCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-        return;
+        sidebarCheckbox.checked = !sidebarCheckbox.checked
+        sidebarCheckbox.dispatchEvent(new Event('change', { bubbles: true }))
+        return
       }
     }
 
-    // VISUAL SYNC: Highlight buttons across tabs
-    this._updateVisualState(targetId, el.checked);
+    // If the layer is already loaded, just toggle visibility
+    if (this.layersByCheckbox.has(targetId)) {
+      const visibility = el.checked ? 'visible' : 'none'
+      const layerIds = this.layersByCheckbox.get(targetId)
 
-    const url = el.dataset.url;
-    const color = LAYER_COLORS[targetId];
+      layerIds.forEach(id => {
+        this.map.setLayoutProperty(id, 'visibility', visibility)
+      })
 
-    if (el.checked) {
-      await this._loadAndAttachLayer(url, color, el.dataset.fit !== 'false');
-    } else {
-      const sourceId = this._sourceIdFromUrl(url);
-      this._forget(sourceId);
-      removeSourceLayers(this.map, sourceId);
-      // // Clear highlight if layer is removed
-      // this._clearHighlight();
+      this._updateVisualState(targetId, el.checked)
+
+      if (el.checked && el.dataset.fit !== 'false') {
+        this._fitToLayer(targetId)
+      }
+    } 
+    // If it's NOT loaded and the user checked it, load it on-demand
+    else if (el.checked && url) {
+      this._loadLayerOnDemand(targetId, url, el)
+    }
+  }
+
+  // --- PRIVATE ---
+
+  /**
+   * Fetches and adds a layer only when needed.
+   */
+  _loadLayerOnDemand(id, url, checkbox) {
+    if (this.hasLoadingTarget) this.loadingTarget.classList.remove('d-none')
+    checkbox.disabled = true // Prevent double-clicks while loading
+
+    const color = LAYER_COLORS[id]
+    const outlineColor = color ? this._computeOutlineColor(color) : undefined
+
+    loadLayer(this.map, url, { 
+      color, 
+      outlineColor,
+      visibility: 'visible' 
+    })
+    .then(({ fc, sourceId, layerIds }) => {
+      this._remember(sourceId, layerIds, id)
+      this.featureCollections.set(id, fc)
+      
+      layerIds.forEach(lId => attachPopup(this.map, lId))
+
+      this._updateVisualState(id, true)
+      if (checkbox.dataset.fit !== 'false') {
+        this._fitToLayer(id)
+      }
+    })
+    .catch(e => console.error(`Failed to load layer on demand: ${id}`, e))
+    .finally(() => {
+      checkbox.disabled = false
+      if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
+    })
+  }
+
+  _fitToLayer(id) {
+    const fc = this.featureCollections.get(id)
+    if (fc && fc.features.length > 0) {
+      const b = boundsFrom(fc)
+      if (!b.isEmpty()) {
+        this.map.fitBounds(b, { padding: 40, maxZoom: 10, duration: 800 })
+      }
+    }
+  }
+
+  _setupAnchorsAndHighlights() {
+    this.map.addLayer({ id: 'polygon-anchor', type: 'background', layout: { visibility: 'none' } })
+
+    this.map.addSource('feature-highlight', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features: [] }
+    })
+
+    this.map.addLayer({
+      id: 'feature-highlight',
+      type: 'line',
+      source: 'feature-highlight',
+      filter: ['any', ['==', ['geometry-type'], 'Polygon'], ['==', ['geometry-type'], 'LineString']],
+      paint: { 'line-color': ['coalesce', ['get', 'stroke'], '#FF00FF'], 'line-width': 4, 'line-opacity': 0.8 }
+    })
+
+    this.map.addLayer({
+      id: 'point-highlight',
+      type: 'circle',
+      source: 'feature-highlight',
+      filter: ['==', ['geometry-type'], 'Point'],
+      paint: {
+        'circle-radius': 12,
+        'circle-color': 'rgba(255, 255, 255, 0)',
+        'circle-stroke-width': 3,
+        'circle-stroke-color': ['coalesce', ['get', 'stroke'], '#FF00FF'],
+        'circle-stroke-opacity': 0.8
+      }
+    })
+  }
+
+  _handleInitialState() {
+    // Process markers immediately
+    if (this.hasMarkersValue && this.markersValue.length > 0) {
+      const [lng, lat] = this.markersValue[0]
+      this._updateMarker(Number(lng), Number(lat), { title: this.markerTooltipTitleValue })
+    }
+
+    // Load the default layer if one is specified
+    if (this.hasDefaultLayerIdValue) {
+      const checkbox = document.getElementById(this.defaultLayerIdValue)
+      if (checkbox) {
+        checkbox.checked = true
+        // This will trigger _loadLayerOnDemand because the layer isn't in 'layersByCheckbox' yet
+        this.toggleLayer({ currentTarget: checkbox })
+      }
     }
   }
 
   _updateVisualState(id, isActive) {
-    const buttons = document.querySelectorAll(`[data-checkbox-id="${id}"]`);
-    buttons.forEach(btn => btn.classList.toggle('active', isActive));
-
-    const checkbox = document.getElementById(id);
-    if (checkbox) checkbox.checked = isActive;
+    document.querySelectorAll(`[data-checkbox-id="${id}"]`).forEach(btn => btn.classList.toggle('active', isActive))
+    const checkbox = document.getElementById(id)
+    if (checkbox) checkbox.checked = isActive
   }
 
   _syncActiveStates() {
     Object.keys(LAYER_COLORS).forEach(id => {
-      // Check if any layer starting with this ID is currently in the map
-      const isLoaded = this.layerIds.some(lId => lId.includes(id));
-      if (isLoaded) this._updateVisualState(id, true);
-    });
+      const layerIds = this.layersByCheckbox.get(id)
+      if (layerIds && layerIds.some(lId => this.map.getLayer(lId) && this.map.getLayoutProperty(lId, 'visibility') === 'visible')) {
+        this._updateVisualState(id, true)
+      }
+    })
   }
 
-  // _clearHighlight() {
-  //   const source = this.map.getSource('feature-highlight');
-  //   if (source) source.setData({ type: 'FeatureCollection', features: [] });
-  // }
-
-  async _loadAndAttachLayer(url, color, fit = true) {
-    const outlineColor = color ? this._computeOutlineColor(color) : undefined
-    const { fc, sourceId, layerIds } = await loadLayer(this.map, url, { color, outlineColor })
-
-    this._remember(sourceId, layerIds)
-
-    // Attach popup logic to the newly loaded layers (reads GeoJSON properties automatically)
-    layerIds.forEach(id => attachPopup(this.map, id))
-
-    if (fit && fc.features.length > 0) {
-      const b = boundsFrom(fc)
-      if (!b.isEmpty()) this.map.fitBounds(b, { padding: 40, maxZoom: 10, duration: 800 })
-    }
-  }
-
-  _sourceIdFromUrl(url) {
-    return new URL(url, window.location.origin).pathname.replace(/[^\w-]/g, ':')
-  }
-
-  _remember(sourceId, layerIds) {
+  _remember(sourceId, layerIds, checkboxId) {
     if (!this.sourceIds.includes(sourceId)) this.sourceIds.push(sourceId)
+    this.layersByCheckbox.set(checkboxId, layerIds)
+    
     const set = this.layersBySource.get(sourceId) || new Set()
     layerIds.forEach((id) => {
       if (!this.layerIds.includes(id)) this.layerIds.push(id)
@@ -188,22 +213,8 @@ export default class extends Controller {
     this.layersBySource.set(sourceId, set)
   }
 
-  _forget(sourceId) {
-    const set = this.layersBySource.get(sourceId)
-    if (set) {
-      for (const id of set) {
-        this.layerIds = this.layerIds.filter((x) => x !== id)
-      }
-      this.layersBySource.delete(sourceId)
-    }
-    this.sourceIds = this.sourceIds.filter((x) => x !== sourceId)
-  }
-
   _updateMarker(lng, lat) {
-    this._domMarker = upsertDomMarker(this._domMarker, this.map, {
-      lng: Number(lng),
-      lat: Number(lat)
-    });
+    this._domMarker = upsertDomMarker(this._domMarker, this.map, { lng: Number(lng), lat: Number(lat) })
   }
 
   _computeOutlineColor(color) {
