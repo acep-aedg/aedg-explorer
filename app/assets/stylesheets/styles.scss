@@ -1,5 +1,10 @@
 :root {
   --main-toolbar-height: 64px; // This gets dynamically updated by JavaScript
+  --banner-height: 0px;
+}
+// If the banner ID is on the page, update the variable to its height
+body:has(#import-banner-container) {
+  --banner-height: 35px;
 }
 
 #jump-nav {
