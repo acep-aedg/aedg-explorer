@@ -199,6 +199,7 @@ GEM
       net-smtp
     marcel (1.1.0)
     matrix (0.4.3)
+    memory_profiler (1.1.0)
     mini_mime (1.1.5)
     minitest (5.27.0)
     mocha (3.0.2)
@@ -250,6 +251,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.6)
+    rack-mini-profiler (4.0.1)
+      rack (>= 1.2.0)
     rack-session (2.1.2)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -373,6 +376,7 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
+    stackprof (0.2.28)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.2.0)
@@ -440,12 +444,14 @@ DEPENDENCIES
   jbuilder
   kramdown
   kramdown-parser-gfm
+  memory_profiler
   minitest (~> 5.1)
   mocha
   pagy (~> 43.2.9)
   pg (~> 1.1)
   pg_search (~> 2.3)
   puma (>= 5.0)
+  rack-mini-profiler
   rails (~> 8.0.4)
   redis (~> 5.0)
   rgeo
@@ -457,6 +463,7 @@ DEPENDENCIES
   selenium-webdriver
   simplecov
   sprockets-rails
+  stackprof
   stimulus-rails
   turbo-rails
   tzinfo-data
