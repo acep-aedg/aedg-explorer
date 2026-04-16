@@ -7,8 +7,13 @@ class SenateDistrict < ApplicationRecord
 
   ## Override the settings from Searchable
   scope :starts_with, ->(query) { where("district ilike ?", "#{query}%") }
+  scope :name_results, -> { pluck(:district) }
   pg_search_scope :search,
                   against: :district,
+                  associated_against: {
+                    communities: :name
+                  },
+
                   using: {
                     tsearch: {
                       prefix: true

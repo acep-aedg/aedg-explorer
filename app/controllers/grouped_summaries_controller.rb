@@ -8,9 +8,9 @@ class GroupedSummariesController < ApplicationController
   def index
     @search_params = search_params
     @query = @search_params[:q]
-    @parents = @parents.search(@parents.search_field, @query) if @query.present?
-    @active_letters = @parents.pluck(@parents.search_field).map { |n| n[0].upcase }.uniq.sort
+    @parents = @parents.search(@query) if @query.present?
     @parents = @parents.starts_with(@search_params[:letter]) if @search_params[:letter].present?
+    @active_letters = @parents.first_letters
   end
 
   def show
