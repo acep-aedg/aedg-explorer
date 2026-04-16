@@ -5,7 +5,19 @@ class SenateDistrict < ApplicationRecord
   include Facetable
   extend FriendlyId
 
-  self.searchable_column = :district
+  ## Override the settings from Searchable
+  scope :starts_with, ->(query) { where("district ilike ?", "#{query}%") }
+  pg_search_scope :search,
+                  against: :district,
+                  using: {
+                    tsearch: {
+                      prefix: true
+                    },
+                    trigram: {
+                      word_similarity: true
+                    }
+                  }
+
   friendly_id :district, use: :slugged
 
   has_many :communities_senate_districts, foreign_key: :senate_district_district, primary_key: :district, dependent: :destroy, inverse_of: :senate_district

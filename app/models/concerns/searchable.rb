@@ -2,14 +2,19 @@ module Searchable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :searchable_column, default: :name
+    scope :starts_with, ->(letter) { where("name ilike ?", "#{letter}%") if letter.present? }
 
-    scope :starts_with, ->(letter) { where(arel_table[searchable_column].matches("#{letter}%")) if letter.present? }
-  end
+    include PgSearch::Model
 
-  class_methods do
-    def search_related(query)
-      where(arel_table[searchable_column].matches("%#{query}%"))
-    end
+    pg_search_scope :search,
+                    against: :name,
+                    using: {
+                      tsearch: {
+                        prefix: true
+                      },
+                      trigram: {
+                        word_similarity: true
+                      }
+                    }
   end
 end
