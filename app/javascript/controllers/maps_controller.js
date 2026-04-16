@@ -237,8 +237,14 @@ export default class extends Controller {
    * and applies the 'active' class/checked state.
    */
   _updateVisualState(id, isActive) {
+    // Only target elements that have the data-layer-id AND the class 'btn' (to deal with btns off the map)
+    const offMapSelector = `.btn[data-layer-id="${id}"]`
     // queries all layers realted to btns on the right side of the page
-    document.querySelectorAll(`[data-layer-id="${id}"]`).forEach(btn => btn.classList.toggle('active', isActive))
+    document.querySelectorAll(offMapSelector).forEach(btn => {
+      btn.classList.toggle('active', isActive)
+    })
+
+    // The checkbox logic remains the same (searching by DOM ID)
     const checkbox = document.getElementById(id)
     if (checkbox) checkbox.checked = isActive
   }
