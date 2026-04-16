@@ -6,6 +6,14 @@ import { boundsFrom } from '../maps/geo.js'
 import { upsertDomMarker } from '../maps/dom_marker.js'
 import { attachPopup } from '../maps/popup.js'
 
+/**
+ * MapsController
+ * * Manages a Mapbox GL instance with support for:
+ * - Lazy-loading GeoJSON layers (On-demand fetching to prevent initial lag)
+ * - Visual synchronization between map layers, checkboxes, and UI buttons
+ * - The Checkbox is the Source of Truth (DOM-based State)
+ * - Feature highlighting and automatic map fitting (zooming)
+ */
 export default class extends Controller {
   static targets = ['map', 'loading', 'swatch']
   static values = {
@@ -18,11 +26,13 @@ export default class extends Controller {
 
   connect() {
     mapboxgl.accessToken = this.tokenValue
-    this.layerIds = []
-    this.sourceIds = []
-    this.layersBySource = new Map()
-    this.layersByCheckbox = new Map()
-    this.featureCollections = new Map()
+    
+    // State Tracking
+    this.layerIds = []                  // Flat list of all Mapbox layer IDs
+    this.sourceIds = []                 // Flat list of all Mapbox source IDs
+    this.layersBySource = new Map()     // Maps sourceId -> Set of layerIds
+    this.layersByCheckbox = new Map()   // Maps layerKey (layer_id) -> Array of Mapbox layerIds
+    this.featureCollections = new Map() // Cached GeoJSON data for bounds calculations
     this._domMarker = null
 
     this.map = new mapboxgl.Map({
@@ -33,18 +43,25 @@ export default class extends Controller {
     })
 
     this.initSwatches()
+
+    // Expose map instance to the DOM for console debugging if needed
     this.mapTarget._mapbox = this.map
 
     this.map.on('load', () => {
       this._setupAnchorsAndHighlights()
       
-      // LAZY LOADING: We only handle the markers and the default starting layer.
+      // LAZY LOADING STRATEGY: 
+      // Instead of pre-loading 10+ GeoJSONs on refresh (which causes 3s+ lag),
+      // we only load markers and the 'defaultLayerId' immediately.
       this._handleInitialState()
     })
   }
 
   // --- PUBLIC ACTIONS ---
 
+  /**
+   * Colors the small color-indicators next to checkboxes based on config.js
+   */
   initSwatches() {
     this.swatchTargets.forEach((swatch) => {
       const checkbox = swatch.closest('.form-check').querySelector('input')
@@ -53,17 +70,23 @@ export default class extends Controller {
     })
   }
 
+  /**
+   * Main entry point for user interaction. Handles clicks from:
+   * 1. Actual checkboxes (isCheckbox = true)
+   * 2. UI Buttons with [data-layer-id] (isCheckbox = false)
+   */
   toggleLayer(event) {
     const el = event.currentTarget
-    const targetId = el.dataset.checkboxId || el.id
+    const layer_id = el.dataset.layerId || el.id
     const isCheckbox = el.type === 'checkbox'
     const url = el.dataset.url
 
-    if (!targetId) return
+    if (!layer_id) return
 
-    // Ensure we are working with the actual checkbox element
+    // If a non-checkbox (like a button) was clicked, find its "source of truth" 
+    // checkbox and trigger it. This keeps the logic centralized in the checkbox state.
     if (!isCheckbox) {
-      const sidebarCheckbox = document.getElementById(targetId)
+      const sidebarCheckbox = document.getElementById(layer_id)
       if (sidebarCheckbox) {
         sidebarCheckbox.checked = !sidebarCheckbox.checked
         sidebarCheckbox.dispatchEvent(new Event('change', { bubbles: true }))
@@ -71,37 +94,38 @@ export default class extends Controller {
       }
     }
 
-    // If the layer is already loaded, just toggle visibility
-    if (this.layersByCheckbox.has(targetId)) {
+    // CASE 1: Layer already exists in Mapbox memory. Just toggle visibility.
+    if (this.layersByCheckbox.has(layer_id)) {
       const visibility = el.checked ? 'visible' : 'none'
-      const layerIds = this.layersByCheckbox.get(targetId)
+      const layerIds = this.layersByCheckbox.get(layer_id)
 
       layerIds.forEach(id => {
         this.map.setLayoutProperty(id, 'visibility', visibility)
       })
 
-      this._updateVisualState(targetId, el.checked)
+      this._updateVisualState(layer_id, el.checked)
 
       if (el.checked && el.dataset.fit !== 'false') {
-        this._fitToLayer(targetId)
+        this._fitToLayer(layer_id)
       }
     } 
-    // If it's NOT loaded and the user checked it, load it on-demand
+    // CASE 2: Layer hasn't been fetched yet. Fetch, add to map, then show.
     else if (el.checked && url) {
-      this._loadLayerOnDemand(targetId, url, el)
+      this._loadLayerOnDemand(layer_id, url, el)
     }
   }
 
   // --- PRIVATE ---
 
   /**
-   * Fetches and adds a layer only when needed.
+   * Performs the async fetch and Mapbox layer injection.
+   * Disables the UI element during the load to prevent race conditions.
    */
-  _loadLayerOnDemand(id, url, checkbox) {
+  _loadLayerOnDemand(layer_id, url, checkbox) {
     if (this.hasLoadingTarget) this.loadingTarget.classList.remove('d-none')
-    checkbox.disabled = true // Prevent double-clicks while loading
+    checkbox.disabled = true 
 
-    const color = LAYER_COLORS[id]
+    const color = LAYER_COLORS[layer_id]
     const outlineColor = color ? this._computeOutlineColor(color) : undefined
 
     loadLayer(this.map, url, { 
@@ -109,26 +133,40 @@ export default class extends Controller {
       outlineColor,
       visibility: 'visible' 
     })
+    /**
+     * Note: 'fc' stands for FeatureCollection.(contains an array of coordinate 
+     * pairs that define every single "vertex" (corner) of that shape.)
+     * While Mapbox handles the visual rendering, we store the 'fc' in our own 
+     * Map (this.featureCollections) so we can access the raw coordinates for 
+     * bounds calculations (zooming) without having to query the Mapbox API.
+     */
     .then(({ fc, sourceId, layerIds }) => {
-      this._remember(sourceId, layerIds, id)
-      this.featureCollections.set(id, fc)
+      // Map the internal Mapbox IDs to our UI ID for future toggling
+      this._remember(sourceId, layerIds, layer_id)
+      this.featureCollections.set(layer_id, fc)
       
+      // Register these specific layers for the popup click handler
       layerIds.forEach(lId => attachPopup(this.map, lId))
 
-      this._updateVisualState(id, true)
+      this._updateVisualState(layer_id, true)
+      
+      // Automatically zoom to the new data if requested
       if (checkbox.dataset.fit !== 'false') {
-        this._fitToLayer(id)
+        this._fitToLayer(layer_id)
       }
     })
-    .catch(e => console.error(`Failed to load layer on demand: ${id}`, e))
+    .catch(e => console.error(`[Mapbox] Error loading layer: ${layer_id}`, e))
     .finally(() => {
       checkbox.disabled = false
       if (this.hasLoadingTarget) this.loadingTarget.classList.add('d-none')
     })
   }
 
-  _fitToLayer(id) {
-    const fc = this.featureCollections.get(id)
+  /**
+   * Zooms the map to fit the bounding box of the GeoJSON data
+   */
+  _fitToLayer(layer_id) {
+    const fc = this.featureCollections.get(layer_id)
     if (fc && fc.features.length > 0) {
       const b = boundsFrom(fc)
       if (!b.isEmpty()) {
@@ -137,7 +175,11 @@ export default class extends Controller {
     }
   }
 
+  /**
+   * Sets up invisible anchor layers (for Z-index ordering) and highlight styles
+   */
   _setupAnchorsAndHighlights() {
+    // Polygons will be inserted BEFORE this layer to stay under points/labels
     this.map.addLayer({ id: 'polygon-anchor', type: 'background', layout: { visibility: 'none' } })
 
     this.map.addSource('feature-highlight', {
@@ -145,6 +187,7 @@ export default class extends Controller {
       data: { type: 'FeatureCollection', features: [] }
     })
 
+    // Highlight for selected Lines/Polygons
     this.map.addLayer({
       id: 'feature-highlight',
       type: 'line',
@@ -153,6 +196,7 @@ export default class extends Controller {
       paint: { 'line-color': ['coalesce', ['get', 'stroke'], '#FF00FF'], 'line-width': 4, 'line-opacity': 0.8 }
     })
 
+    // Halo highlight for selected Points
     this.map.addLayer({
       id: 'point-highlight',
       type: 'circle',
@@ -168,26 +212,33 @@ export default class extends Controller {
     })
   }
 
+  /**
+   * Handles markers and the default layer provided by Stimulus Values
+   */
   _handleInitialState() {
-    // Process markers immediately
     if (this.hasMarkersValue && this.markersValue.length > 0) {
       const [lng, lat] = this.markersValue[0]
       this._updateMarker(Number(lng), Number(lat), { title: this.markerTooltipTitleValue })
     }
 
-    // Load the default layer if one is specified
     if (this.hasDefaultLayerIdValue) {
       const checkbox = document.getElementById(this.defaultLayerIdValue)
       if (checkbox) {
         checkbox.checked = true
-        // This will trigger _loadLayerOnDemand because the layer isn't in 'layersByCheckbox' yet
+        // Manually trigger toggle to kick off lazy loading
         this.toggleLayer({ currentTarget: checkbox })
       }
     }
   }
 
+  /**
+   * Synchronizes UI state.
+   * If 'id' is active, it finds the checkbox AND any button with [data-layer-id] 
+   * and applies the 'active' class/checked state.
+   */
   _updateVisualState(id, isActive) {
-    document.querySelectorAll(`[data-checkbox-id="${id}"]`).forEach(btn => btn.classList.toggle('active', isActive))
+    // queries all layers realted to btns on the right side of the page
+    document.querySelectorAll(`[data-layer-id="${id}"]`).forEach(btn => btn.classList.toggle('active', isActive))
     const checkbox = document.getElementById(id)
     if (checkbox) checkbox.checked = isActive
   }
@@ -201,9 +252,9 @@ export default class extends Controller {
     })
   }
 
-  _remember(sourceId, layerIds, checkboxId) {
+  _remember(sourceId, layerIds, layer_id) {
     if (!this.sourceIds.includes(sourceId)) this.sourceIds.push(sourceId)
-    this.layersByCheckbox.set(checkboxId, layerIds)
+    this.layersByCheckbox.set(layer_id, layerIds)
     
     const set = this.layersBySource.get(sourceId) || new Set()
     layerIds.forEach((id) => {
@@ -213,10 +264,16 @@ export default class extends Controller {
     this.layersBySource.set(sourceId, set)
   }
 
+  /**
+   * Manages the "You are here" marker on the map
+   */
   _updateMarker(lng, lat) {
     this._domMarker = upsertDomMarker(this._domMarker, this.map, { lng: Number(lng), lat: Number(lat) })
   }
 
+  /**
+   * Generates a darker outline color based on the fill color for better contrast
+   */
   _computeOutlineColor(color) {
     let hex = color.replace('#', '')
     if (hex.length === 3) hex = hex.split('').map(c => c + c).join('')
