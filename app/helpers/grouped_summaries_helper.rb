@@ -14,6 +14,6 @@ module GroupedSummariesHelper
   end
 
   def show_search_tools?(collection)
-    collection.size > 20 || params[:q].present?
+    collection.size > 20 || params[:q].present? || params[:letter].present?
   end
 end
