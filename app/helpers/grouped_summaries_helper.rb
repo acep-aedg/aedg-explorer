@@ -13,7 +13,9 @@ module GroupedSummariesHelper
     grouped_summaries_registry.dig(name, :icon) || "bi-grid-fill"
   end
 
-  def show_search_tools?(collection)
-    collection.size > 20 || params[:q].present? || params[:letter].present?
+  def show_search_letters?(collection)
+    return false if collection.try(:model) == SenateDistrict
+
+    true
   end
 end

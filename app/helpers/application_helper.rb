@@ -52,4 +52,14 @@ module ApplicationHelper
       concat label_tag(id, label_content, class: "form-check-label small ms-2")
     end
   end
+
+  def search_placeholder_for(model)
+    name = model.model_name.human.titleize.pluralize
+
+    if model == Community
+      "Search #{name} by name, electric grid or house district..."
+    else
+      "Search #{name} by name or community..."
+    end
+  end
 end

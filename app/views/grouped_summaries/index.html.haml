@@ -15,10 +15,9 @@
             .d-flex.flex-column.flex-sm-row.justify-content-center.align-items-center.gap-3.mb-4
               = link_to "View Data Explorer", search_metadata_path, class: "btn btn-lg btn-aedg-primary"
               = link_to "Advanced Community Search", search_advanced_path, class: "btn btn-lg btn-aedg-secondary"
-            - if show_search_tools?(@parents)
-              .row.justify-content-center
-                .col.col-lg-10
-                  = render 'shared/search/simple_search', model: @parents.model
+            .row.justify-content-center
+              .col.col-lg-10
+                = render 'shared/search/simple_search', model: @parents.model
       -# Photo Credit
       .text-end.text-small.text-muted.mt-2
         Photo Credit: Gwen Holdmann
@@ -27,6 +26,6 @@
 .row.justify-content-center.g-5.mb-5.mx-0
   .col-xl-8.mt-0
     = turbo_frame_tag 'collection_list' do
-      - if show_search_tools?(@parents) 
+      - if show_search_letters?(@parents) 
         = render 'shared/search/results_pagination', letters: @active_letters, model: @parents.model
       = render 'shared/search/results_list', collection: @parents
