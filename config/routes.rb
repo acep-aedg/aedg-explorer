@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "/robots.txt", to: "robots#index", defaults: { format: :text }
 
   scope path: "/explore" do
+    get "all", to: "static_pages#explore_all", as: :explore_all
     resources :metadata, only: %i[index show], path: "data" do
       resources :datasets, only: [] do
         get :show, on: :member, defaults: { format: :json }
@@ -78,6 +79,7 @@ Rails.application.routes.draw do
         collection do
           get :community_locations
           get :service_areas
+          get :service_area_geoms
           get :plants
         end
       end
@@ -85,6 +87,22 @@ Rails.application.routes.draw do
 
     resources :grids, only: %i[index show] do
       concerns :summarizable, resource_name: :grouped_summaries
+    end
+
+    resources :house_districts, path: "house-districts", only: %i[index show] do
+      concerns :summarizable, resource_name: :grouped_summaries
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
+    end
+
+    resources :senate_districts, path: "senate-districts", only: %i[index show] do
+      concerns :summarizable, resource_name: :grouped_summaries
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
     end
   end
 

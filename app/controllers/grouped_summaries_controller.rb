@@ -2,15 +2,19 @@ class GroupedSummariesController < ApplicationController
   layout :determine_layout
   before_action :set_parent, except: %i[index]
   before_action :set_parents
-  before_action :set_jump_to_links, :set_map_buttons, only: %i[power_generation]
+  before_action :set_jump_to_links, :set_map_buttons, only: %i[general power_generation]
   before_action :set_nav_tab_links, only: %i[general power_generation]
 
   def index
     @search_params = search_params
     @query = @search_params[:q]
-    @parents = @parents.search_related(@query) if @query.present?
-    @active_letters = @parents.pluck(:name).map { |n| n[0].upcase }.uniq.sort
+    @parents = @parents.search(@query) if @query.present?
     @parents = @parents.starts_with(@search_params[:letter]) if @search_params[:letter].present?
+    @active_letters = @parents.first_letters
+  end
+
+  def show
+    redirect_to polymorphic_path([:general, @parent]), status: :see_other
   end
 
   def general; end
@@ -34,6 +38,8 @@ class GroupedSummariesController < ApplicationController
 
   def set_map_buttons
     @map_buttons = case action_name
+                   when "general"
+                     general_map_buttons
                    when "power_generation"
                      power_generation_map_buttons
                    end
@@ -41,9 +47,17 @@ class GroupedSummariesController < ApplicationController
 
   def set_jump_to_links
     @jump_to_links = case action_name
+                     when "general"
+                       general_jump_to_links
                      when "power_generation"
                        power_generation_jump_to_links
                      end
+  end
+
+  helper_method :default_map_layer
+
+  def default_map_layer
+    "layer-communities"
   end
 
   def set_nav_tab_links
@@ -71,12 +85,51 @@ class GroupedSummariesController < ApplicationController
         visible: @parent.service_areas?
       },
       {
+        label: "Local Service Areas",
+        url: polymorphic_path([:service_area_geoms, @parent, :maps]),
+        icon: "bounding-box",
+        id: "layer-service-area-local",
+        visible: @parent.local_service_area?
+      },
+      {
         label: "Power Plants",
         url: polymorphic_path([:plants, @parent, :maps]),
         icon: "building",
         id: "layer-plants",
         visible: @parent.plants?
       }
+    ]
+  end
+
+  def general_map_buttons
+    [
+      {
+        label: "Communities",
+        url: polymorphic_path([:community_locations, @parent, :maps]),
+        icon: "people",
+        id: "layer-communities",
+        visible: @parent.communities?
+      }
+    ] + (
+      if @parent.boundary?
+        [
+          {
+            label: "District Boundary",
+            url: polymorphic_path([:boundary, @parent, :maps]),
+            icon: "bounding-box",
+            id: @parent.boundary_map_layer,
+            visible: true
+          }
+        ]
+      else
+        []
+      end
+    )
+  end
+
+  def general_jump_to_links
+    [
+      { title: "Overview", anchor: "#overview", icon: "globe", show: true }
     ]
   end
 

@@ -367,7 +367,7 @@ CREATE TABLE public.communities (
 CREATE TABLE public.communities_house_districts (
     id bigint NOT NULL,
     community_fips_code character varying,
-    house_district_district character varying,
+    house_district_district integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -884,12 +884,13 @@ ALTER SEQUENCE public.heating_degree_days_id_seq OWNED BY public.heating_degree_
 
 CREATE TABLE public.house_districts (
     id bigint NOT NULL,
-    district character varying NOT NULL,
+    district integer NOT NULL,
     name character varying,
     as_of_date date,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    boundary public.geometry(Geometry,4326)
+    boundary public.geometry(Geometry,4326),
+    slug character varying
 );
 
 
@@ -1196,7 +1197,7 @@ CREATE TABLE public.plants (
     grid_primary_voltage_2_kv numeric,
     phases character varying,
     notes character varying,
-    location public.geometry,
+    location public.geometry(Point,4326),
     pce_reporting_id character varying
 );
 
@@ -1497,7 +1498,8 @@ CREATE TABLE public.senate_districts (
     as_of_date date,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    boundary public.geometry(Geometry,4326)
+    boundary public.geometry(Geometry,4326),
+    slug character varying
 );
 
 
@@ -1528,7 +1530,7 @@ CREATE TABLE public.service_area_geoms (
     id bigint NOT NULL,
     aedg_id character varying NOT NULL,
     service_area_cpcn_id integer NOT NULL,
-    boundary public.geometry,
+    boundary public.geometry(Geometry,4326),
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -1562,7 +1564,7 @@ CREATE TABLE public.service_areas (
     cpcn_id integer NOT NULL,
     name character varying,
     certificate_url character varying,
-    boundary public.geometry,
+    boundary public.geometry(Geometry,4326),
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -2793,6 +2795,13 @@ CREATE UNIQUE INDEX index_house_districts_on_district ON public.house_districts 
 
 
 --
+-- Name: index_house_districts_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_house_districts_on_slug ON public.house_districts USING btree (slug);
+
+
+--
 -- Name: index_household_incomes_on_community_fips_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2839,6 +2848,13 @@ CREATE UNIQUE INDEX index_plants_on_aea_plant_id ON public.plants USING btree (a
 --
 
 CREATE INDEX index_plants_on_grid_id ON public.plants USING btree (grid_id);
+
+
+--
+-- Name: index_plants_on_location; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_plants_on_location ON public.plants USING gist (location);
 
 
 --
@@ -2919,6 +2935,13 @@ CREATE UNIQUE INDEX index_senate_districts_on_district ON public.senate_district
 
 
 --
+-- Name: index_senate_districts_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_senate_districts_on_slug ON public.senate_districts USING btree (slug);
+
+
+--
 -- Name: index_service_area_geoms_on_aedg_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2926,10 +2949,24 @@ CREATE UNIQUE INDEX index_service_area_geoms_on_aedg_id ON public.service_area_g
 
 
 --
+-- Name: index_service_area_geoms_on_boundary; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_service_area_geoms_on_boundary ON public.service_area_geoms USING gist (boundary);
+
+
+--
 -- Name: index_service_area_geoms_on_service_area_cpcn_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_service_area_geoms_on_service_area_cpcn_id ON public.service_area_geoms USING btree (service_area_cpcn_id);
+
+
+--
+-- Name: index_service_areas_on_boundary; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_service_areas_on_boundary ON public.service_areas USING gist (boundary);
 
 
 --
@@ -3365,7 +3402,7 @@ ALTER TABLE ONLY public.communities
 --
 
 ALTER TABLE ONLY public.communities_house_districts
-    ADD CONSTRAINT fk_rails_e19cffa2ca FOREIGN KEY (house_district_district) REFERENCES public.house_districts(district) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_e19cffa2ca FOREIGN KEY (house_district_district) REFERENCES public.house_districts(district);
 
 
 --
@@ -3399,6 +3436,9 @@ ALTER TABLE ONLY public.monthly_generations
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260410175545'),
+('20260408230311'),
+('20260406191044'),
 ('20260403214428'),
 ('20260325171748'),
 ('20260323204950'),

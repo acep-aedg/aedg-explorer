@@ -3,14 +3,27 @@ class HouseDistrict < ApplicationRecord
   include Facetable
   include Displayable
   include Searchable
+  extend FriendlyId
 
-  has_many :communities_house_districts, foreign_key: :house_district_district, dependent: :destroy, inverse_of: :house_district
+  friendly_id :district, use: :slugged
+
+  has_many :communities_house_districts, foreign_key: :house_district_district, primary_key: :district, dependent: :destroy, inverse_of: :house_district
   has_many :communities, through: :communities_house_districts
-
   has_many :reporting_entities, through: :communities
-  has_many :plants, through: :communities
-  has_many :service_area_geoms, through: :plants
-  has_many :service_areas, through: :service_area_geoms
+  has_many :service_area_geoms,
+           lambda { |district|
+             unscope(:where).where(
+               "ST_Intersects(
+                   service_area_geoms.boundary,
+                   (SELECT boundary FROM house_districts WHERE id = ?)
+                 )",
+               district.id
+             )
+           },
+           dependent: :nullify,
+           inverse_of: false
+  has_many :plants, through: :service_area_geoms
+  has_many :service_areas, -> { distinct }, through: :service_area_geoms
   has_many :capacities, through: :plants
   has_many :yearly_generations, through: :plants
   has_many :monthly_generations, through: :plants
@@ -19,6 +32,14 @@ class HouseDistrict < ApplicationRecord
 
   def to_s
     "#{district} - #{name}"
+  end
+
+  def boundary_map_layer
+    "layer-house"
+  end
+
+  def long_name
+    "#{self.class.model_name.human.titleize} #{self}"
   end
 
   def as_geojson
