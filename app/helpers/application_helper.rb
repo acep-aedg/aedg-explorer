@@ -46,7 +46,7 @@ module ApplicationHelper
   def import_status_message
     ::Kredis.string("aedg:import_status").value.presence
   end
-  
+
   def map_layer_checkbox(id:, label:, path_args:)
     content_tag(:div, class: "form-check d-flex align-items-center mb-1") do
       concat check_box_tag(id, nil, false,
