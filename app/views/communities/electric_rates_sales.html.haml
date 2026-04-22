@@ -3,7 +3,7 @@
     { title: 'Consumption', anchor: '#consumption', icon: 'lightning-charge', show: @community.yearly_electricity_sales? }, |
     { title: 'Revenue', anchor: '#revenue', icon: 'cash-coin', show: @community.yearly_electricity_revenues? }, |
     { title: 'Customers', anchor: '#customers', icon: 'people', show: @community.yearly_electricity_customers? }, |
-    { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.electric_rates? } |
+    { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.yearly_electric_rates? } |
   ] |
 
 = turbo_frame_tag "community_tab_content" do
@@ -18,8 +18,10 @@
           icon: 'lightning-charge',
           title: 'Electricity Consumption',
           description: 'Total electricity sales and consumption rates by reporting entity',
-          anchor: '#consumption'
-          
+          anchor: '#consumption',
+          about_modal_id: 'salesConsumptionAboutModal' # this id must match the id in the sections about_modal partial
+        
+        = render "communities/#{tab}/yearly_sales/about_modal"
         = render "communities/#{tab}/consumption"
         
     - if @community.yearly_electricity_revenues?
@@ -28,8 +30,10 @@
           icon: 'cash-coin',
           title: 'Electricity Revenue',
           description: 'Electricity revenue by reporting entity',
-          anchor: '#revenue'
-          
+          anchor: '#revenue',
+          about_modal_id: 'salesRevenueAboutModal' # this id must match the id in the sections about_modal partial
+        
+        = render "communities/#{tab}/yearly_revenue/about_modal"
         = render "communities/#{tab}/revenue"
 
     - if @community.yearly_electricity_customers?
@@ -42,13 +46,15 @@
           
         = render "communities/#{tab}/customers"
 
-    - if @community.electric_rates?
+    - if @community.yearly_electric_rates?
       #rates.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'coin',
           title: 'Rates',
           description: 'Residential, commercial, and industrial electric rate trends',
           anchor: '#rates',
-          related_metadata: ["public_rates"]
-
+          related_metadata: ["public_yearly_electric_rates", "public_monthly_electric_rates"],
+          about_modal_id: 'yearlyElectricRatesAboutModal'
+        
+        = render "communities/#{tab}/yearly_rates/about_modal"
         = render "communities/#{tab}/rates"

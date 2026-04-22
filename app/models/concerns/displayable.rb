@@ -27,29 +27,39 @@ module Displayable
   end
 
   def yearly_generations?
-    yearly_generations&.any?
+    return @yearly_generations if defined?(@yearly_generations)
+
+    @yearly_generations = yearly_generations&.any?
   end
 
   def monthly_generations?
-    monthly_generations&.any?
+    return @monthly_generations if defined?(@monthly_generations)
+
+    @monthly_generations = monthly_generations&.any?
   end
 
   def capacities?
-    capacities&.any?
+    return @capacities if defined?(@capacities)
+
+    @capacities = capacities.any?
   end
 
   def plants?
-    plants&.any?
+    return @plants if defined?(@plants)
+
+    @plants = plants&.any?
   end
 
   def service_area_collection
-    if respond_to?(:service_areas)
-      service_areas.to_a
-    elsif respond_to?(:service_area)
-      [service_area].compact
-    else
-      []
-    end
+    return @service_area_collection if defined?(@service_area_collection)
+
+    @service_area_collection = if respond_to?(:service_areas)
+                                 service_areas.to_a
+                               elsif respond_to?(:service_area)
+                                 [service_area].compact
+                               else
+                                 []
+                               end
   end
 
   def service_areas?
@@ -88,8 +98,8 @@ module Displayable
     household_incomes&.exists?
   end
 
-  def electric_rates?
-    electric_rates&.with_rates&.exists?
+  def yearly_electric_rates?
+    yearly_electric_rates&.with_rates&.exists?
   end
 
   def sex_distribution?
@@ -110,6 +120,19 @@ module Displayable
 
   def yearly_electricity_customers?
     yearly_sales&.with_customers&.exists?
+  end
+
+  def boundary?
+    self.class.column_names.include?("boundary") && boundary.present?
+  end
+
+  def local_service_area?
+    @local_service_area ||= begin
+      local_ids = service_area_geoms.ids
+      ServiceAreaGeom.where(service_area_cpcn_id: service_areas.select(:cpcn_id))
+                     .where.not(id: local_ids)
+                     .exists?
+    end
   end
 
   # --- Grouped ---
@@ -143,7 +166,7 @@ module Displayable
   end
 
   def electricity_sales_rates?
-    yearly_electricity_sales? || electric_rates? || yearly_electricity_revenues? || yearly_electricity_customers?
+    yearly_electricity_sales? || yearly_electric_rates? || yearly_electricity_revenues? || yearly_electricity_customers?
   end
 end
 # rubocop:enable Metrics/ModuleLength

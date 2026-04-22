@@ -1,0 +1,29 @@
+- content_for :title, "All Summaries"
+
+.container-xl.mt-4
+  .row.justify-content-center.mb-5
+    .col
+      #grouped-summaries-hero.position-relative.text-center.rounded-4.p-0.p-md-3.p-lg-5
+        .row.justify-content-center.mx-0
+          .col-12.col-md-11.col-lg-10.bg-white.bg-opacity-75.p-4.rounded-4.shadow.position-relative
+            %h1.fw-bold.m-3
+              %i.bi.bi-stack.me-2
+              All Summaries
+            
+            %p.lead.fs-5.mx-3.mb-4
+              Select a category to explore Alaska's energy landscape through community metrics, electrical infrastructure, and regional data.
+
+      .text-end.text-small.text-muted.mt-2
+        Photo Credit: Gwen Holdmann
+
+.row.justify-content-center.mb-5.mx-0
+  .col-xl-8
+    .row.g-3
+      - grouped_summaries_registry.each do |name, cat|
+        .col-6.col-sm-4.col-lg-3
+          = link_to cat[:path], 
+            class: "btn btn-light border w-100 h-100 shadow-sm d-flex align-items-center justify-content-center text-wrap py-4",
+            data: { turbo: false } do
+            %div
+              %i{class: "bi #{cat[:icon]} d-block fs-3 mb-2"}
+              .fs-4= name

@@ -79,6 +79,7 @@ export default class extends Controller {
             },
           },
           y: {
+            beginAtZero: true,
             stacked: true,
             title: {
               display: true,
