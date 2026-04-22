@@ -1,5 +1,5 @@
--# Expects variable: 'entity'
-- sources = entity.monthly_generations.pluck(:source).uniq.compact
+- entity = local_assigns[:entity]
+- sources = entity&.respond_to?(:monthly_generations) ? entity.monthly_generations.pluck(:source).uniq.compact : []
 
 .d-flex.align-items-start
   %i.bi.bi-clipboard-data.text-warning.fs-4
@@ -19,8 +19,12 @@
         %em Net (EIA) 
         generation values. Check out the data to see which sources contributed to specific totals.
         
-    - else
+    - elsif sources.any?
       %p.text-muted.mb-0
-        Data in this section originates from both
+        Data in this section originates from the
         %strong= sources.first
         program.
+        
+    - else
+      %p.text-muted.mb-0
+        No reporting source data is available for this area.

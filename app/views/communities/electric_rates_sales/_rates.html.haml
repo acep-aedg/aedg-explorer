@@ -1,4 +1,4 @@
-- parent_tab = "electric_rates_sales"
+- partial_path = "communities/electric_rates_sales/yearly_rates"
 
 -# --- Section Body ---
 .section-body.m-1.m-md-2.m-lg-4.mt-3
@@ -8,11 +8,11 @@
       .p-4.border.rounded-3.bg-white.shadow-sm.mb-4        
         -# Historical Chart Section
         .mb-5
-          = render "communities/#{parent_tab}/rates/historical_rate_chart"
+          = render "#{partial_path}/historical_rate_chart"
         
         -# Data Table Section
         .pt-4.border-top
           .d-flex.align-items-center.mb-3
             %i.bi.bi-table.me-2.text-primary
-            %h5.mb-0.fw-bold Electric Rates Data
-          = render "communities/#{parent_tab}/rates/data"
+            %h5.mb-0.fw-bold Average Electric Rates Data
+          = render "#{partial_path}/data"

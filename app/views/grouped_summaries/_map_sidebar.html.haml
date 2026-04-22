@@ -6,7 +6,7 @@
         .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
         
         .form-check.d-flex.align-items-center.mb-1
-          %input.form-check-input#layer-communities{
+          %input.form-check-input#community_locations{
             type: "checkbox",
             data: {
               action: "change->maps#toggleLayer",
@@ -14,14 +14,14 @@
               fit: true
             }
           }
-          %label.form-check-label.small.ms-2{ for: "layer-communities" }
+          %label.form-check-label.small.ms-2{ for: "community_locations" }
             %span.legend-swatch{ data: { maps_target: "swatch" } }
             Communities
 
         / Map Layer: Utility Service Area
         - if @parent.service_areas?
           .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-service-area-utility{
+            %input.form-check-input#service-area{
               type: "checkbox",
               data: {
                 action: "change->maps#toggleLayer",
@@ -29,13 +29,13 @@
                 fit: true
               }
             }
-            %label.form-check-label.small.ms-2{ for: "layer-service-area-utility" }
+            %label.form-check-label.small.ms-2{ for: "service-area" }
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Utility Service Area(s)
 
         - if @parent.plants?
           .form-check.d-flex.align-items-center.mb-1
-            %input.form-check-input#layer-plants{ 
+            %input.form-check-input#plants-points{ 
               type: "checkbox", 
               data: { 
                 action: "change->maps#toggleLayer", 
@@ -43,7 +43,7 @@
                 fit: true 
               } 
             }
-            %label.form-check-label.small.ms-2{ for: "layer-plants" }
+            %label.form-check-label.small.ms-2{ for: "plants-points" }
               %span.legend-swatch{ data: { maps_target: "swatch" } }
               Power Plants
 

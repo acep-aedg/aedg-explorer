@@ -7,7 +7,7 @@ class Grid < ApplicationRecord
   extend FriendlyId
 
   accepts_nested_attributes_for :aedg_import
-  friendly_id :slug_candidates, use: :slugged
+  friendly_id :name, use: :slugged
   validates :name, presence: true, uniqueness: true
   has_one :aedg_import, as: :importable
   has_many :community_grids
@@ -21,12 +21,10 @@ class Grid < ApplicationRecord
   has_many :monthly_generations, through: :plants
 
   default_scope { order(name: :asc) }
-  scope :active, -> { joins(:community_grids).merge(CommunityGrid.active).distinct }
+  scope :active, -> { where(id: CommunityGrid.active.select(:grid_id)) }
 
-  def slug_candidates
-    [
-      :name
-    ]
+  def to_s
+    name
   end
 
   def utility_names(exclude: nil)

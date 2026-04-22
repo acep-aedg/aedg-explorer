@@ -9,9 +9,11 @@
         = render 'shared/section_header', 
           icon: 'buildings', 
           title: 'Utilities', 
-          description: 'Electrical providers, service areas, and grid infrastructure',
-          anchor: '#utilities'
-  
+          description: 'Utility providers and service areas',
+          anchor: '#utilities',
+          about_modal_id: 'utilitiesAboutModal'
+          
+        = render "#{partial_path}/utilities/about_modal"
         = render "#{partial_path}/utilities"
 
     - if @parent.generation?

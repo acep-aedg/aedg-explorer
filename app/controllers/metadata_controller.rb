@@ -5,7 +5,8 @@ class MetadataController < ApplicationController
   def index
     @search = search_params
     @highlighted = Metadatum.highlighted.all
-    @topics = ActsAsTaggableOn::Tag.for_context(:topics)
+    # Use the constant we defined in the model
+    @topics = Metadatum::SUPPORTED_TOPICS
   end
 
   def show; end
