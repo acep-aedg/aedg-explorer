@@ -8,6 +8,7 @@ module Communities
     def service_area; end
     def plants; end
     def bulk_fuel_facilities; end
+    def boroughs; end
 
     private
 

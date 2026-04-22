@@ -81,8 +81,8 @@ class GroupedSummariesController < ApplicationController
         label: "Utility Service Areas",
         url: polymorphic_path([:service_areas, @parent, :maps]),
         icon: "bounding-box",
-        id: "layer-service-area-utility",
-        visible: @parent.service_areas?
+        id: "service-area",
+        visible: @parent&.service_areas?
       },
       {
         label: "Local Service Areas",
@@ -95,8 +95,8 @@ class GroupedSummariesController < ApplicationController
         label: "Power Plants",
         url: polymorphic_path([:plants, @parent, :maps]),
         icon: "building",
-        id: "layer-plants",
-        visible: @parent.plants?
+        id: "plants-points",
+        visible: @parent&.plants?
       }
     ]
   end
