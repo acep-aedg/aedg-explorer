@@ -276,7 +276,8 @@
     }
   }
 }
-.topic-tile {
+
+.topic-tile.enabled {
   background-color: white;
   border: 1px solid mix($aedg-yellow, #000, 25%);
   color: $aedg-navy;
@@ -291,6 +292,13 @@
     background-color: mix(white, $aedg-yellow, 85%) !important;
     transform: translateY(-2px);
   }
+}
+
+/* Visual cue for disabled tiles */
+.topic-tile.disabled {
+  cursor: not-allowed;
+  filter: grayscale(1);
+  border-style: dashed !important;
 }
 
 .hero-section {

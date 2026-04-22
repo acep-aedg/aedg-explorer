@@ -1,7 +1,17 @@
-.row.row-cols-2.row-cols-sm-3.g-4
-  - @topics.each do |topic|
-    .col
-      = link_to search_metadata_path(topic: topic.name.downcase), class: "text-decoration-none" do
-        .topic-tile.d-flex.flex-column.align-items-center.justify-content-center.p-4.border.rounded-4.bg-light.subtle
-          %i.fs-1.mb-2{ class: "#{topic_icon(topic.name)}" }
-          .fw-semibold.text-dark= topic.name.titleize
+.container
+  .row.row-cols-2.row-cols-sm-3.g-4
+    - @topics.each do |topic_name|
+      - has_data = Metadatum.tagged_with(topic_name, on: :topics).exists?
+      
+      .col
+        - if has_data
+          = link_to search_metadata_path(topic: topic_name.downcase), class: "text-decoration-none h-100" do
+            .topic-tile.enabled.d-flex.flex-column.align-items-center.justify-content-center.p-4.border.rounded-4.bg-light.subtle.h-100
+              %i.fs-1.mb-2{ class: topic_icon(topic_name) }
+              .fw-semibold.text-dark= topic_name.titleize
+        - else
+          -# Non-clickable version
+          .topic-tile.disabled.d-flex.flex-column.align-items-center.justify-content-center.p-4.border.rounded-4.bg-light.subtle.h-100.opacity-50
+            %i.fs-1.mb-2{ class: topic_icon(topic_name) }
+            .fw-semibold.text-muted= topic_name.titleize
+            %span.badge.bg-secondary.mt-2 Coming Soon
