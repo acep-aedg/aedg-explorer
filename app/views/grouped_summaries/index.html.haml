@@ -7,7 +7,7 @@
         .row.justify-content-center.mx-0
           .col-12.col-md-11.col-lg-10.bg-white.bg-opacity-75.p-4.rounded-4.shadow.position-relative
             %h1.fw-bold.m-3
-              %i.bi.bi-grid-fill.me-2
+              %i{ class: "bi #{summary_icon_for(@parents)} me-2" }
               = @parents.model_name.human.titleize.pluralize
 
             %p.lead.fs-5.mx-3
@@ -26,5 +26,6 @@
 .row.justify-content-center.g-5.mb-5.mx-0
   .col-xl-8.mt-0
     = turbo_frame_tag 'collection_list' do
-      = render 'shared/search/results_pagination', letters: @active_letters, model: @parents.model
+      - if show_search_letters?(@parents) 
+        = render 'shared/search/results_pagination', letters: @active_letters, model: @parents.model
       = render 'shared/search/results_list', collection: @parents

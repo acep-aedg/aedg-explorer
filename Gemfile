@@ -64,6 +64,9 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem "memory_profiler"
+  gem "rack-mini-profiler"
+  gem "stackprof"
 end
 
 group :test do

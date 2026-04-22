@@ -3,8 +3,9 @@
 -#   field_name:  optional  (e.g., :grid / :community) – can be nil
 -#   prompt:      optional  (defaults to "Select a <Model>")
 
-- arr = collection.map { |item| [item.name, url_for(item)] }
-- prompt  ||= "Select a #{collection.respond_to?(:klass) ? collection.klass.model_name.human(count: 1) : 'Item'}"
+- arr = collection.map { |item| [item, url_for(item)] }
+- model_name = collection.respond_to?(:klass) ? collection.klass.model_name.human.titleize : 'Item'
+- prompt ||= "Select #{model_name.start_with?(/[AEIOU]/) ? 'an' : 'a'} #{model_name}"
 - field_name   ||= collection.respond_to?(:klass) ? collection.klass.model_name.param_key.to_sym : nil
 
 .d-inline-flex.me-2.flex-shrink-0{ data: { controller: "dropdown", action: "change->dropdown#update" } }

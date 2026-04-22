@@ -15,4 +15,9 @@ RSpec.describe "Accessibility::StaticPages", type: :system do
     visit about_path
     expect_page_to_be_accessible
   end
+
+  it "checks the Explore All page" do
+    visit explore_all_path
+    expect_page_to_be_accessible
+  end
 end

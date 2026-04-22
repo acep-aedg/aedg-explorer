@@ -14,4 +14,17 @@ class Borough < ApplicationRecord
   def census_area?
     name&.match?(/\bcensus\b/i)
   end
+
+  def as_geojson
+    {
+      type: "Feature",
+      geometry: RGeo::GeoJSON.encode(boundary),
+      properties: {
+        id: id,
+        title: name,
+        category: is_census_area ? "Census Area" : "Borough",
+        fips: fips_code
+      }
+    }
+  end
 end

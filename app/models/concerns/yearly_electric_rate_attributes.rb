@@ -1,5 +1,5 @@
 # app/models/concerns/electric_rate_attributes.rb
-module ElectricRateAttributes
+module YearlyElectricRateAttributes
   extend ActiveSupport::Concern
 
   class_methods do
@@ -17,8 +17,14 @@ module ElectricRateAttributes
         reporting_entity: ReportingEntity.from_aedg_id(params[:reporting_entity_id]).first,
         year: params[:year],
         residential_rate: params[:residential_rate],
+        residential_rate_subsidized: params[:residential_rate_subsidized],
         commercial_rate: params[:commercial_rate],
-        industrial_rate: params[:industrial_rate]
+        industrial_rate: params[:industrial_rate],
+        transportation_rate: params[:transportation_rate],
+        community_rate: params[:community_rate],
+        other_rate: params[:other_rate],
+        total_rate: params[:total_rate],
+        source: params[:source]
       )
     end
   end

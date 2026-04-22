@@ -21,7 +21,7 @@ class HouseDistrictAttributesTest < ActiveSupport::TestCase
 
     @valid_props = {
       name: "Test House District",
-      district: "1000",
+      district: 1000,
       as_of_date: "2023-01-01"
     }
   end

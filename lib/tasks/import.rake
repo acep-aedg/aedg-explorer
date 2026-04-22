@@ -36,11 +36,12 @@ namespace :import do
   multitask layer_four: %i[plants communities_service_area_geoms communities_reporting_entities]
 
   # Imports that depend on layer four & earlier
-  multitask layer_five: %i[monthly_generations yearly_generations heating_degree_days fuel_prices monthly_sales]
+  multitask layer_five: %i[monthly_generations yearly_generations heating_degree_days monthly_electric_rates monthly_sales]
 
-  multitask layer_six: %i[income_poverties household_incomes electric_rates yearly_sales miscellaneous]
+  multitask layer_six: %i[income_poverties household_incomes yearly_electric_rates yearly_sales miscellaneous]
 
   task miscellaneous: :environment do
+    Rake::Task["import:fuel_prices"].invoke
     Rake::Task["import:community_grids"].invoke
     Rake::Task["import:generators"].invoke
     Rake::Task["import:populations"].invoke
@@ -98,10 +99,16 @@ namespace :import do
     ImportHelpers.batch_import_csv(filepath, ReportingEntity)
   end
 
-  desc "Import Electric Rates Data from .csv file"
-  task electric_rates: :environment do
-    filepath = Rails.root.join("db/imports/electric_rates/electric_rates.csv")
-    ImportHelpers.batch_import_csv(filepath, ElectricRate)
+  desc "Import Monthly Electric Rates Data from .csv file"
+  task monthly_electric_rates: :environment do
+    filepath = Rails.root.join("db/imports/monthly_electric_rates/monthly_electric_rates.csv")
+    ImportHelpers.batch_import_csv(filepath, MonthlyElectricRate)
+  end
+
+  desc "Import Yearly Electric Rates Data from .csv file"
+  task yearly_electric_rates: :environment do
+    filepath = Rails.root.join("db/imports/yearly_electric_rates/yearly_electric_rates.csv")
+    ImportHelpers.batch_import_csv(filepath, YearlyElectricRate)
   end
 
   desc "Import Monthly Sales Data from .csv file"
