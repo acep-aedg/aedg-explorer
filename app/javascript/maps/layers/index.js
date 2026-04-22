@@ -1,9 +1,11 @@
 import { fetchGeoJSON } from '../fetch.js'
 import { addPolygonLayers } from './polygon.js'
 import { addPointLayer } from './points.js'
-import { attachPopup } from '../popup.js'
+import { attachPopup, detachPopup } from '../popup.js'
 
-// Add a GeoJSON source or update its data if the source already exists
+/**
+ * Add a GeoJSON source or update its data if the source already exists.
+ */
 export function addSource(map, id, data) {
   const src = map.getSource(id)
   if (src) {
@@ -14,35 +16,52 @@ export function addSource(map, id, data) {
   return true
 }
 
-// Remove all layers that use a source, then remove the source (skip "marker:")
+/**
+ * Remove all layers that use a specific source, then remove the source itself.
+ */
 export function removeSourceLayers(map, sourceId) {
   if (sourceId.startsWith('marker:')) return
+  
   const style = map.getStyle?.()
   if (style?.layers) {
     for (const layer of [...style.layers]) {
-      if (layer.source === sourceId && map.getLayer(layer.id)) map.removeLayer(layer.id)
+      if (layer.source === sourceId && map.getLayer(layer.id)) {
+        detachPopup(layer.id)
+        map.removeLayer(layer.id)
+      }
     }
   }
-  if (map.getSource(sourceId)) map.removeSource(sourceId)
+  
+  if (map.getSource(sourceId)) {
+    map.removeSource(sourceId)
+  }
 }
 
-// Fetch GeoJSON by URL, add as a source, then add polygon/point layers accordingly
-export async function loadLayer(map, url, { color, outlineColor } = {}) {
-  if (!map.isStyleLoaded()) await new Promise((r) => map.once('load', r))
-  const fc = await fetchGeoJSON(url)
-  const sourceId = sourceIdFrom(url)
-  addSource(map, sourceId, fc)
-  return addLayersForFC(map, sourceId, fc, { color, outlineColor })
+/**
+ * Main entry point to fetch and load a layer from a URL.
+ * Now uses .then() instead of await to maintain sync-like flow.
+ */
+export function loadLayer(map, url, { color, outlineColor, visibility = 'visible' } = {}) {
+  // We return the promise so the controller can track completion
+  return fetchGeoJSON(url).then(fc => {
+    const sourceId = sourceIdFrom(url)
+    addSource(map, sourceId, fc)
+    
+    const result = addLayersForFC(map, sourceId, fc, { color, outlineColor, visibility })
+    return { ...result, fc } // Return everything the controller needs
+  })
 }
 
-// Add a simple circle layer for point features from an inline FeatureCollection
-export async function loadMarkerLayer(
+/**
+ * Specifically adds a circle layer for marker-style point features.
+ * Removed async/await style checks (handled by controller load event).
+ */
+export function loadMarkerLayer(
   map,
   sourceId,
   fc,
-  { iconSize = 1.6, color = '#1DA6B0', strokeColor = '#fff', strokeWidth = 2 } = {}
+  { iconSize = 1.6, color = '#1DA6B0', strokeColor = '#fff', strokeWidth = 2, visibility = 'visible' } = {}
 ) {
-  if (!map.isStyleLoaded()) await new Promise((r) => map.once('load', r))
   addSource(map, sourceId, fc)
 
   const layerId = `${sourceId}-circle`
@@ -52,6 +71,9 @@ export async function loadMarkerLayer(
       type: 'circle',
       source: sourceId,
       filter: ['==', ['geometry-type'], 'Point'],
+      layout: {
+        'visibility': visibility
+      },
       paint: {
         'circle-radius': 8 * iconSize,
         'circle-color': color,
@@ -60,30 +82,36 @@ export async function loadMarkerLayer(
       }
     })
   }
+  
+  attachPopup(map, layerId)
+  
   return { fc, sourceId, layerIds: [layerId] }
 }
 
-// Internal helper to add polygon or point layers based on first feature’s geometry type
-// maps/layers/index.js snippet
-// Internal helper to add polygon or point layers
-function addLayersForFC(map, sourceId, fc, { color, outlineColor } = {}) {
+/**
+ * Internal helper to add polygon or point layers based on geometry.
+ * Synchronously adds layers to the map.
+ */
+function addLayersForFC(map, sourceId, fc, { color, outlineColor, visibility = 'visible' } = {}) {
   const type = fc?.features?.[0]?.geometry?.type || ''
   let layerIds = []
 
   if (/Polygon/i.test(type)) {
-    layerIds = addPolygonLayers(map, sourceId, { color, outlineColor })
+    // Put polygons UNDER the anchor
+    const beforeId = map.getLayer('polygon-anchor') ? 'polygon-anchor' : undefined
+    layerIds = addPolygonLayers(map, sourceId, { color, outlineColor, beforeId, visibility })
   } else {
-    const id = addPointLayer(map, sourceId, { color, outlineColor })
+    // Put points OVER the anchor (on top)
+    const id = addPointLayer(map, sourceId, { color, outlineColor, visibility })
     if (id) layerIds.push(id)
   }
 
-  // Attach the simple hover popup
-  layerIds.forEach(id => attachPopup(map, id))
-
-  return { fc, sourceId, layerIds }
+  return { sourceId, layerIds }
 }
 
-// Build a deterministic source id from a URL path (replace non-word chars with ':')
+/**
+ * Generates a clean source ID from a URL.
+ */
 export function sourceIdFrom(url) {
   return new URL(url, window.location.origin).pathname.replace(/[^\w-]/g, ':')
 }
