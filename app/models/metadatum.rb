@@ -48,8 +48,7 @@ class Metadatum < ApplicationRecord
   def citation
     author = data.dig("resources", 0, "context", "publisher").presence || "Unknown Author"
     title = data["title"].presence&.titleize || "Untitled Dataset"
-    publication_date = data.dig("resources", 0, "publicationDate")
-    publication_year = Date.parse(publication_date).year if publication_date.present?
+    publication_year = data.dig("resources", 0, "publicationDate")
     version = "v3.0"
     access_date = Time.zone.today.strftime("%B %-d, %Y")
     base_url = "https://akenergygateway.alaska.edu"
