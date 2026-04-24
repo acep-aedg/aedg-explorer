@@ -172,4 +172,8 @@ class Community < ApplicationRecord
 
     @local_service_area = !!service_area&.service_area_geoms&.many?
   end
+
+  def borough?
+    @borough ||= borough.present?
+  end
 end
