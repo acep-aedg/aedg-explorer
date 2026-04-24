@@ -16,24 +16,12 @@ class RegionalCorporation < ApplicationRecord
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
 
   has_many :communities, foreign_key: :regional_corporation_fips_code, primary_key: :fips_code
-  has_many :reporting_entities, through: :communities
-  has_many :service_area_geoms,
-           lambda { |reg_corp|
-             unscope(:where).where(
-               "ST_Intersects(
-                   service_area_geoms.boundary,
-                   (SELECT boundary FROM regional_corporations WHERE id = ?)
-                 )",
-               reg_corp.id
-             )
-           },
-           dependent: :nullify,
-           inverse_of: false
-  has_many :plants, through: :service_area_geoms
+  has_many :service_area_geoms, -> { distinct }, through: :communities
+  has_many :plants, -> { distinct }, through: :service_area_geoms
   has_many :service_areas, -> { distinct }, through: :service_area_geoms
-  has_many :capacities, through: :plants
-  has_many :yearly_generations, through: :plants
-  has_many :monthly_generations, through: :plants
+  has_many :capacities, -> { distinct }, through: :plants
+  has_many :yearly_generations, -> { distinct }, through: :plants
+  has_many :monthly_generations, -> { distinct }, through: :plants
 
   default_scope { order(name: :asc) }
 
