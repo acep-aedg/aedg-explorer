@@ -9,7 +9,7 @@
     "chart.js": "^4.4.8",
     "datatables.net-bs5": "^2.2.2",
     "nodemon": "^3.1.7",
-    "postcss": "^8.4.47",
+    "postcss": "^8.5.10",
     "postcss-cli": "^11.0.0",
     "sass": "^1.80.6"
   },
