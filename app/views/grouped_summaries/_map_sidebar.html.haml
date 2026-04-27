@@ -7,17 +7,17 @@
         
         / Map Layer: Boundary
         = map_layer_checkbox(id: @parent.boundary_map_layer, label: "#{@parents.model_name.human.titleize} Boundary", path_args: [:boundary, @parent, :maps]) if @parent.boundary?
-        / Map Layer: Communities
-        = map_layer_checkbox(id: 'layer-communities', label: 'Communities', path_args: [:community_locations, @parent, :maps])
+        / Map Layer: Community Locations
+        = map_layer_checkbox(id: 'community-locations', label: 'Communities', path_args: [:community_locations, @parent, :maps])
         / Map Layer: Utility Service Area
-        = map_layer_checkbox(id: 'layer-service-area-utility', label: 'Utility Service Area(s)', path_args: [:service_areas, @parent, :maps]) if @parent.service_areas?
+        = map_layer_checkbox(id: 'service-area', label: 'Utility Service Area(s)', path_args: [:service_areas, @parent, :maps]) if @parent.service_areas?
         / Map Layer: Local Service Area
-        = map_layer_checkbox(id: 'layer-service-area-local', label: 'Local Service Area(s)', path_args: [:service_area_geoms, @parent, :maps]) if @parent.local_service_area?
+        = map_layer_checkbox(id: 'service-area-geom', label: 'Local Service Area(s)', path_args: [:service_area_geoms, @parent, :maps]) if @parent.local_service_area?
         / Map Layer: Plants
-        = map_layer_checkbox(id: 'layer-plants', label: 'Power Plants', path_args: [:plants, @parent, :maps]) if @parent.plants?
-        
+        = map_layer_checkbox(id: 'plant-points', label: 'Power Plants', path_args: [:plants, @parent, :maps]) if @parent.plants?
+
         / Map Layer: Bulk Fuel Facilities
-        /= map_layer_checkbox(id: 'layer-bulk-fuel-facilities', label: 'Bulk Fuel Facilities', path_args: [:bulk_fuel_facilities, @parent, :maps]) if @parent.bulk_fuel_facilities?
+        /= map_layer_checkbox(id: 'bulk-fuel-facilities-points', label: 'Bulk Fuel Facilities', path_args: [:bulk_fuel_facilities, @parent, :maps]) if @parent.bulk_fuel_facilities?
 
     .flex-grow-1.position-relative
       .h-100{ data: { maps_target: "map" } }

@@ -44,7 +44,7 @@ class HouseDistrict < ApplicationRecord
   end
 
   def boundary_map_layer
-    "layer-house"
+    "house-districts"
   end
 
   def long_name

@@ -57,7 +57,7 @@ class GroupedSummariesController < ApplicationController
   helper_method :default_map_layer
 
   def default_map_layer
-    "layer-communities"
+    "community-locations"
   end
 
   def set_nav_tab_links
@@ -81,22 +81,22 @@ class GroupedSummariesController < ApplicationController
         label: "Utility Service Areas",
         url: polymorphic_path([:service_areas, @parent, :maps]),
         icon: "bounding-box",
-        id: "layer-service-area-utility",
-        visible: @parent.service_areas?
+        id: "service-area",
+        visible: @parent&.service_areas?
       },
       {
         label: "Local Service Areas",
         url: polymorphic_path([:service_area_geoms, @parent, :maps]),
         icon: "bounding-box",
-        id: "layer-service-area-local",
+        id: "service-area-geom",
         visible: @parent.local_service_area?
       },
       {
         label: "Power Plants",
         url: polymorphic_path([:plants, @parent, :maps]),
         icon: "building",
-        id: "layer-plants",
-        visible: @parent.plants?
+        id: "plant-points",
+        visible: @parent&.plants?
       }
     ]
   end
@@ -107,7 +107,7 @@ class GroupedSummariesController < ApplicationController
         label: "Communities",
         url: polymorphic_path([:community_locations, @parent, :maps]),
         icon: "people",
-        id: "layer-communities",
+        id: "community-locations",
         visible: @parent.communities?
       }
     ] + (
