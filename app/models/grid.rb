@@ -14,8 +14,8 @@ class Grid < ApplicationRecord
   has_many :communities, through: :community_grids
   has_many :reporting_entities
   has_many :plants
-  has_many :service_area_geoms, through: :plants
-  has_many :service_areas, through: :service_area_geoms
+  has_many :service_area_geoms, -> { distinct }, through: :plants
+  has_many :service_areas, -> { distinct }, through: :service_area_geoms
   has_many :capacities, through: :plants
   has_many :yearly_generations, through: :plants
   has_many :monthly_generations, through: :plants
