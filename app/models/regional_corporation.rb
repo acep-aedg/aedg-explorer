@@ -30,7 +30,7 @@ class RegionalCorporation < ApplicationRecord
   end
 
   def boundary_map_layer
-    "layer-regional-corporation"
+    "regional-corporations"
   end
 
   def as_geojson
@@ -40,6 +40,7 @@ class RegionalCorporation < ApplicationRecord
       properties: {
         id: id,
         name: name,
+        category: "Native Regional Corporation",
         land_area: land_area,
         water_area: water_area
       }

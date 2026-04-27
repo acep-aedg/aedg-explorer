@@ -25,4 +25,5 @@ export const LAYER_COLORS = {
   "service-area":           COLORS.medium_yellow,
   "bulk-fuel-facilities-points": COLORS.dark_green,
   "boroughs": COLORS.dark_brown,
+  "regional-corporations": COLORS.light_brown,
 };

@@ -1,0 +1,18 @@
+- tab = 'general'
+
+= turbo_frame_tag "tab_content" do
+
+  = render 'shared/tab_nav', links: @jump_to_links
+    
+  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+    
+    #overview.scroll-section.mb-5
+      = render 'shared/section_header', 
+        icon: 'globe', 
+        title: 'Overview', 
+        description: 'Location and regional associations',
+        anchor: '#overview'
+        
+      = render "regional_corporations/#{tab}/geography"
+
+      = render "regional_corporations/#{tab}/communities"
