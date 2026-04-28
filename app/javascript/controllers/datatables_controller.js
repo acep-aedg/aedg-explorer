@@ -4,7 +4,7 @@ import DataTable from "datatables.net-bs5";
 // Connects to data-controller="datatables"
 export default class extends Controller {
   static values = {
-    order: { type: Array, default: [0, 'asc'] },
+    order: { type: Array, default: [[0, 'asc']] },
     pagesize: { type: Number, default: 10 },
     load: String
   }
@@ -34,7 +34,7 @@ export default class extends Controller {
       destroy: true, // overwrite any "Zombie" tables left by Turbo.
       data: data,
       columns: columns,
-      order: [this.orderValue],
+      order: this.orderValue,
       pageLength: this.pagesizeValue,
       scrollX: true
     });
