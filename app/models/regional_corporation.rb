@@ -7,10 +7,6 @@ class RegionalCorporation < ApplicationRecord
 
   friendly_id :name, use: :slugged
 
-  def should_generate_new_friendly_id?
-    slug.nil? || name_changed?
-  end
-
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
@@ -27,6 +23,10 @@ class RegionalCorporation < ApplicationRecord
 
   def to_s
     name
+  end
+
+  def should_generate_new_friendly_id?
+    slug.nil? || name_changed?
   end
 
   def boundary_map_layer

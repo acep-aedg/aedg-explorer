@@ -112,9 +112,10 @@ class GroupedSummariesController < ApplicationController
       }
     ] + (
       if @parent.boundary?
+        display_name = @parent.respond_to?(:display_type) ? @parent.display_type : @parent.class.model_name.human.titleize
         [
           {
-            label: "#{@parent.class.model_name.human.titleize} Boundary",
+            label: "#{display_name} Boundary",
             url: polymorphic_path([:boundary, @parent, :maps]),
             icon: "bounding-box",
             id: @parent.boundary_map_layer,
