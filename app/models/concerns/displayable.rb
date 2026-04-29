@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/ModuleLength
 module Displayable
   extend ActiveSupport::Concern
 
@@ -53,13 +52,11 @@ module Displayable
   def service_area_collection
     return @service_area_collection if defined?(@service_area_collection)
 
-    @service_area_collection = if respond_to?(:service_areas)
-                                 service_areas.to_a
-                               elsif respond_to?(:service_area)
-                                 [service_area].compact
-                               else
-                                 []
-                               end
+    @service_area_collection ||= if respond_to?(:service_areas)
+                                   service_areas.to_a
+                                 else
+                                   Array(respond_to?(:service_area) ? service_area : nil).compact
+                                 end
   end
 
   def service_areas?
@@ -129,14 +126,11 @@ module Displayable
   def local_service_area?
     @local_service_area ||= begin
       local_ids = service_area_geoms.ids
-      ServiceAreaGeom.where(service_area_cpcn_id: service_areas.select(:cpcn_id))
-                     .where.not(id: local_ids)
-                     .exists?
+      ServiceAreaGeom.where(service_area_cpcn_id: service_areas.select(:cpcn_id)).where.not(id: local_ids).exists?
     end
   end
 
   # --- Grouped ---
-
   def generation?
     yearly_generations? || monthly_generations?
   end
@@ -169,4 +163,3 @@ module Displayable
     yearly_electricity_sales? || yearly_electric_rates? || yearly_electricity_revenues? || yearly_electricity_customers?
   end
 end
-# rubocop:enable Metrics/ModuleLength

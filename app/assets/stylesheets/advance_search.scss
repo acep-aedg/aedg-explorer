@@ -1,189 +1,199 @@
 // Structural Fixes
 .row.flex-nowrap {
-  display: flex;
-  overflow: visible !important;
-  position: relative; 
+    display: flex;
+    overflow: visible !important;
+    position: relative; 
 }
 
 .main_nav_sidebar {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  z-index: 1000;
-  align-self: flex-start;
-  border-right: 1px solid #dee2e6;
-  background: white; 
-  overflow: visible !important; 
+    width: 30%;
+    min-width: 260px;
+    max-width: 500px;
+    flex: 0 0 auto;
+    position: sticky;
+    top: var(--banner-height, 0px);
+    z-index: 1000;
+    max-height: 100vh;
+    align-self: flex-start;
+    border-right: 1px solid #dee2e6;
 }
 
 .panel-stage {
-  position: absolute;
-  top: 0;
-  left: 33.3%; /* Aligned for col-md-4 sidebar */
-  width: 0;
-  height: 100%;
-  overflow: visible !important;
-  pointer-events: none;
-  z-index: 1050;
+    position: sticky;
+    top: var(--banner-height, 0px);
+    left: 33.3%; /* Aligned for col-md-4 sidebar */
+    width: 0;
+    height: 100%;
+    overflow: visible !important;
+    pointer-events: none;
+    z-index: 1000;
 }
 
 .facet-panel {
-  position: absolute;
-  top: 10px;
-  left: 0;
-  width: 400px;
-  display: block !important;
-  visibility: hidden;
-  opacity: 0;
-  transform: translateX(-420px);
-  transition: transform 0.4s ease, opacity 0.3s ease;
-  pointer-events: auto;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 400px;
+    display: block !important;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-420px);
+    transition: transform 0.4s ease, opacity 0.3s ease;
+    pointer-events: auto;
 }
 
 .facet-panel.panel-visible {
-  visibility: visible !important;
-  opacity: 1 !important;
-  transform: translateX(0) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateX(0) !important;
 }
 
 // Alphabet Navigation
 .facet-alphabet-nav {
-  width: 35px;
-  background-color: #f8f9fa;
-  border-left: 1px solid #eee;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .alphabet-link {
-    // RESET BUTTON DEFAULTS
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    
-    // SIZE & ALIGNMENT
+    width: 35px;
+    background-color: #f8f9fa;
+    border-left: 1px solid #eee;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 100%;       // Take up full 35px width
-    height: 24px;      // Fixed height for vertical consistency
-    
-    // TYPOGRAPHY
-    color: $aedg-navy;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    
-    &:hover, &.active {
-      color: $aedg-yellow !important;
-      transform: scale(1.2);
-    }
-    
-    &.text-muted {
-      opacity: 0.3;
-      pointer-events: none;
-      cursor: default;
-    }
 
-    // Specific fix for the Bootstrap Icon in the list button
-    i.bi-list {
-      font-size: 1rem;
+    .alphabet-link {
+        // RESET BUTTON DEFAULTS
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        
+        // SIZE & ALIGNMENT
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;       // Take up full 35px width
+        height: 24px;      // Fixed height for vertical consistency
+        
+        // TYPOGRAPHY
+        color: $aedg-navy;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        
+        &:hover, &.active {
+        color: $aedg-yellow !important;
+        transform: scale(1.2);
+        }
+        
+        &.text-muted {
+        opacity: 0.3;
+        pointer-events: none;
+        cursor: default;
+        }
+
+        // Specific fix for the Bootstrap Icon in the list button
+        i.bi-list {
+        font-size: 1rem;
+        }
     }
-  }
 }
 
 //  Active Filters & Badges
 #active_filters_list {
-  display: flex;
-  flex-wrap: wrap;     
-  gap: 3px;            
-  padding: 8px 0;
+    display: flex;
+    flex-wrap: wrap;     
+    gap: 3px;            
+    padding: 8px 0;
 
-  .badge-wrapper {
-    display: inline-flex;
-    align-items: center; 
-    
-    background-color: #ffffff;
-    /* Use a very deep navy (almost black) to ensure it's bold */
-    color: #001f3f !important; 
-    border: 1px solid #adb5bd; /* Slightly darker border for definition */
-    
-    border-radius: 50px; 
-    padding: 1px 9px;      
-    
-    font-size: 0.72rem;    
-    font-weight: 700;      /* Heavy weight for maximum readability */
-    line-height: 1.2;
-    opacity: 1 !important; /* Force full visibility */
-    
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
-    transition: all 0.1s ease;
+    .badge-wrapper {
+        display: inline-flex;
+        align-items: center; 
+        
+        background-color: #ffffff;
+        /* Use a very deep navy (almost black) to ensure it's bold */
+        color: #001f3f !important; 
+        border: 1px solid #adb5bd; /* Slightly darker border for definition */
+        
+        border-radius: 50px; 
+        padding: 1px 9px;      
+        
+        font-size: 0.72rem;    
+        font-weight: 700;      /* Heavy weight for maximum readability */
+        line-height: 1.2;
+        opacity: 1 !important; /* Force full visibility */
+        
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+        transition: all 0.1s ease;
 
-    a {
-      /* The X should also be dark navy so it doesn't look washed out */
-      color: #001f3f !important;
-      opacity: 0.6; /* X is slightly softer than the text */
-      text-decoration: none;
-      margin-left: 6px;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      line-height: 1;
-      
-      &:hover {
-        color: #dc3545 !important; /* Solid Red on hover */
-        opacity: 1;
-      }
+        a {
+        /* The X should also be dark navy so it doesn't look washed out */
+        color: #001f3f !important;
+        opacity: 0.6;  /* X is slightly softer than the text */
+        text-decoration: none;
+        margin-left: 6px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        line-height: 1;
+        
+        &:hover {
+            color: #dc3545 !important; /* Solid Red on hover */
+            opacity: 1;
+        }
+        }
+
+        &:hover {
+        border-color: #001f3f;
+        background-color: #f8f9fa;
+        }
     }
-
-    &:hover {
-      border-color: #001f3f;
-      background-color: #f8f9fa;
-    }
-  }
 }
 
 /* Polished Loading State */
-#active_filters_list[busy] {
-  opacity: 0.4;
-  filter: grayscale(50%); /* Extra visual cue it's loading */
+#active_filters_list[busy] { 
+    opacity: 0.4;
+    filter: grayscale(50%);  /* Extra visual cue it's loading */
 }
 
 // Results Area
 .main_results_area {
-  flex: 1;
-  min-width: 0;
-  padding: 2rem;
+    flex: 1;
+    min-width: 0;
+    padding: 2rem;
 }
 
 #results_frame {
-  min-height: 800px;
-  transition: opacity 0.2s ease-in-out;
-  backface-visibility: hidden;
-  transform: translateZ(0); 
-  will-change: opacity;
+    min-height: 800px;
+    transition: opacity 0.2s ease-in-out;
+    backface-visibility: hidden;
+    transform: translateZ(0); 
+    will-change: opacity;
 
-  &[busy] {
-    animation: pulse 1.5s infinite ease-in-out;
-  }
+    &[busy] {
+        animation: pulse 1.5s infinite ease-in-out;
+    }
 }
 
 /* Prevents the 'flash of white' */
 turbo-frame {
-  display: block;
-  min-height: 1px;
+    display: block;
+    min-height: 1px;
 }
 
 /* Cursor loading state */
 .main_nav_sidebar:has(~ .main_results_area turbo-frame[busy]) {
-  cursor: wait;
+    cursor: wait;
 }
 
 @keyframes pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 0.3; }
-  100% { opacity: 0.6; }
+    0% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+
+    100% {
+        opacity: 0.6;
+    }
 }
