@@ -9,7 +9,7 @@
           
           - if entity.is_a?(Community)
             .d-flex.align-items-center.flex-wrap.gap-1.text-muted.small
-              - if entity.borough.present? && !entity.borough.census_area?
+              - if entity.borough.present? && !entity.borough.is_census_area?
                 %span.fw-semibold.text-secondary= entity.borough.name
 
                 - if entity.grid.present?

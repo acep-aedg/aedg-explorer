@@ -1,5 +1,6 @@
 - cache [entity, "power-generation-sources-v1"] do
   - service_area_info = service_area_text(entity)
+  - entity_name = entity.respond_to?(:display_type) ? entity.display_type.downcase : entity.class.model_name.human.downcase
   
   %i.bi.bi-geo-alt.text-primary.fs-4
   .flex-grow-1.ms-3
@@ -7,7 +8,7 @@
     %p.text-muted.mb-1
       This section displays data from energy assets within the 
       %strong= service_area_info[:label]
-      = "that #{service_area_info[:count] == 1 ? 'serves' : 'serve'} this #{entity.class.model_name.human.downcase}."
+      = "that #{service_area_info[:count] == 1 ? 'serves' : 'serve'} this #{entity_name}."
       
     - if entity.respond_to?(:grid) && entity.grid
       = link_to grid_path(entity.grid, anchor: 'capacity'),

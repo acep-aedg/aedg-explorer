@@ -4,6 +4,7 @@ class Grid < ApplicationRecord
   include ImportFinders
   include Displayable
   include Searchable
+  include SummaryParent
   extend FriendlyId
 
   accepts_nested_attributes_for :aedg_import
