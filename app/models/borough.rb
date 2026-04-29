@@ -3,6 +3,7 @@ class Borough < ApplicationRecord
   include Facetable
   include Displayable
   include Searchable
+  include SummaryParent
   extend FriendlyId
 
   friendly_id :name, use: :slugged
@@ -33,8 +34,8 @@ class Borough < ApplicationRecord
     slug.nil? || name_changed?
   end
 
-  def display_type
-    @display_type ||= is_census_area? ? "Census Area" : "Borough"
+  def display_title
+    @display_title ||= is_census_area? ? "Census Area" : "Borough"
   end
 
   def self.dropdown_label

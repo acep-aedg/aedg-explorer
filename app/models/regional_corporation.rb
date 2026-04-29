@@ -2,6 +2,7 @@ class RegionalCorporation < ApplicationRecord
   include RegionalCorporationAttributes
   include Facetable
   include Displayable
+  include SummaryParent
   include Searchable
   extend FriendlyId
 

@@ -3,6 +3,7 @@ class HouseDistrict < ApplicationRecord
   include Facetable
   include Displayable
   include Searchable
+  include SummaryParent
   extend FriendlyId
 
   friendly_id :district, use: :slugged
