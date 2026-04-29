@@ -2,6 +2,10 @@ class Metadatum < ApplicationRecord
   include MetadatumImport
   include PgSearch::Model
 
+  SUPPORTED_TOPICS = ["Energy", "Social", "Transportation", "Technology", "Geography", "Data Models"].freeze
+
+  acts_as_taggable_on :topics
+
   pg_search_scope :search_full_text,
                   against: [:name],
                   associated_against: {

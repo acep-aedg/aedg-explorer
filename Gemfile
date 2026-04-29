@@ -103,6 +103,6 @@ gem "brakeman", "~> 8.0"
 gem "kramdown"
 gem "kramdown-parser-gfm"
 gem "kredis"
-gem "pagy", "~> 43.2.9"
+gem "pagy", "~> 43.5.1"
 gem "rubyzip", ">= 2.3.0"
 gem "simplecov", require: false, group: :test

@@ -62,8 +62,8 @@ Add the map `layer-id` (which is the slug url name) and `color` to the `LAYER_CO
 
 ```js
 export const LAYER_COLORS = {
-  "community_locations": "#75ba75",
-  "plants-points": "#088",
+  "community-locations": "#75ba75",
+  "plant-points": "#088",
   "senate-districts": "#fec76f",
   "layer-id": "#newcolor"
 };
@@ -78,7 +78,7 @@ To override or pass in custom colors pass in the `color` and or `outline_color`,
     action: "click->maps#showLayer",
     url: plants_community_maps_path(@community),
     fit: true,
-    checkbox_id: "plants-points", # toggles checkbox in map panel, ensure checkbox exists
+    checkbox_id: "plant-points", # toggles checkbox in map panel, ensure checkbox exists
     color: "#FF0000",
     outline_color: "#ffffff"
   }

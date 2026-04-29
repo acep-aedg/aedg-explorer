@@ -60,7 +60,7 @@ class SenateDistrict < ApplicationRecord
   end
 
   def boundary_map_layer
-    "layer-senate"
+    "senate-districts"
   end
 
   def as_geojson
