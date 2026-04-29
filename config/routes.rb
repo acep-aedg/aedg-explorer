@@ -105,6 +105,14 @@ Rails.application.routes.draw do
         collection { get :boundary }
       end
     end
+
+    resources :regional_corporations, path: "regional-corporations", only: %i[index show] do
+      concerns :summarizable, resource_name: :grouped_summaries
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

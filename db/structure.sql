@@ -1346,7 +1346,8 @@ CREATE TABLE public.regional_corporations (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     land_area bigint,
-    water_area bigint
+    water_area bigint,
+    slug character varying
 );
 
 
@@ -2886,6 +2887,13 @@ CREATE UNIQUE INDEX index_regional_corporations_on_fips_code ON public.regional_
 
 
 --
+-- Name: index_regional_corporations_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_regional_corporations_on_slug ON public.regional_corporations USING btree (slug);
+
+
+--
 -- Name: index_reporting_entities_on_grid_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3436,6 +3444,7 @@ ALTER TABLE ONLY public.monthly_generations
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260421224848'),
 ('20260410175545'),
 ('20260408230311'),
 ('20260406191044'),

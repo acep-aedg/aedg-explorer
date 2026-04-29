@@ -15,7 +15,7 @@ class ServiceAreaGeom < ApplicationRecord
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
         id: id,
-        category: "Service Area",
+        category: "Local Service Area",
         title: service_area&.name,
         aedg_id: aedg_id
       }
