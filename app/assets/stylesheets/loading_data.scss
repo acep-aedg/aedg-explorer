@@ -1,0 +1,59 @@
+#import-banner-container {
+    position: sticky;
+    top: 0; // Stick to the very top of the viewport
+    width: 100%;
+    z-index: 1100; // Higher than the header/toolbar (usually > 1070)
+    background: white;
+    display: block;
+
+    // The magic variable for the toolbar below it
+    --banner-height: 38px;
+}
+
+#summary-toolbar.sticky-top {
+    top: var(--banner-height, 0px) !important;
+}
+
+.import-status-banner {
+    color: $aedg-navy;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid rgba($aedg-navy, 0.1);
+
+    .banner-content {
+        padding: 5px;
+        font-size: 1rem;
+        display: flex;
+        gap: 8px;
+    }
+
+    .progress-track {
+        width: 100%;
+        height: 3px;
+        position: relative;
+        overflow: hidden;
+        background-color: rgba($aedg-navy, 0.05);
+    }
+
+    .progress-bar {
+        width: 30%;
+        height: 100%;
+        background-color: $aedg-navy;
+        position: absolute;
+        left: -30%;
+        animation: slide-progress 2s infinite ease-in-out;
+    }
+}
+
+@keyframes slide-progress {
+    from {
+        left: -30%;
+    }
+
+    to {
+        left: 110%;
+    }
+}
