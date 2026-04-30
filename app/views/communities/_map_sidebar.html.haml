@@ -1,5 +1,3 @@
-- is_census_area = @community.borough.is_census_area?
-
 .d-flex.flex-column.position-sticky{ style: "top: 60px; height: calc(100vh - 60px);" }
   .flex-grow-1.d-flex.flex-column#mapbox-area
     .d-flex.align-items-center
@@ -26,7 +24,7 @@
         = map_layer_checkbox(id: 'bulk-fuel-facilities-points', label: 'Bulk Fuel Facilities', path_args: [:bulk_fuel_facilities, @community, :maps]) if @community.bulk_fuel_facilities?
       
         / Map Layer: Boroughs/Census Areas
-        = map_layer_checkbox(id: 'boroughs', label: is_census_area ? 'Census Area' : 'Borough', path_args: [:boroughs, @community, :maps]) if @community.borough?
+        = map_layer_checkbox(id: 'boroughs', label: @community.borough.is_census_area? ? 'Census Area' : 'Borough', path_args: [:boroughs, @community, :maps]) if @community.borough?
 
     .flex-grow-1.position-relative
       .h-100{ data: { maps_target: "map" } }

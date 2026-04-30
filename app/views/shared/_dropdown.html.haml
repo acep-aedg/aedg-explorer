@@ -4,8 +4,7 @@
 -#   prompt:      optional  (defaults to "Select a <Model>")
 
 - arr = collection.map { |item| [item, url_for(item)] }
-- model_name = collection.respond_to?(:klass) ? collection.klass.model_name.human.titleize : 'Item'
-- prompt ||= "Select #{model_name.start_with?(/[AEIOU]/) ? 'an' : 'a'} #{model_name}"
+- prompt = dropdown_prompt_for(collection)
 - field_name   ||= collection.respond_to?(:klass) ? collection.klass.model_name.param_key.to_sym : nil
 
 .d-inline-flex.me-2.flex-shrink-0{ data: { controller: "dropdown", action: "change->dropdown#update" } }

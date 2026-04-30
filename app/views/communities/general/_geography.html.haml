@@ -10,17 +10,17 @@
                 %td.fw-bold= @community.name
   
             - if @community.borough.present?
-              - if @community.borough.census_area?
+              - if @community.borough.is_census_area?
                 %tr
                   %th.pe-3.text-muted.fw-semibold Borough
                   %td.text-secondary None (in the Unorganized Borough)
                 %tr
                   %th.pe-3.text-muted.fw-semibold Census Area
-                  %td= @community.borough.name
+                  %td= link_to @community.borough.name, borough_path(@community.borough), class: "text-info fw-bold", target: "_blank", rel: "noopener", data: { turbo_frame: "_top" }
               - else
                 %tr
                   %th.pe-3.text-muted.fw-semibold Borough
-                  %td= @community.borough.name
+                  %td= link_to @community.borough.name, borough_path(@community.borough), class: "text-info fw-bold", target: "_blank", rel: "noopener", data: { turbo_frame: "_top" }
   
             - if @community.regional_corporation.present?
               %tr

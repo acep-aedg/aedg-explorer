@@ -2,14 +2,11 @@ class RegionalCorporation < ApplicationRecord
   include RegionalCorporationAttributes
   include Facetable
   include Displayable
+  include SummaryParent
   include Searchable
   extend FriendlyId
 
   friendly_id :name, use: :slugged
-
-  def should_generate_new_friendly_id?
-    slug.nil? || name_changed?
-  end
 
   validates :fips_code, presence: true, uniqueness: true
   validates :name, presence: true
@@ -27,6 +24,10 @@ class RegionalCorporation < ApplicationRecord
 
   def to_s
     name
+  end
+
+  def should_generate_new_friendly_id?
+    slug.nil? || name_changed?
   end
 
   def boundary_map_layer

@@ -3,6 +3,7 @@ class SenateDistrict < ApplicationRecord
   include Displayable
   include Searchable
   include Facetable
+  include SummaryParent
   extend FriendlyId
 
   ## Override the settings from Searchable

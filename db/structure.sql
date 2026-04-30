@@ -219,7 +219,8 @@ CREATE TABLE public.boroughs (
     is_census_area boolean,
     boundary public.geography(Geometry,4326),
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    slug character varying
 );
 
 
@@ -2628,6 +2629,13 @@ CREATE UNIQUE INDEX index_boroughs_on_fips_code ON public.boroughs USING btree (
 
 
 --
+-- Name: index_boroughs_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_boroughs_on_slug ON public.boroughs USING btree (slug);
+
+
+--
 -- Name: index_capacities_on_aea_plant_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3444,6 +3452,7 @@ ALTER TABLE ONLY public.monthly_generations
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260428205235'),
 ('20260421224848'),
 ('20260410175545'),
 ('20260408230311'),

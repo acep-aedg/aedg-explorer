@@ -9,7 +9,7 @@ module ModalHelper
     case entity
     when Grid
       partials.unshift("shared/modal/grid_plant_connection")
-    when SenateDistrict, HouseDistrict, RegionalCorporation
+    when SenateDistrict, HouseDistrict, RegionalCorporation, Borough
       partials.unshift("shared/modal/power_generation_sources")
     end
 
@@ -24,7 +24,7 @@ module ModalHelper
     case entity
     when Grid
       partials.unshift("shared/modal/grid_plant_connection")
-    when SenateDistrict, HouseDistrict, RegionalCorporation
+    when SenateDistrict, HouseDistrict, RegionalCorporation, Borough
       partials.unshift("shared/modal/power_generation_sources")
     end
 

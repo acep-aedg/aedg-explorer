@@ -142,7 +142,7 @@ class Community < ApplicationRecord
         title: name,
         content: content,
         path: community_path_link,
-        (borough&.census_area? ? :census_area : :borough) => borough&.name,
+        (borough&.is_census_area? ? :census_area : :borough) => borough&.name,
         regional_corporation: regional_corporation&.name,
         village_corporation: village_corporation,
         economic_region: economic_region,
