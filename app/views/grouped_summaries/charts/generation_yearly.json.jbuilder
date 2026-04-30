@@ -1,4 +1,4 @@
-json.cache! [@parent.plants.size], expires_in: 12.hours do
+json.cache! [@parent.cache_key_with_version, "yearly_generations"], expires_in: 12.hours do
   chart_data = @parent.yearly_generations.total_mwh_by_energy_source.map do |series|
     series[:color] = ChartsHelper.fuel_color(series[:code]).to_opaque
     series.except(:code)
