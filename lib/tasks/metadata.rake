@@ -3,7 +3,7 @@ require_relative "data_download"
 namespace :metadata do
   desc "Download and Import metadata (Pass PR=123 to test a PR)"
   task import: :environment do
-    ImportHelpers.with_import_banner do
+    ImportHelpers.with_import_banner("Updating Data Explorer records") do
       Rake::Task["metadata:download_data"].invoke
     end
 

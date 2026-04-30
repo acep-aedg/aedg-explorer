@@ -8,7 +8,7 @@ require_relative "versioning"
 namespace :import do
   desc "Import Data Files into the Database (Defaults to DATA_POND_TAG, or pass PR=123 for testing)"
   task all: %i[environment download_data] do
-    msg = "Loading Data..."
+    msg = "Updating Explorer Data..."
     # set loading data feature on the UI when
     ImportHelpers.with_import_banner(msg) do
       puts "🚀 Starting full import..."
