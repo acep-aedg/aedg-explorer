@@ -1,6 +1,6 @@
 - cache [entity, "power-generation-sources-v1"] do
   - service_area_info = service_area_text(entity)
-  - entity_name = entity.respond_to?(:display_type) ? entity.display_type.downcase : entity.class.model_name.human.downcase
+  - entity_name = entity.respond_to?(:display_title) ? entity.display_title.downcase : entity.class.model_name.human.downcase
   
   %i.bi.bi-geo-alt.text-primary.fs-4
   .flex-grow-1.ms-3

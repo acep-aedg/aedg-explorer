@@ -7,7 +7,7 @@
         
         / Map Layer: Boundary
         - if @parent.boundary?
-          - label = @parent.respond_to?(:display_type) ? @parent.display_type : @parent.class.model_name.human.titleize
+          - label = @parent.respond_to?(:display_title) ? @parent.display_title : @parent.class.model_name.human.titleize
           = map_layer_checkbox(id: @parent.boundary_map_layer, label: "#{label} Boundary", path_args: [:boundary, @parent, :maps])
         / Map Layer: Community Locations
         = map_layer_checkbox(id: 'community-locations', label: 'Communities', path_args: [:community_locations, @parent, :maps])
