@@ -12,10 +12,10 @@ class ServiceArea < ApplicationRecord
       type: "Feature",
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
-        id: cpcn_id,
-        category: "Utility Service Area",
+        cpcn_id: cpcn_id,
         title: name,
-        cpcn_id: cpcn_id
+        certificate_url: certificate_url,
+        category: "Utility Service Area"
       }
     }
   end
