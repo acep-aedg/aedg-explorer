@@ -19,7 +19,8 @@ module ApplicationHelper
 
   def page_title(parents, parent = nil)
     if parent.present?
-      [parents.model_name.human.titleize, parent.to_s].compact.join(" - ")
+      label = parent.respond_to?(:display_title) ? parent.display_title.titleize : parents.model_name.human.titleize
+      [label, parent.to_s].compact.join(" - ")
     else
       "#{parents.model_name.human.titleize} Explorer"
     end
