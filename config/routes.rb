@@ -49,7 +49,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :maps, only: [], controller: "communities/maps", defaults: { format: :json } do
+      resources :maps, only: [], controller: "communities/maps", defaults: { format: :geojson } do
         collection do
           get :house_districts
           get :senate_districts
@@ -76,7 +76,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :maps, only: [], module: options[:resource_name], defaults: { format: :json } do
+      resources :maps, only: [], module: options[:resource_name], defaults: { format: :geojson } do
         collection do
           get :community_locations
           get :service_areas
