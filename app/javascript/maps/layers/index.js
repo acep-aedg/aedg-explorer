@@ -21,7 +21,7 @@ export function addSource(map, id, data) {
  */
 export function removeSourceLayers(map, sourceId) {
   if (sourceId.startsWith('marker:')) return
-  
+
   const style = map.getStyle?.()
   if (style?.layers) {
     for (const layer of [...style.layers]) {
@@ -31,7 +31,7 @@ export function removeSourceLayers(map, sourceId) {
       }
     }
   }
-  
+
   if (map.getSource(sourceId)) {
     map.removeSource(sourceId)
   }
@@ -41,13 +41,13 @@ export function removeSourceLayers(map, sourceId) {
  * Main entry point to fetch and load a layer from a URL.
  * Now uses .then() instead of await to maintain sync-like flow.
  */
-export function loadLayer(map, url, { color, outlineColor, visibility = 'visible' } = {}) {
+export function loadLayer(map, url, { color, outlineColor, highlightColor, visibility = 'visible' } = {}) {
   // We return the promise so the controller can track completion
   return fetchGeoJSON(url).then(fc => {
     const sourceId = sourceIdFrom(url)
     addSource(map, sourceId, fc)
-    
-    const result = addLayersForFC(map, sourceId, fc, { color, outlineColor, visibility })
+
+    const result = addLayersForFC(map, sourceId, fc, { color, outlineColor, highlightColor, visibility })
     return { ...result, fc } // Return everything the controller needs
   })
 }
@@ -82,9 +82,9 @@ export function loadMarkerLayer(
       }
     })
   }
-  
+
   attachPopup(map, layerId)
-  
+
   return { fc, sourceId, layerIds: [layerId] }
 }
 
@@ -92,17 +92,17 @@ export function loadMarkerLayer(
  * Internal helper to add polygon or point layers based on geometry.
  * Synchronously adds layers to the map.
  */
-function addLayersForFC(map, sourceId, fc, { color, outlineColor, visibility = 'visible' } = {}) {
+function addLayersForFC(map, sourceId, fc, { color, outlineColor, highlightColor, visibility = 'visible' } = {}) {
   const type = fc?.features?.[0]?.geometry?.type || ''
   let layerIds = []
 
   if (/Polygon/i.test(type)) {
     // Put polygons UNDER the anchor
     const beforeId = map.getLayer('polygon-anchor') ? 'polygon-anchor' : undefined
-    layerIds = addPolygonLayers(map, sourceId, { color, outlineColor, beforeId, visibility })
+    layerIds = addPolygonLayers(map, sourceId, { color, outlineColor, highlightColor, beforeId, visibility })
   } else {
     // Put points OVER the anchor (on top)
-    const id = addPointLayer(map, sourceId, { color, outlineColor, visibility })
+    const id = addPointLayer(map, sourceId, { color, outlineColor, highlightColor, visibility })
     if (id) layerIds.push(id)
   }
 
