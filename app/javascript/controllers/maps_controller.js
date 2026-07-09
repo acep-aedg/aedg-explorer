@@ -48,9 +48,9 @@ export default class extends Controller {
     this.mapTarget._mapbox = this.map
 
     this.map.on('load', () => {
-      this._setupAnchorsAndHighlights()
-      
-      // LAZY LOADING STRATEGY: 
+      this._setupAnchors()
+
+      // LAZY LOADING STRATEGY:
       // Instead of pre-loading 10+ GeoJSONs on refresh (which causes 3s+ lag),
       // we only load markers and the 'defaultLayerId' immediately.
       this._handleInitialState()
@@ -178,38 +178,9 @@ export default class extends Controller {
   /**
    * Sets up invisible anchor layers (for Z-index ordering) and highlight styles
    */
-  _setupAnchorsAndHighlights() {
+  _setupAnchors() {
     // Polygons will be inserted BEFORE this layer to stay under points/labels
     this.map.addLayer({ id: 'polygon-anchor', type: 'background', layout: { visibility: 'none' } })
-
-    this.map.addSource('feature-highlight', {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features: [] }
-    })
-
-    // Highlight for selected Lines/Polygons
-    this.map.addLayer({
-      id: 'feature-highlight',
-      type: 'line',
-      source: 'feature-highlight',
-      filter: ['any', ['==', ['geometry-type'], 'Polygon'], ['==', ['geometry-type'], 'LineString']],
-      paint: { 'line-color': ['coalesce', ['get', 'stroke'], '#FF00FF'], 'line-width': 4, 'line-opacity': 0.8 }
-    })
-
-    // Halo highlight for selected Points
-    this.map.addLayer({
-      id: 'point-highlight',
-      type: 'circle',
-      source: 'feature-highlight',
-      filter: ['==', ['geometry-type'], 'Point'],
-      paint: {
-        'circle-radius': 12,
-        'circle-color': 'rgba(255, 255, 255, 0)',
-        'circle-stroke-width': 3,
-        'circle-stroke-color': ['coalesce', ['get', 'stroke'], '#FF00FF'],
-        'circle-stroke-opacity': 0.8
-      }
-    })
   }
 
   /**
@@ -247,15 +218,6 @@ export default class extends Controller {
     // The checkbox logic remains the same (searching by DOM ID)
     const checkbox = document.getElementById(id)
     if (checkbox) checkbox.checked = isActive
-  }
-
-  _syncActiveStates() {
-    Object.keys(LAYER_COLORS).forEach(id => {
-      const layerIds = this.layersByCheckbox.get(id)
-      if (layerIds && layerIds.some(lId => this.map.getLayer(lId) && this.map.getLayoutProperty(lId, 'visibility') === 'visible')) {
-        this._updateVisualState(id, true)
-      }
-    })
   }
 
   _remember(sourceId, layerIds, layer_id) {

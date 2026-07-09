@@ -12,7 +12,7 @@ export function addSource(map, id, data) {
     src.setData(data)
     return false
   }
-  map.addSource(id, { type: 'geojson', data })
+  map.addSource(id, { type: 'geojson', data, generateId: true})
   return true
 }
 

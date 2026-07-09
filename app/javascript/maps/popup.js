@@ -72,25 +72,29 @@ export function detachPopup(layerId) {
 }
 
 function updateHighlight(map, features) {
-  const source = map.getSource('feature-highlight');
-  if (!source) return;
-
-  const highlightFeatures = (features || []).map(f => {
-    const color = getLegendColorForFeature(map, f);
-    return {
-      type: 'Feature',
-      geometry: f.geometry,
-      properties: { stroke: color }
-    };
+  // Loop through ALL previously highlighted features and turn them off
+  activeFeatureStates.forEach(state => {
+    map.setFeatureState(state, { clicked: false });
   });
+  // Clear out the list now that they are all turned off
+  activeFeatureStates = [];
 
-  source.setData({
-    type: 'FeatureCollection',
-    features: highlightFeatures
+  if (!features || !features.length) return;
+
+  features.forEach(feature => {
+    if (feature.id !== undefined) {
+      const state = { source: feature.layer.source, id: feature.id };
+      map.setFeatureState(state, { clicked: true });
+      activeFeatureStates.push(state);
+    } else {
+      console.warn(`Highlight failed: Feature in source '${feature.layer.source}' is missing a top-level ID.`);
+    }
   });
 }
 
 export function attachPopup(map, layerId) {
+  if (clickableLayers.has(layerId)) return;
+
   clickableLayers.add(layerId);
 
   map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer'; });
@@ -99,7 +103,7 @@ export function attachPopup(map, layerId) {
   if (!map._hasGlobalClickHandler) {
     map.on('click', (e) => {
       const activeLayers = Array.from(clickableLayers).filter(id => map.getLayer(id));
-      if (activeLayers.length === 0) return;
+      if (!activeLayers.length) return;
 
       const rawFeatures = map.queryRenderedFeatures(e.point, { layers: activeLayers });
 
