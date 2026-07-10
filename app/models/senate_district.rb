@@ -35,6 +35,7 @@ class SenateDistrict < ApplicationRecord
   has_many :capacities, -> { distinct }, through: :plants
   has_many :yearly_generations, -> { distinct }, through: :plants
   has_many :monthly_generations, -> { distinct }, through: :plants
+  has_many :yearly_sales, -> { distinct }, through: :communities
 
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
 

@@ -18,6 +18,7 @@ class HouseDistrict < ApplicationRecord
   has_many :capacities, -> { distinct }, through: :plants
   has_many :yearly_generations, -> { distinct }, through: :plants
   has_many :monthly_generations, -> { distinct }, through: :plants
+  has_many :yearly_sales, -> { distinct }, through: :communities
 
   def to_s
     "#{district} - #{name}"
