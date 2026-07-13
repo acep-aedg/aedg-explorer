@@ -1,0 +1,19 @@
+- partial_path = 'grouped_summaries/electric_rates_sales'
+
+= turbo_frame_tag "tab_content" do
+  = render 'shared/tab_nav', links: @jump_to_links
+  
+  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+    = render "#{partial_path}/summary"
+        
+    - if @parent.yearly_electricity_revenues?
+      #revenue.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'cash-coin',
+          title: 'Electricity Revenue',
+          description: 'Electricity revenue by reporting entity',
+          anchor: '#revenue',
+          about_modal_id: 'salesRevenueAboutModal' # this id must match the id in the sections about_modal partial
+        
+        = render "#{partial_path}/yearly_revenue/about_modal"
+        = render "#{partial_path}/revenue"

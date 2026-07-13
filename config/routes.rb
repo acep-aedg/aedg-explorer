@@ -66,6 +66,7 @@ Rails.application.routes.draw do
       member do
         get :general
         get :power_generation, path: "power-generation"
+        get :electric_rates_sales, path: "electric-rates-sales"
       end
 
       resources :charts, only: [], module: options[:resource_name], defaults: { format: :json } do
@@ -73,6 +74,7 @@ Rails.application.routes.draw do
           get :generation_monthly
           get :capacity_yearly
           get :generation_yearly
+          get :electricity_revenue
         end
       end
 

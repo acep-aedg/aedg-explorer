@@ -15,6 +15,10 @@ module GroupedSummaries
     def generation_yearly; end
     def capacity_yearly; end
 
+    def electricity_revenue
+      @grouped = @parent.yearly_sales.with_revenue.reorder(year: :asc).group_by(&:year)
+    end
+
     private
 
     def set_parent

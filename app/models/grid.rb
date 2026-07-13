@@ -20,6 +20,7 @@ class Grid < ApplicationRecord
   has_many :capacities, through: :plants
   has_many :yearly_generations, through: :plants
   has_many :monthly_generations, through: :plants
+  has_many :yearly_sales, through: :reporting_entities
 
   default_scope { order(name: :asc) }
   scope :active, -> { where(id: CommunityGrid.active.select(:grid_id)) }
