@@ -165,7 +165,7 @@ GEM
     jbuilder (2.14.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (2.19.4)
+    json (2.21.1)
     kramdown (2.5.2)
       rexml (>= 3.4.4)
     kramdown-parser-gfm (1.1.0)
@@ -213,7 +213,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.19.4-x86_64-linux-gnu)
       racc (~> 1.4)
-    pagy (43.5.1)
+    pagy (43.6.0)
       json
       uri
       yaml
@@ -432,7 +432,7 @@ DEPENDENCIES
   memory_profiler
   minitest (~> 5.1)
   mocha
-  pagy (~> 43.5.1)
+  pagy (~> 43.6.0)
   pg (~> 1.1)
   pg_search (~> 2.3)
   puma (>= 5.0)
