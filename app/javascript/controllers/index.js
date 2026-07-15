@@ -69,3 +69,6 @@ application.register("yearly-electric-rates-chart", YearlyElectricRatesChartCont
 
 import YearlyGenerationChartController from "./yearly_generation_chart_controller"
 application.register("yearly-generation-chart", YearlyGenerationChartController)
+
+import SplitLayoutController from "./split_layout_controller"
+application.register("split-layout", SplitLayoutController)

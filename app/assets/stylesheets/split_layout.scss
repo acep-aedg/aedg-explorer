@@ -1,0 +1,97 @@
+/* Hide the main navbar when expanded */
+body.map-expanded #top-nav {
+  display: none !important;
+}
+
+body.map-expanded #summary-toolbar {
+  top: 0 !important;
+}
+
+body.map-expanded .split-left {
+  top: var(--main-toolbar-height);
+  height: 100%;
+}
+
+body.map-expanded .dashboard-viewport {
+  height: 100vh;
+}
+
+/* The Viewport sits naturally under the header (and banner), stretching perfectly to the bottom */
+.dashboard-viewport {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--main-toolbar-height) - var(--banner-height));
+  overflow: hidden;
+}
+
+#summary-toolbar {
+  flex-shrink: 0;
+}
+
+/* The Wrapper fills the remaining space under the white toolbar */
+.split-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.split-left {
+  width: calc(33% - 4px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.split-right {
+  width: calc(67% - 4px);
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Jump Nav locks to the top of the right panel */
+#jump-nav.sticky-top {
+  top: 0;
+}
+
+/* Custom Gutter */
+.split-gutter {
+  width: 20px;
+  background-color: #f8fafc;
+  border-left: 1px solid #e2e8f0;
+  border-right: 1px solid #e2e8f0;
+  cursor: col-resize;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* The visual "grip" dots */
+.split-gutter::after {
+  content: "";
+  width: 6px;
+  height: 24px;
+  /* This creates a pattern of 3 little dots stacked vertically */
+  background-image: radial-gradient(circle, #94a3b8 2px, transparent 2px);
+  background-size: 100% 8px;
+  transition: background-image 0.2s ease;
+}
+
+/* Make it pop when hovered or dragged */
+.split-gutter:hover,
+.split-gutter:active {
+  background-color: #e2e8f0;
+}
+
+/* Darken the grip dots slightly when hovered */
+.split-gutter:hover::after,
+.split-gutter:active::after {
+  background-image: radial-gradient(circle, #475569 1.5px, transparent 1.5px);
+}
