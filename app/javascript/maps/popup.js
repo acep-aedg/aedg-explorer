@@ -1,21 +1,24 @@
-import mapboxgl from 'mapbox-gl';
-import { LAYER_COLORS } from './config.js';
+import mapboxgl from "mapbox-gl";
+import { LAYER_COLORS } from "./config.js";
 
 let activePopup = null;
 let clickableLayers = new Set();
+let activeFeatureStates = [];
 
 export function trackPopup(popupInstance) {
   activePopup = popupInstance;
-  activePopup.on('close', () => { activePopup = null; });
+  activePopup.on("close", () => {
+    activePopup = null;
+  });
 }
 
 function getLegendColorForFeature(map, feature) {
   const layerId = feature.layer?.id || "";
-  
+
   // Grab everything after the final colon
-  const parts = layerId.split(':');
+  const parts = layerId.split(":");
   const fileName = parts[parts.length - 1] || "";
-  
+
   // Clean: Remove Mapbox suffixes and convert underscores to dashes
   const slug = fileName
     .replace(/-(fill|outline|circle|line|points)$/, "")
@@ -31,28 +34,34 @@ function getLegendColorForFeature(map, feature) {
     return LAYER_COLORS["community_locations"];
   }
 
-  return '#333333'; 
+  return "#333333";
 }
 
 export function defaultPopupTemplate(map, f) {
   const p = f.properties || {};
   const themeColor = getLegendColorForFeature(map, f);
 
-  const title = p.title || p.name || p.Layer || 'Location Detail';
+  const title = p.title || p.name || p.Layer || "Location Detail";
   const category = p.category || (p.isMarker ? "Community" : "Map Feature");
 
   let contentData = p.content || {};
-  if (typeof contentData === 'string') {
-    try { contentData = JSON.parse(contentData); } catch (e) { contentData = {}; }
+  if (typeof contentData === "string") {
+    try {
+      contentData = JSON.parse(contentData);
+    } catch (e) {
+      contentData = {};
+    }
   }
 
+  // Generate body content
   const bodyContent = Object.entries(contentData)
     .map(([label, value]) => {
-      let displayValue = (typeof value === 'number') ? value.toLocaleString() : value;
-      if (label.startsWith("_")) return `<li class="location-item">${displayValue}</li>`;
-      return `<div class="data-row"><strong>${label}:</strong> ${displayValue}</div>`;
+      const val = typeof value === "number" ? value.toLocaleString() : value;
+      return label.startsWith("_")
+        ? `<li class="location-item">${val}</li>`
+        : `<div class="data-row"><strong>${label}:</strong> ${val}</div>`;
     })
-    .join('');
+    .join("");
 
   return `
     <div class="popup-inner">
@@ -60,8 +69,8 @@ export function defaultPopupTemplate(map, f) {
         <li class="popup-category">${category}</li>
         <p>${title}</p>
       </div>
-      ${bodyContent ? `<ul class="popup-body">${bodyContent}</ul>` : ''}
-      ${p.path ? `<a href="${p.path}" class="popup-link">View Profile →</a>` : ''}
+      ${bodyContent ? `<ul class="popup-body">${bodyContent}</ul>` : ""}
+      ${p.path ? `<a href="${p.path}" class="popup-link">View Profile →</a>` : ""}
       <div class="popup-accent-bar" style="background-color: ${themeColor};"></div>
     </div>
   `;
@@ -72,41 +81,55 @@ export function detachPopup(layerId) {
 }
 
 function updateHighlight(map, features) {
-  const source = map.getSource('feature-highlight');
-  if (!source) return;
-
-  const highlightFeatures = (features || []).map(f => {
-    const color = getLegendColorForFeature(map, f);
-    return {
-      type: 'Feature',
-      geometry: f.geometry,
-      properties: { stroke: color }
-    };
+  // Loop through ALL previously highlighted features and turn them off
+  activeFeatureStates.forEach((state) => {
+    map.setFeatureState(state, { clicked: false });
   });
+  // Clear out the list now that they are all turned off
+  activeFeatureStates = [];
 
-  source.setData({
-    type: 'FeatureCollection',
-    features: highlightFeatures
+  if (!features || !features.length) return;
+
+  features.forEach((feature) => {
+    if (feature.id !== undefined) {
+      const state = { source: feature.layer.source, id: feature.id };
+      map.setFeatureState(state, { clicked: true });
+      activeFeatureStates.push(state);
+    } else {
+      console.warn(
+        `Highlight failed: Feature in source '${feature.layer.source}' is missing a top-level ID.`,
+      );
+    }
   });
 }
 
 export function attachPopup(map, layerId) {
+  if (clickableLayers.has(layerId)) return;
+
   clickableLayers.add(layerId);
 
-  map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer'; });
-  map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = ''; });
+  map.on("mouseenter", layerId, () => {
+    map.getCanvas().style.cursor = "pointer";
+  });
+  map.on("mouseleave", layerId, () => {
+    map.getCanvas().style.cursor = "";
+  });
 
   if (!map._hasGlobalClickHandler) {
-    map.on('click', (e) => {
-      const activeLayers = Array.from(clickableLayers).filter(id => map.getLayer(id));
-      if (activeLayers.length === 0) return;
+    map.on("click", (e) => {
+      const activeLayers = Array.from(clickableLayers).filter((id) =>
+        map.getLayer(id),
+      );
+      if (!activeLayers.length) return;
 
-      const rawFeatures = map.queryRenderedFeatures(e.point, { layers: activeLayers });
+      const rawFeatures = map.queryRenderedFeatures(e.point, {
+        layers: activeLayers,
+      });
 
       // FILTER: Remove duplicates by keeping only one feature per unique source
       // This prevents double-popups for -fill and -outline layers
       const seenSources = new Set();
-      const features = rawFeatures.filter(f => {
+      const features = rawFeatures.filter((f) => {
         const sourceId = f.layer.source;
         if (seenSources.has(sourceId)) return false;
         seenSources.add(sourceId);
@@ -123,26 +146,27 @@ export function attachPopup(map, layerId) {
       if (activePopup) activePopup.remove();
 
       const combinedHTML = features
-        .map(f => defaultPopupTemplate(map, f))
+        .map((f) => defaultPopupTemplate(map, f))
         .join('<div class="popup-separator"></div>');
 
       const newPopup = new mapboxgl.Popup({
         closeButton: true,
         closeOnClick: true,
         offset: 15,
-        maxWidth: '300px',
-        className: 'modern-click-popup'
+        maxWidth: "300px",
+        className: "modern-click-popup",
       })
         .setLngLat(e.lngLat)
         .setHTML(`<div class="stacked-popups">${combinedHTML}</div>`)
         .addTo(map);
 
-      newPopup.on('close', () => {
+      newPopup.on("close", () => {
         updateHighlight(map, []);
       });
 
       trackPopup(newPopup);
     });
+
     map._hasGlobalClickHandler = true;
   }
 }

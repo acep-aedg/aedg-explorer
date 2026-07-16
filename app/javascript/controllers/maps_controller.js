@@ -26,7 +26,6 @@ export default class extends Controller {
 
   connect() {
     mapboxgl.accessToken = this.tokenValue
-
     // State Tracking
     this.layerIds = []                  // Flat list of all Mapbox layer IDs
     this.sourceIds = []                 // Flat list of all Mapbox source IDs
@@ -48,7 +47,7 @@ export default class extends Controller {
     this.mapTarget._mapbox = this.map
 
     this.map.on('load', () => {
-      this._setupAnchorsAndHighlights()
+      this._setupAnchors()
 
       // LAZY LOADING STRATEGY:
       // Instead of pre-loading 10+ GeoJSONs on refresh (which causes 3s+ lag),
@@ -135,11 +134,13 @@ export default class extends Controller {
     checkbox.disabled = true
 
     const color = LAYER_COLORS[layer_id]
-    const outlineColor = color ? this._computeOutlineColor(color) : undefined
+    const outlineColor = color ? this._computeDarkerColor(color) : undefined
+    const highlightColor = color ? this._computeDarkerColor(outlineColor) : undefined
 
     loadLayer(this.map, url, {
       color,
       outlineColor,
+      highlightColor,
       visibility: 'visible'
     })
     /**
@@ -185,40 +186,11 @@ export default class extends Controller {
   }
 
   /**
-   * Sets up invisible anchor layers (for Z-index ordering) and highlight styles
+   * Sets up invisible anchor layers (for Z-index ordering)
    */
-  _setupAnchorsAndHighlights() {
+  _setupAnchors() {
     // Polygons will be inserted BEFORE this layer to stay under points/labels
     this.map.addLayer({ id: 'polygon-anchor', type: 'background', layout: { visibility: 'none' } })
-
-    this.map.addSource('feature-highlight', {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features: [] }
-    })
-
-    // Highlight for selected Lines/Polygons
-    this.map.addLayer({
-      id: 'feature-highlight',
-      type: 'line',
-      source: 'feature-highlight',
-      filter: ['any', ['==', ['geometry-type'], 'Polygon'], ['==', ['geometry-type'], 'LineString']],
-      paint: { 'line-color': ['coalesce', ['get', 'stroke'], '#FF00FF'], 'line-width': 4, 'line-opacity': 0.8 }
-    })
-
-    // Halo highlight for selected Points
-    this.map.addLayer({
-      id: 'point-highlight',
-      type: 'circle',
-      source: 'feature-highlight',
-      filter: ['==', ['geometry-type'], 'Point'],
-      paint: {
-        'circle-radius': 12,
-        'circle-color': 'rgba(255, 255, 255, 0)',
-        'circle-stroke-width': 3,
-        'circle-stroke-color': ['coalesce', ['get', 'stroke'], '#FF00FF'],
-        'circle-stroke-opacity': 0.8
-      }
-    })
   }
 
   /**
@@ -258,15 +230,6 @@ export default class extends Controller {
     if (checkbox) checkbox.checked = isActive
   }
 
-  _syncActiveStates() {
-    Object.keys(LAYER_COLORS).forEach(id => {
-      const layerIds = this.layersByCheckbox.get(id)
-      if (layerIds && layerIds.some(lId => this.map.getLayer(lId) && this.map.getLayoutProperty(lId, 'visibility') === 'visible')) {
-        this._updateVisualState(id, true)
-      }
-    })
-  }
-
   _remember(sourceId, layerIds, layer_id) {
     if (!this.sourceIds.includes(sourceId)) this.sourceIds.push(sourceId)
     this.layersByCheckbox.set(layer_id, layerIds)
@@ -289,7 +252,7 @@ export default class extends Controller {
   /**
    * Generates a darker outline color based on the fill color for better contrast
    */
-  _computeOutlineColor(color) {
+  _computeDarkerColor(color) {
     let hex = color.replace('#', '')
     if (hex.length === 3) hex = hex.split('').map(c => c + c).join('')
     let r = parseInt(hex.substring(0, 2), 16), g = parseInt(hex.substring(2, 4), 16), b = parseInt(hex.substring(4, 6), 16)
