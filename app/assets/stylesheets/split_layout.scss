@@ -9,14 +9,20 @@ body.map-expanded #summary-toolbar {
 
 body.map-expanded .split-left {
   top: var(--main-toolbar-height);
+  width: 100%;
   height: 100%;
 }
 
 body.map-expanded .dashboard-viewport {
   height: 100vh;
 }
+/* ----------------------------------- */
 
-/* The Viewport sits naturally under the header (and banner), stretching perfectly to the bottom */
+/* Jump Nav locks to the top of the right panel */
+#jump-nav.sticky-top {
+  top: 0;
+}
+
 .dashboard-viewport {
   display: flex;
   flex-direction: column;
@@ -24,11 +30,6 @@ body.map-expanded .dashboard-viewport {
   overflow: hidden;
 }
 
-#summary-toolbar {
-  flex-shrink: 0;
-}
-
-/* The Wrapper fills the remaining space under the white toolbar */
 .split-wrapper {
   display: flex;
   flex-direction: row;
@@ -52,11 +53,8 @@ body.map-expanded .dashboard-viewport {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-}
-
-/* Jump Nav locks to the top of the right panel */
-#jump-nav.sticky-top {
-  top: 0;
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--jump-toolbar-height);
 }
 
 /* Custom Gutter */

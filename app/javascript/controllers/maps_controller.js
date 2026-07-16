@@ -26,7 +26,7 @@ export default class extends Controller {
 
   connect() {
     mapboxgl.accessToken = this.tokenValue
-    
+
     // State Tracking
     this.layerIds = []                  // Flat list of all Mapbox layer IDs
     this.sourceIds = []                 // Flat list of all Mapbox source IDs
@@ -49,8 +49,8 @@ export default class extends Controller {
 
     this.map.on('load', () => {
       this._setupAnchorsAndHighlights()
-      
-      // LAZY LOADING STRATEGY: 
+
+      // LAZY LOADING STRATEGY:
       // Instead of pre-loading 10+ GeoJSONs on refresh (which causes 3s+ lag),
       // we only load markers and the 'defaultLayerId' immediately.
       this._handleInitialState()
@@ -83,7 +83,7 @@ export default class extends Controller {
 
     if (!layer_id) return
 
-    // If a non-checkbox (like a button) was clicked, find its "source of truth" 
+    // If a non-checkbox (like a button) was clicked, find its "source of truth"
     // checkbox and trigger it. This keeps the logic centralized in the checkbox state.
     if (!isCheckbox) {
       const sidebarCheckbox = document.getElementById(layer_id)
@@ -108,11 +108,20 @@ export default class extends Controller {
       if (el.checked && el.dataset.fit !== 'false') {
         this._fitToLayer(layer_id)
       }
-    } 
+    }
     // CASE 2: Layer hasn't been fetched yet. Fetch, add to map, then show.
     else if (el.checked && url) {
       this._loadLayerOnDemand(layer_id, url, el)
     }
+  }
+
+  toggleExpand() {
+    document.body.classList.toggle('map-expanded')
+
+    // timeout to let the CSS display/width changes finish rendering first.
+    setTimeout(() => {
+      this.map.resize()
+    }, 100)
   }
 
   // --- PRIVATE ---
@@ -123,33 +132,33 @@ export default class extends Controller {
    */
   _loadLayerOnDemand(layer_id, url, checkbox) {
     if (this.hasLoadingTarget) this.loadingTarget.classList.remove('d-none')
-    checkbox.disabled = true 
+    checkbox.disabled = true
 
     const color = LAYER_COLORS[layer_id]
     const outlineColor = color ? this._computeOutlineColor(color) : undefined
 
-    loadLayer(this.map, url, { 
-      color, 
+    loadLayer(this.map, url, {
+      color,
       outlineColor,
-      visibility: 'visible' 
+      visibility: 'visible'
     })
     /**
-     * Note: 'fc' stands for FeatureCollection.(contains an array of coordinate 
+     * Note: 'fc' stands for FeatureCollection.(contains an array of coordinate
      * pairs that define every single "vertex" (corner) of that shape.)
-     * While Mapbox handles the visual rendering, we store the 'fc' in our own 
-     * Map (this.featureCollections) so we can access the raw coordinates for 
+     * While Mapbox handles the visual rendering, we store the 'fc' in our own
+     * Map (this.featureCollections) so we can access the raw coordinates for
      * bounds calculations (zooming) without having to query the Mapbox API.
      */
     .then(({ fc, sourceId, layerIds }) => {
       // Map the internal Mapbox IDs to our UI ID for future toggling
       this._remember(sourceId, layerIds, layer_id)
       this.featureCollections.set(layer_id, fc)
-      
+
       // Register these specific layers for the popup click handler
       layerIds.forEach(lId => attachPopup(this.map, lId))
 
       this._updateVisualState(layer_id, true)
-      
+
       // Automatically zoom to the new data if requested
       if (checkbox.dataset.fit !== 'false') {
         this._fitToLayer(layer_id)
@@ -233,7 +242,7 @@ export default class extends Controller {
 
   /**
    * Synchronizes UI state.
-   * If 'id' is active, it finds the checkbox AND any button with [data-layer-id] 
+   * If 'id' is active, it finds the checkbox AND any button with [data-layer-id]
    * and applies the 'active' class/checked state.
    */
   _updateVisualState(id, isActive) {
@@ -261,7 +270,7 @@ export default class extends Controller {
   _remember(sourceId, layerIds, layer_id) {
     if (!this.sourceIds.includes(sourceId)) this.sourceIds.push(sourceId)
     this.layersByCheckbox.set(layer_id, layerIds)
-    
+
     const set = this.layersBySource.get(sourceId) || new Set()
     layerIds.forEach((id) => {
       if (!this.layerIds.includes(id)) this.layerIds.push(id)

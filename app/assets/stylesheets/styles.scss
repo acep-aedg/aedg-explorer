@@ -1,19 +1,17 @@
 :root {
-  --main-toolbar-height: 64px; // This gets dynamically updated by JavaScript
-  --banner-height: 0px;
+  --main-toolbar-height: 85.66px;  // The Navy Bar
+  --banner-height: 0px;            // The Import Banner
+  --summary-toolbar-height: 68px;  // The White Bar
+  --jump-toolbar-height: 48px;
 }
+
 // If the banner ID is on the page, update the variable to its height
 body:has(#import-banner-container) {
   --banner-height: 35px;
 }
 
-#jump-nav {
-  position: sticky;
-  z-index: 1010;
-  top: var(--main-toolbar-height);
-}
-
 .navbar {
+  top: 0px;
   box-shadow:
     0 0.5rem 1rem rgba(0, 0, 0, 0.15),
     inset 0 -1px 0 rgba(0, 0, 0, 0.15);
