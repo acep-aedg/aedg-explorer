@@ -1,6 +1,6 @@
 = render 'shared/about_modal', id: 'yearlyElectricRatesAboutModal', title: 'About Yearly Electric Rates Data' do
   .d-flex.mb-4
-    = render 'shared/modal/about_this_calculation', title: "What is the Blended Rate?" do
+    = render 'shared/modal/about_this_section', title: "What is the Blended Rate?" do
       %p.mb-3
         The 
         %strong Blended Rate 
@@ -29,7 +29,7 @@
               %span.text-primary.fw-bold $0.185 per kWh
   
   .d-flex.mb-4
-    = render 'shared/modal/about_this_calculation', title: "Power Cost Equalization (PCE) Communities" do
+    = render 'shared/modal/about_this_section', title: "Power Cost Equalization (PCE) Communities" do
       %p.mb-3
         Residential rates in PCE communities are displayed as rates paid by residential customers 
         %strong before and after 

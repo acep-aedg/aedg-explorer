@@ -1,0 +1,14 @@
+= render 'shared/about_modal', id: 'fuelPriceAboutModal', title: 'About Fuel Price Data' do
+  .d-flex.mb-4
+    = render 'shared/modal/about_this_section', title: "What are Survey & Regional Prices?" do
+      %p.mb-3
+        %strong Survey 
+        prices represent data collected directly from specific communities.
+      %p.mb-3
+        %strong Regional  
+        prices are broader estimates or averages calculated to represent a larger geographic area, often used to estimate fuel costs for unsurveyed locations based on economic regions.
+      
+      %p.mb-3
+        The
+        = link_to "Division of Community and Regional Affairs (DCRA)", "https://www.commerce.alaska.gov/web/dcra/", target: "_blank", rel: "noopener"
+        surveys fuel prices in 100 specific communities bi-annually. For communities not included in this survey, regional averages are used to provide estimated prices.

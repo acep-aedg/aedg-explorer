@@ -14,8 +14,10 @@
           title: 'Fuel Prices',
           description: 'Current and historical price trends for heating fuel and gasoline',
           anchor: "#fuel-prices",
-          related_metadata: ["public_fuel_prices"]
+          related_metadata: ["public_fuel_prices"],
+          about_modal_id: 'fuelPriceAboutModal'
         
+        = render "communities/#{tab}/fuel_prices/about_modal"
         = render "communities/#{tab}/fuel_prices"
       
     - if @community.bulk_fuel_facilities?
