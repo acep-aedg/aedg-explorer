@@ -10,10 +10,6 @@
     --banner-height: 38px;
 }
 
-#summary-toolbar.sticky-top {
-    top: var(--banner-height, 0px) !important;
-}
-
 .import-status-banner {
     color: $aedg-navy;
     width: 100%;

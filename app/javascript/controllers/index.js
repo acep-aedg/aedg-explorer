@@ -52,9 +52,6 @@ application.register("search-panels", SearchPanelsController)
 import SexDistributionChartController from "./sex_distribution_chart_controller"
 application.register("sex-distribution-chart", SexDistributionChartController)
 
-import StickyOffsetController from "./sticky_offset_controller"
-application.register("sticky-offset", StickyOffsetController)
-
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
 
@@ -69,3 +66,6 @@ application.register("yearly-electric-rates-chart", YearlyElectricRatesChartCont
 
 import YearlyGenerationChartController from "./yearly_generation_chart_controller"
 application.register("yearly-generation-chart", YearlyGenerationChartController)
+
+import SplitLayoutController from "./split_layout_controller"
+application.register("split-layout", SplitLayoutController)
