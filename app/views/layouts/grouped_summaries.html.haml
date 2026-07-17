@@ -1,23 +1,26 @@
+- content_for :hide_global_footer, "true"
 - content_for :title, page_title(@parents, @parent)
 - content_for :content do
-  -# Main Toolbar
-  = render "shared/toolbar", 
-    entity: @parent,
-    collection: @parents,
-    tabs: @nav_tab_links,
-    target_frame: "tab_content"
+  .dashboard-viewport
+    -# Main Toolbar
+    = render "shared/toolbar",
+      entity: @parent,
+      collection: @parents,
+      tabs: @nav_tab_links,
+      target_frame: "tab_content"
 
-  -# Wrap Entire Page with Mapbox API data
-  .row.gx-0{ data: mapbox_api_data({maps_default_layer_id_value: default_map_layer})
-  }
-    -# Sidebar with Map
-    .col-md-4.d-none.d-lg-block
-      = render 'grouped_summaries/map_sidebar'
-
-    -# Main Content Area
-    .col-md-12.col-lg-8
-      = turbo_frame_tag "tab_content", data: { controller: "scroll", 
-                                  action: "turbo:frame-render->scroll#scrollToTop" } do
-        = yield
+    .split-wrapper{ data: { controller: "split-layout" } }
+      -# Map
+      .d-none.d-lg-block.split-left{ data: mapbox_api_data({ maps_default_layer_id_value: default_map_layer }).merge({ split_layout_target: "left" }) }
+        = render 'grouped_summaries/map_sidebar'
+      -# user moves to increase or decrease widths
+      .split-gutter{ data: { split_layout_target: "gutter" } }
+      -# right side content
+      .split-right.d-flex.flex-column{ data: { split_layout_target: "right", controller: "scroll", action: "turbo:frame-render->scroll#scrollToTop" } }
+        .flex-grow-1
+          = turbo_frame_tag "tab_content" do
+            = yield
+        .mt-auto
+          = render "shared/footer"
 
 = render template: "layouts/application"

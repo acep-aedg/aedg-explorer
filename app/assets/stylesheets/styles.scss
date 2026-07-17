@@ -10,81 +10,21 @@ body:has(#import-banner-container) {
   --banner-height: 35px;
 }
 
-.navbar {
-  top: 0px;
-  box-shadow:
-    0 0.5rem 1rem rgba(0, 0, 0, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-
-  .nav-link {
-    color: $white;
-
-    &:hover,
-    &.active,
-    &.show,
-    .dropdown.show & {
-      color: $aedg-yellow;
-    }
-  }
-
-  .dropdown {
-    &:hover .dropdown-menu {
-      display: block;
-      visibility: visible;
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .dropdown-menu {
-      display: none;
-      visibility: hidden;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s ease-in-out;
-      background-color: lighten($aedg-navy, 75%);
-      border-radius: 0.5rem;
-      padding: 0;
-      border: none;
-      z-index: 2000 !important;
-
-      li:first-child a {
-        border-radius: 0.5rem 0.5rem 0 0;
-      }
-
-      li:last-child a {
-        border-radius: 0 0 0.5rem 0.5rem;
-      }
-
-      .dropdown-item {
-        padding: 1rem 2rem;
-        font-size: 1rem;
-        font-weight: 500;
-        transition:
-          background-color 0.3s ease,
-          color 0.3s ease;
-
-        &:hover {
-          background-color: lighten($aedg-yellow, 15%);
-          color: $aedg-navy;
-        }
-
-        &.active {
-          background-color: $aedg-yellow;
-          color: $aedg-navy;
-        }
-      }
-    }
-  }
+#summary-toolbar.sticky-top {
+    top: var(--banner-height, 0px) !important;
+    z-index: 1020 !important;
 }
 
 // Hover action only large screens
 @media (min-width: 992px) {
   .navbar .dropdown-toggle::after {
     display: none;
+    z-index: 9999 !important;
   }
 
   .navbar .dropdown-toggle {
     pointer-events: none;
+    z-index: 9999 !important;
   }
 }
 
@@ -164,68 +104,6 @@ body:has(#import-banner-container) {
   background-color: $partner-card-bg;
 }
 
-.timeline {
-  border-left: 1px solid hsl(0, 0%, 90%);
-  position: relative;
-  list-style: none;
-}
-
-.timeline .timeline-item {
-  position: relative;
-}
-
-.timeline .timeline-item:after {
-  position: absolute;
-  display: block;
-  top: 0;
-}
-
-.timeline .timeline-item:after {
-  background-color: $aedg-yellow;
-  left: -40px;
-  border-radius: 50%;
-  height: 14px;
-  width: 14px;
-  content: "";
-}
-
-#faq {
-  .nav-pills .nav-link {
-    background-color: $faq-category-inactive-bg; // light bg
-    color: $aedg-navy;
-    transition: all 0.3s ease;
-    border-radius: 50rem;
-
-    &:hover {
-      background-color: $aedg-yellow;
-      color: $white;
-    }
-
-    &.active {
-      background-color: $aedg-navy;
-      color: $white;
-    }
-  }
-
-  .accordion-button {
-    background-color: $white;
-    color: $aedg-navy;
-    transition: all 0.3s ease;
-    border-left: 5px solid transparent;
-
-    &:not(.collapsed) {
-      border-left: 5px solid $aedg-yellow;
-      background-color: $white;
-      color: $aedg-navy;
-      box-shadow: none;
-    }
-
-    &:focus {
-      box-shadow: none;
-    }
-  }
-}
-
 .circle-icon {
   width: 3.5rem;
   height: 3.5rem;
@@ -247,12 +125,6 @@ body:has(#import-banner-container) {
 .img-max-h-300 {
   max-height: 300px;
   object-fit: cover;
-}
-
-// Target links coming from yml static content (markdown)
-#data-creation-process .text-muted a {
-  text-decoration: none;
-  font-weight: 500;
 }
 
 .nav-tabs {
@@ -278,77 +150,6 @@ body:has(#import-banner-container) {
       font-weight: 600;
     }
   }
-}
-
-.topic-tile.enabled {
-  background-color: white;
-  border: 1px solid mix($aedg-yellow, #000, 25%);
-  color: $aedg-navy;
-  transition: all 0.2s ease;
-
-  i,
-  .text-dark {
-    color: $aedg-navy !important;
-  }
-
-  &:hover {
-    background-color: mix(white, $aedg-yellow, 85%) !important;
-    transform: translateY(-2px);
-  }
-}
-
-/* Visual cue for disabled tiles */
-.topic-tile.disabled {
-  cursor: not-allowed;
-  filter: grayscale(1);
-  border-style: dashed !important;
-}
-
-.hero-section {
-  position: relative;
-  background-size: cover;
-  background-position: center;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.3);
-    z-index: 0;
-    border-radius: inherit;
-  }
-
-  .container-fluid {
-    position: relative;
-    z-index: 1;
-  }
-}
-
-#explore-data-hero {
-  @extend .hero-section;
-  background-image:
-    linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)),
-    url("landscape_pc-gwen-holdmann.jpg");
-}
-
-#community-data-hero {
-  @extend .hero-section;
-  background-image:
-    linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)),
-    url("landscape_pc-gwen-holdmann.jpg");
-}
-
-#grouped-summaries-hero {
-  @extend .hero-section;
-  background-image:
-    linear-gradient(rgba(0, 47, 95, 0.6), rgba(255, 255, 255, 0.6)),
-    url("landscape_pc-gwen-holdmann.jpg");
-}
-
-#quick-nav .nav-link:hover {
-  background-color: $gray-200;
-  color: darken($primary, 25%);
-  border-radius: 0.25rem;
 }
 
 .pagy-bootstrap-nav {

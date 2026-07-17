@@ -11,22 +11,16 @@
 
       / Map Layer: Local Service Area
       = map_layer_checkbox(id: 'service-area-geom', label: 'Local Service Area', path_args: [:service_area_geom, @community, :maps]) if @community.local_service_area?
-
       / Map Layer: Utility Service Area
       = map_layer_checkbox(id: 'service-area', label: 'Utility Service Area', path_args: [:service_area, @community, :maps]) if @community.service_areas?
-
       / Map Layer: House Districts
       = map_layer_checkbox(id: 'house-districts', label: 'House Districts', path_args: [:house_districts, @community, :maps]) if @community.house_districts?
-
       / Map Layer: Senate Districts
       = map_layer_checkbox(id: 'senate-districts', label: 'Senate Districts', path_args: [:senate_districts, @community, :maps]) if @community.senate_districts?
-
       / Map Layer: Plants
       = map_layer_checkbox(id: 'plant-points', label: 'Power Plants', path_args: [:plants, @community, :maps]) if @community.plants?
-
       / Map Layer: Bulk Fuel Facilites
       = map_layer_checkbox(id: 'bulk-fuel-facilities-points', label: 'Bulk Fuel Facilities', path_args: [:bulk_fuel_facilities, @community, :maps]) if @community.bulk_fuel_facilities?
-
       / Map Layer: Boroughs/Census Areas
       = map_layer_checkbox(id: 'boroughs', label: @community.borough.is_census_area? ? 'Census Area' : 'Borough', path_args: [:boroughs, @community, :maps]) if @community.borough?
 
