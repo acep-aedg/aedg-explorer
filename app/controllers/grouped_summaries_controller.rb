@@ -151,8 +151,8 @@ class GroupedSummariesController < ApplicationController
 
   def electric_rates_sales_jump_to_links
     [
-      { title: "Revenue", anchor: "#revenue", icon: "cash-coin", show: @parent },
-      { title: "Consumption", anchor: "#consumption", icon: "lightning-charge", show: @parent }
+      { title: "Revenue", anchor: "#revenue", icon: "cash-coin", show: @parent.yearly_electricity_revenues? },
+      { title: "Consumption", anchor: "#consumption", icon: "lightning-charge", show: @parent.yearly_electricity_sales? }
     ]
   end
 end
