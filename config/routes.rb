@@ -75,6 +75,8 @@ Rails.application.routes.draw do
           get :capacity_yearly
           get :generation_yearly
           get :electricity_revenue
+          get :electricity_consumption_by_sector
+          get :electricity_consumption_per_customer
         end
       end
 

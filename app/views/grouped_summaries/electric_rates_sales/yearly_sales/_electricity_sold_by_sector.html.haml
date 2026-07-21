@@ -1,0 +1,11 @@
+.chart-wrapper{ style: "height: 500px; width: 100%;" }
+  %canvas{
+    data: {
+      controller: "electricity-consumption-by-sector-chart",
+      electricity_consumption_by_sector_chart: {
+        url_value: polymorphic_path([:electricity_consumption_by_sector, @parent, :charts]),
+
+        title_value: "#{@parent} - Electricity Consumption by Sector"
+      }
+    }
+  }
