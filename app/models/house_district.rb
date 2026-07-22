@@ -45,4 +45,8 @@ class HouseDistrict < ApplicationRecord
       }
     }
   end
+
+  def electricity_sales_rates?
+    false
+  end
 end

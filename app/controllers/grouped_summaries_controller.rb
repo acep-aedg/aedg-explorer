@@ -67,20 +67,23 @@ class GroupedSummariesController < ApplicationController
     @nav_tab_links = [
       {
         label: "General",
-        path: polymorphic_path([:general, @parent]),
-        visible: true
-      },
-      {
-        label: "Power Generation",
-        path: polymorphic_path([:power_generation, @parent]),
-        visible: @parent.generation?
-      },
-      {
-        label: "Electric Rates & Sales",
-        path: polymorphic_path([:electric_rates_sales, @parent]),
-        visible: true
+        path: polymorphic_path([:general, @parent])
       }
-    ].select { |tab| tab[:visible] }
+    ]
+
+    if @parent.generation?
+      @nav_tab_links << {
+        label: "Power Generation",
+        path: polymorphic_path([:power_generation, @parent])
+      }
+    end
+
+    return unless @parent.electricity_sales_rates?
+
+    @nav_tab_links << {
+      label: "Electric Rates & Sales",
+      path: polymorphic_path([:electric_rates_sales, @parent])
+    }
   end
 
   def power_generation_map_buttons

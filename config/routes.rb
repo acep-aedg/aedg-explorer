@@ -66,7 +66,7 @@ Rails.application.routes.draw do
       member do
         get :general
         get :power_generation, path: "power-generation"
-        get :electric_rates_sales, path: "electric-rates-sales"
+        get :electric_rates_sales, path: "electric-rates-sales" unless options[:skip_rates_sales]
       end
 
       resources :charts, only: [], module: options[:resource_name], defaults: { format: :json } do
@@ -74,9 +74,12 @@ Rails.application.routes.draw do
           get :generation_monthly
           get :capacity_yearly
           get :generation_yearly
-          get :electricity_revenue
-          get :electricity_consumption_by_sector
-          get :electricity_consumption_per_customer
+
+          unless options[:skip_rates_sales]
+            get :electricity_revenue
+            get :electricity_consumption_by_sector
+            get :electricity_consumption_per_customer
+          end
         end
       end
 
@@ -95,7 +98,7 @@ Rails.application.routes.draw do
     end
 
     resources :house_districts, path: "house-districts", only: %i[index show] do
-      concerns :summarizable, resource_name: :grouped_summaries
+      concerns :summarizable, resource_name: :grouped_summaries, skip_rates_sales: true
 
       resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
         collection { get :boundary }
@@ -103,7 +106,7 @@ Rails.application.routes.draw do
     end
 
     resources :senate_districts, path: "senate-districts", only: %i[index show] do
-      concerns :summarizable, resource_name: :grouped_summaries
+      concerns :summarizable, resource_name: :grouped_summaries, skip_rates_sales: true
 
       resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
         collection { get :boundary }
