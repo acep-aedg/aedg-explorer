@@ -2,10 +2,12 @@
 
 = turbo_frame_tag "tab_content" do
   = render 'shared/tab_nav', links: @jump_to_links
-  
+
   .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+    // summary section
     = render "#{partial_path}/summary"
-        
+
+    // revenue section
     - if @parent.yearly_electricity_revenues?
       #revenue.scroll-section.mb-5
         = render 'shared/section_header',
@@ -14,6 +16,17 @@
           description: 'Electricity revenue by reporting entity',
           anchor: '#revenue',
           about_modal_id: 'salesRevenueAboutModal' # this id must match the id in the sections about_modal partial
-        
         = render "#{partial_path}/yearly_revenue/about_modal"
         = render "#{partial_path}/revenue"
+
+    // consumption section
+    - if @parent.yearly_electricity_sales?
+      #consumption.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'lightning-charge',
+          title: 'Electricity Consumption',
+          description: 'Electricity consumption by reporting entity',
+          anchor: '#consumption',
+          about_modal_id: 'salesConsumptionAboutModal' # this id must match the id in the sections about_modal partial
+        = render "#{partial_path}/yearly_sales/about_modal"
+        = render "#{partial_path}/consumption"

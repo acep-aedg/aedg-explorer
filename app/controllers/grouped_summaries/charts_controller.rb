@@ -15,6 +15,14 @@ module GroupedSummaries
     def generation_yearly; end
     def capacity_yearly; end
 
+    def electricity_consumption_by_sector
+      @grouped = @parent.yearly_sales.with_sales.reorder(year: :asc).group_by(&:year)
+    end
+
+    def electricity_consumption_per_customer
+      @grouped = @parent.yearly_sales.valid_for_consumption_per_customer.reorder(year: :asc).group_by(&:year)
+    end
+
     def electricity_revenue
       @grouped = @parent.yearly_sales.with_revenue.reorder(year: :asc).group_by(&:year)
     end
