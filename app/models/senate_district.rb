@@ -70,4 +70,12 @@ class SenateDistrict < ApplicationRecord
   def electricity_sales_rates?
     false
   end
+
+  def generation?
+    false
+  end
+
+  def capacities?
+    false
+  end
 end

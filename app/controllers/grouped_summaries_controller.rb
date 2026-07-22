@@ -71,7 +71,7 @@ class GroupedSummariesController < ApplicationController
       }
     ]
 
-    if @parent.generation?
+    if @parent.power_generation?
       @nav_tab_links << {
         label: "Power Generation",
         path: polymorphic_path([:power_generation, @parent])
