@@ -32,10 +32,6 @@ class SenateDistrict < ApplicationRecord
   has_many :service_area_geoms, -> { distinct }, through: :communities
   has_many :plants, -> { distinct }, through: :service_area_geoms
   has_many :service_areas, -> { distinct }, through: :service_area_geoms
-  has_many :capacities, -> { distinct }, through: :plants
-  has_many :yearly_generations, -> { distinct }, through: :plants
-  has_many :monthly_generations, -> { distinct }, through: :plants
-  has_many :yearly_sales, -> { distinct }, through: :communities
 
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
 
@@ -65,5 +61,17 @@ class SenateDistrict < ApplicationRecord
         district_code: district
       }
     }
+  end
+
+  def electricity_sales_rates?
+    false
+  end
+
+  def generation?
+    false
+  end
+
+  def capacities?
+    false
   end
 end

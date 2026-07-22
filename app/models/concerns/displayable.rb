@@ -2,51 +2,51 @@ module Displayable
   extend ActiveSupport::Concern
 
   def communities?
-    communities&.any?
+    try(:communities)&.any?
   end
 
   def pce_eligible_communities?
-    communities? && communities.pce_eligible.any?
+    (communities? && try(:communities)&.pce_eligible&.any?) || false
   end
 
   def school_districts?
-    school_districts&.any?
+    try(:school_districts)&.any?
   end
 
   def transportation?
-    transportation&.present?
+    try(:transportation)&.present?
   end
 
   def house_districts?
-    house_districts&.any?
+    try(:house_districts)&.any?
   end
 
   def senate_districts?
-    senate_districts&.any?
+    try(:senate_districts)&.any?
   end
 
   def yearly_generations?
     return @yearly_generations if defined?(@yearly_generations)
 
-    @yearly_generations = yearly_generations&.any?
+    @yearly_generations = try(:yearly_generations)&.any? || false
   end
 
   def monthly_generations?
     return @monthly_generations if defined?(@monthly_generations)
 
-    @monthly_generations = monthly_generations&.any?
+    @monthly_generations = try(:monthly_generations)&.any? || false
   end
 
   def capacities?
     return @capacities if defined?(@capacities)
 
-    @capacities = capacities.any?
+    @capacities = try(:capacities)&.any? || false
   end
 
   def plants?
     return @plants if defined?(@plants)
 
-    @plants = plants&.any?
+    @plants = try(:plants)&.any? || false
   end
 
   def service_area_collection
@@ -64,59 +64,59 @@ module Displayable
   end
 
   def fuel_prices?
-    fuel_prices&.any?
+    try(:fuel_prices)&.any?
   end
 
   def bulk_fuel_facilities?
-    bulk_fuel_facilities&.any?
+    try(:bulk_fuel_facilities)&.any?
   end
 
   def bulk_fuel_facility_capacities?
-    bulk_fuel_facilities&.with_capacity&.exists?
+    try(:bulk_fuel_facilities)&.with_capacity&.exists?
   end
 
   def employment?
-    employments&.any?
+    try(:employments)&.any?
   end
 
   def population_age_sexes?
-    population_age_sexes&.any?
+    try(:population_age_sexes)&.any?
   end
 
   def heating_degree_days?
-    heating_degree_days&.any?
+    try(:heating_degree_days)&.any?
   end
 
   def income_poverties?
-    income_poverties&.any?
+    try(:income_poverties)&.any?
   end
 
   def household_incomes?
-    household_incomes&.exists?
+    try(:household_incomes)&.exists?
   end
 
   def yearly_electric_rates?
-    yearly_electric_rates&.with_rates&.exists?
+    try(:yearly_electric_rates)&.with_rates&.exists?
   end
 
   def sex_distribution?
-    population_age_sexes&.with_sex_estimates&.exists?
+    try(:population_age_sexes)&.with_sex_estimates&.exists?
   end
 
   def age_distribution?
-    population_age_sexes&.with_age_estimates&.exists?
+    try(:population_age_sexes)&.with_age_estimates&.exists?
   end
 
   def yearly_electricity_sales?
-    yearly_sales&.with_sales&.exists?
+    try(:yearly_sales)&.with_sales&.exists?
   end
 
   def yearly_electricity_revenues?
-    yearly_sales&.with_revenue&.exists?
+    try(:yearly_sales)&.with_revenue&.exists?
   end
 
   def yearly_electricity_customers?
-    yearly_sales&.with_customers&.exists?
+    try(:yearly_sales)&.with_customers&.exists?
   end
 
   def boundary?
@@ -124,6 +124,8 @@ module Displayable
   end
 
   def local_service_area?
+    return false unless respond_to?(:service_area_geoms) && respond_to?(:service_areas)
+
     @local_service_area ||= begin
       local_ids = service_area_geoms.ids
       ServiceAreaGeom.where(service_area_cpcn_id: service_areas.select(:cpcn_id)).where.not(id: local_ids).exists?
