@@ -36,7 +36,7 @@ module BulkFuelFacilityAttributes
         fuel_supplier: params[:fuel_supplier],
         recommendations_by_aea: params[:recommendations_by_aea],
         distance_to_barge_mooring: params[:distance_to_barge_mooring],
-        data_source: params[:data_source],
+        source: params[:source],
         report: params[:report],
         location: params[:location]
       )
