@@ -75,6 +75,7 @@ jobs:
 
             - name: Get Violation Count
               id: get_violations
+              if: always()
               run: |
                   echo "summary=$(bundle exec rake plane:get_unique_violations)" >> $GITHUB_OUTPUT
 
