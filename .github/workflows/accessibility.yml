@@ -73,11 +73,16 @@ jobs:
                   path: ${{ github.workspace }}/tmp/capybara/
                   if-no-files-found: ignore
 
+            - name: Get Violation Count
+              id: get_violations
+              run: |
+                  echo "summary=$(bundle exec rake plane:get_unique_violations)" >> $GITHUB_OUTPUT
+
             - name: Post PR Comment with Results
               uses: actions/github-script@v7
               if: always() && github.event_name == 'pull_request' 
               env:
-                  A11Y_TEST_SUMMARY: "We found 3 new violations."
+                  VIOLATION_COUNT: ${{ steps.get_violations.outputs.summary }}
               with:
                   script: |
                       // 1. Retrieve existing bot comments for the PR
@@ -95,7 +100,7 @@ jobs:
 
                       <details><summary>View Report Summary</summary>
                       
-                      ${process.env.A11Y_TEST_SUMMARY}
+                      ${process.env.VIOLATION_COUNT}
                       
                       </details>
                       

@@ -47,6 +47,14 @@ RSpec.configure do |config|
     driven_by :selenium_chrome_headless
   end
 
+  config.before(:suite) do
+    FileUtils.rm_rf(Rails.root.join("tmp/axe-results"))
+  end
+
+  config.after(:suite) do
+    AccessibilityHelpers.combine_reports
+  end
+
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
