@@ -1,92 +1,30 @@
 :root {
-  --main-toolbar-height: 64px; // This gets dynamically updated by JavaScript
-  --banner-height: 0px;
+  --main-toolbar-height: 85.66px;  // The Navy Bar
+  --banner-height: 0px;            // The Import Banner
+  --summary-toolbar-height: 68px;  // The White Bar
+  --jump-toolbar-height: 48px;
 }
+
 // If the banner ID is on the page, update the variable to its height
 body:has(#import-banner-container) {
   --banner-height: 35px;
 }
 
-#jump-nav {
-  position: sticky;
-  z-index: 1010;
-  top: var(--main-toolbar-height);
-}
-
-.navbar {
-  box-shadow:
-    0 0.5rem 1rem rgba(0, 0, 0, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-
-  .nav-link {
-    color: $white;
-
-    &:hover,
-    &.active,
-    &.show,
-    .dropdown.show & {
-      color: $aedg-yellow;
-    }
-  }
-
-  .dropdown {
-    &:hover .dropdown-menu {
-      display: block;
-      visibility: visible;
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .dropdown-menu {
-      display: none;
-      visibility: hidden;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s ease-in-out;
-      background-color: lighten($aedg-navy, 75%);
-      border-radius: 0.5rem;
-      padding: 0;
-      border: none;
-      z-index: 2000 !important;
-
-      li:first-child a {
-        border-radius: 0.5rem 0.5rem 0 0;
-      }
-
-      li:last-child a {
-        border-radius: 0 0 0.5rem 0.5rem;
-      }
-
-      .dropdown-item {
-        padding: 1rem 2rem;
-        font-size: 1rem;
-        font-weight: 500;
-        transition:
-          background-color 0.3s ease,
-          color 0.3s ease;
-
-        &:hover {
-          background-color: lighten($aedg-yellow, 15%);
-          color: $aedg-navy;
-        }
-
-        &.active {
-          background-color: $aedg-yellow;
-          color: $aedg-navy;
-        }
-      }
-    }
-  }
+#summary-toolbar.sticky-top {
+    top: var(--banner-height, 0px) !important;
+    z-index: 1020 !important;
 }
 
 // Hover action only large screens
 @media (min-width: 992px) {
   .navbar .dropdown-toggle::after {
     display: none;
+    z-index: 9999 !important;
   }
 
   .navbar .dropdown-toggle {
     pointer-events: none;
+    z-index: 9999 !important;
   }
 }
 

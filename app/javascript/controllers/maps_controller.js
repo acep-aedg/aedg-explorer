@@ -114,6 +114,15 @@ export default class extends Controller {
     }
   }
 
+  toggleExpand() {
+    document.body.classList.toggle('map-expanded')
+
+    // timeout to let the CSS display/width changes finish rendering first.
+    setTimeout(() => {
+      this.map.resize()
+    }, 100)
+  }
+
   // --- PRIVATE ---
 
   /**

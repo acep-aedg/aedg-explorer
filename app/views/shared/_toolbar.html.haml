@@ -1,4 +1,4 @@
-%nav#summary-toolbar.sticky-top.bg-light.border-bottom.px-3.py-2{ aria: { label: "Entity Navigation" }, data: { controller: "sticky-offset" }}
+%nav#summary-toolbar.sticky-top.bg-light.border-bottom.px-3.py-2{ aria: { label: "Entity Navigation" } }
   .row.align-items-center.gy-2
     .col.col-md-auto.flex-grow-1.order-0
       .d-flex.align-items-center.gap-2
@@ -6,7 +6,7 @@
 
         .d-flex.flex-column
           %h1.fw-bold.fs-4.lh-sm.mb-0= entity.try(:long_name) || entity
-          
+
           - if entity.is_a?(Community)
             .d-flex.align-items-center.flex-wrap.gap-1.text-muted.small
               - if entity.borough.present?

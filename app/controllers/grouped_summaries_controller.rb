@@ -2,8 +2,8 @@ class GroupedSummariesController < ApplicationController
   layout :determine_layout
   before_action :set_parent, except: %i[index]
   before_action :set_parents
-  before_action :set_jump_to_links, :set_map_buttons, only: %i[general power_generation]
-  before_action :set_nav_tab_links, only: %i[general power_generation]
+  before_action :set_jump_to_links, :set_map_buttons, only: %i[general power_generation electric_rates_sales]
+  before_action :set_nav_tab_links, only: %i[general power_generation electric_rates_sales]
 
   def index
     @search_params = search_params
@@ -19,6 +19,7 @@ class GroupedSummariesController < ApplicationController
 
   def general; end
   def power_generation; end
+  def electric_rates_sales; end
 
   private
 
@@ -51,6 +52,8 @@ class GroupedSummariesController < ApplicationController
                        general_jump_to_links
                      when "power_generation"
                        power_generation_jump_to_links
+                     when "electric_rates_sales"
+                       electric_rates_sales_jump_to_links
                      end
   end
 
@@ -64,15 +67,23 @@ class GroupedSummariesController < ApplicationController
     @nav_tab_links = [
       {
         label: "General",
-        path: polymorphic_path([:general, @parent]),
-        visible: true
-      },
-      {
-        label: "Power Generation",
-        path: polymorphic_path([:power_generation, @parent]),
-        visible: @parent.generation?
+        path: polymorphic_path([:general, @parent])
       }
-    ].select { |tab| tab[:visible] }
+    ]
+
+    if @parent.power_generation?
+      @nav_tab_links << {
+        label: "Power Generation",
+        path: polymorphic_path([:power_generation, @parent])
+      }
+    end
+
+    return unless @parent.electricity_sales_rates?
+
+    @nav_tab_links << {
+      label: "Electric Rates & Sales",
+      path: polymorphic_path([:electric_rates_sales, @parent])
+    }
   end
 
   def power_generation_map_buttons
@@ -138,6 +149,13 @@ class GroupedSummariesController < ApplicationController
       { title: "Utilities", anchor: "#utilities", icon: "buildings", show: @parent.utilities? },
       { title: "Generation", anchor: "#generation", icon: "building-gear", show: @parent.generation? },
       { title: "Capacity", anchor: "#capacity", icon: "lightning-fill", show: @parent.capacities? }
+    ]
+  end
+
+  def electric_rates_sales_jump_to_links
+    [
+      { title: "Revenue", anchor: "#revenue", icon: "cash-coin", show: @parent.yearly_electricity_revenues? },
+      { title: "Consumption", anchor: "#consumption", icon: "lightning-charge", show: @parent.yearly_electricity_sales? }
     ]
   end
 end

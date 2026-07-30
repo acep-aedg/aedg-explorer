@@ -1,0 +1,10 @@
+.chart-wrapper{ style: "height: 500px; width: 100%;" }
+  %canvas{ 
+    data: { 
+      controller: "electricity-revenue-chart",
+      electricity_revenue_chart: {
+        url_value: polymorphic_path([:electricity_revenue, @parent, :charts]),
+        title_value: "#{@parent} - Electricity Revenue by Sector"
+      }
+    } 
+  }   

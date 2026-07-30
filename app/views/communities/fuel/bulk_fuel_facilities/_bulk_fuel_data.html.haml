@@ -17,7 +17,7 @@
         %th Fuel Supplier
         %th Recommendations by AEA
         %th Distance to Barge Mooring (miles)
-        %th Data Source
+        %th Source
         %th Report
     %tbody
       - @community.bulk_fuel_facilities.each do |facility|
@@ -37,5 +37,5 @@
           %td= facility.fuel_supplier
           %td= facility.recommendations_by_aea
           %td= facility.distance_to_barge_mooring
-          %td= facility.data_source
+          %td= facility.source
           %td= facility.report

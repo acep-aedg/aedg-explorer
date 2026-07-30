@@ -22,4 +22,6 @@
 
     .flex-grow-1
       = content_for?(:content) ? yield(:content) : yield
-    = render 'shared/footer'
+
+    - unless content_for?(:hide_global_footer)
+      = render 'shared/footer'

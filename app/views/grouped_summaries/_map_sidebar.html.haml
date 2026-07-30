@@ -1,25 +1,28 @@
-.d-flex.flex-column.position-sticky{ style: "top: 60px; height: calc(100vh - 60px);" }
-  .flex-grow-1.d-flex.flex-column#mapbox-area
-    .d-flex.align-items-center
-      / --- Floating controls ---
-      .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index:5;" }
-        .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
-        
-        / Map Layer: Boundary
-        - if @parent.boundary?
-          - label = @parent.respond_to?(:display_title) ? @parent.display_title : @parent.class.model_name.human.titleize
-          = map_layer_checkbox(id: @parent.boundary_map_layer, label: "#{label} Boundary", path_args: [:boundary, @parent, :maps])
-        / Map Layer: Community Locations
-        = map_layer_checkbox(id: 'community-locations', label: 'Communities', path_args: [:community_locations, @parent, :maps])
-        / Map Layer: Utility Service Area
-        = map_layer_checkbox(id: 'service-area', label: 'Utility Service Area(s)', path_args: [:service_areas, @parent, :maps]) if @parent.service_areas?
-        / Map Layer: Local Service Area
-        = map_layer_checkbox(id: 'service-area-geom', label: 'Local Service Area(s)', path_args: [:service_area_geoms, @parent, :maps]) if @parent.local_service_area?
-        / Map Layer: Plants
-        = map_layer_checkbox(id: 'plant-points', label: 'Power Plants', path_args: [:plants, @parent, :maps]) if @parent.plants?
+-# fit right under navs and have the height from botton of navs to botton of browser
+.d-flex.flex-column.h-100
+  .flex-grow-1.position-relative#mapbox-area{ data: { map_target: "container" } }
+    / --- Floating controls ---
+    .position-absolute.top-0.start-0.m-2{ style: "z-index: 5;" }
+      %button.btn.btn-white.border.shadow-sm.fw-semibold.small{ data: { action: "click->maps#toggleExpand" } }
+        %i.bi.bi-arrows-fullscreen.me-1
+        Expand
 
-        / Map Layer: Bulk Fuel Facilities
-        /= map_layer_checkbox(id: 'bulk-fuel-facilities-points', label: 'Bulk Fuel Facilities', path_args: [:bulk_fuel_facilities, @parent, :maps]) if @parent.bulk_fuel_facilities?
+    .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index: 5;" }
+      .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
 
-    .flex-grow-1.position-relative
-      .h-100{ data: { maps_target: "map" } }
+      / Map Layer: Boundary
+      - if @parent.boundary?
+        - label = @parent.respond_to?(:display_title) ? @parent.display_title : @parent.class.model_name.human.titleize
+        = map_layer_checkbox(id: @parent.boundary_map_layer, label: "#{label} Boundary", path_args: [:boundary, @parent, :maps])
+      / Map Layer: Community Locations
+      = map_layer_checkbox(id: 'community-locations', label: 'Communities', path_args: [:community_locations, @parent, :maps])
+      / Map Layer: Utility Service Area
+      = map_layer_checkbox(id: 'service-area', label: 'Utility Service Area(s)', path_args: [:service_areas, @parent, :maps]) if @parent.service_areas?
+      / Map Layer: Local Service Area
+      = map_layer_checkbox(id: 'service-area-geom', label: 'Local Service Area(s)', path_args: [:service_area_geoms, @parent, :maps]) if @parent.local_service_area?
+      / Map Layer: Plants
+      = map_layer_checkbox(id: 'plant-points', label: 'Power Plants', path_args: [:plants, @parent, :maps]) if @parent.plants?
+      / Map Layer: Bulk Fuel Facilities
+      /= map_layer_checkbox(id: 'bulk-fuel-facilities-points', label: 'Bulk Fuel Facilities', path_args: [:bulk_fuel_facilities, @parent, :maps]) if @parent.bulk_fuel_facilities?
+
+    .h-100.w-100{ data: { maps_target: "map" } }

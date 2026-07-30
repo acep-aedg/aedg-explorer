@@ -270,7 +270,7 @@ CREATE TABLE public.bulk_fuel_facilities (
     recommendations_by_aea character varying,
     distance_to_barge_mooring character varying,
     tank_farm_evaluation_id integer,
-    data_source character varying,
+    source character varying,
     report character varying,
     location public.geometry,
     created_at timestamp(6) without time zone NOT NULL,
@@ -3452,6 +3452,7 @@ ALTER TABLE ONLY public.monthly_generations
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260723174414'),
 ('20260428205235'),
 ('20260421224848'),
 ('20260410175545'),
