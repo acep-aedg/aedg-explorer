@@ -32,6 +32,10 @@ jobs:
             DATABASE_URL: postgis://postgres:postgres@localhost:5432
             RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
             REDIS_URL: redis://localhost:6379/0
+            PLANE_BASE_URL: ${{ vars.PLANE_BASE_URL }}
+            PLANE_WORKSPACE_SLUG: ${{ vars.PLANE_WORKSPACE_SLUG }}
+            PLANE_PROJECT_ID: ${{ vars.PLANE_PROJECT_ID }}
+            PLANE_API_KEY: ${{ secrets.PLANE_API_KEY }}
 
         steps:
             - name: Install dependencies
@@ -72,54 +76,90 @@ jobs:
                   name: rspec-accessibility-screenshots
                   path: ${{ github.workspace }}/tmp/capybara/
                   if-no-files-found: ignore
-
-            - name: Get Violation Count
+            
+            - name: Get Unique Violation Summary
               id: get_violations
               if: always()
               run: |
-                  echo "summary=$(bundle exec rake plane:get_unique_violations)" >> $GITHUB_OUTPUT
+                echo "summary=$(bundle exec rake plane:get_unique_violations)" >> $GITHUB_OUTPUT
+
+            - name: Get Existing Tickets Count
+              id: get_existing_tickets
+              if: always()
+              run: |
+                OUTPUT=$(bundle exec rake plane:get_existing_tickets_count)
+                echo "existing_tickets<<EOF" >> $GITHUB_OUTPUT
+                echo "$OUTPUT" >> $GITHUB_OUTPUT
+                echo "EOF" >> $GITHUB_OUTPUT
+
+            - name: Get New Violations
+              id: get_new_violations
+              if: always()
+              run: |
+                OUTPUT=$(bundle exec rake plane:get_new_violations)
+                echo "new_violations<<EOF" >> $GITHUB_OUTPUT
+                echo "$OUTPUT" >> $GITHUB_OUTPUT
+                echo "EOF" >> $GITHUB_OUTPUT
+
+            - name: Get Resolved Violations
+              id: get_resolved_violations
+              if: always()
+              run: |
+                OUTPUT=$(bundle exec rake plane:get_resolved_violations)
+                echo "resolved_violations<<EOF" >> $GITHUB_OUTPUT
+                echo "$OUTPUT" >> $GITHUB_OUTPUT
+                echo "EOF" >> $GITHUB_OUTPUT
 
             - name: Post PR Comment with Results
               uses: actions/github-script@v7
               if: always() && github.event_name == 'pull_request' 
               env:
-                  VIOLATION_COUNT: ${{ steps.get_violations.outputs.summary }}
+                VIOLATION_COUNT: ${{ steps.get_violations.outputs.summary }}
+                EXISTING_TICKETS: ${{ steps.get_existing_tickets.outputs.existing_tickets }}
+                NEW_VIOLATIONS: ${{ steps.get_new_violations.outputs.new_violations }}
+                RESOLVED_VIOLATIONS: ${{ steps.get_resolved_violations.outputs.resolved_violations }}
               with:
-                  script: |
-                      // 1. Retrieve existing bot comments for the PR
-                      const { data: comments } = await github.rest.issues.listComments({
+                script: |
+                  const { data: comments } = await github.rest.issues.listComments({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: context.issue.number,
+                  })
+                  const botComment = comments.find(comment => {
+                      return comment.user.type === 'Bot' && comment.body.includes('Accessibility Test Results')
+                  })
+
+                  const output = `### Accessibility Test Results
+
+                  <details><summary>View Report Summary</summary>
+
+                  ${process.env.VIOLATION_COUNT}
+
+                  </details>
+
+                  ### Plane Sync Status
+                  \`\`\`text
+                  ${process.env.EXISTING_TICKETS}
+
+                  ${process.env.NEW_VIOLATIONS}
+
+                  ${process.env.RESOLVED_VIOLATIONS}
+                  \`\`\`
+
+                  *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+                  if (botComment) {
+                      await github.rest.issues.updateComment({
                           owner: context.repo.owner,
                           repo: context.repo.repo,
+                          comment_id: botComment.id,
+                          body: output
+                      })
+                  } else {
+                      await github.rest.issues.createComment({
                           issue_number: context.issue.number,
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          body: output
                       })
-                      const botComment = comments.find(comment => {
-                          return comment.user.type === 'Bot' && comment.body.includes('Accessibility Test Results')
-                      })
-
-                      // 2. Prepare format of the comment
-                      const output = `### Accessibility Test Results
-
-                      <details><summary>View Report Summary</summary>
-                      
-                      ${process.env.VIOLATION_COUNT}
-                      
-                      </details>
-                      
-                      *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
-
-                      // 3. If we have a comment, update it, otherwise create a new one
-                      if (botComment) {
-                          await github.rest.issues.updateComment({
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              comment_id: botComment.id,
-                              body: output
-                          })
-                      } else {
-                          await github.rest.issues.createComment({
-                              issue_number: context.issue.number,
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              body: output
-                          })
-                      }
+                  }

@@ -74,7 +74,7 @@ namespace :plane do
     end
     puts "--------------------------------------------------\n"
 
-    resolved_titles
+    resolved_titles.size
   end
 
   desc "Identify new A11y violations that have not been synced to Plane yet"
@@ -105,7 +105,7 @@ namespace :plane do
       end
     end
 
-    new_violations
+    new_violations.size
   end
 
   desc 'Count unique accessibility violations from the combined report'
@@ -124,4 +124,31 @@ namespace :plane do
 
     unique_count
   end
+
+  desc 'Count unique accessibility violations from the combined report'
+  task get_unique_violations: :environment do
+    report_path = Rails.root.join('tmp/axe-results/combined_report.json')
+
+    unless File.exist?(report_path)
+      puts "Report not found at #{report_path}"
+      next
+    end
+
+    report = JSON.parse(File.read(report_path), symbolize_names: true)
+    unique_count = Array(report[:unique_violations]).size
+
+    puts "Total Unique Violations: #{unique_count}"
+
+    unique_count
+  end
+
+  desc "Get the count of existing tickets in Plane"
+    task get_existing_tickets_count: :environment do
+      tickets = PlaneClient.existing_tickets
+      count = tickets.size
+  
+      puts "📋 Found #{count} existing ticket(s) in Plane."
+  
+      count
+    end
 end
