@@ -44,11 +44,14 @@ RSpec.configure do |config|
   config.include AccessibilityHelpers, type: :system
 
   config.before(:each, type: :system) do
-    driven_by :selenium_chrome_headless
+    driven_by :selenium_chrome_headless, screen_size: [1920, 1080] do |driver_option|
+      driver_option.add_argument('--window-size=1920,1080')
+    end
   end
 
   config.before(:suite) do
     FileUtils.rm_rf(Rails.root.join("tmp/axe-results"))
+    FileUtils.rm_rf(Rails.root.join("tmp/capybara"))
   end
 
   config.after(:suite) do
