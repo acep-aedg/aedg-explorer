@@ -71,38 +71,38 @@ jobs:
                     ${{ github.workspace }}/tmp/capybara/
                   if-no-files-found: ignore
             
-            - name: Get Unique Violation Summary
-              id: get_unique_violations
+            - name: Unique Violation Count
+              id: unique_violations_count
               if: always()
               run: |
-                OUTPUT=$(bundle exec rake plane:get_unique_violations)
-                echo "unique_violations<<EOF" >> $GITHUB_OUTPUT
+                OUTPUT=$(bundle exec rake accessibility:unique_violations_count)
+                echo "unique_violations_count<<EOF" >> $GITHUB_OUTPUT
                 echo "$OUTPUT" >> $GITHUB_OUTPUT
                 echo "EOF" >> $GITHUB_OUTPUT
 
-            - name: Get Existing Tickets Count
-              id: get_existing_tickets
+            - name: Existing Tickets Count
+              id: existing_tickets
               if: always()
               run: |
-                OUTPUT=$(bundle exec rake plane:get_existing_tickets_count)
+                OUTPUT=$(bundle exec rake accessibility:existing_tickets_count)
                 echo "existing_tickets<<EOF" >> $GITHUB_OUTPUT
                 echo "$OUTPUT" >> $GITHUB_OUTPUT
                 echo "EOF" >> $GITHUB_OUTPUT
 
-            - name: Get New Violations
-              id: get_new_violations
+            - name: New Violations
+              id: new_violations
               if: always()
               run: |
-                OUTPUT=$(bundle exec rake plane:get_new_violations)
+                OUTPUT=$(bundle exec rake accessibility:new_violations)
                 echo "new_violations<<EOF" >> $GITHUB_OUTPUT
                 echo "$OUTPUT" >> $GITHUB_OUTPUT
                 echo "EOF" >> $GITHUB_OUTPUT
 
-            - name: Get Resolved Violations
-              id: get_resolved_violations
+            - name: Resolved Violations
+              id: resolved_violations
               if: always()
               run: |
-                OUTPUT=$(bundle exec rake plane:get_resolved_violations)
+                OUTPUT=$(bundle exec rake accessibility:resolved_violations)
                 echo "resolved_violations<<EOF" >> $GITHUB_OUTPUT
                 echo "$OUTPUT" >> $GITHUB_OUTPUT
                 echo "EOF" >> $GITHUB_OUTPUT
@@ -111,10 +111,10 @@ jobs:
               uses: actions/github-script@v7
               if: always() && github.event_name == 'pull_request' 
               env:
-                VIOLATION_COUNT: ${{ steps.get_unique_violations.outputs.unique_violations }}
-                EXISTING_TICKETS: ${{ steps.get_existing_tickets.outputs.existing_tickets }}
-                NEW_VIOLATIONS: ${{ steps.get_new_violations.outputs.new_violations }}
-                RESOLVED_VIOLATIONS: ${{ steps.get_resolved_violations.outputs.resolved_violations }}
+                VIOLATION_COUNT: ${{ steps.unique_violations_count.outputs.unique_violations_count }}
+                EXISTING_TICKETS: ${{ steps.existing_tickets.outputs.existing_tickets }}
+                NEW_VIOLATIONS: ${{ steps.new_violations.outputs.new_violations }}
+                RESOLVED_VIOLATIONS: ${{ steps.resolved_violations.outputs.resolved_violations }}
               with:
                 script: |
                   const { data: comments } = await github.rest.issues.listComments({
@@ -128,7 +128,6 @@ jobs:
 
                   const output = `### Accessibility Test Results
 
-                  \`\`\`
                   ${process.env.VIOLATION_COUNT}
                   
                   ${process.env.EXISTING_TICKETS}
@@ -136,9 +135,8 @@ jobs:
                   ${process.env.NEW_VIOLATIONS}
 
                   ${process.env.RESOLVED_VIOLATIONS}
-                  \`\`\`
 
-                  *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+                  *Pusher: @${{ github.actor }}*`;
 
                   if (botComment) {
                       await github.rest.issues.updateComment({

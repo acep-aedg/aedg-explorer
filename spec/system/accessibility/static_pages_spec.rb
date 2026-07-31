@@ -3,8 +3,6 @@ require "rails_helper"
 RSpec.describe "Accessibility::StaticPages", type: :system do
   it "checks the root page" do
     visit root_path
-    width, height = page.current_window.size
-    puts "Current Viewport: #{width}x#{height}"
     expect_page_to_be_accessible
   end
 
