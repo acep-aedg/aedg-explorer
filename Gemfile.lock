@@ -193,7 +193,7 @@ GEM
     minitest (5.27.0)
     mocha (3.0.2)
       ruby2_keywords (>= 0.0.5)
-    msgpack (1.8.0)
+    msgpack (1.8.2)
     multi_json (1.19.1)
     net-imap (0.6.4.1)
       date
