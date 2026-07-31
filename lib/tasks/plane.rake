@@ -65,14 +65,12 @@ namespace :plane do
     # resolved = in Plane, but NO LONGER in the report
     resolved_titles = plane_a11y_titles - report_titles
 
-    puts "\n--------------------------------------------------"
     if resolved_titles.empty?
       puts "✅ No resolved tickets found! All Plane [A11y] tickets are still active violations."
     else
-      puts "🧹 Found #{resolved_titles.size} resolved ticket(s) (resolved in code, still open in Plane):"
+      puts "🧹 Found #{resolved_titles.size} RESOLVES violations(s) (resolved in code, still open in Plane):"
       resolved_titles.each { |title| puts "  - #{title}" }
     end
-    puts "--------------------------------------------------\n"
 
     resolved_titles.size
   end
@@ -120,7 +118,7 @@ namespace :plane do
     report = JSON.parse(File.read(report_path), symbolize_names: true)
     unique_count = Array(report[:unique_violations]).size
 
-    puts "Total Unique Violations: #{unique_count}"
+    puts "❗Total Unique Violations: #{unique_count}"
 
     unique_count
   end
@@ -130,7 +128,7 @@ namespace :plane do
       tickets = PlaneClient.existing_tickets
       count = tickets.size
   
-      puts "📋 Found #{count} existing ticket(s) in Plane."
+      puts "🎟️ Found #{count} existing ticket(s) in Plane."
   
       count
     end

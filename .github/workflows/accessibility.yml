@@ -134,14 +134,9 @@ jobs:
 
                   const output = `### Accessibility Test Results
 
-                  <details><summary>View Report Summary</summary>
-
+                  \`\`\`
                   ${process.env.VIOLATION_COUNT}
-
-                  </details>
-
-                  ### Plane Sync Status
-                  \`\`\`text
+                  
                   ${process.env.EXISTING_TICKETS}
 
                   ${process.env.NEW_VIOLATIONS}
