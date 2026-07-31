@@ -35,6 +35,7 @@ jobs:
             PLANE_BASE_URL: ${{ secrets.PLANE_BASE_URL }}
             PLANE_WORKSPACE_SLUG: ${{ secrets.PLANE_WORKSPACE_SLUG }}
             PLANE_PROJECT_ID: ${{ secrets.PLANE_PROJECT_ID }}
+            PLANE_STRING_PROJECT_ID: ${{ secrets.PLANE_STRING_PROJECT_ID }}
             PLANE_API_KEY: ${{ secrets.PLANE_API_KEY }}
 
         steps:
