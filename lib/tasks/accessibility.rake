@@ -15,7 +15,7 @@ namespace :accessibility do
     violations = report[:unique_violations]
 
     existing_tickets = PlaneClient.existing_tickets
-    existing_titles = existing_tickets.map { |ticket| ticket["name"] }
+    existing_titles = existing_tickets.pluck("name")
     puts "ℹ️  Found #{existing_titles.size} existing tickets in project."
     puts "ℹ️  Found #{violations.size} in the report."
 
