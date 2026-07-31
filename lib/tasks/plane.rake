@@ -118,7 +118,7 @@ namespace :plane do
     report = JSON.parse(File.read(report_path), symbolize_names: true)
     unique_count = Array(report[:unique_violations]).size
 
-    puts "❗Total Unique Violations: #{unique_count}"
+    puts "❗ Total Unique Violations: #{unique_count}"
 
     unique_count
   end
