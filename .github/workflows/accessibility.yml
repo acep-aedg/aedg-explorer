@@ -55,6 +55,7 @@ jobs:
               uses: browser-actions/setup-chrome@v2
               with:
                 chrome-version: '151'
+                install-chromedriver: true
 
             - name: Install JS Dependencies & Build CSS
               run: |
