@@ -137,7 +137,7 @@ jobs:
 
                   ${process.env.RESOLVED_VIOLATIONS}
 
-                  *Pusher: @${{ github.actor }} | Last Checked: ${new Date().toISOString()}*`;
+                  *Pusher: @${{ github.actor }} | Last Checked: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC*`;
 
                   if (botComment) {
                       await github.rest.issues.updateComment({
