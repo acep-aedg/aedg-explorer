@@ -15,7 +15,7 @@ module PlaneClient
   }.freeze
 
   def existing_tickets
-    puts "📋 Fetching Plane tickets..."
+    puts "Fetching Plane tickets..."
     http, request = build_request(method: :get)
     data = send_request(http, request)
     return [] unless data
@@ -27,7 +27,7 @@ module PlaneClient
       ticket
     end
   rescue StandardError => e
-    puts "⚠️ Error fetching existing tickets: #{e.message}"
+    puts "Error fetching existing tickets: #{e.message}"
     []
   end
 
@@ -145,7 +145,6 @@ module PlaneClient
         puts "Failed (#{response.code}): #{body_text}"
         nil
       end
-
     rescue RateLimitError
       if retries < max_retries
         retries += 1
@@ -156,7 +155,6 @@ module PlaneClient
         puts "Rate limit and max retries (#{max_retries})."
         nil
       end
-
     rescue Errno::ECONNRESET, Errno::ETIMEDOUT, OpenSSL::SSL::SSLError => e
       if retries < max_retries
         retries += 1
