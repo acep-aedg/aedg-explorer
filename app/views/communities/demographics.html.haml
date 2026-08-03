@@ -1,13 +1,9 @@
 - tab = 'demographics'
-- links = [ |
-    { title: 'Population', anchor: '#population', icon: 'people-fill', show: @community.population_age_sexes? }, |
-    { title: 'Employment', anchor: '#employment', icon: 'briefcase-fill', show: @community.employment? }, |
-  ] |
 
 = turbo_frame_tag "community_tab_content" do
-  = render 'shared/tab_nav', links: links
+  = render 'shared/jump_links', links: community_demographics_jump_links(@community)
   
-  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
     - if @community.population_age_sexes?
       #population.scroll-section.mb-5
         = render 'shared/section_header',
