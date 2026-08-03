@@ -68,94 +68,100 @@ class GroupedSummariesController < ApplicationController
       {
         label: "General",
         path: polymorphic_path([:general, @parent])
-      }
-    ]
-
-    if @parent.power_generation?
-      @nav_tab_links << {
-        label: "Power Generation",
-        path: polymorphic_path([:power_generation, @parent])
-      }
-    end
-
-    return unless @parent.electricity_sales_rates?
-
-    @nav_tab_links << {
-      label: "Electric Rates & Sales",
-      path: polymorphic_path([:electric_rates_sales, @parent])
-    }
+      },
+      if @parent.power_generation?
+        {
+          label: "Power Generation",
+          path: polymorphic_path([:power_generation, @parent])
+        }
+      end,
+      if @parent.electricity_sales_rates?
+        {
+          label: "Electric Rates & Sales",
+          path: polymorphic_path([:electric_rates_sales, @parent])
+        }
+      end
+    ].compact
   end
 
   def power_generation_map_buttons
     [
-      {
-        label: "Utility Service Areas",
-        url: polymorphic_path([:service_areas, @parent, :maps]),
-        icon: "bounding-box",
-        id: "service-area",
-        visible: @parent&.service_areas?
-      },
-      {
-        label: "Local Service Areas",
-        url: polymorphic_path([:service_area_geoms, @parent, :maps]),
-        icon: "bounding-box",
-        id: "service-area-geom",
-        visible: @parent.local_service_area?
-      },
-      {
-        label: "Power Plants",
-        url: polymorphic_path([:plants, @parent, :maps]),
-        icon: "building",
-        id: "plant-points",
-        visible: @parent&.plants?
-      }
-    ]
+      if @parent&.service_areas?
+        {
+          label: "Utility Service Areas",
+          url: polymorphic_path([:service_areas, @parent, :maps]),
+          icon: "bounding-box",
+          id: "service-area"
+        }
+      end,
+      if @parent&.local_service_area?
+        {
+          label: "Local Service Areas",
+          url: polymorphic_path([:service_area_geoms, @parent, :maps]),
+          icon: "bounding-box",
+          id: "service-area-geom"
+        }
+      end,
+      if @parent&.plants?
+        {
+          label: "Power Plants",
+          url: polymorphic_path([:plants, @parent, :maps]),
+          icon: "building",
+          id: "plant-points"
+        }
+      end
+    ].compact
   end
 
   def general_map_buttons
     [
-      {
-        label: "Communities",
-        url: polymorphic_path([:community_locations, @parent, :maps]),
-        icon: "people",
-        id: "community-locations",
-        visible: @parent.communities?
-      }
-    ] + (
-      if @parent.boundary?
-        [
-          {
-            label: "#{@parent.display_title} Boundary",
-            url: polymorphic_path([:boundary, @parent, :maps]),
-            icon: "bounding-box",
-            id: @parent.boundary_map_layer,
-            visible: true
-          }
-        ]
-      else
-        []
+      if @parent&.communities?
+        {
+          label: "Communities",
+          url: polymorphic_path([:community_locations, @parent, :maps]),
+          icon: "people",
+          id: "community-locations"
+        }
+      end,
+      if @parent&.boundary?
+        {
+          label: "#{@parent.display_title} Boundary",
+          url: polymorphic_path([:boundary, @parent, :maps]),
+          icon: "bounding-box",
+          id: @parent.boundary_map_layer
+        }
       end
-    )
+    ].compact
   end
 
   def general_jump_to_links
     [
-      { title: "Overview", anchor: "#overview", icon: "globe", show: true }
+      { title: "Overview", anchor: "#overview", icon: "globe"}
     ]
   end
 
   def power_generation_jump_to_links
     [
-      { title: "Utilities", anchor: "#utilities", icon: "buildings", show: @parent.utilities? },
-      { title: "Generation", anchor: "#generation", icon: "building-gear", show: @parent.generation? },
-      { title: "Capacity", anchor: "#capacity", icon: "lightning-fill", show: @parent.capacities? }
-    ]
+      if @parent.utilities?
+        { title: "Utilities", anchor: "#utilities", icon: "buildings" }
+      end,
+      if @parent.generation?
+        { title: "Generation", anchor: "#generation", icon: "building-gear" }
+      end,
+      if @parent.capacities?
+        { title: "Capacity", anchor: "#capacity", icon: "lightning-fill" }
+      end
+    ].compact
   end
 
   def electric_rates_sales_jump_to_links
     [
-      { title: "Revenue", anchor: "#revenue", icon: "cash-coin", show: @parent.yearly_electricity_revenues? },
-      { title: "Consumption", anchor: "#consumption", icon: "lightning-charge", show: @parent.yearly_electricity_sales? }
-    ]
+      if @parent.yearly_electricity_revenues?
+        { title: "Revenue", anchor: "#revenue", icon: "cash-coin" }
+      end,
+      if @parent.yearly_electricity_sales?
+        { title: "Consumption", anchor: "#consumption", icon: "lightning-charge" }
+      end
+    ].compact
   end
 end

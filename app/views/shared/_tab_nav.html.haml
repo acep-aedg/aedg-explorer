@@ -5,9 +5,7 @@
       %small.text-uppercase.fw-bold.text-muted.me-2 Jump To:
 
       - links.each do |link|
-        - if link.fetch(:show, true)
-          -# Change this line in your jump-nav:
-          = link_to link[:anchor], class: "btn btn-sm btn-outline-primary rounded-pill", data: { action: "scroll#jump" } do
-            - if link[:icon].present?
-              %i{ class: "bi bi-#{link[:icon]} me-1" }
-            = link[:title]
+        = link_to link[:anchor], class: "btn btn-sm btn-outline-primary rounded-pill", data: { action: "scroll#jump" } do
+          - if link[:icon].present?
+            %i{ class: "bi bi-#{link[:icon]} me-1" }
+          = link[:title]
