@@ -5,6 +5,8 @@ require "uri"
 module PlaneClient
   extend self
 
+  class RateLimitError < StandardError; end
+
   IMPACT_TO_PRIORITY = {
     "critical" => "urgent",
     "serious" => "high",
@@ -13,7 +15,7 @@ module PlaneClient
   }.freeze
 
   def existing_tickets
-    Rails.logger.debug "📋 Fetching Plane tickets..."
+    puts "📋 Fetching Plane tickets..."
     http, request = build_request(method: :get)
     data = send_request(http, request)
     return [] unless data
@@ -25,7 +27,7 @@ module PlaneClient
       ticket
     end
   rescue StandardError => e
-    Rails.logger.debug { "⚠️ Error fetching existing tickets: #{e.message}" }
+    puts "⚠️ Error fetching existing tickets: #{e.message}"
     []
   end
 
@@ -122,7 +124,6 @@ module PlaneClient
 
     request["X-API-Key"]    = api_key
     request["Content-Type"] = "application/json"
-    request["User-Agent"]   = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AEDG-Explorer/1.0"
     request.body            = payload.to_json if payload
 
     [http, request]
@@ -137,20 +138,33 @@ module PlaneClient
 
       if response.code.to_i.between?(200, 299)
         JSON.parse(response.body)
+      elsif response.code.to_i == 429
+        raise RateLimitError
       else
         body_text = response.body.to_s.dup.force_encoding("UTF-8")
-        Rails.logger.debug { "❌ Failed (#{response.code}): #{body_text}" }
+        puts "Failed (#{response.code}): #{body_text}"
         nil
       end
+
+    rescue RateLimitError
+      if retries < max_retries
+        retries += 1
+        puts "Rate limited exceeded (429). Trying again in 60s (Attempt #{retries}/#{max_retries})..."
+        sleep 60
+        retry
+      else
+        puts "Rate limit and max retries (#{max_retries})."
+        nil
+      end
+
     rescue Errno::ECONNRESET, Errno::ETIMEDOUT, OpenSSL::SSL::SSLError => e
       if retries < max_retries
         retries += 1
-        wait_time = retries * 2
-        Rails.logger.debug { "⚠️ Connection reset. Retrying in #{wait_time}s (#{retries}/#{max_retries})..." }
-        sleep wait_time
+        puts "Connection reset. Retrying in 2s (#{retries}/#{max_retries})..."
+        sleep 2
         retry
       else
-        Rails.logger.debug { "❌ Error after #{max_retries} retries: #{e.message}" }
+        puts "Error after #{max_retries} retries: #{e.message}"
         raise e
       end
     end

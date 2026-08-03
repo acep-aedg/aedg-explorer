@@ -37,7 +37,7 @@ namespace :accessibility do
       )
 
       if ticket_info
-        puts "Created: [#{ticket_info[:name]}](#{ticket_info[:url]})"
+        puts "([#{idx + 1}/#{violations.size}]) Created: [#{ticket_info[:name]}](#{ticket_info[:url]})"
       else
         puts "Failed to create ticket: #{title}"
       end
