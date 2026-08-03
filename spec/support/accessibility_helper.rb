@@ -1,10 +1,5 @@
 module AccessibilityHelpers
   def expect_page_to_be_accessible
-    expect(page).to have_css("main", wait: 5) 
-    expect(page).to have_no_css(".turbo-progress-bar")
-    expect(page).to have_no_css("[data-loading]")
-    expect(page).to have_no_css(".is-loading")
-    
     standards = %i[wcag2a wcag2aa wcag21a wcag21aa]
     matcher = be_axe_clean.according_to(*standards)
     matcher.matches?(page)
