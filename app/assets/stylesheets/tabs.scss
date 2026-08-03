@@ -1,0 +1,67 @@
+#main-tabs-container {
+  z-index: 1020;
+  // Set to transparent or white to remove full-width line across the container
+  border-bottom: 2px solid transparent;
+
+  .nav-scroller {
+    min-width: 0;
+  }
+}
+
+.jump-nav-inner {
+  // Smooth scrolling for iOS
+  -webkit-overflow-scrolling: touch;
+  // Custom slim scrollbar styling
+  scrollbar-width: thin;
+  scrollbar-color: #e2e8f0 transparent;
+
+  &::-webkit-scrollbar {
+    height: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #e2e8f0;
+    border-radius: 10px;
+  }
+}
+
+.jump-link {
+  color: #64748b; // Muted slate gray
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent; // Keeps layout stable on hover/active
+
+  &:hover {
+    background-color: #f1f5f9; // Very light gray background on hover
+    color: #0f172a; // Darker text on hover
+  }
+
+  &.active {
+    color: $tabs-text-active;
+    border-bottom: 2px solid $tabs-border-active;
+  }
+}
+
+.nav-scroller {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+
+  // Lighter scrollbar
+  scrollbar-color: #e2e8f0 transparent;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    height: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #e2e8f0;
+    border-radius: 10px;
+  }
+}
