@@ -2,7 +2,6 @@ class GroupedSummariesController < ApplicationController
   layout :determine_layout
   before_action :set_parent, except: %i[index]
   before_action :set_parents
-  before_action :set_nav_tab_links, only: %i[general power_generation electric_rates_sales]
 
   def index
     @search_params = search_params
@@ -40,26 +39,5 @@ class GroupedSummariesController < ApplicationController
 
   def default_map_layer
     "community-locations"
-  end
-
-  def set_nav_tab_links
-    @nav_tab_links = [
-      {
-        label: "General",
-        path: polymorphic_path([:general, @parent])
-      },
-      if @parent.power_generation?
-        {
-          label: "Power Generation",
-          path: polymorphic_path([:power_generation, @parent])
-        }
-      end,
-      if @parent.electricity_sales_rates?
-        {
-          label: "Electric Rates & Sales",
-          path: polymorphic_path([:electric_rates_sales, @parent])
-        }
-      end
-    ].compact
   end
 end
