@@ -2,7 +2,6 @@ class GroupedSummariesController < ApplicationController
   layout :determine_layout
   before_action :set_parent, except: %i[index]
   before_action :set_parents
-  before_action :set_map_buttons, only: %i[general power_generation electric_rates_sales]
   before_action :set_nav_tab_links, only: %i[general power_generation electric_rates_sales]
 
   def index
@@ -37,15 +36,6 @@ class GroupedSummariesController < ApplicationController
     params.permit(:q, :letter, :page, :per_page)
   end
 
-  def set_map_buttons
-    @map_buttons = case action_name
-                   when "general"
-                     general_map_buttons
-                   when "power_generation"
-                     power_generation_map_buttons
-                   end
-  end
-
   helper_method :default_map_layer
 
   def default_map_layer
@@ -68,56 +58,6 @@ class GroupedSummariesController < ApplicationController
         {
           label: "Electric Rates & Sales",
           path: polymorphic_path([:electric_rates_sales, @parent])
-        }
-      end
-    ].compact
-  end
-
-  def power_generation_map_buttons
-    [
-      if @parent&.service_areas?
-        {
-          label: "Utility Service Areas",
-          url: polymorphic_path([:service_areas, @parent, :maps]),
-          icon: "bounding-box",
-          id: "service-area"
-        }
-      end,
-      if @parent&.local_service_area?
-        {
-          label: "Local Service Areas",
-          url: polymorphic_path([:service_area_geoms, @parent, :maps]),
-          icon: "bounding-box",
-          id: "service-area-geom"
-        }
-      end,
-      if @parent&.plants?
-        {
-          label: "Power Plants",
-          url: polymorphic_path([:plants, @parent, :maps]),
-          icon: "building",
-          id: "plant-points"
-        }
-      end
-    ].compact
-  end
-
-  def general_map_buttons
-    [
-      if @parent&.communities?
-        {
-          label: "Communities",
-          url: polymorphic_path([:community_locations, @parent, :maps]),
-          icon: "people",
-          id: "community-locations"
-        }
-      end,
-      if @parent&.boundary?
-        {
-          label: "#{@parent.display_title} Boundary",
-          url: polymorphic_path([:boundary, @parent, :maps]),
-          icon: "bounding-box",
-          id: @parent.boundary_map_layer
         }
       end
     ].compact
