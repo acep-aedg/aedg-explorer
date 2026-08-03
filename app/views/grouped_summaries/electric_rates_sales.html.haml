@@ -1,7 +1,7 @@
 - partial_path = 'grouped_summaries/electric_rates_sales'
 
 = turbo_frame_tag "tab_content" do
-  = render 'shared/jump_links', links: @jump_to_links
+  = render 'shared/jump_links', links: grouped_summary_electric_rates_sales_jump_links(@parent)
 
   .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
     // summary section

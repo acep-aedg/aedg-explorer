@@ -2,7 +2,7 @@ class GroupedSummariesController < ApplicationController
   layout :determine_layout
   before_action :set_parent, except: %i[index]
   before_action :set_parents
-  before_action :set_jump_to_links, :set_map_buttons, only: %i[general power_generation electric_rates_sales]
+  before_action :set_map_buttons, only: %i[general power_generation electric_rates_sales]
   before_action :set_nav_tab_links, only: %i[general power_generation electric_rates_sales]
 
   def index
@@ -44,17 +44,6 @@ class GroupedSummariesController < ApplicationController
                    when "power_generation"
                      power_generation_map_buttons
                    end
-  end
-
-  def set_jump_to_links
-    @jump_to_links = case action_name
-                     when "general"
-                       general_jump_to_links
-                     when "power_generation"
-                       power_generation_jump_to_links
-                     when "electric_rates_sales"
-                       electric_rates_sales_jump_to_links
-                     end
   end
 
   helper_method :default_map_layer
@@ -130,37 +119,6 @@ class GroupedSummariesController < ApplicationController
           icon: "bounding-box",
           id: @parent.boundary_map_layer
         }
-      end
-    ].compact
-  end
-
-  def general_jump_to_links
-    [
-      { title: "Overview", anchor: "#overview", icon: "globe"}
-    ]
-  end
-
-  def power_generation_jump_to_links
-    [
-      if @parent.utilities?
-        { title: "Utilities", anchor: "#utilities", icon: "buildings" }
-      end,
-      if @parent.generation?
-        { title: "Generation", anchor: "#generation", icon: "building-gear" }
-      end,
-      if @parent.capacities?
-        { title: "Capacity", anchor: "#capacity", icon: "lightning-fill" }
-      end
-    ].compact
-  end
-
-  def electric_rates_sales_jump_to_links
-    [
-      if @parent.yearly_electricity_revenues?
-        { title: "Revenue", anchor: "#revenue", icon: "cash-coin" }
-      end,
-      if @parent.yearly_electricity_sales?
-        { title: "Consumption", anchor: "#consumption", icon: "lightning-charge" }
       end
     ].compact
   end
