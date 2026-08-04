@@ -10,6 +10,14 @@ module GroupedSummariesHelper
     }
   end
 
+  def grouped_summaries_navigation_tabs(parent)
+    [
+      { label: "General", path: polymorphic_path([:general, parent]) },
+      ({ label: "Power Generation", path: polymorphic_path([:power_generation, parent]) } if parent.power_generation?),
+      ({ label: "Electricity Rates & Sales", path: polymorphic_path([:electric_rates_sales, parent]) } if parent.electricity_sales_rates?)
+    ].compact
+  end
+
   def summary_icon_for(model_collection)
     name = model_collection.model_name.human.pluralize.titleize
     grouped_summaries_registry.dig(name, :icon) || "bi-grid-fill"

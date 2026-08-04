@@ -1,9 +1,9 @@
 - partial_path = 'grouped_summaries/electric_rates_sales'
 
-= turbo_frame_tag "tab_content" do
-  = render 'shared/tab_nav', links: @jump_to_links
+= turbo_frame_tag "tab_content", class: "d-flex flex-column h-100" do
+  = render 'shared/jump_links', links: grouped_summary_electric_rates_sales_jump_links(@parent)
 
-  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
     // summary section
     = render "#{partial_path}/summary"
 
@@ -30,3 +30,6 @@
           about_modal_id: 'salesConsumptionAboutModal' # this id must match the id in the sections about_modal partial
         = render "#{partial_path}/yearly_sales/about_modal"
         = render "#{partial_path}/consumption"
+
+    .mt-auto.overflow-hidden
+      = render "shared/footer"
