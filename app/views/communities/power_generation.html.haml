@@ -1,14 +1,9 @@
 - tab = 'power_generation'
-- links = [ |
-  { title: 'Utilities', anchor: '#utilities', icon: 'buildings', show: @community.utilities? }, |
-  { title: 'Generation', anchor: '#generation', icon: 'building-gear', show: @community.generation? }, |
-  { title: 'Capacity', anchor: '#capacity', icon: 'lightning-fill', show: @community.capacities? } |
-] |
 
-= turbo_frame_tag "community_tab_content", class: "d-flex flex-column h-100"  do
-  = render 'shared/tab_nav', links: links
+= turbo_frame_tag "community_tab_content", class: "d-flex flex-column h-100" do
+  = render 'shared/jump_links', links: community_power_generation_jump_links(@community)
 
-  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
     - if @community.utilities?
       #utilities.scroll-section.mb-5
         = render 'shared/section_header',

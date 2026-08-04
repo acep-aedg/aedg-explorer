@@ -1,16 +1,8 @@
 - tab = 'general'
-- links = [ |
-    { title: 'Geography', anchor: '#geography', icon: 'map' }, |
-    { title: 'Transportation', anchor: '#transportation', icon: 'truck', show: @community.transportation? }, |
-    { title: 'Legislative Districts', anchor: '#legislative-districts', icon: 'bank', show: @community.legislative_districts? } |
-  ] |
 
 = turbo_frame_tag "community_tab_content", class: "d-flex flex-column h-100"  do
-
-  = render 'shared/tab_nav', links: links
-
-  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
-
+  = render 'shared/jump_links', links: community_general_jump_links(@community)
+  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
     #geography.scroll-section.mb-5
       = render 'shared/section_header',
         icon: 'globe',

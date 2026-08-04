@@ -7,7 +7,7 @@
       = render "shared/toolbar",
         entity: @parent,
         collection: @parents,
-        tabs: @nav_tab_links,
+        tabs: grouped_summaries_navigation_tabs(@parent),
         target_frame: "tab_content"
 
     .split-wrapper
@@ -21,7 +21,7 @@
       -# right side content
       .split-right.d-flex.flex-column.h-100{ data: { split_layout_target: "right", controller: "scroll", action: "turbo:frame-render->scroll#scrollToTop" } }
         = render "shared/main_tabs",
-            tabs: @nav_tab_links,
+            tabs: grouped_summaries_navigation_tabs(@parent),
             target_frame: "tab_content"
 
         .flex-grow-1.d-flex.flex-column.overflow-hidden

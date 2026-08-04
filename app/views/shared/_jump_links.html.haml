@@ -1,0 +1,7 @@
+#jump-links.sticky-top.bg-white.border-bottom.d-none.d-md-block.w-100
+  .jump-nav-inner.d-flex.align-items-center.flex-nowrap.overflow-x-auto.justify-content-start.justify-content-md-center.gap-1.px-2
+    - links.each do |link|
+      = link_to link[:anchor], class: "jump-link p-1", data: { action: "scroll#jump" } do
+        - if link[:icon].present?
+          %i{ class: "bi bi-#{link[:icon]} me-1" }
+        = link[:title]
