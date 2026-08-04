@@ -1,5 +1,5 @@
 = turbo_frame_tag "community_tab_content", class: "d-flex flex-column h-100" do
-  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+  .scrollspy-container.flex-grow-1.overflow-y-auto
     -if @community.income?
       #income.mb-5
         = render 'shared/section_header',
