@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus";
+import ChartBaseController from "./chart_base_controller";
 import { Chart, registerables } from "chart.js";
 import {
   BarWithErrorBarsController,
@@ -7,7 +7,7 @@ import {
 
 Chart.register(...registerables, BarWithErrorBarsController, BarWithErrorBar);
 
-export default class extends Controller {
+export default class extends ChartBaseController {
   static targets = ["canvas"];
   static values = {
     url: String,
@@ -18,20 +18,6 @@ export default class extends Controller {
     barColor: String,
     errorBarColor: String,
   };
-
-  async urlValueChanged() {
-    if (!this.urlValue) return;
-
-    try {
-      const response = await fetch(this.urlValue);
-      if (!response.ok) throw new Error("Network response was not ok");
-      const data = await response.json();
-      const chartData = this.prepareData(data);
-      this.renderChart(chartData);
-    } catch (error) {
-      console.error("Chart load failed:", error);
-    }
-  }
 
   prepareData(rawData) {
     this.maxWhisker = Math.max(...rawData.map(d => (d.estimate || 0) + (d.moe || 0)), 0);
@@ -58,40 +44,18 @@ export default class extends Controller {
 
   renderChart(chartData) {
     if (this.chart) this.chart.destroy();
-    const fontColor = "#404040";
 
     this.chart = new Chart(this.canvasTarget, {
       type: BarWithErrorBarsController.id,
       data: chartData,
       options: {
         indexAxis: "x",
-        responsive: true,
-        maintainAspectRatio: false,
         plugins: {
           title: {
-            display: true,
             text: this.titleValue,
-            font: { size: 18 },
-            color: fontColor,
-          },
-          legend: {
-            display: true,
-            position: "bottom",
-            labels: {
-              color: fontColor,
-            },
           },
           subtitle: {
-            display: true,
             text: "Whiskers represent the Margin of Error (±)",
-            color: "#666",
-            font: {
-              size: 12,
-              style: "italic",
-            },
-            padding: {
-              bottom: 10,
-            },
           },
           tooltip: {
             callbacks: {
@@ -113,7 +77,11 @@ export default class extends Controller {
             beginAtZero: true,
             title: { display: true, text: "Population Count" },
           },
-          x: { title: { display: true, text: "Age Group" } },
+            x: {
+                title: {
+                    text: "Age Group"
+                }
+            },
         },
       },
     });
@@ -129,9 +97,5 @@ export default class extends Controller {
     const newUrl = new URL(this.baseUrlValue, window.location.origin);
     newUrl.searchParams.set(this.paramValue, selectedValue);
     this.urlValue = newUrl.toString();
-  }
-
-  disconnect() {
-    if (this.chart) this.chart.destroy();
   }
 }

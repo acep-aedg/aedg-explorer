@@ -7,8 +7,8 @@ import { application } from "./application"
 import AgeDistributionChartController from "./age_distribution_chart_controller"
 application.register("age-distribution-chart", AgeDistributionChartController)
 
-import ChartController from "./chart_controller"
-application.register("chart", ChartController)
+import ChartBaseController from "./chart_base_controller"
+application.register("chart-base", ChartBaseController)
 
 import CopyController from "./copy_controller"
 application.register("copy", CopyController)
