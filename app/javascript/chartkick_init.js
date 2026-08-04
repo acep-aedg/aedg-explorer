@@ -1,5 +1,18 @@
 import "chartkick"
 
+Chartkick.options = {
+  library: {
+    plugins: {
+      tooltip: {
+        displayColors: true
+      },
+      title: {
+        color: "#404040"
+      }
+    }
+  }
+}
+
 // Fix for Chartkick bug with Turbo
 if (window.Chartkick) {
   window.Chartkick.config.autoDestroy = false
@@ -15,3 +28,4 @@ if (window.Chartkick) {
 } else {
   console.warn("Chartkick not found during initialization")
 }
+

@@ -5,13 +5,13 @@ json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
     data = @grouped.map do |_year, records|
       records.sum { |r| r.public_send(field).to_f }
     end
-  
+
     # Skip this sector if there is no data (all zeros)
     next if data.all?(&:zero?)
-  
+
     # Determine Color
     base_color = ChartsHelper.sector_color(field)
-  
+
     # Dataset structure
     json.label           field.to_s.gsub("_revenue", "").titleize
     json.data            data
