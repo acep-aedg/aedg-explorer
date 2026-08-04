@@ -1,5 +1,18 @@
 module AccessibilityHelpers
-  def expect_page_to_be_accessible
+  def expect_page_to_be_accessible(debug_versions: false)
+    if debug_versions
+      caps = page.driver.browser.capabilities
+      puts "\n=== Test Environment Versions ==="
+      puts "Capybara:   #{Capybara::VERSION}"
+      puts "Selenium:   #{Selenium::WebDriver::VERSION}"
+      puts "Browser:    #{caps.browser_name} #{caps.browser_version}"
+      
+      # Extract ChromeDriver version from the Chrome capabilities hash
+      if caps["chrome"] && caps["chrome"]["chromedriverVersion"]
+        puts "Driver:     ChromeDriver #{caps['chrome']['chromedriverVersion'].split(' ').first}"
+      end
+      puts "=================================\n"
+    end
     standards = %i[wcag2a wcag2aa wcag21a wcag21aa]
     matcher = be_axe_clean.according_to(*standards)
     matcher.matches?(page)

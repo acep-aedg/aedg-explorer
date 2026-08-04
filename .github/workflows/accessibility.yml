@@ -59,6 +59,14 @@ jobs:
             - name: Prepare Database
               run: bin/rails db:prepare
 
+            - name: Debug Environment & Browser Versions
+              run: |
+                echo "=== System Browser ==="
+                google-chrome --version
+                
+                echo "=== Testing Gems ==="
+                bundle exec gem list | grep -E "^(capybara|selenium-webdriver|axe-core-rspec|axe-capybara) "
+
             - name: Run Accessibility Tests
               run: bundle exec rspec spec/system/accessibility
 
