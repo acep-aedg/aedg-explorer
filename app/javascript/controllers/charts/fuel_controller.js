@@ -1,4 +1,3 @@
-// controllers/fuel_chart_controller.js
 import { Controller } from "@hotwired/stimulus";
 
 // TODO: refactor into using the colors define in charts_helper.rb
@@ -16,6 +15,7 @@ const FUEL_COLORS = {
   WO: "#6E2C00", // dark_brown
 };
 
+// Connects to data-controller="charts--fuel"
 export default class extends Controller {
   static targets = ["chart"];
   static values = {

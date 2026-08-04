@@ -1,13 +1,32 @@
-import ChartBaseController from "./chart_base_controller";
+import BaseController from "./base_controller"
 
-// Connects to data-controller="electricity-customers-chart"
-export default class extends ChartBaseController {
-  renderChart(chartData) {
+// Connects to data-controller="charts--yearly-generation"
+export default class extends BaseController {
+  renderChart(rawData) {
     const settings = this.responsiveSettings;
+    const labels = Object.keys(rawData[0].data);
+    const datasets = rawData.map((series) => {
+      const baseColor = series.color || "rgba(93, 109, 126, 1)";
+
+      let label = series.name;
+      if (label.includes("Electricity used for Energy Storage (MWH)")) {
+        label = "Energy Storage (MWH)";
+      }
+
+      return {
+        label: label,
+        data: Object.values(series.data),
+        borderColor: baseColor,
+        backgroundColor: baseColor,
+      };
+    });
 
     this.chart = new Chart(this.element, {
       type: "line",
-      data: chartData,
+      data: {
+        labels: labels,
+        datasets: datasets
+      },
       options: {
         datasets: {
           line: {
@@ -31,14 +50,14 @@ export default class extends ChartBaseController {
             reverse: true,
             callbacks: {
               label: (context) => {
-                return `${context.dataset.label}: ${context.formattedValue}`;
+                return `${context.dataset.label}: ${context.formattedValue} MWh`;
               },
               footer: (tooltipItems) => {
                 let total = 0;
                 tooltipItems.forEach((item) => {
                   total += item.parsed.y;
                 });
-                return `Total: ${new Intl.NumberFormat().format(total)}`;
+                return `Total: ${new Intl.NumberFormat().format(total)} MWh`;
               },
             },
           },
@@ -51,14 +70,15 @@ export default class extends ChartBaseController {
             },
           },
           y: {
-            beginAtZero: true,
-            stacked: true,
+              stacked: true,
+              beginAtZero: true,
             title: {
-              text: "Customers",
+              text: "Generation (MWh)",
             },
             ticks: {
+              maxTicksLimit: 10,
               callback: (value) => {
-                return `${new Intl.NumberFormat().format(value)}`;
+                return `${new Intl.NumberFormat().format(value)} MWh`;
               },
             },
           },

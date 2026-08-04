@@ -1,4 +1,4 @@
-import ChartBaseController from "./chart_base_controller";
+import BaseController from "./base_controller"
 import { Chart, registerables } from "chart.js";
 import {
   BarWithErrorBarsController,
@@ -7,8 +7,8 @@ import {
 
 Chart.register(...registerables, BarWithErrorBarsController, BarWithErrorBar);
 
-// Connects to data-controller="sex-distribution-chart"
-export default class extends ChartBaseController {
+// Connects to data-controller="charts--sex-distribution"
+export default class extends BaseController {
   static targets = ["canvas"];
   static values = {
     url: String,

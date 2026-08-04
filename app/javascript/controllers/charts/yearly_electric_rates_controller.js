@@ -1,7 +1,7 @@
-import ChartBaseController from "./chart_base_controller";
+import BaseController from "./base_controller";
 
-// Connects to data-controller="yearly-electric-rates-chart"
-export default class extends ChartBaseController {
+// Connects to data-controller="charts--yearly-electric-rates"
+export default class extends BaseController {
   renderChart(chartData) {
     const settings = this.responsiveSettings;
 

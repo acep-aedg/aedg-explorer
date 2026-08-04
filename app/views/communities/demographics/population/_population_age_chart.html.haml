@@ -3,29 +3,29 @@
 - base_title          = "Age Distribution"
 
 .age-chart-wrapper{ data: { 
-                      controller: "age-distribution-chart",
-                      age_distribution_chart: {
-                        base_title_value: base_title,
-                        title_value: "#{base_title} (#{selected_period&.period_label})",
-                        base_url_value: age_distribution_community_charts_path(@community),
-                        param_value: "end_year",
-                        url_value: age_distribution_community_charts_path(@community, end_year: selected_period&.end_year),
-                        bar_color_value: color(:blue),
-                        error_bar_color_value: color(:orange)
-                      }
+                    controller: "charts--age-distribution",
+                    "charts--age-distribution": {
+                      base_title_value: base_title,
+                      title_value: "#{base_title} (#{selected_period&.period_label})",
+                      base_url_value: age_distribution_community_charts_path(@community),
+                      param_value: "end_year",
+                      url_value: age_distribution_community_charts_path(@community, end_year: selected_period&.end_year),
+                      bar_color_value: color(:blue),
+                      error_bar_color_value: color(:orange)
                     }
                   }
+                }
 
   .d-flex.align-items-center.gap-2.mb-3
     %label.form-label.me-2.mb-0.fw-bold{ for: "population-period" } Survey Period:
   
     - if population_periods.size > 1
       = select_tag "population-period", 
-                        options_from_collection_for_select(population_periods, :end_year, :period_label, selected_period&.end_year),
-                        class: "form-select form-select-sm w-auto",
-                        data: { action: "change->age-distribution-chart#update" }
+                    options_from_collection_for_select(population_periods, :end_year, :period_label, selected_period&.end_year),
+                    class: "form-select form-select-sm w-auto",
+                    data: { action: "change->charts--age-distribution#update" }
     - else
       %span.fw-bold.text-muted= selected_period&.period_label
 
   .chart-container.mt-4{ style: "min-height: 500px;" }
-    %canvas{ data: { "age-distribution-chart-target": "canvas" } }
+    %canvas{ data: { "charts--age-distribution-target": "canvas" } }

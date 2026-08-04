@@ -1,32 +1,13 @@
-import ChartBaseController from "./chart_base_controller";
+import BaseController from "./base_controller";
 
-// Connects to data-controller="yearly-generation-chart"
-export default class extends ChartBaseController {
-  renderChart(rawData) {
+// Connects to data-controller="charts--electricity-consumption-by-sector"
+export default class extends BaseController {
+  renderChart(chartData) {
     const settings = this.responsiveSettings;
-    const labels = Object.keys(rawData[0].data);
-    const datasets = rawData.map((series) => {
-      const baseColor = series.color || "rgba(93, 109, 126, 1)";
-
-      let label = series.name;
-      if (label.includes("Electricity used for Energy Storage (MWH)")) {
-        label = "Energy Storage (MWH)";
-      }
-
-      return {
-        label: label,
-        data: Object.values(series.data),
-        borderColor: baseColor,
-        backgroundColor: baseColor,
-      };
-    });
 
     this.chart = new Chart(this.element, {
       type: "line",
-      data: {
-        labels: labels,
-        datasets: datasets
-      },
+      data: chartData,
       options: {
         datasets: {
           line: {
@@ -70,13 +51,12 @@ export default class extends ChartBaseController {
             },
           },
           y: {
-              stacked: true,
-              beginAtZero: true,
+            beginAtZero: true,
+            stacked: true,
             title: {
-              text: "Generation (MWh)",
+              text: "Electricity Consumed",
             },
             ticks: {
-              maxTicksLimit: 10,
               callback: (value) => {
                 return `${new Intl.NumberFormat().format(value)} MWh`;
               },

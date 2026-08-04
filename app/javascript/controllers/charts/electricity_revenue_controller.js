@@ -1,8 +1,7 @@
-import ChartBaseController from "./chart_base_controller";
+import BaseController from "./base_controller";
 
-// Connects to data-controller="electricity-consumption-chart"
-export default class extends ChartBaseController {
-
+// Connects to data-controller="charts--electricity-revenue"
+export default class extends BaseController {
   renderChart(chartData) {
     const settings = this.responsiveSettings;
 
@@ -32,7 +31,14 @@ export default class extends ChartBaseController {
             reverse: true,
             callbacks: {
               label: (context) => {
-                return `${context.dataset.label}: ${context.formattedValue} MWh/Customer`;
+                return `${context.dataset.label}: $${context.formattedValue}`;
+              },
+              footer: (tooltipItems) => {
+                let total = 0;
+                tooltipItems.forEach((item) => {
+                  total += item.parsed.y;
+                });
+                return `Total: $${new Intl.NumberFormat().format(total)}`;
               },
             },
           },
@@ -48,11 +54,11 @@ export default class extends ChartBaseController {
             beginAtZero: true,
             stacked: true,
             title: {
-              text: "Electricity Consumed Per Customer",
+              text: "Revenue",
             },
             ticks: {
               callback: (value) => {
-                return `${new Intl.NumberFormat().format(value)} MWh`;
+                return `$${new Intl.NumberFormat().format(value)}`;
               },
             },
           },

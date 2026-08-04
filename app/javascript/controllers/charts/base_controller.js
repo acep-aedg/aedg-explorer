@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="chart-base"
 export default class extends Controller {
   static values = { url: String, title: String };
 
