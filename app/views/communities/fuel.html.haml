@@ -1,12 +1,8 @@
 - tab = 'fuel'
-- links = [ |
-    { title: 'Fuel Prices', anchor: '#fuel-prices', icon: 'coin', show: @community.fuel_prices? }, |
-    { title: 'Bulk Fuel', anchor: '#bulk-fuel-facilities', icon: 'fuel-pump', show: @community.bulk_fuel_facilities? }, |
-  ] |
-  
+
 = turbo_frame_tag "community_tab_content" do
-  = render 'shared/tab_nav', links: links
-  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+  = render 'shared/jump_links', links: community_fuel_jump_links(@community)
+  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
     - if @community.fuel_prices?
       #fuel-prices.scroll-section.mb-5
         = render 'shared/section_header',

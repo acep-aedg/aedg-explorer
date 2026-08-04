@@ -6,7 +6,7 @@
     = render "shared/toolbar",
       entity: @parent,
       collection: @parents,
-      tabs: @nav_tab_links,
+      tabs: grouped_summaries_navigation_tabs(@parent),
       target_frame: "tab_content"
 
     .split-wrapper{ data: { controller: "split-layout" } }
