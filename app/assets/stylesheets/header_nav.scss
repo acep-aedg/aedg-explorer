@@ -1,5 +1,5 @@
 #top-nav {
-  z-index: 9999;
+  z-index: 8888;
   .navbar {
     top: 0px;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
@@ -11,6 +11,7 @@
 
     .dropdown {
       &:hover .dropdown-menu {
+        z-index: 8888;
         display: block;
         visibility: visible;
         opacity: 1;
@@ -18,6 +19,7 @@
       }
 
       .dropdown-menu {
+        z-index: 8888;
         min-width: auto;
         display: none;
         visibility: hidden;
@@ -32,7 +34,7 @@
         li:last-child a { border-radius: 0 0 0.5rem 0.5rem; }
 
         .dropdown-item {
-          padding: 1rem 2rem; // Standard header padding
+          padding: 1rem 2rem;
           font-size: 1rem;
           font-weight: 500;
           transition: background-color 0.3s ease, color 0.3s ease;
@@ -49,6 +51,31 @@
           }
         }
       }
+    }
+  }
+}
+
+.nav-tabs {
+  .nav-link {
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: $tabs-text-default;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.75rem;
+    transition:
+      border-color 0.2s ease,
+      color 0.2s ease;
+
+    &:hover {
+      color: $tabs-text-hover;
+      border-bottom-color: $tabs-border-hover;
+    }
+
+    &.active {
+      color: $tabs-text-active;
+      border-bottom-color: $tabs-border-active;
+      font-weight: 600;
     }
   }
 }
