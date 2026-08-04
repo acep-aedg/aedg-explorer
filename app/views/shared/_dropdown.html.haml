@@ -2,13 +2,17 @@
 -#   collection:  required (e.g., @grids / @communities)
 -#   field_name:  optional  (e.g., :grid / :community) – can be nil
 -#   prompt:      optional  (defaults to "Select a <Model>")
+-#   size_class:  optional  (defaults to "form-select-md")
 
 - arr = collection.map { |item| [item, url_for(item)] }
 - prompt = dropdown_prompt_for(collection)
 - field_name   ||= collection.respond_to?(:klass) ? collection.klass.model_name.param_key.to_sym : nil
 
+-# Set the default size if one wasn't passed in
+- size_class ||= "form-select-md"
+
 .d-inline-flex.me-2.flex-shrink-0{ data: { controller: "dropdown", action: "change->dropdown#update" } }
   = select_tag(field_name, options_for_select(arr),
       prompt: prompt,
-      class: "form-select form-select-md w-auto rounded-5 text-center",
+      class: "form-select #{size_class} w-auto rounded-5 text-center",
       data: { dropdown_target: "select" })

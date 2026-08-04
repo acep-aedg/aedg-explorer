@@ -41,6 +41,7 @@ export default class extends Controller {
       zoom: DEFAULT_ZOOM,
     })
 
+    this.map.addControl(new mapboxgl.FullscreenControl(), 'top-left');
     this.initSwatches()
 
     // Expose map instance to the DOM for console debugging if needed
@@ -112,15 +113,6 @@ export default class extends Controller {
     else if (el.checked && url) {
       this._loadLayerOnDemand(layer_id, url, el)
     }
-  }
-
-  toggleExpand() {
-    document.body.classList.toggle('map-expanded')
-
-    // timeout to let the CSS display/width changes finish rendering first.
-    setTimeout(() => {
-      this.map.resize()
-    }, 100)
   }
 
   // --- PRIVATE ---

@@ -1,0 +1,10 @@
+#main-tabs-container.sticky-top.bg-light
+  .nav-scroller
+    %ul.nav.nav-tabs.flex-nowrap.w-100.g-2.border-bottom-0.pt-2.px-2{ role: "tablist", data: { controller: "turbo-active-link" } }
+      - tabs.each do |tab|
+        %li.nav-item.flex-grow-1.flex-shrink-0{ role: "presentation" }
+          = link_to tab[:label], tab[:path],
+            class: "nav-link py-1 px-2 px-lg-3 bg-transparent text-center",
+            role: "tab",
+            aria: { selected: "false" },
+            data: { turbo_active_link_target: "link", turbo_frame: target_frame, turbo_action: "advance" }

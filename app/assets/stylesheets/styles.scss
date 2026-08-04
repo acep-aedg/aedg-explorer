@@ -1,8 +1,9 @@
 :root {
   --main-toolbar-height: 85.66px;  // The Navy Bar
   --banner-height: 0px;            // The Import Banner
-  --summary-toolbar-height: 68px;  // The White Bar
-  --jump-toolbar-height: 48px;
+  --summary-toolbar-height: 49px;  // The White Bar
+  --jump-toolbar-height: 31px;
+  --main-tab-height: 50px;
 }
 
 // If the banner ID is on the page, update the variable to its height
@@ -19,12 +20,12 @@ body:has(#import-banner-container) {
 @media (min-width: 992px) {
   .navbar .dropdown-toggle::after {
     display: none;
-    z-index: 9999 !important;
+    z-index: 8888 !important;
   }
 
   .navbar .dropdown-toggle {
     pointer-events: none;
-    z-index: 9999 !important;
+    z-index: 8888 !important;
   }
 }
 
@@ -193,31 +194,6 @@ body:has(#import-banner-container) {
 #data-creation-process .text-muted a {
   text-decoration: none;
   font-weight: 500;
-}
-
-.nav-tabs {
-  .nav-link {
-    border: none;
-    border-bottom: 3px solid transparent;
-    color: $tabs-text-default;
-    font-weight: 500;
-    font-size: 0.9rem;
-    padding: 0.4rem 0.75rem;
-    transition:
-      border-color 0.2s ease,
-      color 0.2s ease;
-
-    &:hover {
-      color: $tabs-text-hover;
-      border-bottom-color: $tabs-border-hover;
-    }
-
-    &.active {
-      color: $tabs-text-active;
-      border-bottom-color: $tabs-border-active;
-      font-weight: 600;
-    }
-  }
 }
 
 .topic-tile.enabled {
