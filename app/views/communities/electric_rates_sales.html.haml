@@ -2,7 +2,7 @@
 
 = turbo_frame_tag "community_tab_content", class: "d-flex flex-column h-100" do
   = render 'shared/jump_links', links: community_electric_rates_sales_jump_links(@community)
-
+  
   .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
     = render "communities/#{tab}/summary"
 
