@@ -92,11 +92,11 @@ jobs:
                 echo "EOF" >> $GITHUB_OUTPUT
 
             - name: Existing Tickets Count
-              id: existing_tickets
+              id: existing_work_items
               if: always()
               run: |
-                OUTPUT=$(bundle exec rake accessibility:existing_tickets_count)
-                echo "existing_tickets<<EOF" >> $GITHUB_OUTPUT
+                OUTPUT=$(bundle exec rake accessibility:existing_work_items_count)
+                echo "existing_work_items<<EOF" >> $GITHUB_OUTPUT
                 echo "$OUTPUT" >> $GITHUB_OUTPUT
                 echo "EOF" >> $GITHUB_OUTPUT
 
@@ -110,11 +110,11 @@ jobs:
                 echo "EOF" >> $GITHUB_OUTPUT
 
             - name: Resolved Violations
-              id: resolved_violations
+              id: resolved_work_items
               if: always()
               run: |
-                OUTPUT=$(bundle exec rake accessibility:resolved_violations)
-                echo "resolved_violations<<EOF" >> $GITHUB_OUTPUT
+                OUTPUT=$(bundle exec rake accessibility:resolved_work_items)
+                echo "resolved_work_items<<EOF" >> $GITHUB_OUTPUT
                 echo "$OUTPUT" >> $GITHUB_OUTPUT
                 echo "EOF" >> $GITHUB_OUTPUT
 
@@ -123,9 +123,9 @@ jobs:
               if: always() && github.event_name == 'pull_request' 
               env:
                 VIOLATION_COUNT: ${{ steps.unique_violations_count.outputs.unique_violations_count }}
-                EXISTING_TICKETS: ${{ steps.existing_tickets.outputs.existing_tickets }}
+                EXISTING_WORK_ITEMS: ${{ steps.existing_work_items.outputs.existing_work_items }}
                 NEW_VIOLATIONS: ${{ steps.new_violations.outputs.new_violations }}
-                RESOLVED_VIOLATIONS: ${{ steps.resolved_violations.outputs.resolved_violations }}
+                RESOLVED_WORK_ITEMS: ${{ steps.resolved_work_items.outputs.resolved_work_items }}
               with:
                 script: |
                   const { data: comments } = await github.rest.issues.listComments({
@@ -141,11 +141,11 @@ jobs:
 
                   ${process.env.VIOLATION_COUNT}
                   
-                  ${process.env.EXISTING_TICKETS}
+                  ${process.env.EXISTING_WORK_ITEMS}
 
                   ${process.env.NEW_VIOLATIONS}
 
-                  ${process.env.RESOLVED_VIOLATIONS}
+                  ${process.env.RESOLVED_WORK_ITEMS}
 
                   *Pusher: @${{ github.actor }} | Last Checked: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC*`;
 

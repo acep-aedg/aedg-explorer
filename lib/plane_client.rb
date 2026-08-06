@@ -14,21 +14,31 @@ module PlaneClient
     "minor" => "low"
   }.freeze
 
-  def existing_tickets
+  def existing_work_items
     puts "Fetching Plane tickets..."
     http, request = build_request(method: :get)
-    data = send_request(http, request)
-    return [] unless data
+    response = send_request(http, request)
+    return [] unless response
 
-    tickets = data["results"]
+    tickets = response["results"]
 
     tickets.map do |ticket|
       ticket["url"] ||= work_item_web_url(ticket["sequence_id"]) if ticket["sequence_id"]
       ticket
     end
-  rescue StandardError => e
-    puts "Error fetching existing tickets: #{e.message}"
-    []
+  end
+  
+  def update_work_item(work_item_id:, payload:)
+    update_endpoint = "#{default_endpoint}#{work_item_id}/"
+    
+    http, request = build_request(method: :patch, payload: payload, endpoint: update_endpoint)
+    response = send_request(http, request)
+    
+    if response && response["id"]
+      true
+    else
+      false
+    end
   end
 
   def create_work_item(name:, description_html: "", impact: nil, labels: [])
@@ -82,8 +92,8 @@ module PlaneClient
 
   private
 
-  def endpoint
-    @endpoint ||= "#{base_url}/api/v1/workspaces/#{workspace_slug}/projects/#{project_id}/work-items/"
+  def default_endpoint
+    @default_endpoint ||= "#{base_url}/api/v1/workspaces/#{workspace_slug}/projects/#{project_id}/work-items/"
   end
 
   def base_url
@@ -110,8 +120,10 @@ module PlaneClient
     "#{base_url}/#{workspace_slug}/browse/#{project_id_string}-#{sequence_id}"
   end
 
-  def build_request(method:, payload: nil)
-    uri = URI(endpoint)
+  def build_request(method:, payload: nil, endpoint: nil)
+    target_endpoint = endpoint || default_endpoint
+    uri = URI(target_endpoint)
+    
     http = Net::HTTP.new(uri.host, uri.port)
 
     if uri.scheme == "https"
@@ -119,7 +131,12 @@ module PlaneClient
       http.min_version = OpenSSL::SSL::TLS1_2_VERSION
     end
 
-    request_class = method == :post ? Net::HTTP::Post : Net::HTTP::Get
+    request_class = case method
+                    when :get then Net::HTTP::Get
+                    when :post then Net::HTTP::Post
+                    when :patch then Net::HTTP::Patch
+                    end
+                    
     request = request_class.new(uri)
 
     request["X-API-Key"]    = api_key
