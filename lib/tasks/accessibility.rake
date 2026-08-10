@@ -11,7 +11,7 @@ namespace :accessibility do
     next unless violations
 
     existing_titles = AccessibilityHelpers.plane_work_item_titles
-    puts "Found #{existing_titles.size} existing [A11y] work items in project."
+    puts "Found #{existing_titles.size} existing work items in project."
     puts "Found #{violations.size} in the report."
 
     violations.each_with_index do |v, idx|
@@ -109,6 +109,6 @@ namespace :accessibility do
   desc "Get the count of existing work items in Plane"
   task existing_work_items_count: :environment do
     count = AccessibilityHelpers.plane_work_items.size
-    puts "Found #{count} existing [A11y] work item(s) in Plane."
+    puts "Found #{count} existing work item(s) in Plane."
   end
 end

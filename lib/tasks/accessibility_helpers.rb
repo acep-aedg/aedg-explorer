@@ -34,7 +34,7 @@ module AccessibilityHelpers
     standardized_selector = standardize_links(violation[:selector])
     "[A11y] #{violation[:rule_id]}: #{standardized_selector}"
   end
-  
+
   def self.standardize_links(selector)
     return selector unless selector.is_a?(String)
 

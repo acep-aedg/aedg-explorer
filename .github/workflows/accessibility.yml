@@ -1,6 +1,8 @@
 name: RSpec Accessibility Tests
 
 on:
+  # push:
+  #   branches: [ main ]
   pull_request:
   workflow_dispatch:
 
@@ -40,6 +42,7 @@ jobs:
       PLANE_STRING_PROJECT_ID: ${{ secrets.PLANE_STRING_PROJECT_ID }}
       PLANE_API_KEY: ${{ secrets.PLANE_API_KEY }}
       PLANE_WORK_ITEM_LABEL_ID: ${{ secrets.PLANE_WORK_ITEM_LABEL_ID }}
+      PLANE_STALE_STATE_ID: ${{ secrets.PLANE_STALE_STATE_ID }}
 
     steps:
       - name: Install dependencies
@@ -47,8 +50,6 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -101,6 +102,22 @@ jobs:
             echo "EOF"
           } >> $GITHUB_OUTPUT
 
+      - name: Sync Violations to Plane
+        id: plane_sync
+        if: always() #&& github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          CREATE_OUT=$(bundle exec rake accessibility:create_work_items 2>&1 || echo "Failed to run create_work_items")
+          STALE_OUT=$(bundle exec rake accessibility:mark_resolved_work_items_as_stale 2>&1 || echo "Failed to run mark_resolved_work_items_as_stale")
+
+          {
+            echo "create_output<<EOF"
+            echo "$CREATE_OUT"
+            echo "EOF"
+            echo "stale_output<<EOF"
+            echo "$STALE_OUT"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
       - name: Post PR Comment with Results
         uses: actions/github-script@v7
         if: always() && github.event_name == 'pull_request'
@@ -109,6 +126,8 @@ jobs:
           EXISTING_WORK_ITEMS: ${{ steps.violation_metrics.outputs.existing_work_items }}
           NEW_VIOLATIONS: ${{ steps.violation_metrics.outputs.new_violations }}
           RESOLVED_WORK_ITEMS: ${{ steps.violation_metrics.outputs.resolved_work_items }}
+          CREATE_OUTPUT: ${{ steps.plane_sync.outputs.create_output }}
+          STALE_OUTPUT: ${{ steps.plane_sync.outputs.stale_output }}
         with:
           script: |
             const { data: comments } = await github.rest.issues.listComments({
@@ -130,6 +149,14 @@ jobs:
             ${process.env.NEW_VIOLATIONS}
             
             ${process.env.RESOLVED_WORK_ITEMS}
+
+            ### Plane Sync Activity
+            
+            **Create Work Items:**
+            ${process.env.CREATE_OUTPUT}
+            
+            **Mark Resolved Items as Stale:**
+            ${process.env.STALE_OUTPUT}
             
             *Pusher: @${context.actor} | Last Checked: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC*`;
 
