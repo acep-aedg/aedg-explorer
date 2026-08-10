@@ -15,7 +15,6 @@ module PlaneClient
   }.freeze
 
   def existing_work_items
-    puts "Fetching Plane tickets..."
     http, request = build_request(method: :get)
     response = send_request(http, request)
     return [] unless response
@@ -27,18 +26,14 @@ module PlaneClient
       ticket
     end
   end
-  
+
   def update_work_item(work_item_id:, payload:)
     update_endpoint = "#{default_endpoint}#{work_item_id}/"
-    
+
     http, request = build_request(method: :patch, payload: payload, endpoint: update_endpoint)
     response = send_request(http, request)
-    
-    if response && response["id"]
-      true
-    else
-      false
-    end
+
+    response if response && response["id"]
   end
 
   def create_work_item(name:, description_html: "", impact: nil, labels: [])
@@ -123,7 +118,7 @@ module PlaneClient
   def build_request(method:, payload: nil, endpoint: nil)
     target_endpoint = endpoint || default_endpoint
     uri = URI(target_endpoint)
-    
+
     http = Net::HTTP.new(uri.host, uri.port)
 
     if uri.scheme == "https"
@@ -136,7 +131,7 @@ module PlaneClient
                     when :post then Net::HTTP::Post
                     when :patch then Net::HTTP::Patch
                     end
-                    
+
     request = request_class.new(uri)
 
     request["X-API-Key"]    = api_key
@@ -151,37 +146,41 @@ module PlaneClient
     max_retries = 3
 
     begin
-      response = http.request(request)
-
-      if response.code.to_i.between?(200, 299)
-        JSON.parse(response.body)
-      elsif response.code.to_i == 429
-        raise RateLimitError
-      else
-        body_text = response.body.to_s.dup.force_encoding("UTF-8")
-        puts "Failed (#{response.code}): #{body_text}"
-        nil
-      end
+      handle_response(http.request(request))
     rescue RateLimitError
       if retries < max_retries
         retries += 1
-        puts "Rate limited exceeded (429). Trying again in 60s (Attempt #{retries}/#{max_retries})..."
+        Rails.logger.warn "Rate limited exceeded (429). Trying again in 60s (Attempt #{retries}/#{max_retries})..."
         sleep 60
         retry
       else
-        puts "Rate limit and max retries (#{max_retries})."
+        Rails.logger.error "Rate limit and max retries (#{max_retries})."
         nil
       end
     rescue Errno::ECONNRESET, Errno::ETIMEDOUT, OpenSSL::SSL::SSLError => e
       if retries < max_retries
         retries += 1
-        puts "Connection reset. Retrying in 2s (#{retries}/#{max_retries})..."
+        Rails.logger.warn "Connection reset. Retrying in 2s (#{retries}/#{max_retries})..."
         sleep 2
         retry
       else
-        puts "Error after #{max_retries} retries: #{e.message}"
+        Rails.logger.error "Failed after #{max_retries} retries: #{e.message}"
         raise e
       end
+    end
+  end
+
+  def handle_response(response)
+    code = response.code.to_i
+
+    if code.between?(200, 299)
+      JSON.parse(response.body)
+    elsif code == 429
+      raise RateLimitError
+    else
+      body_text = response.body.to_s.dup.force_encoding("UTF-8")
+      Rails.logger.error "Failed (#{response.code}): #{body_text}"
+      nil
     end
   end
 end

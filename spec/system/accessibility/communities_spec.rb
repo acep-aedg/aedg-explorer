@@ -14,7 +14,7 @@ RSpec.describe "Accessibility::Communities", type: :system do
 
   it "checks the general tab" do
     visit general_community_path(@community)
-    expect_page_to_be_accessible(debug_versions: true)
+    expect_page_to_be_accessible
   end
 
   it "checks the power generation tab" do

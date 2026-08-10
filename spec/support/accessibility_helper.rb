@@ -1,12 +1,5 @@
 module AccessibilityHelpers
-  def expect_page_to_be_accessible(debug_versions: false)
-    if debug_versions
-      window_size = page.current_window.size # Gets an array like [1920, 1080]
-      
-      puts "\n=== Test Environment Details ==="
-      puts "Window Size: #{window_size[0]}x#{window_size[1]}"
-      puts "=================================\n"
-    end
+  def expect_page_to_be_accessible
     standards = %i[wcag2a wcag2aa wcag21a wcag21aa]
     matcher = be_axe_clean.according_to(*standards)
     matcher.matches?(page)
