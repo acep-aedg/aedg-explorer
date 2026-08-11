@@ -122,8 +122,6 @@ jobs:
         uses: actions/github-script@v7
         if: always() && github.event_name == 'pull_request'
         env:
-          VIOLATION_COUNT: ${{ steps.violation_metrics.outputs.violation_count }}
-          ACTIVE_WORK_ITEMS: ${{ steps.violation_metrics.outputs.active_work_items }}
           NEW_VIOLATIONS: ${{ steps.violation_metrics.outputs.new_violations }}
           RESOLVED_WORK_ITEMS: ${{ steps.violation_metrics.outputs.resolved_work_items }}
           CREATE_OUTPUT: ${{ steps.plane_sync.outputs.create_output }}

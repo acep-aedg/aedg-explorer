@@ -15,4 +15,5 @@
   = select_tag(field_name, options_for_select(arr),
       prompt: prompt,
       class: "form-select #{size_class} w-auto rounded-5 text-center",
+      aria: { label: prompt },
       data: { dropdown_target: "select" })
