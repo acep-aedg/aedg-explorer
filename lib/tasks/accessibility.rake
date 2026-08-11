@@ -11,7 +11,7 @@ namespace :accessibility do
     next unless violations
 
     existing_titles = AccessibilityHelpers.plane_work_item_titles
-    puts "Found #{existing_titles.size} existing work items in project."
+    puts "Found #{existing_titles.size} active work items in project."
     puts "Found #{violations.size} in the report."
 
     violations.each_with_index do |v, idx|
@@ -39,25 +39,25 @@ namespace :accessibility do
     puts "Successfully synced all violations to Plane!"
   end
 
-  desc "Identify A11y work items in Plane that no longer exist in the report"
+  desc "Identify work items in Plane that no longer exist in the report"
   task resolved_work_items: :environment do
     resolved = AccessibilityHelpers.resolved_work_items
     next unless resolved
 
     if resolved.empty?
-      puts "No resolved work items found! All Plane [A11y] items are still active violations."
+      puts "No resolved work items found! All Plane items are still active violations."
     else
       puts "Found #{resolved.size} RESOLVED violations(s) (resolved in code, still open in Plane):"
       resolved.each { |item| puts "  - [#{item['name']}](#{item['url']})" }
     end
   end
 
-  desc "Update the status of resolved A11y work items to 'Stale' in Plane"
+  desc "Update the status of resolved work items to 'Stale' in Plane"
   task mark_resolved_work_items_as_stale: :environment do
-    stale_state_id = ENV.fetch("PLANE_STALE_STATE_ID", nil)
+    stale_state_id = ENV.fetch("PLANE_RESOLVED_STATE_ID", nil)
 
     if stale_state_id.blank?
-      puts "Error: ENV['PLANE_STALE_STATE_ID'] not set."
+      puts "Error: ENV['PLANE_RESOLVED_STATE_ID'] not set."
       next
     end
 
@@ -77,7 +77,7 @@ namespace :accessibility do
     end
   end
 
-  desc "Identify A11y violations in the report that do not exist in Plane yet"
+  desc "Identify new violations (present in the report & do not exist in Plane)"
   task new_violations: :environment do
     violations = AccessibilityHelpers.axe_violations
     if violations.blank?
@@ -106,9 +106,9 @@ namespace :accessibility do
     puts "Total Unique Violations: #{unique_count}"
   end
 
-  desc "Get the count of existing work items in Plane"
-  task existing_work_items_count: :environment do
+  desc "Get the count of active work items in Plane"
+  task active_work_items_count: :environment do
     count = AccessibilityHelpers.plane_work_items.size
-    puts "Found #{count} existing work item(s) in Plane."
+    puts "Found #{count} active work item(s) in Plane."
   end
 end

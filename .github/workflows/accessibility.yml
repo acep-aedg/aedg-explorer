@@ -42,7 +42,7 @@ jobs:
       PLANE_STRING_PROJECT_ID: ${{ secrets.PLANE_STRING_PROJECT_ID }}
       PLANE_API_KEY: ${{ secrets.PLANE_API_KEY }}
       PLANE_WORK_ITEM_LABEL_ID: ${{ secrets.PLANE_WORK_ITEM_LABEL_ID }}
-      PLANE_STALE_STATE_ID: ${{ secrets.PLANE_STALE_STATE_ID }}
+      PLANE_RESOLVED_STATE_ID: ${{ secrets.PLANE_RESOLVED_STATE_ID }}
 
     steps:
       - name: Install dependencies
@@ -83,7 +83,7 @@ jobs:
         if: always()
         run: |
           COUNT=$(bundle exec rake accessibility:violation_count 2>/dev/null || echo "Violation Count unavailable")
-          EXISTING=$(bundle exec rake accessibility:existing_work_items_count 2>/dev/null || echo "Existing Work Item Count unavailable")
+          EXISTING=$(bundle exec rake accessibility:active_work_items_count 2>/dev/null || echo "Existing Work Item Count unavailable")
           NEW_ITEMS=$(bundle exec rake accessibility:new_violations 2>/dev/null || echo "New Violations unavailable")
           RESOLVED=$(bundle exec rake accessibility:resolved_work_items 2>/dev/null || echo "Resolved Work Items unavailable")
 
@@ -91,7 +91,7 @@ jobs:
             echo "violation_count<<EOF"
             echo "$COUNT"
             echo "EOF"
-            echo "existing_work_items<<EOF"
+            echo "active_work_items<<EOF"
             echo "$EXISTING"
             echo "EOF"
             echo "new_violations<<EOF"
@@ -123,7 +123,7 @@ jobs:
         if: always() && github.event_name == 'pull_request'
         env:
           VIOLATION_COUNT: ${{ steps.violation_metrics.outputs.violation_count }}
-          EXISTING_WORK_ITEMS: ${{ steps.violation_metrics.outputs.existing_work_items }}
+          ACTIVE_WORK_ITEMS: ${{ steps.violation_metrics.outputs.active_work_items }}
           NEW_VIOLATIONS: ${{ steps.violation_metrics.outputs.new_violations }}
           RESOLVED_WORK_ITEMS: ${{ steps.violation_metrics.outputs.resolved_work_items }}
           CREATE_OUTPUT: ${{ steps.plane_sync.outputs.create_output }}
@@ -144,7 +144,7 @@ jobs:
 
             ${process.env.VIOLATION_COUNT}
             
-            ${process.env.EXISTING_WORK_ITEMS}
+            ${process.env.ACTIVE_WORK_ITEMS}
             
             ${process.env.NEW_VIOLATIONS}
             

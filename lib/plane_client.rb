@@ -14,16 +14,17 @@ module PlaneClient
     "minor" => "low"
   }.freeze
 
-  def existing_work_items
+  def active_work_items
     http, request = build_request(method: :get)
     response = send_request(http, request)
-    return [] unless response
+    return [] unless response && response["results"]
 
-    tickets = response["results"]
+    stale_state_id = ENV.fetch("PLANE_RESOLVED_STATE_ID", nil)
+    response["results"].each_with_object([]) do |work_item, list|
+      next if stale_state_id.present? && work_item["state"] == stale_state_id
 
-    tickets.map do |ticket|
-      ticket["url"] ||= work_item_web_url(ticket["sequence_id"]) if ticket["sequence_id"]
-      ticket
+      work_item["url"] = work_item_web_url(work_item["sequence_id"])
+      list << work_item
     end
   end
 
@@ -49,10 +50,7 @@ module PlaneClient
 
     return nil unless response.is_a?(Hash) && response["sequence_id"]
 
-    {
-      name: response["name"] || name,
-      url: work_item_web_url(response["sequence_id"])
-    }
+    { name: response["name"] || name, url: work_item_web_url(response["sequence_id"]) }
   end
 
   def build_work_item_description(violation)
@@ -87,28 +85,14 @@ module PlaneClient
 
   private
 
+  def base_url = ENV.fetch("PLANE_BASE_URL") { raise "Missing ENV['PLANE_BASE_URL']" }.chomp("/")
+  def workspace_slug = ENV.fetch("PLANE_WORKSPACE_SLUG") { raise "Missing ENV['PLANE_WORKSPACE_SLUG']" }
+  def project_id = ENV.fetch("PLANE_PROJECT_ID") { raise "Missing ENV['PLANE_PROJECT_ID']" }
+  def project_id_string = ENV.fetch("PLANE_STRING_PROJECT_ID") { raise "Missing ENV['PLANE_STRING_PROJECT_ID']" }
+  def api_key = ENV.fetch("PLANE_API_KEY") { raise "Missing ENV['PLANE_API_KEY']" }
+
   def default_endpoint
     @default_endpoint ||= "#{base_url}/api/v1/workspaces/#{workspace_slug}/projects/#{project_id}/work-items/"
-  end
-
-  def base_url
-    @base_url ||= ENV.fetch("PLANE_BASE_URL") { raise "Missing ENV['PLANE_BASE_URL']" }.chomp("/")
-  end
-
-  def workspace_slug
-    @workspace_slug ||= ENV.fetch("PLANE_WORKSPACE_SLUG") { raise "Missing ENV['PLANE_WORKSPACE_SLUG']" }
-  end
-
-  def project_id
-    @project_id ||= ENV.fetch("PLANE_PROJECT_ID") { raise "Missing ENV['PLANE_PROJECT_ID']" }
-  end
-
-  def project_id_string
-    @project_id_string ||= ENV.fetch("PLANE_STRING_PROJECT_ID") { raise "Missing ENV['PLANE_STRING_PROJECT_ID']" }
-  end
-
-  def api_key
-    @api_key ||= ENV.fetch("PLANE_API_KEY") { raise "Missing ENV['PLANE_API_KEY']" }
   end
 
   def work_item_web_url(sequence_id)

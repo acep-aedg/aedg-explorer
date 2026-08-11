@@ -21,7 +21,7 @@ module AccessibilityHelpers
   end
 
   def self.plane_work_items
-    @plane_work_items ||= PlaneClient.existing_work_items.select do |item|
+    @plane_work_items ||= PlaneClient.active_work_items.select do |item|
       item["name"].to_s.start_with?("[A11y]")
     end
   end
