@@ -4,7 +4,7 @@ class SenateDistrictsController < GroupedSummariesController
   private
 
   def set_parent
-    @parent = SenateDistrict.friendly.find(params[:id])
+    @parent = SenateDistrict.friendly.find(params.expect(:id))
   end
 
   def set_parents

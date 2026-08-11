@@ -33,7 +33,7 @@ class DatasetsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_metadatum
-    @metadatum = Metadatum.friendly.find(params[:metadatum_id])
+    @metadatum = Metadatum.friendly.find(params.expect(:metadatum_id))
   end
 
   def set_dataset
