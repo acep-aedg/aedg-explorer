@@ -4,7 +4,7 @@ class BoroughsController < GroupedSummariesController
   private
 
   def set_parent
-    @parent = Borough.friendly.find(params[:id])
+    @parent = Borough.friendly.find(params.expect(:id))
   end
 
   def set_parents

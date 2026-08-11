@@ -13,7 +13,7 @@ module Communities
     private
 
     def set_community
-      @community = Community.friendly.find(params[:community_id])
+      @community = Community.friendly.find(params.expect(:community_id))
     end
   end
 end
