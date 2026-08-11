@@ -77,7 +77,7 @@ namespace :accessibility do
         work_item_id: item["id"],
         payload: { state: stale_state_id }
       )
-      puts result ? "Successfully marked #{item['name']} as stale." : "Failed to mark #{item['name']} as stale."
+      puts result ? "Successfully marked #{item['name']} as resolved." : "Failed to mark #{item['name']} as resolved."
     end
   end
 

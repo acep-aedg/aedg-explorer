@@ -1,4 +1,4 @@
-# Automated Accessibility Testing & Plane Sync Architecture
+# Automated Accessibility Testing & Plane Syncing
 
 ## Pipeline Overview
 - **Pull Requests:** Runs tests, parses the generated JSON report, and posts (or updates) a formatted summary comment on the PR comparing current violations with existing Plane work items.
