@@ -1,27 +1,40 @@
-/* Hide the main navbar when expanded */
-body.map-expanded #top-nav {
-  display: none !important;
+.top-section {
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-body.map-expanded #summary-toolbar {
-  top: 0 !important;
+/* Horizontal Gutter */
+.split-horizontal-gutter {
+  height: 20px;
+  background-color: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  cursor: row-resize;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-body.map-expanded .split-left {
-  top: var(--main-toolbar-height);
-  width: 100%;
-  height: 100%;
+/* The visual "grip" dots mapped horizontally */
+.split-horizontal-gutter::after {
+  content: "";
+  height: 6px;
+  width: 24px;
+  background-image: radial-gradient(circle, #94a3b8 2px, transparent 2px);
+  background-size: 8px 100%; /* Tiles horizontally instead of vertically */
+  transition: background-image 0.2s ease;
 }
 
-body.map-expanded .dashboard-viewport {
-  height: 100vh;
+.split-horizontal-gutter:hover,
+.split-horizontal-gutter:active {
+  background-color: #e2e8f0;
 }
-/* ----------------------------------- */
 
-/* Jump Nav locks to the top of the right panel */
-#jump-links.sticky-top {
-  top: 0;
-  z-index: 1000;
+.split-horizontal-gutter:hover::after,
+.split-horizontal-gutter:active::after {
+  background-image: radial-gradient(circle, #475569 1.5px, transparent 1.5px);
 }
 
 .dashboard-viewport {
@@ -29,6 +42,9 @@ body.map-expanded .dashboard-viewport {
   flex-direction: column;
   height: calc(100vh - var(--main-toolbar-height) - var(--banner-height));
   overflow: hidden;
+  position: relative;
+  z-index: 2000; /* Higher than the main nav */
+  background-color: #ffffff;
 }
 
 .split-wrapper {
@@ -42,7 +58,7 @@ body.map-expanded .dashboard-viewport {
 }
 
 .split-left {
-  width: calc(33% - 4px);
+  width: 50%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -50,12 +66,13 @@ body.map-expanded .dashboard-viewport {
 }
 
 .split-right {
-  width: calc(67% - 4px);
+  flex: 1;
+  min-width: 0;
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
-  scroll-padding-top: var(--jump-toolbar-height);
+  scroll-padding-top: calc(var(--main-tab-height) + var(--jump-toolbar-height));
 }
 
 /* Custom Gutter */

@@ -1,18 +1,18 @@
 - partial_path = 'grouped_summaries/power_generation'
 
-= turbo_frame_tag "tab_content" do  
+= turbo_frame_tag "tab_content", class: "d-flex flex-column h-100" do
   = render 'shared/jump_links', links: grouped_summary_power_generation_jump_links(@parent)
-  
-  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
+
+  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
     - if @parent.utilities?
       #utilities.scroll-section.mb-5
-        = render 'shared/section_header', 
-          icon: 'buildings', 
-          title: 'Utilities', 
+        = render 'shared/section_header',
+          icon: 'buildings',
+          title: 'Utilities',
           description: 'Utility providers and service areas',
           anchor: '#utilities',
           about_modal_id: 'utilitiesAboutModal'
-          
+
         = render "#{partial_path}/utilities/about_modal"
         = render "#{partial_path}/utilities"
 
@@ -25,10 +25,10 @@
           anchor: '#generation',
           related_metadata: ["public_monthly_generation", "public_yearly_generation"],
           about_modal_id: 'generationAboutModal' # this id must match the id in the sections about_modal partial
-        
+
         = render "#{partial_path}/generation/about_modal"
         = render "#{partial_path}/generation"
-        
+
     - if @parent.capacities?
       #capacity.scroll-section.mb-5
         = render 'shared/section_header',
@@ -38,6 +38,9 @@
           anchor: '#capacity',
           related_metadata: ["public_capacity"],
           about_modal_id: 'capacityAboutModal' # this id must match the id in the sections about_modal partial
-        
+
         = render "#{partial_path}/capacity/about_modal"
         = render "#{partial_path}/capacity"
+
+      .mt-auto.overflow-hidden
+        = render "shared/footer"

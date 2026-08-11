@@ -1,9 +1,9 @@
 - tab = 'demographics'
 
-= turbo_frame_tag "community_tab_content" do
+= turbo_frame_tag "community_tab_content", class: "d-flex flex-column h-100" do
   = render 'shared/jump_links', links: community_demographics_jump_links(@community)
   
-  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
+  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
     - if @community.population_age_sexes?
       #population.scroll-section.mb-5
         = render 'shared/section_header',
@@ -13,11 +13,11 @@
           anchor: '#population',
           related_metadata: ["public_populations_ages_sexes"],
           about_modal_id: 'populationAboutModal' # this id must match the id in the sections about_modal partial
-        
+
         = render "communities/#{tab}/population/about_modal"
-        
+
         = render "communities/#{tab}/population"
-        
+
     - if @community.employment?
       #employment.scroll-sectionmb-5
         = render 'shared/section_header',
@@ -26,6 +26,8 @@
           description: 'Employment status',
           anchor: '#employment',
           related_metadata: ["public_employment"]
-        
+
         = render "communities/#{tab}/employment"
-    
+
+    .mt-auto.overflow-hidden
+      = render "shared/footer"

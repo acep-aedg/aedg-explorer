@@ -1,12 +1,6 @@
 -# fit right under navs and have the height from botton of navs to botton of browser
 .d-flex.flex-column.h-100
   .flex-grow-1.position-relative#mapbox-area{ data: { map_target: "container" } }
-    / --- Floating controls ---
-    .position-absolute.top-0.start-0.m-2{ style: "z-index: 5;" }
-      %button.btn.btn-white.border.shadow-sm.fw-semibold.small{ data: { action: "click->maps#toggleExpand" } }
-        %i.bi.bi-arrows-fullscreen.me-1
-        Expand
-
     .position-absolute.top-0.end-0.bg-white.border.rounded-3.shadow-sm.m-2.p-3{ style: "z-index: 5;" }
       .fw-semibold.small.mb-2.text-center.border-bottom.pb-1 Select a Map Layer
 

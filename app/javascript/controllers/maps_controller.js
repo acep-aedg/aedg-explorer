@@ -41,6 +41,7 @@ export default class extends Controller {
       zoom: DEFAULT_ZOOM,
     })
 
+    this.map.addControl(new mapboxgl.FullscreenControl(), 'top-left');
     this.initSwatches()
 
     // Expose map instance to the DOM for console debugging if needed
@@ -70,57 +71,68 @@ export default class extends Controller {
   }
 
   /**
-   * Main entry point for user interaction. Handles clicks from:
-   * 1. Actual checkboxes (isCheckbox = true)
-   * 2. UI Buttons with [data-layer-id] (isCheckbox = false)
-   */
+    * Main entry point for user interaction (buttons or checkboxes).
+    */
   toggleLayer(event) {
-    const el = event.currentTarget
-    const layer_id = el.dataset.layerId || el.id
-    const isCheckbox = el.type === 'checkbox'
-    const url = el.dataset.url
+    const el = event.currentTarget;
+    const state = this._getLayerState(el);
 
-    if (!layer_id) return
-
-    // If a non-checkbox (like a button) was clicked, find its "source of truth"
-    // checkbox and trigger it. This keeps the logic centralized in the checkbox state.
-    if (!isCheckbox) {
-      const sidebarCheckbox = document.getElementById(layer_id)
-      if (sidebarCheckbox) {
-        sidebarCheckbox.checked = !sidebarCheckbox.checked
-        sidebarCheckbox.dispatchEvent(new Event('change', { bubbles: true }))
-        return
-      }
-    }
-
-    // CASE 1: Layer already exists in Mapbox memory. Just toggle visibility.
-    if (this.layersByCheckbox.has(layer_id)) {
-      const visibility = el.checked ? 'visible' : 'none'
-      const layerIds = this.layersByCheckbox.get(layer_id)
-
-      layerIds.forEach(id => {
-        this.map.setLayoutProperty(id, 'visibility', visibility)
-      })
-
-      this._updateVisualState(layer_id, el.checked)
-
-      if (el.checked && el.dataset.fit !== 'false') {
-        this._fitToLayer(layer_id)
-      }
-    }
-    // CASE 2: Layer hasn't been fetched yet. Fetch, add to map, then show.
-    else if (el.checked && url) {
-      this._loadLayerOnDemand(layer_id, url, el)
-    }
+    if (!state || !state.layer_id) return;
+    this._updateMapLayer(state.layer_id, state.isChecked, state.url, el);
   }
 
-  toggleExpand() {
-    document.body.classList.toggle('map-expanded')
+  /**
+    * Determines the layer ID, checked state, and URL.
+    * Keeps the source-of-truth checkbox synchronized if a button was clicked.
+    */
+  _getLayerState(el) {
+    const isCheckbox = el.type === 'checkbox';
+    const layer_id = el.dataset.layerId || el.id;
 
-    // timeout to let the CSS display/width changes finish rendering first.
-    setTimeout(() => {
-      this.map.resize()
-    }, 100)
+    let isChecked = false;
+    let url = el.dataset.url;
+
+    if (isCheckbox) {
+      isChecked = el.checked;
+    } else {
+      const rightSideContentBtn = document.getElementById(layer_id);
+
+      if (rightSideContentBtn) {
+        rightSideContentBtn.checked = !rightSideContentBtn.checked;
+        isChecked = rightSideContentBtn.checked;
+        url = url || rightSideContentBtn.dataset.url;
+      } else {
+        console.warn('No source-of-truth checkbox found for layer:', layer_id);
+        return null;
+      }
+    }
+
+    return { layer_id, isChecked, url };
+  }
+
+  /**
+    * Interacts with Mapbox to either toggle existing layers
+    * or fetch and load new ones.
+    */
+  _updateMapLayer(layer_id, isChecked, url, el) {
+    // CASE 1: Layer already exists in Mapbox memory.
+    if (this.layersByCheckbox.has(layer_id)) {
+      const visibility = isChecked ? 'visible' : 'none';
+
+      this.layersByCheckbox.get(layer_id).forEach(id => {
+        this.map.setLayoutProperty(id, 'visibility', visibility);
+      });
+
+      this._updateVisualState(layer_id, isChecked);
+
+      if (isChecked && el.dataset.fit !== 'false') {
+        this._fitToLayer(layer_id);
+      }
+    }
+    // CASE 2: Layer hasn't been fetched yet.
+    else if (isChecked && url) {
+      this._loadLayerOnDemand(layer_id, url, el);
+    }
   }
 
   // --- PRIVATE ---
