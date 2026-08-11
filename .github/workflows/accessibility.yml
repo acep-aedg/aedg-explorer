@@ -107,14 +107,14 @@ jobs:
         if: always() #&& github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           CREATE_OUT=$(bundle exec rake accessibility:create_work_items 2>&1 || echo "Failed to run create_work_items")
-          STALE_OUT=$(bundle exec rake accessibility:mark_resolved_work_items_as_stale 2>&1 || echo "Failed to run mark_resolved_work_items_as_stale")
+          RESOLVED_OUT=$(bundle exec rake accessibility:mark_resolved_work_items_as_stale 2>&1 || echo "Failed to run mark_resolved_work_items_as_stale")
 
           {
             echo "create_output<<EOF"
             echo "$CREATE_OUT"
             echo "EOF"
-            echo "stale_output<<EOF"
-            echo "$STALE_OUT"
+            echo "resolved_output<<EOF"
+            echo "$RESOLVED_OUT"
             echo "EOF"
           } >> $GITHUB_OUTPUT
 
@@ -127,7 +127,7 @@ jobs:
           NEW_VIOLATIONS: ${{ steps.violation_metrics.outputs.new_violations }}
           RESOLVED_WORK_ITEMS: ${{ steps.violation_metrics.outputs.resolved_work_items }}
           CREATE_OUTPUT: ${{ steps.plane_sync.outputs.create_output }}
-          STALE_OUTPUT: ${{ steps.plane_sync.outputs.stale_output }}
+          RESOLVED_OUT: ${{ steps.plane_sync.outputs.resolved_output }}
         with:
           script: |
             const { data: comments } = await github.rest.issues.listComments({
@@ -141,10 +141,6 @@ jobs:
             });
 
             const output = `### Accessibility Test Results
-
-            ${process.env.VIOLATION_COUNT}
-            
-            ${process.env.ACTIVE_WORK_ITEMS}
             
             ${process.env.NEW_VIOLATIONS}
             
@@ -156,7 +152,7 @@ jobs:
             ${process.env.CREATE_OUTPUT}
             
             **Mark Resolved Items as Stale:**
-            ${process.env.STALE_OUTPUT}
+            ${process.env.RESOLVED_OUT}
             
             *Pusher: @${context.actor} | Last Checked: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC*`;
 

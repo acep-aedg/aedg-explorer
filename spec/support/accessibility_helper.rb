@@ -50,46 +50,54 @@ module AccessibilityHelpers
     return if report_files.empty?
 
     unique_violations_map = {}
-
-    report_files.each do |file|
-      data = JSON.parse(File.read(file), symbolize_names: true)
-
-      (data[:violations] || []).each do |v|
-        (v[:nodes] || []).each do |node|
-          selector = node[:target]&.join(", ") || "unknown"
-          fingerprint = "#{v[:id]}::#{selector}"
-
-          unique_violations_map[fingerprint] ||= {
-            rule_id: v[:id],
-            impact: (node[:impact] || v[:impact]).to_s.downcase,
-            description: v[:description],
-            help: v[:help],
-            help_url: v[:helpUrl],
-            selector: selector,
-            html: node[:html],
-            failure_summary: node[:failureSummary],
-            affected_urls: []
-          }
-
-          unique_violations_map[fingerprint][:affected_urls] |= [data[:url]]
-        end
-      end
-    end
+    report_files.each { |file| process_report_file(file, unique_violations_map) }
 
     unique_violations_list = unique_violations_map.values
+    combined_data = build_combined_data(report_files.size, unique_violations_list)
 
-    combined_data = {
+    File.write(output_filename, JSON.pretty_generate(combined_data))
+    puts "\n  [Axe API] Combined Accessibility Report saved to #{output_filename}"
+  end
+
+  def process_report_file(file, map)
+    data = JSON.parse(File.read(file), symbolize_names: true)
+
+    Array(data[:violations]).each do |violation|
+      Array(violation[:nodes]).each do |node|
+        register_violation_node(violation, node, data[:url], map)
+      end
+    end
+  end
+
+  def register_violation_node(violation, node, url, map)
+    selector = node[:target]&.join(", ") || "unknown"
+    fingerprint = "#{violation[:id]}::#{selector}"
+
+    map[fingerprint] ||= {
+      rule_id: violation[:id],
+      impact: (node[:impact] || violation[:impact]).to_s.downcase,
+      description: violation[:description],
+      help: violation[:help],
+      help_url: violation[:helpUrl],
+      selector: selector,
+      html: node[:html],
+      failure_summary: node[:failureSummary],
+      affected_urls: []
+    }
+
+    map[fingerprint][:affected_urls] |= [url]
+  end
+
+  def build_combined_data(pages_count, unique_violations_list)
+    {
       generated_at: Time.now.iso8601,
       summary: {
-        total_pages_tested: report_files.size,
+        total_pages_tested: pages_count,
         total_unique_violations: unique_violations_list.size,
         impact_counts: calculate_impact_counts(unique_violations_list)
       },
       unique_violations: unique_violations_list
     }
-
-    File.write(output_filename, JSON.pretty_generate(combined_data))
-    puts "\n  [Axe API] Combined Accessibility Report saved to #{output_filename}"
   end
 
   def calculate_impact_counts(items)

@@ -8,19 +8,23 @@ namespace :accessibility do
     label_id = ENV.fetch("PLANE_WORK_ITEM_LABEL_ID", nil)
 
     violations = AccessibilityHelpers.axe_violations
-    next unless violations
+    next if violations.blank?
 
-    existing_titles = AccessibilityHelpers.plane_work_item_titles
-    puts "Found #{existing_titles.size} active work items in project."
-    puts "Found #{violations.size} in the report."
+    existing_titles = AccessibilityHelpers.plane_work_item_titles.to_set
 
-    violations.each_with_index do |v, idx|
+    new_violations = violations.reject do |v|
+      existing_titles.include?(AccessibilityHelpers.format_violation_title(v))
+    end
+
+    if new_violations.empty?
+      puts "No new violations to create. All #{violations.size} violations already exist in Plane."
+      next
+    end
+
+    puts "Found #{new_violations.size} new violation(s) to create."
+
+    new_violations.each_with_index do |v, idx|
       title = AccessibilityHelpers.format_violation_title(v)
-
-      if existing_titles.include?(title)
-        puts "([#{idx + 1}/#{violations.size}]) Skipping duplicate: #{title}"
-        next
-      end
 
       work_item = PlaneClient.create_work_item(
         name: title,
@@ -30,13 +34,13 @@ namespace :accessibility do
       )
 
       if work_item
-        puts "([#{idx + 1}/#{violations.size}]) Created: [#{work_item[:name]}](#{work_item[:url]})"
+        puts "([#{idx + 1}/#{new_violations.size}]) Created: [#{work_item[:name]}](#{work_item[:url]})"
       else
         puts "Failed to create work item: #{title}"
       end
     end
 
-    puts "Successfully synced all violations to Plane!"
+    puts "Successfully synced all new violations to Plane!"
   end
 
   desc "Identify work items in Plane that no longer exist in the report"
@@ -47,7 +51,7 @@ namespace :accessibility do
     if resolved.empty?
       puts "No resolved work items found! All Plane items are still active violations."
     else
-      puts "Found #{resolved.size} RESOLVED violations(s) (resolved in code, still open in Plane):"
+      puts "Found #{resolved.size} newly RESOLVED violations(s) (resolved in code, still open in Plane):"
       resolved.each { |item| puts "  - [#{item['name']}](#{item['url']})" }
     end
   end
