@@ -17,12 +17,14 @@ flowchart TD
 
 ### Required Environment Variables
 Ensure the following variables are configured in your repository secrets and local `.env` setup (see Keeper):
+* Generate your own `PLANE_API_TOKEN` see [Plane Docs](https://developers.plane.so/api-reference/introduction#authentication)
 
 ```sh
-PLANE_API_TOKEN=
+PLANE_API_TOKEN= see link above
 PLANE_BASE_URL=
 PLANE_WORKSPACE_SLUG=
 PLANE_PROJECT_ID=
+PLANE_STRING_PROJECT_ID=
 PLANE_RESOLVED_STATE_ID=
 ```
 
