@@ -4,7 +4,7 @@ class RegionalCorporationsController < GroupedSummariesController
   private
 
   def set_parent
-    @parent = RegionalCorporation.friendly.find(params[:id])
+    @parent = RegionalCorporation.friendly.find(params.expect(:id))
   end
 
   def set_parents
