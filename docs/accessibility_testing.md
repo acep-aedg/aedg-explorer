@@ -7,12 +7,16 @@
 ```mermaid
 flowchart TD
     A["RSpec System Specs<br/>(Axe-core Accessibility)"] --> B["tmp/axe-results/<br/>combined_report.json"]
-    
+
     B --> C1["Pull Request"]
     B --> D1["Push to `main`"]
-    
+
     C1 --> C2["Calculate Diff<br/>& Post PR Comment"]
-    D1 --> D2["Create / Update<br/>Plane Work Items"]
+
+    D1 --> D2["Create New Work Items<br/>(Active Violations)"]
+    D1 --> D3["Update Resolved Items<br/>to Resolved State"]
+
+    D3 --> E1["Human Review<br/>(Verify & Close in Plane)"]
 ```
 
 ### Required Environment Variables
