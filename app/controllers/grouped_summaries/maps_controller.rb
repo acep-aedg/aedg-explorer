@@ -23,7 +23,7 @@ module GroupedSummaries
 
       if parent_id
         model_class = ALLOWED_GROUPS[parent_id]
-        @parent = model_class.friendly.find(params[parent_id])
+        @parent = model_class.friendly.find(params.expect(parent_id))
       else
         render json: { error: "Resource not found" }, status: :not_found
       end

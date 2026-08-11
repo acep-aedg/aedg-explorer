@@ -30,7 +30,7 @@ class MetadataController < ApplicationController
   private
 
   def set_metadatum
-    @metadatum = Metadatum.friendly.find(params[:id])
+    @metadatum = Metadatum.friendly.find(params.expect(:id))
   end
 
   def set_dataset
