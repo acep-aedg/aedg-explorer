@@ -5,7 +5,6 @@ require "json"
 namespace :accessibility do
   desc "Parse combined accessibility report JSON and create Plane work items"
   task create_work_items: :environment do
-
     violations = AccessibilityHelpers.axe_violations
     next if violations.blank?
 
