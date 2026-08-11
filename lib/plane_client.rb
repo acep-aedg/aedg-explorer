@@ -19,9 +19,9 @@ module PlaneClient
     response = send_request(http, request)
     return [] unless response && response["results"]
 
-    stale_state_id = ENV.fetch("PLANE_RESOLVED_STATE_ID", nil)
+    resolved_state_id = ENV.fetch("PLANE_RESOLVED_STATE_ID", nil)
     response["results"].each_with_object([]) do |work_item, list|
-      next if stale_state_id.present? && work_item["state"] == stale_state_id
+      next if resolved_state_id.present? && work_item["state"] == resolved_state_id
 
       work_item["url"] = work_item_web_url(work_item["sequence_id"])
       list << work_item
@@ -89,7 +89,7 @@ module PlaneClient
   def workspace_slug = ENV.fetch("PLANE_WORKSPACE_SLUG") { raise "Missing ENV['PLANE_WORKSPACE_SLUG']" }
   def project_id = ENV.fetch("PLANE_PROJECT_ID") { raise "Missing ENV['PLANE_PROJECT_ID']" }
   def project_id_string = ENV.fetch("PLANE_STRING_PROJECT_ID") { raise "Missing ENV['PLANE_STRING_PROJECT_ID']" }
-  def api_key = ENV.fetch("PLANE_API_KEY") { raise "Missing ENV['PLANE_API_KEY']" }
+  def api_token = ENV.fetch("PLANE_API_TOKEN") { raise "Missing ENV['PLANE_API_TOKEN']" }
 
   def default_endpoint
     @default_endpoint ||= "#{base_url}/api/v1/workspaces/#{workspace_slug}/projects/#{project_id}/work-items/"
@@ -118,7 +118,7 @@ module PlaneClient
 
     request = request_class.new(uri)
 
-    request["X-API-Key"]    = api_key
+    request["X-API-Key"]    = api_token
     request["Content-Type"] = "application/json"
     request.body            = payload.to_json if payload
 

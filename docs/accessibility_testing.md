@@ -19,12 +19,11 @@ flowchart TD
 Ensure the following variables are configured in your repository secrets and local `.env` setup (see Keeper):
 
 ```sh
-PLANE_API_KEY=your-api-key (see keeper)
-PLANE_BASE_URL=https://plane.yourdomain.com/api/v1
-PLANE_WORKSPACE_SLUG=your-workspace
-PLANE_PROJECT_ID=project-id
-PLANE_WORK_ITEM_LABEL_ID=label-id
-PLANE_RESOLVED_STATE_ID=stale-id
+PLANE_API_TOKEN=
+PLANE_BASE_URL=
+PLANE_WORKSPACE_SLUG=
+PLANE_PROJECT_ID=
+PLANE_RESOLVED_STATE_ID=
 ```
 
 ### Local Development Workflow

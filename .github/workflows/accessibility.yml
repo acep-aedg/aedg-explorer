@@ -40,8 +40,7 @@ jobs:
       PLANE_WORKSPACE_SLUG: ${{ secrets.PLANE_WORKSPACE_SLUG }}
       PLANE_PROJECT_ID: ${{ secrets.PLANE_PROJECT_ID }}
       PLANE_STRING_PROJECT_ID: ${{ secrets.PLANE_STRING_PROJECT_ID }}
-      PLANE_API_KEY: ${{ secrets.PLANE_API_KEY }}
-      PLANE_WORK_ITEM_LABEL_ID: ${{ secrets.PLANE_WORK_ITEM_LABEL_ID }}
+      PLANE_API_TOKEN: ${{ secrets.PLANE_API_TOKEN }}
       PLANE_RESOLVED_STATE_ID: ${{ secrets.PLANE_RESOLVED_STATE_ID }}
 
     steps:

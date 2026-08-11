@@ -5,7 +5,6 @@ require "json"
 namespace :accessibility do
   desc "Parse combined accessibility report JSON and create Plane work items"
   task create_work_items: :environment do
-    label_id = ENV.fetch("PLANE_WORK_ITEM_LABEL_ID", nil)
 
     violations = AccessibilityHelpers.axe_violations
     next if violations.blank?
@@ -29,8 +28,7 @@ namespace :accessibility do
       work_item = PlaneClient.create_work_item(
         name: title,
         description_html: PlaneClient.build_work_item_description(v),
-        impact: v[:impact],
-        labels: [label_id].compact_blank
+        impact: v[:impact]
       )
 
       if work_item
@@ -58,9 +56,9 @@ namespace :accessibility do
 
   desc "Update the status of resolved work items to 'Stale' in Plane"
   task mark_resolved_work_items_as_stale: :environment do
-    stale_state_id = ENV.fetch("PLANE_RESOLVED_STATE_ID", nil)
+    resolved_state_id = ENV.fetch("PLANE_RESOLVED_STATE_ID", nil)
 
-    if stale_state_id.blank?
+    if resolved_state_id.blank?
       puts "Error: ENV['PLANE_RESOLVED_STATE_ID'] not set."
       next
     end
@@ -75,7 +73,7 @@ namespace :accessibility do
     resolved.each do |item|
       result = PlaneClient.update_work_item(
         work_item_id: item["id"],
-        payload: { state: stale_state_id }
+        payload: { state: resolved_state_id }
       )
       puts result ? "Successfully marked #{item['name']} as resolved." : "Failed to mark #{item['name']} as resolved."
     end
