@@ -1,8 +1,8 @@
 name: RSpec Accessibility Tests
 
 on:
-  # push:
-  #   branches: [ main ]
+  push:
+    branches: [ main ]
   pull_request:
   workflow_dispatch:
 
@@ -104,7 +104,7 @@ jobs:
 
       - name: Sync Violations to Plane
         id: plane_sync
-        if: always() #&& github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           CREATE_OUT=$(bundle exec rake accessibility:create_work_items 2>&1 || echo "Failed to run create_work_items")
           RESOLVED_OUT=$(bundle exec rake accessibility:mark_resolved_work_items_as_stale 2>&1 || echo "Failed to run mark_resolved_work_items_as_stale")
@@ -124,8 +124,6 @@ jobs:
         env:
           NEW_VIOLATIONS: ${{ steps.violation_metrics.outputs.new_violations }}
           RESOLVED_WORK_ITEMS: ${{ steps.violation_metrics.outputs.resolved_work_items }}
-          CREATE_OUTPUT: ${{ steps.plane_sync.outputs.create_output }}
-          RESOLVED_OUT: ${{ steps.plane_sync.outputs.resolved_output }}
         with:
           script: |
             const { data: comments } = await github.rest.issues.listComments({
@@ -143,14 +141,6 @@ jobs:
             ${process.env.NEW_VIOLATIONS}
             
             ${process.env.RESOLVED_WORK_ITEMS}
-
-            ### Plane Sync Activity
-            
-            **Create Work Items:**
-            ${process.env.CREATE_OUTPUT}
-            
-            **Mark Resolved Items as Stale:**
-            ${process.env.RESOLVED_OUT}
             
             *Pusher: @${context.actor} | Last Checked: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC*`;
 
