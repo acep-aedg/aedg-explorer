@@ -1,8 +1,8 @@
 .chart-wrapper{ style: "height: 500px; width: 100%;" }
   %canvas{
     data: {
-      controller: "electricity-consumption-by-sector-chart",
-      electricity_consumption_by_sector_chart: {
+      controller: "charts--electricity-consumption-by-sector",
+      charts__electricity_consumption_by_sector: {
         url_value: polymorphic_path([:electricity_consumption_by_sector, @parent, :charts]),
 
         title_value: "#{@parent} - Electricity Consumption by Sector"

@@ -1,8 +1,8 @@
 .chart-wrapper{ style: "height: 500px; width: 100%;" }
   %canvas{ 
     data: { 
-      controller: "electricity-customers-chart",
-      electricity_customers_chart: {
+      controller: "charts--electricity-customers",
+      charts__electricity_customers: {
         url_value: electricity_customers_community_charts_path(@community),
         title_value: "#{@community.name.titleize} - Electricity Customers by Sector"
       }

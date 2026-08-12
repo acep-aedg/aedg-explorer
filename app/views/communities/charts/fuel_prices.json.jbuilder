@@ -1,4 +1,3 @@
-# app/views/communities/charts/fuel_prices.json.jbuilder
 json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
   category_colors = {
     "Winter Gasoline" => ChartsHelper.color(:light_blue),

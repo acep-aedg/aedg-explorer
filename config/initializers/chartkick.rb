@@ -7,8 +7,9 @@ Chartkick.options = {
     animation: { duration: 500 },
     plugins: {
       tooltip: {
-        mode: "nearest",
-        intersect: true
+        displayColors: true,
+        mode: "index",
+        intersect: false
       }
     }
   }

@@ -4,11 +4,35 @@
 
 import { application } from "./application"
 
-import AgeDistributionChartController from "./age_distribution_chart_controller"
-application.register("age-distribution-chart", AgeDistributionChartController)
+import Charts__AgeDistributionController from "./charts/age_distribution_controller"
+application.register("charts--age-distribution", Charts__AgeDistributionController)
 
-import ChartController from "./chart_controller"
-application.register("chart", ChartController)
+import Charts__BaseController from "./charts/base_controller"
+application.register("charts--base", Charts__BaseController)
+
+import Charts__ElectricityConsumptionBySectorController from "./charts/electricity_consumption_by_sector_controller"
+application.register("charts--electricity-consumption-by-sector", Charts__ElectricityConsumptionBySectorController)
+
+import Charts__ElectricityConsumptionController from "./charts/electricity_consumption_controller"
+application.register("charts--electricity-consumption", Charts__ElectricityConsumptionController)
+
+import Charts__ElectricityCustomersController from "./charts/electricity_customers_controller"
+application.register("charts--electricity-customers", Charts__ElectricityCustomersController)
+
+import Charts__ElectricityRevenueController from "./charts/electricity_revenue_controller"
+application.register("charts--electricity-revenue", Charts__ElectricityRevenueController)
+
+import Charts__FuelController from "./charts/fuel_controller"
+application.register("charts--fuel", Charts__FuelController)
+
+import Charts__SexDistributionController from "./charts/sex_distribution_controller"
+application.register("charts--sex-distribution", Charts__SexDistributionController)
+
+import Charts__YearlyElectricRatesController from "./charts/yearly_electric_rates_controller"
+application.register("charts--yearly-electric-rates", Charts__YearlyElectricRatesController)
+
+import Charts__YearlyGenerationController from "./charts/yearly_generation_controller"
+application.register("charts--yearly-generation", Charts__YearlyGenerationController)
 
 import CopyController from "./copy_controller"
 application.register("copy", CopyController)
@@ -18,21 +42,6 @@ application.register("datatables", DatatablesController)
 
 import DropdownController from "./dropdown_controller"
 application.register("dropdown", DropdownController)
-
-import ElectricityConsumptionBySectorChartController from "./electricity_consumption_by_sector_chart_controller"
-application.register("electricity-consumption-by-sector-chart", ElectricityConsumptionBySectorChartController)
-
-import ElectricityConsumptionChartController from "./electricity_consumption_chart_controller"
-application.register("electricity-consumption-chart", ElectricityConsumptionChartController)
-
-import ElectricityCustomersChartController from "./electricity_customers_chart_controller"
-application.register("electricity-customers-chart", ElectricityCustomersChartController)
-
-import ElectricityRevenueChartController from "./electricity_revenue_chart_controller"
-application.register("electricity-revenue-chart", ElectricityRevenueChartController)
-
-import FuelChartController from "./fuel_chart_controller"
-application.register("fuel-chart", FuelChartController)
 
 import LightboxController from "./lightbox_controller"
 application.register("lightbox", LightboxController)
@@ -49,8 +58,8 @@ application.register("scrollspy", ScrollspyController)
 import SearchPanelsController from "./search_panels_controller"
 application.register("search-panels", SearchPanelsController)
 
-import SexDistributionChartController from "./sex_distribution_chart_controller"
-application.register("sex-distribution-chart", SexDistributionChartController)
+import SplitLayoutController from "./split_layout_controller"
+application.register("split-layout", SplitLayoutController)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
@@ -60,12 +69,3 @@ application.register("turbo-active-link", TurboActiveLinkController)
 
 import WidgetUpdateController from "./widget_update_controller"
 application.register("widget-update", WidgetUpdateController)
-
-import YearlyElectricRatesChartController from "./yearly_electric_rates_chart_controller"
-application.register("yearly-electric-rates-chart", YearlyElectricRatesChartController)
-
-import YearlyGenerationChartController from "./yearly_generation_chart_controller"
-application.register("yearly-generation-chart", YearlyGenerationChartController)
-
-import SplitLayoutController from "./split_layout_controller"
-application.register("split-layout", SplitLayoutController)

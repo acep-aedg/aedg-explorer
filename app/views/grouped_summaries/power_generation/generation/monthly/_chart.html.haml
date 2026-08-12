@@ -22,7 +22,6 @@
     .d-flex.align-items-center.gap-2.mb-2
       %label.form-label.me-2.mb-0{ for: "monthly-generation-year" } Year:
 
-      / Select: triggers the 'update' action
       %select#monthly-generation-year.form-select.form-select-sm.w-auto{
         data: { action: "change->widget-update#update" }
       }
@@ -30,6 +29,7 @@
           %option{ value: y, selected: y == selected_year }= y
 
   = column_chart polymorphic_path([:generation_monthly, @parent, :charts], year: selected_year), 
+    height: '400px',
     id: chart_id,
     ytitle: 'Generation (MWh)', 
     suffix: ' MWh',

@@ -15,3 +15,4 @@ if (window.Chartkick) {
 } else {
   console.warn("Chartkick not found during initialization")
 }
+
