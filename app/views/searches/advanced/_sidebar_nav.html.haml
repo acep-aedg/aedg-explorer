@@ -4,10 +4,8 @@
     .text-center
       -# We use form_with, but we'll let Stimulus handle the 'Brain' sync
       = form_with url: search_advanced_path, method: :get, data: { turbo_frame: "results_frame", turbo_action: "advance" }, class: "mb-3" do |f|
-        
         -# Note: We removed the manual params loop here. 
         -# Stimulus autoSubmitSearch will sync 'q' to the 'filter-form' automatically.
-
         .input-group
           = f.text_field :q, value: params[:q], 
               class: "form-control", 
@@ -21,7 +19,7 @@
                 data: { turbo_frame: "results_frame", turbo_action: "advance" } do
               Clear
           
-          = f.button name: nil, class: 'btn btn-aedg-primary' do
+          = f.button name: nil, class: 'btn btn-aedg-primary', aria: { label: "Search" } do
             %i.bi.bi-search
 
   = turbo_frame_tag "sidebar_nav_content" do
