@@ -73,7 +73,7 @@ module BulkFuelFacilityAttributes
         "Tanks" => number_of_tanks.to_i.positive? ? number_of_tanks : nil,
         "Supplier" => fuel_supplier.presence,
         "USCG Inspected" => inspected_by_uscg ? "Yes" : "No",
-        "Mooring Dist." => distance_to_barge_mooring.present? ? distance_to_barge_mooring : nil
+        "Mooring Dist." => distance_to_barge_mooring.presence
       }
     end
 
