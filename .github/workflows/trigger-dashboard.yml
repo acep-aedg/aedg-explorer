@@ -1,0 +1,21 @@
+name: Trigger Central PR Dashboard Update
+
+on:
+  pull_request:
+    types: [opened, reopened, closed, ready_for_review, review_requested, converted_to_draft, synchronize]
+  pull_request_review:
+    types: [submitted, dismissed]
+
+jobs:
+  notify-dashboard:
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft || github.event.action == 'converted_to_draft' }}
+    steps:
+      - name: Send Signal to Dashboard Repo
+        env:
+          # look in keeper and add to repo secrets
+          GH_TOKEN: ${{ secrets.ORG_READ_PAT }}
+          DASHBOARD_REPO: "acep-devops/workflows"
+        run: |
+          gh api repos/$DASHBOARD_REPO/dispatches \
+            -f event_type="pr-updated"
