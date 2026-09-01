@@ -1,12 +1,3 @@
-industry_partners:
-  - name: 'Catalyst Cooperative'
-    url: 'https://catalyst.coop'
-    logo: 'catalyst-logo.png'
-  
-  - name: 'DOWL'
-    url: 'https://www.dowl.com'
-    logo: 'dowl-logo.jpg'
-
 academic_partners:
   - name: 'Alaska Center for Energy and Power'
     acronym: 'ACEP'
@@ -98,3 +89,12 @@ federal_partners:
     acronym: 'CENSUS'
     url: 'https://www.census.gov'
     logo: 'census-logo.png'
+
+industry_partners:
+  - name: 'Catalyst Cooperative'
+    url: 'https://catalyst.coop'
+    logo: 'catalyst-logo.png'
+  
+  - name: 'DOWL'
+    url: 'https://www.dowl.com'
+    logo: 'dowl-logo.jpg'
