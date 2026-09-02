@@ -9,7 +9,7 @@ This directory organizes the views for rendering community-related data. The `ta
 - Each section has its own subdirectory containing related partials.
 - These tabs are rendered in **the order defined in `show.html.haml`**.
 
-**Example Structure**
+**Example Structure!**
 
 ```sh
 views/communities/
