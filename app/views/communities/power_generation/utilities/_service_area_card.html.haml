@@ -9,7 +9,7 @@
     .mb-4
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 Utility Provider
-        %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Entities providing services in this #{service_area_label.downcase}" }
+        %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ role: "img", data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Entities providing services in this #{service_area_label.downcase}" }
       %ul.list-unstyled.mt-1
         %li.d-flex.align-items-center.mb-2
           %i.bi.bi-dot.text-primary.fs-5.lh-1
@@ -24,7 +24,7 @@
     .mb-4
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 Power Plants (#{@community.plants.size})
-        %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Generation facilities located within or serving this community" }
+        %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ role: "img", data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Generation facilities located within or serving this community" }
       
       .row.g-2.mt-1
         - @community.plants.in_groups(2, false).each do |plant_group|
@@ -39,17 +39,27 @@
   .row.mt-3.pt-3.border-top
     .col-md-6.mb-3
       .d-flex.align-items-center.mb-1
-        %label.text-muted.small.text-uppercase.fw-bold.mb-0 Grid Connection
-        %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "The electrical grid the community is physically tied to" }
-      - if @community.grid.nil?
+        %label.text-muted.small.text-uppercase.fw-bold.mb-0 Grid Affiliation
+        %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ role: "img", data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "The electrical grid the community is physically tied to" }
+  
+      - if @community.community_grids.empty?
         %span.text-secondary None
       - else
-        %i.bi.bi-diagram-3.text-primary.me-1
-        = link_to @community.grid.name.titleize, grid_path(@community.grid), class: "fw-bold", target: "_blank", rel: "noopener", data: { turbo_frame: "_top" }
-    
+        .d-flex.flex-column.gap-1
+          - @community.community_grids.includes(:grid).sort_by(&:termination_year).reverse_each do |cg|
+            .d-flex.align-items-center
+              %i.bi.me-1{ class: cg.active? ? "bi-diagram-3-fill text-primary" : "bi-diagram-3 text-muted" }
+      
+              - if cg.active?
+                = link_to cg.grid.name.titleize, grid_path(cg.grid), class: "fw-bold", target: "_blank", rel: "noopener", data: { turbo_frame: "_top" }
+              - else
+                %span.text-muted= cg.grid.name.titleize
+      
+              = grid_status_badge(cg)
+  
     .col-md-6.mb-3
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 PCE Status
-        %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Indicates if the community qualifies for Power Cost Equalization program" }
-      %span.badge{ class: @community.pce_eligible ? "bg-success-subtle text-success border border-success" : "bg-light text-muted border" }
+        %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ role: "img", data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Indicates if the community qualifies for Power Cost Equalization program" }
+      %span.badge{ class: @community.pce_eligible ? "bg-success-subtle text-success-emphasis border border-success-subtle" : "bg-light text-muted border" }
         = @community.pce_eligible ? "Eligible" : "Ineligible"
