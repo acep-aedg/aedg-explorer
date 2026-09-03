@@ -42,20 +42,20 @@
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 Grid Affiliation
         %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "The electrical grid the community is physically tied to" }
   
-      - if @community.grids.empty?
+      - if @community.community_grids.empty?
         %span.text-secondary None
       - else
         .d-flex.flex-column.gap-1
-          - @community.grids.sort_by(&:termination_year).reverse_each do |grid|
+          - @community.community_grids.includes(:grid).sort_by(&:termination_year).reverse_each do |cg|
             .d-flex.align-items-center
-              %i.bi.me-1{ class: grid.active? ? "bi-diagram-3-fill text-primary" : "bi-diagram-3 text-muted" }
-  
-              - if grid.active?
-                = link_to grid.name.titleize, grid_path(grid), class: "fw-bold", target: "_blank", rel: "noopener", data: { turbo_frame: "_top" }
+              %i.bi.me-1{ class: cg.active? ? "bi-diagram-3-fill text-primary" : "bi-diagram-3 text-muted" }
+      
+              - if cg.active?
+                = link_to cg.grid.name.titleize, grid_path(cg.grid), class: "fw-bold", target: "_blank", rel: "noopener", data: { turbo_frame: "_top" }
               - else
-                %span.text-muted= grid.name.titleize
-  
-              = grid_status_badge(grid)
+                %span.text-muted= cg.grid.name.titleize
+      
+              = grid_status_badge(cg)
   
     .col-md-6.mb-3
       .d-flex.align-items-center.mb-1

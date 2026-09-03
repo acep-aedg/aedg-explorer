@@ -7,4 +7,8 @@ class CommunityGrid < ApplicationRecord
 
   scope :active, -> { where(termination_year: 9999) }
   scope :inactive, -> { where.not(termination_year: 9999) }
+
+  def active?
+    termination_year == 9999
+  end
 end
