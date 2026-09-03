@@ -2,6 +2,10 @@ class Metadatum < ApplicationRecord
   include MetadatumImport
   include PgSearch::Model
 
+  SUPPORTED_TOPICS = ["Energy", "Social", "Transportation", "Technology", "Geography", "Data Models"].freeze
+
+  acts_as_taggable_on :topics
+
   pg_search_scope :search_full_text,
                   against: [:name],
                   associated_against: {
@@ -49,7 +53,7 @@ class Metadatum < ApplicationRecord
     author = data.dig("resources", 0, "context", "publisher").presence || "Unknown Author"
     title = data["title"].presence&.titleize || "Untitled Dataset"
     publication_date = data.dig("resources", 0, "publicationDate")
-    publication_year = Date.parse(publication_date).year if publication_date.present?
+    publication_year = Date.strptime(publication_date, "%Y").year if publication_date.present?
     version = "v3.0"
     access_date = Time.zone.today.strftime("%B %-d, %Y")
     base_url = "https://akenergygateway.alaska.edu"

@@ -1,8 +1,8 @@
 .chart-wrapper{ style: "height: 500px; width: 100%;" }
   %canvas{ 
     data: { 
-      controller: "electricity-consumption-chart",
-      electricity_consumption_chart: {
+      controller: "charts--electricity-consumption",
+      charts__electricity_consumption: {
         url_value: electricity_consumption_per_customer_community_charts_path(@community),
         title_value: "#{@community.name.titleize} - Electricity Consumption per Customer"
       }

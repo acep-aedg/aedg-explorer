@@ -36,7 +36,7 @@ module BulkFuelFacilityAttributes
         fuel_supplier: params[:fuel_supplier],
         recommendations_by_aea: params[:recommendations_by_aea],
         distance_to_barge_mooring: params[:distance_to_barge_mooring],
-        data_source: params[:data_source],
+        source: params[:source],
         report: params[:report],
         location: params[:location]
       )
@@ -73,7 +73,7 @@ module BulkFuelFacilityAttributes
         "Tanks" => number_of_tanks.to_i.positive? ? number_of_tanks : nil,
         "Supplier" => fuel_supplier.presence,
         "USCG Inspected" => inspected_by_uscg ? "Yes" : "No",
-        "Mooring Dist." => distance_to_barge_mooring.present? ? "#{distance_to_barge_mooring} miles" : nil
+        "Mooring Dist." => distance_to_barge_mooring.presence
       }
     end
 

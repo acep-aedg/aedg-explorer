@@ -1,12 +1,8 @@
 - tab = 'fuel'
-- links = [ |
-    { title: 'Fuel Prices', anchor: '#fuel-prices', icon: 'coin', show: @community.fuel_prices? }, |
-    { title: 'Bulk Fuel', anchor: '#bulk-fuel-facilities', icon: 'fuel-pump', show: @community.bulk_fuel_facilities? }, |
-  ] |
-  
-= turbo_frame_tag "community_tab_content" do
-  = render 'shared/tab_nav', links: links
-  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-nav", bs_smooth_scroll: "true" }, tabindex: "0" }
+
+= turbo_frame_tag "community_tab_content", class: "d-flex flex-column h-100" do
+  = render 'shared/jump_links', links: community_fuel_jump_links(@community)
+  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
     - if @community.fuel_prices?
       #fuel-prices.scroll-section.mb-5
         = render 'shared/section_header',
@@ -14,10 +10,12 @@
           title: 'Fuel Prices',
           description: 'Current and historical price trends for heating fuel and gasoline',
           anchor: "#fuel-prices",
-          related_metadata: ["public_fuel_prices"]
-        
+          related_metadata: ["public_fuel_prices"],
+          about_modal_id: 'fuelPriceAboutModal'
+
+        = render "communities/#{tab}/fuel_prices/about_modal"
         = render "communities/#{tab}/fuel_prices"
-      
+
     - if @community.bulk_fuel_facilities?
       #bulk-fuel-facilities.scroll-section.mb-5
         = render 'shared/section_header',
@@ -25,5 +23,8 @@
           title: 'Bulk Fuel Facilities',
           description: 'Fuel storage capacity, delivery methods, and infrastructure detail',
           anchor: "#bulk-fuel-facilities"
-        
+
         = render "communities/#{tab}/bulk_fuel_facilities"
+
+    .mt-auto.overflow-hidden
+      = render "shared/footer"

@@ -12,6 +12,11 @@ two:
   community_fips_code: '0000002'
   reporting_entity: two
 
+# Test values aren't duplicated for grouped summaries
 three:
-  community_fips_code: '0000001'
+  community_fips_code: '0000003'
+  reporting_entity: one
+
+four:
+  community_fips_code: '0000004'
   reporting_entity: three

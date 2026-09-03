@@ -1,0 +1,35 @@
+- partial_path = 'grouped_summaries/electric_rates_sales'
+
+= turbo_frame_tag "tab_content", class: "d-flex flex-column h-100" do
+  = render 'shared/jump_links', links: grouped_summary_electric_rates_sales_jump_links(@parent)
+
+  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
+    // summary section
+    = render "#{partial_path}/summary"
+
+    // revenue section
+    - if @parent.yearly_electricity_revenues?
+      #revenue.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'cash-coin',
+          title: 'Electricity Revenue',
+          description: 'Electricity revenue by reporting entity',
+          anchor: '#revenue',
+          about_modal_id: 'salesRevenueAboutModal' # this id must match the id in the sections about_modal partial
+        = render "#{partial_path}/yearly_revenue/about_modal"
+        = render "#{partial_path}/revenue"
+
+    // consumption section
+    - if @parent.yearly_electricity_sales?
+      #consumption.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'lightning-charge',
+          title: 'Electricity Consumption',
+          description: 'Electricity consumption by reporting entity',
+          anchor: '#consumption',
+          about_modal_id: 'salesConsumptionAboutModal' # this id must match the id in the sections about_modal partial
+        = render "#{partial_path}/yearly_sales/about_modal"
+        = render "#{partial_path}/consumption"
+
+    .mt-auto.overflow-hidden
+      = render "shared/footer"

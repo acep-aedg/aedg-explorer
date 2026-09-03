@@ -142,7 +142,7 @@ class Community < ApplicationRecord
         title: name,
         content: content,
         path: community_path_link,
-        (borough&.census_area? ? :census_area : :borough) => borough&.name,
+        (borough&.is_census_area? ? :census_area : :borough) => borough&.name,
         regional_corporation: regional_corporation&.name,
         village_corporation: village_corporation,
         economic_region: economic_region,
@@ -168,6 +168,12 @@ class Community < ApplicationRecord
 
   # Specific to Community
   def local_service_area?
-    service_area&.service_area_geoms&.many?
+    return @local_service_area if defined?(@local_service_area)
+
+    @local_service_area = !!service_area&.service_area_geoms&.many?
+  end
+
+  def borough?
+    @borough ||= borough.present?
   end
 end

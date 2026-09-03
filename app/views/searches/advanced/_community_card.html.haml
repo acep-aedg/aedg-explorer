@@ -36,7 +36,7 @@
 
       - if community.borough.present?
         .mb-1
-          %strong= community.borough.census_area? ? "Census Area:" : "Borough:"
+          %strong= community.borough.is_census_area? ? "Census Area:" : "Borough:"
           = community.borough.name
       
       - if community.regional_corporation.present?

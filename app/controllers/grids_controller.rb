@@ -9,7 +9,7 @@ class GridsController < GroupedSummariesController
   private
 
   def set_parent
-    @parent = Grid.friendly.find(params[:id])
+    @parent = Grid.friendly.find(params.expect(:id))
   end
 
   def set_parents

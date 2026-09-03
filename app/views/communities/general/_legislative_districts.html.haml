@@ -1,22 +1,8 @@
 - parent_tab = 'general'
-- legislative_buttons = [ |
-          { |
-            label: "House Districts", |
-            url: house_districts_community_maps_path(@community), |
-            icon: 'house-fill', |
-            id: 'layer-house' |
-          }, |
-          { |
-            label: "Senate Districts", |
-            url: senate_districts_community_maps_path(@community), |
-            icon: 'bank', |
-            id: 'layer-senate' |
-          } |
-        ] |
 
 .section-body.m-1.m-md-2.m-lg-4.mt-3
   / Map Buttons
-  = render 'shared/map_buttons', buttons: legislative_buttons
+  = render 'shared/map_buttons', buttons: community_legislative_map_buttons(@community)
   
   / Sub-sections for District Data
   .row.g-4

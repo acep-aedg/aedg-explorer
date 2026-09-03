@@ -1,5 +1,25 @@
 module ImportHelpers
   class << self
+    def with_import_banner(msg)
+      status = Kredis.string "aedg:import_status"
+      status.value = msg
+
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "import_status",
+        target: "import-banner-container",
+        partial: "shared/import_banner"
+      )
+
+      yield
+    ensure
+      status.del
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "import_status",
+        target: "import-banner-container",
+        partial: "shared/import_banner"
+      )
+    end
+
     # Imports geographic data from a GeoJSON file and processes it into the given model.
     # It assumes there is an `import_aedg_with_geom!` method for the given model to store the data.
     def import_geojson(filepath, model)

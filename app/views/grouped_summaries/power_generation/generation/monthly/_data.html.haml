@@ -1,7 +1,7 @@
 - cache cache_key = [@parent, @parent.monthly_generations.maximum(:updated_at), "grid_monthly_gen_table_v1"] do
   - show_pce_price = @parent.pce_eligible_communities?
 
-  %div{ data: { controller: 'datatables', datatables: { order_value: [3, 'asc']} } }
+  %div{ data: { controller: 'datatables', datatables: { order_value: [[1, "desc"], [2, "asc"]]} } }
     %table.table.table-sm.table-stripped.border{ data: { datatables_target: 'table'} }
       %thead
         %tr

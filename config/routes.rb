@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "/robots.txt", to: "robots#index", defaults: { format: :text }
 
   scope path: "/explore" do
+    get "all", to: "static_pages#explore_all", as: :explore_all
     resources :metadata, only: %i[index show], path: "data" do
       resources :datasets, only: [] do
         get :show, on: :member, defaults: { format: :json }
@@ -48,7 +49,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :maps, only: [], controller: "communities/maps", defaults: { format: :json } do
+      resources :maps, only: [], controller: "communities/maps", defaults: { format: :geojson } do
         collection do
           get :house_districts
           get :senate_districts
@@ -56,6 +57,7 @@ Rails.application.routes.draw do
           get :service_area
           get :plants
           get :bulk_fuel_facilities
+          get :boroughs
         end
       end
     end
@@ -64,20 +66,31 @@ Rails.application.routes.draw do
       member do
         get :general
         get :power_generation, path: "power-generation"
+        get :electric_rates_sales, path: "electric-rates-sales" unless options[:skip_rates_sales]
       end
 
       resources :charts, only: [], module: options[:resource_name], defaults: { format: :json } do
         collection do
-          get :generation_monthly
-          get :capacity_yearly
-          get :generation_yearly
+          get :capacity_yearly unless options[:skip_capacity]
+
+          unless options[:skip_generation]
+            get :generation_monthly
+            get :generation_yearly
+          end
+
+          unless options[:skip_rates_sales]
+            get :electricity_revenue
+            get :electricity_consumption_by_sector
+            get :electricity_consumption_per_customer
+          end
         end
       end
 
-      resources :maps, only: [], module: options[:resource_name], defaults: { format: :json } do
+      resources :maps, only: [], module: options[:resource_name], defaults: { format: :geojson } do
         collection do
           get :community_locations
           get :service_areas
+          get :service_area_geoms
           get :plants
         end
       end
@@ -85,6 +98,46 @@ Rails.application.routes.draw do
 
     resources :grids, only: %i[index show] do
       concerns :summarizable, resource_name: :grouped_summaries
+    end
+
+    resources :house_districts, path: "house-districts", only: %i[index show] do
+      concerns :summarizable,
+               resource_name: :grouped_summaries,
+               skip_rates_sales: true,
+               skip_generation: true,
+               skip_capacity: true
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
+    end
+
+    resources :senate_districts, path: "senate-districts", only: %i[index show] do
+      concerns :summarizable,
+               resource_name: :grouped_summaries,
+               skip_rates_sales: true,
+               skip_generation: true,
+               skip_capacity: true
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
+    end
+
+    resources :regional_corporations, path: "regional-corporations", only: %i[index show] do
+      concerns :summarizable, resource_name: :grouped_summaries
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
+    end
+
+    resources :boroughs, only: %i[index show] do
+      concerns :summarizable, resource_name: :grouped_summaries
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
     end
   end
 

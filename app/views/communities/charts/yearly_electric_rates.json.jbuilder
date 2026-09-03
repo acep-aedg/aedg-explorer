@@ -1,4 +1,4 @@
-json.cache! [@community, @rates_by_rep_entity, "v1"], expires_in: 12.hours do
+json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
   entity_styles = [
     { pointStyle: "circle" },
     { borderDash: [5, 5], pointStyle: "rect" }

@@ -1,10 +1,4 @@
 = render 'shared/about_modal', id: 'generationAboutModal', title: 'About Generation Data' do
-  .d-flex.mb-4
-    = render 'shared/modal/grid_plant_connection'
-  .d-flex.mb-4
-    = render 'shared/modal/data_reporting', entity: @parent
-  .d-flex.mb-4
-    = render 'shared/modal/net_vs_gross_generation'
-  .d-flex
-    = render 'shared/modal/ipp_generation'
-    
+  - generation_modal_partials(@parent).each do |partial_path|
+    .d-flex.mb-4
+      = render partial_path, entity: @parent

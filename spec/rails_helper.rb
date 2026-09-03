@@ -35,6 +35,17 @@ begin
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
+
+Capybara.register_driver :headless_chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  [
+    "--headless=new",
+    "--window-size=1920,1080"
+  ].each { |arg| options.add_argument(arg) }
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
@@ -44,7 +55,16 @@ RSpec.configure do |config|
   config.include AccessibilityHelpers, type: :system
 
   config.before(:each, type: :system) do
-    driven_by :selenium_chrome_headless
+    driven_by :headless_chrome
+  end
+
+  config.before(:suite) do
+    FileUtils.rm_rf(Rails.root.join("tmp/axe-results"))
+    FileUtils.rm_rf(Rails.root.join("tmp/capybara"))
+  end
+
+  config.after(:suite) do
+    AccessibilityHelpers.combine_reports
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
