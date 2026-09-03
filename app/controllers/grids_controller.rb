@@ -1,20 +1,18 @@
-class GridsController < ApplicationController
-  before_action :set_grid, only: %i[show]
-
-  # GET /grids
-  def index
-    @grids = Grid.active.order(:name)
-  end
+class GridsController < GroupedSummariesController
+  include MetadataLookup
 
   # GET /grids/:slug
   def show
-    @grids = Grid.active.order(:name)
+    redirect_to power_generation_grid_path(@parent), status: :see_other
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_grid
-    @grid = Grid.friendly.find(params[:id])
+  def set_parent
+    @parent = Grid.friendly.find(params.expect(:id))
+  end
+
+  def set_parents
+    @parents = Grid.active.order(:name)
   end
 end

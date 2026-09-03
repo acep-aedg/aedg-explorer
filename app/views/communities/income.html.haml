@@ -1,10 +1,14 @@
-= turbo_frame_tag "community_tab_content" do
-  -if @community.show_income?
-    #income.mb-5
-      = render 'shared/section_header',
-        icon: 'cash-coin',
-        title: 'Income',
-        description: 'Household income distribution, median earnings, and poverty metrics',
-        anchor: '#income'
-      
-      = render "communities/income/income"
+= turbo_frame_tag "community_tab_content", class: "d-flex flex-column h-100" do
+  .scrollspy-container.flex-grow-1.overflow-y-auto
+    -if @community.income?
+      #income.mb-5
+        = render 'shared/section_header',
+          icon: 'cash-coin',
+          title: 'Income',
+          description: 'Household income distribution, median earnings, and poverty metrics',
+          anchor: '#income'
+
+        = render "communities/income/income"
+
+    .mt-auto.overflow-hidden
+      = render "shared/footer"

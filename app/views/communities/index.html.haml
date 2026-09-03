@@ -1,4 +1,4 @@
-- content_for :title, 'Communities Explorer'
+- content_for :title, page_title(@communities)
 
 .container-xl.mt-4
   .row.justify-content-center.mb-5
@@ -17,7 +17,7 @@
               = link_to "Advanced Community Search", search_advanced_path, class: "btn btn-lg btn-aedg-secondary"
             .row.justify-content-center
               .col.col-lg-10
-                = render 'simple_search'
+                = render 'shared/search/simple_search', model: @communities.model
       -# Photo Credit
       .text-end.text-small.text-muted.mt-2
         Photo Credit: Gwen Holdmann
@@ -26,5 +26,5 @@
 .row.justify-content-center.g-5.mb-5.mx-0
   .col-xl-8.mt-0
     = turbo_frame_tag 'communities' do
-      = render 'results_pagination', letters: @active_letters
-      = render 'results_list', communities: @communities
+      = render 'shared/search/results_pagination', letters: @active_letters, model: @communities.model
+      = render 'shared/search/results_list', collection: @communities

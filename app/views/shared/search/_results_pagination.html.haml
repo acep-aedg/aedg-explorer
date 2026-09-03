@@ -1,0 +1,12 @@
+- if letters.any?
+  .text-center.mb-4.mt-4
+    - base_params = @search_params || {}
+
+    = link_to 'All', polymorphic_path(model, base_params.except(:letter)),
+      class: "btn btn-sm btn-light #{'active' unless base_params[:letter].present?}",
+      data: { turbo_frame: '_top' }
+
+    - letters.each do |ch|
+      = link_to ch, polymorphic_path(model, base_params.merge(letter: ch)),
+        class: "btn btn-sm btn-light #{'active' if ch == base_params[:letter]}",
+        data: { turbo_frame: '_top' }

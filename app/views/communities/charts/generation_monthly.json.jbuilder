@@ -1,7 +1,5 @@
-# app/views/communities/charts/generation_monthly.json.jbuilder
-
 json.cache! [@community.cache_key_with_version, @year], expires_in: 12.hours do
-  gen_data = MonthlyGeneration.data_by_year(@community, @year)
+  gen_data = @community.monthly_generations.total_mwh_by_year(@year)
   hdd_data = HeatingDegreeDay.data_by_year(@community, @year)
 
   series = [

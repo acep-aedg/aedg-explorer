@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "/robots.txt", to: "robots#index", defaults: { format: :text }
 
   scope path: "/explore" do
+    get "all", to: "static_pages#explore_all", as: :explore_all
     resources :metadata, only: %i[index show], path: "data" do
       resources :datasets, only: [] do
         get :show, on: :member, defaults: { format: :json }
@@ -24,6 +25,7 @@ Rails.application.routes.draw do
         get :demographics
         get :income
       end
+
       resources :charts, only: [], controller: "communities/charts", defaults: { format: :json } do
         collection do
           get :generation_monthly
@@ -32,9 +34,6 @@ Rails.application.routes.draw do
           get :population_detail
           get :generation_yearly
           get :fuel_prices
-          get :customer_breakdown_revenue
-          get :customer_breakdown_customers
-          get :customer_breakdown_sales
           get :bulk_fuel_capacity_mix
           get :sex_distribution
           get :age_distribution
@@ -42,49 +41,106 @@ Rails.application.routes.draw do
           get :household_income_brackets
           get :income
           get :fuel_prices
-          get :energy_sold
-          get :energy_sold_stacked
-          get :electric_rates
+          get :electricity_consumption_by_sector
+          get :electricity_consumption_per_customer
+          get :electricity_revenue
+          get :electricity_customers
+          get :yearly_electric_rates
         end
       end
 
-      resources :maps, only: [], controller: "communities/maps", defaults: { format: :json } do
+      resources :maps, only: [], controller: "communities/maps", defaults: { format: :geojson } do
         collection do
           get :house_districts
           get :senate_districts
-          get :service_area_geoms
-          get :service_areas
+          get :service_area_geom
+          get :service_area
           get :plants
           get :bulk_fuel_facilities
+          get :boroughs
         end
-      end
-
-      resource :summary, only: [], controller: "communities/summaries" do
-        get :monthly_generation
       end
     end
-    resources :grids, only: %i[index show] do
-      resources :charts, only: [], controller: "grids/charts", defaults: { format: :json } do
+
+    concern :summarizable do |options|
+      member do
+        get :general
+        get :power_generation, path: "power-generation"
+        get :electric_rates_sales, path: "electric-rates-sales" unless options[:skip_rates_sales]
+      end
+
+      resources :charts, only: [], module: options[:resource_name], defaults: { format: :json } do
         collection do
-          get :generation_monthly
-          get :capacity_yearly
-          get :generation_yearly
+          get :capacity_yearly unless options[:skip_capacity]
+
+          unless options[:skip_generation]
+            get :generation_monthly
+            get :generation_yearly
+          end
+
+          unless options[:skip_rates_sales]
+            get :electricity_revenue
+            get :electricity_consumption_by_sector
+            get :electricity_consumption_per_customer
+          end
         end
       end
 
-      resources :maps, only: [], controller: "grids/maps", defaults: { format: :json } do
+      resources :maps, only: [], module: options[:resource_name], defaults: { format: :geojson } do
         collection do
           get :community_locations
+          get :service_areas
           get :service_area_geoms
           get :plants
         end
       end
+    end
 
-      resource :summary, only: [], controller: "grids/summaries" do
-        get :monthly_generation
+    resources :grids, only: %i[index show] do
+      concerns :summarizable, resource_name: :grouped_summaries
+    end
+
+    resources :house_districts, path: "house-districts", only: %i[index show] do
+      concerns :summarizable,
+               resource_name: :grouped_summaries,
+               skip_rates_sales: true,
+               skip_generation: true,
+               skip_capacity: true
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
+    end
+
+    resources :senate_districts, path: "senate-districts", only: %i[index show] do
+      concerns :summarizable,
+               resource_name: :grouped_summaries,
+               skip_rates_sales: true,
+               skip_generation: true,
+               skip_capacity: true
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
+    end
+
+    resources :regional_corporations, path: "regional-corporations", only: %i[index show] do
+      concerns :summarizable, resource_name: :grouped_summaries
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
+      end
+    end
+
+    resources :boroughs, only: %i[index show] do
+      concerns :summarizable, resource_name: :grouped_summaries
+
+      resources :maps, only: [], module: :grouped_summaries, defaults: { format: :json } do
+        collection { get :boundary }
       end
     end
   end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

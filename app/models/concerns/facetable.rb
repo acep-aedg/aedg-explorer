@@ -13,5 +13,13 @@ module Facetable
 
       query
     end
+
+    def available_letters_for(column_name)
+      where.not(column_name => nil)
+           .reorder(nil)
+           .distinct
+           .pluck(Arel.sql("UPPER(LEFT(#{connection.quote_column_name(column_name.to_s)}::text, 1))"))
+           .sort
+    end
   end
 end

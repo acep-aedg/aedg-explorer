@@ -1,0 +1,4 @@
+= render 'shared/about_modal', id: 'generationAboutModal', title: 'About Generation Data' do
+  - generation_modal_partials(@parent).each do |partial_path|
+    .d-flex.mb-4
+      = render partial_path, entity: @parent

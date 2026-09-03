@@ -1,31 +1,57 @@
 - tab = 'electric_rates_sales'
-- links = [ |
-    { title: 'Rates', anchor: '#rates', icon: 'coin', show: @community.show_rates? }, |
-    { title: 'Sales', anchor: '#sales', icon: 'cash-coin', show: @community.show_sales? }, |
-  ] |
-        
-= turbo_frame_tag "community_tab_content" do
-  = render 'shared/tab_nav', links: links
+
+= turbo_frame_tag "community_tab_content", class: "d-flex flex-column h-100" do
+  = render 'shared/jump_links', links: community_electric_rates_sales_jump_links(@community)
   
-  .scrollspy-container{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump_nav", bs_smooth_scroll: "true" }, tabindex: "0" }
-    
-    - if @community.show_rates?
+  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
+    = render "communities/#{tab}/summary"
+
+    - if @community.yearly_electricity_sales?
+      #consumption.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'lightning-charge',
+          title: 'Electricity Consumption',
+          description: 'Total electricity sales and consumption rates by reporting entity',
+          anchor: '#consumption',
+          about_modal_id: 'salesConsumptionAboutModal' # this id must match the id in the sections about_modal partial
+
+        = render "communities/#{tab}/yearly_sales/about_modal"
+        = render "communities/#{tab}/consumption"
+
+    - if @community.yearly_electricity_revenues?
+      #revenue.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'cash-coin',
+          title: 'Electricity Revenue',
+          description: 'Electricity revenue by reporting entity',
+          anchor: '#revenue',
+          about_modal_id: 'salesRevenueAboutModal' # this id must match the id in the sections about_modal partial
+
+        = render "communities/#{tab}/yearly_revenue/about_modal"
+        = render "communities/#{tab}/revenue"
+
+    - if @community.yearly_electricity_customers?
+      #customers.scroll-section.mb-5
+        = render 'shared/section_header',
+          icon: 'people',
+          title: 'Electricity Customers',
+          description: 'Electricity customers by reporting entity',
+          anchor: '#customers'
+
+        = render "communities/#{tab}/customers"
+
+    - if @community.yearly_electric_rates?
       #rates.scroll-section.mb-5
         = render 'shared/section_header',
           icon: 'coin',
           title: 'Rates',
           description: 'Residential, commercial, and industrial electric rate trends',
           anchor: '#rates',
-          related_metadata: ["public_rates"]
+          related_metadata: ["public_yearly_electric_rates", "public_monthly_electric_rates"],
+          about_modal_id: 'yearlyElectricRatesAboutModal'
 
+        = render "communities/#{tab}/yearly_rates/about_modal"
         = render "communities/#{tab}/rates"
 
-    - if @community.show_sales?
-      #sales.scroll-section.mb-5
-        = render 'shared/section_header',
-          icon: 'cash-coin',
-          title: 'Sales',
-          description: 'Total energy sales and revenue analysis',
-          anchor: '#sales'
-          
-        = render "communities/#{tab}/sales"
+    .mt-auto.overflow-hidden
+      = render "shared/footer"

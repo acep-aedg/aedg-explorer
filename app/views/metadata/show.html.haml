@@ -1,4 +1,4 @@
-- content_for :title, "Data Explorer - #{@metadatum.title.titleize if @metadatum}"
+- content_for :title, "Data Explorer - #{@metadatum.title&.titleize if @metadatum}"
 
 .container-xxl
   / Back Button
@@ -13,7 +13,7 @@
     .col-12.col-lg-8
       .d-flex.align-items-baseline
         %i.bi.bi-database-fill.me-2.fs-1
-        %h2.fw-bold= @metadatum.title.titleize
+        %h2.fw-bold= @metadatum.title&.titleize
 
     .col-12.col-lg-3.offset-lg-1.mt-3.mt-lg-0
       .d-flex.flex-row.flex-lg-column.align-items-md-end.gap-2
@@ -42,9 +42,9 @@
     #fields.tab-pane.fade.p-3
       = render 'datasets/tabs/fields', dataset: @dataset
     #data.tab-pane.fade.p-3
-      - if @dataset.format.downcase == 'csv'
+      - if @dataset.format&.downcase == 'csv'
         = render 'datasets/tabs/data_csv', dataset: @dataset
-      - if @dataset.format.downcase == 'geojson'
+      - if @dataset.format&.downcase == 'geojson'
         = render 'datasets/tabs/data_map', dataset: @dataset
     #citation.tab-pane.fade.p-3
       = render 'metadata/tabs/cite_dataset', metadatum: @metadatum

@@ -1,10 +1,31 @@
 module ImportHelpers
   class << self
+    def with_import_banner(msg)
+      status = Kredis.string "aedg:import_status"
+      status.value = msg
+
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "import_status",
+        target: "import-banner-container",
+        partial: "shared/import_banner"
+      )
+
+      yield
+    ensure
+      status.del
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "import_status",
+        target: "import-banner-container",
+        partial: "shared/import_banner"
+      )
+    end
+
     # Imports geographic data from a GeoJSON file and processes it into the given model.
     # It assumes there is an `import_aedg_with_geom!` method for the given model to store the data.
     def import_geojson(filepath, model)
       return unless file_exists?(filepath, model)
 
+      ensure_empty!(model)
       start_time = Time.current
       puts "📂 Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
       data = File.read(filepath)
@@ -27,6 +48,7 @@ module ImportHelpers
     def batch_import_geojson(filepath, model)
       return unless file_exists?(filepath, model)
 
+      ensure_empty!(model)
       start_time = Time.current
       puts "📂 Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
 
@@ -39,7 +61,7 @@ module ImportHelpers
         end
 
         result = model.import records,
-                              batch_size: 1000,
+                              batch_size: 2000,
                               track_validation_failures: true
 
         failed_instances = result.failed_instances
@@ -56,6 +78,7 @@ module ImportHelpers
     def batch_import_csv(filepath, model)
       return unless file_exists?(filepath, model)
 
+      ensure_empty!(model)
       start_time = Time.current
       puts "📂 Importing #{model.name.pluralize} from #{File.basename(filepath)}..."
 
@@ -79,19 +102,17 @@ module ImportHelpers
       end
     end
 
-    def ensure_empty!(model, delete_tasks)
+    def ensure_empty!(model)
       return unless model.any?
 
-      human_name = model.name.titleize
-      tasks = Array(delete_tasks)
-      command_chain = tasks.map { |t| "rails delete:#{t}" }.join(" && ")
+      task = "delete:#{model.table_name}"
+      msg = if Rake::Task.task_defined?(task)
+              "Run: rails #{task}\nThen try again."
+            else
+              "No delete task found. Run: rails import:prepare FORCE=true"
+            end
 
-      raise <<~ERROR
-        \n ❗ERROR: #{human_name} table is not empty!
-        To clear it safely, run:
-            #{command_chain}
-        Then try the import again.\n
-      ERROR
+      raise "\n ❗ ERROR: #{model.name.titleize} table is not empty!\n#{msg}\n\n"
     end
 
     private

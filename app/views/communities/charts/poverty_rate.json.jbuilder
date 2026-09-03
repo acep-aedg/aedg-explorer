@@ -1,4 +1,3 @@
-# app/views/communities/charts/poverty_rate.json.jbuilder
 json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
   data = @community.income_poverties.map do |r|
     year    = r[:end_year].to_i

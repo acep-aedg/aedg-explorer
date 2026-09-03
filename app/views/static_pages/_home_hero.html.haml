@@ -2,18 +2,18 @@
   = image_tag "aedg-logo.png", alt: "AEDG Logo", class: "img-fluid mb-5 w-50"
 
   %h2.mb-5.fw-bold Energy Data for Alaska Communities
-  = render 'communities/simple_search'
+  = render 'shared/search/simple_search', model: Community
 
   / Quick links
-  .mt-2.quick-links
+  .mt-4.quick-links
     = link_to 'Advanced Community Search', search_advanced_path,
-      class: 'text-success fw-bold text-decoration-none small link-hover'
+      class: 'text-primary fw-bold text-decoration-none link-hover'
     %span.mx-1 &bull;
-    = link_to 'About page', about_path,
-      class: 'text-primary fw-bold text-decoration-none small link-hover'
+    = link_to 'About AEDG', about_path,
+      class: 'text-primary fw-bold text-decoration-none link-hover'
     %span.mx-1 &bull;
     = link_to 'User Guide', user_guide_path,
-      class: 'text-info fw-bold text-decoration-none small link-hover'
+      class: 'text-primary fw-bold text-decoration-none link-hover'
 
   .row.justify-content-center.g-4.mt-2
     .col-md-4.d-flex

@@ -1,6 +1,8 @@
 export const MAP_STYLE = "mapbox://styles/mapbox/streets-v11?optimize=true";
 export const DEFAULT_ZOOM = 8;
-const COLORS = {
+
+// 'export' to use in other files
+export const COLORS = {
   dark_blue:    "#2E5A88",
   orange:       "#f5945c",
   soft_green:   "#78c2ad",
@@ -15,11 +17,13 @@ const COLORS = {
 };
 
 export const LAYER_COLORS = {
-  "layer-communities":           COLORS.dark_blue,
-  "layer-plants":                COLORS.orange,
-  "layer-senate":                COLORS.purple,
-  "layer-house":                 COLORS.light_red,
-  "layer-service-area-local":    COLORS.dark_blue,
-  "layer-service-area-utility":  COLORS.medium_yellow,
-  "layer-bulk-fuel-facilities":  COLORS.dark_green,
+  "community-locations":    COLORS.dark_blue,
+  "plant-points":          COLORS.orange,
+  "senate-districts":       COLORS.purple,
+  "house-districts":        COLORS.light_red,
+  "service-area-geom":      COLORS.dark_blue,
+  "service-area":           COLORS.medium_yellow,
+  "bulk-fuel-facilities-points": COLORS.dark_green,
+  "boroughs": COLORS.dark_brown,
+  "regional-corporations": COLORS.light_brown,
 };

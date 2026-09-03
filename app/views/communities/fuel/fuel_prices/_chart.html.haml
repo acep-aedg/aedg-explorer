@@ -11,8 +11,9 @@
 
 %turbo-frame#fuel_prices_chart
   = column_chart fuel_prices_community_charts_path( @community, price_type: @selected_price_type),
-      title:    "#{@community.name} - Seasonal Fuel Prices (#{@selected_price_type})",
-      legend:   "bottom",
-      download: { filename: "#{@community.name.parameterize}_fuel_prices", format: "png" },
-      library: { plugins: { legend: { title: { display: true, text: 'Click on a source to hide/show', font: { size: 12, weight: 'bold' }, padding: { top: 20, bottom: 10 } } }, tooltip: { mode: 'index', intersect: false } }, scales: { y: { type: "linear", display: "auto", position: "left", title: { display: true, text: "$ Price (USD)" } }, y1: { type: "linear", display: "auto", position: "right", title: { display: true, text: "Heating Degree Days" } } } }
-      
+    height:  '350px',
+    title:    "#{@community.name} - Seasonal Fuel Prices (#{@selected_price_type})",
+    legend:   "bottom",
+    download: { filename: "#{@community.name.parameterize}_fuel_prices", format: "png" },
+    library: { plugins: { legend: { title: { text: 'Click on a source to hide/show', font: { size: 12, weight: 'bold' }, padding: { top: 20, bottom: 10 } } } }, scales: { y: { type: "linear", display: "auto", position: "left", title: { text: "$ Price (USD)" } }, y1: { type: "linear", display: "auto", position: "right", title: { text: "Heating Degree Days" } } } }
+    

@@ -1,0 +1,160 @@
+name: RSpec Accessibility Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  rspec-accessibility:
+    continue-on-error: true
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgis://postgres:postgres@localhost:5432
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      REDIS_URL: redis://localhost:6379/0
+      PLANE_BASE_URL: ${{ secrets.PLANE_BASE_URL }}
+      PLANE_WORKSPACE_SLUG: ${{ secrets.PLANE_WORKSPACE_SLUG }}
+      PLANE_PROJECT_ID: ${{ secrets.PLANE_PROJECT_ID }}
+      PLANE_STRING_PROJECT_ID: ${{ secrets.PLANE_STRING_PROJECT_ID }}
+      PLANE_API_TOKEN: ${{ secrets.PLANE_API_TOKEN }}
+      PLANE_RESOLVED_STATE_ID: ${{ secrets.PLANE_RESOLVED_STATE_ID }}
+
+    steps:
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Install JS Dependencies & Build CSS
+        run: |
+          yarn install
+          yarn build:css
+
+      - name: Prepare Database
+        run: bin/rails db:prepare
+
+      - name: Run Accessibility Tests
+        run: bundle exec rspec spec/system/accessibility
+
+      - name: Upload Accessibility Reports and Screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-artifacts
+          path: |
+            ${{ github.workspace }}/tmp/axe-results/
+            ${{ github.workspace }}/tmp/capybara/
+          if-no-files-found: ignore
+
+      - name: Generate Violation Metrics
+        id: violation_metrics
+        if: always()
+        run: |
+          COUNT=$(bundle exec rake accessibility:violation_count 2>/dev/null || echo "Violation Count unavailable")
+          EXISTING=$(bundle exec rake accessibility:active_work_items_count 2>/dev/null || echo "Existing Work Item Count unavailable")
+          NEW_ITEMS=$(bundle exec rake accessibility:new_violations 2>/dev/null || echo "New Violations unavailable")
+          RESOLVED=$(bundle exec rake accessibility:resolved_work_items 2>/dev/null || echo "Resolved Work Items unavailable")
+
+          {
+            echo "violation_count<<EOF"
+            echo "$COUNT"
+            echo "EOF"
+            echo "active_work_items<<EOF"
+            echo "$EXISTING"
+            echo "EOF"
+            echo "new_violations<<EOF"
+            echo "$NEW_ITEMS"
+            echo "EOF"
+            echo "resolved_work_items<<EOF"
+            echo "$RESOLVED"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+      - name: Sync Violations to Plane
+        id: plane_sync
+        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          CREATE_OUT=$(bundle exec rake accessibility:create_work_items 2>&1 || echo "Failed to run create_work_items")
+          RESOLVED_OUT=$(bundle exec rake accessibility:mark_resolved_work_items_as_stale 2>&1 || echo "Failed to run mark_resolved_work_items_as_stale")
+
+          {
+            echo "create_output<<EOF"
+            echo "$CREATE_OUT"
+            echo "EOF"
+            echo "resolved_output<<EOF"
+            echo "$RESOLVED_OUT"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+      - name: Post PR Comment with Results
+        uses: actions/github-script@v7
+        if: always() && github.event_name == 'pull_request'
+        env:
+          NEW_VIOLATIONS: ${{ steps.violation_metrics.outputs.new_violations }}
+          RESOLVED_WORK_ITEMS: ${{ steps.violation_metrics.outputs.resolved_work_items }}
+        with:
+          script: |
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('Accessibility Test Results');
+            });
+
+            const output = `### Accessibility Test Results
+            
+            ${process.env.NEW_VIOLATIONS}
+            
+            ${process.env.RESOLVED_WORK_ITEMS}
+            
+            *Pusher: @${context.actor} | Last Checked: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC*`;
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: output
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+            }

@@ -5,3 +5,4 @@ import "bootstrap";
 import 'chartkick';
 import 'Chart.bundle';
 import "./chartkick_init";
+import "./chartjs_config";

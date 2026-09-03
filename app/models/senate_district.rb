@@ -1,10 +1,37 @@
 class SenateDistrict < ApplicationRecord
   include SenateDistrictAttributes
-
+  include Displayable
+  include Searchable
   include Facetable
+  include SummaryParent
+  extend FriendlyId
 
-  has_many :communities_senate_districts, dependent: :destroy
+  ## Override the settings from Searchable
+  scope :starts_with, ->(query) { where("district ilike ?", "#{query}%") }
+  scope :name_results, -> { pluck(:district) }
+  pg_search_scope :search,
+                  against: :district,
+                  associated_against: {
+                    communities: :name
+                  },
+
+                  using: {
+                    tsearch: {
+                      prefix: true
+                    },
+                    trigram: {
+                      word_similarity: true
+                    }
+                  }
+
+  friendly_id :district, use: :slugged
+
+  has_many :communities_senate_districts, foreign_key: :senate_district_district, primary_key: :district, dependent: :destroy, inverse_of: :senate_district
   has_many :communities, through: :communities_senate_districts
+  has_many :reporting_entities, -> { distinct }, through: :communities
+  has_many :service_area_geoms, -> { distinct }, through: :communities
+  has_many :plants, -> { distinct }, through: :service_area_geoms
+  has_many :service_areas, -> { distinct }, through: :service_area_geoms
 
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
 
@@ -13,6 +40,14 @@ class SenateDistrict < ApplicationRecord
 
   def to_s
     district
+  end
+
+  def long_name
+    "#{self.class.model_name.human.titleize} #{self}"
+  end
+
+  def boundary_map_layer
+    "senate-districts"
   end
 
   def as_geojson
@@ -26,5 +61,17 @@ class SenateDistrict < ApplicationRecord
         district_code: district
       }
     }
+  end
+
+  def electricity_sales_rates?
+    false
+  end
+
+  def generation?
+    false
+  end
+
+  def capacities?
+    false
   end
 end

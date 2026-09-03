@@ -1,4 +1,3 @@
-# app/views/communities/charts/population_employment.json.jbuilder
 json.cache! [@community.cache_key_with_version], expires_in: 12.hours do
   employments = @community.employments.order(:measurement_year)
 

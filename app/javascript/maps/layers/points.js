@@ -1,10 +1,38 @@
-export function addPointLayer(map, sourceId, { color = '#EE4B2B', outlineColor = '#ffffff' } = {}) {
-  const id = `${sourceId}_points`;
+export function addPointLayer(map, sourceId, { color = '#EE4B2B', outlineColor = '#ffffff', highlightColor = '#05505e', visibility = 'visible' } = {}) {
+  const id = `${sourceId}-point`;
+
   if (map.getLayer(id)) return id;
+
   map.addLayer({
-    id, type: 'circle', source: sourceId,
+    id: id,
+    type: 'circle',
+    source: sourceId,
     filter: ['==', ['geometry-type'], 'Point'],
-    paint: { 'circle-radius': 6, 'circle-color': color, 'circle-stroke-width': 1, 'circle-stroke-color': outlineColor },
+    layout: {
+      'visibility': visibility
+    },
+    paint: {
+      'circle-color': color,
+      'circle-radius': [
+        'case',
+        ['boolean', ['feature-state', 'clicked'], false],
+        8, // clicked
+        6  // default
+      ],
+      'circle-stroke-color': [
+        'case',
+        ['boolean', ['feature-state', 'clicked'], false],
+        highlightColor, // clicked
+        outlineColor    // default
+      ],
+      'circle-stroke-width': [
+        'case',
+        ['boolean', ['feature-state', 'clicked'], false],
+        3, // clicked
+        1  // default
+      ]
+    },
   });
+
   return id;
 }

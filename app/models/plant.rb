@@ -12,6 +12,8 @@ class Plant < ApplicationRecord
   has_one :service_area, through: :service_area_geom
   has_many :communities, through: :service_area_geom
 
+  scope :with_location, -> { where.not(location: nil) }
+
   def as_geojson
     {
       type: "Feature",

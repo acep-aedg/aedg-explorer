@@ -9,9 +9,12 @@ one:
   highlighted: true
   published: true
   data:
+    resources:
+      - context:
+        publicationDate: "2024"
     name: 'test_dataset'
     title: 'Test Monthly Generation Dataset'
     description: 'Test Monthly Generation Dataset'
     topics:
-      - 'Test Topic'
+     - 'Test Topic'
     format: 'CSV'

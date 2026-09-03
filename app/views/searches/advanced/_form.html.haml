@@ -1,0 +1,16 @@
+-# searches/advanced/_form.html.haml
+= form_with url: search_advanced_path, method: :get, id: 'filter-form', class: 'd-none', 
+    data: { turbo_frame: "results_frame", turbo_action: "advance" } do |f|
+  
+  = hidden_field_tag :q, params[:q]
+  = hidden_field_tag :page, params[:page]
+  = hidden_field_tag :expanded, params[:expanded], data: { search_panels_target: "tracker" }
+
+  -# Facet Pagination/Alpha State
+  - Community.advanced_search_facets.each do |facet|
+    = hidden_field_tag "alpha_#{facet[:prefix]}", params["alpha_#{facet[:prefix]}"], id: "hidden_alpha_#{facet[:prefix]}"
+    = hidden_field_tag "page_#{facet[:prefix]}", params["page_#{facet[:prefix]}"], id: "hidden_page_#{facet[:prefix]}"
+    
+    -# NEW: This creates hidden inputs for every selected checkbox currently in the URL
+    - Array(params[facet[:param]]).each do |val|
+      = hidden_field_tag "#{facet[:param]}[]", val, data: { facet_tag: facet[:prefix] }

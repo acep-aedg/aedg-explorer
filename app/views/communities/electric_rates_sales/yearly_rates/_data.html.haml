@@ -1,0 +1,17 @@
+%div{ data: { controller: 'datatables', datatables: { order_value: [1, 'desc']} } }
+  %table.table.table-striped.border
+    %thead
+      %tr
+        %th Report Entity
+        %th Year
+        - @active_yearly_rate_fields.each do |column|
+          %th= column.to_s.titleize
+        %th Source
+    %tbody
+      - @yearly_rates.each do |rate|
+        %tr
+          %td= rate.reporting_entity.name
+          %td= rate.year
+          - @active_yearly_rate_fields.each do |column|
+            %td= rate.public_send(column)
+          %td= rate.source

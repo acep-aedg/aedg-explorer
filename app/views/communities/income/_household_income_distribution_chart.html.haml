@@ -1,6 +1,7 @@
 - hh_income_bracket_title = "#{@community.name} - Household Income Brackets"
 
 = column_chart household_income_brackets_community_charts_path(@community),
+  height:  '350px',
   suffix:   '%',
   title:    hh_income_bracket_title,
   min:      0,
@@ -21,4 +22,4 @@
               color(:medium_yellow),
               color(:dark_brown)],
   download: { filename: hh_income_bracket_title.parameterize },
-  library: { plugins: { legend: { display:true, position: 'right', reverse: true }, tooltip: { mode: 'index', intersect: false, reverse: true } }}
+  library: { plugins: { legend: { position: 'right', reverse: true }, tooltip: { reverse: true } }}

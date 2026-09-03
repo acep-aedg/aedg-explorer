@@ -4,7 +4,7 @@ ruby "3.4.5"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "minitest", "~> 5.1"
-gem "rails", "~> 8.0.4"
+gem "rails", "~> 8.1.3"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
@@ -64,12 +64,18 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem "memory_profiler"
+  gem "rack-mini-profiler"
+  gem "stackprof"
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "axe-core-capybara"
+  gem "axe-core-rspec"
   gem "capybara"
   gem "mocha"
+  gem "rspec-rails"
   gem "selenium-webdriver"
 end
 gem "activerecord-import", "~> 2.0"
@@ -81,7 +87,7 @@ gem "haml-rails", "~> 3.0"
 
 gem "html2haml", "~> 2.3", group: :dev
 
-gem "activerecord-postgis-adapter", "~> 11.0.0"
+gem "activerecord-postgis-adapter", "~> 11.1.1"
 gem "chartkick"
 gem "csv"
 gem "friendly_id", "~> 5.6.0"
@@ -96,6 +102,7 @@ gem "rubocop-rails", require: false
 gem "brakeman", "~> 8.0"
 gem "kramdown"
 gem "kramdown-parser-gfm"
-gem "pagy", "~> 43.2.9"
+gem "kredis"
+gem "pagy", "~> 43.6.0"
 gem "rubyzip", ">= 2.3.0"
 gem "simplecov", require: false, group: :test

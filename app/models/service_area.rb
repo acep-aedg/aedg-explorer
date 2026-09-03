@@ -7,19 +7,15 @@ class ServiceArea < ApplicationRecord
   has_many :service_area_geoms, primary_key: :cpcn_id, foreign_key: :service_area_cpcn_id, dependent: :destroy, inverse_of: :service_area
   has_many :communities, through: :service_area_geoms
 
-  def boundary_matches_geom_boundary?
-    true
-  end
-
   def as_geojson
     {
       type: "Feature",
       geometry: RGeo::GeoJSON.encode(boundary),
       properties: {
-        id: cpcn_id,
-        category: "Full Service Area",
+        cpcn_id: cpcn_id,
         title: name,
-        cpcn_id: cpcn_id
+        certificate_url: certificate_url,
+        category: "Utility Service Area"
       }
     }
   end

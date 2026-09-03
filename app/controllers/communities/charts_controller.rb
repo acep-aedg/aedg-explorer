@@ -1,24 +1,40 @@
 class Communities::ChartsController < ApplicationController
   before_action :set_community
   before_action :set_year,
-                only: %i[capacity_yearly generation_monthly customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
-  before_action :set_sales, only: %i[customer_breakdown_revenue customer_breakdown_customers customer_breakdown_sales energy_sold energy_sold_stacked]
+                only: %i[capacity_yearly generation_monthly]
 
   def generation_monthly; end
   def generation_yearly; end
   def capacity_yearly; end
   def population_employment; end
-  def customer_breakdown_revenue; end
-  def customer_breakdown_customers; end
-  def customer_breakdown_sales; end
   def bulk_fuel_capacity_mix; end
   def sex_distribution; end
   def poverty_rate; end
   def household_income_brackets; end
   def income; end
-  def energy_sold; end
-  def energy_sold_stacked; end
-  def electric_rates; end
+
+  def electricity_consumption_by_sector
+    @grouped = @community.yearly_sales.with_sales.reorder(year: :asc).group_by(&:year)
+  end
+
+  def electricity_consumption_per_customer
+    @grouped = @community.yearly_sales.valid_for_consumption_per_customer.reorder(year: :asc).group_by(&:year)
+  end
+
+  def electricity_revenue
+    @grouped = @community.yearly_sales.with_revenue.reorder(year: :asc).group_by(&:year)
+  end
+
+  def electricity_customers
+    @grouped = @community.yearly_sales.with_customers.reorder(year: :asc).group_by(&:year)
+  end
+
+  def yearly_electric_rates
+    rates = @community.yearly_electric_rates.with_rates.reorder(year: :asc)
+    @active_sectors = rates.active_fields
+    @chart_years = rates.map(&:year).uniq.sort
+    @rates_by_rep_entity = rates.group_by(&:reporting_entity_id)
+  end
 
   def age_distribution
     @end_year = params[:end_year].presence&.to_i
@@ -34,11 +50,7 @@ class Communities::ChartsController < ApplicationController
   private
 
   def set_community
-    @community = Community.friendly.find(params[:community_id])
-  end
-
-  def set_sales
-    @sales = @community.sales.where(year: @year)
+    @community = Community.friendly.find(params.expect(:community_id))
   end
 
   def set_year

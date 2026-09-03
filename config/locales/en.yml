@@ -29,3 +29,9 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    models:
+      grid: "Electric Grid"
+      borough:
+        one: "Borough & Census Area"
+        other: "Boroughs & Census Areas"

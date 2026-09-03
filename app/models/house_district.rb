@@ -1,14 +1,31 @@
 class HouseDistrict < ApplicationRecord
   include HouseDistrictAttributes
   include Facetable
+  include Displayable
+  include Searchable
+  include SummaryParent
+  extend FriendlyId
 
-  has_many :communities_house_districts, dependent: :destroy
-  has_many :communities, through: :communities_house_districts
-
+  friendly_id :district, use: :slugged
   validates :boundary, presence: true, allowed_geometry_types: %w[Polygon MultiPolygon]
+
+  has_many :communities_house_districts, foreign_key: :house_district_district, primary_key: :district, dependent: :destroy, inverse_of: :house_district
+  has_many :communities, through: :communities_house_districts
+  has_many :reporting_entities, -> { distinct }, through: :communities
+  has_many :service_area_geoms, -> { distinct }, through: :communities
+  has_many :plants, -> { distinct }, through: :service_area_geoms
+  has_many :service_areas, -> { distinct }, through: :service_area_geoms
 
   def to_s
     "#{district} - #{name}"
+  end
+
+  def boundary_map_layer
+    "house-districts"
+  end
+
+  def long_name
+    "#{self.class.model_name.human.titleize} #{self}"
   end
 
   def as_geojson
@@ -23,5 +40,17 @@ class HouseDistrict < ApplicationRecord
         as_of: as_of_date # Metadata to show later
       }
     }
+  end
+
+  def electricity_sales_rates?
+    false
+  end
+
+  def generation?
+    false
+  end
+
+  def capacities?
+    false
   end
 end

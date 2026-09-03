@@ -1,0 +1,19 @@
+- tab = 'general'
+
+= turbo_frame_tag "tab_content", class: "d-flex flex-column h-100" do
+
+  = render 'shared/jump_links', links: grouped_summary_general_jump_links
+
+  .scrollspy-container.flex-grow-1.overflow-y-auto{ data: { controller: "scrollspy", bs_spy: "scroll", bs_target: "#jump-links", bs_smooth_scroll: "true" }, tabindex: "0" }
+
+    #overview.scroll-section.mb-5
+      = render 'shared/section_header',
+        icon: 'globe',
+        title: 'Overview',
+        description: 'Location and regional associations',
+        anchor: '#overview'
+
+      = render "grouped_summaries/#{tab}/communities"
+
+    .mt-auto.overflow-hidden
+      = render "shared/footer"
