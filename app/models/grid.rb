@@ -34,4 +34,8 @@ class Grid < ApplicationRecord
     query = query.where.not(name: exclude) if exclude.present?
     query.distinct.pluck(:name)
   end
+
+  def active?
+    termination_year == 9999
+  end
 end

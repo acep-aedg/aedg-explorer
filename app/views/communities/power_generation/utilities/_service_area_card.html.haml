@@ -39,17 +39,27 @@
   .row.mt-3.pt-3.border-top
     .col-md-6.mb-3
       .d-flex.align-items-center.mb-1
-        %label.text-muted.small.text-uppercase.fw-bold.mb-0 Grid Connection
+        %label.text-muted.small.text-uppercase.fw-bold.mb-0 Grid Affiliation
         %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "The electrical grid the community is physically tied to" }
-      - if @community.grid.nil?
+  
+      - if @community.grids.empty?
         %span.text-secondary None
       - else
-        %i.bi.bi-diagram-3.text-primary.me-1
-        = link_to @community.grid.name.titleize, grid_path(@community.grid), class: "fw-bold", target: "_blank", rel: "noopener", data: { turbo_frame: "_top" }
-    
+        .d-flex.flex-column.gap-1
+          - @community.grids.sort_by(&:termination_year).reverse_each do |grid|
+            .d-flex.align-items-center
+              %i.bi.me-1{ class: grid.active? ? "bi-diagram-3-fill text-primary" : "bi-diagram-3 text-muted" }
+  
+              - if grid.active?
+                = link_to grid.name.titleize, grid_path(grid), class: "fw-bold", target: "_blank", rel: "noopener", data: { turbo_frame: "_top" }
+              - else
+                %span.text-muted= grid.name.titleize
+  
+              = grid_status_badge(grid)
+  
     .col-md-6.mb-3
       .d-flex.align-items-center.mb-1
         %label.text-muted.small.text-uppercase.fw-bold.mb-0 PCE Status
         %i.bi.bi-info-circle-fill.ms-2.text-navy.small{ data: { controller: 'tooltip', bs_toggle: 'tooltip' }, title: "Indicates if the community qualifies for Power Cost Equalization program" }
-      %span.badge{ class: @community.pce_eligible ? "bg-success-subtle text-success border border-success" : "bg-light text-muted border" }
+      %span.badge{ class: @community.pce_eligible ? "bg-success-subtle text-success border border-success-subtle" : "bg-light text-muted border" }
         = @community.pce_eligible ? "Eligible" : "Ineligible"

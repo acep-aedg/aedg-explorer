@@ -12,7 +12,7 @@ class Community < ApplicationRecord
   has_one :population, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :population_age_sexes, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :community_grids, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
-  has_many :grids, through: :community_grids
+  has_many :grids, -> { select("grids.*, community_grids.termination_year, community_grids.connection_year") }, through: :community_grids
   has_many :fuel_prices, foreign_key: :community_fips_code, primary_key: :fips_code, inverse_of: :community
   has_many :communities_reporting_entities, foreign_key: :community_fips_code, primary_key: :fips_code
   has_many :reporting_entities, through: :communities_reporting_entities
