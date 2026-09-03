@@ -43,7 +43,6 @@
   height: calc(100vh - var(--main-toolbar-height) - var(--banner-height));
   overflow: hidden;
   position: relative;
-  z-index: 2000; /* Higher than the main nav */
   background-color: #ffffff;
 }
 
