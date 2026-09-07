@@ -90,7 +90,7 @@ gem "html2haml", "~> 2.3", group: :dev
 gem "activerecord-postgis-adapter", "~> 11.1.1"
 gem "chartkick"
 gem "csv"
-gem "friendly_id", "~> 5.6.0"
+gem "friendly_id", "~> 5.7.0"
 gem "rgeo"
 gem "rgeo-geojson"
 

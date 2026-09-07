@@ -134,7 +134,7 @@ GEM
     erb (6.0.7)
     erubi (1.13.1)
     erubis (2.7.0)
-    friendly_id (5.6.0)
+    friendly_id (5.7.0)
       activerecord (>= 4.0.0)
     globalid (1.4.0)
       activesupport (>= 6.1)
@@ -424,7 +424,7 @@ DEPENDENCIES
   csv
   debug
   dotenv-rails (~> 3.1)
-  friendly_id (~> 5.6.0)
+  friendly_id (~> 5.7.0)
   haml-rails (~> 3.0)
   html2haml (~> 2.3)
   importmap-rails
