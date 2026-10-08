@@ -99,7 +99,7 @@ gem "pg_search", "~> 2.3"
 gem "rubocop", require: false
 gem "rubocop-rails", require: false
 
-gem "brakeman", "~> 8.0"
+gem "brakeman", "~> 8.1"
 gem "kramdown"
 gem "kramdown-parser-gfm"
 gem "kredis"
