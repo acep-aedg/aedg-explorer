@@ -97,7 +97,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.23.0)
       msgpack (~> 1.2)
-    bootstrap_form (5.5.0)
+    bootstrap_form (5.6.1)
       actionpack (>= 7.2)
       activemodel (>= 7.2)
     brakeman (8.1.0)
@@ -409,7 +409,7 @@ DEPENDENCIES
   axe-core-capybara
   axe-core-rspec
   bootsnap
-  bootstrap_form (~> 5.4)
+  bootstrap_form (~> 5.6)
   brakeman (~> 8.1)
   capybara
   chartkick
