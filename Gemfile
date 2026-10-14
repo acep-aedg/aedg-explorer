@@ -81,7 +81,7 @@ end
 gem "activerecord-import", "~> 2.0"
 gem "dotenv-rails", "~> 3.1"
 
-gem "bootstrap_form", "~> 5.4"
+gem "bootstrap_form", "~> 5.6"
 
 gem "haml-rails", "~> 3.0"
 
