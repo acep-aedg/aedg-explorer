@@ -191,7 +191,9 @@ GEM
     matrix (0.4.3)
     memory_profiler (1.1.0)
     mini_mime (1.1.5)
-    minitest (5.27.0)
+    minitest (6.0.6)
+      drb (~> 2.0)
+      prism (~> 1.5)
     mocha (3.0.2)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.8.2)
@@ -427,7 +429,7 @@ DEPENDENCIES
   kramdown-parser-gfm
   kredis
   memory_profiler
-  minitest (~> 5.1)
+  minitest (~> 6.0)
   mocha
   pagy (~> 43.6.0)
   pg (~> 1.1)
